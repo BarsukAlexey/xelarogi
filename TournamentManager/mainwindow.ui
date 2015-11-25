@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralWidget"/>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>400</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="handbookMenu">
+    <property name="title">
+     <string>Справочники</string>
+    </property>
+    <addaction name="countryAction"/>
+    <addaction name="regionAction"/>
+    <addaction name="ateAction"/>
+    <addaction name="sexAction"/>
+    <addaction name="typeAction"/>
+    <addaction name="sportCategoryAction"/>
+    <addaction name="separator"/>
+    <addaction name="tournamentAction"/>
+    <addaction name="tournamentCategoryAction"/>
+    <addaction name="separator"/>
+    <addaction name="clubAction"/>
+    <addaction name="coachAction"/>
+    <addaction name="separator"/>
+    <addaction name="separator"/>
+    <addaction name="orderAction"/>
+   </widget>
+   <addaction name="handbookMenu"/>
+  </widget>
+  <widget class="QToolBar" name="mainToolBar">
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <action name="countryAction">
+   <property name="text">
+    <string>Страны</string>
+   </property>
+  </action>
+  <action name="regionAction">
+   <property name="text">
+    <string>Регионы</string>
+   </property>
+  </action>
+  <action name="ateAction">
+   <property name="text">
+    <string>АТЕ</string>
+   </property>
+  </action>
+  <action name="sexAction">
+   <property name="text">
+    <string>Пол</string>
+   </property>
+  </action>
+  <action name="typeAction">
+   <property name="text">
+    <string>Разделы</string>
+   </property>
+  </action>
+  <action name="sportCategoryAction">
+   <property name="text">
+    <string>Спортивные разряды</string>
+   </property>
+  </action>
+  <action name="tournamentAction">
+   <property name="text">
+    <string>Турниры</string>
+   </property>
+  </action>
+  <action name="tournamentCategoryAction">
+   <property name="text">
+    <string>Категории турниров</string>
+   </property>
+  </action>
+  <action name="clubAction">
+   <property name="text">
+    <string>Клубы</string>
+   </property>
+  </action>
+  <action name="coachAction">
+   <property name="text">
+    <string>Тренерский состав</string>
+   </property>
+  </action>
+  <action name="orderAction">
+   <property name="text">
+    <string>Заявки</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>
