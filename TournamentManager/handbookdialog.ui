@@ -6,34 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>978</width>
-    <height>422</height>
+    <width>872</width>
+    <height>435</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="1" column="0">
-    <widget class="QTableWidget" name="tableWidget">
-     <property name="sizeAdjustPolicy">
-      <enum>QAbstractScrollArea::AdjustIgnored</enum>
+   <item row="3" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>&lt;a href=&quot;http://127.0.0.1:49255/viewer/frameset?__report=C%3A%5CUsers%5CАлексей%5Cworkspace%5CReports%5Ctest_report.rptdesign&amp;__format=html&amp;__svg=true&amp;__locale=ru_RU&amp;__timezone=W-SU&amp;__masterpage=true&amp;__rtl=false&amp;__cubememsize=100&amp;__resourceFolder=C%3A%5CUsers%5CАлексей%5Cworkspace%5CReports&amp;998452581&quot;&gt; Посмотреть тестовый отчет &lt;/a&gt;</string>
      </property>
-     <property name="alternatingRowColors">
-      <bool>true</bool>
-     </property>
-     <property name="selectionMode">
-      <enum>QAbstractItemView::SingleSelection</enum>
-     </property>
-     <property name="selectionBehavior">
-      <enum>QAbstractItemView::SelectRows</enum>
-     </property>
-     <property name="sortingEnabled">
-      <bool>true</bool>
-     </property>
-     <attribute name="verticalHeaderVisible">
-      <bool>false</bool>
-     </attribute>
     </widget>
    </item>
    <item row="0" column="0">
@@ -78,51 +63,50 @@
      </item>
     </layout>
    </item>
+   <item row="1" column="0">
+    <widget class="QTableView" name="tableView"/>
+   </item>
    <item row="2" column="0">
-    <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QPushButton" name="btnInsert">
+       <property name="text">
+        <string>Добавить новую запись</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnSave">
+       <property name="text">
+        <string>Сохрнить изменения</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnRevert">
+       <property name="text">
+        <string>Отменить изменения</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnExit">
+       <property name="text">
+        <string>Закрыть</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>&lt;a href=&quot;http://127.0.0.1:49255/viewer/frameset?__report=C%3A%5CUsers%5CАлексей%5Cworkspace%5CReports%5Ctest_report.rptdesign&amp;__format=xlsx&amp;__svg=true&amp;__locale=ru_RU&amp;__timezone=W-SU&amp;__masterpage=true&amp;__rtl=false&amp;__cubememsize=100&amp;__resourceFolder=C%3A%5CUsers%5CАлексей%5Cworkspace%5CReports&amp;998452581&quot;&gt; Получить тестовый отчет в формате excel &lt;/a&gt;</string>
      </property>
     </widget>
    </item>
   </layout>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>accepted()</signal>
-   <receiver>HandbookDialog</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>157</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>rejected()</signal>
-   <receiver>HandbookDialog</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>286</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

@@ -16,6 +16,7 @@ class DataBaseExpert : public QObject
     Q_OBJECT
 public:
     static QMap<QString, QString> fieldTranslationMap(const QSqlDatabase& database);
+    static QMap<QString, QString> ralationTablesForFields(const QSqlDatabase& database);
     static QString getTableNameByField(const QString & field);
 
 private:

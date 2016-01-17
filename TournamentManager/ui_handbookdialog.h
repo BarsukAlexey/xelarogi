@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'handbookdialog.ui'
 **
-** Created by: Qt User Interface Compiler version 5.2.1
+** Created by: Qt User Interface Compiler version 5.5.1
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -14,13 +14,13 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QDialog>
-#include <QtWidgets/QDialogButtonBox>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QPushButton>
 #include <QtWidgets/QSpacerItem>
-#include <QtWidgets/QTableWidget>
+#include <QtWidgets/QTableView>
 
 QT_BEGIN_NAMESPACE
 
@@ -28,30 +28,30 @@ class Ui_HandbookDialog
 {
 public:
     QGridLayout *gridLayout;
-    QTableWidget *tableWidget;
+    QLabel *label_2;
     QHBoxLayout *horizontalLayout;
     QSpacerItem *horizontalSpacer;
     QLabel *label;
     QSpacerItem *horizontalSpacer_2;
-    QDialogButtonBox *buttonBox;
+    QTableView *tableView;
+    QHBoxLayout *horizontalLayout_2;
+    QPushButton *btnInsert;
+    QPushButton *btnSave;
+    QPushButton *btnRevert;
+    QPushButton *btnExit;
+    QLabel *label_3;
 
     void setupUi(QDialog *HandbookDialog)
     {
         if (HandbookDialog->objectName().isEmpty())
             HandbookDialog->setObjectName(QStringLiteral("HandbookDialog"));
-        HandbookDialog->resize(978, 422);
+        HandbookDialog->resize(872, 435);
         gridLayout = new QGridLayout(HandbookDialog);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
-        tableWidget = new QTableWidget(HandbookDialog);
-        tableWidget->setObjectName(QStringLiteral("tableWidget"));
-        tableWidget->setSizeAdjustPolicy(QAbstractScrollArea::AdjustIgnored);
-        tableWidget->setAlternatingRowColors(true);
-        tableWidget->setSelectionMode(QAbstractItemView::SingleSelection);
-        tableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
-        tableWidget->setSortingEnabled(true);
-        tableWidget->verticalHeader()->setVisible(false);
+        label_2 = new QLabel(HandbookDialog);
+        label_2->setObjectName(QStringLiteral("label_2"));
 
-        gridLayout->addWidget(tableWidget, 1, 0, 1, 1);
+        gridLayout->addWidget(label_2, 3, 0, 1, 1);
 
         horizontalLayout = new QHBoxLayout();
         horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
@@ -74,17 +74,43 @@ public:
 
         gridLayout->addLayout(horizontalLayout, 0, 0, 1, 1);
 
-        buttonBox = new QDialogButtonBox(HandbookDialog);
-        buttonBox->setObjectName(QStringLiteral("buttonBox"));
-        buttonBox->setOrientation(Qt::Horizontal);
-        buttonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
+        tableView = new QTableView(HandbookDialog);
+        tableView->setObjectName(QStringLiteral("tableView"));
 
-        gridLayout->addWidget(buttonBox, 2, 0, 1, 1);
+        gridLayout->addWidget(tableView, 1, 0, 1, 1);
+
+        horizontalLayout_2 = new QHBoxLayout();
+        horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
+        btnInsert = new QPushButton(HandbookDialog);
+        btnInsert->setObjectName(QStringLiteral("btnInsert"));
+
+        horizontalLayout_2->addWidget(btnInsert);
+
+        btnSave = new QPushButton(HandbookDialog);
+        btnSave->setObjectName(QStringLiteral("btnSave"));
+
+        horizontalLayout_2->addWidget(btnSave);
+
+        btnRevert = new QPushButton(HandbookDialog);
+        btnRevert->setObjectName(QStringLiteral("btnRevert"));
+
+        horizontalLayout_2->addWidget(btnRevert);
+
+        btnExit = new QPushButton(HandbookDialog);
+        btnExit->setObjectName(QStringLiteral("btnExit"));
+
+        horizontalLayout_2->addWidget(btnExit);
+
+
+        gridLayout->addLayout(horizontalLayout_2, 2, 0, 1, 1);
+
+        label_3 = new QLabel(HandbookDialog);
+        label_3->setObjectName(QStringLiteral("label_3"));
+
+        gridLayout->addWidget(label_3, 4, 0, 1, 1);
 
 
         retranslateUi(HandbookDialog);
-        QObject::connect(buttonBox, SIGNAL(accepted()), HandbookDialog, SLOT(accept()));
-        QObject::connect(buttonBox, SIGNAL(rejected()), HandbookDialog, SLOT(reject()));
 
         QMetaObject::connectSlotsByName(HandbookDialog);
     } // setupUi
@@ -92,7 +118,13 @@ public:
     void retranslateUi(QDialog *HandbookDialog)
     {
         HandbookDialog->setWindowTitle(QApplication::translate("HandbookDialog", "Dialog", 0));
+        label_2->setText(QApplication::translate("HandbookDialog", "<a href=\"http://127.0.0.1:49255/viewer/frameset?__report=C%3A%5CUsers%5C\320\220\320\273\320\265\320\272\321\201\320\265\320\271%5Cworkspace%5CReports%5Ctest_report.rptdesign&__format=html&__svg=true&__locale=ru_RU&__timezone=W-SU&__masterpage=true&__rtl=false&__cubememsize=100&__resourceFolder=C%3A%5CUsers%5C\320\220\320\273\320\265\320\272\321\201\320\265\320\271%5Cworkspace%5CReports&998452581\"> \320\237\320\276\321\201\320\274\320\276\321\202\321\200\320\265\321\202\321\214 \321\202\320\265\321\201\321\202\320\276\320\262\321\213\320\271 \320\276\321\202\321\207\320\265\321\202 </a>", 0));
         label->setText(QApplication::translate("HandbookDialog", "\320\241\320\277\321\200\320\260\320\262\320\276\321\207\320\275\320\270\320\272", 0));
+        btnInsert->setText(QApplication::translate("HandbookDialog", "\320\224\320\276\320\261\320\260\320\262\320\270\321\202\321\214 \320\275\320\276\320\262\321\203\321\216 \320\267\320\260\320\277\320\270\321\201\321\214", 0));
+        btnSave->setText(QApplication::translate("HandbookDialog", "\320\241\320\276\321\205\321\200\320\275\320\270\321\202\321\214 \320\270\320\267\320\274\320\265\320\275\320\265\320\275\320\270\321\217", 0));
+        btnRevert->setText(QApplication::translate("HandbookDialog", "\320\236\321\202\320\274\320\265\320\275\320\270\321\202\321\214 \320\270\320\267\320\274\320\265\320\275\320\265\320\275\320\270\321\217", 0));
+        btnExit->setText(QApplication::translate("HandbookDialog", "\320\227\320\260\320\272\321\200\321\213\321\202\321\214", 0));
+        label_3->setText(QApplication::translate("HandbookDialog", "<a href=\"http://127.0.0.1:49255/viewer/frameset?__report=C%3A%5CUsers%5C\320\220\320\273\320\265\320\272\321\201\320\265\320\271%5Cworkspace%5CReports%5Ctest_report.rptdesign&__format=xlsx&__svg=true&__locale=ru_RU&__timezone=W-SU&__masterpage=true&__rtl=false&__cubememsize=100&__resourceFolder=C%3A%5CUsers%5C\320\220\320\273\320\265\320\272\321\201\320\265\320\271%5Cworkspace%5CReports&998452581\"> \320\237\320\276\320\273\321\203\321\207\320\270\321\202\321\214 \321\202\320\265\321\201\321\202\320\276\320\262\321\213\320\271 \320\276\321\202\321\207\320\265\321\202 \320\262 \321\204\320\276\321\200\320\274\320\260\321\202\320\265 excel </a>", 0));
     } // retranslateUi
 
 };

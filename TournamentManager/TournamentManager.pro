@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui sql
+QT       += core gui sql axcontainer #webkitwidgets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -17,11 +17,16 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     handbookdialog.cpp \
-    databaseexpert.cpp
+    databaseexpert.cpp \
+    webreportdialog.cpp \
+    tournamentmanager.cpp
 
 HEADERS  += mainwindow.h \
     handbookdialog.h \
-    databaseexpert.h
+    databaseexpert.h \
+    webreportdialog.h \
+    tournamentmanager.h
 
 FORMS    += mainwindow.ui \
-    handbookdialog.ui
+    handbookdialog.ui \
+    webreportdialog.ui

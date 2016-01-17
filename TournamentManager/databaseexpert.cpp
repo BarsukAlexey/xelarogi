@@ -18,6 +18,24 @@ QMap<QString, QString> DataBaseExpert::fieldTranslationMap(const QSqlDatabase& d
     return result;
 }
 
+QMap<QString, QString> DataBaseExpert::ralationTablesForFields(const QSqlDatabase &database)
+{
+    QMap<QString, QString> result;
+
+    QSqlQuery query("select NAME_ENG, RELATION_TABLE_NAME from FIELD_TRANSLATES");
+    if (!query.exec())
+        qDebug() << database.lastError().text();
+    else
+    {
+        while (query.next())
+        {
+            result[query.value("NAME_ENG").toString()] = query.value("RELATION_TABLE_NAME").toString();
+        }
+    }
+
+    return result;
+}
+
 QString DataBaseExpert::getTableNameByField(const QString &field)
 {
     QString tableName = field;
