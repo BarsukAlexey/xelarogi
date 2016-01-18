@@ -19,14 +19,26 @@ SOURCES += main.cpp\
     handbookdialog.cpp \
     databaseexpert.cpp \
     webreportdialog.cpp \
-    tournamentmanager.cpp
+    tournamentmanager.cpp \
+    tournamentgridwidget.cpp \
+    tournamentgriddialog.cpp \
+    choosetournamentdialog.cpp \
+    tournamentadmindialog.cpp
 
 HEADERS  += mainwindow.h \
     handbookdialog.h \
     databaseexpert.h \
     webreportdialog.h \
-    tournamentmanager.h
+    tournamentmanager.h \
+    tournamentgridwidget.h \
+    tournamentgriddialog.h \
+    choosetournamentdialog.h \
+    tournamentadmindialog.h
 
 FORMS    += mainwindow.ui \
     handbookdialog.ui \
-    webreportdialog.ui
+    webreportdialog.ui \
+    tournamentgridwidget.ui \
+    tournamentgriddialog.ui \
+    choosetournamentdialog.ui \
+    tournamentadmindialog.ui

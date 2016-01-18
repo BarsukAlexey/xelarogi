@@ -82,7 +82,7 @@ QVector<TournamentManager::Border> TournamentManager::getTournamentBorders(QVect
     {
         for (const Point& p : level)
         {
-            borders.push_back({p, true, true, true, true});
+            borders.push_back({p.x, p.y, true, true, true, true});
         }
     }
 
@@ -90,11 +90,11 @@ QVector<TournamentManager::Border> TournamentManager::getTournamentBorders(QVect
     {
         for (int j = 0; j < (int)levels[i].size(); j += 2)
         {
-            Point parent = levels[i + 1][j / 2];
+            Point parent = levels[i + 1][levels[i][j].parentIndex];
             for (int y = levels[i][j].y + 1; y < parent.y; y++)
-                borders.push_back({{levels[i][j].x, y}, false, false, true, false});
+                borders.push_back({levels[i][j].x, y, false, false, true, false});
             for (int y = levels[i][j + 1].y - 1; y > parent.y; y--)
-                borders.push_back({{levels[i][j].x, y}, false, false, true, false});
+                borders.push_back({levels[i][j].x, y, false, false, true, false});
         }
     }
 
@@ -118,9 +118,13 @@ QVector<QVector<TournamentManager::Point>> TournamentManager::getTournamentRecta
         else            break;
     }
 
-    int addLayerCount = 1 << (count - lowDeg);
-    if (addLayerCount > 0) lowDeg *= 2;
+    bool wasSpecificLevel = ( count != lowDeg );
+    int addLayerCount = 2 * (count - lowDeg);
+    if (wasSpecificLevel) lowDeg *= 2;
+    else addLayerCount = 0;
 
+    int wasLayerCount = addLayerCount;
+    int vIndex = 0;
     QVector<QVector<Point>> levels;
     for (int i = 1; lowDeg > 0; i++)
     {
@@ -131,6 +135,9 @@ QVector<QVector<TournamentManager::Point>> TournamentManager::getTournamentRecta
                 Point p;
                 p.x = i;
                 p.y = ((1 << (i - 1)) + k * (1 << i));
+                p.text = particapants[vIndex++].text;
+                p.parentIndex = levels.back().size() / 2;
+                p.isClicked = false;
                 levels.back().push_back(p);
                 k++;
                 addLayerCount--;
@@ -141,10 +148,47 @@ QVector<QVector<TournamentManager::Point>> TournamentManager::getTournamentRecta
                 Point p;
                 p.x = i;
                 p.y = ((1 << (i - 1)) + (j - 1) * (1 << i));
+                if (vIndex < particapants.size())
+                {
+                    p.text = particapants[vIndex++].text;
+                }
+                p.parentIndex = levels.back().size() / 2;
+                p.isClicked = false;
                 levels.back().push_back(p);
             }
         }
         lowDeg /= 2;
+    }
+
+    if (wasSpecificLevel && levels.size() > 1)
+    {
+        for (int i = 0; i < levels[0].size()/2 && i < levels[1].size(); i++)
+        {
+            if ((i + 1) * 2 <= levels[0].size())
+            {
+                int j1 = 2*i;
+                int j2 = 2*i + 1;
+                int dy = abs(levels[1][i].y - levels[0][j1].y);
+
+                int ri = levels[1].size() - 1 - i;
+                levels[0][j1].y = levels[1][ri].y + dy;
+                levels[0][j2].y = levels[1][ri].y - dy;
+
+                levels[0][j1].parentIndex = ri;
+                levels[0][j2].parentIndex = ri;
+
+                int rj1 = 2*ri;
+                int rj2 = 2*ri + 1;
+                if (rj1 < levels[0].size())
+                {
+                    levels[0][rj1].parentIndex = i;
+                }
+                if (rj2 < levels[0].size())
+                {
+                    levels[0][rj2].parentIndex = i;
+                }
+            }
+        }
     }
 
     return levels;

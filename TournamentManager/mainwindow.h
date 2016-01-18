@@ -16,6 +16,8 @@
 #include <QPaintEvent>
 
 #include "tournamentmanager.h"
+#include "tournamentgriddialog.h"
+#include "choosetournamentdialog.h"
 
 namespace Ui {
 class MainWindow;
@@ -34,7 +36,6 @@ protected:
 
 private slots:
     void on_btnExcel_clicked();
-    void on_pushButton_clicked();
     
 private:
     Ui::MainWindow *ui;

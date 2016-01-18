@@ -7,6 +7,7 @@
 #include <QObject>
 #include <QString>
 #include <QVector>
+#include <QDebug>
 
 class TournamentManager : public QObject
 {
@@ -25,9 +26,12 @@ public:
     };
     struct Point {
         int x, y;
+        QString text;
+        int parentIndex;
+        bool isClicked;
     };
     struct Border {
-        Point p;
+        int x, y;
         bool l, t, r, b;
     };
 

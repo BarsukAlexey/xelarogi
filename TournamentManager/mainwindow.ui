@@ -14,31 +14,57 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QPushButton" name="btnExcel">
+   <widget class="QPushButton" name="pushButton_2">
     <property name="geometry">
      <rect>
-      <x>630</x>
-      <y>10</y>
-      <width>161</width>
-      <height>21</height>
+      <x>320</x>
+      <y>110</y>
+      <width>141</width>
+      <height>61</height>
      </rect>
     </property>
     <property name="text">
-     <string>Заполнить страны из Excel</string>
+     <string>Создать новый турнир</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="pushButton_3">
     <property name="geometry">
      <rect>
-      <x>670</x>
-      <y>60</y>
-      <width>75</width>
-      <height>23</height>
+      <x>320</x>
+      <y>180</y>
+      <width>141</width>
+      <height>61</height>
      </rect>
     </property>
     <property name="text">
-     <string>PushButton</string>
+     <string>Выбрать турнир</string>
     </property>
+   </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>450</x>
+      <y>390</y>
+      <width>334</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QPushButton" name="pushButton">
+       <property name="text">
+        <string>Редактирование турнирной сетки</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnExcel">
+       <property name="text">
+        <string>Заполнить страны из Excel</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">

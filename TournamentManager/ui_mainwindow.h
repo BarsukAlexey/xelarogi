@@ -13,6 +13,7 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
@@ -39,8 +40,12 @@ public:
     QAction *coachAction;
     QAction *orderAction;
     QWidget *centralWidget;
-    QPushButton *btnExcel;
+    QPushButton *pushButton_2;
+    QPushButton *pushButton_3;
+    QWidget *widget;
+    QHBoxLayout *horizontalLayout;
     QPushButton *pushButton;
+    QPushButton *btnExcel;
     QMenuBar *menuBar;
     QMenu *handbookMenu;
     QToolBar *mainToolBar;
@@ -75,12 +80,30 @@ public:
         orderAction->setObjectName(QStringLiteral("orderAction"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
-        btnExcel = new QPushButton(centralWidget);
-        btnExcel->setObjectName(QStringLiteral("btnExcel"));
-        btnExcel->setGeometry(QRect(630, 10, 161, 21));
-        pushButton = new QPushButton(centralWidget);
+        pushButton_2 = new QPushButton(centralWidget);
+        pushButton_2->setObjectName(QStringLiteral("pushButton_2"));
+        pushButton_2->setGeometry(QRect(320, 110, 141, 61));
+        pushButton_3 = new QPushButton(centralWidget);
+        pushButton_3->setObjectName(QStringLiteral("pushButton_3"));
+        pushButton_3->setGeometry(QRect(320, 180, 141, 61));
+        widget = new QWidget(centralWidget);
+        widget->setObjectName(QStringLiteral("widget"));
+        widget->setGeometry(QRect(450, 390, 334, 25));
+        horizontalLayout = new QHBoxLayout(widget);
+        horizontalLayout->setSpacing(6);
+        horizontalLayout->setContentsMargins(11, 11, 11, 11);
+        horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
+        horizontalLayout->setContentsMargins(0, 0, 0, 0);
+        pushButton = new QPushButton(widget);
         pushButton->setObjectName(QStringLiteral("pushButton"));
-        pushButton->setGeometry(QRect(670, 60, 75, 23));
+
+        horizontalLayout->addWidget(pushButton);
+
+        btnExcel = new QPushButton(widget);
+        btnExcel->setObjectName(QStringLiteral("btnExcel"));
+
+        horizontalLayout->addWidget(btnExcel);
+
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
@@ -131,8 +154,10 @@ public:
         clubAction->setText(QApplication::translate("MainWindow", "\320\232\320\273\321\203\320\261\321\213", 0));
         coachAction->setText(QApplication::translate("MainWindow", "\320\242\321\200\320\265\320\275\320\265\321\200\321\201\320\272\320\270\320\271 \321\201\320\276\321\201\321\202\320\260\320\262", 0));
         orderAction->setText(QApplication::translate("MainWindow", "\320\227\320\260\321\217\320\262\320\272\320\270", 0));
+        pushButton_2->setText(QApplication::translate("MainWindow", "\320\241\320\276\320\267\320\264\320\260\321\202\321\214 \320\275\320\276\320\262\321\213\320\271 \321\202\321\203\321\200\320\275\320\270\321\200", 0));
+        pushButton_3->setText(QApplication::translate("MainWindow", "\320\222\321\213\320\261\321\200\320\260\321\202\321\214 \321\202\321\203\321\200\320\275\320\270\321\200", 0));
+        pushButton->setText(QApplication::translate("MainWindow", "\320\240\320\265\320\264\320\260\320\272\321\202\320\270\321\200\320\276\320\262\320\260\320\275\320\270\320\265 \321\202\321\203\321\200\320\275\320\270\321\200\320\275\320\276\320\271 \321\201\320\265\321\202\320\272\320\270", 0));
         btnExcel->setText(QApplication::translate("MainWindow", "\320\227\320\260\320\277\320\276\320\273\320\275\320\270\321\202\321\214 \321\201\321\202\321\200\320\260\320\275\321\213 \320\270\320\267 Excel", 0));
-        pushButton->setText(QApplication::translate("MainWindow", "PushButton", 0));
         handbookMenu->setTitle(QApplication::translate("MainWindow", "\320\241\320\277\321\200\320\260\320\262\320\276\321\207\320\275\320\270\320\272\320\270", 0));
     } // retranslateUi
 
