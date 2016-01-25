@@ -76,6 +76,7 @@ public:
 
         tableView = new QTableView(HandbookDialog);
         tableView->setObjectName(QStringLiteral("tableView"));
+        tableView->setContextMenuPolicy(Qt::CustomContextMenu);
 
         gridLayout->addWidget(tableView, 1, 0, 1, 1);
 

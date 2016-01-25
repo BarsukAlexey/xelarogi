@@ -62,7 +62,19 @@ HandbookDialog::HandbookDialog(QString tableName, QString tableRusName, const QS
     ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeMode::Stretch);
 
 
+    connect(ui->tableView, &QTableView::customContextMenuRequested, [this] (const QPoint& pos)
+    {
+        QMenu * contextMenu = new QMenu(tr("Выбор действия со строкой"), ui->tableView);
+        QAction * delAction = new QAction(tr("Удалить"), contextMenu);
+        contextMenu->addAction(delAction);
 
+        connect(delAction, &QAction::triggered, [this] ()
+        {
+            ui->btnExit->setText("Deleted");
+        });
+
+        contextMenu->exec(ui->tableView->viewport()->mapToGlobal(pos));
+    });
 
 
 

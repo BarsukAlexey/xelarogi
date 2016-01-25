@@ -2,6 +2,8 @@
 #define HANDBOOKDIALOG_H
 
 #include <QDialog>
+#include <QMenu>
+#include <QAction>
 #include <QSql>
 #include <QSqlDriver>
 #include <QSqlDatabase>
