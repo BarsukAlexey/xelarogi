@@ -68,9 +68,13 @@ HandbookDialog::HandbookDialog(QString tableName, QString tableRusName, const QS
         QAction * delAction = new QAction(tr("Удалить"), contextMenu);
         contextMenu->addAction(delAction);
 
-        connect(delAction, &QAction::triggered, [this] ()
+        connect(delAction, &QAction::triggered, [this, &pos] ()
         {
             ui->btnExit->setText("Deleted");
+            QPoint transformPos = pos;
+            transformPos.setX(20);
+            QModelIndex index = ui->tableView->indexAt(transformPos);
+            ui->btnExit->setText(ui->tableView->model()->data(index).toString());
         });
 
         contextMenu->exec(ui->tableView->viewport()->mapToGlobal(pos));
