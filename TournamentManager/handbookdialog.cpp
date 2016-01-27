@@ -62,19 +62,29 @@ HandbookDialog::HandbookDialog(QString tableName, QString tableRusName, const QS
     ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeMode::Stretch);
 
 
-    connect(ui->tableView, &QTableView::customContextMenuRequested, [this] (const QPoint& pos)
+    connect(ui->tableView, &QTableView::customContextMenuRequested, [this, &tableName, model] (const QPoint& pos)
     {
         QMenu * contextMenu = new QMenu(tr("Выбор действия со строкой"), ui->tableView);
         QAction * delAction = new QAction(tr("Удалить"), contextMenu);
         contextMenu->addAction(delAction);
 
-        connect(delAction, &QAction::triggered, [this, &pos] ()
+        connect(delAction, &QAction::triggered, [this, &pos, &tableName, model] ()
         {
             ui->btnExit->setText("Deleted");
             QPoint transformPos = pos;
             transformPos.setX(20);
             QModelIndex index = ui->tableView->indexAt(transformPos);
-            ui->btnExit->setText(ui->tableView->model()->data(index).toString());
+            QString recordId = ui->tableView->model()->data(index).toString();
+            QSqlQuery query("DELETE FROM " + tableName + " WHERE UID = " + recordId, m_database);
+            if (query.exec())
+            {
+                qDebug() << "Deleted from " + tableName;
+            }
+            else
+            {
+                qDebug() << "error in deleted " + tableName;
+            }
+            model->submitAll();
         });
 
         contextMenu->exec(ui->tableView->viewport()->mapToGlobal(pos));
