@@ -2,6 +2,8 @@
 #define TOURNAMENTADMINDIALOG_H
 
 #include <QDialog>
+#include <QSqlDatabase>
+#include <QSqlQuery>
 
 namespace Ui {
 class TournamentAdminDialog;
@@ -12,7 +14,7 @@ class TournamentAdminDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit TournamentAdminDialog(QWidget *parent = 0);
+    explicit TournamentAdminDialog(const QSqlDatabase& database, long long tournamentUID, QWidget *parent = 0);
     ~TournamentAdminDialog();
 
 private:

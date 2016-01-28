@@ -2,6 +2,9 @@
 #define CHOOSETOURNAMENTDIALOG_H
 
 #include <QDialog>
+#include <QSqlDatabase>
+#include <QSqlQuery>
+#include <QMessageBox>
 
 #include "tournamentadmindialog.h"
 
@@ -14,7 +17,7 @@ class ChooseTournamentDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit ChooseTournamentDialog(QWidget *parent = 0);
+    explicit ChooseTournamentDialog(const QSqlDatabase& database, QWidget *parent = 0);
     ~ChooseTournamentDialog();
 
 private:

@@ -18,6 +18,7 @@
 #include "tournamentmanager.h"
 #include "tournamentgriddialog.h"
 #include "choosetournamentdialog.h"
+#include "createtournamentdialog.h"
 
 namespace Ui {
 class MainWindow;

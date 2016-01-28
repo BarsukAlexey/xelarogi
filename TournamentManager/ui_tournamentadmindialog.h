@@ -32,6 +32,7 @@ public:
     QLabel *label;
     QLabel *label_2;
     QLabel *label_3;
+    QLabel *testLabel;
 
     void setupUi(QDialog *TournamentAdminDialog)
     {
@@ -64,6 +65,9 @@ public:
         label_3 = new QLabel(TournamentAdminDialog);
         label_3->setObjectName(QStringLiteral("label_3"));
         label_3->setGeometry(QRect(390, 140, 211, 16));
+        testLabel = new QLabel(TournamentAdminDialog);
+        testLabel->setObjectName(QStringLiteral("testLabel"));
+        testLabel->setGeometry(QRect(30, 30, 161, 21));
 
         retranslateUi(TournamentAdminDialog);
         QObject::connect(buttonBox, SIGNAL(accepted()), TournamentAdminDialog, SLOT(accept()));
@@ -82,6 +86,7 @@ public:
         label->setText(QApplication::translate("TournamentAdminDialog", "\320\240\320\265\320\264\320\260\320\272\321\202\320\270\321\200\320\276\320\262\320\260\320\275\320\270\320\265", 0));
         label_2->setText(QApplication::translate("TournamentAdminDialog", "\320\230\320\274\320\277\320\276\321\200\321\202", 0));
         label_3->setText(QApplication::translate("TournamentAdminDialog", "\320\222\320\267\320\262\320\265\321\210\320\270\320\262\320\260\320\275\320\270\320\265 / \320\236\320\277\320\273\320\260\321\202\320\260 / \320\220\320\272\320\272\321\200\320\265\320\264\320\270\321\202\320\260\321\206\320\270\321\217", 0));
+        testLabel->setText(QApplication::translate("TournamentAdminDialog", "TextLabel", 0));
     } // retranslateUi
 
 };

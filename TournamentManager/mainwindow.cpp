@@ -81,7 +81,9 @@ MainWindow::MainWindow(QWidget *parent) :
     });
 
     connect(ui->orderAction, &QAction::triggered, [this] () {
-          HandbookDialog handbookDlg(QString("ORDERS"), QString("Заявки"), m_database, this);
+          HandbookDialog handbookDlg(QString("ORDERS"), QString("Заявки"), m_database, this,
+          {"IS_WEIGHTED", "IS_MEDICAL", "IS_ACCREDITATED", "IS_PAID", "COACH_FK", "CLUB_FK",
+            "COUNTRY_FK", "REGION_FK", "REGION_UNIT_FK"});
           handbookDlg.exec();
     });
 
@@ -91,10 +93,16 @@ MainWindow::MainWindow(QWidget *parent) :
         dialog.exec();
     });
 
-    connect(ui->pushButton_3, &QPushButton::clicked, [this] ()
+    connect(ui->searchTournamentBtn, &QPushButton::clicked, [this] ()
     {
-        ChooseTournamentDialog dialog(this);
+        ChooseTournamentDialog dialog(m_database, this);
         dialog.exec();
+    });
+
+    connect(ui->createTournamentBtn, &QPushButton::clicked, [this] ()
+    {
+        CreateTournamentDialog dlg(this);
+        dlg.exec();
     });
 }
 

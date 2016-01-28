@@ -23,7 +23,8 @@ SOURCES += main.cpp\
     tournamentgridwidget.cpp \
     tournamentgriddialog.cpp \
     choosetournamentdialog.cpp \
-    tournamentadmindialog.cpp
+    tournamentadmindialog.cpp \
+    createtournamentdialog.cpp
 
 HEADERS  += mainwindow.h \
     handbookdialog.h \
@@ -33,7 +34,8 @@ HEADERS  += mainwindow.h \
     tournamentgridwidget.h \
     tournamentgriddialog.h \
     choosetournamentdialog.h \
-    tournamentadmindialog.h
+    tournamentadmindialog.h \
+    createtournamentdialog.h
 
 FORMS    += mainwindow.ui \
     handbookdialog.ui \
@@ -41,4 +43,5 @@ FORMS    += mainwindow.ui \
     tournamentgridwidget.ui \
     tournamentgriddialog.ui \
     choosetournamentdialog.ui \
-    tournamentadmindialog.ui
+    tournamentadmindialog.ui \
+    createtournamentdialog.ui

@@ -2,6 +2,7 @@
 #define HANDBOOKDIALOG_H
 
 #include <QDialog>
+#include <QStringList>
 #include <QMenu>
 #include <QAction>
 #include <QSql>
@@ -34,7 +35,10 @@ class HandbookDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit HandbookDialog(QString tableName, QString tableRusName, const QSqlDatabase & database, QWidget *parent = 0);
+    explicit HandbookDialog(QString tableName, QString tableRusName,
+                            const QSqlDatabase & database,
+                            QWidget *parent = 0,
+                            QStringList hiddenColumns = QStringList());
     ~HandbookDialog();
 
     static QSqlRecord m_record;
@@ -42,6 +46,7 @@ public:
 private:
     Ui::HandbookDialog *ui;
     const QSqlDatabase & m_database;
+    QStringList mHiddenColumns;
 
 };
 
@@ -65,6 +70,7 @@ public:
     void setModelData(QWidget *editor,
                       QAbstractItemModel *model,
                       const QModelIndex &index) const;
+
 };
 
 #endif // HANDBOOKDIALOG_H

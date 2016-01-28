@@ -5,8 +5,12 @@
 
 QSqlRecord HandbookDialog::m_record;
 
-HandbookDialog::HandbookDialog(QString tableName, QString tableRusName, const QSqlDatabase &database, QWidget *parent) :
+HandbookDialog::HandbookDialog(QString tableName, QString tableRusName,
+                               const QSqlDatabase &database,
+                               QWidget *parent,
+                               QStringList hiddenColumns):
     m_database(database),
+    mHiddenColumns(hiddenColumns),
     QDialog(parent),
     ui(new Ui::HandbookDialog)
 {
@@ -36,10 +40,22 @@ HandbookDialog::HandbookDialog(QString tableName, QString tableRusName, const QS
     for (int i = 0; i < m_record.count(); ++i)
     {
         model->setHeaderData(i, Qt::Horizontal, rusFieldNames[m_record.fieldName(i)]);
+        if (mHiddenColumns.contains(m_record.fieldName(i), Qt::CaseInsensitive))
+        {
+            ui->tableView->setColumnHidden(i, true);
+        }
     }
 
     ui->tableView->setModel(model);
     ui->tableView->setItemDelegate(new MySqlRelationDelegate(ui->tableView));
+
+    for (int i = 0; i < m_record.count(); ++i)
+    {
+        if (mHiddenColumns.contains(m_record.fieldName(i), Qt::CaseInsensitive))
+        {
+            ui->tableView->setColumnHidden(i, true);
+        }
+    }
 
     connect(ui->btnInsert, &QPushButton::clicked, [model]()
     {
@@ -65,27 +81,27 @@ HandbookDialog::HandbookDialog(QString tableName, QString tableRusName, const QS
     connect(ui->tableView, &QTableView::customContextMenuRequested, [this, &tableName, model] (const QPoint& pos)
     {
         QMenu * contextMenu = new QMenu(tr("Выбор действия со строкой"), ui->tableView);
+
+        QAction* insertAction = new QAction(tr("Добавить"), contextMenu);
+        contextMenu->addAction(insertAction);
+        connect(insertAction, &QAction::triggered, [this, &model] ()
+        {
+            model->insertRow(model->rowCount());
+        });
+
         QAction * delAction = new QAction(tr("Удалить"), contextMenu);
         contextMenu->addAction(delAction);
-
         connect(delAction, &QAction::triggered, [this, &pos, &tableName, model] ()
         {
-            ui->btnExit->setText("Deleted");
             QPoint transformPos = pos;
             transformPos.setX(20);
             QModelIndex index = ui->tableView->indexAt(transformPos);
             QString recordId = ui->tableView->model()->data(index).toString();
             QSqlQuery query("DELETE FROM " + tableName + " WHERE UID = " + recordId, m_database);
-            if (query.exec())
-            {
-                qDebug() << "Deleted from " + tableName;
-            }
-            else
-            {
-                qDebug() << "error in deleted " + tableName;
-            }
+            query,exec();
             model->submitAll();
         });
+
 
         contextMenu->exec(ui->tableView->viewport()->mapToGlobal(pos));
     });
