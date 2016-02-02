@@ -255,7 +255,13 @@ public class Fighting {
     private Player findWinnerInCaseOfTieByEuropeanRules() {
         int idJudge = -1;
         for (int i = 0; i < 3; i++) {
-            if (countOfPointsForTheLeftFighter[i] == countOfPointsForTheRightFighter[i]) {
+            int countPointLeft = 0;
+            int countPointRight = 0;
+            for (int round = 1; round <= countOfRounds; round++) {
+                countPointLeft += countOfPointsForTheLeftFighter[round][i];
+                countPointRight += countOfPointsForTheRightFighter[round][i];
+            }
+            if (countPointLeft == countPointRight) {
                 idJudge = i;
                 break;
             }
@@ -642,6 +648,14 @@ public class Fighting {
 
     public synchronized StatusFighting getStatusFighting() {
         return statusFighting;
+    }
+
+    @Override
+    public String toString() {
+        String separator = " / ";
+        return fightId + separator +
+                nameOfLeftFighter + " " + countryOfLeftFighter + " " + separator +
+                nameOfRightFighter + " " + countryOfRightFighter + " " + separator;
     }
 }
 

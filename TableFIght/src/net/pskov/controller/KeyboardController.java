@@ -23,7 +23,7 @@ public class KeyboardController {
     public HashSet<Component.Identifier> capture() {
         HashSet<Component.Identifier> set = new HashSet<>();
         for (Keyboard keyboard : m_keyboard) {
-            if (keyboard.poll()) {
+            if (!keyboard.poll()) {
                 continue;
             }
             EventQueue keyboardQueue = keyboard .getEventQueue();
