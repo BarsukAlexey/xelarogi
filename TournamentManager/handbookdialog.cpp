@@ -34,16 +34,11 @@ HandbookDialog::HandbookDialog(QString tableName, QString tableRusName,
         }
     }
     model->setEditStrategy(QSqlTableModel::OnManualSubmit);
-    //model->removeColumn(0);
     model->select();
 
     for (int i = 0; i < m_record.count(); ++i)
     {
         model->setHeaderData(i, Qt::Horizontal, rusFieldNames[m_record.fieldName(i)]);
-        if (mHiddenColumns.contains(m_record.fieldName(i), Qt::CaseInsensitive))
-        {
-            ui->tableView->setColumnHidden(i, true);
-        }
     }
 
     ui->tableView->setModel(model);
@@ -93,12 +88,8 @@ HandbookDialog::HandbookDialog(QString tableName, QString tableRusName,
         contextMenu->addAction(delAction);
         connect(delAction, &QAction::triggered, [this, &pos, &tableName, model] ()
         {
-            QPoint transformPos = pos;
-            transformPos.setX(20);
-            QModelIndex index = ui->tableView->indexAt(transformPos);
-            QString recordId = ui->tableView->model()->data(index).toString();
-            QSqlQuery query("DELETE FROM " + tableName + " WHERE UID = " + recordId, m_database);
-            query,exec();
+            QModelIndex index = ui->tableView->indexAt(pos);
+            model->removeRow(index.row());
             model->submitAll();
         });
 
@@ -135,9 +126,9 @@ void MySqlRelationDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
         }
         //painter->save();
     }
-    else if (HandbookDialog::m_record.fieldName(index.column()).contains("DATE_", Qt::CaseSensitive))
+    else if (HandbookDialog::m_record.fieldName(index.column()).contains("DATE", Qt::CaseSensitive))
     {
-        painter->drawText(option.rect, QDate::fromString(index.data().toString(), "yyyy-MM-dd").toString("dd.MM.yyyy"));
+        painter->drawText(option.rect, Qt::AlignHCenter | Qt::AlignVCenter, QDate::fromString(index.data().toString(), "yyyy-MM-dd").toString("dd.MM.yyyy"));
     }
     else
     {
@@ -157,7 +148,7 @@ QWidget *MySqlRelationDelegate::createEditor(QWidget *aParent, const QStyleOptio
             checkBox->setChecked(index.data().toInt() > 0);
             return checkBox;
         }
-        else if (HandbookDialog::m_record.fieldName(index.column()).contains("DATE_", Qt::CaseSensitive))
+        else if (HandbookDialog::m_record.fieldName(index.column()).contains("DATE", Qt::CaseSensitive))
         {
             QDateEdit * dateEdit = new QDateEdit(aParent);
             dateEdit->setDate(QDate::fromString(index.data().toString(), "yyyy-MM-dd"));
