@@ -1,0 +1,40 @@
+<component name="libraryTable">
+  <library name="MyJinput">
+    <ANNOTATIONS>
+      <root url="file://D:/JInput/webstart" />
+      <root url="file://D:/JInput/applet" />
+    </ANNOTATIONS>
+    <CLASSES>
+      <root url="file://D:/JInput/dist" />
+      <root url="file://D:/JInput/webstart" />
+      <root url="file://D:/JInput/webstart" />
+      <root url="file://D:/JInput/applet" />
+      <root url="file://D:/JInput/applet" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="file://D:/JInput/coreAPI/apidocs" />
+      <root url="file://D:/JInput/webstart" />
+      <root url="file://D:/JInput/applet" />
+    </JAVADOC>
+    <NATIVE>
+      <root url="file://D:/JInput/dist" />
+      <root url="file://D:/JInput/webstart" />
+      <root url="file://D:/JInput/applet" />
+    </NATIVE>
+    <SOURCES>
+      <root url="file://D:/JInput/webstart" />
+      <root url="file://D:/JInput/webstart" />
+      <root url="file://D:/JInput/applet" />
+      <root url="file://D:/JInput/applet" />
+    </SOURCES>
+    <jarDirectory url="file://D:/JInput/applet" recursive="false" />
+    <jarDirectory url="file://D:/JInput/applet" recursive="false" />
+    <jarDirectory url="file://D:/JInput/dist" recursive="false" />
+    <jarDirectory url="file://D:/JInput/webstart" recursive="false" />
+    <jarDirectory url="file://D:/JInput/webstart" recursive="false" />
+    <jarDirectory url="file://D:/JInput/applet" recursive="false" type="SOURCES" />
+    <jarDirectory url="file://D:/JInput/applet" recursive="false" type="SOURCES" />
+    <jarDirectory url="file://D:/JInput/webstart" recursive="false" type="SOURCES" />
+    <jarDirectory url="file://D:/JInput/webstart" recursive="false" type="SOURCES" />
+  </library>
+</component>
