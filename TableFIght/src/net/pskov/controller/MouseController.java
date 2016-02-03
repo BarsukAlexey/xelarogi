@@ -28,8 +28,10 @@ public class MouseController {
         wasLeftClick = wasRightClick = false;
 
         boolean isValid = mouse.poll();
-        if (!isValid)
+        if (!isValid) {
+            System.err.println("Отвалилась мышь ^_^");
             return false;
+        }
 
         {
             float val = mouse.getLeft().getPollData();

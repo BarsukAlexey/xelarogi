@@ -1,9 +1,6 @@
 package net.pskov;
 
 import net.java.games.input.Component;
-import net.java.games.input.Controller;
-import net.java.games.input.ControllerEnvironment;
-import net.java.games.input.Mouse;
 import net.pskov.controller.KeyboardController;
 import net.pskov.controller.MouseController;
 import net.pskov.someEnum.StatusFighting;
@@ -11,14 +8,10 @@ import net.pskov.someEnum.StatusFighting;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashSet;
 
 public class JFrameMainJudge extends JFrame {
@@ -32,13 +25,14 @@ public class JFrameMainJudge extends JFrame {
 
     private volatile Fighting activeFighting;
 
-    private MouseController[] mouseController;
-    private KeyboardController keyboardController;
+    private final MouseController[] mouseController;
+    private volatile KeyboardController keyboardController;
 
     public JFrameMainJudge() {
         super();
 
-        initMiceAndKeyboard();
+        mouseController = new MouseController[3];
+        keyboardController = new KeyboardController();
 
         // получаем координаты левого верхнего всех мониторов
         GraphicsDevice[] screenDevices = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices();
@@ -69,24 +63,31 @@ public class JFrameMainJudge extends JFrame {
         initJPanelStartPage();
         initJPanelFighting();
 
-//        add(jPanelFighting);
-//        remove(jPanelFighting);
         add(jPanelStartPage);
-//        remove(jPanelStartPage);
-
-//        jPanelFighting.setVisible(false);
-//        revalidate();
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocation(originPoint[0]);
-//        setUndecorated(true);
-//        setExtendedState(Frame.MAXIMIZED_BOTH);
+        setUndecorated(true);
+        setExtendedState(Frame.MAXIMIZED_BOTH);
+        setAlwaysOnTop(true);
+        requestFocus();
+        addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                System.err.println("focusGained");
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                System.err.println("FocusEvent");
+                JFrameMainJudge.this.requestFocus();
+            }
+        });
         pack();
         setVisible(true);
-        setSize(1200, 800);
+//        setSize(1200, 800);
 
-        new Updater().start();
-
+        new PollMiceAndKeyboard().start();
     }
 
     private void initJPanelStartPage() {
@@ -118,6 +119,11 @@ public class JFrameMainJudge extends JFrame {
         jStart.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (!updateMice()) {
+                    JOptionPane.showMessageDialog(JFrameMainJudge.this, "Connect mice and click \"init mice\"");
+                    return;
+                }
+
                 Fighting selectedValue = jList.getSelectedValue();
                 if (selectedValue == null) return;
                 System.err.println("Fight: " + selectedValue); // TODO
@@ -167,6 +173,14 @@ public class JFrameMainJudge extends JFrame {
             }
         });
 
+        JButton jButtonInitMice = new JButton("Init mice...");
+        jButtonInitMice.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new JDialogInitMice(JFrameMainJudge.this, JFrameMainJudge.this.mouseController);
+            }
+        });
+
         // добавление всех компонентов на панель
         jPanelStartPage = new JPanel();
         jPanelStartPage.setLayout(new BoxLayout(jPanelStartPage, BoxLayout.Y_AXIS));
@@ -174,6 +188,7 @@ public class JFrameMainJudge extends JFrame {
         jPanelStartPage.add(jStart);
         jPanelStartPage.add(jButtonSelectFile);
         jPanelStartPage.add(jButtonSaveFile);
+        jPanelStartPage.add(jButtonInitMice);
     }
 
     void initJPanelFighting() {
@@ -222,53 +237,32 @@ public class JFrameMainJudge extends JFrame {
     }
 
 
-    private void initMiceAndKeyboard() {
-        ControllerEnvironment ce = ControllerEnvironment.getDefaultEnvironment();
-        Controller[] ca = ce.getControllers();
-        if (ca.length == 0) {
-            throw new RuntimeException();
-        }
-        // collect the IDs of all the mouse controllers
-        ArrayList<Integer> mouseIDs = new ArrayList<>();
-//        System.out.println("Mouse Controllers:");
-        for (int i = 0; i < ca.length; i++) {
-            if (ca[i].getType() == Controller.Type.MOUSE) {
-//                System.out.println("  ID " + i + "; \"" + ca[i].getName() + "\"");
-                mouseIDs.add(i);
-            }
-        }
-
-        mouseController = new MouseController[mouseIDs.size()];
-        for (int i = 0; i < mouseIDs.size(); i++) {
-            mouseController[i] = new MouseController((Mouse) ca[mouseIDs.get(i)]);
-        }
-
-        keyboardController = new KeyboardController();
-    }
-
-
+    /**
+     * @return true, если мышки покллючены и они не отвалились, иначе false
+     */
     private boolean updateMice() {
-        boolean update = false;
-        for (int i = 0; i < Math.min(3, mouseController.length); i++) {
-            MouseController mouse = mouseController[i];
-            if (!mouse.update()) {
-                System.out.println("Controller #" + i + " no longer valid");
-                System.exit(-1); // TODO ОПАСНО!
-            }
-            if (mouse.wasLeftClick()) {
-                if (activeFighting != null) {
-                    activeFighting.addOnePointToLeftFighter(i);
-                    update = true;
+        synchronized (mouseController) {
+            boolean ok = true;
+            for (int i = 0; i < 3; i++) {
+                MouseController mouse = mouseController[i];
+                if (mouse == null || !mouse.update()) {
+                    ok = false;
+                    continue;
+                }
+//                System.err.println("JFrameMainJudge::updateMice::" + new Date());
+                if (mouse.wasLeftClick()) {
+                    if (activeFighting != null) {
+                        activeFighting.addOnePointToLeftFighter(i);
+                    }
+                }
+                if (mouse.wasRightClick()) {
+                    if (activeFighting != null) {
+                        activeFighting.addOnePointToRightFighter(i);
+                    }
                 }
             }
-            if (mouse.wasRightClick()) {
-                if (activeFighting != null) {
-                    activeFighting.addOnePointToRightFighter(i);
-                    update = true;
-                }
-            }
+            return ok;
         }
-        return update;
     }
 
     private void updateKeyboard() {
@@ -329,7 +323,7 @@ public class JFrameMainJudge extends JFrame {
         }
     }
 
-    class Updater extends Thread {
+    class PollMiceAndKeyboard extends Thread {
         @Override
         public void run() {
             while (true) {
@@ -377,14 +371,6 @@ public class JFrameMainJudge extends JFrame {
         }).start();
     }
 
-
-    private Fighting f() {
-        try {
-            return new Fighting("Иван  Иванович", "Василий Васильевич", 2, "FC f-52", 2, 30, 20, ImageIO.read(new File("resources\\images\\Canada.png")), ImageIO.read(new File("resources\\images\\Qatar.png")), "Canada", "Qatar");
-        } catch (IOException e) {
-            return null;
-        }
-    }
 
     private JFrame createFrameAtLocation(Point p, JPanel jPanel) {
         JFrame frame = new JFrame();
