@@ -1,5 +1,5 @@
-#ifndef HANDBOOKDIALOG_H
-#define HANDBOOKDIALOG_H
+#ifndef CREATETOURNAMENTORDERSDIALOG_H
+#define CREATETOURNAMENTORDERSDIALOG_H
 
 #include <QDialog>
 #include <QStringList>
@@ -22,42 +22,50 @@
 #include <QPainter>
 #include <QDateEdit>
 #include <QChar>
+#include <QAxObject>
+#include <QAxBase>
 
 #include "databaseexpert.h"
 #include "webreportdialog.h"
 
+
 namespace Ui {
-class HandbookDialog;
+class CreateTournamentOrdersDialog;
 }
 
-class HandbookDialog : public QDialog
+class CreateTournamentOrdersDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit HandbookDialog(QString tableName, QString tableRusName,
-                            const QSqlDatabase & database,
-                            QWidget *parent = 0,
-                            QStringList hiddenColumns = QStringList());
-    ~HandbookDialog();
+    explicit CreateTournamentOrdersDialog(const QSqlDatabase & database,
+                                            long long tournamentUID,
+                                            QWidget *parent = 0,
+                                            QStringList hiddenColumns = QStringList()
+                                            );
+    ~CreateTournamentOrdersDialog();
 
     static QSqlRecord m_record;
 
+private slots:
+    void loadFromExcel();
+
 private:
-    Ui::HandbookDialog *ui;
+    Ui::CreateTournamentOrdersDialog *ui;
     const QSqlDatabase & m_database;
+    long long mTournamentUID;
     QStringList mHiddenColumns;
 
 };
 
-class HandlebookRelationDelegate : public QItemDelegate
+class OrdersRelationDelegate : public QItemDelegate
 {
 public:
 
-    explicit HandlebookRelationDelegate(QObject *aParent = 0)
+    explicit OrdersRelationDelegate(QObject *aParent = 0)
         : QItemDelegate(aParent)
     {}
-    ~HandlebookRelationDelegate() { }
+    ~OrdersRelationDelegate() { }
 
     void paint(QPainter *painter,
                const QStyleOptionViewItem &option,
@@ -73,4 +81,4 @@ public:
 
 };
 
-#endif // HANDBOOKDIALOG_H
+#endif // CREATETOURNAMENTORDERSDIALOG_H

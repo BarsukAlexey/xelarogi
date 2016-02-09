@@ -107,12 +107,12 @@
     <string>TextLabel</string>
    </property>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>220</x>
      <y>70</y>
-     <width>167</width>
+     <width>174</width>
      <height>99</height>
     </rect>
    </property>
@@ -121,7 +121,7 @@
      <number>0</number>
     </property>
     <item>
-     <widget class="QPushButton" name="pushButton">
+     <widget class="QPushButton" name="createOrdersBtn">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
         <horstretch>0</horstretch>
