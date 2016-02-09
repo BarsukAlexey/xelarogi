@@ -34,9 +34,9 @@ public:
     QLabel *label;
     QLabel *label_2;
     QLabel *testLabel;
-    QWidget *widget;
+    QWidget *layoutWidget;
     QHBoxLayout *horizontalLayout;
-    QPushButton *pushButton;
+    QPushButton *createOrdersBtn;
     QVBoxLayout *verticalLayout;
     QPushButton *ordersPayedBtn;
     QPushButton *ordersWeightBtn;
@@ -71,48 +71,48 @@ public:
         testLabel = new QLabel(TournamentAdminDialog);
         testLabel->setObjectName(QStringLiteral("testLabel"));
         testLabel->setGeometry(QRect(30, 30, 161, 21));
-        widget = new QWidget(TournamentAdminDialog);
-        widget->setObjectName(QStringLiteral("widget"));
-        widget->setGeometry(QRect(220, 70, 167, 99));
-        horizontalLayout = new QHBoxLayout(widget);
+        layoutWidget = new QWidget(TournamentAdminDialog);
+        layoutWidget->setObjectName(QStringLiteral("layoutWidget"));
+        layoutWidget->setGeometry(QRect(220, 70, 174, 99));
+        horizontalLayout = new QHBoxLayout(layoutWidget);
         horizontalLayout->setSpacing(0);
         horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
         horizontalLayout->setContentsMargins(0, 0, 0, 0);
-        pushButton = new QPushButton(widget);
-        pushButton->setObjectName(QStringLiteral("pushButton"));
+        createOrdersBtn = new QPushButton(layoutWidget);
+        createOrdersBtn->setObjectName(QStringLiteral("createOrdersBtn"));
         QSizePolicy sizePolicy(QSizePolicy::Minimum, QSizePolicy::Expanding);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
-        sizePolicy.setHeightForWidth(pushButton->sizePolicy().hasHeightForWidth());
-        pushButton->setSizePolicy(sizePolicy);
+        sizePolicy.setHeightForWidth(createOrdersBtn->sizePolicy().hasHeightForWidth());
+        createOrdersBtn->setSizePolicy(sizePolicy);
 
-        horizontalLayout->addWidget(pushButton);
+        horizontalLayout->addWidget(createOrdersBtn);
 
         verticalLayout = new QVBoxLayout();
         verticalLayout->setSpacing(0);
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
-        ordersPayedBtn = new QPushButton(widget);
+        ordersPayedBtn = new QPushButton(layoutWidget);
         ordersPayedBtn->setObjectName(QStringLiteral("ordersPayedBtn"));
         sizePolicy.setHeightForWidth(ordersPayedBtn->sizePolicy().hasHeightForWidth());
         ordersPayedBtn->setSizePolicy(sizePolicy);
 
         verticalLayout->addWidget(ordersPayedBtn);
 
-        ordersWeightBtn = new QPushButton(widget);
+        ordersWeightBtn = new QPushButton(layoutWidget);
         ordersWeightBtn->setObjectName(QStringLiteral("ordersWeightBtn"));
         sizePolicy.setHeightForWidth(ordersWeightBtn->sizePolicy().hasHeightForWidth());
         ordersWeightBtn->setSizePolicy(sizePolicy);
 
         verticalLayout->addWidget(ordersWeightBtn);
 
-        ordersMedicalBtn = new QPushButton(widget);
+        ordersMedicalBtn = new QPushButton(layoutWidget);
         ordersMedicalBtn->setObjectName(QStringLiteral("ordersMedicalBtn"));
         sizePolicy.setHeightForWidth(ordersMedicalBtn->sizePolicy().hasHeightForWidth());
         ordersMedicalBtn->setSizePolicy(sizePolicy);
 
         verticalLayout->addWidget(ordersMedicalBtn);
 
-        ordersAccreditationBtn = new QPushButton(widget);
+        ordersAccreditationBtn = new QPushButton(layoutWidget);
         ordersAccreditationBtn->setObjectName(QStringLiteral("ordersAccreditationBtn"));
         sizePolicy.setHeightForWidth(ordersAccreditationBtn->sizePolicy().hasHeightForWidth());
         ordersAccreditationBtn->setSizePolicy(sizePolicy);
@@ -139,7 +139,7 @@ public:
         label->setText(QApplication::translate("TournamentAdminDialog", "\320\240\320\265\320\264\320\260\320\272\321\202\320\270\321\200\320\276\320\262\320\260\320\275\320\270\320\265", 0));
         label_2->setText(QApplication::translate("TournamentAdminDialog", "\320\230\320\274\320\277\320\276\321\200\321\202", 0));
         testLabel->setText(QApplication::translate("TournamentAdminDialog", "TextLabel", 0));
-        pushButton->setText(QApplication::translate("TournamentAdminDialog", "\320\227\320\260\321\217\320\262\320\272\320\270", 0));
+        createOrdersBtn->setText(QApplication::translate("TournamentAdminDialog", "\320\227\320\260\321\217\320\262\320\272\320\270", 0));
         ordersPayedBtn->setText(QApplication::translate("TournamentAdminDialog", "\320\236\320\277\320\273\320\260\321\202\320\260", 0));
         ordersWeightBtn->setText(QApplication::translate("TournamentAdminDialog", "\320\222\320\267\320\262\320\265\321\210\320\270\320\262\320\260\320\275\320\270\320\265", 0));
         ordersMedicalBtn->setText(QApplication::translate("TournamentAdminDialog", "\320\234\320\265\320\264. \320\276\321\201\320\274\320\276\321\202\321\200", 0));

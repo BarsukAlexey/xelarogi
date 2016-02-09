@@ -42,7 +42,7 @@ HandbookDialog::HandbookDialog(QString tableName, QString tableRusName,
     }
 
     ui->tableView->setModel(model);
-    ui->tableView->setItemDelegate(new MySqlRelationDelegate(ui->tableView));
+    ui->tableView->setItemDelegate(new HandlebookRelationDelegate(ui->tableView));
 
     for (int i = 0; i < m_record.count(); ++i)
     {
@@ -112,7 +112,7 @@ HandbookDialog::~HandbookDialog()
 }
 
 
-void MySqlRelationDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
+void HandlebookRelationDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     if (HandbookDialog::m_record.fieldName(index.column()).contains("IS_", Qt::CaseSensitive))
     {
@@ -136,7 +136,7 @@ void MySqlRelationDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
     }
 }
 
-QWidget *MySqlRelationDelegate::createEditor(QWidget *aParent, const QStyleOptionViewItem &option, const QModelIndex &index) const
+QWidget *HandlebookRelationDelegate::createEditor(QWidget *aParent, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     const QSqlRelationalTableModel *sqlModel = qobject_cast<const QSqlRelationalTableModel *>(index.model());
     QSqlTableModel *childModel = sqlModel ? sqlModel->relationModel(index.column()) : 0;
@@ -159,16 +159,91 @@ QWidget *MySqlRelationDelegate::createEditor(QWidget *aParent, const QStyleOptio
             return QItemDelegate::createEditor(aParent, option, index);
         }
     }
+    else
+    {
+        if (HandbookDialog::m_record.fieldName(index.column()) == "REGION_FK")
+        {
+            int countryColumn = -1;
+            for (int i = 0; i < HandbookDialog::m_record.count(); ++i)
+            {
+                if (HandbookDialog::m_record.fieldName(i) == "COUNTRY_FK")
+                {
+                    countryColumn = i;
+                }
+            }
+            QModelIndex countryIndex = sqlModel->index(index.row(), countryColumn);
+            QString countryName = countryIndex.data(Qt::DisplayRole).toString();
 
-    QComboBox *combo = new QComboBox(aParent);
-    combo->setModel(childModel);
-    combo->setModelColumn(childModel->fieldIndex(sqlModel->relation(index.column()).displayColumn()));
-    combo->installEventFilter(const_cast<MySqlRelationDelegate *>(this));
+            QString countryFK = "";
+            QSqlQuery query;
+            query.prepare("SELECT * FROM COUNTRIES WHERE NAME = ?");
+            query.bindValue(0, countryName);
+            if (query.exec() && query.next())
+            {
+                countryFK = query.value("UID").toString();
+            }
+            query.clear();
 
-    return combo;
+            QComboBox *combo = new QComboBox(aParent);
+            query.prepare("SELECT * REGIONS WHERE COUNTRY_FK = " + countryFK);
+            QSqlTableModel* regionModel = new QSqlTableModel;
+            regionModel->setTable("REGIONS");
+            regionModel->setFilter("COUNTRY_FK = " + countryFK);
+            regionModel->select();
+            combo->setModel(regionModel);
+            combo->setModelColumn(regionModel->fieldIndex("NAME"));
+            combo->installEventFilter(const_cast<HandlebookRelationDelegate *>(this));
+
+            return combo;
+        }
+        else if (HandbookDialog::m_record.fieldName(index.column()) == "REGION_UNIT_FK")
+        {
+            int regionColumn = -1;
+            for (int i = 0; i < HandbookDialog::m_record.count(); ++i)
+            {
+                if (HandbookDialog::m_record.fieldName(i) == "REGION_FK")
+                {
+                    regionColumn = i;
+                }
+            }
+            QModelIndex regionIndex = sqlModel->index(index.row(), regionColumn);
+            QString regionName = regionIndex.data(Qt::DisplayRole).toString();
+
+            QString regionFK = "";
+            QSqlQuery query;
+            query.prepare("SELECT * FROM REGIONS WHERE NAME = ?");
+            query.bindValue(0, regionName);
+            if (query.exec() && query.next())
+            {
+                regionFK = query.value("UID").toString();
+            }
+            query.clear();
+
+            QComboBox *combo = new QComboBox(aParent);
+            query.prepare("SELECT * REGION_UNITS WHERE REGION_FK = " + regionFK);
+            QSqlTableModel* regionModel = new QSqlTableModel;
+            regionModel->setTable("REGION_UNITS");
+            regionModel->setFilter("REGION_FK = " + regionFK);
+            regionModel->select();
+            combo->setModel(regionModel);
+            combo->setModelColumn(regionModel->fieldIndex("NAME"));
+            combo->installEventFilter(const_cast<HandlebookRelationDelegate *>(this));
+
+            return combo;
+        }
+        else
+        {
+            QComboBox *combo = new QComboBox(aParent);
+            combo->setModel(childModel);
+            combo->setModelColumn(childModel->fieldIndex(sqlModel->relation(index.column()).displayColumn()));
+            combo->installEventFilter(const_cast<HandlebookRelationDelegate *>(this));
+
+            return combo;
+        }
+    }
 }
 
-void MySqlRelationDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
+void HandlebookRelationDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
 {
     if (!index.isValid())
         return;
@@ -176,6 +251,16 @@ void MySqlRelationDelegate::setModelData(QWidget *editor, QAbstractItemModel *mo
     QSqlRelationalTableModel *sqlModel = qobject_cast<QSqlRelationalTableModel *>(model);
     QSqlTableModel *childModel = sqlModel ? sqlModel->relationModel(index.column()) : 0;
     QComboBox *combo = qobject_cast<QComboBox *>(editor);
+
+    if (HandbookDialog::m_record.fieldName(index.column()) == "REGION_FK")
+    {
+        childModel = qobject_cast<QSqlTableModel *>(combo->model());
+    }
+    else if (HandbookDialog::m_record.fieldName(index.column()) == "REGION_UNIT_FK")
+    {
+        childModel = qobject_cast<QSqlTableModel *>(combo->model());
+    }
+
     if (!sqlModel || !childModel || !combo) {
         if (HandbookDialog::m_record.fieldName(index.column()).contains("IS_", Qt::CaseSensitive))
         {

@@ -83,7 +83,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->orderAction, &QAction::triggered, [this] () {
           HandbookDialog handbookDlg(QString("ORDERS"), QString("Заявки"), m_database, this,
           {"IS_WEIGHTED", "IS_MEDICAL", "IS_ACCREDITATED", "IS_PAID", "COACH_FK", "CLUB_FK",
-            "COUNTRY_FK", "REGION_FK", "REGION_UNIT_FK", "UID"});
+            /*"COUNTRY_FK", "REGION_FK", "REGION_UNIT_FK",*/ "UID"});
           handbookDlg.exec();
     });
 

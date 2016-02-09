@@ -29,6 +29,12 @@ TournamentAdminDialog::TournamentAdminDialog(const QSqlDatabase &database, long 
        OneFieldSetupDialog dlg(tournamentUID, "IS_WEIGHTED", this);
        dlg.exec();
     });
+    connect(ui->createOrdersBtn, &QPushButton::clicked, [this, database, tournamentUID] ()
+    {
+       CreateTournamentOrdersDialog dlg(database, tournamentUID, this,
+       {"IS_WEIGHTED", "IS_MEDICAL", "IS_ACCREDITATED", "IS_PAID", "COACH_FK", "CLUB_FK", "UID"});
+       dlg.exec();
+    });
 }
 
 TournamentAdminDialog::~TournamentAdminDialog()

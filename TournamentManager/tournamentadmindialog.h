@@ -6,6 +6,7 @@
 #include <QSqlQuery>
 
 #include "onefieldsetupdialog.h"
+#include "createtournamentordersdialog.h"
 
 namespace Ui {
 class TournamentAdminDialog;
