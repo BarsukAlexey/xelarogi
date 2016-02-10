@@ -26,7 +26,9 @@ SOURCES += main.cpp\
     tournamentadmindialog.cpp \
     createtournamentdialog.cpp \
     onefieldsetupdialog.cpp \
-    createtournamentordersdialog.cpp
+    createtournamentordersdialog.cpp \
+    renderareawidget.cpp \
+    tournamentgriddialog2.cpp
 
 HEADERS  += mainwindow.h \
     handbookdialog.h \
@@ -39,7 +41,9 @@ HEADERS  += mainwindow.h \
     tournamentadmindialog.h \
     createtournamentdialog.h \
     onefieldsetupdialog.h \
-    createtournamentordersdialog.h
+    createtournamentordersdialog.h \
+    renderareawidget.h \
+    tournamentgriddialog2.h
 
 FORMS    += mainwindow.ui \
     handbookdialog.ui \
