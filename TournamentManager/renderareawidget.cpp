@@ -11,11 +11,18 @@
 #include <QDebug>
 #include <QTime>
 #include <QtAlgorithms>
+#include <QSqlQuery>
+#include <QSqlError>
 
-RenderAreaWidget::RenderAreaWidget(QWidget *parent, int widthCell, int heightCell) : QWidget(parent)
+
+RenderAreaWidget::RenderAreaWidget(QWidget *parent, int widthCell, int heightCell, const QSqlDatabase &_database, long long _tournamentUID)
+    : QWidget(parent),
+      database(_database),
+      tournamentUID(_tournamentUID)
 {
-    countRows = 1;
-    countColumns = 1;
+    tournamentCategories = -1;
+    countRows = 0;
+    countColumns = 0;
     this->widthCell = widthCell;
     this->heightCell = heightCell;
     setNormalSize();
@@ -38,12 +45,17 @@ QPoint RenderAreaWidget::getCell(int v)
 
 void RenderAreaWidget::paintEvent(QPaintEvent* )
 {
+    //qDebug() << __PRETTY_FUNCTION__ << " " << QDateTime::currentDateTime();
+    //return;
+
     QPainter painter(this);
 
     QVector<NodeOfTournirGrid> nodes = getNodes();
+    if (nodes.empty()) return;
     qSort(nodes);
 
-    countColumns = qMax(countColumns, log2(nodes.last().v) + 1);
+    //countColumns = qMax(countColumns, log2(nodes.last().v) + 1);
+    countColumns = log2(nodes.last().v) + 1;
     countRows = 2 * (1 << (countColumns - 1)) - 1;
     setNormalSize();
 
@@ -68,7 +80,7 @@ void RenderAreaWidget::mousePressEvent(QMouseEvent* event)
     repaint();
 }
 
-void RenderAreaWidget::wheelEvent(QWheelEvent* event)
+void RenderAreaWidget::wheelEvent(QWheelEvent* )
 {
     cntNodes += 2;
     repaint();
@@ -112,12 +124,60 @@ void RenderAreaWidget::getNodes_ForDebuging(int v, QVector<RenderAreaWidget::Nod
 QVector<RenderAreaWidget::NodeOfTournirGrid> RenderAreaWidget::getNodes()
 {
     QVector<RenderAreaWidget::NodeOfTournirGrid> arr;
-    getNodes_ForDebuging(1, arr);
+    //getNodes_ForDebuging(1, arr);
+
+    //
+    QSqlQuery query("SELECT * FROM GRID WHERE TOURNAMENT_CATEGORIES_FK = ? ", database);
+    query.bindValue(0, tournamentCategories);
+    if (query.exec())
+    {
+        while (query.next())
+        {
+            QString orderUID = query.value("ORDER_FK").toString();
+            QString name = "Unknown";
+            QString region = "";
+            if (orderUID.size() != 0)
+            {
+                QSqlQuery queryOrder("SELECT * FROM ORDERS WHERE UID = ? ", database);
+                queryOrder.bindValue(0, orderUID);
+                if (!(queryOrder.exec() && queryOrder.next()))
+                {
+                    qDebug() << __PRETTY_FUNCTION__ << " " << queryOrder.lastError().text() << "\n" << queryOrder.lastQuery();
+                    arr.clear();
+                    return arr;
+                }
+                //name = queryOrder.value("SECOND_NAME").toString() + " " + queryOrder.value("FIRST_NAME").toString();
+                name = queryOrder.value("SECOND_NAME").toString();
+
+                QSqlQuery queryRegion("SELECT * FROM REGIONS WHERE UID = ? ", database);
+                //qDebug() << __PRETTY_FUNCTION__ << queryOrder.value("REGION_FK").toString();
+                queryRegion.bindValue(0, queryOrder.value("REGION_FK").toString());
+                if (!(queryRegion.exec() && queryRegion.next()))
+                {
+                    qDebug() << __PRETTY_FUNCTION__ << " " << queryRegion.lastError().text() << "\n" << queryRegion.lastQuery();
+                    arr.clear();
+                    return arr;
+                }
+                region = queryRegion.value("SHORTNAME").toString();
+            }
+
+
+
+            arr.push_back(RenderAreaWidget::NodeOfTournirGrid(query.value("VERTEX").toInt(), name + " " + region));
+        }
+    }
+    else
+    {
+        qDebug() << __PRETTY_FUNCTION__ << " " << query.lastError().text() << "\n" << query.lastQuery();
+        arr.clear();
+        return arr;
+    }
     return arr;
 }
 
-void RenderAreaWidget::setPlayers()
+void RenderAreaWidget::slotSetTournamentCategories(int tournamentCategories)
 {
+    this->tournamentCategories = tournamentCategories;
     repaint();
 }
 

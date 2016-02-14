@@ -38,6 +38,8 @@ protected:
 private slots:
     void on_btnExcel_clicked();
     
+    void on_pushButton_2_clicked();
+
 private:
     Ui::MainWindow *ui;
     QSqlDatabase m_database;

@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "handbookdialog.h"
+#include "tournamentgriddialog2.h"
 
 using namespace std;
 
@@ -179,4 +180,10 @@ void MainWindow::on_btnExcel_clicked()
     delete workbook;
     excel->dynamicCall("Quit()");
     delete excel;
+}
+
+void MainWindow::on_pushButton_2_clicked()
+{
+    TournamentGridDialog2 d(m_database, 1, this);
+    d.exec();
 }

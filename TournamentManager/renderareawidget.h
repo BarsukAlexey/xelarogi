@@ -9,6 +9,7 @@
 #include <QPainter>
 #include <QSet>
 #include <QPoint>
+#include <QSqlDatabase>
 
 class RenderAreaWidget : public QWidget
 {
@@ -36,13 +37,16 @@ public:
     };
 
 private:
+    const QSqlDatabase & database;
+    long long tournamentUID;
+    long long tournamentCategories;
     int cntNodes = 1; // TEMP FOR DEBUG
     int countRows, countColumns;
     int widthCell, heightCell;
     QVector<QPoint> setOfSelectedCells;
 
 public:
-    explicit RenderAreaWidget(QWidget *parent, int widthCell, int heightCell);
+    explicit RenderAreaWidget(QWidget *parent, int widthCell, int heightCell, const QSqlDatabase &_database, long long _tournamentUID);
 
 protected:
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
@@ -61,7 +65,7 @@ private:
 signals:
 
 public slots:
-    void setPlayers();
+    void slotSetTournamentCategories(int tournamentCategories);
     void widthChanged(int);
     void heightChanged(int);
 };
