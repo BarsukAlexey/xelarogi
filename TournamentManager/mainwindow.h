@@ -14,11 +14,13 @@
 #include <QString>
 #include <QPainter>
 #include <QPaintEvent>
+#include <QTreeWidgetItem>
 
 #include "tournamentmanager.h"
 #include "tournamentgriddialog.h"
-#include "choosetournamentdialog.h"
 #include "createtournamentdialog.h"
+#include "onefieldsetupdialog.h"
+#include "createtournamentordersdialog.h"
 
 namespace Ui {
 class MainWindow;
@@ -37,6 +39,10 @@ protected:
 
 private slots:
     void on_btnExcel_clicked();
+
+private:
+    void updateTournamentTreeWidget();
+    void connectButtons();
     
 private:
     Ui::MainWindow *ui;

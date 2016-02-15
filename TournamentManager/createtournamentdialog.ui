@@ -61,7 +61,11 @@
         </widget>
        </item>
        <item>
-        <widget class="QDateEdit" name="startDate"/>
+        <widget class="QDateEdit" name="startDate">
+         <property name="calendarPopup">
+          <bool>true</bool>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QLabel" name="label_5">
@@ -71,7 +75,11 @@
         </widget>
        </item>
        <item>
-        <widget class="QDateEdit" name="endDate"/>
+        <widget class="QDateEdit" name="endDate">
+         <property name="calendarPopup">
+          <bool>true</bool>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>

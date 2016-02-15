@@ -97,6 +97,7 @@ public:
 
         startDate = new QDateEdit(CreateTournamentDialog);
         startDate->setObjectName(QStringLiteral("startDate"));
+        startDate->setCalendarPopup(true);
 
         horizontalLayout_3->addWidget(startDate);
 
@@ -107,6 +108,7 @@ public:
 
         endDate = new QDateEdit(CreateTournamentDialog);
         endDate->setObjectName(QStringLiteral("endDate"));
+        endDate->setCalendarPopup(true);
 
         horizontalLayout_3->addWidget(endDate);
 

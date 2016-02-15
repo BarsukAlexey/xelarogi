@@ -51,6 +51,16 @@ private slots:
     void loadFromExcel();
 
 private:
+    long long getCountryUID(QString countryName);
+    long long getRegionUID(QString regionName, long long countryUID);
+    long long getRegionUnitUID(QString unitName, long long regionUID, long long countryUID);
+    long long getGenderUID(QString genderName);
+    long long getCategoryUID(QString categoryName);
+    long long getTypeUID(QString typeName);
+    long long getClubUID(QString clubName, long long coutryUID, long long regionUID, long long unitUID);
+    long long getCoachUID(QString coachName, long long clubUID);
+
+private:
     Ui::CreateTournamentOrdersDialog *ui;
     const QSqlDatabase & m_database;
     long long mTournamentUID;

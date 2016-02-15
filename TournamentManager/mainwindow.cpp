@@ -93,17 +93,8 @@ MainWindow::MainWindow(QWidget *parent) :
         dialog.exec();
     });
 
-    connect(ui->searchTournamentBtn, &QPushButton::clicked, [this] ()
-    {
-        ChooseTournamentDialog dialog(m_database, this);
-        dialog.exec();
-    });
-
-    connect(ui->createTournamentBtn, &QPushButton::clicked, [this] ()
-    {
-        CreateTournamentDialog dlg(this);
-        dlg.exec();
-    });
+    connectButtons();
+    updateTournamentTreeWidget();
 }
 
 MainWindow::~MainWindow()
@@ -179,4 +170,149 @@ void MainWindow::on_btnExcel_clicked()
     delete workbook;
     excel->dynamicCall("Quit()");
     delete excel;
+}
+
+void MainWindow::updateTournamentTreeWidget()
+{
+    ui->tournamentTreeWidget->clear();
+    ui->tournamentTreeWidget->setColumnCount(2);
+    ui->tournamentTreeWidget->setHeaderLabels({"Турнир", "Дата проведения"});
+
+    ui->tournamentTreeWidget->setColumnWidth(0, 200);
+
+    std::map<int, std::vector<QTreeWidgetItem*>, std::greater<int>> items;
+
+    QSqlQuery query;
+    query.prepare("SELECT * FROM TOURNAMENTS ORDER BY DATE_BEGIN ASC");
+    int currentYear = -1000;
+    if (query.exec())
+    {
+        while (query.next())
+        {
+            QString uid = query.value("UID").toString();
+            QString name = query.value("NAME").toString();
+            QString shortName = query.value("SHORTNAME").toString();
+            QDate beginDate = QDate::fromString(query.value("DATE_BEGIN").toString(),"yyyy-MM-dd");
+            QDate endDate = QDate::fromString(query.value("DATE_END").toString(),"yyyy-MM-dd");
+
+            int year = beginDate.year();
+            if (year != currentYear)
+            {
+                currentYear = year;
+            }
+
+            QTreeWidgetItem* item = new QTreeWidgetItem({name + " (" + shortName + ")",
+                                                         QString::number(beginDate.day()) + "." + QString::number(beginDate.month()) + " - " +
+                                                         QString::number(endDate.day()) + "." + QString::number(endDate.month())
+                                                        });
+            item->setData(0, Qt::UserRole, uid);
+            item->setData(1, Qt::UserRole, uid);
+
+            items[currentYear].push_back(item);
+        }
+
+        for (auto pair : items)
+        {
+            int year = pair.first;
+            QTreeWidgetItem* topLevel = new QTreeWidgetItem({QString::number(year) + " год", ""});
+            for (auto item : items[year])
+            {
+                topLevel->addChild(item);
+            }
+            ui->tournamentTreeWidget->addTopLevelItem(topLevel);
+        }
+
+        connect(ui->tournamentTreeWidget, &QTreeWidget::clicked, [this] (const QModelIndex& index)
+        {
+            if (index.parent() == QModelIndex())
+            {
+                ui->stackedWidget->setCurrentIndex(0);
+            }
+            else
+            {
+                QString uid = index.data(Qt::UserRole).toString();
+                if (!uid.isEmpty())
+                {
+                    long long tournamentUID = uid.toLongLong();
+                    ui->tournamentLabel->setText(uid);
+                    ui->stackedWidget->setCurrentIndex(1);
+                }
+            }
+        });
+    }
+    else
+    {
+        qDebug() << query.lastError().text();
+    }
+
+    ui->tournamentTreeWidget->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
+    connect(ui->tournamentTreeWidget, &QTreeWidget::customContextMenuRequested, [this] (const QPoint& pos)
+    {
+        QMenu menu;
+
+        connect(menu.addAction("Добавить"), &QAction::triggered, [this, pos] ()
+        {
+            CreateTournamentDialog dlg(this);
+            dlg.exec();
+            updateTournamentTreeWidget();
+        });
+        connect(menu.addAction("Удалить"), &QAction::triggered, [this, pos] ()
+        {
+            QModelIndex index = ui->tournamentTreeWidget->indexAt(pos);
+            QString uid = index.data(Qt::UserRole).toString();
+            if (uid.isEmpty() == false)
+            {
+                long long tournamentUID = uid.toLongLong();
+                QSqlQuery query;
+                query.prepare("DELETE FROM TOURNAMENTS WHERE UID = ?");
+                query.bindValue(0, tournamentUID);
+                if (!query.exec())
+                {
+                    qDebug() << query.lastError().text();
+                }
+                else
+                {
+                    updateTournamentTreeWidget();
+                    ui->stackedWidget->setCurrentIndex(0);
+                }
+            }
+        });
+
+        menu.exec(ui->tournamentTreeWidget->viewport()->mapToGlobal(pos));
+    });
+}
+
+void MainWindow::connectButtons()
+{
+    connect(ui->ordersAccreditationBtn, &QPushButton::clicked, [this] ()
+    {
+        long long tournamentUID = ui->tournamentLabel->text().toLongLong();
+        OneFieldSetupDialog dlg(tournamentUID, "IS_ACCREDITATED", this);
+        dlg.exec();
+    });
+    connect(ui->ordersMedicalBtn, &QPushButton::clicked, [this] ()
+    {
+        long long tournamentUID = ui->tournamentLabel->text().toLongLong();
+        OneFieldSetupDialog dlg(tournamentUID, "IS_MEDICAL", this);
+        dlg.exec();
+    });
+    connect(ui->ordersPayedBtn, &QPushButton::clicked, [this] ()
+    {
+        long long tournamentUID = ui->tournamentLabel->text().toLongLong();
+        OneFieldSetupDialog dlg(tournamentUID, "IS_PAID", this);
+        dlg.exec();
+    });
+    connect(ui->ordersWeightBtn, &QPushButton::clicked, [this] ()
+    {
+        long long tournamentUID = ui->tournamentLabel->text().toLongLong();
+        OneFieldSetupDialog dlg(tournamentUID, "IS_WEIGHTED", this);
+        dlg.exec();
+    });
+    connect(ui->createOrdersBtn, &QPushButton::clicked, [this] ()
+    {
+        long long tournamentUID = ui->tournamentLabel->text().toLongLong();
+        CreateTournamentOrdersDialog dlg(m_database, tournamentUID, this,
+        {"IS_WEIGHTED", "IS_MEDICAL", "IS_ACCREDITATED", "IS_PAID", "COACH_FK", "CLUB_FK", "UID"});
+        dlg.exec();
+    });
 }

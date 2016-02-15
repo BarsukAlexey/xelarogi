@@ -13,14 +13,20 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
+#include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QSplitter>
+#include <QtWidgets/QStackedWidget>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QToolBar>
+#include <QtWidgets/QTreeWidget>
+#include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -40,12 +46,23 @@ public:
     QAction *coachAction;
     QAction *orderAction;
     QWidget *centralWidget;
-    QPushButton *createTournamentBtn;
-    QPushButton *searchTournamentBtn;
-    QWidget *layoutWidget;
-    QHBoxLayout *horizontalLayout;
-    QPushButton *pushButton;
+    QVBoxLayout *verticalLayout_2;
+    QSplitter *splitter;
+    QTreeWidget *tournamentTreeWidget;
+    QStackedWidget *stackedWidget;
+    QWidget *generalPage;
+    QWidget *ordersPage;
+    QGridLayout *gridLayout_2;
+    QLabel *tournamentLabel;
+    QHBoxLayout *horizontalLayout_2;
+    QPushButton *createOrdersBtn;
+    QVBoxLayout *verticalLayout;
+    QPushButton *ordersPayedBtn;
+    QPushButton *ordersWeightBtn;
+    QPushButton *ordersMedicalBtn;
+    QPushButton *ordersAccreditationBtn;
     QPushButton *btnExcel;
+    QPushButton *pushButton;
     QMenuBar *menuBar;
     QMenu *handbookMenu;
     QToolBar *mainToolBar;
@@ -80,29 +97,126 @@ public:
         orderAction->setObjectName(QStringLiteral("orderAction"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
-        createTournamentBtn = new QPushButton(centralWidget);
-        createTournamentBtn->setObjectName(QStringLiteral("createTournamentBtn"));
-        createTournamentBtn->setGeometry(QRect(320, 110, 141, 61));
-        searchTournamentBtn = new QPushButton(centralWidget);
-        searchTournamentBtn->setObjectName(QStringLiteral("searchTournamentBtn"));
-        searchTournamentBtn->setGeometry(QRect(320, 180, 141, 61));
-        layoutWidget = new QWidget(centralWidget);
-        layoutWidget->setObjectName(QStringLiteral("layoutWidget"));
-        layoutWidget->setGeometry(QRect(450, 390, 334, 25));
-        horizontalLayout = new QHBoxLayout(layoutWidget);
-        horizontalLayout->setSpacing(6);
-        horizontalLayout->setContentsMargins(11, 11, 11, 11);
-        horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
-        horizontalLayout->setContentsMargins(0, 0, 0, 0);
-        pushButton = new QPushButton(layoutWidget);
-        pushButton->setObjectName(QStringLiteral("pushButton"));
+        verticalLayout_2 = new QVBoxLayout(centralWidget);
+        verticalLayout_2->setSpacing(6);
+        verticalLayout_2->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_2->setObjectName(QStringLiteral("verticalLayout_2"));
+        splitter = new QSplitter(centralWidget);
+        splitter->setObjectName(QStringLiteral("splitter"));
+        QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(splitter->sizePolicy().hasHeightForWidth());
+        splitter->setSizePolicy(sizePolicy);
+        splitter->setLineWidth(1);
+        splitter->setMidLineWidth(1);
+        splitter->setOrientation(Qt::Horizontal);
+        splitter->setOpaqueResize(true);
+        splitter->setHandleWidth(10);
+        tournamentTreeWidget = new QTreeWidget(splitter);
+        QTreeWidgetItem *__qtreewidgetitem = new QTreeWidgetItem();
+        __qtreewidgetitem->setText(0, QStringLiteral("1"));
+        tournamentTreeWidget->setHeaderItem(__qtreewidgetitem);
+        tournamentTreeWidget->setObjectName(QStringLiteral("tournamentTreeWidget"));
+        QSizePolicy sizePolicy1(QSizePolicy::Preferred, QSizePolicy::Expanding);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(0);
+        sizePolicy1.setHeightForWidth(tournamentTreeWidget->sizePolicy().hasHeightForWidth());
+        tournamentTreeWidget->setSizePolicy(sizePolicy1);
+        tournamentTreeWidget->setMaximumSize(QSize(400, 16777215));
+        tournamentTreeWidget->setIndentation(10);
+        tournamentTreeWidget->setAnimated(true);
+        splitter->addWidget(tournamentTreeWidget);
+        tournamentTreeWidget->header()->setCascadingSectionResizes(true);
+        tournamentTreeWidget->header()->setStretchLastSection(true);
+        stackedWidget = new QStackedWidget(splitter);
+        stackedWidget->setObjectName(QStringLiteral("stackedWidget"));
+        stackedWidget->setMinimumSize(QSize(200, 0));
+        generalPage = new QWidget();
+        generalPage->setObjectName(QStringLiteral("generalPage"));
+        generalPage->setMinimumSize(QSize(200, 0));
+        stackedWidget->addWidget(generalPage);
+        ordersPage = new QWidget();
+        ordersPage->setObjectName(QStringLiteral("ordersPage"));
+        ordersPage->setMinimumSize(QSize(200, 0));
+        gridLayout_2 = new QGridLayout(ordersPage);
+        gridLayout_2->setSpacing(6);
+        gridLayout_2->setContentsMargins(11, 11, 11, 11);
+        gridLayout_2->setObjectName(QStringLiteral("gridLayout_2"));
+        tournamentLabel = new QLabel(ordersPage);
+        tournamentLabel->setObjectName(QStringLiteral("tournamentLabel"));
+        QFont font;
+        font.setPointSize(14);
+        font.setBold(false);
+        font.setWeight(50);
+        tournamentLabel->setFont(font);
 
-        horizontalLayout->addWidget(pushButton);
+        gridLayout_2->addWidget(tournamentLabel, 0, 0, 1, 1);
 
-        btnExcel = new QPushButton(layoutWidget);
+        horizontalLayout_2 = new QHBoxLayout();
+        horizontalLayout_2->setSpacing(0);
+        horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
+        createOrdersBtn = new QPushButton(ordersPage);
+        createOrdersBtn->setObjectName(QStringLiteral("createOrdersBtn"));
+        QSizePolicy sizePolicy2(QSizePolicy::Minimum, QSizePolicy::Expanding);
+        sizePolicy2.setHorizontalStretch(0);
+        sizePolicy2.setVerticalStretch(0);
+        sizePolicy2.setHeightForWidth(createOrdersBtn->sizePolicy().hasHeightForWidth());
+        createOrdersBtn->setSizePolicy(sizePolicy2);
+
+        horizontalLayout_2->addWidget(createOrdersBtn);
+
+        verticalLayout = new QVBoxLayout();
+        verticalLayout->setSpacing(0);
+        verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
+        ordersPayedBtn = new QPushButton(ordersPage);
+        ordersPayedBtn->setObjectName(QStringLiteral("ordersPayedBtn"));
+        sizePolicy2.setHeightForWidth(ordersPayedBtn->sizePolicy().hasHeightForWidth());
+        ordersPayedBtn->setSizePolicy(sizePolicy2);
+
+        verticalLayout->addWidget(ordersPayedBtn);
+
+        ordersWeightBtn = new QPushButton(ordersPage);
+        ordersWeightBtn->setObjectName(QStringLiteral("ordersWeightBtn"));
+        sizePolicy2.setHeightForWidth(ordersWeightBtn->sizePolicy().hasHeightForWidth());
+        ordersWeightBtn->setSizePolicy(sizePolicy2);
+
+        verticalLayout->addWidget(ordersWeightBtn);
+
+        ordersMedicalBtn = new QPushButton(ordersPage);
+        ordersMedicalBtn->setObjectName(QStringLiteral("ordersMedicalBtn"));
+        sizePolicy2.setHeightForWidth(ordersMedicalBtn->sizePolicy().hasHeightForWidth());
+        ordersMedicalBtn->setSizePolicy(sizePolicy2);
+
+        verticalLayout->addWidget(ordersMedicalBtn);
+
+        ordersAccreditationBtn = new QPushButton(ordersPage);
+        ordersAccreditationBtn->setObjectName(QStringLiteral("ordersAccreditationBtn"));
+        sizePolicy2.setHeightForWidth(ordersAccreditationBtn->sizePolicy().hasHeightForWidth());
+        ordersAccreditationBtn->setSizePolicy(sizePolicy2);
+
+        verticalLayout->addWidget(ordersAccreditationBtn);
+
+
+        horizontalLayout_2->addLayout(verticalLayout);
+
+
+        gridLayout_2->addLayout(horizontalLayout_2, 1, 0, 1, 1);
+
+        stackedWidget->addWidget(ordersPage);
+        splitter->addWidget(stackedWidget);
+
+        verticalLayout_2->addWidget(splitter);
+
+        btnExcel = new QPushButton(centralWidget);
         btnExcel->setObjectName(QStringLiteral("btnExcel"));
 
-        horizontalLayout->addWidget(btnExcel);
+        verticalLayout_2->addWidget(btnExcel);
+
+        pushButton = new QPushButton(centralWidget);
+        pushButton->setObjectName(QStringLiteral("pushButton"));
+
+        verticalLayout_2->addWidget(pushButton);
 
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
@@ -137,6 +251,9 @@ public:
 
         retranslateUi(MainWindow);
 
+        stackedWidget->setCurrentIndex(0);
+
+
         QMetaObject::connectSlotsByName(MainWindow);
     } // setupUi
 
@@ -154,10 +271,14 @@ public:
         clubAction->setText(QApplication::translate("MainWindow", "\320\232\320\273\321\203\320\261\321\213", 0));
         coachAction->setText(QApplication::translate("MainWindow", "\320\242\321\200\320\265\320\275\320\265\321\200\321\201\320\272\320\270\320\271 \321\201\320\276\321\201\321\202\320\260\320\262", 0));
         orderAction->setText(QApplication::translate("MainWindow", "\320\227\320\260\321\217\320\262\320\272\320\270", 0));
-        createTournamentBtn->setText(QApplication::translate("MainWindow", "\320\241\320\276\320\267\320\264\320\260\321\202\321\214 \320\275\320\276\320\262\321\213\320\271 \321\202\321\203\321\200\320\275\320\270\321\200", 0));
-        searchTournamentBtn->setText(QApplication::translate("MainWindow", "\320\222\321\213\320\261\321\200\320\260\321\202\321\214 \321\202\321\203\321\200\320\275\320\270\321\200", 0));
-        pushButton->setText(QApplication::translate("MainWindow", "\320\240\320\265\320\264\320\260\320\272\321\202\320\270\321\200\320\276\320\262\320\260\320\275\320\270\320\265 \321\202\321\203\321\200\320\275\320\270\321\200\320\275\320\276\320\271 \321\201\320\265\321\202\320\272\320\270", 0));
+        tournamentLabel->setText(QApplication::translate("MainWindow", "\320\242\321\203\321\200\320\275\320\270\321\200", 0));
+        createOrdersBtn->setText(QApplication::translate("MainWindow", "\320\227\320\260\321\217\320\262\320\272\320\270", 0));
+        ordersPayedBtn->setText(QApplication::translate("MainWindow", "\320\236\320\277\320\273\320\260\321\202\320\260", 0));
+        ordersWeightBtn->setText(QApplication::translate("MainWindow", "\320\222\320\267\320\262\320\265\321\210\320\270\320\262\320\260\320\275\320\270\320\265", 0));
+        ordersMedicalBtn->setText(QApplication::translate("MainWindow", "\320\234\320\265\320\264. \320\276\321\201\320\274\320\276\321\202\321\200", 0));
+        ordersAccreditationBtn->setText(QApplication::translate("MainWindow", "\320\220\320\272\320\272\321\200\320\265\320\264\320\270\321\202\320\260\321\206\320\270\321\217", 0));
         btnExcel->setText(QApplication::translate("MainWindow", "\320\227\320\260\320\277\320\276\320\273\320\275\320\270\321\202\321\214 \321\201\321\202\321\200\320\260\320\275\321\213 \320\270\320\267 Excel", 0));
+        pushButton->setText(QApplication::translate("MainWindow", "\320\240\320\265\320\264\320\260\320\272\321\202\320\270\321\200\320\276\320\262\320\260\320\275\320\270\320\265 \321\202\321\203\321\200\320\275\320\270\321\200\320\275\320\276\320\271 \321\201\320\265\321\202\320\272\320\270", 0));
         handbookMenu->setTitle(QApplication::translate("MainWindow", "\320\241\320\277\321\200\320\260\320\262\320\276\321\207\320\275\320\270\320\272\320\270", 0));
     } // retranslateUi
 

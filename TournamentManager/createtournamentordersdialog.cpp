@@ -153,6 +153,9 @@ void CreateTournamentOrdersDialog::loadFromExcel()
         QString regionName = c->dynamicCall("Value()").toString();
         delete c;
 
+        long long countryUID = getCountryUID(countryName);
+        long long regionUID = getRegionUID(regionName, countryUID);
+
         for (int row = 15 ; row < intRowStart + intRows ; ++row) {
 
             QAxObject* cell = sheet->querySubObject( "Cells( int, int )", row, 2 );
@@ -210,11 +213,41 @@ void CreateTournamentOrdersDialog::loadFromExcel()
             QString coachName = value.toString();
             delete cell;
 
+            long long unitUID = getRegionUnitUID(regionUnitName, regionUID, countryUID);
+            long long clubUID = getClubUID(clubName, countryUID, regionUID, unitUID);
+            QStringList coachNameArgs = coachName.split(" ");
+            coachName = "";
+            for (const QString& arg: coachNameArgs)
+            {
+                if (arg.isEmpty()) continue;
+                if (coachName.isEmpty() == false)
+                {
+                    coachName += " ";
+                }
+                coachName += arg;
+            }
 
+            // TODO check if exist
+            QSqlQuery query;
+            query.prepare(  "INSERT INTO ORDERS(FIRSTNAME, LASTNAME, PATRONYMIC, COUNTRY_FK, REGION_FK, REGION_UNIT_FK, BIRTHDAY, WEIGHT, SEX_FK, TOURNAMENT_CATEGORY_FK, TYPE_FK, CLUB_FK, COACH_FK) "
+                            "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+                            );
+            query.bindValue(0, firstName);
+            query.bindValue(1, secondName);
+            query.bindValue(2, patronymic);
+            query.bindValue(3, countryUID);
+            query.bindValue(4, regionUID);
+            query.bindValue(5, unitUID);
+            query.bindValue(6, QDate::fromString(birthday, "dd.MM.YYYY").toString("yyyy-MM-dd"));
+            query.bindValue(7, weight.toDouble());
+            query.bindValue(8, getGenderUID(gender));
+            query.bindValue(9, getCategoryUID(category));
+            query.bindValue(10, getTypeUID(sportKind));
+            query.bindValue(11, clubUID);
+            query.bindValue(12, getCoachUID(coachName, clubUID));
 
-            //QSqlQuery query("INSERT INTO COUNTRIES(NAME, NAME_ENG, SHORTNAME, SHORTNAME_ENG) VALUES('" + name + "','" + nameEng + "','" + shortNameEng2 + "','" + shortNameEng3 + "')", m_database);
-            //if (!query.exec())
-            //    qDebug() << query.lastError().text() << query.lastQuery();
+            if (query.exec()) ;
+            else qDebug() << query.lastError().text();
         }
     }
 
@@ -223,6 +256,255 @@ void CreateTournamentOrdersDialog::loadFromExcel()
     delete workbook;
     excel->dynamicCall("Quit()");
     delete excel;
+}
+
+long long CreateTournamentOrdersDialog::getCountryUID(QString countryName)
+{
+    QSqlQuery query;
+    query.prepare("SELECT UID FROM COUNTRIES WHERE NAME = ?");
+    query.bindValue(0, countryName);
+    bool isFind = ( query.exec() && query.next() );
+    if (isFind)
+    {
+        return query.value("UID").toLongLong();
+    }
+    else
+    {
+        query.clear();
+        query.prepare("INSERT INTO COUNTRIES(NAME) VALUES(?)");
+        query.bindValue(0, countryName);
+
+        if (query.exec())
+        {
+            query.clear();
+            return getCountryUID(countryName);
+        }
+        else
+        {
+            qDebug() << query.lastError().text();
+            return -100;
+        }
+    }
+}
+
+long long CreateTournamentOrdersDialog::getRegionUID(QString regionName, long long countryUID)
+{
+    QSqlQuery query;
+    query.prepare("SELECT UID FROM REGIONS WHERE NAME = ? AND COUNTRY_FK = ?");
+    query.bindValue(0, regionName);
+    query.bindValue(1, countryUID);
+    bool isFind = ( query.exec() && query.next() );
+    if (isFind)
+    {
+        return query.value("UID").toLongLong();
+    }
+    else
+    {
+        query.clear();
+        query.prepare("INSERT INTO REGIONS(NAME, COUNTRY_FK) VALUES(?, ?)");
+        query.bindValue(0, regionName);
+        query.bindValue(1, countryUID);
+
+        if (query.exec())
+        {
+            query.clear();
+            return getRegionUID(regionName, countryUID);
+        }
+        else
+        {
+            qDebug() << query.lastError().text();
+            return -100;
+        }
+    }
+}
+
+long long CreateTournamentOrdersDialog::getRegionUnitUID(QString unitName, long long regionUID, long long countryUID)
+{
+    QSqlQuery query;
+    query.prepare("SELECT UID FROM REGION_UNITS WHERE NAME = ? AND REGION_FK = ?");
+    query.bindValue(0, unitName);
+    query.bindValue(1, regionUID);
+    bool isFind = ( query.exec() && query.next() );
+    if (isFind)
+    {
+        return query.value("UID").toLongLong();
+    }
+    else
+    {
+        query.clear();
+        query.prepare("INSERT INTO REGION_UNITS(NAME, REGION_FK, COUNRY_FK) VALUES(?, ?, ?)");
+        query.bindValue(0, unitName);
+        query.bindValue(1, regionUID);
+        query.bindValue(2, countryUID);
+
+        if (query.exec())
+        {
+            query.clear();
+            return getRegionUnitUID(unitName, regionUID, countryUID);
+        }
+        else
+        {
+            qDebug() << query.lastError().text();
+            return -100;
+        }
+    }
+}
+
+long long CreateTournamentOrdersDialog::getGenderUID(QString genderName)
+{
+    QSqlQuery query;
+    query.prepare("SELECT UID FROM SEXES WHERE NAME = ?");
+    query.bindValue(0, genderName);
+    bool isFind = ( query.exec() && query.next() );
+    if (isFind)
+    {
+        return query.value("UID").toLongLong();
+    }
+    else
+    {
+        query.clear();
+        query.prepare("INSERT INTO SEXES(NAME, SHORTNAME) VALUES(?, ?)");
+        query.bindValue(0, genderName);
+        query.bindValue(1, genderName.left(1).toUpper());
+
+        if (query.exec())
+        {
+            query.clear();
+            return getGenderUID(genderName);
+        }
+        else
+        {
+            qDebug() << query.lastError().text();
+            return -100;
+        }
+    }
+}
+
+long long CreateTournamentOrdersDialog::getCategoryUID(QString categoryName)
+{
+    QSqlQuery query;
+    query.prepare("SELECT UID FROM TOUNRAMENT_CATEGORIES WHERE NAME = ?");
+    query.bindValue(0, categoryName);
+    bool isFind = ( query.exec() && query.next() );
+    if (isFind)
+    {
+        return query.value("UID").toLongLong();
+    }
+    else
+    {
+        query.clear();
+        query.prepare("INSERT INTO TOURNAMENT_CATEGORIES(NAME, TOURNAMENT_FK) VALUES(?, ?)");
+        query.bindValue(0, categoryName);
+        query.bindValue(1, mTournamentUID);
+
+        // TODO запросить диапазон возраста и веса ( + пол ? )
+
+        if (query.exec())
+        {
+            query.clear();
+            return getCategoryUID(categoryName);
+        }
+        else
+        {
+            qDebug() << query.lastError().text();
+            return -100;
+        }
+    }
+}
+
+long long CreateTournamentOrdersDialog::getTypeUID(QString typeName)
+{
+    QSqlQuery query;
+    query.prepare("SELECT UID FROM TYPES WHERE NAME = ?");
+    query.bindValue(0, typeName);
+    bool isFind = ( query.exec() && query.next() );
+    if (isFind)
+    {
+        return query.value("UID").toLongLong();
+    }
+    else
+    {
+        query.clear();
+        query.prepare("INSERT INTO TYPES(NAME) VALUES(?)");
+        query.bindValue(0, typeName);
+
+        if (query.exec())
+        {
+            query.clear();
+            return getTypeUID(typeName);
+        }
+        else
+        {
+            qDebug() << query.lastError().text();
+            return -100;
+        }
+    }
+}
+
+long long CreateTournamentOrdersDialog::getClubUID(QString clubName, long long coutryUID, long long regionUID, long long unitUID)
+{
+    QSqlQuery query;
+    query.prepare("SELECT UID FROM CLUBS WHERE NAME = ? AND COUNTRY_FK = ? AND REGION_FK = ? AND REGION_UNIT = ?");
+    query.bindValue(0, clubName);
+    query.bindValue(1, coutryUID);
+    query.bindValue(2, regionUID);
+    query.bindValue(3, unitUID);
+    bool isFind = ( query.exec() && query.next() );
+    if (isFind)
+    {
+        return query.value("UID").toLongLong();
+    }
+    else
+    {
+        query.clear();
+        query.prepare("INSERT INTO CLUBS(NAME, COUNTRY_FK, REGION_FK, REGION_UNIT_FK) VALUES(?, ?, ?, ?)");
+        query.bindValue(0, clubName);
+        query.bindValue(1, coutryUID);
+        query.bindValue(2, regionUID);
+        query.bindValue(3, unitUID);
+
+        if (query.exec())
+        {
+            query.clear();
+            return getClubUID(clubName, coutryUID, regionUID, unitUID);
+        }
+        else
+        {
+            qDebug() << query.lastError().text();
+            return -100;
+        }
+    }
+}
+
+long long CreateTournamentOrdersDialog::getCoachUID(QString coachName, long long clubUID)
+{
+    QSqlQuery query;
+    query.prepare("SELECT UID FROM COACHS WHERE NAME = ? AND CLUB_FK = ?");
+    query.bindValue(0, coachName);
+    query.bindValue(1, clubUID);
+    bool isFind = ( query.exec() && query.next() );
+    if (isFind)
+    {
+        return query.value("UID").toLongLong();
+    }
+    else
+    {
+        query.clear();
+        query.prepare("INSERT INTO COACHS(NAME, CLUB_FK");
+        query.bindValue(0, coachName);
+        query.bindValue(1, clubUID);
+
+        if (query.exec())
+        {
+            query.clear();
+            return getCoachUID(coachName, clubUID);
+        }
+        else
+        {
+            qDebug() << query.lastError().text();
+            return -100;
+        }
+    }
 }
 
 
