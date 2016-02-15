@@ -50,7 +50,6 @@ private:
     void setInGridBestFigher(int v, const QVector<bool>& isLeaf, const QVector<int>& distToLeaf, const QVector<TournamentGridDialog2::BestFigher>& bestFighters, QHash<long long, int>& vertexOfBest);
 
 private slots:
-    void playerChanged();
     void onActivatedCategory(int id);
     void onCellCLickedForChangePrioritet(int, int);
     void onButtonGenerateGrid();

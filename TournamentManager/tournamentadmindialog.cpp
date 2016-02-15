@@ -48,3 +48,8 @@ TournamentAdminDialog::~TournamentAdminDialog()
 {
     delete ui;
 }
+
+void TournamentAdminDialog::on_createOrdersBtn_clicked()
+{
+
+}

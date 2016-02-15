@@ -20,6 +20,9 @@ public:
     explicit TournamentAdminDialog(const QSqlDatabase& database, long long tournamentUID, QWidget *parent = 0);
     ~TournamentAdminDialog();
 
+private slots:
+    void on_createOrdersBtn_clicked();
+
 private:
     Ui::TournamentAdminDialog *ui;
 };
