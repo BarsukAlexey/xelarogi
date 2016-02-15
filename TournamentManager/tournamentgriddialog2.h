@@ -54,8 +54,7 @@ private slots:
     void onActivatedCategory(int id);
     void onCellCLickedForChangePrioritet(int, int);
     void onButtonGenerateGrid();
-
+    void onButtonDelete();
 
 };
-
 #endif // TOURNAMENTGRIDDIALOG2_H

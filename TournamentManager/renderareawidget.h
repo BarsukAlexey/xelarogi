@@ -18,18 +18,11 @@ class RenderAreaWidget : public QWidget
 public:
     struct NodeOfTournirGrid
     {
-        int v; // id вершины; вершины нумируются как в дереве отрезков
-        QString name; //
-        NodeOfTournirGrid()
-        {
-            v = -1;
-            name = "error";
-        }
-        NodeOfTournirGrid(int v, QString name)
-        {
-            this->v = v;
-            this->name = name;
-        }
+        int v; // id вершины; вершины нумируются как в дереве отрезков (только зеркально)
+        QString name;
+        QString region;
+        int isFighing;
+
         bool operator < (const NodeOfTournirGrid& other) const
         {
             return v < other.v;
@@ -37,28 +30,25 @@ public:
     };
 
 private:
-    const QSqlDatabase & database;
-    long long tournamentUID;
+    const QSqlDatabase &database;
     long long tournamentCategories;
-    int cntNodes = 1; // TEMP FOR DEBUG
     int countRows, countColumns;
     int widthCell, heightCell;
-    QVector<QPoint> setOfSelectedCells;
+    const NodeOfTournirGrid noNode = NodeOfTournirGrid({-1, "", "", false});
+    NodeOfTournirGrid selectedNode = noNode;
 
 public:
-    explicit RenderAreaWidget(QWidget *parent, int widthCell, int heightCell, const QSqlDatabase &_database, long long _tournamentUID);
+    explicit RenderAreaWidget(QWidget *parent, int widthCell, int heightCell, const QSqlDatabase &_database);
 
 protected:
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
     void mousePressEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
-    void wheelEvent(QWheelEvent *event) Q_DECL_OVERRIDE;
 
 private:
     void paintRect(int i, int j, QPainter& painter, const NodeOfTournirGrid& node);
     void paintLine(QPoint , QPoint , QPainter& painter);
     void setNormalSize();
     QVector<NodeOfTournirGrid> getNodes();
-    void getNodes_ForDebuging(int v, QVector<RenderAreaWidget::NodeOfTournirGrid>& arr);
     int log2(int x);
     QPoint getCell(int v);
 
@@ -68,6 +58,6 @@ public slots:
     void slotSetTournamentCategories(int tournamentCategories);
     void widthChanged(int);
     void heightChanged(int);
+    void onSaveInExcel();
 };
-
 #endif // RENDERAREAWIDGET_H

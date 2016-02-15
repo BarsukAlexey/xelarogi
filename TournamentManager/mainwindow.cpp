@@ -33,59 +33,59 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->countryAction, &QAction::triggered, [this] () {
         HandbookDialog handbookDlg(QString("COUNTRIES"), QString("Страны"), m_database, this, {"UID"});
-          handbookDlg.exec();
+        handbookDlg.exec();
     });
 
     connect(ui->regionAction, &QAction::triggered, [this] () {
-          HandbookDialog handbookDlg(QString("REGIONS"), QString("Регионы"), m_database, this, {"UID"});
-          handbookDlg.exec();
+        HandbookDialog handbookDlg(QString("REGIONS"), QString("Регионы"), m_database, this, {"UID"});
+        handbookDlg.exec();
     });
 
     connect(ui->ateAction, &QAction::triggered, [this] () {
-          HandbookDialog handbookDlg(QString("REGION_UNITS"), QString("АТЕ"), m_database, this, {"UID"});
-          handbookDlg.exec();
+        HandbookDialog handbookDlg(QString("REGION_UNITS"), QString("АТЕ"), m_database, this, {"UID"});
+        handbookDlg.exec();
     });
 
     connect(ui->sexAction, &QAction::triggered, [this] () {
-          HandbookDialog handbookDlg(QString("SEXES"), QString("Пол"), m_database, this, {"UID"});
-          handbookDlg.exec();
+        HandbookDialog handbookDlg(QString("SEXES"), QString("Пол"), m_database, this, {"UID"});
+        handbookDlg.exec();
     });
 
     connect(ui->typeAction, &QAction::triggered, [this] () {
-          HandbookDialog handbookDlg(QString("TYPES"), QString("Разделы"), m_database, this, {"UID"});
-          handbookDlg.exec();
+        HandbookDialog handbookDlg(QString("TYPES"), QString("Разделы"), m_database, this, {"UID"});
+        handbookDlg.exec();
     });
 
     connect(ui->sportCategoryAction, &QAction::triggered, [this] () {
-          HandbookDialog handbookDlg(QString("SPORT_CATEGORIES"), QString("Спортивные разряды"), m_database, this, {"UID"});
-          handbookDlg.exec();
+        HandbookDialog handbookDlg(QString("SPORT_CATEGORIES"), QString("Спортивные разряды"), m_database, this, {"UID"});
+        handbookDlg.exec();
     });
 
     connect(ui->tournamentAction, &QAction::triggered, [this] () {
-          HandbookDialog handbookDlg(QString("TOURNAMENTS"), QString("Турниры"), m_database, this, {"UID"});
-          handbookDlg.exec();
+        HandbookDialog handbookDlg(QString("TOURNAMENTS"), QString("Турниры"), m_database, this, {"UID"});
+        handbookDlg.exec();
     });
 
     connect(ui->tournamentCategoryAction, &QAction::triggered, [this] () {
-          HandbookDialog handbookDlg(QString("TOURNAMENT_CATEGORIES"), QString("Категории турнира"), m_database, this, {"UID"});
-          handbookDlg.exec();
+        HandbookDialog handbookDlg(QString("TOURNAMENT_CATEGORIES"), QString("Категории турнира"), m_database, this, {"UID"});
+        handbookDlg.exec();
     });
 
     connect(ui->clubAction, &QAction::triggered, [this] () {
-          HandbookDialog handbookDlg(QString("CLUBS"), QString("Клубы"), m_database, this, {"UID"});
-          handbookDlg.exec();
+        HandbookDialog handbookDlg(QString("CLUBS"), QString("Клубы"), m_database, this, {"UID"});
+        handbookDlg.exec();
     });
 
     connect(ui->coachAction, &QAction::triggered, [this] () {
-          HandbookDialog handbookDlg(QString("COACHS"), QString("Тренерский состав"), m_database, this, {"UID"});
-          handbookDlg.exec();
+        HandbookDialog handbookDlg(QString("COACHS"), QString("Тренерский состав"), m_database, this, {"UID"});
+        handbookDlg.exec();
     });
 
     connect(ui->orderAction, &QAction::triggered, [this] () {
-          HandbookDialog handbookDlg(QString("ORDERS"), QString("Заявки"), m_database, this,
-          {"IS_WEIGHTED", "IS_MEDICAL", "IS_ACCREDITATED", "IS_PAID", "COACH_FK", "CLUB_FK",
-            /*"COUNTRY_FK", "REGION_FK", "REGION_UNIT_FK",*/ "UID"});
-          handbookDlg.exec();
+        HandbookDialog handbookDlg(QString("ORDERS"), QString("Заявки"), m_database, this,
+        {"IS_WEIGHTED", "IS_MEDICAL", "IS_ACCREDITATED", "IS_PAID", "COACH_FK", "CLUB_FK",
+         /*"COUNTRY_FK", "REGION_FK", "REGION_UNIT_FK",*/ "UID"});
+        handbookDlg.exec();
     });
 
     connect(ui->pushButton, &QPushButton::clicked, [this] ()
@@ -154,20 +154,20 @@ void MainWindow::on_btnExcel_clicked()
                 continue;
 
             switch (col) {
-            case 1:
-                name = value.toString();
-                break;
-            case 2:
-                nameEng = value.toString();
-                break;
-            case 3:
-                shortNameEng2 = value.toString();
-                break;
-            case 4:
-                shortNameEng3 = value.toString();
-                break;
-            default:
-                break;
+                case 1:
+                    name = value.toString();
+                    break;
+                case 2:
+                    nameEng = value.toString();
+                    break;
+                case 3:
+                    shortNameEng2 = value.toString();
+                    break;
+                case 4:
+                    shortNameEng3 = value.toString();
+                    break;
+                default:
+                    break;
             }
         }
         QSqlQuery query("INSERT INTO COUNTRIES(NAME, NAME_ENG, SHORTNAME, SHORTNAME_ENG) VALUES('" + name + "','" + nameEng + "','" + shortNameEng2 + "','" + shortNameEng3 + "')", m_database);
@@ -187,3 +187,5 @@ void MainWindow::on_pushButton_2_clicked()
     TournamentGridDialog2 d(m_database, 1, this);
     d.exec();
 }
+
+
