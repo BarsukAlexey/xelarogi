@@ -129,7 +129,7 @@ void CreateTournamentOrdersDialog::loadFromExcel()
 {
     QAxObject* excel = new QAxObject( "Excel.Application", 0 );
     QAxObject* workbooks = excel->querySubObject( "Workbooks" );
-    QAxObject* workbook = workbooks->querySubObject( "Open(const QString&)", "C:/orders.xlsx" );
+    QAxObject* workbook = workbooks->querySubObject( "Open(const QString&)", "D:/orders.xlsx" );
 
     QAxObject* sheets = workbook->querySubObject( "Sheets" );
     int sheetCount = sheets->dynamicCall("Count()").toInt();

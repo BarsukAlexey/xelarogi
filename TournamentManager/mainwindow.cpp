@@ -98,6 +98,8 @@ MainWindow::MainWindow(QWidget *parent) :
     updateTournamentTreeWidget();
 
     ui->tournamentUidLabel->setVisible(false);
+
+    connect(ui->pushButton_2, &QPushButton::clicked, this, &MainWindow::on_pushButton_2_clicked);
 }
 
 MainWindow::~MainWindow()
@@ -334,6 +336,7 @@ void MainWindow::connectButtons()
 
 void MainWindow::on_pushButton_2_clicked()
 {
+    qDebug() << "clicked";
     TournamentGridDialog2 d(m_database, 1, this);
     d.exec();
 }

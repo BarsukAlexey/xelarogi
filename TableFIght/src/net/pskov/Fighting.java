@@ -316,7 +316,7 @@ public class Fighting {
 
         ++countOfMinusToLeft;
         for (int i = 0; i < 3; i++) {
-            ++countOfPointsForTheRightFighter[currentRound][i];
+            countOfPointsForTheRightFighter[currentRound][i] += 3;
         }
         stackOfMinus.add(new Pair<>(Player.left, currentRound));
 
@@ -336,7 +336,7 @@ public class Fighting {
 
         ++countOfMinusToRight;
         for (int i = 0; i < 3; i++) {
-            ++countOfPointsForTheLeftFighter[currentRound][i];
+            countOfPointsForTheLeftFighter[currentRound][i] += 3;
         }
         stackOfMinus.add(new Pair<>(Player.right, currentRound));
 
@@ -346,7 +346,7 @@ public class Fighting {
     }
 
     /**
-     * Откатываем последнее предупреждение
+     * Откатываем последний minus
      */
     public synchronized void cancelLastMinus() {
         if (stackOfMinus.isEmpty())
@@ -358,12 +358,12 @@ public class Fighting {
         if (player == Player.left) {
             --countOfMinusToLeft;
             for (int i = 0; i < 3; i++) {
-                --countOfPointsForTheRightFighter[idRound][i];
+                countOfPointsForTheRightFighter[idRound][i] -= 3;
             }
         } else {
             --countOfMinusToRight;
             for (int i = 0; i < 3; i++) {
-                --countOfPointsForTheLeftFighter[idRound][i];
+                countOfPointsForTheLeftFighter[idRound][i] -= 3;
             }
         }
         if (statusFighting == StatusFighting.disqualification && countOfMinusToLeft <= 2 && countOfMinusToRight <= 2) {

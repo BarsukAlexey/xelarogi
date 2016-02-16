@@ -89,7 +89,7 @@ public class JDialogInitMice extends JDialog {
                     cyc:
                     while (!isInterrupt) {
                         long startTime = System.currentTimeMillis();
-//                        System.err.println("OK + " + i + "     " + allMouseController.size());
+                        System.err.println("OK + " + i + "     " + allMouseController.size());
                         for (MouseController mouseController : allMouseController) {
                             mouseController.update();
                             if (mouseController.wasLeftClick() || mouseController.wasRightClick()) {
