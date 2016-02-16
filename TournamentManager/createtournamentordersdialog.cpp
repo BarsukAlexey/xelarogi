@@ -129,8 +129,7 @@ void CreateTournamentOrdersDialog::loadFromExcel()
 {
     QAxObject* excel = new QAxObject( "Excel.Application", 0 );
     QAxObject* workbooks = excel->querySubObject( "Workbooks" );
-    QAxObject* workbook = workbooks->querySubObject( "Open(const QString&)", "D:/orders.xlsx" );
-
+    QAxObject* workbook = workbooks->querySubObject( "Open(const QString&)", "C:/orders.xlsx" );
 
     QAxObject* sheets = workbook->querySubObject( "Sheets" );
     int sheetCount = sheets->dynamicCall("Count()").toInt();
@@ -141,10 +140,7 @@ void CreateTournamentOrdersDialog::loadFromExcel()
 
         QAxObject* usedrange = sheet->querySubObject( "UsedRange");
         QAxObject * rows = usedrange->querySubObject("Rows");
-        QAxObject * columns = usedrange->querySubObject("Columns");
         int intRowStart = usedrange->property("Row").toInt();
-        int intColStart = usedrange->property("Column").toInt();
-        int intCols = columns->property("Count").toInt();
         int intRows = rows->property("Count").toInt();
 
         QAxObject* c = sheet->querySubObject("Cells( int, int )", 7, 3);
@@ -174,6 +170,8 @@ void CreateTournamentOrdersDialog::loadFromExcel()
             value = cell->dynamicCall( "Value()" );
             QString patronymic = value.toString();
             delete cell;
+
+            if (secondName.isEmpty()) break;
 
             cell = sheet->querySubObject( "Cells( int, int )", row, 5 );
             value = cell->dynamicCall( "Value()" );
@@ -230,10 +228,13 @@ void CreateTournamentOrdersDialog::loadFromExcel()
             }
 
             // TODO check if exist
+
+
             QSqlQuery query;
-            query.prepare(  "INSERT INTO ORDERS(FIRSTNAME, LASTNAME, PATRONYMIC, COUNTRY_FK, REGION_FK, REGION_UNIT_FK, BIRTHDAY, WEIGHT, SEX_FK, TOURNAMENT_CATEGORY_FK, TYPE_FK, CLUB_FK, COACH_FK) "
-                            "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-                            );
+            if (!query.prepare(  "INSERT INTO ORDERS(FIRST_NAME, SECOND_NAME, PATRONYMIC, COUNTRY_FK, REGION_FK, REGION_UNIT_FK, BIRTHDATE, WEIGHT, SEX_FK, TOURNAMENT_CATEGORY_FK, TYPE_FK, CLUB_FK, COACH_FK, SPORT_CATEGORY_FK) "
+                            "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)"
+                            ))
+                qDebug() << query.lastError().text();
             query.bindValue(0, firstName);
             query.bindValue(1, secondName);
             query.bindValue(2, patronymic);
@@ -334,7 +335,7 @@ long long CreateTournamentOrdersDialog::getRegionUnitUID(QString unitName, long 
     else
     {
         query.clear();
-        query.prepare("INSERT INTO REGION_UNITS(NAME, REGION_FK, COUNRY_FK) VALUES(?, ?, ?)");
+        query.prepare("INSERT INTO REGION_UNITS(NAME, REGION_FK, COUNTRY_FK) VALUES(?, ?, ?)");
         query.bindValue(0, unitName);
         query.bindValue(1, regionUID);
         query.bindValue(2, countryUID);
@@ -385,7 +386,8 @@ long long CreateTournamentOrdersDialog::getGenderUID(QString genderName)
 long long CreateTournamentOrdersDialog::getCategoryUID(QString categoryName)
 {
     QSqlQuery query;
-    query.prepare("SELECT UID FROM TOUNRAMENT_CATEGORIES WHERE NAME = ?");
+    if (!query.prepare("SELECT UID FROM TOURNAMENT_CATEGORIES WHERE NAME = ?"))
+        qDebug() << query.lastError().text();
     query.bindValue(0, categoryName);
     bool isFind = ( query.exec() && query.next() );
     if (isFind)
@@ -395,7 +397,8 @@ long long CreateTournamentOrdersDialog::getCategoryUID(QString categoryName)
     else
     {
         query.clear();
-        query.prepare("INSERT INTO TOURNAMENT_CATEGORIES(NAME, TOURNAMENT_FK) VALUES(?, ?)");
+        if (!query.prepare("INSERT INTO TOURNAMENT_CATEGORIES(NAME, TOURNAMENT_FK) VALUES(?, ?)"))
+            qDebug() << query.lastError().text();
         query.bindValue(0, categoryName);
         query.bindValue(1, mTournamentUID);
 
@@ -446,7 +449,7 @@ long long CreateTournamentOrdersDialog::getTypeUID(QString typeName)
 long long CreateTournamentOrdersDialog::getClubUID(QString clubName, long long coutryUID, long long regionUID, long long unitUID)
 {
     QSqlQuery query;
-    query.prepare("SELECT UID FROM CLUBS WHERE NAME = ? AND COUNTRY_FK = ? AND REGION_FK = ? AND REGION_UNIT = ?");
+    query.prepare("SELECT UID FROM CLUBS WHERE NAME = ? AND COUNTRY_FK = ? AND REGION_FK = ? AND REGION_UNIT_FK = ?");
     query.bindValue(0, clubName);
     query.bindValue(1, coutryUID);
     query.bindValue(2, regionUID);
@@ -492,9 +495,14 @@ long long CreateTournamentOrdersDialog::getCoachUID(QString coachName, long long
     else
     {
         query.clear();
-        query.prepare("INSERT INTO COACHS(NAME, CLUB_FK");
+        if (!query.prepare("INSERT INTO COACHS(NAME, CLUB_FK, FIRST_NAME, LAST_NAME, PATRONYMIC) VALUES(?, ?, ?, ?, ?)"))
+            qDebug() << query.lastError().text();
         query.bindValue(0, coachName);
         query.bindValue(1, clubUID);
+        QStringList args = coachName.split(" ");
+        query.bindValue(2, args[std::min(1, args.size())]);
+        query.bindValue(3, args[0]);
+        query.bindValue(4, args[std::min(2, args.size())]);
 
         if (query.exec())
         {
