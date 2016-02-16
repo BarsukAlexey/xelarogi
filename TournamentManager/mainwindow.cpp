@@ -8,6 +8,7 @@
 
 #include "handbookdialog.h"
 #include "tournamentgriddialog2.h"
+#include "fiting_distribution.h"
 
 using namespace std;
 
@@ -336,7 +337,8 @@ void MainWindow::connectButtons()
 
 void MainWindow::on_pushButton_2_clicked()
 {
-    qDebug() << "clicked";
-    TournamentGridDialog2 d(m_database, 1, this);
-    d.exec();
+//    TournamentGridDialog2 d(m_database, ui->tournamentUidLabel->text().toLongLong(), this);
+//    d.exec();
+    //FitingDistribution dd(m_database, ui->tournamentUidLabel->text().toLongLong());
+    FitingDistribution dd(m_database, 1);
 }

@@ -45,8 +45,10 @@ public:
     TournamentGridDialog2(const QSqlDatabase &database, long long tournamentUID, QWidget *parent = 0);
     ~TournamentGridDialog2();
 
-private:
+public:
     void ebnutVBazyGovno();
+
+private:
     void setInGridBestFigher(int v, const QVector<bool>& isLeaf, const QVector<int>& distToLeaf, const QVector<TournamentGridDialog2::BestFigher>& bestFighters, QHash<long long, int>& vertexOfBest);
 
 private slots:

@@ -555,9 +555,11 @@ TournamentGridDialog2::~TournamentGridDialog2(){}
 //
 void TournamentGridDialog2::ebnutVBazyGovno()
 {
-    return ;
+
+    //  return ;
     qDebug() << "ebnutVBazyGovno";
     QSqlQuery *query;
+
 
     query = new QSqlQuery("DELETE FROM ORDERS", database);
     if (!query->exec())
@@ -574,57 +576,63 @@ void TournamentGridDialog2::ebnutVBazyGovno()
         qDebug() << "\n" << __PRETTY_FUNCTION__ << "\n" << query->lastError().text() << "\n" << query->lastQuery() << "\n";
     delete query;
 
-    long long UID      = 10;
-    long long UID_girl = 1000;
-    int countGirl = 1;
-    for(int age = 10, stepAge = 7; age <= 45; age += stepAge)
+    long long UID_TOURNAMENT_CATEGORIES = 10;
+    long long UID_people = 1000;
+    int count_people = 1;
+    for(int age = 10, stepAge = 10; age <= 45; age += stepAge)
     {
-        for(int weight = 30, stepWeight = 21; weight <= 100; weight += stepWeight, ++UID, ++countGirl)
+        for(int weight = 30, stepWeight = 30; weight <= 100; weight += stepWeight, ++UID_TOURNAMENT_CATEGORIES, ++count_people)
         {
-            query = new QSqlQuery("INSERT INTO TOURNAMENT_CATEGORIES VALUES (?, ?, ?, ?, ?, ?, 1)", database);
-            QString str;
-            str.sprintf("Девушки от %d до %d лет, от %d до %d кг", age, age + stepAge, weight, weight + stepWeight);
-            query->bindValue(0, UID);
-            query->bindValue(1,  str);
-            query->bindValue(2, age);
-            query->bindValue(3, age + stepAge);
-            query->bindValue(4, weight);
-            query->bindValue(5, weight + stepWeight);
-            if (!query->exec())
-                qDebug() << "\n" << __PRETTY_FUNCTION__ << "\n" << query->lastError().text() << "\n" << query->lastQuery() << "\n";
-            delete query;
-
-            for (int j = 0; j < countGirl; ++j, ++UID_girl){
-                query = new QSqlQuery("INSERT INTO ORDERS VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", database);
-                query->bindValue(0, UID_girl);
-                query->bindValue(1, "Name" + QString('A' + j));
-                query->bindValue(2, "Second" + QString(char('A' + j)));
-                query->bindValue(3, "Patr" + QString(char('A' + j)));
-                query->bindValue(4, "2000-01-01");
-                query->bindValue(5, "2");
-                query->bindValue(6, "50");
-                query->bindValue(7, "1");
-                query->bindValue(8, UID);
-                query->bindValue(9, "1");
-                query->bindValue(10, "1");
-                query->bindValue(11, "2");
-                query->bindValue(12, "1");
-                query->bindValue(13, "1");
-                query->bindValue(14, "1");
-
-                query->bindValue(15, "true");
-                query->bindValue(16, "true");
-                query->bindValue(17, "true");
-                query->bindValue(18, "true");
-                if (!query->exec())
+            for (int type = 1; type <= 5; ++type)
+            {
+                for (int sex = 1; sex <= 2; ++sex)
                 {
-                    qDebug() << "\n" << __PRETTY_FUNCTION__ << "\n" << query->lastError().text() << "\n" << query->lastQuery() << "\n";
-                    return;
-                }
-                delete query;
-            }
+                    query = new QSqlQuery("INSERT INTO TOURNAMENT_CATEGORIES VALUES (?, ?, ?, ?, ?, ?, 1)", database);
+                    QString str;
+                    str.sprintf("%s от %d до %d лет, от %d до %d кг", (sex==1? "М" : "Ж"), age, age + stepAge, weight, weight + stepWeight);
+                    query->bindValue(0, UID_TOURNAMENT_CATEGORIES);
+                    query->bindValue(1, str);
+                    query->bindValue(2, age);
+                    query->bindValue(3, age + stepAge);
+                    query->bindValue(4, weight);
+                    query->bindValue(5, weight + stepWeight);
+                    if (!query->exec())
+                        qDebug() << "\n" << __PRETTY_FUNCTION__ << "\n" << query->lastError().text() << "\n" << query->lastQuery() << "\n";
+                    delete query;
 
-            qDebug() << "DONE " << UID;
+                    for (int j = 0; j < count_people; ++j, ++UID_people){
+                        query = new QSqlQuery("INSERT INTO ORDERS VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", database);
+                        query->bindValue(0, UID_people);
+                        query->bindValue(1, "Name" + QString('A' + j));
+                        query->bindValue(2, "Second" + QString(char('A' + j)));
+                        query->bindValue(3, "Patr" + QString(char('A' + j)));
+                        query->bindValue(4, "2000-01-01");
+                        query->bindValue(5, "2");
+                        query->bindValue(6, "50");
+                        query->bindValue(7, "1");
+                        query->bindValue(8, UID_TOURNAMENT_CATEGORIES);
+                        query->bindValue(9, "1");
+                        query->bindValue(10, "1");
+                        query->bindValue(11, "2");
+                        query->bindValue(12, "1");
+                        query->bindValue(13, "1");
+                        query->bindValue(14, "1");
+
+                        query->bindValue(15, "true");
+                        query->bindValue(16, "true");
+                        query->bindValue(17, "true");
+                        query->bindValue(18, "true");
+                        if (!query->exec())
+                        {
+                            qDebug() << "\n" << __PRETTY_FUNCTION__ << "\n" << query->lastError().text() << "\n" << query->lastQuery() << "\n";
+                            return;
+                        }
+                        delete query;
+                    }
+                }
+            }
+            qDebug() << "DONE " << UID_TOURNAMENT_CATEGORIES;
         }
     }
+    /**/
 }
