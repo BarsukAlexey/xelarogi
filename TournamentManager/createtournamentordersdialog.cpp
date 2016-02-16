@@ -70,9 +70,11 @@ CreateTournamentOrdersDialog::CreateTournamentOrdersDialog(const QSqlDatabase &d
         }
     }
 
-    connect(ui->btnInsert, &QPushButton::clicked, [model]()
+    connect(ui->btnInsert, &QPushButton::clicked, [model, tournamentUID, this]()
     {
-        model->insertRow(model->rowCount());
+        //model->insertRow(model->rowCount());
+        AddOrderDialog dlg(tournamentUID, this);
+        dlg.exec();
     });
     connect(ui->btnSave, &QPushButton::clicked, [model]()
     {

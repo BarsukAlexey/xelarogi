@@ -27,6 +27,7 @@
 
 #include "databaseexpert.h"
 #include "webreportdialog.h"
+#include "addorderdialog.h"
 
 
 namespace Ui {
