@@ -44,6 +44,8 @@ private:
     void updateTournamentTreeWidget();
     void connectButtons();
     
+    void on_pushButton_2_clicked();
+
 private:
     Ui::MainWindow *ui;
     QSqlDatabase m_database;

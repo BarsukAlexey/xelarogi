@@ -240,6 +240,21 @@
       </property>
      </widget>
     </item>
+    <item>
+    <widget class="QPushButton" name="pushButton_2">
+     <property name="geometry">
+      <rect>
+       <x>320</x>
+       <y>390</y>
+       <width>75</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>PushButton</string>
+     </property>
+    </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar">

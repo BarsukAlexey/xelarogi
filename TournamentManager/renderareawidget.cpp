@@ -1,0 +1,340 @@
+#include "renderareawidget.h"
+
+#include <QPainter>
+#include <QPaintEvent>
+#include <QVector>
+#include <QRect>
+#include <QDebug>
+#include <QWidget>
+#include <QPainter>
+#include <QPaintEvent>
+#include <QDebug>
+#include <QTime>
+#include <QtAlgorithms>
+#include <QSqlQuery>
+#include <QSqlError>
+#include <QAxObject>
+#include <QAxBase>
+#include <QWidget>
+#include <QPainter>
+#include <QPaintEvent>
+#include <QAxObject>
+#include <QAxBase>
+#include <QDebug>
+#include <QAxObject>
+#include "QVariant"
+
+
+RenderAreaWidget::RenderAreaWidget(QWidget *parent, int widthCell, int heightCell, const QSqlDatabase &_database)
+    : QWidget(parent),
+      database(_database)
+{
+    tournamentCategories = -1;
+    countRows = 0;
+    countColumns = 0;
+    this->widthCell = widthCell;
+    this->heightCell = heightCell;
+    setNormalSize();
+}
+
+int RenderAreaWidget::log2(int x)
+{
+    int ans = 0;
+    while (x >>= 1) ++ans;
+    return ans;
+}
+
+QPoint RenderAreaWidget::getCell(int v)
+{
+    QPoint p;
+    p.setY(countColumns - log2(v) - 1);
+    p.setX( (1 << (p.y() + 1)) * ((1 << (countColumns - p.y())) - 1 - v) + (1 << p.y()) - 1);
+    return p;
+}
+
+void RenderAreaWidget::paintEvent(QPaintEvent* )
+{
+    //qDebug() << __PRETTY_FUNCTION__ << " " << QDateTime::currentDateTime();
+    //return;
+
+    QPainter painter(this);
+
+    QVector<NodeOfTournirGrid> nodes = getNodes();
+    if (nodes.empty()) return;
+    qSort(nodes);
+
+    //countColumns = qMax(countColumns, log2(nodes.last().v) + 1);
+    countColumns = log2(nodes.last().v) + 1;
+    countRows = 2 * (1 << (countColumns - 1)) - 1;
+    setNormalSize();
+
+    for (const NodeOfTournirGrid& node : nodes)
+    {
+        QPoint cell = getCell(node.v);
+        paintRect(cell.x(), cell.y(), painter, node);
+        for (int child : {2 * node.v, 2 * node.v + 1})
+        {
+            if (qBinaryFind(nodes, NodeOfTournirGrid({child, "", "", false})) != nodes.end() )
+            {
+                paintLine(getCell(node.v), getCell(child), painter);
+            }
+        }
+    }
+}
+
+void RenderAreaWidget::mousePressEvent(QMouseEvent* event)
+{
+    QPoint p(event->y() / heightCell, event->x() / widthCell);
+
+    NodeOfTournirGrid currentNode = noNode;
+    for (const NodeOfTournirGrid& node : getNodes())
+        if (getCell(node.v) == p)
+            currentNode = node;
+    if (currentNode.v == noNode.v) return;
+
+    if (event->button() == Qt::RightButton){
+        if (selectedNode.v != noNode.v)
+        {
+            if (selectedNode.v == currentNode.v && selectedNode.isFighing)
+            {
+                QSqlQuery query("UPDATE GRID SET ORDER_FK = ? WHERE TOURNAMENT_CATEGORIES_FK = ? AND VERTEX = ?", database);
+                query.bindValue(0, QVariant(QVariant::Int));
+                query.bindValue(1, tournamentCategories);
+                query.bindValue(2, selectedNode.v);
+                if (!query.exec())
+                    qDebug() << __PRETTY_FUNCTION__ << " " << query.lastError().text() << "\n" << query.lastQuery();
+            }
+            selectedNode = noNode;
+        }
+    } else if (event->button() == Qt::LeftButton){
+        if (selectedNode.v == noNode.v)
+        {
+            selectedNode = currentNode;
+        }
+        else
+        {
+            NodeOfTournirGrid node0 = selectedNode;
+            NodeOfTournirGrid node1 = currentNode;
+            selectedNode = noNode;
+            if (!node0.isFighing && !node1.isFighing)
+            {
+                {
+                    QSqlQuery query("UPDATE GRID SET VERTEX = ? WHERE TOURNAMENT_CATEGORIES_FK = ? AND VERTEX = ?", database);
+                    query.bindValue(0, 100500);
+                    query.bindValue(1, tournamentCategories);
+                    query.bindValue(2, node0.v);
+                    if (!query.exec())
+                        qDebug() << __PRETTY_FUNCTION__ << " " << query.lastError().text() << "\n" << query.lastQuery();
+                }
+                {
+                    QSqlQuery query("UPDATE GRID SET VERTEX = ? WHERE TOURNAMENT_CATEGORIES_FK = ? AND VERTEX = ?", database);
+                    query.bindValue(0, node0.v);
+                    query.bindValue(1, tournamentCategories);
+                    query.bindValue(2, node1.v);
+                    if (!query.exec())
+                        qDebug() << __PRETTY_FUNCTION__ << " " << query.lastError().text() << "\n" << query.lastQuery();
+                }
+                {
+                    QSqlQuery query("UPDATE GRID SET VERTEX = ? WHERE TOURNAMENT_CATEGORIES_FK = ? AND VERTEX = ?", database);
+                    query.bindValue(0, node1.v);
+                    query.bindValue(1, tournamentCategories);
+                    query.bindValue(2, 100500);
+                    if (!query.exec())
+                        qDebug() << __PRETTY_FUNCTION__ << " " << query.lastError().text() << "\n" << query.lastQuery();
+                }
+            }
+            if (node0.v > node1.v) std::swap(node0, node1);
+            if (2 * node0.v == node1.v || 2 * node0.v + 1 == node1.v)
+            {
+                QString orderUID;
+                {
+                    QSqlQuery query("SELECT * FROM GRID WHERE TOURNAMENT_CATEGORIES_FK = ? AND VERTEX = ?", database);
+                    query.bindValue(0, tournamentCategories);
+                    query.bindValue(1, node1.v);
+                    if (!( query.exec() && query.next()))
+                        qDebug() << __PRETTY_FUNCTION__ << " " << query.lastError().text() << "\n" << query.lastQuery();
+                    orderUID = query.value("ORDER_FK").toString();
+                }
+                QSqlQuery query("UPDATE GRID SET ORDER_FK = ? WHERE TOURNAMENT_CATEGORIES_FK = ? AND VERTEX = ?", database);
+                query.bindValue(0, orderUID);
+                query.bindValue(1, tournamentCategories);
+                query.bindValue(2, node0.v);
+                if (!query.exec())
+                    qDebug() << __PRETTY_FUNCTION__ << " " << query.lastError().text() << "\n" << query.lastQuery();
+            }
+        }
+    }
+    repaint();
+}
+
+
+
+void RenderAreaWidget::paintRect(int i, int j, QPainter& painter, const NodeOfTournirGrid& node)
+{
+    QRect rect(j * widthCell, i * heightCell, widthCell, heightCell);
+    if (node.v == selectedNode.v)
+        painter.fillRect(rect, QBrush(Qt::green));
+    else
+        painter.fillRect(rect, QBrush(Qt::gray));
+    painter.drawRect(rect);
+    QRect rectName(rect.topLeft(), QSize(rect.width(), rect.height() / 2));
+    QRect rectRegion(QPoint(rect.topLeft().x(), rect.topLeft().y() + rect.height() / 2), QSize(rect.width(), rect.height() / 2));
+
+    painter.drawText(rectName  , Qt::AlignHCenter | Qt::AlignVCenter, node.name);
+    painter.drawText(rectRegion, Qt::AlignHCenter | Qt::AlignVCenter, node.region);
+}
+
+void RenderAreaWidget::paintLine(QPoint aa, QPoint bb, QPainter& painter)
+{
+    QPoint a(qMin(aa.x(), bb.x()), qMin(aa.y(), bb.y()));
+    QPoint b(qMax(aa.x(), bb.x()), qMax(aa.y(), bb.y()));
+    painter.drawLine(QPoint(widthCell * (a.y() + 1), heightCell * (a.x())),
+                     QPoint(widthCell *  b.y()     , heightCell * (b.x() + 1)));
+
+}
+
+
+void RenderAreaWidget::setNormalSize()
+{
+    resize(countColumns * widthCell + 1, countRows * heightCell + 1);
+}
+
+
+QVector<RenderAreaWidget::NodeOfTournirGrid> RenderAreaWidget::getNodes()
+{
+    QVector<RenderAreaWidget::NodeOfTournirGrid> arr;
+    //getNodes_ForDebuging(1, arr);
+
+    //
+    QSqlQuery query("SELECT * FROM GRID WHERE TOURNAMENT_CATEGORIES_FK = ? ", database);
+    query.bindValue(0, tournamentCategories);
+    if (query.exec())
+    {
+        while (query.next())
+        {
+            QString orderUID = query.value("ORDER_FK").toString();
+            QString name = "Unknown";
+            QString region = "";
+            bool isFighing = query.value("IS_FIGHTING").toBool();
+            if (orderUID.size() != 0)
+            {
+                QSqlQuery queryOrder("SELECT * FROM ORDERS WHERE UID = ? ", database);
+                queryOrder.bindValue(0, orderUID);
+                if (!(queryOrder.exec() && queryOrder.next()))
+                {
+                    qDebug() << __PRETTY_FUNCTION__ << " " << queryOrder.lastError().text() << "\n" << queryOrder.lastQuery();
+                    arr.clear();
+                    return arr;
+                }
+                //name = queryOrder.value("SECOND_NAME").toString() + " " + queryOrder.value("FIRST_NAME").toString();
+                name = queryOrder.value("SECOND_NAME").toString();
+
+                QSqlQuery queryRegion("SELECT * FROM REGIONS WHERE UID = ? ", database);
+                //qDebug() << __PRETTY_FUNCTION__ << queryOrder.value("REGION_FK").toString();
+                queryRegion.bindValue(0, queryOrder.value("REGION_FK").toString());
+                if (!(queryRegion.exec() && queryRegion.next()))
+                {
+                    qDebug() << __PRETTY_FUNCTION__ << " " << queryRegion.lastError().text() << "\n" << queryRegion.lastQuery();
+                    arr.clear();
+                    return arr;
+                }
+                region = queryRegion.value("SHORTNAME").toString();
+            }
+
+
+
+            arr.push_back(RenderAreaWidget::NodeOfTournirGrid({query.value("VERTEX").toInt(), name, region, isFighing}));
+        }
+    }
+    else
+    {
+        qDebug() << __PRETTY_FUNCTION__ << " " << query.lastError().text() << "\n" << query.lastQuery();
+        arr.clear();
+        return arr;
+    }
+    qSort(arr);
+    return arr;
+}
+
+void RenderAreaWidget::slotSetTournamentCategories(int tournamentCategories)
+{
+    this->tournamentCategories = tournamentCategories;
+    selectedNode = noNode;
+    repaint();
+}
+
+void RenderAreaWidget::widthChanged(int width)
+{
+    widthCell = width;
+    setNormalSize();
+    repaint();
+}
+
+void RenderAreaWidget::heightChanged(int height)
+{
+    heightCell = height;
+    setNormalSize();
+    repaint();
+}
+
+void RenderAreaWidget::onSaveInExcel()
+{
+    QVector<NodeOfTournirGrid> nodes = getNodes();
+    if (nodes.empty()) return;
+    qSort(nodes);
+
+    countColumns = log2(nodes.last().v) + 1;
+    countRows = 2 * (1 << (countColumns - 1)) - 1;
+
+
+    QAxObject* excel = new QAxObject( "Excel.Application", this );
+    excel->setProperty("Visible", true);
+    QAxObject* workbooks = excel->querySubObject( "Workbooks" );
+    QAxObject* workbook = workbooks->querySubObject( "Open(const QString&)", "D:/test_t.xlsx" );
+
+    QAxObject* sheets = workbook->querySubObject( "Sheets" );
+    int sheetNumber = 1;
+    QAxObject* sheet = sheets->querySubObject( "Item( int )", sheetNumber );
+
+
+    for (const NodeOfTournirGrid& node : nodes)
+    {
+
+        QPoint p = getCell(node.v);
+
+        QAxObject* cell = sheet->querySubObject( "Cells( int, int )", p.x() + 1, p.y() + 1);
+        cell->setProperty("Value", QVariant(node.name));
+        QAxObject *border = cell->querySubObject("Borders()");
+        border->setProperty("LineStyle", 1);
+        border->setProperty("Weight", 2);
+        delete cell;
+
+        for (int child : {2 * node.v, 2 * node.v + 1})
+        {
+            if (qBinaryFind(nodes, NodeOfTournirGrid({child, "", "", false})) != nodes.end() )
+            {
+                QPoint aa = getCell(node.v);
+                QPoint bb = getCell(child);
+
+                QPoint a(qMin(aa.x(), bb.x()), qMin(aa.y(), bb.y()));
+                QPoint b(qMax(aa.x(), bb.x()), qMax(aa.y(), bb.y()));
+                for (int row = a.x(); row <= b.x(); ++row)
+                {
+                    cell = sheet->querySubObject( "Cells( int, int )", row + 1, a.y() + 1);
+                    QAxObject *border = cell->querySubObject("Borders(xlEdgeRight)");
+                    border->setProperty("LineStyle", 1);
+                    border->setProperty("Weight", 2);
+                    delete border;
+                }
+            }
+        }
+    }
+
+    workbook->dynamicCall("Close()");
+    delete sheet;
+    delete sheets;
+    delete workbook;
+    delete workbooks;
+    excel->dynamicCall("Quit()");
+    delete excel;
+}

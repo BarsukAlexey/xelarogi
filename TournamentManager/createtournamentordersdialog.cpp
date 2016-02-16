@@ -517,7 +517,6 @@ long long CreateTournamentOrdersDialog::getCoachUID(QString coachName, long long
     }
 }
 
-
 void OrdersRelationDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     if (CreateTournamentOrdersDialog::m_record.fieldName(index.column()).contains("DATE", Qt::CaseSensitive))

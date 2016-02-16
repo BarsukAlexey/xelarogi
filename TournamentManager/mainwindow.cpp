@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "handbookdialog.h"
+#include "tournamentgriddialog2.h"
 
 using namespace std;
 
@@ -146,20 +147,20 @@ void MainWindow::on_btnExcel_clicked()
                 continue;
 
             switch (col) {
-            case 1:
-                name = value.toString();
-                break;
-            case 2:
-                nameEng = value.toString();
-                break;
-            case 3:
-                shortNameEng2 = value.toString();
-                break;
-            case 4:
-                shortNameEng3 = value.toString();
-                break;
-            default:
-                break;
+                case 1:
+                    name = value.toString();
+                    break;
+                case 2:
+                    nameEng = value.toString();
+                    break;
+                case 3:
+                    shortNameEng2 = value.toString();
+                    break;
+                case 4:
+                    shortNameEng3 = value.toString();
+                    break;
+                default:
+                    break;
             }
         }
         QSqlQuery query("INSERT INTO COUNTRIES(NAME, NAME_ENG, SHORTNAME, SHORTNAME_ENG) VALUES('" + name + "','" + nameEng + "','" + shortNameEng2 + "','" + shortNameEng3 + "')", m_database);
@@ -329,4 +330,10 @@ void MainWindow::connectButtons()
         {"IS_WEIGHTED", "IS_MEDICAL", "IS_ACCREDITATED", "IS_PAID", "UID"});
         dlg.exec();
     });
+}
+
+void MainWindow::on_pushButton_2_clicked()
+{
+    TournamentGridDialog2 d(m_database, 1, this);
+    d.exec();
 }
