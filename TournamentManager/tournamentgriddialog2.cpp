@@ -41,7 +41,7 @@ TournamentGridDialog2::TournamentGridDialog2(const QSqlDatabase &_database, long
     specialGroup = QVector<int>(4, false);
 
 
-    ebnutVBazyGovno(); // TODO DELETE THIS
+    //ebnutVBazyGovno(); // TODO DELETE THIS
 
 
     QWidget *leftPane = new QWidget;
@@ -591,7 +591,9 @@ void TournamentGridDialog2::ebnutVBazyGovno()
             {
                 for (int type = 1; type <= 3; ++type)
                 {
-                    ++UID_TOURNAMENT_CATEGORIES, count_people = (count_people + 1) % 17;
+                    ++UID_TOURNAMENT_CATEGORIES;
+                    //count_people = (count_people + 1) % 17;
+                    ++count_people;
 
                     query = new QSqlQuery("INSERT INTO TOURNAMENT_CATEGORIES VALUES (?, ?, ?, ?, ?, ?, 1, ?, ?)", database);
                     QString str;
