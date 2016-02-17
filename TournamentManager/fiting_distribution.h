@@ -13,7 +13,8 @@ public:
     explicit FitingDistribution(const QSqlDatabase &m_database, long long tournamentUID);
 
 private:
-    void initTableHeads(QAxObject *sheet);
+    void initTableHeads(QAxObject *sheet, int& rowCount, const QStringList& days);
+
 
 signals:
 

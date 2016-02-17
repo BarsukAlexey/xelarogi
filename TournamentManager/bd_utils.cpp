@@ -3,6 +3,7 @@
 #include <QVariant>
 #include <QDebug>
 #include <QSqlError>
+#include <QDate>
 
 
 QString BDUtils::getNameTournamentByUID(const QSqlDatabase& database, const long long UID)
@@ -37,15 +38,39 @@ QString BDUtils::getTypeNameByUID(const QSqlDatabase& database, long long UID)
 
 QString BDUtils::get_SHORTNAME_FROM_SEXES(const QSqlDatabase& database, long long UID)
 {
-    QSqlQuery query("SELECT NAME FROM TYPES WHERE UID = ? ", database);
+    QSqlQuery query("SELECT SHORTNAME FROM SEXES WHERE UID = ? ", database);
     query.bindValue(0, UID);
     if (query.exec() && query.next())
     {
-        return query.value("NAME").toString();
+        return query.value("SHORTNAME").toString();
     }
     else
     {
         qDebug() << __LINE__ << __PRETTY_FUNCTION__ << query.lastError().text() << query.lastQuery();
     }
     return "";
+}
+
+QStringList BDUtils::get_DAYS_FROM_TOURNAMENTS(const QSqlDatabase& database, long long UID)
+{
+    QSqlQuery query("SELECT * FROM TOURNAMENTS WHERE UID = ? ", database);
+    query.bindValue(0, UID);
+    QStringList res;
+    if (query.exec() && query.next())
+    {
+        QDate dateBegin = query.value("DATE_BEGIN").toDate();
+        QDate dateEnd = query.value("DATE_END").toDate();
+        while (true)
+        {
+            res.push_back(dateBegin.toString("dd.MM.yyyy"));
+            //qDebug() << dateBegin << dateEnd;
+            if (dateBegin == dateEnd) break;
+            dateBegin = dateBegin.addDays(1);
+        }
+    }
+    else
+    {
+        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << query.lastError().text() << query.lastQuery();
+    }
+    return res;
 }

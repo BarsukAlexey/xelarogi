@@ -1,6 +1,9 @@
 #include "fiting_distribution.h"
 #include "tournamentgriddialog2.h"
 #include "bd_utils.h"
+#include "excel_utils.h"
+
+
 #include <QAxObject>
 #include <QAxWidget>
 #include <QSqlDatabase>
@@ -24,6 +27,7 @@ FitingDistribution::FitingDistribution(const QSqlDatabase &database, const long 
     QAxObject *workbook = excel.querySubObject("ActiveWorkBook");
     QAxObject *sheets = workbook->querySubObject("WorkSheets");
 
+    QStringList days = BDUtils::get_DAYS_FROM_TOURNAMENTS(database, tournamentUID);
 
     QSqlQuery queryTYPE_FK_AGE_FROM("SELECT * FROM TOURNAMENT_CATEGORIES WHERE TOURNAMENT_FK = ? GROUP BY TYPE_FK, AGE_FROM, AGE_TILL ORDER BY TYPE_FK, AGE_FROM", database);
     queryTYPE_FK_AGE_FROM.bindValue(0, tournamentUID);
@@ -41,21 +45,19 @@ FitingDistribution::FitingDistribution(const QSqlDatabase &database, const long 
         QAxObject *sheet = sheets->querySubObject( "Item( int )", 1);
         int currentRow = 2;
 
-        QAxObject *cell;
 
-        cell = sheet->querySubObject( "Cells( int, int )", currentRow++, 1);
-        cell->setProperty("Value", BDUtils::getNameTournamentByUID(database, tournamentUID));
-        delete cell;
+        ExcelUtils::setValue  (sheet, currentRow, 1, BDUtils::getNameTournamentByUID(database, tournamentUID));
+        ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 2 + 3 * days.size());
+        ++currentRow;
+        ExcelUtils::setValue  (sheet, currentRow, 1, "Раздел: " + BDUtils::getTypeNameByUID(database, TYPE_FK));
+        ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 2 + 3 * days.size());
+        ++currentRow;
+        ExcelUtils::setValue  (sheet, currentRow, 1, "Возраст от " + AGE_FROM + " до " + queryTYPE_FK_AGE_FROM.value("AGE_TILL").toString());
+        ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 2 + 3 * days.size());
+        ++currentRow;
 
-        cell = sheet->querySubObject( "Cells( int, int )", currentRow++, 1);
-        cell->setProperty("Value", "Раздел: " + BDUtils::getTypeNameByUID(database, TYPE_FK));
-        delete cell;
 
-        cell = sheet->querySubObject( "Cells( int, int )", currentRow++, 1);
-        cell->setProperty("Value", "Возраст от " + AGE_FROM + " до " + queryTYPE_FK_AGE_FROM.value("AGE_TILL").toString());
-        delete cell;
-
-        initTableHeads(sheet, currentRow++);
+        initTableHeads(sheet, currentRow, days);
 
 
         QSqlQuery querySEX_FK("SELECT DISTINCT SEX_FK FROM TOURNAMENT_CATEGORIES WHERE TOURNAMENT_FK = ? AND TYPE_FK = ? AND AGE_FROM = ? ORDER BY SEX_FK", database);
@@ -70,7 +72,10 @@ FitingDistribution::FitingDistribution(const QSqlDatabase &database, const long 
         while (querySEX_FK.next())
         {
             long long SEX_FK = querySEX_FK.value("SEX_FK").toLongLong();
-            QSqlQuery queryWEIGHT_FROM("SELECT DISTINCT WEIGHT_FROM FROM TOURNAMENT_CATEGORIES WHERE TOURNAMENT_FK = ? AND TYPE_FK = ?  AND AGE_FROM = ? AND SEX_FK = ? ORDER BY WEIGHT_FROM", database);
+
+            ExcelUtils::setValue(sheet, currentRow++, 1, BDUtils::get_SHORTNAME_FROM_SEXES(database, SEX_FK));
+
+            QSqlQuery queryWEIGHT_FROM("SELECT WEIGHT_FROM, WEIGHT_TILL FROM TOURNAMENT_CATEGORIES WHERE TOURNAMENT_FK = ? AND TYPE_FK = ?  AND AGE_FROM = ? AND SEX_FK = ? GROUP BY WEIGHT_FROM, WEIGHT_TILL ORDER BY WEIGHT_FROM", database);
             queryWEIGHT_FROM.bindValue(0, tournamentUID);
             queryWEIGHT_FROM.bindValue(1, TYPE_FK);
             queryWEIGHT_FROM.bindValue(2, AGE_FROM);
@@ -81,13 +86,15 @@ FitingDistribution::FitingDistribution(const QSqlDatabase &database, const long 
                 return;
             }
 
-            cell = sheet->querySubObject( "Cells( int, int )", currentRow++, 1);
-            cell->setProperty("Value", BDUtils::get_SHORTNAME_FROM_SEXES(database, SEX_FK));
-            delete cell;
+
 
             while (queryWEIGHT_FROM.next())
             {
                 QString WEIGHT_FROM = queryWEIGHT_FROM.value("WEIGHT_FROM").toString();
+                QString WEIGHT_TILL = queryWEIGHT_FROM.value("WEIGHT_TILL").toString();
+
+                ExcelUtils::setValue(sheet, currentRow, 1, WEIGHT_FROM + " - " + WEIGHT_TILL + " кг");
+
 
                 QSqlQuery queryTOURNAMENT_CATEGORIES_UID("SELECT * FROM TOURNAMENT_CATEGORIES WHERE TOURNAMENT_FK = ? AND TYPE_FK = ? AND SEX_FK = ? AND AGE_FROM = ? AND WEIGHT_FROM = ?", database);
                 queryTOURNAMENT_CATEGORIES_UID.bindValue(0, tournamentUID);
@@ -113,7 +120,11 @@ FitingDistribution::FitingDistribution(const QSqlDatabase &database, const long 
                 int count = 0;
                 if (queryCOUNT.next())
                     count = queryCOUNT.value("COUNT").toInt();
-                qDebug() << TYPE_FK << AGE_FROM << SEX_FK << WEIGHT_FROM << UID_TOURNAMENT_CATEGORY << ": " << count;
+                //qDebug() << TYPE_FK << AGE_FROM << SEX_FK << WEIGHT_FROM << UID_TOURNAMENT_CATEGORY << ": " << count;
+
+                ExcelUtils::setValue(sheet, currentRow, 2, QString::number(count));
+
+                ++currentRow;
             }
         }
         /**/
@@ -174,19 +185,25 @@ FitingDistribution::FitingDistribution(const QSqlDatabase &database, const long 
     //    }
 }
 
-void FitingDistribution::initTableHeads(QAxObject* sheet, int& currentRow)
+void FitingDistribution::initTableHeads(QAxObject* sheet, int& currentRow, const QStringList& days)
 {
-    QAxObject *cell;
+    ExcelUtils::setValue(sheet, currentRow, 1, "Вес");
+    ExcelUtils::setValue(sheet, currentRow, 2, "Кол-во\n\rчеловек");
 
-    cell = sheet->querySubObject( "Cells( int, int )", currentRow, 1);
-    cell->setProperty("Value", "Вес");
-    delete cell;
+    for (int column = 3, i = 0; i < days.size(); ++i, column += 3)
+    {
+        ExcelUtils::uniteRange(sheet, currentRow, column, currentRow, column + 2);
+        ExcelUtils::setValue(sheet, currentRow, column, days[i]);
 
-    cell = sheet->querySubObject( "Cells( int, int )", currentRow, 2);
-    cell->setProperty("Value", "Кол-во\n\rчеловек");
-    delete cell;
+        int shift = 0;
+        for(const QString& s : {"Утро", "День", "Вечер"})
+        {
+            ExcelUtils::setValue(sheet, currentRow + 1, column + shift, s);
+            ++shift;
+        }
+    }
 
-    ++currentRow;
+    currentRow += 2;
 }
 
 
