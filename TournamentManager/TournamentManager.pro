@@ -28,7 +28,8 @@ SOURCES += main.cpp\
     addorderdialog.cpp \
     renderareawidget.cpp \
     tournamentgriddialog2.cpp \
-    fiting_distribution.cpp
+    fiting_distribution.cpp \
+    bd_utils.cpp
 
 HEADERS  += mainwindow.h \
     handbookdialog.h \
@@ -43,7 +44,8 @@ HEADERS  += mainwindow.h \
     addorderdialog.h \
     renderareawidget.h \
     tournamentgriddialog2.h \
-    fiting_distribution.h
+    fiting_distribution.h \
+    bd_utils.h
 
 FORMS    += mainwindow.ui \
     handbookdialog.ui \

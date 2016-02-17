@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QSqlDatabase>
+#include <QAxObject>
 
 class FitingDistribution : public QObject
 {
@@ -12,6 +13,7 @@ public:
     explicit FitingDistribution(const QSqlDatabase &m_database, long long tournamentUID);
 
 private:
+    void initTableHeads(QAxObject *sheet);
 
 signals:
 

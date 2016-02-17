@@ -27,7 +27,9 @@
 #include <time.h>
 #include <set>
 #include <QtGlobal>
+#include <QDate>
 #include <assert.h>
+#include <string>
 
 
 TournamentGridDialog2::TournamentGridDialog2(const QSqlDatabase &_database, long long _tournamentUID, QWidget *_parent)
@@ -556,7 +558,7 @@ TournamentGridDialog2::~TournamentGridDialog2(){}
 void TournamentGridDialog2::ebnutVBazyGovno()
 {
 
-    //  return ;
+    return ;
     qDebug() << "ebnutVBazyGovno";
     QSqlQuery *query;
 
@@ -578,27 +580,37 @@ void TournamentGridDialog2::ebnutVBazyGovno()
 
     long long UID_TOURNAMENT_CATEGORIES = 10;
     long long UID_people = 1000;
-    int count_people = 1;
-    for(int age = 10, stepAge = 10; age <= 45; age += stepAge)
+    int count_people = -1;
+    const char* types[5] = {"light contact", "low kick", "full contact"};
+
+    for(int age = 10, stepAge = 10; age <= 30; age += stepAge)
     {
-        for(int weight = 30, stepWeight = 30; weight <= 100; weight += stepWeight, ++UID_TOURNAMENT_CATEGORIES, ++count_people)
+        for(int weight = 30, stepWeight = 30; weight <= 100; weight += stepWeight)
         {
-            for (int type = 1; type <= 5; ++type)
+            for (int sex = 1; sex <= 2; ++sex)
             {
-                for (int sex = 1; sex <= 2; ++sex)
+                for (int type = 1; type <= 3; ++type)
                 {
-                    query = new QSqlQuery("INSERT INTO TOURNAMENT_CATEGORIES VALUES (?, ?, ?, ?, ?, ?, 1)", database);
+                    ++UID_TOURNAMENT_CATEGORIES, count_people = (count_people + 1) % 17;
+
+                    query = new QSqlQuery("INSERT INTO TOURNAMENT_CATEGORIES VALUES (?, ?, ?, ?, ?, ?, 1, ?, ?)", database);
                     QString str;
-                    str.sprintf("%s от %d до %d лет, от %d до %d кг", (sex==1? "М" : "Ж"), age, age + stepAge, weight, weight + stepWeight);
+
+                    str.sprintf("%s от %d до %d лет, от %d до %d кг, %s", (sex==1? "М" : "Ж"), age, age + stepAge, weight, weight + stepWeight, types[type - 1]);
                     query->bindValue(0, UID_TOURNAMENT_CATEGORIES);
                     query->bindValue(1, str);
                     query->bindValue(2, age);
                     query->bindValue(3, age + stepAge);
                     query->bindValue(4, weight);
                     query->bindValue(5, weight + stepWeight);
+                    query->bindValue(6, type);
+                    query->bindValue(7, sex);
                     if (!query->exec())
-                        qDebug() << "\n" << __PRETTY_FUNCTION__ << "\n" << query->lastError().text() << "\n" << query->lastQuery() << "\n";
+                    {
+                        qDebug() << __PRETTY_FUNCTION__ << __LINE__ << " " << query->lastError().text() << " " << query->lastQuery();
+                    }
                     delete query;
+
 
                     for (int j = 0; j < count_people; ++j, ++UID_people){
                         query = new QSqlQuery("INSERT INTO ORDERS VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", database);
@@ -606,10 +618,12 @@ void TournamentGridDialog2::ebnutVBazyGovno()
                         query->bindValue(1, "Name" + QString('A' + j));
                         query->bindValue(2, "Second" + QString(char('A' + j)));
                         query->bindValue(3, "Patr" + QString(char('A' + j)));
-                        query->bindValue(4, "2000-01-01");
-                        query->bindValue(5, "2");
-                        query->bindValue(6, "50");
-                        query->bindValue(7, "1");
+                        QDate date;
+                        date.addYears(- age - stepAge / 2);
+                        query->bindValue(4, date);
+                        query->bindValue(5, sex);
+                        query->bindValue(6, weight + stepWeight / 2);
+                        query->bindValue(7, type);
                         query->bindValue(8, UID_TOURNAMENT_CATEGORIES);
                         query->bindValue(9, "1");
                         query->bindValue(10, "1");
@@ -623,15 +637,14 @@ void TournamentGridDialog2::ebnutVBazyGovno()
                         query->bindValue(17, "true");
                         query->bindValue(18, "true");
                         if (!query->exec())
-                        {
-                            qDebug() << "\n" << __PRETTY_FUNCTION__ << "\n" << query->lastError().text() << "\n" << query->lastQuery() << "\n";
-                            return;
-                        }
+                            qDebug() << __PRETTY_FUNCTION__ << "\n" << query->lastError().text() << "\n" << query->lastQuery() << "\n";
                         delete query;
                     }
+                    /**/
+                    qDebug() << "DONE count_people: " << count_people;
                 }
             }
-            qDebug() << "DONE " << UID_TOURNAMENT_CATEGORIES;
+
         }
     }
     /**/
