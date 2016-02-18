@@ -74,3 +74,39 @@ QStringList BDUtils::get_DAYS_FROM_TOURNAMENTS(const QSqlDatabase& database, lon
     }
     return res;
 }
+
+QString BDUtils::get_MAIN_JUDGE(const QSqlDatabase& database, long long tournamentUID)
+{
+    QSqlQuery query("SELECT * FROM TOURNAMENTS WHERE UID = ? ", database);
+    query.bindValue(0, tournamentUID);
+    QString res;
+    if (query.exec() && query.next())
+        res = query.value("MAIN_JUDGE").toString();
+    else
+        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << query.lastError().text() << query.lastQuery();
+    return res;
+}
+
+QString BDUtils::get_MAIN_SECRETARY(const QSqlDatabase& database, long long tournamentUID)
+{
+    QSqlQuery query("SELECT * FROM TOURNAMENTS WHERE UID = ? ", database);
+    query.bindValue(0, tournamentUID);
+    QString res;
+    if (query.exec() && query.next())
+        res = query.value("MAIN_SECRETARY").toString();
+    else
+        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << query.lastError().text() << query.lastQuery();
+    return res;
+}
+
+QString BDUtils::get_ASSOCIATE_MAIN_JUDGE(const QSqlDatabase& database, long long tournamentUID)
+{
+    QSqlQuery query("SELECT * FROM TOURNAMENTS WHERE UID = ? ", database);
+    query.bindValue(0, tournamentUID);
+    QString res;
+    if (query.exec() && query.next())
+        res = query.value("ASSOCIATE_MAIN_JUDGE").toString();
+    else
+        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << query.lastError().text() << query.lastQuery();
+    return res;
+}

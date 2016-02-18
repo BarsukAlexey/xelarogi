@@ -595,7 +595,7 @@ void TournamentGridDialog2::ebnutVBazyGovno()
                     //count_people = (count_people + 1) % 17;
                     ++count_people;
 
-                    query = new QSqlQuery("INSERT INTO TOURNAMENT_CATEGORIES VALUES (?, ?, ?, ?, ?, ?, 1, ?, ?)", database);
+                    query = new QSqlQuery("INSERT INTO TOURNAMENT_CATEGORIES VALUES (?, ?, ?, ?, ?, ?, 1, ?, ?,   ?, ?, ?)", database);
                     QString str;
 
                     str.sprintf("%s от %d до %d лет, от %d до %d кг, %s", (sex==1? "М" : "Ж"), age, age + stepAge, weight, weight + stepWeight, types[type - 1]);
@@ -607,6 +607,9 @@ void TournamentGridDialog2::ebnutVBazyGovno()
                     query->bindValue(5, weight + stepWeight);
                     query->bindValue(6, type);
                     query->bindValue(7, sex);
+                    query->bindValue(8, 30);
+                    query->bindValue(9, 20);
+                    query->bindValue(10, 3);
                     if (!query->exec())
                     {
                         qDebug() << __PRETTY_FUNCTION__ << __LINE__ << " " << query->lastError().text() << " " << query->lastQuery();

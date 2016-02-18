@@ -12,6 +12,9 @@ public:
     static QString get_SHORTNAME_FROM_SEXES(const QSqlDatabase& , long long);
     static QStringList get_DAYS_FROM_TOURNAMENTS(const QSqlDatabase& , long long);
 
+    static QString get_MAIN_JUDGE(const QSqlDatabase& database, long long tournamentUID);
+    static QString get_MAIN_SECRETARY(const QSqlDatabase& database, long long tournamentUID);
+    static QString get_ASSOCIATE_MAIN_JUDGE(const QSqlDatabase& database, long long tournamentUID);
 };
 
 #endif // BDUTILS_H

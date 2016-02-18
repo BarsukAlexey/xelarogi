@@ -18,7 +18,7 @@
 
 FitingDistribution::FitingDistribution(const QSqlDatabase &database, const long long tournamentUID)
 {
-    //TournamentGridDialog2(database, tournamentUID, 0).ebnutVBazyGovno();
+    TournamentGridDialog2(database, tournamentUID, 0).ebnutVBazyGovno();
 
     QAxWidget excel("Excel.Application");
     excel.setProperty("Visible", true);
@@ -173,64 +173,32 @@ FitingDistribution::FitingDistribution(const QSqlDatabase &database, const long 
         ExcelUtils::setValue(sheet, currentRow, 2, QString::number(totalPeople));
         ExcelUtils::setBorder(sheet, currentRow, 1, currentRow, 2 + 3 * days.size());
 
+
         for (int i = 0; i < totalSum.size(); ++i)
             if (totalSum[i])
                 ExcelUtils::setValue(sheet, currentRow, 3 + i, QString::number(totalSum[i]));
+        ++currentRow;
+        ++currentRow;
+
+        ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 2 + 3 * days.size());
+        ExcelUtils::setValue(sheet, currentRow, 1, "Главный судья: " + BDUtils::get_MAIN_JUDGE(database, tournamentUID), 0);
+        ++currentRow;
+
+        ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 2 + 3 * days.size());
+        ExcelUtils::setValue(sheet, currentRow, 1, "Главный секретарь: " + BDUtils::get_MAIN_SECRETARY(database, tournamentUID), 0);
+        ++currentRow;
+
+        ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 2 + 3 * days.size());
+        ExcelUtils::setValue(sheet, currentRow, 1, "Заместитель главного судьи: " + BDUtils::get_ASSOCIATE_MAIN_JUDGE(database, tournamentUID), 0);
+        ++currentRow;
+
+        delete sheet;
     }
 
 
-
-
-
-
-
-
-
-    /*/
-    QAxWidget excel("Excel.Application");
-    excel.setProperty("Visible", true);
-
-    QAxObject *workbooks = excel.querySubObject("WorkBooks");
-    workbooks->dynamicCall("Add");
-
-    QAxObject * workbook = excel.querySubObject("ActiveWorkBook");
-
-    QAxObject * sheets = workbook->querySubObject("WorkSheets");
-    sheets->querySubObject("Add");
-    sheets->querySubObject("Add");
-    sheets->querySubObject("Add");
-
-    QAxObject* sheet = sheets->querySubObject( "Item( int )", 2);
-
-    QAxObject * cell = sheet->querySubObject( "Cells( int, int )", 3, 5);
-    cell->setProperty("Value", "Я ебу");
-    QAxObject *border = cell->querySubObject("Borders()");
-    border->setProperty("LineStyle", 1);
-    border->setProperty("Weight", 2);
-    delete cell;
-            //    excel_1.setProperty("DisplayAlerts", 0);
-            //    workbook_1->dynamicCall("SaveAs (const QString&)", QString("D:\\Temp\\test_1.xls"));
-            //    workbook_1->dynamicCall("Close (Boolean)", false);
-            //    excel_1.setProperty("DisplayAlerts", 1);
-            //    excel_1.dynamicCall("Quit (void)");
-    /**/
-
-    //    QSqlQuery queryTournamentCategories("SELECT * FROM TOURNAMENT_CATEGORIES WHERE TOURNAMENT_FK = ? ", database);
-    //    queryTournamentCategories.bindValue(0, tournamentUID);
-    //    if (queryTournamentCategories.exec())
-    //    {
-    //        while (queryTournamentCategories.next())
-    //        {
-    //            long long UIDTournamentCategory = queryTournamentCategories.value("UID").toLongLong();
-
-
-
-    //        }
-    //    }
-    //    else
-    //    {
-    //        qDebug() << __PRETTY_FUNCTION__ << " " << queryTournamentCategories.lastError().text() << " " << queryTournamentCategories.lastQuery();
-    //    }
+    delete sheets;
+    delete workbook;
+    delete workbooks;
 }
 
 void FitingDistribution::initTableHeads(QAxObject* sheet, int& currentRow, const QStringList& days)

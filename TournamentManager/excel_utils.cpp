@@ -46,3 +46,4 @@ void ExcelUtils::setBorder(QAxObject* sheet, int row0, int column0, int row1, in
     // толщина
     border->setProperty("Weight",2);
 }
+
