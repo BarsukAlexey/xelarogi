@@ -157,6 +157,7 @@ void TournamentGridDialog2::onActivatedCategory(int id)
     tournamentCategories = qComboBoxSelectCategory->itemData(id, Qt::UserRole).toInt();
 
     pRenderArea->slotSetTournamentCategories(tournamentCategories);
+    //qDebug() << __LINE__ << __PRETTY_FUNCTION__ << "tournamentCategories: " << tournamentCategories;
 
     QSqlQuery query("SELECT * FROM ORDERS WHERE TOURNAMENT_CATEGORY_FK = ? AND IS_WEIGHTED = ? AND IS_MEDICAL = ? AND IS_ACCREDITATED = ? AND IS_PAID = ?", database);
     query.bindValue(0, tournamentCategories);

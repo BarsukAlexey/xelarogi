@@ -9,6 +9,7 @@
 #include "handbookdialog.h"
 #include "tournamentgriddialog2.h"
 #include "fiting_distribution.h"
+#include "fighting_pairs.h"
 
 using namespace std;
 
@@ -124,7 +125,7 @@ void MainWindow::on_btnExcel_clicked()
 
 
     QAxObject* sheets = workbook->querySubObject( "Sheets" );
-    int sheetCount = sheets->dynamicCall("Count()").toInt();
+    //int sheetCount = sheets->dynamicCall("Count()").toInt();
     int sheetNumber = 1;
 
     QAxObject* sheet = sheets->querySubObject( "Item( int )", sheetNumber );
@@ -337,8 +338,12 @@ void MainWindow::connectButtons()
 
 void MainWindow::on_pushButton_2_clicked()
 {
-//    TournamentGridDialog2 d(m_database, ui->tournamentUidLabel->text().toLongLong(), this);
+//    TournamentGridDialog2 d(m_database, 1, this);
 //    d.exec();
+
     //FitingDistribution dd(m_database, ui->tournamentUidLabel->text().toLongLong());
-    FitingDistribution dd(m_database, 1);
+    //FitingDistribution dd(m_database, 1);
+
+    FightingPairs d(m_database, 1, this);
+    d.exec();
 }

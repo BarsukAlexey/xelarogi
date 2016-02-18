@@ -30,7 +30,8 @@ SOURCES += main.cpp\
     tournamentgriddialog2.cpp \
     fiting_distribution.cpp \
     bd_utils.cpp \
-    excel_utils.cpp
+    excel_utils.cpp \
+    fighting_pairs.cpp
 
 HEADERS  += mainwindow.h \
     handbookdialog.h \
@@ -47,7 +48,8 @@ HEADERS  += mainwindow.h \
     tournamentgriddialog2.h \
     fiting_distribution.h \
     bd_utils.h \
-    excel_utils.h
+    excel_utils.h \
+    fighting_pairs.h
 
 FORMS    += mainwindow.ui \
     handbookdialog.ui \
