@@ -1,13 +1,15 @@
 #ifndef FIGHTINGPAIRS_H
 #define FIGHTINGPAIRS_H
 
-#include <bd_utils.h>
+#include <db_utils.h>
 #include <QObject>
 #include <QDialog>
 #include <QVector>
 #include <QListWidget>
 #include <QPushButton>
 #include <QSpinBox>
+#include <QAxObject>
+#include <QLineEdit>
 
 class FightingPairs : public QDialog
 {
@@ -23,8 +25,9 @@ private:
     QListWidget* qListWidget;
     QPushButton* qPushButton;
     QSpinBox* ringSpinBox;
-    QVector<QVector<BDUtils::Fighing> > globalListsOfPairs;
-
+    QLineEdit *qLineEdit;
+    QVector<QVector<DBUtils::Fighing> > globalListsOfPairs;
+    void printInExcel(QAxObject *sheets, const QVector<DBUtils::Fighing>& fighting, int ring);
 
 signals:
 

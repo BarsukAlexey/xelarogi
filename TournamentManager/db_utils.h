@@ -1,10 +1,10 @@
-#ifndef BDUTILS_H
-#define BDUTILS_H
+#ifndef DBUTILS_H
+#define DBUTILS_H
 
 #include <QSqlDatabase>
 #include <QStringList>
 
-class BDUtils
+class DBUtils
 {
 
 public:
@@ -32,26 +32,43 @@ public:
         int winer;
     };
 
+    static QString getField(const QSqlDatabase&, const QString& field, const QString& table, const QString& where);
+    static QString getField(const QSqlDatabase&, const QString& field, const QString& table, const long long where);
+
     static QString getNameTournamentByUID(const QSqlDatabase& , long long);
     static QString getTypeNameByUID(const QSqlDatabase& , long long);
     static QString get_SHORTNAME_FROM_SEXES(const QSqlDatabase& , long long);
     static QStringList get_DAYS_FROM_TOURNAMENTS(const QSqlDatabase& , long long);
 
+    // для таблицы ORDERS
+    static QString getSecondNameAndOneLetterOfName(const QSqlDatabase& database, long long UID);
+    static QString get__REGION(const QSqlDatabase& database, long long UID);
+
+    // для таблицы TOURNAMENTS
     static QString get_MAIN_JUDGE(const QSqlDatabase& database, long long tournamentUID);
     static QString get_MAIN_SECRETARY(const QSqlDatabase& database, long long tournamentUID);
     static QString get_ASSOCIATE_MAIN_JUDGE(const QSqlDatabase& database, long long tournamentUID);
 
+
     static QVector<NodeOfTournirGrid> getNodes(const QSqlDatabase& database, long long tournamentCategories);
-    static QVector<QVector<BDUtils::Fighing>> getListsOfPairs(const QSqlDatabase& database, long long tournamentUID);
+    static QVector<QVector<DBUtils::Fighing>> getListsOfPairs(const QSqlDatabase& database, long long tournamentUID);
     static QVector<Fighing> getListOfPairs(const QSqlDatabase& database, long long TOURNAMENT_CATEGORIES_FK);
 
     static int isPow2(int a) {
       return !(a & (a - 1));
     }
 
-    static QString get_NAME_FROM_TOURNAMENT_CATEGORIES(const QSqlDatabase& database, long long UID);
+    // для таблицы TOURNAMENT_CATEGORIES
+    static QString get__NAME_OF_TOURNAMENT_CATEGORIES(const QSqlDatabase& database, long long UID);
+    static int     get__AGE_FROM(const QSqlDatabase& database, long long UID);
+    static int     get__AGE_TILL(const QSqlDatabase& database, long long UID);
+    static QString get__WEIGHT_FROM(const QSqlDatabase& database, long long UID);
+    static QString get__WEIGHT_TILL(const QSqlDatabase& database, long long UID);
+    static int     get__DURATION_FIGHING(const QSqlDatabase& database, long long UID);
+    static int     get__DURATION_BREAK(const QSqlDatabase& database, long long UID);
+    static int     get__ROUND_COUNT(const QSqlDatabase& database, long long UID);
 
-    static double get__AGE_TILL__FROM__TOURNAMENT_CATEGORIES(const QSqlDatabase& database, long long UID);
+
 };
 
-#endif // BDUTILS_H
+#endif // DBUTILS_H

@@ -1,11 +1,16 @@
 #include "fighting_pairs.h"
-#include "bd_utils.h"
+#include "db_utils.h"
+#include "excel_utils.h"
 
 #include <QLabel>
 #include <QGridLayout>
 #include <QListWidget>
 #include <QDebug>
 #include <algorithm>
+#include <QAxWidget>
+#include <QAxObject>
+
+
 
 
 FightingPairs::FightingPairs(const QSqlDatabase &_database, long long _tournamentUID, QWidget* parent) :
@@ -14,10 +19,10 @@ FightingPairs::FightingPairs(const QSqlDatabase &_database, long long _tournamen
     tournamentUID(_tournamentUID)
 {
     qListWidget = new QListWidget;
-    globalListsOfPairs = BDUtils::getListsOfPairs(database, tournamentUID);
-    for(const QVector<BDUtils::Fighing>& x : globalListsOfPairs)
+    globalListsOfPairs = DBUtils::getListsOfPairs(database, tournamentUID);
+    for(const QVector<DBUtils::Fighing>& x : globalListsOfPairs)
     {
-        QString str = BDUtils::get_NAME_FROM_TOURNAMENT_CATEGORIES(database, x[0].TOURNAMENT_CATEGORIES_FK) +
+        QString str = DBUtils::get__NAME_OF_TOURNAMENT_CATEGORIES(database, x[0].TOURNAMENT_CATEGORIES_FK) +
                 "; кол-во пар: " + QString::number(x.size());
         qListWidget->addItem(str);
     }
@@ -27,7 +32,7 @@ FightingPairs::FightingPairs(const QSqlDatabase &_database, long long _tournamen
     ringSpinBox = new QSpinBox;
     ringSpinBox->setMaximum(100);
     ringSpinBox->setMinimum(1);
-    ringSpinBox->setValue(3);
+    ringSpinBox->setValue(1);
 
 
     qPushButton = new QPushButton("GO!");
@@ -36,7 +41,9 @@ FightingPairs::FightingPairs(const QSqlDatabase &_database, long long _tournamen
     qGridLayout->addWidget(qListWidget, 0, 0, 1, 2);
     qGridLayout->addWidget(new QLabel(QString("Кол-во рингов:")), 1, 0, Qt::AlignRight);
     qGridLayout->addWidget(ringSpinBox, 1, 1);
-    qGridLayout->addWidget(qPushButton, 2, 0, 1, 2);
+    qGridLayout->addWidget(new QLabel(QString("Дата + {утро, день, вечер}:")), 2, 0, Qt::AlignRight);
+    qGridLayout->addWidget(qLineEdit = new QLineEdit(), 2, 1);
+    qGridLayout->addWidget(qPushButton, 3, 0, 1, 2);
 
     setLayout(qGridLayout);
 
@@ -52,11 +59,68 @@ FightingPairs::~FightingPairs()
 
 }
 
+void FightingPairs::printInExcel(QAxObject *sheet, const QVector<DBUtils::Fighing>& fighting, int ring)
+{
+    int currentRow = 1;
+
+    ExcelUtils::setValue(sheet, currentRow, 1, "Состав пар");
+    ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 3);
+    ++currentRow;
+
+    ExcelUtils::setValue(sheet, currentRow, 1, qLineEdit->text());
+    ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 3);
+    ++currentRow;
+
+    ExcelUtils::setValue(sheet, currentRow, 1, "Ринг #" + QString::number(ring));
+    ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 3);
+    ++currentRow;
+
+    for (int i = 0, pair = 1; i < fighting.size(); ++i, ++pair)
+    {
+        DBUtils::Fighing f = fighting[i];
+        if (i == 0 || f.TOURNAMENT_CATEGORIES_FK != fighting[i - 1].TOURNAMENT_CATEGORIES_FK)
+        {
+            ++currentRow;
+            ++currentRow;
+
+            ExcelUtils::setValue(sheet, currentRow, 1,DBUtils::getField(database, "NAME", "TYPES", DBUtils::getField(database, "TYPE_FK", "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK)));
+            ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 3);
+            ++currentRow;
+
+            ExcelUtils::setValue(sheet, currentRow, 1, "Возраст: " +
+                QString::number(DBUtils::get__AGE_FROM(database, f.TOURNAMENT_CATEGORIES_FK)) +
+                " - " +
+                QString::number(DBUtils::get__AGE_TILL(database, f.TOURNAMENT_CATEGORIES_FK))
+            );
+            ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 3);
+            ++currentRow;
+
+            ExcelUtils::setValue(sheet, currentRow, 1, "Вес: " +
+                DBUtils::get__WEIGHT_FROM(database, f.TOURNAMENT_CATEGORIES_FK) +
+                " - " +
+                DBUtils::get__WEIGHT_TILL(database, f.TOURNAMENT_CATEGORIES_FK) +
+                " кг"
+            );
+            ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 3);
+            ++currentRow;
+        }
+
+        ExcelUtils::setValue(sheet, currentRow, 1, QString::number(pair));
+        ExcelUtils::setValue(sheet, currentRow, 2, DBUtils::getSecondNameAndOneLetterOfName(database, f.UID0) + "(" +
+                             DBUtils::getField(database, "SHORTNAME", "REGIONS", DBUtils::getField(database, "COUNTRY_FK", "ORDERS", f.UID0)) +
+                             ")");
+        ExcelUtils::setValue(sheet, currentRow, 3, DBUtils::getSecondNameAndOneLetterOfName(database, f.UID1) + "(" +
+                             DBUtils::getField(database, "SHORTNAME", "REGIONS", DBUtils::getField(database, "COUNTRY_FK", "ORDERS", f.UID1)) +
+                             ")");
+        ++currentRow;
+    }
+}
+
 
 
 void FightingPairs::onGoPress()
 {
-    QVector<QVector<BDUtils::Fighing> > listsOfPairs;
+    QVector<QVector<DBUtils::Fighing> > listsOfPairs;
     for(QModelIndex index : qListWidget->selectionModel()->selectedIndexes())
     {
         int row = index.row();
@@ -66,23 +130,68 @@ void FightingPairs::onGoPress()
 
     std::random_shuffle(listsOfPairs.begin(), listsOfPairs.end());
     std::sort(std::begin(listsOfPairs), std::end(listsOfPairs),
-              [this] (const QVector<BDUtils::Fighing>& lhs, const QVector<BDUtils::Fighing>& rhs) {
+              [this] (const QVector<DBUtils::Fighing>& lhs, const QVector<DBUtils::Fighing>& rhs) {
         return
-            BDUtils::get__AGE_TILL__FROM__TOURNAMENT_CATEGORIES(database, lhs[0].TOURNAMENT_CATEGORIES_FK) <
-            BDUtils::get__AGE_TILL__FROM__TOURNAMENT_CATEGORIES(database, rhs[0].TOURNAMENT_CATEGORIES_FK);
+                DBUtils::get__AGE_TILL(database, lhs[0].TOURNAMENT_CATEGORIES_FK) <
+                DBUtils::get__AGE_TILL(database, rhs[0].TOURNAMENT_CATEGORIES_FK);
     });
 
-    QVector<BDUtils::Fighing> fighing;
-    for (QVector<BDUtils::Fighing>& a : listsOfPairs)
+    QVector<DBUtils::Fighing> fighing;
+    for (QVector<DBUtils::Fighing>& a : listsOfPairs)
     {
         std::random_shuffle(a.begin(), a.end());
-        std::sort(std::begin(a), std::end(a), [] (const BDUtils::Fighing& lhs, const BDUtils::Fighing& rhs) {
-            return lhs.VERTEX < rhs.VERTEX;
+        std::sort(std::begin(a), std::end(a), [] (const DBUtils::Fighing& lhs, const DBUtils::Fighing& rhs) {
+            return lhs.VERTEX > rhs.VERTEX;
         });
         fighing += a;
     }
 
-    int ringCount = ringSpinBox->value();
 
+    QAxWidget excel("Excel.Application");
+    excel.setProperty("Visible", true);
+    QAxObject *workbooks = excel.querySubObject("WorkBooks");
+    workbooks->dynamicCall("Add");
+    QAxObject *workbook = excel.querySubObject("ActiveWorkBook");
+    QAxObject *sheets = workbook->querySubObject("WorkSheets");
+
+    for (int ringCount = ringSpinBox->value(), idRind = 1; 1 <= ringCount; --ringCount, ++idRind)
+    {
+        int time = 0;
+        for (const DBUtils::Fighing& f : fighing)
+        {
+            time += DBUtils::get__DURATION_FIGHING(database, f.TOURNAMENT_CATEGORIES_FK) *
+                    DBUtils::get__ROUND_COUNT(database, f.TOURNAMENT_CATEGORIES_FK) +
+
+                    DBUtils::get__DURATION_BREAK(database, f.TOURNAMENT_CATEGORIES_FK) *
+                    (DBUtils::get__ROUND_COUNT(database, f.TOURNAMENT_CATEGORIES_FK) - 1);
+        }
+        time /= ringCount;
+
+        int curTime = 0;
+        QVector<DBUtils::Fighing> curFighing;
+        while (fighing.size())
+        {
+            DBUtils::Fighing f = fighing.front();
+            curTime += DBUtils::get__DURATION_FIGHING(database, f.TOURNAMENT_CATEGORIES_FK) *
+                       DBUtils::get__ROUND_COUNT(database, f.TOURNAMENT_CATEGORIES_FK) +
+
+                       DBUtils::get__DURATION_BREAK(database, f.TOURNAMENT_CATEGORIES_FK) *
+                       (DBUtils::get__ROUND_COUNT(database, f.TOURNAMENT_CATEGORIES_FK) - 1);
+            curFighing += f;
+            fighing.pop_front();
+            if (time <= curTime && 2 <= ringCount)
+                break;
+        }
+
+        sheets->querySubObject("Add");
+        QAxObject *sheet = sheets->querySubObject( "Item( int )", 1);
+        printInExcel(sheet, curFighing, idRind);
+        delete sheet;
+
+    }
+
+    delete sheets;
+    delete workbook;
+    delete workbooks;
 }
 

@@ -59,7 +59,7 @@ void RenderAreaWidget::paintEvent(QPaintEvent* )
 
     QPainter painter(this);
 
-    QVector<BDUtils::NodeOfTournirGrid> nodes = BDUtils::getNodes(database, tournamentCategories);
+    QVector<DBUtils::NodeOfTournirGrid> nodes = DBUtils::getNodes(database, tournamentCategories);
     if (nodes.empty()) return;
     qSort(nodes);
 
@@ -68,13 +68,13 @@ void RenderAreaWidget::paintEvent(QPaintEvent* )
     countRows = 2 * (1 << (countColumns - 1)) - 1;
     setNormalSize();
 
-    for (const BDUtils::NodeOfTournirGrid& node : nodes)
+    for (const DBUtils::NodeOfTournirGrid& node : nodes)
     {
         QPoint cell = getCell(node.v);
         paintRect(cell.x(), cell.y(), painter, node);
         for (int child : {2 * node.v, 2 * node.v + 1})
         {
-            if (qBinaryFind(nodes, BDUtils::NodeOfTournirGrid({child, "", "", false, -1})) != nodes.end() )
+            if (qBinaryFind(nodes, DBUtils::NodeOfTournirGrid({child, "", "", false, -1})) != nodes.end() )
             {
                 paintLine(getCell(node.v), getCell(child), painter);
             }
@@ -86,8 +86,8 @@ void RenderAreaWidget::mousePressEvent(QMouseEvent* event)
 {
     QPoint p(event->y() / heightCell, event->x() / widthCell);
 
-    BDUtils::NodeOfTournirGrid currentNode = noNode;
-    for (const BDUtils::NodeOfTournirGrid& node : BDUtils::getNodes(database, tournamentCategories))
+    DBUtils::NodeOfTournirGrid currentNode = noNode;
+    for (const DBUtils::NodeOfTournirGrid& node : DBUtils::getNodes(database, tournamentCategories))
         if (getCell(node.v) == p)
             currentNode = node;
     if (currentNode.v == noNode.v) return;
@@ -113,8 +113,8 @@ void RenderAreaWidget::mousePressEvent(QMouseEvent* event)
         }
         else
         {
-            BDUtils::NodeOfTournirGrid node0 = selectedNode;
-            BDUtils::NodeOfTournirGrid node1 = currentNode;
+            DBUtils::NodeOfTournirGrid node0 = selectedNode;
+            DBUtils::NodeOfTournirGrid node1 = currentNode;
             selectedNode = noNode;
             if (!node0.isFighing && !node1.isFighing)
             {
@@ -169,7 +169,7 @@ void RenderAreaWidget::mousePressEvent(QMouseEvent* event)
 
 
 
-void RenderAreaWidget::paintRect(int i, int j, QPainter& painter, const BDUtils::NodeOfTournirGrid& node)
+void RenderAreaWidget::paintRect(int i, int j, QPainter& painter, const DBUtils::NodeOfTournirGrid& node)
 {
     QRect rect(j * widthCell, i * heightCell, widthCell, heightCell);
     if (node.v == selectedNode.v)
@@ -225,7 +225,7 @@ void RenderAreaWidget::heightChanged(int height)
 
 void RenderAreaWidget::onSaveInExcel()
 {
-    QVector<BDUtils::NodeOfTournirGrid> nodes = BDUtils::getNodes(database, tournamentCategories);
+    QVector<DBUtils::NodeOfTournirGrid> nodes = DBUtils::getNodes(database, tournamentCategories);
     if (nodes.empty()) return;
     qSort(nodes);
 
@@ -243,7 +243,7 @@ void RenderAreaWidget::onSaveInExcel()
     QAxObject* sheet = sheets->querySubObject( "Item( int )", sheetNumber );
 
 
-    for (const BDUtils::NodeOfTournirGrid& node : nodes)
+    for (const DBUtils::NodeOfTournirGrid& node : nodes)
     {
 
         QPoint p = getCell(node.v);
@@ -257,7 +257,7 @@ void RenderAreaWidget::onSaveInExcel()
 
         for (int child : {2 * node.v, 2 * node.v + 1})
         {
-            if (qBinaryFind(nodes, BDUtils::NodeOfTournirGrid({child, "", "", false, -1})) != nodes.end() )
+            if (qBinaryFind(nodes, DBUtils::NodeOfTournirGrid({child, "", "", false, -1})) != nodes.end() )
             {
                 QPoint aa = getCell(node.v);
                 QPoint bb = getCell(child);

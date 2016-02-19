@@ -1,7 +1,7 @@
 #ifndef RENDERAREAWIDGET_H
 #define RENDERAREAWIDGET_H
 
-#include <bd_utils.h>
+#include <db_utils.h>
 
 #include <QWidget>
 #include <QVector>
@@ -24,8 +24,8 @@ private:
     long long tournamentCategories;
     int countRows, countColumns;
     int widthCell, heightCell;
-    const BDUtils::NodeOfTournirGrid noNode = BDUtils::NodeOfTournirGrid({-1, "", "", false, -1});
-    BDUtils::NodeOfTournirGrid selectedNode = noNode;
+    const DBUtils::NodeOfTournirGrid noNode = DBUtils::NodeOfTournirGrid({-1, "", "", false, -1});
+    DBUtils::NodeOfTournirGrid selectedNode = noNode;
 
 public:
     explicit RenderAreaWidget(QWidget *parent, int widthCell, int heightCell, const QSqlDatabase &_database);
@@ -35,7 +35,7 @@ protected:
     void mousePressEvent(QMouseEvent* event) Q_DECL_OVERRIDE;
 
 private:
-    void paintRect(int i, int j, QPainter& painter, const BDUtils::NodeOfTournirGrid& node);
+    void paintRect(int i, int j, QPainter& painter, const DBUtils::NodeOfTournirGrid& node);
     void paintLine(QPoint , QPoint , QPainter& painter);
     void setNormalSize();
     //QVector<NodeOfTournirGrid> getNodes();

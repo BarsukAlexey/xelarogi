@@ -1,6 +1,6 @@
 #include "fiting_distribution.h"
 #include "tournamentgriddialog2.h"
-#include "bd_utils.h"
+#include "db_utils.h"
 #include "excel_utils.h"
 
 
@@ -27,7 +27,7 @@ FitingDistribution::FitingDistribution(const QSqlDatabase &database, const long 
     QAxObject *workbook = excel.querySubObject("ActiveWorkBook");
     QAxObject *sheets = workbook->querySubObject("WorkSheets");
 
-    QStringList days = BDUtils::get_DAYS_FROM_TOURNAMENTS(database, tournamentUID);
+    QStringList days = DBUtils::get_DAYS_FROM_TOURNAMENTS(database, tournamentUID);
 
 
     QSqlQuery queryTYPE_FK_AGE_FROM("SELECT * FROM TOURNAMENT_CATEGORIES WHERE TOURNAMENT_FK = ? GROUP BY TYPE_FK, AGE_FROM, AGE_TILL ORDER BY TYPE_FK, AGE_FROM", database);
@@ -49,10 +49,10 @@ FitingDistribution::FitingDistribution(const QSqlDatabase &database, const long 
         int currentRow = 2;
 
 
-        ExcelUtils::setValue  (sheet, currentRow, 1, BDUtils::getNameTournamentByUID(database, tournamentUID));
+        ExcelUtils::setValue  (sheet, currentRow, 1, DBUtils::getNameTournamentByUID(database, tournamentUID));
         ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 2 + 3 * days.size());
         ++currentRow;
-        ExcelUtils::setValue  (sheet, currentRow, 1, "Раздел: " + BDUtils::getTypeNameByUID(database, TYPE_FK));
+        ExcelUtils::setValue  (sheet, currentRow, 1, "Раздел: " + DBUtils::getTypeNameByUID(database, TYPE_FK));
         ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 2 + 3 * days.size());
         ++currentRow;
         ExcelUtils::setValue  (sheet, currentRow, 1, "Возраст от " + AGE_FROM + " до " + queryTYPE_FK_AGE_FROM.value("AGE_TILL").toString());
@@ -76,7 +76,7 @@ FitingDistribution::FitingDistribution(const QSqlDatabase &database, const long 
         {
             long long SEX_FK = querySEX_FK.value("SEX_FK").toLongLong();
 
-            ExcelUtils::setValue  (sheet, currentRow, 1, BDUtils::get_SHORTNAME_FROM_SEXES(database, SEX_FK), 0);
+            ExcelUtils::setValue  (sheet, currentRow, 1, DBUtils::get_SHORTNAME_FROM_SEXES(database, SEX_FK), 0);
             ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 2 + 3 * days.size());
             ++currentRow;
 
@@ -181,15 +181,15 @@ FitingDistribution::FitingDistribution(const QSqlDatabase &database, const long 
         ++currentRow;
 
         ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 2 + 3 * days.size());
-        ExcelUtils::setValue(sheet, currentRow, 1, "Главный судья: " + BDUtils::get_MAIN_JUDGE(database, tournamentUID), 0);
+        ExcelUtils::setValue(sheet, currentRow, 1, "Главный судья: " + DBUtils::get_MAIN_JUDGE(database, tournamentUID), 0);
         ++currentRow;
 
         ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 2 + 3 * days.size());
-        ExcelUtils::setValue(sheet, currentRow, 1, "Главный секретарь: " + BDUtils::get_MAIN_SECRETARY(database, tournamentUID), 0);
+        ExcelUtils::setValue(sheet, currentRow, 1, "Главный секретарь: " + DBUtils::get_MAIN_SECRETARY(database, tournamentUID), 0);
         ++currentRow;
 
         ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 2 + 3 * days.size());
-        ExcelUtils::setValue(sheet, currentRow, 1, "Заместитель главного судьи: " + BDUtils::get_ASSOCIATE_MAIN_JUDGE(database, tournamentUID), 0);
+        ExcelUtils::setValue(sheet, currentRow, 1, "Заместитель главного судьи: " + DBUtils::get_ASSOCIATE_MAIN_JUDGE(database, tournamentUID), 0);
         ++currentRow;
 
         delete sheet;
