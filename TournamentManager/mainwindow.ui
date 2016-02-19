@@ -77,7 +77,7 @@
         </size>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="generalPage">
         <property name="minimumSize">
@@ -97,6 +97,9 @@
         <layout class="QGridLayout" name="gridLayout_2">
          <item row="1" column="0">
           <widget class="QLabel" name="tournamentUidLabel">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
            <property name="text">
             <string>TextLabel</string>
            </property>
@@ -139,45 +142,6 @@
               </widget>
              </item>
              <item>
-              <widget class="QPushButton" name="ordersPayedBtn">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>Оплата</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="ordersWeightBtn">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>Взвешивание</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="ordersMedicalBtn">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="text">
-                <string>Мед. осмотр</string>
-               </property>
-              </widget>
-             </item>
-             <item>
               <widget class="QPushButton" name="ordersAccreditationBtn">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
@@ -186,7 +150,28 @@
                 </sizepolicy>
                </property>
                <property name="text">
-                <string>Аккредитация</string>
+                <string>Дисквалифицировать лалок: TODO</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="pushButtonGrid">
+               <property name="text">
+                <string>Турнирные сетки</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="pushButtonFightinDistribution">
+               <property name="text">
+                <string>График распеределения боёв</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="pushButtonPair">
+               <property name="text">
+                <string>Составы пар</string>
                </property>
               </widget>
              </item>
@@ -204,7 +189,7 @@
             </font>
            </property>
            <property name="text">
-            <string>Турнир</string>
+            <string>Турнир. Как убрать это при запуске?</string>
            </property>
           </widget>
          </item>
@@ -232,28 +217,6 @@
        <string>Заполнить страны из Excel</string>
       </property>
      </widget>
-    </item>
-    <item>
-     <widget class="QPushButton" name="pushButton">
-      <property name="text">
-       <string>Редактирование турнирной сетки</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-    <widget class="QPushButton" name="pushButton_2">
-     <property name="geometry">
-      <rect>
-       <x>320</x>
-       <y>390</y>
-       <width>75</width>
-       <height>23</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>PushButton</string>
-     </property>
-    </widget>
     </item>
    </layout>
   </widget>

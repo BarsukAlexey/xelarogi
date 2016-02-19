@@ -174,8 +174,9 @@ void RenderAreaWidget::paintRect(int i, int j, QPainter& painter, const DBUtils:
     QRect rect(j * widthCell, i * heightCell, widthCell, heightCell);
     if (node.v == selectedNode.v)
         painter.fillRect(rect, QBrush(Qt::green));
-    else
-        painter.fillRect(rect, QBrush(Qt::gray));
+    //else
+        //painter.fillRect(rect, QBrush(Qt::gray));
+        //painter.fillRect(rect, QBrush(Qt::lightGray));
     painter.drawRect(rect);
     QRect rectName(rect.topLeft(), QSize(rect.width(), rect.height() / 2));
     QRect rectRegion(QPoint(rect.topLeft().x(), rect.topLeft().y() + rect.height() / 2), QSize(rect.width(), rect.height() / 2));

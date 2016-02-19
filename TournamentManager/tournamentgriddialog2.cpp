@@ -159,12 +159,9 @@ void TournamentGridDialog2::onActivatedCategory(int id)
     pRenderArea->slotSetTournamentCategories(tournamentCategories);
     //qDebug() << __LINE__ << __PRETTY_FUNCTION__ << "tournamentCategories: " << tournamentCategories;
 
-    QSqlQuery query("SELECT * FROM ORDERS WHERE TOURNAMENT_CATEGORY_FK = ? AND IS_WEIGHTED = ? AND IS_MEDICAL = ? AND IS_ACCREDITATED = ? AND IS_PAID = ?", database);
+    QSqlQuery query("SELECT * FROM ORDERS WHERE TOURNAMENT_CATEGORY_FK = ? AND IS_VALID = ?", database);
     query.bindValue(0, tournamentCategories);
     query.bindValue(1, "true");
-    query.bindValue(2, "true");
-    query.bindValue(3, "true");
-    query.bindValue(4, "true");
 
     //qDebug() << "\n" << __PRETTY_FUNCTION__  << "\n" << "tournamentCategories: " << tournamentCategories << "\n";
 

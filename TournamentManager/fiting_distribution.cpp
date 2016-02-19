@@ -115,7 +115,7 @@ FitingDistribution::FitingDistribution(const QSqlDatabase &database, const long 
 
                 long long UID_TOURNAMENT_CATEGORY = queryTOURNAMENT_CATEGORIES_UID.value("UID").toLongLong();
 
-                QSqlQuery queryCOUNT("SELECT count() AS COUNT FROM ORDERS WHERE TOURNAMENT_CATEGORY_FK = ? AND IS_WEIGHTED = ? GROUP BY TOURNAMENT_CATEGORY_FK", database);
+                QSqlQuery queryCOUNT("SELECT count() AS COUNT FROM ORDERS WHERE TOURNAMENT_CATEGORY_FK = ? AND IS_VALID = ? GROUP BY TOURNAMENT_CATEGORY_FK", database);
                 queryCOUNT.bindValue(0, UID_TOURNAMENT_CATEGORY);
                 queryCOUNT.bindValue(1, "true");
                 if (!queryCOUNT.exec())

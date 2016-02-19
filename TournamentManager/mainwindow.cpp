@@ -90,18 +90,18 @@ MainWindow::MainWindow(QWidget *parent) :
           handbookDlg.exec();
     });
 
-    connect(ui->pushButton, &QPushButton::clicked, [this] ()
-    {
-        TournamentGridDialog dialog(m_database, this);
-        dialog.exec();
-    });
+//    connect(ui->pushButton, &QPushButton::clicked, [this] ()
+//    {
+//        TournamentGridDialog dialog(m_database, this);
+//        dialog.exec();
+//    });
 
     connectButtons();
     updateTournamentTreeWidget();
 
     ui->tournamentUidLabel->setVisible(false);
 
-    connect(ui->pushButton_2, &QPushButton::clicked, this, &MainWindow::on_pushButton_2_clicked);
+//    connect(ui->pushButton_2, &QPushButton::clicked, this, &MainWindow::on_pushButton_2_clicked);
 }
 
 MainWindow::~MainWindow()
@@ -309,24 +309,24 @@ void MainWindow::connectButtons()
         OneFieldSetupDialog dlg(tournamentUID, "IS_ACCREDITATED", this);
         dlg.exec();
     });
-    connect(ui->ordersMedicalBtn, &QPushButton::clicked, [this] ()
-    {
-        long long tournamentUID = ui->tournamentUidLabel->text().toLongLong();
-        OneFieldSetupDialog dlg(tournamentUID, "IS_MEDICAL", this);
-        dlg.exec();
-    });
-    connect(ui->ordersPayedBtn, &QPushButton::clicked, [this] ()
-    {
-        long long tournamentUID = ui->tournamentUidLabel->text().toLongLong();
-        OneFieldSetupDialog dlg(tournamentUID, "IS_PAID", this);
-        dlg.exec();
-    });
-    connect(ui->ordersWeightBtn, &QPushButton::clicked, [this] ()
-    {
-        long long tournamentUID = ui->tournamentUidLabel->text().toLongLong();
-        OneFieldSetupDialog dlg(tournamentUID, "IS_WEIGHTED", this);
-        dlg.exec();
-    });
+//    connect(ui->ordersMedicalBtn, &QPushButton::clicked, [this] ()
+//    {
+//        long long tournamentUID = ui->tournamentUidLabel->text().toLongLong();
+//        OneFieldSetupDialog dlg(tournamentUID, "IS_MEDICAL", this);
+//        dlg.exec();
+//    });
+//    connect(ui->ordersPayedBtn, &QPushButton::clicked, [this] ()
+//    {
+//        long long tournamentUID = ui->tournamentUidLabel->text().toLongLong();
+//        OneFieldSetupDialog dlg(tournamentUID, "IS_PAID", this);
+//        dlg.exec();
+//    });
+//    connect(ui->ordersWeightBtn, &QPushButton::clicked, [this] ()
+//    {
+//        long long tournamentUID = ui->tournamentUidLabel->text().toLongLong();
+//        OneFieldSetupDialog dlg(tournamentUID, "IS_WEIGHTED", this);
+//        dlg.exec();
+//    });
     connect(ui->createOrdersBtn, &QPushButton::clicked, [this] ()
     {
         long long tournamentUID = ui->tournamentUidLabel->text().toLongLong();
@@ -336,14 +336,37 @@ void MainWindow::connectButtons()
     });
 }
 
-void MainWindow::on_pushButton_2_clicked()
-{
+//void MainWindow::on_pushButton_2_clicked()
+//{
 //    TournamentGridDialog2 d(m_database, 1, this);
 //    d.exec();
 
-    //FitingDistribution dd(m_database, ui->tournamentUidLabel->text().toLongLong());
-    //FitingDistribution dd(m_database, 1);
+//    //FitingDistribution dd(m_database, ui->tournamentUidLabel->text().toLongLong());
+//    //FitingDistribution dd(m_database, 1);
 
-    FightingPairs d(m_database, 1, this);
-    d.exec();
+//    FightingPairs d(m_database, 1, this);
+//    d.exec();
+//}
+
+void MainWindow::on_pushButtonGrid_clicked()
+{
+    long long routnamentUID = ui->tournamentUidLabel->text().toLongLong();
+    qDebug() << "routnamentUID: " << routnamentUID;
+    TournamentGridDialog2 dialog(m_database, routnamentUID, this);
+    dialog.exec();
+}
+
+void MainWindow::on_pushButtonFightinDistribution_clicked()
+{
+    long long routnamentUID = ui->tournamentUidLabel->text().toLongLong();
+    qDebug() << "routnamentUID: " << routnamentUID;
+    FitingDistribution dialog(m_database, routnamentUID);
+}
+
+void MainWindow::on_pushButtonPair_clicked()
+{
+    long long routnamentUID = ui->tournamentUidLabel->text().toLongLong();
+    qDebug() << "routnamentUID: " << routnamentUID;
+    FightingPairs dialog(m_database, routnamentUID, this);
+    dialog.exec();
 }
