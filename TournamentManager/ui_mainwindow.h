@@ -63,6 +63,7 @@ public:
     QPushButton *pushButtonGrid;
     QPushButton *pushButtonFightinDistribution;
     QPushButton *pushButtonPair;
+    QPushButton *pushButtonProtokolVzveshinanya;
     QLabel *tournamentLabel;
     QSpacerItem *verticalSpacer_2;
     QPushButton *btnExcel;
@@ -194,6 +195,11 @@ public:
 
         verticalLayout->addWidget(pushButtonPair);
 
+        pushButtonProtokolVzveshinanya = new QPushButton(ordersPage);
+        pushButtonProtokolVzveshinanya->setObjectName(QStringLiteral("pushButtonProtokolVzveshinanya"));
+
+        verticalLayout->addWidget(pushButtonProtokolVzveshinanya);
+
 
         horizontalLayout_2->addLayout(verticalLayout);
 
@@ -283,6 +289,7 @@ public:
         pushButtonGrid->setText(QApplication::translate("MainWindow", "\320\242\321\203\321\200\320\275\320\270\321\200\320\275\321\213\320\265 \321\201\320\265\321\202\320\272\320\270", 0));
         pushButtonFightinDistribution->setText(QApplication::translate("MainWindow", "\320\223\321\200\320\260\321\204\320\270\320\272 \321\200\320\260\321\201\320\277\320\265\321\200\320\265\320\264\320\265\320\273\320\265\320\275\320\270\321\217 \320\261\320\276\321\221\320\262", 0));
         pushButtonPair->setText(QApplication::translate("MainWindow", "\320\241\320\276\321\201\321\202\320\260\320\262\321\213 \320\277\320\260\321\200", 0));
+        pushButtonProtokolVzveshinanya->setText(QApplication::translate("MainWindow", "\320\237\321\200\320\276\321\202\320\276\320\272\320\276\320\273\321\213 \320\262\320\267\320\262\320\265\321\210\320\270\320\262\320\260\320\275\320\270\321\217", 0));
         tournamentLabel->setText(QApplication::translate("MainWindow", "\320\242\321\203\321\200\320\275\320\270\321\200. \320\232\320\260\320\272 \321\203\320\261\321\200\320\260\321\202\321\214 \321\215\321\202\320\276 \320\277\321\200\320\270 \320\267\320\260\320\277\321\203\321\201\320\272\320\265?", 0));
         btnExcel->setText(QApplication::translate("MainWindow", "\320\227\320\260\320\277\320\276\320\273\320\275\320\270\321\202\321\214 \321\201\321\202\321\200\320\260\320\275\321\213 \320\270\320\267 Excel", 0));
         handbookMenu->setTitle(QApplication::translate("MainWindow", "\320\241\320\277\321\200\320\260\320\262\320\276\321\207\320\275\320\270\320\272\320\270", 0));

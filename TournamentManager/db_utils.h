@@ -32,8 +32,10 @@ public:
         int winer;
     };
 
-    static QString getField(const QSqlDatabase&, const QString& field, const QString& table, const QString& where);
-    static QString getField(const QSqlDatabase&, const QString& field, const QString& table, const long long where);
+    static QString getField(const QSqlDatabase&, const QString& field, const QString& table, const QString& UID);
+    static QString getField(const QSqlDatabase&, const QString& field, const QString& table, const long long UID);
+    static QString getFieldDate(const QSqlDatabase&, const QString& field, const QString& table, const long long UID);
+
 
     static QString getNameTournamentByUID(const QSqlDatabase& , long long);
     static QString getTypeNameByUID(const QSqlDatabase& , long long);
@@ -51,6 +53,7 @@ public:
 
 
     static QVector<NodeOfTournirGrid> getNodes(const QSqlDatabase& database, long long tournamentCategories);
+    static QVector<NodeOfTournirGrid> getLeafOFTree(const QSqlDatabase& database, long long tournamentCategories);
     static QVector<QVector<DBUtils::Fighing>> getListsOfPairs(const QSqlDatabase& database, long long tournamentUID);
     static QVector<Fighing> getListOfPairs(const QSqlDatabase& database, long long TOURNAMENT_CATEGORIES_FK);
 
@@ -59,6 +62,7 @@ public:
     }
 
     // для таблицы TOURNAMENT_CATEGORIES
+    static QVector<long long> get_UIDs_of_TOURNAMENT_CATEGORIES(const QSqlDatabase& database, long long tournamentUID);
     static QString get__NAME_OF_TOURNAMENT_CATEGORIES(const QSqlDatabase& database, long long UID);
     static int     get__AGE_FROM(const QSqlDatabase& database, long long UID);
     static int     get__AGE_TILL(const QSqlDatabase& database, long long UID);

@@ -46,11 +46,12 @@ private slots:
 
     void on_pushButtonPair_clicked();
 
+    void on_pushButtonProtokolVzveshinanya_clicked();
+
 private:
     void updateTournamentTreeWidget();
     void connectButtons();
     
-    //void on_pushButton_2_clicked();
 
 private:
     Ui::MainWindow *ui;

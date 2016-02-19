@@ -4,6 +4,7 @@
 #include <QDebug>
 #include <QSqlError>
 #include <QDate>
+#include <algorithm>
 
 
 QString DBUtils::getField(const QSqlDatabase& database, const QString& field, const QString& table, const QString& UID)
@@ -28,6 +29,21 @@ QString DBUtils::getField(const QSqlDatabase& database, const QString& field, co
     if (query.exec() && query.next())
     {
         return query.value(field).toString();
+    }
+    else
+    {
+        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << query.lastError().text() << query.lastQuery();
+    }
+    return "";
+}
+
+QString DBUtils::getFieldDate(const QSqlDatabase& database, const QString& field, const QString& table, const long long UID)
+{
+    QSqlQuery query("SELECT * FROM " + table + " WHERE UID = ?", database);
+    query.bindValue(0, UID);
+    if (query.exec() && query.next())
+    {
+        return query.value(field).toDate().toString("dd.MM.yyyy");
     }
     else
     {
@@ -210,6 +226,25 @@ QVector<DBUtils::NodeOfTournirGrid> DBUtils::getNodes(const QSqlDatabase& databa
     return arr;
 }
 
+QVector<DBUtils::NodeOfTournirGrid> DBUtils::getLeafOFTree(const QSqlDatabase& database, long long tournamentCategories)
+{
+    QVector<DBUtils::NodeOfTournirGrid> res;
+    for (DBUtils::NodeOfTournirGrid node : getNodes(database, tournamentCategories))
+        if (!node.isFighing)
+            res.push_back(node);
+    if (!res.empty())
+    {
+        tournamentCategories = tournamentCategories;
+    }
+
+    std::random_shuffle(res.begin(), res.end());
+    std::sort(std::begin(res), std::end(res), [database] (const DBUtils::NodeOfTournirGrid& lhs, const DBUtils::NodeOfTournirGrid& rhs) {
+        return DBUtils::getSecondNameAndOneLetterOfName(database, lhs.UID) <
+               DBUtils::getSecondNameAndOneLetterOfName(database, rhs.UID);
+    });
+    return res;
+}
+
 QVector<QVector<DBUtils::Fighing>> DBUtils::getListsOfPairs(const QSqlDatabase& database, long long tournamentUID)
 {
     QVector<QVector<Fighing>> result;
@@ -258,6 +293,20 @@ QVector<DBUtils::Fighing> DBUtils::getListOfPairs(const QSqlDatabase& database, 
 
     std::reverse(arr.begin(), arr.end());
     return arr;
+}
+
+QVector<long long> DBUtils::get_UIDs_of_TOURNAMENT_CATEGORIES(const QSqlDatabase& database, long long tournamentUID)
+{
+    QVector<long long> uids;
+    QSqlQuery query("SELECT * FROM TOURNAMENT_CATEGORIES WHERE TOURNAMENT_FK = ? ", database);
+    query.bindValue(0, tournamentUID);
+    if (!query.exec())
+        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << query.lastError().text() << query.lastQuery();
+    else
+        while(query.next())
+            uids.push_back(query.value("UID").toLongLong());
+    //qDebug() << uids;
+    return uids;
 }
 
 QString DBUtils::get__NAME_OF_TOURNAMENT_CATEGORIES(const QSqlDatabase& database, long long UID)

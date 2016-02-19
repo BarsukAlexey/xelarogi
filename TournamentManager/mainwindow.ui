@@ -175,6 +175,13 @@
                </property>
               </widget>
              </item>
+             <item>
+              <widget class="QPushButton" name="pushButtonProtokolVzveshinanya">
+               <property name="text">
+                <string>Протоколы взвешивания</string>
+               </property>
+              </widget>
+             </item>
             </layout>
            </item>
           </layout>

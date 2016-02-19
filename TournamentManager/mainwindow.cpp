@@ -10,6 +10,7 @@
 #include "tournamentgriddialog2.h"
 #include "fiting_distribution.h"
 #include "fighting_pairs.h"
+#include "weighing_protocol.h"
 
 using namespace std;
 
@@ -336,17 +337,6 @@ void MainWindow::connectButtons()
     });
 }
 
-//void MainWindow::on_pushButton_2_clicked()
-//{
-//    TournamentGridDialog2 d(m_database, 1, this);
-//    d.exec();
-
-//    //FitingDistribution dd(m_database, ui->tournamentUidLabel->text().toLongLong());
-//    //FitingDistribution dd(m_database, 1);
-
-//    FightingPairs d(m_database, 1, this);
-//    d.exec();
-//}
 
 void MainWindow::on_pushButtonGrid_clicked()
 {
@@ -360,7 +350,7 @@ void MainWindow::on_pushButtonFightinDistribution_clicked()
 {
     long long routnamentUID = ui->tournamentUidLabel->text().toLongLong();
     qDebug() << "routnamentUID: " << routnamentUID;
-    FitingDistribution dialog(m_database, routnamentUID);
+    FitingDistribution(m_database, routnamentUID);
 }
 
 void MainWindow::on_pushButtonPair_clicked()
@@ -369,4 +359,11 @@ void MainWindow::on_pushButtonPair_clicked()
     qDebug() << "routnamentUID: " << routnamentUID;
     FightingPairs dialog(m_database, routnamentUID, this);
     dialog.exec();
+}
+
+void MainWindow::on_pushButtonProtokolVzveshinanya_clicked()
+{
+    long long routnamentUID = ui->tournamentUidLabel->text().toLongLong();
+    qDebug() << "routnamentUID: " << routnamentUID;
+    WeighingProtocol(m_database, routnamentUID);
 }

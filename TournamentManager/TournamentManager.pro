@@ -31,7 +31,8 @@ SOURCES += main.cpp\
     fiting_distribution.cpp \
     excel_utils.cpp \
     fighting_pairs.cpp \
-    db_utils.cpp
+    db_utils.cpp \
+    weighing_protocol.cpp
 
 HEADERS  += mainwindow.h \
     handbookdialog.h \
@@ -49,7 +50,8 @@ HEADERS  += mainwindow.h \
     fiting_distribution.h \
     excel_utils.h \
     fighting_pairs.h \
-    db_utils.h
+    db_utils.h \
+    weighing_protocol.h
 
 FORMS    += mainwindow.ui \
     handbookdialog.ui \
