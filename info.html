@@ -1,0 +1,4006 @@
+<h1 align=center> Reference</h1>
+<p>The  COM object is a QAxObject with the CLSID .</p>
+<h3>Interfaces</h3>
+<ul>
+<li>PageSetup
+</ul>
+<h3>Event Interfaces</h3>
+<ul>
+<li>IUnknown
+</ul>
+<h2>Public Slots:</h2>
+<ul>
+<li>QVariant <a href="#PrintQuality"><b>PrintQuality</b></a>(QVariant Index = 0);</li>
+<li>void <a href="#SetAlignMarginsHeaderFooter"><b>SetAlignMarginsHeaderFooter</b></a>(bool AlignMarginsHeaderFooter);</li>
+<li>void <a href="#SetBlackAndWhite"><b>SetBlackAndWhite</b></a>(bool BlackAndWhite);</li>
+<li>void <a href="#SetBottomMargin"><b>SetBottomMargin</b></a>(double BottomMargin);</li>
+<li>void <a href="#SetCenterFooter"><b>SetCenterFooter</b></a>(QString CenterFooter);</li>
+<li>void <a href="#SetCenterHeader"><b>SetCenterHeader</b></a>(QString CenterHeader);</li>
+<li>void <a href="#SetCenterHorizontally"><b>SetCenterHorizontally</b></a>(bool CenterHorizontally);</li>
+<li>void <a href="#SetCenterVertically"><b>SetCenterVertically</b></a>(bool CenterVertically);</li>
+<li>void <a href="#SetChartSize"><b>SetChartSize</b></a>(XlObjectSize ChartSize);</li>
+<li>void <a href="#SetDifferentFirstPageHeaderFooter"><b>SetDifferentFirstPageHeaderFooter</b></a>(bool DifferentFirstPageHeaderFooter);</li>
+<li>void <a href="#SetDraft"><b>SetDraft</b></a>(bool Draft);</li>
+<li>void <a href="#SetFirstPageNumber"><b>SetFirstPageNumber</b></a>(int FirstPageNumber);</li>
+<li>void <a href="#SetFitToPagesTall"><b>SetFitToPagesTall</b></a>(QVariant FitToPagesTall);</li>
+<li>void <a href="#SetFitToPagesWide"><b>SetFitToPagesWide</b></a>(QVariant FitToPagesWide);</li>
+<li>void <a href="#SetFooterMargin"><b>SetFooterMargin</b></a>(double FooterMargin);</li>
+<li>void <a href="#SetHeaderMargin"><b>SetHeaderMargin</b></a>(double HeaderMargin);</li>
+<li>void <a href="#SetLeftFooter"><b>SetLeftFooter</b></a>(QString LeftFooter);</li>
+<li>void <a href="#SetLeftHeader"><b>SetLeftHeader</b></a>(QString LeftHeader);</li>
+<li>void <a href="#SetLeftMargin"><b>SetLeftMargin</b></a>(double LeftMargin);</li>
+<li>void <a href="#SetOddAndEvenPagesHeaderFooter"><b>SetOddAndEvenPagesHeaderFooter</b></a>(bool OddAndEvenPagesHeaderFooter);</li>
+<li>void <a href="#SetOrder"><b>SetOrder</b></a>(XlOrder Order);</li>
+<li>void <a href="#SetOrientation"><b>SetOrientation</b></a>(XlPageOrientation Orientation);</li>
+<li>void <a href="#SetPaperSize"><b>SetPaperSize</b></a>(XlPaperSize PaperSize);</li>
+<li>void <a href="#SetPrintArea"><b>SetPrintArea</b></a>(QString PrintArea);</li>
+<li>void <a href="#SetPrintComments"><b>SetPrintComments</b></a>(XlPrintLocation PrintComments);</li>
+<li>void <a href="#SetPrintErrors"><b>SetPrintErrors</b></a>(XlPrintErrors PrintErrors);</li>
+<li>void <a href="#SetPrintGridlines"><b>SetPrintGridlines</b></a>(bool PrintGridlines);</li>
+<li>void <a href="#SetPrintHeadings"><b>SetPrintHeadings</b></a>(bool PrintHeadings);</li>
+<li>void <a href="#SetPrintNotes"><b>SetPrintNotes</b></a>(bool PrintNotes);</li>
+<li>QVariant <a href="#SetPrintQuality"><b>SetPrintQuality</b></a>(QVariant Index = 0, QVariant rhs = 0);</li>
+<li>void <a href="#SetPrintTitleColumns"><b>SetPrintTitleColumns</b></a>(QString PrintTitleColumns);</li>
+<li>void <a href="#SetPrintTitleRows"><b>SetPrintTitleRows</b></a>(QString PrintTitleRows);</li>
+<li>void <a href="#SetRightFooter"><b>SetRightFooter</b></a>(QString RightFooter);</li>
+<li>void <a href="#SetRightHeader"><b>SetRightHeader</b></a>(QString RightHeader);</li>
+<li>void <a href="#SetRightMargin"><b>SetRightMargin</b></a>(double RightMargin);</li>
+<li>void <a href="#SetScaleWithDocHeaderFooter"><b>SetScaleWithDocHeaderFooter</b></a>(bool ScaleWithDocHeaderFooter);</li>
+<li>void <a href="#SetTopMargin"><b>SetTopMargin</b></a>(double TopMargin);</li>
+<li>void <a href="#SetZoom"><b>SetZoom</b></a>(QVariant Zoom);</li>
+</ul>
+<h2>Signals:</h2>
+<ul>
+<li>void <a href="#exception"><b>exception</b></a>(int code, QString source, QString disc, QString help);</li>
+<li>void <a href="#propertyChanged"><b>propertyChanged</b></a>(QString name);</li>
+<li>void <a href="#signal"><b>signal</b></a>(QString name, int argc, void* argv);</li>
+</ul>
+<h2>Properties:</h2>
+<ul>
+<li>QString <a href="#objectName"><b>objectName</b></a>;</li>
+<li>bool <a href="#AlignMarginsHeaderFooter"><b>AlignMarginsHeaderFooter</b></a>;</li>
+<li>IDispatch* <a href="#Application"><b>Application</b></a>;</li>
+<li>bool <a href="#BlackAndWhite"><b>BlackAndWhite</b></a>;</li>
+<li>double <a href="#BottomMargin"><b>BottomMargin</b></a>;</li>
+<li>QString <a href="#CenterFooter"><b>CenterFooter</b></a>;</li>
+<li>IDispatch* <a href="#CenterFooterPicture"><b>CenterFooterPicture</b></a>;</li>
+<li>QString <a href="#CenterHeader"><b>CenterHeader</b></a>;</li>
+<li>IDispatch* <a href="#CenterHeaderPicture"><b>CenterHeaderPicture</b></a>;</li>
+<li>bool <a href="#CenterHorizontally"><b>CenterHorizontally</b></a>;</li>
+<li>bool <a href="#CenterVertically"><b>CenterVertically</b></a>;</li>
+<li>XlObjectSize <a href="#ChartSize"><b>ChartSize</b></a>;</li>
+<li>XlCreator <a href="#Creator"><b>Creator</b></a>;</li>
+<li>bool <a href="#DifferentFirstPageHeaderFooter"><b>DifferentFirstPageHeaderFooter</b></a>;</li>
+<li>bool <a href="#Draft"><b>Draft</b></a>;</li>
+<li>IDispatch* <a href="#EvenPage"><b>EvenPage</b></a>;</li>
+<li>IDispatch* <a href="#FirstPage"><b>FirstPage</b></a>;</li>
+<li>int <a href="#FirstPageNumber"><b>FirstPageNumber</b></a>;</li>
+<li>QVariant <a href="#FitToPagesTall"><b>FitToPagesTall</b></a>;</li>
+<li>QVariant <a href="#FitToPagesWide"><b>FitToPagesWide</b></a>;</li>
+<li>double <a href="#FooterMargin"><b>FooterMargin</b></a>;</li>
+<li>double <a href="#HeaderMargin"><b>HeaderMargin</b></a>;</li>
+<li>QString <a href="#LeftFooter"><b>LeftFooter</b></a>;</li>
+<li>IDispatch* <a href="#LeftFooterPicture"><b>LeftFooterPicture</b></a>;</li>
+<li>QString <a href="#LeftHeader"><b>LeftHeader</b></a>;</li>
+<li>IDispatch* <a href="#LeftHeaderPicture"><b>LeftHeaderPicture</b></a>;</li>
+<li>double <a href="#LeftMargin"><b>LeftMargin</b></a>;</li>
+<li>bool <a href="#OddAndEvenPagesHeaderFooter"><b>OddAndEvenPagesHeaderFooter</b></a>;</li>
+<li>XlOrder <a href="#Order"><b>Order</b></a>;</li>
+<li>XlPageOrientation <a href="#Orientation"><b>Orientation</b></a>;</li>
+<li>IDispatch* <a href="#Pages"><b>Pages</b></a>;</li>
+<li>XlPaperSize <a href="#PaperSize"><b>PaperSize</b></a>;</li>
+<li>IDispatch* <a href="#Parent"><b>Parent</b></a>;</li>
+<li>QString <a href="#PrintArea"><b>PrintArea</b></a>;</li>
+<li>XlPrintLocation <a href="#PrintComments"><b>PrintComments</b></a>;</li>
+<li>XlPrintErrors <a href="#PrintErrors"><b>PrintErrors</b></a>;</li>
+<li>bool <a href="#PrintGridlines"><b>PrintGridlines</b></a>;</li>
+<li>bool <a href="#PrintHeadings"><b>PrintHeadings</b></a>;</li>
+<li>bool <a href="#PrintNotes"><b>PrintNotes</b></a>;</li>
+<li>QVariant <a href="#PrintQuality"><b>PrintQuality</b></a>;</li>
+<li>QString <a href="#PrintTitleColumns"><b>PrintTitleColumns</b></a>;</li>
+<li>QString <a href="#PrintTitleRows"><b>PrintTitleRows</b></a>;</li>
+<li>QString <a href="#RightFooter"><b>RightFooter</b></a>;</li>
+<li>IDispatch* <a href="#RightFooterPicture"><b>RightFooterPicture</b></a>;</li>
+<li>QString <a href="#RightHeader"><b>RightHeader</b></a>;</li>
+<li>IDispatch* <a href="#RightHeaderPicture"><b>RightHeaderPicture</b></a>;</li>
+<li>double <a href="#RightMargin"><b>RightMargin</b></a>;</li>
+<li>bool <a href="#ScaleWithDocHeaderFooter"><b>ScaleWithDocHeaderFooter</b></a>;</li>
+<li>double <a href="#TopMargin"><b>TopMargin</b></a>;</li>
+<li>QVariant <a href="#Zoom"><b>Zoom</b></a>;</li>
+<li>QString <a href="#control"><b>control</b></a>;</li>
+</ul>
+<hr><h2>Member Type Documentation</h2>
+<h3><a name=Constants></a>Constants</h3>
+<ul>
+<li>xlAll	=-4104</li>
+<li>xlAutomatic	=-4105</li>
+<li>xlBoth	=1</li>
+<li>xlCenter	=-4108</li>
+<li>xlChecker	=9</li>
+<li>xlCircle	=8</li>
+<li>xlCorner	=2</li>
+<li>xlCrissCross	=16</li>
+<li>xlCross	=4</li>
+<li>xlDiamond	=2</li>
+<li>xlDistributed	=-4117</li>
+<li>xlDoubleAccounting	=5</li>
+<li>xlFixedValue	=1</li>
+<li>xlFormats	=-4122</li>
+<li>xlGray16	=17</li>
+<li>xlGray8	=18</li>
+<li>xlGrid	=15</li>
+<li>xlHigh	=-4127</li>
+<li>xlInside	=2</li>
+<li>xlJustify	=-4130</li>
+<li>xlLightDown	=13</li>
+<li>xlLightHorizontal	=11</li>
+<li>xlLightUp	=14</li>
+<li>xlLightVertical	=12</li>
+<li>xlLow	=-4134</li>
+<li>xlManual	=-4135</li>
+<li>xlMinusValues	=3</li>
+<li>xlModule	=-4141</li>
+<li>xlNextToAxis	=4</li>
+<li>xlNone	=-4142</li>
+<li>xlNotes	=-4144</li>
+<li>xlOff	=-4146</li>
+<li>xlOn	=1</li>
+<li>xlPercent	=2</li>
+<li>xlPlus	=9</li>
+<li>xlPlusValues	=2</li>
+<li>xlSemiGray75	=10</li>
+<li>xlShowLabel	=4</li>
+<li>xlShowLabelAndPercent	=5</li>
+<li>xlShowPercent	=3</li>
+<li>xlShowValue	=2</li>
+<li>xlSimple	=-4154</li>
+<li>xlSingle	=2</li>
+<li>xlSingleAccounting	=4</li>
+<li>xlSolid	=1</li>
+<li>xlSquare	=1</li>
+<li>xlStar	=5</li>
+<li>xlStError	=4</li>
+<li>xlToolbarButton	=2</li>
+<li>xlTriangle	=3</li>
+<li>xlGray25	=-4124</li>
+<li>xlGray50	=-4125</li>
+<li>xlGray75	=-4126</li>
+<li>xlBottom	=-4107</li>
+<li>xlLeft	=-4131</li>
+<li>xlRight	=-4152</li>
+<li>xlTop	=-4160</li>
+<li>xl3DBar	=-4099</li>
+<li>xl3DSurface	=-4103</li>
+<li>xlBar	=2</li>
+<li>xlColumn	=3</li>
+<li>xlCombination	=-4111</li>
+<li>xlCustom	=-4114</li>
+<li>xlDefaultAutoFormat	=-1</li>
+<li>xlMaximum	=2</li>
+<li>xlMinimum	=4</li>
+<li>xlOpaque	=3</li>
+<li>xlTransparent	=2</li>
+<li>xlBidi	=-5000</li>
+<li>xlLatin	=-5001</li>
+<li>xlContext	=-5002</li>
+<li>xlLTR	=-5003</li>
+<li>xlRTL	=-5004</li>
+<li>xlFullScript	=1</li>
+<li>xlPartialScript	=2</li>
+<li>xlMixedScript	=3</li>
+<li>xlMixedAuthorizedScript	=4</li>
+<li>xlVisualCursor	=2</li>
+<li>xlLogicalCursor	=1</li>
+<li>xlSystem	=1</li>
+<li>xlPartial	=3</li>
+<li>xlHindiNumerals	=3</li>
+<li>xlBidiCalendar	=3</li>
+<li>xlGregorian	=2</li>
+<li>xlComplete	=4</li>
+<li>xlScale	=3</li>
+<li>xlClosed	=3</li>
+<li>xlColor1	=7</li>
+<li>xlColor2	=8</li>
+<li>xlColor3	=9</li>
+<li>xlConstants	=2</li>
+<li>xlContents	=2</li>
+<li>xlBelow	=1</li>
+<li>xlCascade	=7</li>
+<li>xlCenterAcrossSelection	=7</li>
+<li>xlChart4	=2</li>
+<li>xlChartSeries	=17</li>
+<li>xlChartShort	=6</li>
+<li>xlChartTitles	=18</li>
+<li>xlClassic1	=1</li>
+<li>xlClassic2	=2</li>
+<li>xlClassic3	=3</li>
+<li>xl3DEffects1	=13</li>
+<li>xl3DEffects2	=14</li>
+<li>xlAbove	=0</li>
+<li>xlAccounting1	=4</li>
+<li>xlAccounting2	=5</li>
+<li>xlAccounting3	=6</li>
+<li>xlAccounting4	=17</li>
+<li>xlAdd	=2</li>
+<li>xlDebugCodePane	=13</li>
+<li>xlDesktop	=9</li>
+<li>xlDirect	=1</li>
+<li>xlDivide	=5</li>
+<li>xlDoubleClosed	=5</li>
+<li>xlDoubleOpen	=4</li>
+<li>xlDoubleQuote	=1</li>
+<li>xlEntireChart	=20</li>
+<li>xlExcelMenus	=1</li>
+<li>xlExtended	=3</li>
+<li>xlFill	=5</li>
+<li>xlFirst	=0</li>
+<li>xlFloating	=5</li>
+<li>xlFormula	=5</li>
+<li>xlGeneral	=1</li>
+<li>xlGridline	=22</li>
+<li>xlIcons	=1</li>
+<li>xlImmediatePane	=12</li>
+<li>xlInteger	=2</li>
+<li>xlLast	=1</li>
+<li>xlLastCell	=11</li>
+<li>xlList1	=10</li>
+<li>xlList2	=11</li>
+<li>xlList3	=12</li>
+<li>xlLocalFormat1	=15</li>
+<li>xlLocalFormat2	=16</li>
+<li>xlLong	=3</li>
+<li>xlLotusHelp	=2</li>
+<li>xlMacrosheetCell	=7</li>
+<li>xlMixed	=2</li>
+<li>xlMultiply	=4</li>
+<li>xlNarrow	=1</li>
+<li>xlNoDocuments	=3</li>
+<li>xlOpen	=2</li>
+<li>xlOutside	=3</li>
+<li>xlReference	=4</li>
+<li>xlSemiautomatic	=2</li>
+<li>xlShort	=1</li>
+<li>xlSingleQuote	=2</li>
+<li>xlStrict	=2</li>
+<li>xlSubtract	=3</li>
+<li>xlTextBox	=16</li>
+<li>xlTiled	=1</li>
+<li>xlTitleBar	=8</li>
+<li>xlToolbar	=1</li>
+<li>xlVisible	=12</li>
+<li>xlWatchPane	=11</li>
+<li>xlWide	=3</li>
+<li>xlWorkbookTab	=6</li>
+<li>xlWorksheet4	=1</li>
+<li>xlWorksheetCell	=3</li>
+<li>xlWorksheetShort	=5</li>
+<li>xlAllExceptBorders	=7</li>
+<li>xlLeftToRight	=2</li>
+<li>xlTopToBottom	=1</li>
+<li>xlVeryHidden	=2</li>
+<li>xlDrawingObject	=14</li>
+</ul>
+<h3><a name=XlAboveBelow></a>XlAboveBelow</h3>
+<ul>
+<li>xlAboveAverage	=0</li>
+<li>xlBelowAverage	=1</li>
+<li>xlEqualAboveAverage	=2</li>
+<li>xlEqualBelowAverage	=3</li>
+<li>xlAboveStdDev	=4</li>
+<li>xlBelowStdDev	=5</li>
+</ul>
+<h3><a name=XlActionType></a>XlActionType</h3>
+<ul>
+<li>xlActionTypeUrl	=1</li>
+<li>xlActionTypeRowset	=16</li>
+<li>xlActionTypeReport	=128</li>
+<li>xlActionTypeDrillthrough	=256</li>
+</ul>
+<h3><a name=XlAllocation></a>XlAllocation</h3>
+<ul>
+<li>xlManualAllocation	=1</li>
+<li>xlAutomaticAllocation	=2</li>
+</ul>
+<h3><a name=XlAllocationMethod></a>XlAllocationMethod</h3>
+<ul>
+<li>xlEqualAllocation	=1</li>
+<li>xlWeightedAllocation	=2</li>
+</ul>
+<h3><a name=XlAllocationValue></a>XlAllocationValue</h3>
+<ul>
+<li>xlAllocateValue	=1</li>
+<li>xlAllocateIncrement	=2</li>
+</ul>
+<h3><a name=XlApplicationInternational></a>XlApplicationInternational</h3>
+<ul>
+<li>xl24HourClock	=33</li>
+<li>xl4DigitYears	=43</li>
+<li>xlAlternateArraySeparator	=16</li>
+<li>xlColumnSeparator	=14</li>
+<li>xlCountryCode	=1</li>
+<li>xlCountrySetting	=2</li>
+<li>xlCurrencyBefore	=37</li>
+<li>xlCurrencyCode	=25</li>
+<li>xlCurrencyDigits	=27</li>
+<li>xlCurrencyLeadingZeros	=40</li>
+<li>xlCurrencyMinusSign	=38</li>
+<li>xlCurrencyNegative	=28</li>
+<li>xlCurrencySpaceBefore	=36</li>
+<li>xlCurrencyTrailingZeros	=39</li>
+<li>xlDateOrder	=32</li>
+<li>xlDateSeparator	=17</li>
+<li>xlDayCode	=21</li>
+<li>xlDayLeadingZero	=42</li>
+<li>xlDecimalSeparator	=3</li>
+<li>xlGeneralFormatName	=26</li>
+<li>xlHourCode	=22</li>
+<li>xlLeftBrace	=12</li>
+<li>xlLeftBracket	=10</li>
+<li>xlListSeparator	=5</li>
+<li>xlLowerCaseColumnLetter	=9</li>
+<li>xlLowerCaseRowLetter	=8</li>
+<li>xlMDY	=44</li>
+<li>xlMetric	=35</li>
+<li>xlMinuteCode	=23</li>
+<li>xlMonthCode	=20</li>
+<li>xlMonthLeadingZero	=41</li>
+<li>xlMonthNameChars	=30</li>
+<li>xlNoncurrencyDigits	=29</li>
+<li>xlNonEnglishFunctions	=34</li>
+<li>xlRightBrace	=13</li>
+<li>xlRightBracket	=11</li>
+<li>xlRowSeparator	=15</li>
+<li>xlSecondCode	=24</li>
+<li>xlThousandsSeparator	=4</li>
+<li>xlTimeLeadingZero	=45</li>
+<li>xlTimeSeparator	=18</li>
+<li>xlUpperCaseColumnLetter	=7</li>
+<li>xlUpperCaseRowLetter	=6</li>
+<li>xlWeekdayNameChars	=31</li>
+<li>xlYearCode	=19</li>
+<li>xlUICultureTag	=46</li>
+</ul>
+<h3><a name=XlApplyNamesOrder></a>XlApplyNamesOrder</h3>
+<ul>
+<li>xlColumnThenRow	=2</li>
+<li>xlRowThenColumn	=1</li>
+</ul>
+<h3><a name=XlArabicModes></a>XlArabicModes</h3>
+<ul>
+<li>xlArabicNone	=0</li>
+<li>xlArabicStrictAlefHamza	=1</li>
+<li>xlArabicStrictFinalYaa	=2</li>
+<li>xlArabicBothStrict	=3</li>
+</ul>
+<h3><a name=XlArrangeStyle></a>XlArrangeStyle</h3>
+<ul>
+<li>xlArrangeStyleCascade	=7</li>
+<li>xlArrangeStyleHorizontal	=-4128</li>
+<li>xlArrangeStyleTiled	=1</li>
+<li>xlArrangeStyleVertical	=-4166</li>
+</ul>
+<h3><a name=XlArrowHeadLength></a>XlArrowHeadLength</h3>
+<ul>
+<li>xlArrowHeadLengthLong	=3</li>
+<li>xlArrowHeadLengthMedium	=-4138</li>
+<li>xlArrowHeadLengthShort	=1</li>
+</ul>
+<h3><a name=XlArrowHeadStyle></a>XlArrowHeadStyle</h3>
+<ul>
+<li>xlArrowHeadStyleClosed	=3</li>
+<li>xlArrowHeadStyleDoubleClosed	=5</li>
+<li>xlArrowHeadStyleDoubleOpen	=4</li>
+<li>xlArrowHeadStyleNone	=-4142</li>
+<li>xlArrowHeadStyleOpen	=2</li>
+</ul>
+<h3><a name=XlArrowHeadWidth></a>XlArrowHeadWidth</h3>
+<ul>
+<li>xlArrowHeadWidthMedium	=-4138</li>
+<li>xlArrowHeadWidthNarrow	=1</li>
+<li>xlArrowHeadWidthWide	=3</li>
+</ul>
+<h3><a name=XlAutoFillType></a>XlAutoFillType</h3>
+<ul>
+<li>xlFillCopy	=1</li>
+<li>xlFillDays	=5</li>
+<li>xlFillDefault	=0</li>
+<li>xlFillFormats	=3</li>
+<li>xlFillMonths	=7</li>
+<li>xlFillSeries	=2</li>
+<li>xlFillValues	=4</li>
+<li>xlFillWeekdays	=6</li>
+<li>xlFillYears	=8</li>
+<li>xlGrowthTrend	=10</li>
+<li>xlLinearTrend	=9</li>
+<li>xlFlashFill	=11</li>
+</ul>
+<h3><a name=XlAutoFilterOperator></a>XlAutoFilterOperator</h3>
+<ul>
+<li>xlAnd	=1</li>
+<li>xlBottom10Items	=4</li>
+<li>xlBottom10Percent	=6</li>
+<li>xlOr	=2</li>
+<li>xlTop10Items	=3</li>
+<li>xlTop10Percent	=5</li>
+<li>xlFilterValues	=7</li>
+<li>xlFilterCellColor	=8</li>
+<li>xlFilterFontColor	=9</li>
+<li>xlFilterIcon	=10</li>
+<li>xlFilterDynamic	=11</li>
+<li>xlFilterNoFill	=12</li>
+<li>xlFilterAutomaticFontColor	=13</li>
+<li>xlFilterNoIcon	=14</li>
+</ul>
+<h3><a name=XlAxisCrosses></a>XlAxisCrosses</h3>
+<ul>
+<li>xlAxisCrossesAutomatic	=-4105</li>
+<li>xlAxisCrossesCustom	=-4114</li>
+<li>xlAxisCrossesMaximum	=2</li>
+<li>xlAxisCrossesMinimum	=4</li>
+</ul>
+<h3><a name=XlAxisGroup></a>XlAxisGroup</h3>
+<ul>
+<li>xlPrimary	=1</li>
+<li>xlSecondary	=2</li>
+</ul>
+<h3><a name=XlAxisType></a>XlAxisType</h3>
+<ul>
+<li>xlCategory	=1</li>
+<li>xlSeriesAxis	=3</li>
+<li>xlValue	=2</li>
+</ul>
+<h3><a name=XlBackground></a>XlBackground</h3>
+<ul>
+<li>xlBackgroundAutomatic	=-4105</li>
+<li>xlBackgroundOpaque	=3</li>
+<li>xlBackgroundTransparent	=2</li>
+</ul>
+<h3><a name=XlBarShape></a>XlBarShape</h3>
+<ul>
+<li>xlBox	=0</li>
+<li>xlPyramidToPoint	=1</li>
+<li>xlPyramidToMax	=2</li>
+<li>xlCylinder	=3</li>
+<li>xlConeToPoint	=4</li>
+<li>xlConeToMax	=5</li>
+</ul>
+<h3><a name=XlBinsType></a>XlBinsType</h3>
+<ul>
+<li>xlBinsTypeAutomatic	=0</li>
+<li>xlBinsTypeCategorical	=1</li>
+<li>xlBinsTypeManual	=2</li>
+<li>xlBinsTypeBinSize	=3</li>
+<li>xlBinsTypeBinCount	=4</li>
+</ul>
+<h3><a name=XlBorderWeight></a>XlBorderWeight</h3>
+<ul>
+<li>xlHairline	=1</li>
+<li>xlMedium	=-4138</li>
+<li>xlThick	=4</li>
+<li>xlThin	=2</li>
+</ul>
+<h3><a name=XlBordersIndex></a>XlBordersIndex</h3>
+<ul>
+<li>xlInsideHorizontal	=12</li>
+<li>xlInsideVertical	=11</li>
+<li>xlDiagonalDown	=5</li>
+<li>xlDiagonalUp	=6</li>
+<li>xlEdgeBottom	=9</li>
+<li>xlEdgeLeft	=7</li>
+<li>xlEdgeRight	=10</li>
+<li>xlEdgeTop	=8</li>
+</ul>
+<h3><a name=XlBuiltInDialog></a>XlBuiltInDialog</h3>
+<ul>
+<li>xlDialogOpen	=1</li>
+<li>xlDialogOpenLinks	=2</li>
+<li>xlDialogSaveAs	=5</li>
+<li>xlDialogFileDelete	=6</li>
+<li>xlDialogPageSetup	=7</li>
+<li>xlDialogPrint	=8</li>
+<li>xlDialogPrinterSetup	=9</li>
+<li>xlDialogArrangeAll	=12</li>
+<li>xlDialogWindowSize	=13</li>
+<li>xlDialogWindowMove	=14</li>
+<li>xlDialogRun	=17</li>
+<li>xlDialogSetPrintTitles	=23</li>
+<li>xlDialogFont	=26</li>
+<li>xlDialogDisplay	=27</li>
+<li>xlDialogProtectDocument	=28</li>
+<li>xlDialogCalculation	=32</li>
+<li>xlDialogExtract	=35</li>
+<li>xlDialogDataDelete	=36</li>
+<li>xlDialogSort	=39</li>
+<li>xlDialogDataSeries	=40</li>
+<li>xlDialogTable	=41</li>
+<li>xlDialogFormatNumber	=42</li>
+<li>xlDialogAlignment	=43</li>
+<li>xlDialogStyle	=44</li>
+<li>xlDialogBorder	=45</li>
+<li>xlDialogCellProtection	=46</li>
+<li>xlDialogColumnWidth	=47</li>
+<li>xlDialogClear	=52</li>
+<li>xlDialogPasteSpecial	=53</li>
+<li>xlDialogEditDelete	=54</li>
+<li>xlDialogInsert	=55</li>
+<li>xlDialogPasteNames	=58</li>
+<li>xlDialogDefineName	=61</li>
+<li>xlDialogCreateNames	=62</li>
+<li>xlDialogFormulaGoto	=63</li>
+<li>xlDialogFormulaFind	=64</li>
+<li>xlDialogGalleryArea	=67</li>
+<li>xlDialogGalleryBar	=68</li>
+<li>xlDialogGalleryColumn	=69</li>
+<li>xlDialogGalleryLine	=70</li>
+<li>xlDialogGalleryPie	=71</li>
+<li>xlDialogGalleryScatter	=72</li>
+<li>xlDialogCombination	=73</li>
+<li>xlDialogGridlines	=76</li>
+<li>xlDialogAxes	=78</li>
+<li>xlDialogAttachText	=80</li>
+<li>xlDialogPatterns	=84</li>
+<li>xlDialogMainChart	=85</li>
+<li>xlDialogOverlay	=86</li>
+<li>xlDialogScale	=87</li>
+<li>xlDialogFormatLegend	=88</li>
+<li>xlDialogFormatText	=89</li>
+<li>xlDialogParse	=91</li>
+<li>xlDialogUnhide	=94</li>
+<li>xlDialogWorkspace	=95</li>
+<li>xlDialogActivate	=103</li>
+<li>xlDialogCopyPicture	=108</li>
+<li>xlDialogDeleteName	=110</li>
+<li>xlDialogDeleteFormat	=111</li>
+<li>xlDialogNew	=119</li>
+<li>xlDialogRowHeight	=127</li>
+<li>xlDialogFormatMove	=128</li>
+<li>xlDialogFormatSize	=129</li>
+<li>xlDialogFormulaReplace	=130</li>
+<li>xlDialogSelectSpecial	=132</li>
+<li>xlDialogApplyNames	=133</li>
+<li>xlDialogReplaceFont	=134</li>
+<li>xlDialogSplit	=137</li>
+<li>xlDialogOutline	=142</li>
+<li>xlDialogSaveWorkbook	=145</li>
+<li>xlDialogCopyChart	=147</li>
+<li>xlDialogFormatFont	=150</li>
+<li>xlDialogNote	=154</li>
+<li>xlDialogSetUpdateStatus	=159</li>
+<li>xlDialogColorPalette	=161</li>
+<li>xlDialogChangeLink	=166</li>
+<li>xlDialogAppMove	=170</li>
+<li>xlDialogAppSize	=171</li>
+<li>xlDialogMainChartType	=185</li>
+<li>xlDialogOverlayChartType	=186</li>
+<li>xlDialogOpenMail	=188</li>
+<li>xlDialogSendMail	=189</li>
+<li>xlDialogStandardFont	=190</li>
+<li>xlDialogConsolidate	=191</li>
+<li>xlDialogSortSpecial	=192</li>
+<li>xlDialogGallery3dArea	=193</li>
+<li>xlDialogGallery3dColumn	=194</li>
+<li>xlDialogGallery3dLine	=195</li>
+<li>xlDialogGallery3dPie	=196</li>
+<li>xlDialogView3d	=197</li>
+<li>xlDialogGoalSeek	=198</li>
+<li>xlDialogWorkgroup	=199</li>
+<li>xlDialogFillGroup	=200</li>
+<li>xlDialogUpdateLink	=201</li>
+<li>xlDialogPromote	=202</li>
+<li>xlDialogDemote	=203</li>
+<li>xlDialogShowDetail	=204</li>
+<li>xlDialogObjectProperties	=207</li>
+<li>xlDialogSaveNewObject	=208</li>
+<li>xlDialogApplyStyle	=212</li>
+<li>xlDialogAssignToObject	=213</li>
+<li>xlDialogObjectProtection	=214</li>
+<li>xlDialogCreatePublisher	=217</li>
+<li>xlDialogSubscribeTo	=218</li>
+<li>xlDialogShowToolbar	=220</li>
+<li>xlDialogPrintPreview	=222</li>
+<li>xlDialogEditColor	=223</li>
+<li>xlDialogFormatMain	=225</li>
+<li>xlDialogFormatOverlay	=226</li>
+<li>xlDialogEditSeries	=228</li>
+<li>xlDialogDefineStyle	=229</li>
+<li>xlDialogGalleryRadar	=249</li>
+<li>xlDialogEditionOptions	=251</li>
+<li>xlDialogZoom	=256</li>
+<li>xlDialogInsertObject	=259</li>
+<li>xlDialogSize	=261</li>
+<li>xlDialogMove	=262</li>
+<li>xlDialogFormatAuto	=269</li>
+<li>xlDialogGallery3dBar	=272</li>
+<li>xlDialogGallery3dSurface	=273</li>
+<li>xlDialogCustomizeToolbar	=276</li>
+<li>xlDialogWorkbookAdd	=281</li>
+<li>xlDialogWorkbookMove	=282</li>
+<li>xlDialogWorkbookCopy	=283</li>
+<li>xlDialogWorkbookOptions	=284</li>
+<li>xlDialogSaveWorkspace	=285</li>
+<li>xlDialogChartWizard	=288</li>
+<li>xlDialogAssignToTool	=293</li>
+<li>xlDialogPlacement	=300</li>
+<li>xlDialogFillWorkgroup	=301</li>
+<li>xlDialogWorkbookNew	=302</li>
+<li>xlDialogScenarioCells	=305</li>
+<li>xlDialogScenarioAdd	=307</li>
+<li>xlDialogScenarioEdit	=308</li>
+<li>xlDialogScenarioSummary	=311</li>
+<li>xlDialogPivotTableWizard	=312</li>
+<li>xlDialogPivotFieldProperties	=313</li>
+<li>xlDialogOptionsCalculation	=318</li>
+<li>xlDialogOptionsEdit	=319</li>
+<li>xlDialogOptionsView	=320</li>
+<li>xlDialogAddinManager	=321</li>
+<li>xlDialogMenuEditor	=322</li>
+<li>xlDialogAttachToolbars	=323</li>
+<li>xlDialogOptionsChart	=325</li>
+<li>xlDialogVbaInsertFile	=328</li>
+<li>xlDialogVbaProcedureDefinition	=330</li>
+<li>xlDialogRoutingSlip	=336</li>
+<li>xlDialogMailLogon	=339</li>
+<li>xlDialogInsertPicture	=342</li>
+<li>xlDialogGalleryDoughnut	=344</li>
+<li>xlDialogChartTrend	=350</li>
+<li>xlDialogWorkbookInsert	=354</li>
+<li>xlDialogOptionsTransition	=355</li>
+<li>xlDialogOptionsGeneral	=356</li>
+<li>xlDialogFilterAdvanced	=370</li>
+<li>xlDialogMailNextLetter	=378</li>
+<li>xlDialogDataLabel	=379</li>
+<li>xlDialogInsertTitle	=380</li>
+<li>xlDialogFontProperties	=381</li>
+<li>xlDialogMacroOptions	=382</li>
+<li>xlDialogWorkbookUnhide	=384</li>
+<li>xlDialogWorkbookName	=386</li>
+<li>xlDialogGalleryCustom	=388</li>
+<li>xlDialogAddChartAutoformat	=390</li>
+<li>xlDialogChartAddData	=392</li>
+<li>xlDialogTabOrder	=394</li>
+<li>xlDialogSubtotalCreate	=398</li>
+<li>xlDialogWorkbookTabSplit	=415</li>
+<li>xlDialogWorkbookProtect	=417</li>
+<li>xlDialogScrollbarProperties	=420</li>
+<li>xlDialogPivotShowPages	=421</li>
+<li>xlDialogTextToColumns	=422</li>
+<li>xlDialogFormatCharttype	=423</li>
+<li>xlDialogPivotFieldGroup	=433</li>
+<li>xlDialogPivotFieldUngroup	=434</li>
+<li>xlDialogCheckboxProperties	=435</li>
+<li>xlDialogLabelProperties	=436</li>
+<li>xlDialogListboxProperties	=437</li>
+<li>xlDialogEditboxProperties	=438</li>
+<li>xlDialogOpenText	=441</li>
+<li>xlDialogPushbuttonProperties	=445</li>
+<li>xlDialogFilter	=447</li>
+<li>xlDialogFunctionWizard	=450</li>
+<li>xlDialogSaveCopyAs	=456</li>
+<li>xlDialogOptionsListsAdd	=458</li>
+<li>xlDialogSeriesAxes	=460</li>
+<li>xlDialogSeriesX	=461</li>
+<li>xlDialogSeriesY	=462</li>
+<li>xlDialogErrorbarX	=463</li>
+<li>xlDialogErrorbarY	=464</li>
+<li>xlDialogFormatChart	=465</li>
+<li>xlDialogSeriesOrder	=466</li>
+<li>xlDialogMailEditMailer	=470</li>
+<li>xlDialogStandardWidth	=472</li>
+<li>xlDialogScenarioMerge	=473</li>
+<li>xlDialogProperties	=474</li>
+<li>xlDialogSummaryInfo	=474</li>
+<li>xlDialogFindFile	=475</li>
+<li>xlDialogActiveCellFont	=476</li>
+<li>xlDialogVbaMakeAddin	=478</li>
+<li>xlDialogFileSharing	=481</li>
+<li>xlDialogAutoCorrect	=485</li>
+<li>xlDialogCustomViews	=493</li>
+<li>xlDialogInsertNameLabel	=496</li>
+<li>xlDialogSeriesShape	=504</li>
+<li>xlDialogChartOptionsDataLabels	=505</li>
+<li>xlDialogChartOptionsDataTable	=506</li>
+<li>xlDialogSetBackgroundPicture	=509</li>
+<li>xlDialogDataValidation	=525</li>
+<li>xlDialogChartType	=526</li>
+<li>xlDialogChartLocation	=527</li>
+<li>_xlDialogPhonetic	=538</li>
+<li>xlDialogChartSourceData	=540</li>
+<li>_xlDialogChartSourceData	=541</li>
+<li>xlDialogSeriesOptions	=557</li>
+<li>xlDialogPivotTableOptions	=567</li>
+<li>xlDialogPivotSolveOrder	=568</li>
+<li>xlDialogPivotCalculatedField	=570</li>
+<li>xlDialogPivotCalculatedItem	=572</li>
+<li>xlDialogConditionalFormatting	=583</li>
+<li>xlDialogInsertHyperlink	=596</li>
+<li>xlDialogProtectSharing	=620</li>
+<li>xlDialogOptionsME	=647</li>
+<li>xlDialogPublishAsWebPage	=653</li>
+<li>xlDialogPhonetic	=656</li>
+<li>xlDialogNewWebQuery	=667</li>
+<li>xlDialogImportTextFile	=666</li>
+<li>xlDialogExternalDataProperties	=530</li>
+<li>xlDialogWebOptionsGeneral	=683</li>
+<li>xlDialogWebOptionsFiles	=684</li>
+<li>xlDialogWebOptionsPictures	=685</li>
+<li>xlDialogWebOptionsEncoding	=686</li>
+<li>xlDialogWebOptionsFonts	=687</li>
+<li>xlDialogPivotClientServerSet	=689</li>
+<li>xlDialogPropertyFields	=754</li>
+<li>xlDialogSearch	=731</li>
+<li>xlDialogEvaluateFormula	=709</li>
+<li>xlDialogDataLabelMultiple	=723</li>
+<li>xlDialogChartOptionsDataLabelMultiple	=724</li>
+<li>xlDialogErrorChecking	=732</li>
+<li>xlDialogWebOptionsBrowsers	=773</li>
+<li>xlDialogCreateList	=796</li>
+<li>xlDialogPermission	=832</li>
+<li>xlDialogMyPermission	=834</li>
+<li>xlDialogDocumentInspector	=862</li>
+<li>xlDialogNameManager	=977</li>
+<li>xlDialogNewName	=978</li>
+<li>xlDialogSparklineInsertLine	=1133</li>
+<li>xlDialogSparklineInsertColumn	=1134</li>
+<li>xlDialogSparklineInsertWinLoss	=1135</li>
+<li>xlDialogSlicerSettings	=1179</li>
+<li>xlDialogSlicerCreation	=1182</li>
+<li>xlDialogSlicerPivotTableConnections	=1184</li>
+<li>xlDialogPivotTableSlicerConnections	=1183</li>
+<li>xlDialogPivotTableWhatIfAnalysisSettings	=1153</li>
+<li>xlDialogSetManager	=1109</li>
+<li>xlDialogSetMDXEditor	=1208</li>
+<li>xlDialogSetTupleEditorOnRows	=1107</li>
+<li>xlDialogSetTupleEditorOnColumns	=1108</li>
+<li>xlDialogManageRelationships	=1271</li>
+<li>xlDialogCreateRelationship	=1272</li>
+<li>xlDialogRecommendedPivotTables	=1258</li>
+<li>xlDialogForecastETS	=1299</li>
+</ul>
+<h3><a name=XlCVError></a>XlCVError</h3>
+<ul>
+<li>xlErrDiv0	=2007</li>
+<li>xlErrNA	=2042</li>
+<li>xlErrName	=2029</li>
+<li>xlErrNull	=2000</li>
+<li>xlErrNum	=2036</li>
+<li>xlErrRef	=2023</li>
+<li>xlErrValue	=2015</li>
+</ul>
+<h3><a name=XlCalcFor></a>XlCalcFor</h3>
+<ul>
+<li>xlAllValues	=0</li>
+<li>xlRowGroups	=1</li>
+<li>xlColGroups	=2</li>
+</ul>
+<h3><a name=XlCalcMemNumberFormatType></a>XlCalcMemNumberFormatType</h3>
+<ul>
+<li>xlNumberFormatTypeDefault	=0</li>
+<li>xlNumberFormatTypeNumber	=1</li>
+<li>xlNumberFormatTypePercent	=2</li>
+</ul>
+<h3><a name=XlCalculatedMemberType></a>XlCalculatedMemberType</h3>
+<ul>
+<li>xlCalculatedMember	=0</li>
+<li>xlCalculatedSet	=1</li>
+<li>xlCalculatedMeasure	=2</li>
+</ul>
+<h3><a name=XlCalculation></a>XlCalculation</h3>
+<ul>
+<li>xlCalculationAutomatic	=-4105</li>
+<li>xlCalculationManual	=-4135</li>
+<li>xlCalculationSemiautomatic	=2</li>
+</ul>
+<h3><a name=XlCalculationInterruptKey></a>XlCalculationInterruptKey</h3>
+<ul>
+<li>xlNoKey	=0</li>
+<li>xlEscKey	=1</li>
+<li>xlAnyKey	=2</li>
+</ul>
+<h3><a name=XlCalculationState></a>XlCalculationState</h3>
+<ul>
+<li>xlDone	=0</li>
+<li>xlCalculating	=1</li>
+<li>xlPending	=2</li>
+</ul>
+<h3><a name=XlCategoryLabelLevel></a>XlCategoryLabelLevel</h3>
+<ul>
+<li>xlCategoryLabelLevelNone	=-3</li>
+<li>xlCategoryLabelLevelCustom	=-2</li>
+<li>xlCategoryLabelLevelAll	=-1</li>
+</ul>
+<h3><a name=XlCategoryType></a>XlCategoryType</h3>
+<ul>
+<li>xlCategoryScale	=2</li>
+<li>xlTimeScale	=3</li>
+<li>xlAutomaticScale	=-4105</li>
+</ul>
+<h3><a name=XlCellChangedState></a>XlCellChangedState</h3>
+<ul>
+<li>xlCellNotChanged	=1</li>
+<li>xlCellChanged	=2</li>
+<li>xlCellChangeApplied	=3</li>
+</ul>
+<h3><a name=XlCellInsertionMode></a>XlCellInsertionMode</h3>
+<ul>
+<li>xlOverwriteCells	=0</li>
+<li>xlInsertDeleteCells	=1</li>
+<li>xlInsertEntireRows	=2</li>
+</ul>
+<h3><a name=XlCellType></a>XlCellType</h3>
+<ul>
+<li>xlCellTypeBlanks	=4</li>
+<li>xlCellTypeConstants	=2</li>
+<li>xlCellTypeFormulas	=-4123</li>
+<li>xlCellTypeLastCell	=11</li>
+<li>xlCellTypeComments	=-4144</li>
+<li>xlCellTypeVisible	=12</li>
+<li>xlCellTypeAllFormatConditions	=-4172</li>
+<li>xlCellTypeSameFormatConditions	=-4173</li>
+<li>xlCellTypeAllValidation	=-4174</li>
+<li>xlCellTypeSameValidation	=-4175</li>
+</ul>
+<h3><a name=XlChartElementPosition></a>XlChartElementPosition</h3>
+<ul>
+<li>xlChartElementPositionAutomatic	=-4105</li>
+<li>xlChartElementPositionCustom	=-4114</li>
+</ul>
+<h3><a name=XlChartGallery></a>XlChartGallery</h3>
+<ul>
+<li>xlBuiltIn	=21</li>
+<li>xlUserDefined	=22</li>
+<li>xlAnyGallery	=23</li>
+</ul>
+<h3><a name=XlChartItem></a>XlChartItem</h3>
+<ul>
+<li>xlDataLabel	=0</li>
+<li>xlChartArea	=2</li>
+<li>xlSeries	=3</li>
+<li>xlChartTitle	=4</li>
+<li>xlWalls	=5</li>
+<li>xlCorners	=6</li>
+<li>xlDataTable	=7</li>
+<li>xlTrendline	=8</li>
+<li>xlErrorBars	=9</li>
+<li>xlXErrorBars	=10</li>
+<li>xlYErrorBars	=11</li>
+<li>xlLegendEntry	=12</li>
+<li>xlLegendKey	=13</li>
+<li>xlShape	=14</li>
+<li>xlMajorGridlines	=15</li>
+<li>xlMinorGridlines	=16</li>
+<li>xlAxisTitle	=17</li>
+<li>xlUpBars	=18</li>
+<li>xlPlotArea	=19</li>
+<li>xlDownBars	=20</li>
+<li>xlAxis	=21</li>
+<li>xlSeriesLines	=22</li>
+<li>xlFloor	=23</li>
+<li>xlLegend	=24</li>
+<li>xlHiLoLines	=25</li>
+<li>xlDropLines	=26</li>
+<li>xlRadarAxisLabels	=27</li>
+<li>xlNothing	=28</li>
+<li>xlLeaderLines	=29</li>
+<li>xlDisplayUnitLabel	=30</li>
+<li>xlPivotChartFieldButton	=31</li>
+<li>xlPivotChartDropZone	=32</li>
+<li>xlPivotChartExpandEntireFieldButton	=33</li>
+<li>xlPivotChartCollapseEntireFieldButton	=34</li>
+</ul>
+<h3><a name=XlChartLocation></a>XlChartLocation</h3>
+<ul>
+<li>xlLocationAsNewSheet	=1</li>
+<li>xlLocationAsObject	=2</li>
+<li>xlLocationAutomatic	=3</li>
+</ul>
+<h3><a name=XlChartPicturePlacement></a>XlChartPicturePlacement</h3>
+<ul>
+<li>xlSides	=1</li>
+<li>xlEnd	=2</li>
+<li>xlEndSides	=3</li>
+<li>xlFront	=4</li>
+<li>xlFrontSides	=5</li>
+<li>xlFrontEnd	=6</li>
+<li>xlAllFaces	=7</li>
+</ul>
+<h3><a name=XlChartPictureType></a>XlChartPictureType</h3>
+<ul>
+<li>xlStackScale	=3</li>
+<li>xlStack	=2</li>
+<li>xlStretch	=1</li>
+</ul>
+<h3><a name=XlChartSplitType></a>XlChartSplitType</h3>
+<ul>
+<li>xlSplitByPosition	=1</li>
+<li>xlSplitByPercentValue	=3</li>
+<li>xlSplitByCustomSplit	=4</li>
+<li>xlSplitByValue	=2</li>
+</ul>
+<h3><a name=XlChartType></a>XlChartType</h3>
+<ul>
+<li>xlColumnClustered	=51</li>
+<li>xlColumnStacked	=52</li>
+<li>xlColumnStacked100	=53</li>
+<li>xl3DColumnClustered	=54</li>
+<li>xl3DColumnStacked	=55</li>
+<li>xl3DColumnStacked100	=56</li>
+<li>xlBarClustered	=57</li>
+<li>xlBarStacked	=58</li>
+<li>xlBarStacked100	=59</li>
+<li>xl3DBarClustered	=60</li>
+<li>xl3DBarStacked	=61</li>
+<li>xl3DBarStacked100	=62</li>
+<li>xlLineStacked	=63</li>
+<li>xlLineStacked100	=64</li>
+<li>xlLineMarkers	=65</li>
+<li>xlLineMarkersStacked	=66</li>
+<li>xlLineMarkersStacked100	=67</li>
+<li>xlPieOfPie	=68</li>
+<li>xlPieExploded	=69</li>
+<li>xl3DPieExploded	=70</li>
+<li>xlBarOfPie	=71</li>
+<li>xlXYScatterSmooth	=72</li>
+<li>xlXYScatterSmoothNoMarkers	=73</li>
+<li>xlXYScatterLines	=74</li>
+<li>xlXYScatterLinesNoMarkers	=75</li>
+<li>xlAreaStacked	=76</li>
+<li>xlAreaStacked100	=77</li>
+<li>xl3DAreaStacked	=78</li>
+<li>xl3DAreaStacked100	=79</li>
+<li>xlDoughnutExploded	=80</li>
+<li>xlRadarMarkers	=81</li>
+<li>xlRadarFilled	=82</li>
+<li>xlSurface	=83</li>
+<li>xlSurfaceWireframe	=84</li>
+<li>xlSurfaceTopView	=85</li>
+<li>xlSurfaceTopViewWireframe	=86</li>
+<li>xlBubble	=15</li>
+<li>xlBubble3DEffect	=87</li>
+<li>xlStockHLC	=88</li>
+<li>xlStockOHLC	=89</li>
+<li>xlStockVHLC	=90</li>
+<li>xlStockVOHLC	=91</li>
+<li>xlCylinderColClustered	=92</li>
+<li>xlCylinderColStacked	=93</li>
+<li>xlCylinderColStacked100	=94</li>
+<li>xlCylinderBarClustered	=95</li>
+<li>xlCylinderBarStacked	=96</li>
+<li>xlCylinderBarStacked100	=97</li>
+<li>xlCylinderCol	=98</li>
+<li>xlConeColClustered	=99</li>
+<li>xlConeColStacked	=100</li>
+<li>xlConeColStacked100	=101</li>
+<li>xlConeBarClustered	=102</li>
+<li>xlConeBarStacked	=103</li>
+<li>xlConeBarStacked100	=104</li>
+<li>xlConeCol	=105</li>
+<li>xlPyramidColClustered	=106</li>
+<li>xlPyramidColStacked	=107</li>
+<li>xlPyramidColStacked100	=108</li>
+<li>xlPyramidBarClustered	=109</li>
+<li>xlPyramidBarStacked	=110</li>
+<li>xlPyramidBarStacked100	=111</li>
+<li>xlPyramidCol	=112</li>
+<li>xl3DColumn	=-4100</li>
+<li>xlLine	=4</li>
+<li>xl3DLine	=-4101</li>
+<li>xl3DPie	=-4102</li>
+<li>xlPie	=5</li>
+<li>xlXYScatter	=-4169</li>
+<li>xl3DArea	=-4098</li>
+<li>xlArea	=1</li>
+<li>xlDoughnut	=-4120</li>
+<li>xlRadar	=-4151</li>
+<li>xlTreemap	=117</li>
+<li>xlHistogram	=118</li>
+<li>xlWaterfall	=119</li>
+<li>xlSunburst	=120</li>
+<li>xlBoxwhisker	=121</li>
+<li>xlPareto	=122</li>
+</ul>
+<h3><a name=XlCheckInVersionType></a>XlCheckInVersionType</h3>
+<ul>
+<li>xlCheckInMinorVersion	=0</li>
+<li>xlCheckInMajorVersion	=1</li>
+<li>xlCheckInOverwriteVersion	=2</li>
+</ul>
+<h3><a name=XlClipboardFormat></a>XlClipboardFormat</h3>
+<ul>
+<li>xlClipboardFormatBIFF12	=63</li>
+<li>xlClipboardFormatBIFF	=8</li>
+<li>xlClipboardFormatBIFF2	=18</li>
+<li>xlClipboardFormatBIFF3	=20</li>
+<li>xlClipboardFormatBIFF4	=30</li>
+<li>xlClipboardFormatBinary	=15</li>
+<li>xlClipboardFormatBitmap	=9</li>
+<li>xlClipboardFormatCGM	=13</li>
+<li>xlClipboardFormatCSV	=5</li>
+<li>xlClipboardFormatDIF	=4</li>
+<li>xlClipboardFormatDspText	=12</li>
+<li>xlClipboardFormatEmbeddedObject	=21</li>
+<li>xlClipboardFormatEmbedSource	=22</li>
+<li>xlClipboardFormatLink	=11</li>
+<li>xlClipboardFormatLinkSource	=23</li>
+<li>xlClipboardFormatLinkSourceDesc	=32</li>
+<li>xlClipboardFormatMovie	=24</li>
+<li>xlClipboardFormatNative	=14</li>
+<li>xlClipboardFormatObjectDesc	=31</li>
+<li>xlClipboardFormatObjectLink	=19</li>
+<li>xlClipboardFormatOwnerLink	=17</li>
+<li>xlClipboardFormatPICT	=2</li>
+<li>xlClipboardFormatPrintPICT	=3</li>
+<li>xlClipboardFormatRTF	=7</li>
+<li>xlClipboardFormatScreenPICT	=29</li>
+<li>xlClipboardFormatStandardFont	=28</li>
+<li>xlClipboardFormatStandardScale	=27</li>
+<li>xlClipboardFormatSYLK	=6</li>
+<li>xlClipboardFormatTable	=16</li>
+<li>xlClipboardFormatText	=0</li>
+<li>xlClipboardFormatToolFace	=25</li>
+<li>xlClipboardFormatToolFacePICT	=26</li>
+<li>xlClipboardFormatVALU	=1</li>
+<li>xlClipboardFormatWK1	=10</li>
+</ul>
+<h3><a name=XlCmdType></a>XlCmdType</h3>
+<ul>
+<li>xlCmdCube	=1</li>
+<li>xlCmdSql	=2</li>
+<li>xlCmdTable	=3</li>
+<li>xlCmdDefault	=4</li>
+<li>xlCmdList	=5</li>
+<li>xlCmdTableCollection	=6</li>
+<li>xlCmdExcel	=7</li>
+<li>xlCmdDAX	=8</li>
+</ul>
+<h3><a name=XlColorIndex></a>XlColorIndex</h3>
+<ul>
+<li>xlColorIndexAutomatic	=-4105</li>
+<li>xlColorIndexNone	=-4142</li>
+</ul>
+<h3><a name=XlColumnDataType></a>XlColumnDataType</h3>
+<ul>
+<li>xlGeneralFormat	=1</li>
+<li>xlTextFormat	=2</li>
+<li>xlMDYFormat	=3</li>
+<li>xlDMYFormat	=4</li>
+<li>xlYMDFormat	=5</li>
+<li>xlMYDFormat	=6</li>
+<li>xlDYMFormat	=7</li>
+<li>xlYDMFormat	=8</li>
+<li>xlSkipColumn	=9</li>
+<li>xlEMDFormat	=10</li>
+</ul>
+<h3><a name=XlCommandUnderlines></a>XlCommandUnderlines</h3>
+<ul>
+<li>xlCommandUnderlinesAutomatic	=-4105</li>
+<li>xlCommandUnderlinesOff	=-4146</li>
+<li>xlCommandUnderlinesOn	=1</li>
+</ul>
+<h3><a name=XlCommentDisplayMode></a>XlCommentDisplayMode</h3>
+<ul>
+<li>xlNoIndicator	=0</li>
+<li>xlCommentIndicatorOnly	=-1</li>
+<li>xlCommentAndIndicator	=1</li>
+</ul>
+<h3><a name=XlConditionValueTypes></a>XlConditionValueTypes</h3>
+<ul>
+<li>xlConditionValueNone	=-1</li>
+<li>xlConditionValueNumber	=0</li>
+<li>xlConditionValueLowestValue	=1</li>
+<li>xlConditionValueHighestValue	=2</li>
+<li>xlConditionValuePercent	=3</li>
+<li>xlConditionValueFormula	=4</li>
+<li>xlConditionValuePercentile	=5</li>
+<li>xlConditionValueAutomaticMin	=6</li>
+<li>xlConditionValueAutomaticMax	=7</li>
+</ul>
+<h3><a name=XlConnectionType></a>XlConnectionType</h3>
+<ul>
+<li>xlConnectionTypeOLEDB	=1</li>
+<li>xlConnectionTypeODBC	=2</li>
+<li>xlConnectionTypeXMLMAP	=3</li>
+<li>xlConnectionTypeTEXT	=4</li>
+<li>xlConnectionTypeWEB	=5</li>
+<li>xlConnectionTypeDATAFEED	=6</li>
+<li>xlConnectionTypeMODEL	=7</li>
+<li>xlConnectionTypeWORKSHEET	=8</li>
+<li>xlConnectionTypeNOSOURCE	=9</li>
+</ul>
+<h3><a name=XlConsolidationFunction></a>XlConsolidationFunction</h3>
+<ul>
+<li>xlAverage	=-4106</li>
+<li>xlCount	=-4112</li>
+<li>xlCountNums	=-4113</li>
+<li>xlMax	=-4136</li>
+<li>xlMin	=-4139</li>
+<li>xlProduct	=-4149</li>
+<li>xlStDev	=-4155</li>
+<li>xlStDevP	=-4156</li>
+<li>xlSum	=-4157</li>
+<li>xlVar	=-4164</li>
+<li>xlVarP	=-4165</li>
+<li>xlUnknown	=1000</li>
+<li>xlDistinctCount	=11</li>
+</ul>
+<h3><a name=XlContainsOperator></a>XlContainsOperator</h3>
+<ul>
+<li>xlContains	=0</li>
+<li>xlDoesNotContain	=1</li>
+<li>xlBeginsWith	=2</li>
+<li>xlEndsWith	=3</li>
+</ul>
+<h3><a name=XlCopyPictureFormat></a>XlCopyPictureFormat</h3>
+<ul>
+<li>xlBitmap	=2</li>
+<li>xlPicture	=-4147</li>
+</ul>
+<h3><a name=XlCorruptLoad></a>XlCorruptLoad</h3>
+<ul>
+<li>xlNormalLoad	=0</li>
+<li>xlRepairFile	=1</li>
+<li>xlExtractData	=2</li>
+</ul>
+<h3><a name=XlCreator></a>XlCreator</h3>
+<ul>
+<li>xlCreatorCode	=1480803660</li>
+</ul>
+<h3><a name=XlCredentialsMethod></a>XlCredentialsMethod</h3>
+<ul>
+<li>xlCredentialsMethodIntegrated	=0</li>
+<li>xlCredentialsMethodNone	=1</li>
+<li>xlCredentialsMethodStored	=2</li>
+</ul>
+<h3><a name=XlCubeFieldSubType></a>XlCubeFieldSubType</h3>
+<ul>
+<li>xlCubeHierarchy	=1</li>
+<li>xlCubeMeasure	=2</li>
+<li>xlCubeSet	=3</li>
+<li>xlCubeAttribute	=4</li>
+<li>xlCubeCalculatedMeasure	=5</li>
+<li>xlCubeKPIValue	=6</li>
+<li>xlCubeKPIGoal	=7</li>
+<li>xlCubeKPIStatus	=8</li>
+<li>xlCubeKPITrend	=9</li>
+<li>xlCubeKPIWeight	=10</li>
+<li>xlCubeImplicitMeasure	=11</li>
+</ul>
+<h3><a name=XlCubeFieldType></a>XlCubeFieldType</h3>
+<ul>
+<li>xlHierarchy	=1</li>
+<li>xlMeasure	=2</li>
+<li>xlSet	=3</li>
+</ul>
+<h3><a name=XlCutCopyMode></a>XlCutCopyMode</h3>
+<ul>
+<li>xlCopy	=1</li>
+<li>xlCut	=2</li>
+</ul>
+<h3><a name=XlDVAlertStyle></a>XlDVAlertStyle</h3>
+<ul>
+<li>xlValidAlertStop	=1</li>
+<li>xlValidAlertWarning	=2</li>
+<li>xlValidAlertInformation	=3</li>
+</ul>
+<h3><a name=XlDVType></a>XlDVType</h3>
+<ul>
+<li>xlValidateInputOnly	=0</li>
+<li>xlValidateWholeNumber	=1</li>
+<li>xlValidateDecimal	=2</li>
+<li>xlValidateList	=3</li>
+<li>xlValidateDate	=4</li>
+<li>xlValidateTime	=5</li>
+<li>xlValidateTextLength	=6</li>
+<li>xlValidateCustom	=7</li>
+</ul>
+<h3><a name=XlDataBarAxisPosition></a>XlDataBarAxisPosition</h3>
+<ul>
+<li>xlDataBarAxisAutomatic	=0</li>
+<li>xlDataBarAxisMidpoint	=1</li>
+<li>xlDataBarAxisNone	=2</li>
+</ul>
+<h3><a name=XlDataBarBorderType></a>XlDataBarBorderType</h3>
+<ul>
+<li>xlDataBarBorderNone	=0</li>
+<li>xlDataBarBorderSolid	=1</li>
+</ul>
+<h3><a name=XlDataBarFillType></a>XlDataBarFillType</h3>
+<ul>
+<li>xlDataBarFillSolid	=0</li>
+<li>xlDataBarFillGradient	=1</li>
+</ul>
+<h3><a name=XlDataBarNegativeColorType></a>XlDataBarNegativeColorType</h3>
+<ul>
+<li>xlDataBarColor	=0</li>
+<li>xlDataBarSameAsPositive	=1</li>
+</ul>
+<h3><a name=XlDataLabelPosition></a>XlDataLabelPosition</h3>
+<ul>
+<li>xlLabelPositionCenter	=-4108</li>
+<li>xlLabelPositionAbove	=0</li>
+<li>xlLabelPositionBelow	=1</li>
+<li>xlLabelPositionLeft	=-4131</li>
+<li>xlLabelPositionRight	=-4152</li>
+<li>xlLabelPositionOutsideEnd	=2</li>
+<li>xlLabelPositionInsideEnd	=3</li>
+<li>xlLabelPositionInsideBase	=4</li>
+<li>xlLabelPositionBestFit	=5</li>
+<li>xlLabelPositionMixed	=6</li>
+<li>xlLabelPositionCustom	=7</li>
+</ul>
+<h3><a name=XlDataLabelSeparator></a>XlDataLabelSeparator</h3>
+<ul>
+<li>xlDataLabelSeparatorDefault	=1</li>
+</ul>
+<h3><a name=XlDataLabelsType></a>XlDataLabelsType</h3>
+<ul>
+<li>xlDataLabelsShowNone	=-4142</li>
+<li>xlDataLabelsShowValue	=2</li>
+<li>xlDataLabelsShowPercent	=3</li>
+<li>xlDataLabelsShowLabel	=4</li>
+<li>xlDataLabelsShowLabelAndPercent	=5</li>
+<li>xlDataLabelsShowBubbleSizes	=6</li>
+</ul>
+<h3><a name=XlDataSeriesDate></a>XlDataSeriesDate</h3>
+<ul>
+<li>xlDay	=1</li>
+<li>xlMonth	=3</li>
+<li>xlWeekday	=2</li>
+<li>xlYear	=4</li>
+</ul>
+<h3><a name=XlDataSeriesType></a>XlDataSeriesType</h3>
+<ul>
+<li>xlAutoFill	=4</li>
+<li>xlChronological	=3</li>
+<li>xlGrowth	=2</li>
+<li>xlDataSeriesLinear	=-4132</li>
+</ul>
+<h3><a name=XlDeleteShiftDirection></a>XlDeleteShiftDirection</h3>
+<ul>
+<li>xlShiftToLeft	=-4159</li>
+<li>xlShiftUp	=-4162</li>
+</ul>
+<h3><a name=XlDirection></a>XlDirection</h3>
+<ul>
+<li>xlDown	=-4121</li>
+<li>xlToLeft	=-4159</li>
+<li>xlToRight	=-4161</li>
+<li>xlUp	=-4162</li>
+</ul>
+<h3><a name=XlDisplayBlanksAs></a>XlDisplayBlanksAs</h3>
+<ul>
+<li>xlInterpolated	=3</li>
+<li>xlNotPlotted	=1</li>
+<li>xlZero	=2</li>
+</ul>
+<h3><a name=XlDisplayDrawingObjects></a>XlDisplayDrawingObjects</h3>
+<ul>
+<li>xlDisplayShapes	=-4104</li>
+<li>xlHide	=3</li>
+<li>xlPlaceholders	=2</li>
+</ul>
+<h3><a name=XlDisplayUnit></a>XlDisplayUnit</h3>
+<ul>
+<li>xlHundreds	=-2</li>
+<li>xlThousands	=-3</li>
+<li>xlTenThousands	=-4</li>
+<li>xlHundredThousands	=-5</li>
+<li>xlMillions	=-6</li>
+<li>xlTenMillions	=-7</li>
+<li>xlHundredMillions	=-8</li>
+<li>xlThousandMillions	=-9</li>
+<li>xlMillionMillions	=-10</li>
+</ul>
+<h3><a name=XlDupeUnique></a>XlDupeUnique</h3>
+<ul>
+<li>xlUnique	=0</li>
+<li>xlDuplicate	=1</li>
+</ul>
+<h3><a name=XlDynamicFilterCriteria></a>XlDynamicFilterCriteria</h3>
+<ul>
+<li>xlFilterToday	=1</li>
+<li>xlFilterYesterday	=2</li>
+<li>xlFilterTomorrow	=3</li>
+<li>xlFilterThisWeek	=4</li>
+<li>xlFilterLastWeek	=5</li>
+<li>xlFilterNextWeek	=6</li>
+<li>xlFilterThisMonth	=7</li>
+<li>xlFilterLastMonth	=8</li>
+<li>xlFilterNextMonth	=9</li>
+<li>xlFilterThisQuarter	=10</li>
+<li>xlFilterLastQuarter	=11</li>
+<li>xlFilterNextQuarter	=12</li>
+<li>xlFilterThisYear	=13</li>
+<li>xlFilterLastYear	=14</li>
+<li>xlFilterNextYear	=15</li>
+<li>xlFilterYearToDate	=16</li>
+<li>xlFilterAllDatesInPeriodQuarter1	=17</li>
+<li>xlFilterAllDatesInPeriodQuarter2	=18</li>
+<li>xlFilterAllDatesInPeriodQuarter3	=19</li>
+<li>xlFilterAllDatesInPeriodQuarter4	=20</li>
+<li>xlFilterAllDatesInPeriodJanuary	=21</li>
+<li>xlFilterAllDatesInPeriodFebruray	=22</li>
+<li>xlFilterAllDatesInPeriodMarch	=23</li>
+<li>xlFilterAllDatesInPeriodApril	=24</li>
+<li>xlFilterAllDatesInPeriodMay	=25</li>
+<li>xlFilterAllDatesInPeriodJune	=26</li>
+<li>xlFilterAllDatesInPeriodJuly	=27</li>
+<li>xlFilterAllDatesInPeriodAugust	=28</li>
+<li>xlFilterAllDatesInPeriodSeptember	=29</li>
+<li>xlFilterAllDatesInPeriodOctober	=30</li>
+<li>xlFilterAllDatesInPeriodNovember	=31</li>
+<li>xlFilterAllDatesInPeriodDecember	=32</li>
+<li>xlFilterAboveAverage	=33</li>
+<li>xlFilterBelowAverage	=34</li>
+</ul>
+<h3><a name=XlEditionFormat></a>XlEditionFormat</h3>
+<ul>
+<li>xlBIFF	=2</li>
+<li>xlPICT	=1</li>
+<li>xlRTF	=4</li>
+<li>xlVALU	=8</li>
+</ul>
+<h3><a name=XlEditionOptionsOption></a>XlEditionOptionsOption</h3>
+<ul>
+<li>xlAutomaticUpdate	=4</li>
+<li>xlCancel	=1</li>
+<li>xlChangeAttributes	=6</li>
+<li>xlManualUpdate	=5</li>
+<li>xlOpenSource	=3</li>
+<li>xlSelect	=3</li>
+<li>xlSendPublisher	=2</li>
+<li>xlUpdateSubscriber	=2</li>
+</ul>
+<h3><a name=XlEditionType></a>XlEditionType</h3>
+<ul>
+<li>xlPublisher	=1</li>
+<li>xlSubscriber	=2</li>
+</ul>
+<h3><a name=XlEnableCancelKey></a>XlEnableCancelKey</h3>
+<ul>
+<li>xlDisabled	=0</li>
+<li>xlErrorHandler	=2</li>
+<li>xlInterrupt	=1</li>
+</ul>
+<h3><a name=XlEnableSelection></a>XlEnableSelection</h3>
+<ul>
+<li>xlNoRestrictions	=0</li>
+<li>xlUnlockedCells	=1</li>
+<li>xlNoSelection	=-4142</li>
+</ul>
+<h3><a name=XlEndStyleCap></a>XlEndStyleCap</h3>
+<ul>
+<li>xlCap	=1</li>
+<li>xlNoCap	=2</li>
+</ul>
+<h3><a name=XlErrorBarDirection></a>XlErrorBarDirection</h3>
+<ul>
+<li>xlX	=-4168</li>
+<li>xlY	=1</li>
+</ul>
+<h3><a name=XlErrorBarInclude></a>XlErrorBarInclude</h3>
+<ul>
+<li>xlErrorBarIncludeBoth	=1</li>
+<li>xlErrorBarIncludeMinusValues	=3</li>
+<li>xlErrorBarIncludeNone	=-4142</li>
+<li>xlErrorBarIncludePlusValues	=2</li>
+</ul>
+<h3><a name=XlErrorBarType></a>XlErrorBarType</h3>
+<ul>
+<li>xlErrorBarTypeCustom	=-4114</li>
+<li>xlErrorBarTypeFixedValue	=1</li>
+<li>xlErrorBarTypePercent	=2</li>
+<li>xlErrorBarTypeStDev	=-4155</li>
+<li>xlErrorBarTypeStError	=4</li>
+</ul>
+<h3><a name=XlErrorChecks></a>XlErrorChecks</h3>
+<ul>
+<li>xlEvaluateToError	=1</li>
+<li>xlTextDate	=2</li>
+<li>xlNumberAsText	=3</li>
+<li>xlInconsistentFormula	=4</li>
+<li>xlOmittedCells	=5</li>
+<li>xlUnlockedFormulaCells	=6</li>
+<li>xlEmptyCellReferences	=7</li>
+<li>xlListDataValidation	=8</li>
+<li>xlInconsistentListFormula	=9</li>
+</ul>
+<h3><a name=XlFileAccess></a>XlFileAccess</h3>
+<ul>
+<li>xlReadOnly	=3</li>
+<li>xlReadWrite	=2</li>
+</ul>
+<h3><a name=XlFileFormat></a>XlFileFormat</h3>
+<ul>
+<li>xlAddIn	=18</li>
+<li>xlCSV	=6</li>
+<li>xlCSVMac	=22</li>
+<li>xlCSVMSDOS	=24</li>
+<li>xlCSVWindows	=23</li>
+<li>xlDBF2	=7</li>
+<li>xlDBF3	=8</li>
+<li>xlDBF4	=11</li>
+<li>xlDIF	=9</li>
+<li>xlExcel2	=16</li>
+<li>xlExcel2FarEast	=27</li>
+<li>xlExcel3	=29</li>
+<li>xlExcel4	=33</li>
+<li>xlExcel5	=39</li>
+<li>xlExcel7	=39</li>
+<li>xlExcel9795	=43</li>
+<li>xlExcel4Workbook	=35</li>
+<li>xlIntlAddIn	=26</li>
+<li>xlIntlMacro	=25</li>
+<li>xlWorkbookNormal	=-4143</li>
+<li>xlSYLK	=2</li>
+<li>xlTemplate	=17</li>
+<li>xlCurrentPlatformText	=-4158</li>
+<li>xlTextMac	=19</li>
+<li>xlTextMSDOS	=21</li>
+<li>xlTextPrinter	=36</li>
+<li>xlTextWindows	=20</li>
+<li>xlWJ2WD1	=14</li>
+<li>xlWK1	=5</li>
+<li>xlWK1ALL	=31</li>
+<li>xlWK1FMT	=30</li>
+<li>xlWK3	=15</li>
+<li>xlWK4	=38</li>
+<li>xlWK3FM3	=32</li>
+<li>xlWKS	=4</li>
+<li>xlWorks2FarEast	=28</li>
+<li>xlWQ1	=34</li>
+<li>xlWJ3	=40</li>
+<li>xlWJ3FJ3	=41</li>
+<li>xlUnicodeText	=42</li>
+<li>xlHtml	=44</li>
+<li>xlWebArchive	=45</li>
+<li>xlXMLSpreadsheet	=46</li>
+<li>xlExcel12	=50</li>
+<li>xlOpenXMLWorkbook	=51</li>
+<li>xlOpenXMLWorkbookMacroEnabled	=52</li>
+<li>xlOpenXMLTemplateMacroEnabled	=53</li>
+<li>xlTemplate8	=17</li>
+<li>xlOpenXMLTemplate	=54</li>
+<li>xlAddIn8	=18</li>
+<li>xlOpenXMLAddIn	=55</li>
+<li>xlExcel8	=56</li>
+<li>xlOpenDocumentSpreadsheet	=60</li>
+<li>xlOpenXMLStrictWorkbook	=61</li>
+<li>xlWorkbookDefault	=51</li>
+</ul>
+<h3><a name=XlFileValidationPivotMode></a>XlFileValidationPivotMode</h3>
+<ul>
+<li>xlFileValidationPivotDefault	=0</li>
+<li>xlFileValidationPivotRun	=1</li>
+<li>xlFileValidationPivotSkip	=2</li>
+</ul>
+<h3><a name=XlFillWith></a>XlFillWith</h3>
+<ul>
+<li>xlFillWithAll	=-4104</li>
+<li>xlFillWithContents	=2</li>
+<li>xlFillWithFormats	=-4122</li>
+</ul>
+<h3><a name=XlFilterAction></a>XlFilterAction</h3>
+<ul>
+<li>xlFilterCopy	=2</li>
+<li>xlFilterInPlace	=1</li>
+</ul>
+<h3><a name=XlFilterAllDatesInPeriod></a>XlFilterAllDatesInPeriod</h3>
+<ul>
+<li>xlFilterAllDatesInPeriodYear	=0</li>
+<li>xlFilterAllDatesInPeriodMonth	=1</li>
+<li>xlFilterAllDatesInPeriodDay	=2</li>
+<li>xlFilterAllDatesInPeriodHour	=3</li>
+<li>xlFilterAllDatesInPeriodMinute	=4</li>
+<li>xlFilterAllDatesInPeriodSecond	=5</li>
+</ul>
+<h3><a name=XlFilterStatus></a>XlFilterStatus</h3>
+<ul>
+<li>xlFilterStatusOK	=0</li>
+<li>xlFilterStatusDateWrongOrder	=1</li>
+<li>xlFilterStatusDateHasTime	=2</li>
+<li>xlFilterStatusInvalidDate	=3</li>
+</ul>
+<h3><a name=XlFindLookIn></a>XlFindLookIn</h3>
+<ul>
+<li>xlFormulas	=-4123</li>
+<li>xlComments	=-4144</li>
+<li>xlValues	=-4163</li>
+</ul>
+<h3><a name=XlFixedFormatQuality></a>XlFixedFormatQuality</h3>
+<ul>
+<li>xlQualityStandard	=0</li>
+<li>xlQualityMinimum	=1</li>
+</ul>
+<h3><a name=XlFixedFormatType></a>XlFixedFormatType</h3>
+<ul>
+<li>xlTypePDF	=0</li>
+<li>xlTypeXPS	=1</li>
+</ul>
+<h3><a name=XlForecastAggregation></a>XlForecastAggregation</h3>
+<ul>
+<li>xlForecastAggregationAverage	=1</li>
+<li>xlForecastAggregationCount	=2</li>
+<li>xlForecastAggregationCountA	=3</li>
+<li>xlForecastAggregationMax	=4</li>
+<li>xlForecastAggregationMedian	=5</li>
+<li>xlForecastAggregationMin	=6</li>
+<li>xlForecastAggregationSum	=7</li>
+</ul>
+<h3><a name=XlForecastChartType></a>XlForecastChartType</h3>
+<ul>
+<li>xlForecastChartTypeLine	=0</li>
+<li>xlForecastChartTypeColumn	=1</li>
+</ul>
+<h3><a name=XlForecastDataCompletion></a>XlForecastDataCompletion</h3>
+<ul>
+<li>xlForecastDataCompletionZeros	=0</li>
+<li>xlForecastDataCompletionInterpolate	=1</li>
+</ul>
+<h3><a name=XlFormControl></a>XlFormControl</h3>
+<ul>
+<li>xlButtonControl	=0</li>
+<li>xlCheckBox	=1</li>
+<li>xlDropDown	=2</li>
+<li>xlEditBox	=3</li>
+<li>xlGroupBox	=4</li>
+<li>xlLabel	=5</li>
+<li>xlListBox	=6</li>
+<li>xlOptionButton	=7</li>
+<li>xlScrollBar	=8</li>
+<li>xlSpinner	=9</li>
+</ul>
+<h3><a name=XlFormatConditionOperator></a>XlFormatConditionOperator</h3>
+<ul>
+<li>xlBetween	=1</li>
+<li>xlNotBetween	=2</li>
+<li>xlEqual	=3</li>
+<li>xlNotEqual	=4</li>
+<li>xlGreater	=5</li>
+<li>xlLess	=6</li>
+<li>xlGreaterEqual	=7</li>
+<li>xlLessEqual	=8</li>
+</ul>
+<h3><a name=XlFormatConditionType></a>XlFormatConditionType</h3>
+<ul>
+<li>xlCellValue	=1</li>
+<li>xlExpression	=2</li>
+<li>xlColorScale	=3</li>
+<li>xlDatabar	=4</li>
+<li>xlTop10	=5</li>
+<li>xlIconSets	=6</li>
+<li>xlUniqueValues	=8</li>
+<li>xlTextString	=9</li>
+<li>xlBlanksCondition	=10</li>
+<li>xlTimePeriod	=11</li>
+<li>xlAboveAverageCondition	=12</li>
+<li>xlNoBlanksCondition	=13</li>
+<li>xlErrorsCondition	=16</li>
+<li>xlNoErrorsCondition	=17</li>
+</ul>
+<h3><a name=XlFormatFilterTypes></a>XlFormatFilterTypes</h3>
+<ul>
+<li>xlFilterBottom	=0</li>
+<li>xlFilterTop	=1</li>
+<li>xlFilterBottomPercent	=2</li>
+<li>xlFilterTopPercent	=3</li>
+</ul>
+<h3><a name=XlFormulaLabel></a>XlFormulaLabel</h3>
+<ul>
+<li>xlNoLabels	=-4142</li>
+<li>xlRowLabels	=1</li>
+<li>xlColumnLabels	=2</li>
+<li>xlMixedLabels	=3</li>
+</ul>
+<h3><a name=XlGenerateTableRefs></a>XlGenerateTableRefs</h3>
+<ul>
+<li>xlGenerateTableRefA1	=0</li>
+<li>xlGenerateTableRefStruct	=1</li>
+</ul>
+<h3><a name=XlGradientFillType></a>XlGradientFillType</h3>
+<ul>
+<li>xlGradientFillLinear	=0</li>
+<li>xlGradientFillPath	=1</li>
+</ul>
+<h3><a name=XlHAlign></a>XlHAlign</h3>
+<ul>
+<li>xlHAlignCenter	=-4108</li>
+<li>xlHAlignCenterAcrossSelection	=7</li>
+<li>xlHAlignDistributed	=-4117</li>
+<li>xlHAlignFill	=5</li>
+<li>xlHAlignGeneral	=1</li>
+<li>xlHAlignJustify	=-4130</li>
+<li>xlHAlignLeft	=-4131</li>
+<li>xlHAlignRight	=-4152</li>
+</ul>
+<h3><a name=XlHebrewModes></a>XlHebrewModes</h3>
+<ul>
+<li>xlHebrewFullScript	=0</li>
+<li>xlHebrewPartialScript	=1</li>
+<li>xlHebrewMixedScript	=2</li>
+<li>xlHebrewMixedAuthorizedScript	=3</li>
+</ul>
+<h3><a name=XlHighlightChangesTime></a>XlHighlightChangesTime</h3>
+<ul>
+<li>xlSinceMyLastSave	=1</li>
+<li>xlAllChanges	=2</li>
+<li>xlNotYetReviewed	=3</li>
+</ul>
+<h3><a name=XlHtmlType></a>XlHtmlType</h3>
+<ul>
+<li>xlHtmlStatic	=0</li>
+<li>xlHtmlCalc	=1</li>
+<li>xlHtmlList	=2</li>
+<li>xlHtmlChart	=3</li>
+</ul>
+<h3><a name=XlIMEMode></a>XlIMEMode</h3>
+<ul>
+<li>xlIMEModeNoControl	=0</li>
+<li>xlIMEModeOn	=1</li>
+<li>xlIMEModeOff	=2</li>
+<li>xlIMEModeDisable	=3</li>
+<li>xlIMEModeHiragana	=4</li>
+<li>xlIMEModeKatakana	=5</li>
+<li>xlIMEModeKatakanaHalf	=6</li>
+<li>xlIMEModeAlphaFull	=7</li>
+<li>xlIMEModeAlpha	=8</li>
+<li>xlIMEModeHangulFull	=9</li>
+<li>xlIMEModeHangul	=10</li>
+</ul>
+<h3><a name=XlIcon></a>XlIcon</h3>
+<ul>
+<li>xlIconNoCellIcon	=-1</li>
+<li>xlIconGreenUpArrow	=1</li>
+<li>xlIconYellowSideArrow	=2</li>
+<li>xlIconRedDownArrow	=3</li>
+<li>xlIconGrayUpArrow	=4</li>
+<li>xlIconGraySideArrow	=5</li>
+<li>xlIconGrayDownArrow	=6</li>
+<li>xlIconGreenFlag	=7</li>
+<li>xlIconYellowFlag	=8</li>
+<li>xlIconRedFlag	=9</li>
+<li>xlIconGreenCircle	=10</li>
+<li>xlIconYellowCircle	=11</li>
+<li>xlIconRedCircleWithBorder	=12</li>
+<li>xlIconBlackCircleWithBorder	=13</li>
+<li>xlIconGreenTrafficLight	=14</li>
+<li>xlIconYellowTrafficLight	=15</li>
+<li>xlIconRedTrafficLight	=16</li>
+<li>xlIconYellowTriangle	=17</li>
+<li>xlIconRedDiamond	=18</li>
+<li>xlIconGreenCheckSymbol	=19</li>
+<li>xlIconYellowExclamationSymbol	=20</li>
+<li>xlIconRedCrossSymbol	=21</li>
+<li>xlIconGreenCheck	=22</li>
+<li>xlIconYellowExclamation	=23</li>
+<li>xlIconRedCross	=24</li>
+<li>xlIconYellowUpInclineArrow	=25</li>
+<li>xlIconYellowDownInclineArrow	=26</li>
+<li>xlIconGrayUpInclineArrow	=27</li>
+<li>xlIconGrayDownInclineArrow	=28</li>
+<li>xlIconRedCircle	=29</li>
+<li>xlIconPinkCircle	=30</li>
+<li>xlIconGrayCircle	=31</li>
+<li>xlIconBlackCircle	=32</li>
+<li>xlIconCircleWithOneWhiteQuarter	=33</li>
+<li>xlIconCircleWithTwoWhiteQuarters	=34</li>
+<li>xlIconCircleWithThreeWhiteQuarters	=35</li>
+<li>xlIconWhiteCircleAllWhiteQuarters	=36</li>
+<li>xlIcon0Bars	=37</li>
+<li>xlIcon1Bar	=38</li>
+<li>xlIcon2Bars	=39</li>
+<li>xlIcon3Bars	=40</li>
+<li>xlIcon4Bars	=41</li>
+<li>xlIconGoldStar	=42</li>
+<li>xlIconHalfGoldStar	=43</li>
+<li>xlIconSilverStar	=44</li>
+<li>xlIconGreenUpTriangle	=45</li>
+<li>xlIconYellowDash	=46</li>
+<li>xlIconRedDownTriangle	=47</li>
+<li>xlIcon4FilledBoxes	=48</li>
+<li>xlIcon3FilledBoxes	=49</li>
+<li>xlIcon2FilledBoxes	=50</li>
+<li>xlIcon1FilledBox	=51</li>
+<li>xlIcon0FilledBoxes	=52</li>
+</ul>
+<h3><a name=XlIconSet></a>XlIconSet</h3>
+<ul>
+<li>xlCustomSet	=-1</li>
+<li>xl3Arrows	=1</li>
+<li>xl3ArrowsGray	=2</li>
+<li>xl3Flags	=3</li>
+<li>xl3TrafficLights1	=4</li>
+<li>xl3TrafficLights2	=5</li>
+<li>xl3Signs	=6</li>
+<li>xl3Symbols	=7</li>
+<li>xl3Symbols2	=8</li>
+<li>xl4Arrows	=9</li>
+<li>xl4ArrowsGray	=10</li>
+<li>xl4RedToBlack	=11</li>
+<li>xl4CRV	=12</li>
+<li>xl4TrafficLights	=13</li>
+<li>xl5Arrows	=14</li>
+<li>xl5ArrowsGray	=15</li>
+<li>xl5CRV	=16</li>
+<li>xl5Quarters	=17</li>
+<li>xl3Stars	=18</li>
+<li>xl3Triangles	=19</li>
+<li>xl5Boxes	=20</li>
+</ul>
+<h3><a name=XlImportDataAs></a>XlImportDataAs</h3>
+<ul>
+<li>xlQueryTable	=0</li>
+<li>xlPivotTableReport	=1</li>
+<li>xlTable	=2</li>
+</ul>
+<h3><a name=XlInsertFormatOrigin></a>XlInsertFormatOrigin</h3>
+<ul>
+<li>xlFormatFromLeftOrAbove	=0</li>
+<li>xlFormatFromRightOrBelow	=1</li>
+</ul>
+<h3><a name=XlInsertShiftDirection></a>XlInsertShiftDirection</h3>
+<ul>
+<li>xlShiftDown	=-4121</li>
+<li>xlShiftToRight	=-4161</li>
+</ul>
+<h3><a name=XlLayoutFormType></a>XlLayoutFormType</h3>
+<ul>
+<li>xlTabular	=0</li>
+<li>xlOutline	=1</li>
+</ul>
+<h3><a name=XlLayoutRowType></a>XlLayoutRowType</h3>
+<ul>
+<li>xlCompactRow	=0</li>
+<li>xlTabularRow	=1</li>
+<li>xlOutlineRow	=2</li>
+</ul>
+<h3><a name=XlLegendPosition></a>XlLegendPosition</h3>
+<ul>
+<li>xlLegendPositionBottom	=-4107</li>
+<li>xlLegendPositionCorner	=2</li>
+<li>xlLegendPositionLeft	=-4131</li>
+<li>xlLegendPositionRight	=-4152</li>
+<li>xlLegendPositionTop	=-4160</li>
+<li>xlLegendPositionCustom	=-4161</li>
+</ul>
+<h3><a name=XlLineStyle></a>XlLineStyle</h3>
+<ul>
+<li>xlContinuous	=1</li>
+<li>xlDash	=-4115</li>
+<li>xlDashDot	=4</li>
+<li>xlDashDotDot	=5</li>
+<li>xlDot	=-4118</li>
+<li>xlDouble	=-4119</li>
+<li>xlSlantDashDot	=13</li>
+<li>xlLineStyleNone	=-4142</li>
+</ul>
+<h3><a name=XlLink></a>XlLink</h3>
+<ul>
+<li>xlExcelLinks	=1</li>
+<li>xlOLELinks	=2</li>
+<li>xlPublishers	=5</li>
+<li>xlSubscribers	=6</li>
+</ul>
+<h3><a name=XlLinkInfo></a>XlLinkInfo</h3>
+<ul>
+<li>xlEditionDate	=2</li>
+<li>xlUpdateState	=1</li>
+<li>xlLinkInfoStatus	=3</li>
+</ul>
+<h3><a name=XlLinkInfoType></a>XlLinkInfoType</h3>
+<ul>
+<li>xlLinkInfoOLELinks	=2</li>
+<li>xlLinkInfoPublishers	=5</li>
+<li>xlLinkInfoSubscribers	=6</li>
+</ul>
+<h3><a name=XlLinkStatus></a>XlLinkStatus</h3>
+<ul>
+<li>xlLinkStatusOK	=0</li>
+<li>xlLinkStatusMissingFile	=1</li>
+<li>xlLinkStatusMissingSheet	=2</li>
+<li>xlLinkStatusOld	=3</li>
+<li>xlLinkStatusSourceNotCalculated	=4</li>
+<li>xlLinkStatusIndeterminate	=5</li>
+<li>xlLinkStatusNotStarted	=6</li>
+<li>xlLinkStatusInvalidName	=7</li>
+<li>xlLinkStatusSourceNotOpen	=8</li>
+<li>xlLinkStatusSourceOpen	=9</li>
+<li>xlLinkStatusCopiedValues	=10</li>
+</ul>
+<h3><a name=XlLinkType></a>XlLinkType</h3>
+<ul>
+<li>xlLinkTypeExcelLinks	=1</li>
+<li>xlLinkTypeOLELinks	=2</li>
+</ul>
+<h3><a name=XlListConflict></a>XlListConflict</h3>
+<ul>
+<li>xlListConflictDialog	=0</li>
+<li>xlListConflictRetryAllConflicts	=1</li>
+<li>xlListConflictDiscardAllConflicts	=2</li>
+<li>xlListConflictError	=3</li>
+</ul>
+<h3><a name=XlListDataType></a>XlListDataType</h3>
+<ul>
+<li>xlListDataTypeNone	=0</li>
+<li>xlListDataTypeText	=1</li>
+<li>xlListDataTypeMultiLineText	=2</li>
+<li>xlListDataTypeNumber	=3</li>
+<li>xlListDataTypeCurrency	=4</li>
+<li>xlListDataTypeDateTime	=5</li>
+<li>xlListDataTypeChoice	=6</li>
+<li>xlListDataTypeChoiceMulti	=7</li>
+<li>xlListDataTypeListLookup	=8</li>
+<li>xlListDataTypeCheckbox	=9</li>
+<li>xlListDataTypeHyperLink	=10</li>
+<li>xlListDataTypeCounter	=11</li>
+<li>xlListDataTypeMultiLineRichText	=12</li>
+</ul>
+<h3><a name=XlListObjectSourceType></a>XlListObjectSourceType</h3>
+<ul>
+<li>xlSrcExternal	=0</li>
+<li>xlSrcRange	=1</li>
+<li>xlSrcXml	=2</li>
+<li>xlSrcQuery	=3</li>
+<li>xlSrcModel	=4</li>
+</ul>
+<h3><a name=XlLocationInTable></a>XlLocationInTable</h3>
+<ul>
+<li>xlColumnHeader	=-4110</li>
+<li>xlColumnItem	=5</li>
+<li>xlDataHeader	=3</li>
+<li>xlDataItem	=7</li>
+<li>xlPageHeader	=2</li>
+<li>xlPageItem	=6</li>
+<li>xlRowHeader	=-4153</li>
+<li>xlRowItem	=4</li>
+<li>xlTableBody	=8</li>
+</ul>
+<h3><a name=XlLookAt></a>XlLookAt</h3>
+<ul>
+<li>xlPart	=2</li>
+<li>xlWhole	=1</li>
+</ul>
+<h3><a name=XlLookFor></a>XlLookFor</h3>
+<ul>
+<li>xlLookForBlanks	=0</li>
+<li>xlLookForErrors	=1</li>
+<li>xlLookForFormulas	=2</li>
+</ul>
+<h3><a name=XlMSApplication></a>XlMSApplication</h3>
+<ul>
+<li>xlMicrosoftAccess	=4</li>
+<li>xlMicrosoftFoxPro	=5</li>
+<li>xlMicrosoftMail	=3</li>
+<li>xlMicrosoftPowerPoint	=2</li>
+<li>xlMicrosoftProject	=6</li>
+<li>xlMicrosoftSchedulePlus	=7</li>
+<li>xlMicrosoftWord	=1</li>
+</ul>
+<h3><a name=XlMailSystem></a>XlMailSystem</h3>
+<ul>
+<li>xlMAPI	=1</li>
+<li>xlNoMailSystem	=0</li>
+<li>xlPowerTalk	=2</li>
+</ul>
+<h3><a name=XlMarkerStyle></a>XlMarkerStyle</h3>
+<ul>
+<li>xlMarkerStyleAutomatic	=-4105</li>
+<li>xlMarkerStyleCircle	=8</li>
+<li>xlMarkerStyleDash	=-4115</li>
+<li>xlMarkerStyleDiamond	=2</li>
+<li>xlMarkerStyleDot	=-4118</li>
+<li>xlMarkerStyleNone	=-4142</li>
+<li>xlMarkerStylePicture	=-4147</li>
+<li>xlMarkerStylePlus	=9</li>
+<li>xlMarkerStyleSquare	=1</li>
+<li>xlMarkerStyleStar	=5</li>
+<li>xlMarkerStyleTriangle	=3</li>
+<li>xlMarkerStyleX	=-4168</li>
+</ul>
+<h3><a name=XlMeasurementUnits></a>XlMeasurementUnits</h3>
+<ul>
+<li>xlInches	=0</li>
+<li>xlCentimeters	=1</li>
+<li>xlMillimeters	=2</li>
+</ul>
+<h3><a name=XlModelChangeSource></a>XlModelChangeSource</h3>
+<ul>
+<li>xlChangeByExcel	=0</li>
+<li>xlChangeByPowerPivotAddIn	=1</li>
+</ul>
+<h3><a name=XlMouseButton></a>XlMouseButton</h3>
+<ul>
+<li>xlNoButton	=0</li>
+<li>xlPrimaryButton	=1</li>
+<li>xlSecondaryButton	=2</li>
+</ul>
+<h3><a name=XlMousePointer></a>XlMousePointer</h3>
+<ul>
+<li>xlIBeam	=3</li>
+<li>xlDefault	=-4143</li>
+<li>xlNorthwestArrow	=1</li>
+<li>xlWait	=2</li>
+</ul>
+<h3><a name=XlOLEType></a>XlOLEType</h3>
+<ul>
+<li>xlOLEControl	=2</li>
+<li>xlOLEEmbed	=1</li>
+<li>xlOLELink	=0</li>
+</ul>
+<h3><a name=XlOLEVerb></a>XlOLEVerb</h3>
+<ul>
+<li>xlVerbOpen	=2</li>
+<li>xlVerbPrimary	=1</li>
+</ul>
+<h3><a name=XlOartHorizontalOverflow></a>XlOartHorizontalOverflow</h3>
+<ul>
+<li>xlOartHorizontalOverflowOverflow	=0</li>
+<li>xlOartHorizontalOverflowClip	=1</li>
+</ul>
+<h3><a name=XlOartVerticalOverflow></a>XlOartVerticalOverflow</h3>
+<ul>
+<li>xlOartVerticalOverflowOverflow	=0</li>
+<li>xlOartVerticalOverflowClip	=1</li>
+<li>xlOartVerticalOverflowEllipsis	=2</li>
+</ul>
+<h3><a name=XlObjectSize></a>XlObjectSize</h3>
+<ul>
+<li>xlFitToPage	=2</li>
+<li>xlFullPage	=3</li>
+<li>xlScreenSize	=1</li>
+</ul>
+<h3><a name=XlOrder></a>XlOrder</h3>
+<ul>
+<li>xlDownThenOver	=1</li>
+<li>xlOverThenDown	=2</li>
+</ul>
+<h3><a name=XlOrientation></a>XlOrientation</h3>
+<ul>
+<li>xlDownward	=-4170</li>
+<li>xlHorizontal	=-4128</li>
+<li>xlUpward	=-4171</li>
+<li>xlVertical	=-4166</li>
+</ul>
+<h3><a name=XlPTSelectionMode></a>XlPTSelectionMode</h3>
+<ul>
+<li>xlLabelOnly	=1</li>
+<li>xlDataAndLabel	=0</li>
+<li>xlDataOnly	=2</li>
+<li>xlOrigin	=3</li>
+<li>xlButton	=15</li>
+<li>xlBlanks	=4</li>
+<li>xlFirstRow	=256</li>
+</ul>
+<h3><a name=XlPageBreak></a>XlPageBreak</h3>
+<ul>
+<li>xlPageBreakAutomatic	=-4105</li>
+<li>xlPageBreakManual	=-4135</li>
+<li>xlPageBreakNone	=-4142</li>
+</ul>
+<h3><a name=XlPageBreakExtent></a>XlPageBreakExtent</h3>
+<ul>
+<li>xlPageBreakFull	=1</li>
+<li>xlPageBreakPartial	=2</li>
+</ul>
+<h3><a name=XlPageOrientation></a>XlPageOrientation</h3>
+<ul>
+<li>xlLandscape	=2</li>
+<li>xlPortrait	=1</li>
+</ul>
+<h3><a name=XlPaperSize></a>XlPaperSize</h3>
+<ul>
+<li>xlPaper10x14	=16</li>
+<li>xlPaper11x17	=17</li>
+<li>xlPaperA3	=8</li>
+<li>xlPaperA4	=9</li>
+<li>xlPaperA4Small	=10</li>
+<li>xlPaperA5	=11</li>
+<li>xlPaperB4	=12</li>
+<li>xlPaperB5	=13</li>
+<li>xlPaperCsheet	=24</li>
+<li>xlPaperDsheet	=25</li>
+<li>xlPaperEnvelope10	=20</li>
+<li>xlPaperEnvelope11	=21</li>
+<li>xlPaperEnvelope12	=22</li>
+<li>xlPaperEnvelope14	=23</li>
+<li>xlPaperEnvelope9	=19</li>
+<li>xlPaperEnvelopeB4	=33</li>
+<li>xlPaperEnvelopeB5	=34</li>
+<li>xlPaperEnvelopeB6	=35</li>
+<li>xlPaperEnvelopeC3	=29</li>
+<li>xlPaperEnvelopeC4	=30</li>
+<li>xlPaperEnvelopeC5	=28</li>
+<li>xlPaperEnvelopeC6	=31</li>
+<li>xlPaperEnvelopeC65	=32</li>
+<li>xlPaperEnvelopeDL	=27</li>
+<li>xlPaperEnvelopeItaly	=36</li>
+<li>xlPaperEnvelopeMonarch	=37</li>
+<li>xlPaperEnvelopePersonal	=38</li>
+<li>xlPaperEsheet	=26</li>
+<li>xlPaperExecutive	=7</li>
+<li>xlPaperFanfoldLegalGerman	=41</li>
+<li>xlPaperFanfoldStdGerman	=40</li>
+<li>xlPaperFanfoldUS	=39</li>
+<li>xlPaperFolio	=14</li>
+<li>xlPaperLedger	=4</li>
+<li>xlPaperLegal	=5</li>
+<li>xlPaperLetter	=1</li>
+<li>xlPaperLetterSmall	=2</li>
+<li>xlPaperNote	=18</li>
+<li>xlPaperQuarto	=15</li>
+<li>xlPaperStatement	=6</li>
+<li>xlPaperTabloid	=3</li>
+<li>xlPaperUser	=256</li>
+</ul>
+<h3><a name=XlParameterDataType></a>XlParameterDataType</h3>
+<ul>
+<li>xlParamTypeUnknown	=0</li>
+<li>xlParamTypeChar	=1</li>
+<li>xlParamTypeNumeric	=2</li>
+<li>xlParamTypeDecimal	=3</li>
+<li>xlParamTypeInteger	=4</li>
+<li>xlParamTypeSmallInt	=5</li>
+<li>xlParamTypeFloat	=6</li>
+<li>xlParamTypeReal	=7</li>
+<li>xlParamTypeDouble	=8</li>
+<li>xlParamTypeVarChar	=12</li>
+<li>xlParamTypeDate	=9</li>
+<li>xlParamTypeTime	=10</li>
+<li>xlParamTypeTimestamp	=11</li>
+<li>xlParamTypeLongVarChar	=-1</li>
+<li>xlParamTypeBinary	=-2</li>
+<li>xlParamTypeVarBinary	=-3</li>
+<li>xlParamTypeLongVarBinary	=-4</li>
+<li>xlParamTypeBigInt	=-5</li>
+<li>xlParamTypeTinyInt	=-6</li>
+<li>xlParamTypeBit	=-7</li>
+<li>xlParamTypeWChar	=-8</li>
+</ul>
+<h3><a name=XlParameterType></a>XlParameterType</h3>
+<ul>
+<li>xlPrompt	=0</li>
+<li>xlConstant	=1</li>
+<li>xlRange	=2</li>
+</ul>
+<h3><a name=XlParentDataLabelOptions></a>XlParentDataLabelOptions</h3>
+<ul>
+<li>xlParentDataLabelOptionsNone	=0</li>
+<li>xlParentDataLabelOptionsBanner	=1</li>
+<li>xlParentDataLabelOptionsOverlapping	=2</li>
+</ul>
+<h3><a name=XlPasteSpecialOperation></a>XlPasteSpecialOperation</h3>
+<ul>
+<li>xlPasteSpecialOperationAdd	=2</li>
+<li>xlPasteSpecialOperationDivide	=5</li>
+<li>xlPasteSpecialOperationMultiply	=4</li>
+<li>xlPasteSpecialOperationNone	=-4142</li>
+<li>xlPasteSpecialOperationSubtract	=3</li>
+</ul>
+<h3><a name=XlPasteType></a>XlPasteType</h3>
+<ul>
+<li>xlPasteAll	=-4104</li>
+<li>xlPasteAllUsingSourceTheme	=13</li>
+<li>xlPasteAllMergingConditionalFormats	=14</li>
+<li>xlPasteAllExceptBorders	=7</li>
+<li>xlPasteFormats	=-4122</li>
+<li>xlPasteFormulas	=-4123</li>
+<li>xlPasteComments	=-4144</li>
+<li>xlPasteValues	=-4163</li>
+<li>xlPasteColumnWidths	=8</li>
+<li>xlPasteValidation	=6</li>
+<li>xlPasteFormulasAndNumberFormats	=11</li>
+<li>xlPasteValuesAndNumberFormats	=12</li>
+</ul>
+<h3><a name=XlPattern></a>XlPattern</h3>
+<ul>
+<li>xlPatternAutomatic	=-4105</li>
+<li>xlPatternChecker	=9</li>
+<li>xlPatternCrissCross	=16</li>
+<li>xlPatternDown	=-4121</li>
+<li>xlPatternGray16	=17</li>
+<li>xlPatternGray25	=-4124</li>
+<li>xlPatternGray50	=-4125</li>
+<li>xlPatternGray75	=-4126</li>
+<li>xlPatternGray8	=18</li>
+<li>xlPatternGrid	=15</li>
+<li>xlPatternHorizontal	=-4128</li>
+<li>xlPatternLightDown	=13</li>
+<li>xlPatternLightHorizontal	=11</li>
+<li>xlPatternLightUp	=14</li>
+<li>xlPatternLightVertical	=12</li>
+<li>xlPatternNone	=-4142</li>
+<li>xlPatternSemiGray75	=10</li>
+<li>xlPatternSolid	=1</li>
+<li>xlPatternUp	=-4162</li>
+<li>xlPatternVertical	=-4166</li>
+<li>xlPatternLinearGradient	=4000</li>
+<li>xlPatternRectangularGradient	=4001</li>
+</ul>
+<h3><a name=XlPhoneticAlignment></a>XlPhoneticAlignment</h3>
+<ul>
+<li>xlPhoneticAlignNoControl	=0</li>
+<li>xlPhoneticAlignLeft	=1</li>
+<li>xlPhoneticAlignCenter	=2</li>
+<li>xlPhoneticAlignDistributed	=3</li>
+</ul>
+<h3><a name=XlPhoneticCharacterType></a>XlPhoneticCharacterType</h3>
+<ul>
+<li>xlKatakanaHalf	=0</li>
+<li>xlKatakana	=1</li>
+<li>xlHiragana	=2</li>
+<li>xlNoConversion	=3</li>
+</ul>
+<h3><a name=XlPictureAppearance></a>XlPictureAppearance</h3>
+<ul>
+<li>xlPrinter	=2</li>
+<li>xlScreen	=1</li>
+</ul>
+<h3><a name=XlPictureConvertorType></a>XlPictureConvertorType</h3>
+<ul>
+<li>xlBMP	=1</li>
+<li>xlCGM	=7</li>
+<li>xlDRW	=4</li>
+<li>xlDXF	=5</li>
+<li>xlEPS	=8</li>
+<li>xlHGL	=6</li>
+<li>xlPCT	=13</li>
+<li>xlPCX	=10</li>
+<li>xlPIC	=11</li>
+<li>xlPLT	=12</li>
+<li>xlTIF	=9</li>
+<li>xlWMF	=2</li>
+<li>xlWPG	=3</li>
+</ul>
+<h3><a name=XlPieSliceIndex></a>XlPieSliceIndex</h3>
+<ul>
+<li>xlOuterCounterClockwisePoint	=1</li>
+<li>xlOuterCenterPoint	=2</li>
+<li>xlOuterClockwisePoint	=3</li>
+<li>xlMidClockwiseRadiusPoint	=4</li>
+<li>xlCenterPoint	=5</li>
+<li>xlMidCounterClockwiseRadiusPoint	=6</li>
+<li>xlInnerClockwisePoint	=7</li>
+<li>xlInnerCenterPoint	=8</li>
+<li>xlInnerCounterClockwisePoint	=9</li>
+</ul>
+<h3><a name=XlPieSliceLocation></a>XlPieSliceLocation</h3>
+<ul>
+<li>xlHorizontalCoordinate	=1</li>
+<li>xlVerticalCoordinate	=2</li>
+</ul>
+<h3><a name=XlPivotCellType></a>XlPivotCellType</h3>
+<ul>
+<li>xlPivotCellValue	=0</li>
+<li>xlPivotCellPivotItem	=1</li>
+<li>xlPivotCellSubtotal	=2</li>
+<li>xlPivotCellGrandTotal	=3</li>
+<li>xlPivotCellDataField	=4</li>
+<li>xlPivotCellPivotField	=5</li>
+<li>xlPivotCellPageFieldItem	=6</li>
+<li>xlPivotCellCustomSubtotal	=7</li>
+<li>xlPivotCellDataPivotField	=8</li>
+<li>xlPivotCellBlankCell	=9</li>
+</ul>
+<h3><a name=XlPivotConditionScope></a>XlPivotConditionScope</h3>
+<ul>
+<li>xlSelectionScope	=0</li>
+<li>xlFieldsScope	=1</li>
+<li>xlDataFieldScope	=2</li>
+</ul>
+<h3><a name=XlPivotFieldCalculation></a>XlPivotFieldCalculation</h3>
+<ul>
+<li>xlDifferenceFrom	=2</li>
+<li>xlIndex	=9</li>
+<li>xlNoAdditionalCalculation	=-4143</li>
+<li>xlPercentDifferenceFrom	=4</li>
+<li>xlPercentOf	=3</li>
+<li>xlPercentOfColumn	=7</li>
+<li>xlPercentOfRow	=6</li>
+<li>xlPercentOfTotal	=8</li>
+<li>xlRunningTotal	=5</li>
+<li>xlPercentOfParentRow	=10</li>
+<li>xlPercentOfParentColumn	=11</li>
+<li>xlPercentOfParent	=12</li>
+<li>xlPercentRunningTotal	=13</li>
+<li>xlRankAscending	=14</li>
+<li>xlRankDecending	=15</li>
+</ul>
+<h3><a name=XlPivotFieldDataType></a>XlPivotFieldDataType</h3>
+<ul>
+<li>xlDate	=2</li>
+<li>xlNumber	=-4145</li>
+<li>xlText	=-4158</li>
+</ul>
+<h3><a name=XlPivotFieldOrientation></a>XlPivotFieldOrientation</h3>
+<ul>
+<li>xlColumnField	=2</li>
+<li>xlDataField	=4</li>
+<li>xlHidden	=0</li>
+<li>xlPageField	=3</li>
+<li>xlRowField	=1</li>
+</ul>
+<h3><a name=XlPivotFieldRepeatLabels></a>XlPivotFieldRepeatLabels</h3>
+<ul>
+<li>xlDoNotRepeatLabels	=1</li>
+<li>xlRepeatLabels	=2</li>
+</ul>
+<h3><a name=XlPivotFilterType></a>XlPivotFilterType</h3>
+<ul>
+<li>xlTopCount	=1</li>
+<li>xlBottomCount	=2</li>
+<li>xlTopPercent	=3</li>
+<li>xlBottomPercent	=4</li>
+<li>xlTopSum	=5</li>
+<li>xlBottomSum	=6</li>
+<li>xlValueEquals	=7</li>
+<li>xlValueDoesNotEqual	=8</li>
+<li>xlValueIsGreaterThan	=9</li>
+<li>xlValueIsGreaterThanOrEqualTo	=10</li>
+<li>xlValueIsLessThan	=11</li>
+<li>xlValueIsLessThanOrEqualTo	=12</li>
+<li>xlValueIsBetween	=13</li>
+<li>xlValueIsNotBetween	=14</li>
+<li>xlCaptionEquals	=15</li>
+<li>xlCaptionDoesNotEqual	=16</li>
+<li>xlCaptionBeginsWith	=17</li>
+<li>xlCaptionDoesNotBeginWith	=18</li>
+<li>xlCaptionEndsWith	=19</li>
+<li>xlCaptionDoesNotEndWith	=20</li>
+<li>xlCaptionContains	=21</li>
+<li>xlCaptionDoesNotContain	=22</li>
+<li>xlCaptionIsGreaterThan	=23</li>
+<li>xlCaptionIsGreaterThanOrEqualTo	=24</li>
+<li>xlCaptionIsLessThan	=25</li>
+<li>xlCaptionIsLessThanOrEqualTo	=26</li>
+<li>xlCaptionIsBetween	=27</li>
+<li>xlCaptionIsNotBetween	=28</li>
+<li>xlSpecificDate	=29</li>
+<li>xlNotSpecificDate	=30</li>
+<li>xlBefore	=31</li>
+<li>xlBeforeOrEqualTo	=32</li>
+<li>xlAfter	=33</li>
+<li>xlAfterOrEqualTo	=34</li>
+<li>xlDateBetween	=35</li>
+<li>xlDateNotBetween	=36</li>
+<li>xlDateTomorrow	=37</li>
+<li>xlDateToday	=38</li>
+<li>xlDateYesterday	=39</li>
+<li>xlDateNextWeek	=40</li>
+<li>xlDateThisWeek	=41</li>
+<li>xlDateLastWeek	=42</li>
+<li>xlDateNextMonth	=43</li>
+<li>xlDateThisMonth	=44</li>
+<li>xlDateLastMonth	=45</li>
+<li>xlDateNextQuarter	=46</li>
+<li>xlDateThisQuarter	=47</li>
+<li>xlDateLastQuarter	=48</li>
+<li>xlDateNextYear	=49</li>
+<li>xlDateThisYear	=50</li>
+<li>xlDateLastYear	=51</li>
+<li>xlYearToDate	=52</li>
+<li>xlAllDatesInPeriodQuarter1	=53</li>
+<li>xlAllDatesInPeriodQuarter2	=54</li>
+<li>xlAllDatesInPeriodQuarter3	=55</li>
+<li>xlAllDatesInPeriodQuarter4	=56</li>
+<li>xlAllDatesInPeriodJanuary	=57</li>
+<li>xlAllDatesInPeriodFebruary	=58</li>
+<li>xlAllDatesInPeriodMarch	=59</li>
+<li>xlAllDatesInPeriodApril	=60</li>
+<li>xlAllDatesInPeriodMay	=61</li>
+<li>xlAllDatesInPeriodJune	=62</li>
+<li>xlAllDatesInPeriodJuly	=63</li>
+<li>xlAllDatesInPeriodAugust	=64</li>
+<li>xlAllDatesInPeriodSeptember	=65</li>
+<li>xlAllDatesInPeriodOctober	=66</li>
+<li>xlAllDatesInPeriodNovember	=67</li>
+<li>xlAllDatesInPeriodDecember	=68</li>
+</ul>
+<h3><a name=XlPivotFormatType></a>XlPivotFormatType</h3>
+<ul>
+<li>xlReport1	=0</li>
+<li>xlReport2	=1</li>
+<li>xlReport3	=2</li>
+<li>xlReport4	=3</li>
+<li>xlReport5	=4</li>
+<li>xlReport6	=5</li>
+<li>xlReport7	=6</li>
+<li>xlReport8	=7</li>
+<li>xlReport9	=8</li>
+<li>xlReport10	=9</li>
+<li>xlTable1	=10</li>
+<li>xlTable2	=11</li>
+<li>xlTable3	=12</li>
+<li>xlTable4	=13</li>
+<li>xlTable5	=14</li>
+<li>xlTable6	=15</li>
+<li>xlTable7	=16</li>
+<li>xlTable8	=17</li>
+<li>xlTable9	=18</li>
+<li>xlTable10	=19</li>
+<li>xlPTClassic	=20</li>
+<li>xlPTNone	=21</li>
+</ul>
+<h3><a name=XlPivotLineType></a>XlPivotLineType</h3>
+<ul>
+<li>xlPivotLineRegular	=0</li>
+<li>xlPivotLineSubtotal	=1</li>
+<li>xlPivotLineGrandTotal	=2</li>
+<li>xlPivotLineBlank	=3</li>
+</ul>
+<h3><a name=XlPivotTableMissingItems></a>XlPivotTableMissingItems</h3>
+<ul>
+<li>xlMissingItemsDefault	=-1</li>
+<li>xlMissingItemsNone	=0</li>
+<li>xlMissingItemsMax	=32500</li>
+<li>xlMissingItemsMax2	=1048576</li>
+</ul>
+<h3><a name=XlPivotTableSourceType></a>XlPivotTableSourceType</h3>
+<ul>
+<li>xlScenario	=4</li>
+<li>xlConsolidation	=3</li>
+<li>xlDatabase	=1</li>
+<li>xlExternal	=2</li>
+<li>xlPivotTable	=-4148</li>
+</ul>
+<h3><a name=XlPivotTableVersionList></a>XlPivotTableVersionList</h3>
+<ul>
+<li>xlPivotTableVersion2000	=0</li>
+<li>xlPivotTableVersion10	=1</li>
+<li>xlPivotTableVersion11	=2</li>
+<li>xlPivotTableVersion12	=3</li>
+<li>xlPivotTableVersion14	=4</li>
+<li>xlPivotTableVersion15	=5</li>
+<li>xlPivotTableVersionCurrent	=-1</li>
+</ul>
+<h3><a name=XlPlacement></a>XlPlacement</h3>
+<ul>
+<li>xlFreeFloating	=3</li>
+<li>xlMove	=2</li>
+<li>xlMoveAndSize	=1</li>
+</ul>
+<h3><a name=XlPlatform></a>XlPlatform</h3>
+<ul>
+<li>xlMacintosh	=1</li>
+<li>xlMSDOS	=3</li>
+<li>xlWindows	=2</li>
+</ul>
+<h3><a name=XlPortugueseReform></a>XlPortugueseReform</h3>
+<ul>
+<li>xlPortuguesePreReform	=1</li>
+<li>xlPortuguesePostReform	=2</li>
+<li>xlPortugueseBoth	=3</li>
+</ul>
+<h3><a name=XlPrintErrors></a>XlPrintErrors</h3>
+<ul>
+<li>xlPrintErrorsDisplayed	=0</li>
+<li>xlPrintErrorsBlank	=1</li>
+<li>xlPrintErrorsDash	=2</li>
+<li>xlPrintErrorsNA	=3</li>
+</ul>
+<h3><a name=XlPrintLocation></a>XlPrintLocation</h3>
+<ul>
+<li>xlPrintSheetEnd	=1</li>
+<li>xlPrintInPlace	=16</li>
+<li>xlPrintNoComments	=-4142</li>
+</ul>
+<h3><a name=XlPriority></a>XlPriority</h3>
+<ul>
+<li>xlPriorityHigh	=-4127</li>
+<li>xlPriorityLow	=-4134</li>
+<li>xlPriorityNormal	=-4143</li>
+</ul>
+<h3><a name=XlPropertyDisplayedIn></a>XlPropertyDisplayedIn</h3>
+<ul>
+<li>xlDisplayPropertyInPivotTable	=1</li>
+<li>xlDisplayPropertyInTooltip	=2</li>
+<li>xlDisplayPropertyInPivotTableAndTooltip	=3</li>
+</ul>
+<h3><a name=XlProtectedViewCloseReason></a>XlProtectedViewCloseReason</h3>
+<ul>
+<li>xlProtectedViewCloseNormal	=0</li>
+<li>xlProtectedViewCloseEdit	=1</li>
+<li>xlProtectedViewCloseForced	=2</li>
+</ul>
+<h3><a name=XlProtectedViewWindowState></a>XlProtectedViewWindowState</h3>
+<ul>
+<li>xlProtectedViewWindowNormal	=0</li>
+<li>xlProtectedViewWindowMinimized	=1</li>
+<li>xlProtectedViewWindowMaximized	=2</li>
+</ul>
+<h3><a name=XlQueryType></a>XlQueryType</h3>
+<ul>
+<li>xlODBCQuery	=1</li>
+<li>xlDAORecordset	=2</li>
+<li>xlWebQuery	=4</li>
+<li>xlOLEDBQuery	=5</li>
+<li>xlTextImport	=6</li>
+<li>xlADORecordset	=7</li>
+</ul>
+<h3><a name=XlQuickAnalysisMode></a>XlQuickAnalysisMode</h3>
+<ul>
+<li>xlLensOnly	=0</li>
+<li>xlFormatConditions	=1</li>
+<li>xlRecommendedCharts	=2</li>
+<li>xlTotals	=3</li>
+<li>xlTables	=4</li>
+<li>xlSparklines	=5</li>
+</ul>
+<h3><a name=XlRangeAutoFormat></a>XlRangeAutoFormat</h3>
+<ul>
+<li>xlRangeAutoFormat3DEffects1	=13</li>
+<li>xlRangeAutoFormat3DEffects2	=14</li>
+<li>xlRangeAutoFormatAccounting1	=4</li>
+<li>xlRangeAutoFormatAccounting2	=5</li>
+<li>xlRangeAutoFormatAccounting3	=6</li>
+<li>xlRangeAutoFormatAccounting4	=17</li>
+<li>xlRangeAutoFormatClassic1	=1</li>
+<li>xlRangeAutoFormatClassic2	=2</li>
+<li>xlRangeAutoFormatClassic3	=3</li>
+<li>xlRangeAutoFormatColor1	=7</li>
+<li>xlRangeAutoFormatColor2	=8</li>
+<li>xlRangeAutoFormatColor3	=9</li>
+<li>xlRangeAutoFormatList1	=10</li>
+<li>xlRangeAutoFormatList2	=11</li>
+<li>xlRangeAutoFormatList3	=12</li>
+<li>xlRangeAutoFormatLocalFormat1	=15</li>
+<li>xlRangeAutoFormatLocalFormat2	=16</li>
+<li>xlRangeAutoFormatLocalFormat3	=19</li>
+<li>xlRangeAutoFormatLocalFormat4	=20</li>
+<li>xlRangeAutoFormatReport1	=21</li>
+<li>xlRangeAutoFormatReport2	=22</li>
+<li>xlRangeAutoFormatReport3	=23</li>
+<li>xlRangeAutoFormatReport4	=24</li>
+<li>xlRangeAutoFormatReport5	=25</li>
+<li>xlRangeAutoFormatReport6	=26</li>
+<li>xlRangeAutoFormatReport7	=27</li>
+<li>xlRangeAutoFormatReport8	=28</li>
+<li>xlRangeAutoFormatReport9	=29</li>
+<li>xlRangeAutoFormatReport10	=30</li>
+<li>xlRangeAutoFormatClassicPivotTable	=31</li>
+<li>xlRangeAutoFormatTable1	=32</li>
+<li>xlRangeAutoFormatTable2	=33</li>
+<li>xlRangeAutoFormatTable3	=34</li>
+<li>xlRangeAutoFormatTable4	=35</li>
+<li>xlRangeAutoFormatTable5	=36</li>
+<li>xlRangeAutoFormatTable6	=37</li>
+<li>xlRangeAutoFormatTable7	=38</li>
+<li>xlRangeAutoFormatTable8	=39</li>
+<li>xlRangeAutoFormatTable9	=40</li>
+<li>xlRangeAutoFormatTable10	=41</li>
+<li>xlRangeAutoFormatPTNone	=42</li>
+<li>xlRangeAutoFormatNone	=-4142</li>
+<li>xlRangeAutoFormatSimple	=-4154</li>
+</ul>
+<h3><a name=XlRangeValueDataType></a>XlRangeValueDataType</h3>
+<ul>
+<li>xlRangeValueDefault	=10</li>
+<li>xlRangeValueXMLSpreadsheet	=11</li>
+<li>xlRangeValueMSPersistXML	=12</li>
+</ul>
+<h3><a name=XlReferenceStyle></a>XlReferenceStyle</h3>
+<ul>
+<li>xlA1	=1</li>
+<li>xlR1C1	=-4150</li>
+</ul>
+<h3><a name=XlReferenceType></a>XlReferenceType</h3>
+<ul>
+<li>xlAbsolute	=1</li>
+<li>xlAbsRowRelColumn	=2</li>
+<li>xlRelative	=4</li>
+<li>xlRelRowAbsColumn	=3</li>
+</ul>
+<h3><a name=XlRemoveDocInfoType></a>XlRemoveDocInfoType</h3>
+<ul>
+<li>xlRDIComments	=1</li>
+<li>xlRDIRemovePersonalInformation	=4</li>
+<li>xlRDIEmailHeader	=5</li>
+<li>xlRDIRoutingSlip	=6</li>
+<li>xlRDISendForReview	=7</li>
+<li>xlRDIDocumentProperties	=8</li>
+<li>xlRDIDocumentWorkspace	=10</li>
+<li>xlRDIInkAnnotations	=11</li>
+<li>xlRDIScenarioComments	=12</li>
+<li>xlRDIPublishInfo	=13</li>
+<li>xlRDIDocumentServerProperties	=14</li>
+<li>xlRDIDocumentManagementPolicy	=15</li>
+<li>xlRDIContentType	=16</li>
+<li>xlRDIDefinedNameComments	=18</li>
+<li>xlRDIInactiveDataConnections	=19</li>
+<li>xlRDIPrinterPath	=20</li>
+<li>xlRDIInlineWebExtensions	=21</li>
+<li>xlRDITaskpaneWebExtensions	=22</li>
+<li>xlRDIExcelDataModel	=23</li>
+<li>xlRDIAll	=99</li>
+</ul>
+<h3><a name=XlRgbColor></a>XlRgbColor</h3>
+<ul>
+<li>rgbAliceBlue	=16775408</li>
+<li>rgbAntiqueWhite	=14150650</li>
+<li>rgbAqua	=16776960</li>
+<li>rgbAquamarine	=13959039</li>
+<li>rgbAzure	=16777200</li>
+<li>rgbBeige	=14480885</li>
+<li>rgbBisque	=12903679</li>
+<li>rgbBlack	=0</li>
+<li>rgbBlanchedAlmond	=13495295</li>
+<li>rgbBlue	=16711680</li>
+<li>rgbBlueViolet	=14822282</li>
+<li>rgbBrown	=2763429</li>
+<li>rgbBurlyWood	=8894686</li>
+<li>rgbCadetBlue	=10526303</li>
+<li>rgbChartreuse	=65407</li>
+<li>rgbCoral	=5275647</li>
+<li>rgbCornflowerBlue	=15570276</li>
+<li>rgbCornsilk	=14481663</li>
+<li>rgbCrimson	=3937500</li>
+<li>rgbDarkBlue	=9109504</li>
+<li>rgbDarkCyan	=9145088</li>
+<li>rgbDarkGoldenrod	=755384</li>
+<li>rgbDarkGreen	=25600</li>
+<li>rgbDarkGray	=11119017</li>
+<li>rgbDarkGrey	=11119017</li>
+<li>rgbDarkKhaki	=7059389</li>
+<li>rgbDarkMagenta	=9109643</li>
+<li>rgbDarkOliveGreen	=3107669</li>
+<li>rgbDarkOrange	=36095</li>
+<li>rgbDarkOrchid	=13382297</li>
+<li>rgbDarkRed	=139</li>
+<li>rgbDarkSalmon	=8034025</li>
+<li>rgbDarkSeaGreen	=9419919</li>
+<li>rgbDarkSlateBlue	=9125192</li>
+<li>rgbDarkSlateGray	=5197615</li>
+<li>rgbDarkSlateGrey	=5197615</li>
+<li>rgbDarkTurquoise	=13749760</li>
+<li>rgbDarkViolet	=13828244</li>
+<li>rgbDeepPink	=9639167</li>
+<li>rgbDeepSkyBlue	=16760576</li>
+<li>rgbDimGray	=6908265</li>
+<li>rgbDimGrey	=6908265</li>
+<li>rgbDodgerBlue	=16748574</li>
+<li>rgbFireBrick	=2237106</li>
+<li>rgbFloralWhite	=15792895</li>
+<li>rgbForestGreen	=2263842</li>
+<li>rgbFuchsia	=16711935</li>
+<li>rgbGainsboro	=14474460</li>
+<li>rgbGhostWhite	=16775416</li>
+<li>rgbGold	=55295</li>
+<li>rgbGoldenrod	=2139610</li>
+<li>rgbGray	=8421504</li>
+<li>rgbGreen	=32768</li>
+<li>rgbGrey	=8421504</li>
+<li>rgbGreenYellow	=3145645</li>
+<li>rgbHoneydew	=15794160</li>
+<li>rgbHotPink	=11823615</li>
+<li>rgbIndianRed	=6053069</li>
+<li>rgbIndigo	=8519755</li>
+<li>rgbIvory	=15794175</li>
+<li>rgbKhaki	=9234160</li>
+<li>rgbLavender	=16443110</li>
+<li>rgbLavenderBlush	=16118015</li>
+<li>rgbLawnGreen	=64636</li>
+<li>rgbLemonChiffon	=13499135</li>
+<li>rgbLightBlue	=15128749</li>
+<li>rgbLightCoral	=8421616</li>
+<li>rgbLightCyan	=9145088</li>
+<li>rgbLightGoldenrodYellow	=13826810</li>
+<li>rgbLightGray	=13882323</li>
+<li>rgbLightGreen	=9498256</li>
+<li>rgbLightGrey	=13882323</li>
+<li>rgbLightPink	=12695295</li>
+<li>rgbLightSalmon	=8036607</li>
+<li>rgbLightSeaGreen	=11186720</li>
+<li>rgbLightSkyBlue	=16436871</li>
+<li>rgbLightSlateGray	=10061943</li>
+<li>rgbLightSlateGrey	=10061943</li>
+<li>rgbLightSteelBlue	=14599344</li>
+<li>rgbLightYellow	=14745599</li>
+<li>rgbLime	=65280</li>
+<li>rgbLimeGreen	=3329330</li>
+<li>rgbLinen	=15134970</li>
+<li>rgbMaroon	=128</li>
+<li>rgbMediumAquamarine	=11206502</li>
+<li>rgbMediumBlue	=13434880</li>
+<li>rgbMediumOrchid	=13850042</li>
+<li>rgbMediumPurple	=14381203</li>
+<li>rgbMediumSeaGreen	=7451452</li>
+<li>rgbMediumSlateBlue	=15624315</li>
+<li>rgbMediumSpringGreen	=10156544</li>
+<li>rgbMediumTurquoise	=13422920</li>
+<li>rgbMediumVioletRed	=8721863</li>
+<li>rgbMidnightBlue	=7346457</li>
+<li>rgbMintCream	=16449525</li>
+<li>rgbMistyRose	=14804223</li>
+<li>rgbMoccasin	=11920639</li>
+<li>rgbNavajoWhite	=11394815</li>
+<li>rgbNavy	=8388608</li>
+<li>rgbNavyBlue	=8388608</li>
+<li>rgbOldLace	=15136253</li>
+<li>rgbOlive	=32896</li>
+<li>rgbOliveDrab	=2330219</li>
+<li>rgbOrange	=42495</li>
+<li>rgbOrangeRed	=17919</li>
+<li>rgbOrchid	=14053594</li>
+<li>rgbPaleGoldenrod	=7071982</li>
+<li>rgbPaleGreen	=10025880</li>
+<li>rgbPaleTurquoise	=15658671</li>
+<li>rgbPaleVioletRed	=9662683</li>
+<li>rgbPapayaWhip	=14020607</li>
+<li>rgbPeachPuff	=12180223</li>
+<li>rgbPeru	=4163021</li>
+<li>rgbPink	=13353215</li>
+<li>rgbPlum	=14524637</li>
+<li>rgbPowderBlue	=15130800</li>
+<li>rgbPurple	=8388736</li>
+<li>rgbRed	=255</li>
+<li>rgbRosyBrown	=9408444</li>
+<li>rgbRoyalBlue	=14772545</li>
+<li>rgbSalmon	=7504122</li>
+<li>rgbSandyBrown	=6333684</li>
+<li>rgbSeaGreen	=5737262</li>
+<li>rgbSeashell	=15660543</li>
+<li>rgbSienna	=2970272</li>
+<li>rgbSilver	=12632256</li>
+<li>rgbSkyBlue	=15453831</li>
+<li>rgbSlateBlue	=13458026</li>
+<li>rgbSlateGray	=9470064</li>
+<li>rgbSlateGrey	=9470064</li>
+<li>rgbSnow	=16448255</li>
+<li>rgbSpringGreen	=8388352</li>
+<li>rgbSteelBlue	=11829830</li>
+<li>rgbTan	=9221330</li>
+<li>rgbTeal	=8421376</li>
+<li>rgbThistle	=14204888</li>
+<li>rgbTomato	=4678655</li>
+<li>rgbTurquoise	=13688896</li>
+<li>rgbYellow	=65535</li>
+<li>rgbYellowGreen	=3329434</li>
+<li>rgbViolet	=15631086</li>
+<li>rgbWheat	=11788021</li>
+<li>rgbWhite	=16777215</li>
+<li>rgbWhiteSmoke	=16119285</li>
+</ul>
+<h3><a name=XlRobustConnect></a>XlRobustConnect</h3>
+<ul>
+<li>xlAsRequired	=0</li>
+<li>xlAlways	=1</li>
+<li>xlNever	=2</li>
+</ul>
+<h3><a name=XlRoutingSlipDelivery></a>XlRoutingSlipDelivery</h3>
+<ul>
+<li>xlAllAtOnce	=2</li>
+<li>xlOneAfterAnother	=1</li>
+</ul>
+<h3><a name=XlRoutingSlipStatus></a>XlRoutingSlipStatus</h3>
+<ul>
+<li>xlNotYetRouted	=0</li>
+<li>xlRoutingComplete	=2</li>
+<li>xlRoutingInProgress	=1</li>
+</ul>
+<h3><a name=XlRowCol></a>XlRowCol</h3>
+<ul>
+<li>xlColumns	=2</li>
+<li>xlRows	=1</li>
+</ul>
+<h3><a name=XlRunAutoMacro></a>XlRunAutoMacro</h3>
+<ul>
+<li>xlAutoActivate	=3</li>
+<li>xlAutoClose	=2</li>
+<li>xlAutoDeactivate	=4</li>
+<li>xlAutoOpen	=1</li>
+</ul>
+<h3><a name=XlSaveAction></a>XlSaveAction</h3>
+<ul>
+<li>xlDoNotSaveChanges	=2</li>
+<li>xlSaveChanges	=1</li>
+</ul>
+<h3><a name=XlSaveAsAccessMode></a>XlSaveAsAccessMode</h3>
+<ul>
+<li>xlExclusive	=3</li>
+<li>xlNoChange	=1</li>
+<li>xlShared	=2</li>
+</ul>
+<h3><a name=XlSaveConflictResolution></a>XlSaveConflictResolution</h3>
+<ul>
+<li>xlLocalSessionChanges	=2</li>
+<li>xlOtherSessionChanges	=3</li>
+<li>xlUserResolution	=1</li>
+</ul>
+<h3><a name=XlScaleType></a>XlScaleType</h3>
+<ul>
+<li>xlScaleLinear	=-4132</li>
+<li>xlScaleLogarithmic	=-4133</li>
+</ul>
+<h3><a name=XlSearchDirection></a>XlSearchDirection</h3>
+<ul>
+<li>xlNext	=1</li>
+<li>xlPrevious	=2</li>
+</ul>
+<h3><a name=XlSearchOrder></a>XlSearchOrder</h3>
+<ul>
+<li>xlByColumns	=2</li>
+<li>xlByRows	=1</li>
+</ul>
+<h3><a name=XlSearchWithin></a>XlSearchWithin</h3>
+<ul>
+<li>xlWithinSheet	=1</li>
+<li>xlWithinWorkbook	=2</li>
+</ul>
+<h3><a name=XlSeriesNameLevel></a>XlSeriesNameLevel</h3>
+<ul>
+<li>xlSeriesNameLevelNone	=-3</li>
+<li>xlSeriesNameLevelCustom	=-2</li>
+<li>xlSeriesNameLevelAll	=-1</li>
+</ul>
+<h3><a name=XlSheetType></a>XlSheetType</h3>
+<ul>
+<li>xlChart	=-4109</li>
+<li>xlDialogSheet	=-4116</li>
+<li>xlExcel4IntlMacroSheet	=4</li>
+<li>xlExcel4MacroSheet	=3</li>
+<li>xlWorksheet	=-4167</li>
+</ul>
+<h3><a name=XlSheetVisibility></a>XlSheetVisibility</h3>
+<ul>
+<li>xlSheetVisible	=-1</li>
+<li>xlSheetHidden	=0</li>
+<li>xlSheetVeryHidden	=2</li>
+</ul>
+<h3><a name=XlSizeRepresents></a>XlSizeRepresents</h3>
+<ul>
+<li>xlSizeIsWidth	=2</li>
+<li>xlSizeIsArea	=1</li>
+</ul>
+<h3><a name=XlSlicerCacheType></a>XlSlicerCacheType</h3>
+<ul>
+<li>xlSlicer	=1</li>
+<li>xlTimeline	=2</li>
+</ul>
+<h3><a name=XlSlicerCrossFilterType></a>XlSlicerCrossFilterType</h3>
+<ul>
+<li>xlSlicerNoCrossFilter	=1</li>
+<li>xlSlicerCrossFilterShowItemsWithDataAtTop	=2</li>
+<li>xlSlicerCrossFilterShowItemsWithNoData	=3</li>
+<li>xlSlicerCrossFilterHideButtonsWithNoData	=4</li>
+</ul>
+<h3><a name=XlSlicerSort></a>XlSlicerSort</h3>
+<ul>
+<li>xlSlicerSortDataSourceOrder	=1</li>
+<li>xlSlicerSortAscending	=2</li>
+<li>xlSlicerSortDescending	=3</li>
+</ul>
+<h3><a name=XlSmartTagControlType></a>XlSmartTagControlType</h3>
+<ul>
+<li>xlSmartTagControlSmartTag	=1</li>
+<li>xlSmartTagControlLink	=2</li>
+<li>xlSmartTagControlHelp	=3</li>
+<li>xlSmartTagControlHelpURL	=4</li>
+<li>xlSmartTagControlSeparator	=5</li>
+<li>xlSmartTagControlButton	=6</li>
+<li>xlSmartTagControlLabel	=7</li>
+<li>xlSmartTagControlImage	=8</li>
+<li>xlSmartTagControlCheckbox	=9</li>
+<li>xlSmartTagControlTextbox	=10</li>
+<li>xlSmartTagControlListbox	=11</li>
+<li>xlSmartTagControlCombo	=12</li>
+<li>xlSmartTagControlActiveX	=13</li>
+<li>xlSmartTagControlRadioGroup	=14</li>
+</ul>
+<h3><a name=XlSmartTagDisplayMode></a>XlSmartTagDisplayMode</h3>
+<ul>
+<li>xlIndicatorAndButton	=0</li>
+<li>xlDisplayNone	=1</li>
+<li>xlButtonOnly	=2</li>
+</ul>
+<h3><a name=XlSortDataOption></a>XlSortDataOption</h3>
+<ul>
+<li>xlSortNormal	=0</li>
+<li>xlSortTextAsNumbers	=1</li>
+</ul>
+<h3><a name=XlSortMethod></a>XlSortMethod</h3>
+<ul>
+<li>xlPinYin	=1</li>
+<li>xlStroke	=2</li>
+</ul>
+<h3><a name=XlSortMethodOld></a>XlSortMethodOld</h3>
+<ul>
+<li>xlCodePage	=2</li>
+<li>xlSyllabary	=1</li>
+</ul>
+<h3><a name=XlSortOn></a>XlSortOn</h3>
+<ul>
+<li>xlSortOnValues	=0</li>
+<li>xlSortOnCellColor	=1</li>
+<li>xlSortOnFontColor	=2</li>
+<li>xlSortOnIcon	=3</li>
+</ul>
+<h3><a name=XlSortOrder></a>XlSortOrder</h3>
+<ul>
+<li>xlAscending	=1</li>
+<li>xlDescending	=2</li>
+</ul>
+<h3><a name=XlSortOrientation></a>XlSortOrientation</h3>
+<ul>
+<li>xlSortRows	=2</li>
+<li>xlSortColumns	=1</li>
+</ul>
+<h3><a name=XlSortType></a>XlSortType</h3>
+<ul>
+<li>xlSortLabels	=2</li>
+<li>xlSortValues	=1</li>
+</ul>
+<h3><a name=XlSourceType></a>XlSourceType</h3>
+<ul>
+<li>xlSourceWorkbook	=0</li>
+<li>xlSourceSheet	=1</li>
+<li>xlSourcePrintArea	=2</li>
+<li>xlSourceAutoFilter	=3</li>
+<li>xlSourceRange	=4</li>
+<li>xlSourceChart	=5</li>
+<li>xlSourcePivotTable	=6</li>
+<li>xlSourceQuery	=7</li>
+</ul>
+<h3><a name=XlSpanishModes></a>XlSpanishModes</h3>
+<ul>
+<li>xlSpanishTuteoOnly	=0</li>
+<li>xlSpanishTuteoAndVoseo	=1</li>
+<li>xlSpanishVoseoOnly	=2</li>
+</ul>
+<h3><a name=XlSparkScale></a>XlSparkScale</h3>
+<ul>
+<li>xlSparkScaleGroup	=1</li>
+<li>xlSparkScaleSingle	=2</li>
+<li>xlSparkScaleCustom	=3</li>
+</ul>
+<h3><a name=XlSparkType></a>XlSparkType</h3>
+<ul>
+<li>xlSparkLine	=1</li>
+<li>xlSparkColumn	=2</li>
+<li>xlSparkColumnStacked100	=3</li>
+</ul>
+<h3><a name=XlSparklineRowCol></a>XlSparklineRowCol</h3>
+<ul>
+<li>xlSparklineNonSquare	=0</li>
+<li>xlSparklineRowsSquare	=1</li>
+<li>xlSparklineColumnsSquare	=2</li>
+</ul>
+<h3><a name=XlSpeakDirection></a>XlSpeakDirection</h3>
+<ul>
+<li>xlSpeakByRows	=0</li>
+<li>xlSpeakByColumns	=1</li>
+</ul>
+<h3><a name=XlSpecialCellsValue></a>XlSpecialCellsValue</h3>
+<ul>
+<li>xlErrors	=16</li>
+<li>xlLogical	=4</li>
+<li>xlNumbers	=1</li>
+<li>xlTextValues	=2</li>
+</ul>
+<h3><a name=XlStdColorScale></a>XlStdColorScale</h3>
+<ul>
+<li>xlColorScaleRYG	=1</li>
+<li>xlColorScaleGYR	=2</li>
+<li>xlColorScaleBlackWhite	=3</li>
+<li>xlColorScaleWhiteBlack	=4</li>
+</ul>
+<h3><a name=XlSubscribeToFormat></a>XlSubscribeToFormat</h3>
+<ul>
+<li>xlSubscribeToPicture	=-4147</li>
+<li>xlSubscribeToText	=-4158</li>
+</ul>
+<h3><a name=XlSubtototalLocationType></a>XlSubtototalLocationType</h3>
+<ul>
+<li>xlAtTop	=1</li>
+<li>xlAtBottom	=2</li>
+</ul>
+<h3><a name=XlSummaryColumn></a>XlSummaryColumn</h3>
+<ul>
+<li>xlSummaryOnLeft	=-4131</li>
+<li>xlSummaryOnRight	=-4152</li>
+</ul>
+<h3><a name=XlSummaryReportType></a>XlSummaryReportType</h3>
+<ul>
+<li>xlSummaryPivotTable	=-4148</li>
+<li>xlStandardSummary	=1</li>
+</ul>
+<h3><a name=XlSummaryRow></a>XlSummaryRow</h3>
+<ul>
+<li>xlSummaryAbove	=0</li>
+<li>xlSummaryBelow	=1</li>
+</ul>
+<h3><a name=XlTabPosition></a>XlTabPosition</h3>
+<ul>
+<li>xlTabPositionFirst	=0</li>
+<li>xlTabPositionLast	=1</li>
+</ul>
+<h3><a name=XlTableStyleElementType></a>XlTableStyleElementType</h3>
+<ul>
+<li>xlWholeTable	=0</li>
+<li>xlHeaderRow	=1</li>
+<li>xlTotalRow	=2</li>
+<li>xlGrandTotalRow	=2</li>
+<li>xlFirstColumn	=3</li>
+<li>xlLastColumn	=4</li>
+<li>xlGrandTotalColumn	=4</li>
+<li>xlRowStripe1	=5</li>
+<li>xlRowStripe2	=6</li>
+<li>xlColumnStripe1	=7</li>
+<li>xlColumnStripe2	=8</li>
+<li>xlFirstHeaderCell	=9</li>
+<li>xlLastHeaderCell	=10</li>
+<li>xlFirstTotalCell	=11</li>
+<li>xlLastTotalCell	=12</li>
+<li>xlSubtotalColumn1	=13</li>
+<li>xlSubtotalColumn2	=14</li>
+<li>xlSubtotalColumn3	=15</li>
+<li>xlSubtotalRow1	=16</li>
+<li>xlSubtotalRow2	=17</li>
+<li>xlSubtotalRow3	=18</li>
+<li>xlBlankRow	=19</li>
+<li>xlColumnSubheading1	=20</li>
+<li>xlColumnSubheading2	=21</li>
+<li>xlColumnSubheading3	=22</li>
+<li>xlRowSubheading1	=23</li>
+<li>xlRowSubheading2	=24</li>
+<li>xlRowSubheading3	=25</li>
+<li>xlPageFieldLabels	=26</li>
+<li>xlPageFieldValues	=27</li>
+<li>xlSlicerUnselectedItemWithData	=28</li>
+<li>xlSlicerUnselectedItemWithNoData	=29</li>
+<li>xlSlicerSelectedItemWithData	=30</li>
+<li>xlSlicerSelectedItemWithNoData	=31</li>
+<li>xlSlicerHoveredUnselectedItemWithData	=32</li>
+<li>xlSlicerHoveredSelectedItemWithData	=33</li>
+<li>xlSlicerHoveredUnselectedItemWithNoData	=34</li>
+<li>xlSlicerHoveredSelectedItemWithNoData	=35</li>
+<li>xlTimelineSelectionLabel	=36</li>
+<li>xlTimelineTimeLevel	=37</li>
+<li>xlTimelinePeriodLabels1	=38</li>
+<li>xlTimelinePeriodLabels2	=39</li>
+<li>xlTimelineSelectedTimeBlock	=40</li>
+<li>xlTimelineUnselectedTimeBlock	=41</li>
+<li>xlTimelineSelectedTimeBlockSpace	=42</li>
+</ul>
+<h3><a name=XlTextParsingType></a>XlTextParsingType</h3>
+<ul>
+<li>xlDelimited	=1</li>
+<li>xlFixedWidth	=2</li>
+</ul>
+<h3><a name=XlTextQualifier></a>XlTextQualifier</h3>
+<ul>
+<li>xlTextQualifierDoubleQuote	=1</li>
+<li>xlTextQualifierNone	=-4142</li>
+<li>xlTextQualifierSingleQuote	=2</li>
+</ul>
+<h3><a name=XlTextVisualLayoutType></a>XlTextVisualLayoutType</h3>
+<ul>
+<li>xlTextVisualLTR	=1</li>
+<li>xlTextVisualRTL	=2</li>
+</ul>
+<h3><a name=XlThemeColor></a>XlThemeColor</h3>
+<ul>
+<li>xlThemeColorDark1	=1</li>
+<li>xlThemeColorLight1	=2</li>
+<li>xlThemeColorDark2	=3</li>
+<li>xlThemeColorLight2	=4</li>
+<li>xlThemeColorAccent1	=5</li>
+<li>xlThemeColorAccent2	=6</li>
+<li>xlThemeColorAccent3	=7</li>
+<li>xlThemeColorAccent4	=8</li>
+<li>xlThemeColorAccent5	=9</li>
+<li>xlThemeColorAccent6	=10</li>
+<li>xlThemeColorHyperlink	=11</li>
+<li>xlThemeColorFollowedHyperlink	=12</li>
+</ul>
+<h3><a name=XlThemeFont></a>XlThemeFont</h3>
+<ul>
+<li>xlThemeFontNone	=0</li>
+<li>xlThemeFontMajor	=1</li>
+<li>xlThemeFontMinor	=2</li>
+</ul>
+<h3><a name=XlThreadMode></a>XlThreadMode</h3>
+<ul>
+<li>xlThreadModeAutomatic	=0</li>
+<li>xlThreadModeManual	=1</li>
+</ul>
+<h3><a name=XlTickLabelOrientation></a>XlTickLabelOrientation</h3>
+<ul>
+<li>xlTickLabelOrientationAutomatic	=-4105</li>
+<li>xlTickLabelOrientationDownward	=-4170</li>
+<li>xlTickLabelOrientationHorizontal	=-4128</li>
+<li>xlTickLabelOrientationUpward	=-4171</li>
+<li>xlTickLabelOrientationVertical	=-4166</li>
+</ul>
+<h3><a name=XlTickLabelPosition></a>XlTickLabelPosition</h3>
+<ul>
+<li>xlTickLabelPositionHigh	=-4127</li>
+<li>xlTickLabelPositionLow	=-4134</li>
+<li>xlTickLabelPositionNextToAxis	=4</li>
+<li>xlTickLabelPositionNone	=-4142</li>
+</ul>
+<h3><a name=XlTickMark></a>XlTickMark</h3>
+<ul>
+<li>xlTickMarkCross	=4</li>
+<li>xlTickMarkInside	=2</li>
+<li>xlTickMarkNone	=-4142</li>
+<li>xlTickMarkOutside	=3</li>
+</ul>
+<h3><a name=XlTimePeriods></a>XlTimePeriods</h3>
+<ul>
+<li>xlToday	=0</li>
+<li>xlYesterday	=1</li>
+<li>xlLast7Days	=2</li>
+<li>xlThisWeek	=3</li>
+<li>xlLastWeek	=4</li>
+<li>xlLastMonth	=5</li>
+<li>xlTomorrow	=6</li>
+<li>xlNextWeek	=7</li>
+<li>xlNextMonth	=8</li>
+<li>xlThisMonth	=9</li>
+</ul>
+<h3><a name=XlTimeUnit></a>XlTimeUnit</h3>
+<ul>
+<li>xlDays	=0</li>
+<li>xlMonths	=1</li>
+<li>xlYears	=2</li>
+</ul>
+<h3><a name=XlTimelineLevel></a>XlTimelineLevel</h3>
+<ul>
+<li>xlTimelineLevelYears	=0</li>
+<li>xlTimelineLevelQuarters	=1</li>
+<li>xlTimelineLevelMonths	=2</li>
+<li>xlTimelineLevelDays	=3</li>
+</ul>
+<h3><a name=XlToolbarProtection></a>XlToolbarProtection</h3>
+<ul>
+<li>xlNoButtonChanges	=1</li>
+<li>xlNoChanges	=4</li>
+<li>xlNoDockingChanges	=3</li>
+<li>xlToolbarProtectionNone	=-4143</li>
+<li>xlNoShapeChanges	=2</li>
+</ul>
+<h3><a name=XlTopBottom></a>XlTopBottom</h3>
+<ul>
+<li>xlTop10Top	=1</li>
+<li>xlTop10Bottom	=0</li>
+</ul>
+<h3><a name=XlTotalsCalculation></a>XlTotalsCalculation</h3>
+<ul>
+<li>xlTotalsCalculationNone	=0</li>
+<li>xlTotalsCalculationSum	=1</li>
+<li>xlTotalsCalculationAverage	=2</li>
+<li>xlTotalsCalculationCount	=3</li>
+<li>xlTotalsCalculationCountNums	=4</li>
+<li>xlTotalsCalculationMin	=5</li>
+<li>xlTotalsCalculationMax	=6</li>
+<li>xlTotalsCalculationStdDev	=7</li>
+<li>xlTotalsCalculationVar	=8</li>
+<li>xlTotalsCalculationCustom	=9</li>
+</ul>
+<h3><a name=XlTrendlineType></a>XlTrendlineType</h3>
+<ul>
+<li>xlExponential	=5</li>
+<li>xlLinear	=-4132</li>
+<li>xlLogarithmic	=-4133</li>
+<li>xlMovingAvg	=6</li>
+<li>xlPolynomial	=3</li>
+<li>xlPower	=4</li>
+</ul>
+<h3><a name=XlUnderlineStyle></a>XlUnderlineStyle</h3>
+<ul>
+<li>xlUnderlineStyleDouble	=-4119</li>
+<li>xlUnderlineStyleDoubleAccounting	=5</li>
+<li>xlUnderlineStyleNone	=-4142</li>
+<li>xlUnderlineStyleSingle	=2</li>
+<li>xlUnderlineStyleSingleAccounting	=4</li>
+</ul>
+<h3><a name=XlUpdateLinks></a>XlUpdateLinks</h3>
+<ul>
+<li>xlUpdateLinksUserSetting	=1</li>
+<li>xlUpdateLinksNever	=2</li>
+<li>xlUpdateLinksAlways	=3</li>
+</ul>
+<h3><a name=XlVAlign></a>XlVAlign</h3>
+<ul>
+<li>xlVAlignBottom	=-4107</li>
+<li>xlVAlignCenter	=-4108</li>
+<li>xlVAlignDistributed	=-4117</li>
+<li>xlVAlignJustify	=-4130</li>
+<li>xlVAlignTop	=-4160</li>
+</ul>
+<h3><a name=XlWBATemplate></a>XlWBATemplate</h3>
+<ul>
+<li>xlWBATChart	=-4109</li>
+<li>xlWBATExcel4IntlMacroSheet	=4</li>
+<li>xlWBATExcel4MacroSheet	=3</li>
+<li>xlWBATWorksheet	=-4167</li>
+</ul>
+<h3><a name=XlWebFormatting></a>XlWebFormatting</h3>
+<ul>
+<li>xlWebFormattingAll	=1</li>
+<li>xlWebFormattingRTF	=2</li>
+<li>xlWebFormattingNone	=3</li>
+</ul>
+<h3><a name=XlWebSelectionType></a>XlWebSelectionType</h3>
+<ul>
+<li>xlEntirePage	=1</li>
+<li>xlAllTables	=2</li>
+<li>xlSpecifiedTables	=3</li>
+</ul>
+<h3><a name=XlWindowState></a>XlWindowState</h3>
+<ul>
+<li>xlMaximized	=-4137</li>
+<li>xlMinimized	=-4140</li>
+<li>xlNormal	=-4143</li>
+</ul>
+<h3><a name=XlWindowType></a>XlWindowType</h3>
+<ul>
+<li>xlChartAsWindow	=5</li>
+<li>xlChartInPlace	=4</li>
+<li>xlClipboard	=3</li>
+<li>xlInfo	=-4129</li>
+<li>xlWorkbook	=1</li>
+</ul>
+<h3><a name=XlWindowView></a>XlWindowView</h3>
+<ul>
+<li>xlNormalView	=1</li>
+<li>xlPageBreakPreview	=2</li>
+<li>xlPageLayoutView	=3</li>
+</ul>
+<h3><a name=XlXLMMacroType></a>XlXLMMacroType</h3>
+<ul>
+<li>xlCommand	=2</li>
+<li>xlFunction	=1</li>
+<li>xlNotXLM	=3</li>
+</ul>
+<h3><a name=XlXmlExportResult></a>XlXmlExportResult</h3>
+<ul>
+<li>xlXmlExportSuccess	=0</li>
+<li>xlXmlExportValidationFailed	=1</li>
+</ul>
+<h3><a name=XlXmlImportResult></a>XlXmlImportResult</h3>
+<ul>
+<li>xlXmlImportSuccess	=0</li>
+<li>xlXmlImportElementsTruncated	=1</li>
+<li>xlXmlImportValidationFailed	=2</li>
+</ul>
+<h3><a name=XlXmlLoadOption></a>XlXmlLoadOption</h3>
+<ul>
+<li>xlXmlLoadPromptUser	=0</li>
+<li>xlXmlLoadOpenXml	=1</li>
+<li>xlXmlLoadImportToList	=2</li>
+<li>xlXmlLoadMapXml	=3</li>
+</ul>
+<h3><a name=XlYesNoGuess></a>XlYesNoGuess</h3>
+<ul>
+<li>xlGuess	=0</li>
+<li>xlNo	=2</li>
+<li>xlYes	=1</li>
+</ul>
+<hr><h2>Member Function Documentation</h2>
+<h3><a name=PrintQuality></a>QVariant PrintQuality (QVariant Index)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QVariant)), object, SLOT(PrintQuality(QVariant)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	QVariant result = object->dynamicCall("PrintQuality(QVariant)", params);</pre>
+
+<h3><a name=SetAlignMarginsHeaderFooter></a>void SetAlignMarginsHeaderFooter (bool AlignMarginsHeaderFooter)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(bool)), object, SLOT(SetAlignMarginsHeaderFooter(bool)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetAlignMarginsHeaderFooter(bool)", params);</pre>
+
+<h3><a name=SetBlackAndWhite></a>void SetBlackAndWhite (bool BlackAndWhite)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(bool)), object, SLOT(SetBlackAndWhite(bool)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetBlackAndWhite(bool)", params);</pre>
+
+<h3><a name=SetBottomMargin></a>void SetBottomMargin (double BottomMargin)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(double)), object, SLOT(SetBottomMargin(double)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetBottomMargin(double)", params);</pre>
+
+<h3><a name=SetCenterFooter></a>void SetCenterFooter (QString CenterFooter)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QString)), object, SLOT(SetCenterFooter(QString)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetCenterFooter(QString)", params);</pre>
+
+<h3><a name=SetCenterHeader></a>void SetCenterHeader (QString CenterHeader)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QString)), object, SLOT(SetCenterHeader(QString)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetCenterHeader(QString)", params);</pre>
+
+<h3><a name=SetCenterHorizontally></a>void SetCenterHorizontally (bool CenterHorizontally)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(bool)), object, SLOT(SetCenterHorizontally(bool)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetCenterHorizontally(bool)", params);</pre>
+
+<h3><a name=SetCenterVertically></a>void SetCenterVertically (bool CenterVertically)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(bool)), object, SLOT(SetCenterVertically(bool)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetCenterVertically(bool)", params);</pre>
+
+<h3><a name=SetChartSize></a>void SetChartSize (XlObjectSize ChartSize)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(XlObjectSize)), object, SLOT(SetChartSize(XlObjectSize)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetChartSize(XlObjectSize)", params);</pre>
+
+<h3><a name=SetDifferentFirstPageHeaderFooter></a>void SetDifferentFirstPageHeaderFooter (bool DifferentFirstPageHeaderFooter)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(bool)), object, SLOT(SetDifferentFirstPageHeaderFooter(bool)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetDifferentFirstPageHeaderFooter(bool)", params);</pre>
+
+<h3><a name=SetDraft></a>void SetDraft (bool Draft)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(bool)), object, SLOT(SetDraft(bool)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetDraft(bool)", params);</pre>
+
+<h3><a name=SetFirstPageNumber></a>void SetFirstPageNumber (int FirstPageNumber)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(int)), object, SLOT(SetFirstPageNumber(int)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetFirstPageNumber(int)", params);</pre>
+
+<h3><a name=SetFitToPagesTall></a>void SetFitToPagesTall (QVariant FitToPagesTall)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QVariant)), object, SLOT(SetFitToPagesTall(QVariant)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetFitToPagesTall(QVariant)", params);</pre>
+
+<h3><a name=SetFitToPagesWide></a>void SetFitToPagesWide (QVariant FitToPagesWide)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QVariant)), object, SLOT(SetFitToPagesWide(QVariant)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetFitToPagesWide(QVariant)", params);</pre>
+
+<h3><a name=SetFooterMargin></a>void SetFooterMargin (double FooterMargin)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(double)), object, SLOT(SetFooterMargin(double)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetFooterMargin(double)", params);</pre>
+
+<h3><a name=SetHeaderMargin></a>void SetHeaderMargin (double HeaderMargin)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(double)), object, SLOT(SetHeaderMargin(double)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetHeaderMargin(double)", params);</pre>
+
+<h3><a name=SetLeftFooter></a>void SetLeftFooter (QString LeftFooter)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QString)), object, SLOT(SetLeftFooter(QString)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetLeftFooter(QString)", params);</pre>
+
+<h3><a name=SetLeftHeader></a>void SetLeftHeader (QString LeftHeader)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QString)), object, SLOT(SetLeftHeader(QString)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetLeftHeader(QString)", params);</pre>
+
+<h3><a name=SetLeftMargin></a>void SetLeftMargin (double LeftMargin)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(double)), object, SLOT(SetLeftMargin(double)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetLeftMargin(double)", params);</pre>
+
+<h3><a name=SetOddAndEvenPagesHeaderFooter></a>void SetOddAndEvenPagesHeaderFooter (bool OddAndEvenPagesHeaderFooter)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(bool)), object, SLOT(SetOddAndEvenPagesHeaderFooter(bool)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetOddAndEvenPagesHeaderFooter(bool)", params);</pre>
+
+<h3><a name=SetOrder></a>void SetOrder (XlOrder Order)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(XlOrder)), object, SLOT(SetOrder(XlOrder)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetOrder(XlOrder)", params);</pre>
+
+<h3><a name=SetOrientation></a>void SetOrientation (XlPageOrientation Orientation)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(XlPageOrientation)), object, SLOT(SetOrientation(XlPageOrientation)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetOrientation(XlPageOrientation)", params);</pre>
+
+<h3><a name=SetPaperSize></a>void SetPaperSize (XlPaperSize PaperSize)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(XlPaperSize)), object, SLOT(SetPaperSize(XlPaperSize)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetPaperSize(XlPaperSize)", params);</pre>
+
+<h3><a name=SetPrintArea></a>void SetPrintArea (QString PrintArea)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QString)), object, SLOT(SetPrintArea(QString)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetPrintArea(QString)", params);</pre>
+
+<h3><a name=SetPrintComments></a>void SetPrintComments (XlPrintLocation PrintComments)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(XlPrintLocation)), object, SLOT(SetPrintComments(XlPrintLocation)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetPrintComments(XlPrintLocation)", params);</pre>
+
+<h3><a name=SetPrintErrors></a>void SetPrintErrors (XlPrintErrors PrintErrors)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(XlPrintErrors)), object, SLOT(SetPrintErrors(XlPrintErrors)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetPrintErrors(XlPrintErrors)", params);</pre>
+
+<h3><a name=SetPrintGridlines></a>void SetPrintGridlines (bool PrintGridlines)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(bool)), object, SLOT(SetPrintGridlines(bool)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetPrintGridlines(bool)", params);</pre>
+
+<h3><a name=SetPrintHeadings></a>void SetPrintHeadings (bool PrintHeadings)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(bool)), object, SLOT(SetPrintHeadings(bool)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetPrintHeadings(bool)", params);</pre>
+
+<h3><a name=SetPrintNotes></a>void SetPrintNotes (bool PrintNotes)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(bool)), object, SLOT(SetPrintNotes(bool)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetPrintNotes(bool)", params);</pre>
+
+<h3><a name=SetPrintQuality></a>QVariant SetPrintQuality (QVariant Index, QVariant rhs)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QVariant, QVariant)), object, SLOT(SetPrintQuality(QVariant, QVariant)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	QVariant result = object->dynamicCall("SetPrintQuality(QVariant, QVariant)", params);</pre>
+
+<h3><a name=SetPrintTitleColumns></a>void SetPrintTitleColumns (QString PrintTitleColumns)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QString)), object, SLOT(SetPrintTitleColumns(QString)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetPrintTitleColumns(QString)", params);</pre>
+
+<h3><a name=SetPrintTitleRows></a>void SetPrintTitleRows (QString PrintTitleRows)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QString)), object, SLOT(SetPrintTitleRows(QString)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetPrintTitleRows(QString)", params);</pre>
+
+<h3><a name=SetRightFooter></a>void SetRightFooter (QString RightFooter)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QString)), object, SLOT(SetRightFooter(QString)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetRightFooter(QString)", params);</pre>
+
+<h3><a name=SetRightHeader></a>void SetRightHeader (QString RightHeader)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QString)), object, SLOT(SetRightHeader(QString)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetRightHeader(QString)", params);</pre>
+
+<h3><a name=SetRightMargin></a>void SetRightMargin (double RightMargin)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(double)), object, SLOT(SetRightMargin(double)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetRightMargin(double)", params);</pre>
+
+<h3><a name=SetScaleWithDocHeaderFooter></a>void SetScaleWithDocHeaderFooter (bool ScaleWithDocHeaderFooter)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(bool)), object, SLOT(SetScaleWithDocHeaderFooter(bool)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetScaleWithDocHeaderFooter(bool)", params);</pre>
+
+<h3><a name=SetTopMargin></a>void SetTopMargin (double TopMargin)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(double)), object, SLOT(SetTopMargin(double)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetTopMargin(double)", params);</pre>
+
+<h3><a name=SetZoom></a>void SetZoom (QVariant Zoom)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QVariant)), object, SLOT(SetZoom(QVariant)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetZoom(QVariant)", params);</pre>
+
+<h3><a name=exception></a>void exception (int code, QString source, QString disc, QString help)<tt> [signal]</tt></h3>
+<p>
+<p>Connect a slot to this signal:<pre>
+	QObject::connect(object, SIGNAL(exception(int, QString, QString, QString)), receiver, SLOT(someSlot(int, QString, QString, QString)));</pre>
+
+<h3><a name=propertyChanged></a>void propertyChanged (QString name)<tt> [signal]</tt></h3>
+<p>
+<p>Connect a slot to this signal:<pre>
+	QObject::connect(object, SIGNAL(propertyChanged(QString)), receiver, SLOT(someSlot(QString)));</pre>
+
+<h3><a name=signal></a>void signal (QString name, int argc, void* argv)<tt> [signal]</tt></h3>
+<p>
+<p>Connect a slot to this signal:<pre>
+	QObject::connect(object, SIGNAL(signal(QString, int, void*)), receiver, SLOT(someSlot(QString, int, void*)));</pre>
+
+<hr><h2>Property Documentation</h2>
+<h3><a name=objectName></a>QString objectName</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	QString val = object->property("objectName").toString();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	QString newValue = ...
+	object->setProperty("objectName", newValue);
+</pre>
+Or using the <a href="#setObjectName">setObjectName</a> slot.
+
+<h3><a name=AlignMarginsHeaderFooter></a>bool AlignMarginsHeaderFooter</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	bool val = object->property("AlignMarginsHeaderFooter").toBool();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	bool newValue = ...
+	object->setProperty("AlignMarginsHeaderFooter", newValue);
+</pre>
+Or using the <a href="#SetAlignMarginsHeaderFooter">SetAlignMarginsHeaderFooter</a> slot.
+
+<h3><a name=Application></a>IDispatch* Application</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	IDispatch* val = object->property("Application").toIDispatch*();
+</pre>
+
+<h3><a name=BlackAndWhite></a>bool BlackAndWhite</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	bool val = object->property("BlackAndWhite").toBool();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	bool newValue = ...
+	object->setProperty("BlackAndWhite", newValue);
+</pre>
+Or using the <a href="#SetBlackAndWhite">SetBlackAndWhite</a> slot.
+
+<h3><a name=BottomMargin></a>double BottomMargin</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	double val = object->property("BottomMargin").toDouble();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	double newValue = ...
+	object->setProperty("BottomMargin", newValue);
+</pre>
+Or using the <a href="#SetBottomMargin">SetBottomMargin</a> slot.
+
+<h3><a name=CenterFooter></a>QString CenterFooter</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	QString val = object->property("CenterFooter").toString();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	QString newValue = ...
+	object->setProperty("CenterFooter", newValue);
+</pre>
+Or using the <a href="#SetCenterFooter">SetCenterFooter</a> slot.
+
+<h3><a name=CenterFooterPicture></a>IDispatch* CenterFooterPicture</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	IDispatch* val = object->property("CenterFooterPicture").toIDispatch*();
+</pre>
+
+<h3><a name=CenterHeader></a>QString CenterHeader</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	QString val = object->property("CenterHeader").toString();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	QString newValue = ...
+	object->setProperty("CenterHeader", newValue);
+</pre>
+Or using the <a href="#SetCenterHeader">SetCenterHeader</a> slot.
+
+<h3><a name=CenterHeaderPicture></a>IDispatch* CenterHeaderPicture</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	IDispatch* val = object->property("CenterHeaderPicture").toIDispatch*();
+</pre>
+
+<h3><a name=CenterHorizontally></a>bool CenterHorizontally</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	bool val = object->property("CenterHorizontally").toBool();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	bool newValue = ...
+	object->setProperty("CenterHorizontally", newValue);
+</pre>
+Or using the <a href="#SetCenterHorizontally">SetCenterHorizontally</a> slot.
+
+<h3><a name=CenterVertically></a>bool CenterVertically</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	bool val = object->property("CenterVertically").toBool();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	bool newValue = ...
+	object->setProperty("CenterVertically", newValue);
+</pre>
+Or using the <a href="#SetCenterVertically">SetCenterVertically</a> slot.
+
+<h3><a name=ChartSize></a>XlObjectSize ChartSize</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	int val = object->property("ChartSize").toInt();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	int newValue = ... // string representation of values also supported
+	object->setProperty("ChartSize", newValue);
+</pre>
+Or using the <a href="#SetChartSize">SetChartSize</a> slot.
+<p>See also <a href="#XlObjectSize">XlObjectSize</a>.
+
+<h3><a name=Creator></a>XlCreator Creator</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	int val = object->property("Creator").toInt();
+</pre>
+<p>See also <a href="#XlCreator">XlCreator</a>.
+
+<h3><a name=DifferentFirstPageHeaderFooter></a>bool DifferentFirstPageHeaderFooter</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	bool val = object->property("DifferentFirstPageHeaderFooter").toBool();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	bool newValue = ...
+	object->setProperty("DifferentFirstPageHeaderFooter", newValue);
+</pre>
+Or using the <a href="#SetDifferentFirstPageHeaderFooter">SetDifferentFirstPageHeaderFooter</a> slot.
+
+<h3><a name=Draft></a>bool Draft</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	bool val = object->property("Draft").toBool();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	bool newValue = ...
+	object->setProperty("Draft", newValue);
+</pre>
+Or using the <a href="#SetDraft">SetDraft</a> slot.
+
+<h3><a name=EvenPage></a>IDispatch* EvenPage</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	IDispatch* val = object->property("EvenPage").toIDispatch*();
+</pre>
+
+<h3><a name=FirstPage></a>IDispatch* FirstPage</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	IDispatch* val = object->property("FirstPage").toIDispatch*();
+</pre>
+
+<h3><a name=FirstPageNumber></a>int FirstPageNumber</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	int val = object->property("FirstPageNumber").toInt();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	int newValue = ...
+	object->setProperty("FirstPageNumber", newValue);
+</pre>
+Or using the <a href="#SetFirstPageNumber">SetFirstPageNumber</a> slot.
+
+<h3><a name=FitToPagesTall></a>QVariant FitToPagesTall</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	QVariant val = object->property("FitToPagesTall").toVariant();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	QVariant newValue = ...
+	object->setProperty("FitToPagesTall", newValue);
+</pre>
+Or using the <a href="#SetFitToPagesTall">SetFitToPagesTall</a> slot.
+
+<h3><a name=FitToPagesWide></a>QVariant FitToPagesWide</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	QVariant val = object->property("FitToPagesWide").toVariant();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	QVariant newValue = ...
+	object->setProperty("FitToPagesWide", newValue);
+</pre>
+Or using the <a href="#SetFitToPagesWide">SetFitToPagesWide</a> slot.
+
+<h3><a name=FooterMargin></a>double FooterMargin</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	double val = object->property("FooterMargin").toDouble();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	double newValue = ...
+	object->setProperty("FooterMargin", newValue);
+</pre>
+Or using the <a href="#SetFooterMargin">SetFooterMargin</a> slot.
+
+<h3><a name=HeaderMargin></a>double HeaderMargin</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	double val = object->property("HeaderMargin").toDouble();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	double newValue = ...
+	object->setProperty("HeaderMargin", newValue);
+</pre>
+Or using the <a href="#SetHeaderMargin">SetHeaderMargin</a> slot.
+
+<h3><a name=LeftFooter></a>QString LeftFooter</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	QString val = object->property("LeftFooter").toString();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	QString newValue = ...
+	object->setProperty("LeftFooter", newValue);
+</pre>
+Or using the <a href="#SetLeftFooter">SetLeftFooter</a> slot.
+
+<h3><a name=LeftFooterPicture></a>IDispatch* LeftFooterPicture</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	IDispatch* val = object->property("LeftFooterPicture").toIDispatch*();
+</pre>
+
+<h3><a name=LeftHeader></a>QString LeftHeader</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	QString val = object->property("LeftHeader").toString();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	QString newValue = ...
+	object->setProperty("LeftHeader", newValue);
+</pre>
+Or using the <a href="#SetLeftHeader">SetLeftHeader</a> slot.
+
+<h3><a name=LeftHeaderPicture></a>IDispatch* LeftHeaderPicture</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	IDispatch* val = object->property("LeftHeaderPicture").toIDispatch*();
+</pre>
+
+<h3><a name=LeftMargin></a>double LeftMargin</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	double val = object->property("LeftMargin").toDouble();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	double newValue = ...
+	object->setProperty("LeftMargin", newValue);
+</pre>
+Or using the <a href="#SetLeftMargin">SetLeftMargin</a> slot.
+
+<h3><a name=OddAndEvenPagesHeaderFooter></a>bool OddAndEvenPagesHeaderFooter</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	bool val = object->property("OddAndEvenPagesHeaderFooter").toBool();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	bool newValue = ...
+	object->setProperty("OddAndEvenPagesHeaderFooter", newValue);
+</pre>
+Or using the <a href="#SetOddAndEvenPagesHeaderFooter">SetOddAndEvenPagesHeaderFooter</a> slot.
+
+<h3><a name=Order></a>XlOrder Order</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	int val = object->property("Order").toInt();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	int newValue = ... // string representation of values also supported
+	object->setProperty("Order", newValue);
+</pre>
+Or using the <a href="#SetOrder">SetOrder</a> slot.
+<p>See also <a href="#XlOrder">XlOrder</a>.
+
+<h3><a name=Orientation></a>XlPageOrientation Orientation</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	int val = object->property("Orientation").toInt();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	int newValue = ... // string representation of values also supported
+	object->setProperty("Orientation", newValue);
+</pre>
+Or using the <a href="#SetOrientation">SetOrientation</a> slot.
+<p>See also <a href="#XlPageOrientation">XlPageOrientation</a>.
+
+<h3><a name=Pages></a>IDispatch* Pages</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	IDispatch* val = object->property("Pages").toIDispatch*();
+</pre>
+
+<h3><a name=PaperSize></a>XlPaperSize PaperSize</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	int val = object->property("PaperSize").toInt();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	int newValue = ... // string representation of values also supported
+	object->setProperty("PaperSize", newValue);
+</pre>
+Or using the <a href="#SetPaperSize">SetPaperSize</a> slot.
+<p>See also <a href="#XlPaperSize">XlPaperSize</a>.
+
+<h3><a name=Parent></a>IDispatch* Parent</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	IDispatch* val = object->property("Parent").toIDispatch*();
+</pre>
+
+<h3><a name=PrintArea></a>QString PrintArea</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	QString val = object->property("PrintArea").toString();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	QString newValue = ...
+	object->setProperty("PrintArea", newValue);
+</pre>
+Or using the <a href="#SetPrintArea">SetPrintArea</a> slot.
+
+<h3><a name=PrintComments></a>XlPrintLocation PrintComments</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	int val = object->property("PrintComments").toInt();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	int newValue = ... // string representation of values also supported
+	object->setProperty("PrintComments", newValue);
+</pre>
+Or using the <a href="#SetPrintComments">SetPrintComments</a> slot.
+<p>See also <a href="#XlPrintLocation">XlPrintLocation</a>.
+
+<h3><a name=PrintErrors></a>XlPrintErrors PrintErrors</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	int val = object->property("PrintErrors").toInt();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	int newValue = ... // string representation of values also supported
+	object->setProperty("PrintErrors", newValue);
+</pre>
+Or using the <a href="#SetPrintErrors">SetPrintErrors</a> slot.
+<p>See also <a href="#XlPrintErrors">XlPrintErrors</a>.
+
+<h3><a name=PrintGridlines></a>bool PrintGridlines</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	bool val = object->property("PrintGridlines").toBool();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	bool newValue = ...
+	object->setProperty("PrintGridlines", newValue);
+</pre>
+Or using the <a href="#SetPrintGridlines">SetPrintGridlines</a> slot.
+
+<h3><a name=PrintHeadings></a>bool PrintHeadings</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	bool val = object->property("PrintHeadings").toBool();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	bool newValue = ...
+	object->setProperty("PrintHeadings", newValue);
+</pre>
+Or using the <a href="#SetPrintHeadings">SetPrintHeadings</a> slot.
+
+<h3><a name=PrintNotes></a>bool PrintNotes</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	bool val = object->property("PrintNotes").toBool();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	bool newValue = ...
+	object->setProperty("PrintNotes", newValue);
+</pre>
+Or using the <a href="#SetPrintNotes">SetPrintNotes</a> slot.
+
+<h3><a name=PrintQuality></a>QVariant PrintQuality</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	QVariant val = object->property("PrintQuality").toVariant();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	QVariant newValue = ...
+	object->setProperty("PrintQuality", newValue);
+</pre>
+Or using the <a href="#SetPrintQuality">SetPrintQuality</a> slot.
+
+<h3><a name=PrintTitleColumns></a>QString PrintTitleColumns</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	QString val = object->property("PrintTitleColumns").toString();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	QString newValue = ...
+	object->setProperty("PrintTitleColumns", newValue);
+</pre>
+Or using the <a href="#SetPrintTitleColumns">SetPrintTitleColumns</a> slot.
+
+<h3><a name=PrintTitleRows></a>QString PrintTitleRows</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	QString val = object->property("PrintTitleRows").toString();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	QString newValue = ...
+	object->setProperty("PrintTitleRows", newValue);
+</pre>
+Or using the <a href="#SetPrintTitleRows">SetPrintTitleRows</a> slot.
+
+<h3><a name=RightFooter></a>QString RightFooter</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	QString val = object->property("RightFooter").toString();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	QString newValue = ...
+	object->setProperty("RightFooter", newValue);
+</pre>
+Or using the <a href="#SetRightFooter">SetRightFooter</a> slot.
+
+<h3><a name=RightFooterPicture></a>IDispatch* RightFooterPicture</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	IDispatch* val = object->property("RightFooterPicture").toIDispatch*();
+</pre>
+
+<h3><a name=RightHeader></a>QString RightHeader</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	QString val = object->property("RightHeader").toString();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	QString newValue = ...
+	object->setProperty("RightHeader", newValue);
+</pre>
+Or using the <a href="#SetRightHeader">SetRightHeader</a> slot.
+
+<h3><a name=RightHeaderPicture></a>IDispatch* RightHeaderPicture</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	IDispatch* val = object->property("RightHeaderPicture").toIDispatch*();
+</pre>
+
+<h3><a name=RightMargin></a>double RightMargin</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	double val = object->property("RightMargin").toDouble();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	double newValue = ...
+	object->setProperty("RightMargin", newValue);
+</pre>
+Or using the <a href="#SetRightMargin">SetRightMargin</a> slot.
+
+<h3><a name=ScaleWithDocHeaderFooter></a>bool ScaleWithDocHeaderFooter</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	bool val = object->property("ScaleWithDocHeaderFooter").toBool();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	bool newValue = ...
+	object->setProperty("ScaleWithDocHeaderFooter", newValue);
+</pre>
+Or using the <a href="#SetScaleWithDocHeaderFooter">SetScaleWithDocHeaderFooter</a> slot.
+
+<h3><a name=TopMargin></a>double TopMargin</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	double val = object->property("TopMargin").toDouble();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	double newValue = ...
+	object->setProperty("TopMargin", newValue);
+</pre>
+Or using the <a href="#SetTopMargin">SetTopMargin</a> slot.
+
+<h3><a name=Zoom></a>QVariant Zoom</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	QVariant val = object->property("Zoom").toVariant();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	QVariant newValue = ...
+	object->setProperty("Zoom", newValue);
+</pre>
+Or using the <a href="#SetZoom">SetZoom</a> slot.
+
+<h3><a name=control></a>QString control</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	QString val = object->property("control").toString();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	QString newValue = ...
+	object->setProperty("control", newValue);
+</pre>
+Or using the <a href="#setControl">setControl</a> slot.
+

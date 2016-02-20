@@ -1,6 +1,7 @@
 #include "excel_utils.h"
 
 #include <QVector>
+#include <QFile>
 
 
 void ExcelUtils::uniteRange(QAxObject* sheet, int row0, int column0, int row1, int column1)
@@ -47,3 +48,31 @@ void ExcelUtils::setBorder(QAxObject* sheet, int row0, int column0, int row1, in
     border->setProperty("Weight",2);
 }
 
+void ExcelUtils::setColumnAutoFit(QAxObject* sheet, int column)
+{
+    QAxObject *pColumn = sheet->querySubObject("Columns(QVariant&)", column);
+    pColumn->dynamicCall("AutoFit()");
+    delete pColumn;
+}
+
+// 1 - портретная, 2 - альбомная
+void ExcelUtils::setPageOrientation(QAxObject* sheet, int orientation)
+{
+    QAxObject *pageSetup = sheet->querySubObject("PageSetup");
+    pageSetup->dynamicCall("SetOrientation(XlPageOrientation)", orientation);
+    delete pageSetup;
+}
+
+void ExcelUtils::generateDocumentation(QAxObject* p)
+{
+    QString localGenerateDocumentation = p->generateDocumentation();
+    QFile file("../info.html");
+    file.open(QIODevice::WriteOnly);
+    file.write(localGenerateDocumentation.toStdString().c_str());
+    file.close();
+
+    //QAxObject *pageSetup = sheet->querySubObject("PageSetup");
+    //sheet->setProperty("FitToPagesWide", 1);
+    //sheet->setProperty("FitToPagesTall", 1);
+    //for (auto x : pageSetup->propertyBag().keys()) qDebug() << x << pageSetup->propertyBag()[x];
+}

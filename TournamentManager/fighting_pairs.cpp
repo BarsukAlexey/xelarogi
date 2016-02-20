@@ -61,6 +61,8 @@ FightingPairs::~FightingPairs()
 
 void FightingPairs::printInExcel(QAxObject *sheet, const QVector<DBUtils::Fighing>& fighting, int ring)
 {
+
+
     int currentRow = 1;
 
     ExcelUtils::setValue(sheet, currentRow, 1, "Состав пар");
@@ -112,8 +114,12 @@ void FightingPairs::printInExcel(QAxObject *sheet, const QVector<DBUtils::Fighin
         ExcelUtils::setValue(sheet, currentRow, 3, DBUtils::getSecondNameAndOneLetterOfName(database, f.UID1) + "(" +
                              DBUtils::getField(database, "SHORTNAME", "REGIONS", DBUtils::getField(database, "COUNTRY_FK", "ORDERS", f.UID1)) +
                              ")");
+        ExcelUtils::setBorder(sheet, currentRow, 1, currentRow, 3);
         ++currentRow;
     }
+
+    for (int column = 1; column <= 3; ++column)
+        ExcelUtils::setColumnAutoFit(sheet, column);
 }
 
 
@@ -186,8 +192,8 @@ void FightingPairs::onGoPress()
         sheets->querySubObject("Add");
         QAxObject *sheet = sheets->querySubObject( "Item( int )", 1);
         printInExcel(sheet, curFighing, idRind);
-        delete sheet;
 
+        delete sheet;
     }
 
     delete sheets;

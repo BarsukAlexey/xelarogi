@@ -192,6 +192,8 @@ FitingDistribution::FitingDistribution(const QSqlDatabase &database, const long 
         ExcelUtils::setValue(sheet, currentRow, 1, "Заместитель главного судьи: " + DBUtils::get_ASSOCIATE_MAIN_JUDGE(database, tournamentUID), 0);
         ++currentRow;
 
+        ExcelUtils::setPageOrientation(sheet, 2);
+
         delete sheet;
     }
 
