@@ -11,6 +11,8 @@
 #include "fiting_distribution.h"
 #include "fighting_pairs.h"
 #include "weighing_protocol.h"
+#include "winner_report.h"
+#include "ebnutvbazu.h"
 
 using namespace std;
 
@@ -365,5 +367,17 @@ void MainWindow::on_pushButtonProtokolVzveshinanya_clicked()
 {
     long long routnamentUID = ui->tournamentUidLabel->text().toLongLong();
     qDebug() << "routnamentUID: " << routnamentUID;
-    WeighingProtocol(m_database, routnamentUID);
+    WeighingProtocol(m_database, routnamentUID, this);
+}
+
+void MainWindow::on_pushButtonWinnerReport_clicked()
+{
+    long long routnamentUID = ui->tournamentUidLabel->text().toLongLong();
+    qDebug() << "routnamentUID: " << routnamentUID;
+    WinnerReport(m_database, routnamentUID, this);
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+    EbnutVBazu::setRandomWinner(m_database, 1);
 }

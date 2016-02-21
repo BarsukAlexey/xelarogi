@@ -4,6 +4,7 @@
 #include <QFile>
 
 
+
 void ExcelUtils::uniteRange(QAxObject* sheet, int row0, int column0, int row1, int column1)
 {
     QAxObject* cell1 = sheet->querySubObject("Cells(QVariant&, QVariant&)", row0, column0);
@@ -55,12 +56,40 @@ void ExcelUtils::setColumnAutoFit(QAxObject* sheet, int column)
     delete pColumn;
 }
 
+void ExcelUtils::setRowAutoFit(QAxObject* sheet, int row)
+{
+    QAxObject *pRow = sheet->querySubObject("Rows(QVariant&)", row);
+    pRow->dynamicCall("AutoFit()");
+    delete pRow;
+}
+
+void ExcelUtils::setRowHeight(QAxObject* sheet, int row, int height)
+{
+//    QAxObject *rangec = sheet->querySubObject( "Range(const QVariant&)",QVariant("A1"));
+//    // получаю указатель на строку
+//    QAxObject *razmer = rangec->querySubObject("Rows");
+//    // устанавливаю её размер.
+//    razmer->setProperty("RowHeight",100);
+    QAxObject *pRow = sheet->querySubObject("Rows(QVariant&)", row);
+    pRow->setProperty("RowHeight", height);
+}
+
 // 1 - портретная, 2 - альбомная
 void ExcelUtils::setPageOrientation(QAxObject* sheet, int orientation)
 {
     QAxObject *pageSetup = sheet->querySubObject("PageSetup");
     pageSetup->dynamicCall("SetOrientation(XlPageOrientation)", orientation);
     delete pageSetup;
+}
+
+void ExcelUtils::setWrapText(QAxObject* sheet, int row, int column)
+{
+    QAxObject* cell = sheet->querySubObject("Cells(QVariant&, QVariant&)", row, column);
+    // выбираю её
+    cell->dynamicCall("Select()");
+    // устанавливаю свойство разрешения переноса
+    cell->dynamicCall("WrapText", true);
+    delete cell;
 }
 
 void ExcelUtils::generateDocumentation(QAxObject* p)

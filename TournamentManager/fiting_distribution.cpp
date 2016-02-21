@@ -18,7 +18,6 @@
 
 FitingDistribution::FitingDistribution(const QSqlDatabase &database, const long long tournamentUID)
 {
-    TournamentGridDialog2(database, tournamentUID, 0).ebnutVBazyGovno();
 
     QAxWidget excel("Excel.Application");
     excel.setProperty("Visible", true);

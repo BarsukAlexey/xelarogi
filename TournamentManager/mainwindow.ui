@@ -182,6 +182,13 @@
                </property>
               </widget>
              </item>
+             <item>
+              <widget class="QPushButton" name="pushButtonWinnerReport">
+               <property name="text">
+                <string>Список победителей</string>
+               </property>
+              </widget>
+             </item>
             </layout>
            </item>
           </layout>
@@ -222,6 +229,13 @@
      <widget class="QPushButton" name="btnExcel">
       <property name="text">
        <string>Заполнить страны из Excel</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="pushButton">
+      <property name="text">
+       <string>PushButton</string>
       </property>
      </widget>
     </item>

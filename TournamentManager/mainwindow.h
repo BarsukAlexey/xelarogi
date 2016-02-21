@@ -48,6 +48,10 @@ private slots:
 
     void on_pushButtonProtokolVzveshinanya_clicked();
 
+    void on_pushButtonWinnerReport_clicked();
+
+    void on_pushButton_clicked();
+
 private:
     void updateTournamentTreeWidget();
     void connectButtons();

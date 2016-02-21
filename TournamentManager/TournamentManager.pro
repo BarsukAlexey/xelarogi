@@ -32,7 +32,9 @@ SOURCES += main.cpp\
     excel_utils.cpp \
     fighting_pairs.cpp \
     db_utils.cpp \
-    weighing_protocol.cpp
+    weighing_protocol.cpp \
+    winner_report.cpp \
+    ebnutvbazu.cpp
 
 HEADERS  += mainwindow.h \
     handbookdialog.h \
@@ -51,7 +53,9 @@ HEADERS  += mainwindow.h \
     excel_utils.h \
     fighting_pairs.h \
     db_utils.h \
-    weighing_protocol.h
+    weighing_protocol.h \
+    winner_report.h \
+    ebnutvbazu.h
 
 FORMS    += mainwindow.ui \
     handbookdialog.ui \
