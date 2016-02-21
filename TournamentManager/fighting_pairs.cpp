@@ -10,7 +10,16 @@
 #include <QAxWidget>
 #include <QAxObject>
 
-
+#include <QJsonDocument>
+#include <QJsonParseError>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QJsonValue>
+#include <QJsonValuePtr>
+#include <QJsonValueRef>
+#include <QJsonValueRefPtr>
+#include <QVariantMap>
+#include <QFileDialog>
 
 
 FightingPairs::FightingPairs(const QSqlDatabase &_database, long long _tournamentUID, QWidget* parent) :
@@ -122,10 +131,51 @@ void FightingPairs::printInExcel(QAxObject *sheet, const QVector<DBUtils::Fighin
         ExcelUtils::setColumnAutoFit(sheet, column);
 }
 
+void FightingPairs::printInJSON(const QVector<DBUtils::Fighing>& fighting, int ring, const QString& existingDirectory)
+{
+    QJsonArray arr;
+    int fightingId = 1;
+    for (const DBUtils::Fighing& f : fighting)
+    {
+        QJsonObject a;
+        a["nameOfLeftFighter" ] = DBUtils::getField(database, "SECOND_NAME", "ORDERS", f.UID0) + " " + DBUtils::getField(database, "FIRST_NAME", "ORDERS", f.UID0);
+        a["nameOfRightFighter"] = DBUtils::getField(database, "SECOND_NAME", "ORDERS", f.UID1) + " " + DBUtils::getField(database, "FIRST_NAME", "ORDERS", f.UID1);
+
+        a["fightId"] = fightingId;
+        a["categoryOfFighting"] = DBUtils::getField(database, "WEIGHT_TILL", "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK);
+
+        a["countOfRounds"  ] = DBUtils::getField(database, "ROUND_COUNT"     , "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK);
+        a["durationOfRound"] = DBUtils::getField(database, "DURATION_FIGHING", "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK);
+        a["durationOfBreak"] = DBUtils::getField(database, "DURATION_BREAK"  , "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK);
+
+        a["countryOfLeftFighter" ] = DBUtils::getField(database, "NAME", "REGIONS", DBUtils::getField(database, "REGION_FK", "ORDERS", f.UID0));
+        a["countryOfRightFighter"] = DBUtils::getField(database, "NAME", "REGIONS", DBUtils::getField(database, "REGION_FK", "ORDERS", f.UID1));
+
+
+        arr.push_back(a);
+        //
+        ++fightingId;
+    }
+
+    //const QString path = existingDirectory + QDir::separator() + "ring " + QString::number(ring);
+    const QString path = existingDirectory + "/_ring" + QString::number(ring) + ".json";
+    //const QString path = existingDirectory + "ring " + QString::number(ring);
+    QFile saveFile((existingDirectory));
+    if (!saveFile.open(QIODevice::WriteOnly)) {
+        qWarning("Couldn't open save file.");
+        qDebug() << path;
+        return;
+    }
+    qDebug() << "writing: " << saveFile.write(QJsonDocument(arr).toJson()) << "БайТ";
+}
+
 
 
 void FightingPairs::onGoPress()
 {
+    //QString existingDirectory = QFileDialog::getExistingDirectory(this);
+    QString existingDirectory = QFileDialog::getExistingDirectory(this, tr("Select Folder"), "/", QFileDialog::ShowDirsOnly);
+
     QVector<QVector<DBUtils::Fighing> > listsOfPairs;
     for(QModelIndex index : qListWidget->selectionModel()->selectedIndexes())
     {
@@ -192,6 +242,7 @@ void FightingPairs::onGoPress()
         sheets->querySubObject("Add");
         QAxObject *sheet = sheets->querySubObject( "Item( int )", 1);
         printInExcel(sheet, curFighing, idRind);
+        printInJSON(curFighing, idRind, existingDirectory);
 
         delete sheet;
     }

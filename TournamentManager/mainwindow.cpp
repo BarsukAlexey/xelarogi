@@ -14,6 +14,10 @@
 #include "winner_report.h"
 #include "ebnutvbazu.h"
 
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
+
 using namespace std;
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -377,7 +381,49 @@ void MainWindow::on_pushButtonWinnerReport_clicked()
     WinnerReport(m_database, routnamentUID, this);
 }
 
+
+    #include <QJsonDocument>
+    #include <QJsonParseError>
+    #include <QJsonObject>
+    #include <QJsonArray>
+    #include <QJsonValue>
+    #include <QJsonValuePtr>
+    #include <QJsonValueRef>
+    #include <QJsonValueRefPtr>
+    #include <QVariantMap>
+    #include <QFileDialog>
+
+
 void MainWindow::on_pushButton_clicked()
 {
-    EbnutVBazu::setRandomWinner(m_database, 1);
+    //EbnutVBazu::setRandomWinner(m_database, 1);
+
+
+    QJsonArray arr;
+    for (int i = 0; i < 2; ++i)
+    {
+        QJsonObject a;
+        a["nameOfLeftFighter"] = "левый" + QString::number(i);
+        a["nameOfRightFighter"] = "правый" + QString::number(i);
+        a["fightId"] = "13";
+        arr.push_back(a);
+    }
+
+    //QString existingDirectory = QFileDialog::getExistingDirectory(this);
+    QString existingDirectory = QFileDialog::getExistingDirectory(this, tr("Select Folder"), "/", QFileDialog::ShowDirsOnly);
+    //existingDirectory = existingDirectory + QDir::separator() + "yes.json";
+    existingDirectory = existingDirectory + "/" + "yes.json";
+    qDebug() << existingDirectory;
+
+    //QFile saveFile(QStringLiteral(existingDirectory.toStdString()));
+
+    QFile saveFile(existingDirectory);
+    if (!saveFile.open(QIODevice::WriteOnly)) {
+        qWarning("Couldn't open save file.");
+        return;
+    }
+
+    qDebug() << saveFile.write(QJsonDocument(arr).toJson());
+
+
 }

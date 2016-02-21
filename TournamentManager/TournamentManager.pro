@@ -14,6 +14,7 @@ TARGET = TournamentManager
 TEMPLATE = app
 
 
+
 SOURCES += main.cpp\
         mainwindow.cpp \
     handbookdialog.cpp \

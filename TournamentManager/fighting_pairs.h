@@ -28,6 +28,7 @@ private:
     QLineEdit *qLineEdit;
     QVector<QVector<DBUtils::Fighing> > globalListsOfPairs;
     void printInExcel(QAxObject *sheets, const QVector<DBUtils::Fighing>& fighting, int ring);
+    void printInJSON(const QVector<DBUtils::Fighing>& fighting, int ring, const QString& path);
 
 signals:
 
