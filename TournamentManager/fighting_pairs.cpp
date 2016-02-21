@@ -157,13 +157,12 @@ void FightingPairs::printInJSON(const QVector<DBUtils::Fighing>& fighting, int r
         ++fightingId;
     }
 
-    //const QString path = existingDirectory + QDir::separator() + "ring " + QString::number(ring);
-    const QString path = existingDirectory + "/_ring" + QString::number(ring) + ".json";
-    //const QString path = existingDirectory + "ring " + QString::number(ring);
-    QFile saveFile((existingDirectory));
+    const QString path = existingDirectory + QDir::separator() + "ring " + QString::number(ring) + ".json";
+    QFile saveFile(path);
     if (!saveFile.open(QIODevice::WriteOnly)) {
         qWarning("Couldn't open save file.");
-        qDebug() << path;
+        qDebug() << saveFile.errorString();
+        //qDebug() << path;
         return;
     }
     qDebug() << "writing: " << saveFile.write(QJsonDocument(arr).toJson()) << "БайТ";
@@ -173,8 +172,7 @@ void FightingPairs::printInJSON(const QVector<DBUtils::Fighing>& fighting, int r
 
 void FightingPairs::onGoPress()
 {
-    //QString existingDirectory = QFileDialog::getExistingDirectory(this);
-    QString existingDirectory = QFileDialog::getExistingDirectory(this, tr("Select Folder"), "/", QFileDialog::ShowDirsOnly);
+    QString existingDirectory = QFileDialog::getExistingDirectory(this);
 
     QVector<QVector<DBUtils::Fighing> > listsOfPairs;
     for(QModelIndex index : qListWidget->selectionModel()->selectedIndexes())
