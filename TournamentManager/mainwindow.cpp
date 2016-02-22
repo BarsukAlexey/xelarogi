@@ -18,6 +18,18 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
+#include <QJsonDocument>
+#include <QJsonParseError>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QJsonValue>
+#include <QJsonValuePtr>
+#include <QJsonValueRef>
+#include <QJsonValueRefPtr>
+#include <QVariantMap>
+#include <QFileDialog>
+#include <QMessageBox>
+
 using namespace std;
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -42,73 +54,73 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->countryAction, &QAction::triggered, [this] () {
         HandbookDialog handbookDlg(QString("COUNTRIES"), QString("Страны"), m_database, this, {"UID"});
-          handbookDlg.exec();
+        handbookDlg.exec();
     });
 
     connect(ui->regionAction, &QAction::triggered, [this] () {
-          HandbookDialog handbookDlg(QString("REGIONS"), QString("Регионы"), m_database, this, {"UID"});
-          handbookDlg.exec();
+        HandbookDialog handbookDlg(QString("REGIONS"), QString("Регионы"), m_database, this, {"UID"});
+        handbookDlg.exec();
     });
 
     connect(ui->ateAction, &QAction::triggered, [this] () {
-          HandbookDialog handbookDlg(QString("REGION_UNITS"), QString("АТЕ"), m_database, this, {"UID"});
-          handbookDlg.exec();
+        HandbookDialog handbookDlg(QString("REGION_UNITS"), QString("АТЕ"), m_database, this, {"UID"});
+        handbookDlg.exec();
     });
 
     connect(ui->sexAction, &QAction::triggered, [this] () {
-          HandbookDialog handbookDlg(QString("SEXES"), QString("Пол"), m_database, this, {"UID"});
-          handbookDlg.exec();
+        HandbookDialog handbookDlg(QString("SEXES"), QString("Пол"), m_database, this, {"UID"});
+        handbookDlg.exec();
     });
 
     connect(ui->typeAction, &QAction::triggered, [this] () {
-          HandbookDialog handbookDlg(QString("TYPES"), QString("Разделы"), m_database, this, {"UID"});
-          handbookDlg.exec();
+        HandbookDialog handbookDlg(QString("TYPES"), QString("Разделы"), m_database, this, {"UID"});
+        handbookDlg.exec();
     });
 
     connect(ui->sportCategoryAction, &QAction::triggered, [this] () {
-          HandbookDialog handbookDlg(QString("SPORT_CATEGORIES"), QString("Спортивные разряды"), m_database, this, {"UID"});
-          handbookDlg.exec();
+        HandbookDialog handbookDlg(QString("SPORT_CATEGORIES"), QString("Спортивные разряды"), m_database, this, {"UID"});
+        handbookDlg.exec();
     });
 
     connect(ui->tournamentAction, &QAction::triggered, [this] () {
-          HandbookDialog handbookDlg(QString("TOURNAMENTS"), QString("Турниры"), m_database, this, {"UID"});
-          handbookDlg.exec();
+        HandbookDialog handbookDlg(QString("TOURNAMENTS"), QString("Турниры"), m_database, this, {"UID"});
+        handbookDlg.exec();
     });
 
     connect(ui->tournamentCategoryAction, &QAction::triggered, [this] () {
-          HandbookDialog handbookDlg(QString("TOURNAMENT_CATEGORIES"), QString("Категории турнира"), m_database, this, {"UID"});
-          handbookDlg.exec();
+        HandbookDialog handbookDlg(QString("TOURNAMENT_CATEGORIES"), QString("Категории турнира"), m_database, this, {"UID"});
+        handbookDlg.exec();
     });
 
     connect(ui->clubAction, &QAction::triggered, [this] () {
-          HandbookDialog handbookDlg(QString("CLUBS"), QString("Клубы"), m_database, this, {"UID"});
-          handbookDlg.exec();
+        HandbookDialog handbookDlg(QString("CLUBS"), QString("Клубы"), m_database, this, {"UID"});
+        handbookDlg.exec();
     });
 
     connect(ui->coachAction, &QAction::triggered, [this] () {
-          HandbookDialog handbookDlg(QString("COACHS"), QString("Тренерский состав"), m_database, this, {"UID"});
-          handbookDlg.exec();
+        HandbookDialog handbookDlg(QString("COACHS"), QString("Тренерский состав"), m_database, this, {"UID"});
+        handbookDlg.exec();
     });
 
     connect(ui->orderAction, &QAction::triggered, [this] () {
-          HandbookDialog handbookDlg(QString("ORDERS"), QString("Заявки"), m_database, this,
-          {"IS_WEIGHTED", "IS_MEDICAL", "IS_ACCREDITATED", "IS_PAID", "COACH_FK", "CLUB_FK",
-            /*"COUNTRY_FK", "REGION_FK", "REGION_UNIT_FK",*/ "UID"});
-          handbookDlg.exec();
+        HandbookDialog handbookDlg(QString("ORDERS"), QString("Заявки"), m_database, this,
+        {"IS_WEIGHTED", "IS_MEDICAL", "IS_ACCREDITATED", "IS_PAID", "COACH_FK", "CLUB_FK",
+         /*"COUNTRY_FK", "REGION_FK", "REGION_UNIT_FK",*/ "UID"});
+        handbookDlg.exec();
     });
 
-//    connect(ui->pushButton, &QPushButton::clicked, [this] ()
-//    {
-//        TournamentGridDialog dialog(m_database, this);
-//        dialog.exec();
-//    });
+    //    connect(ui->pushButton, &QPushButton::clicked, [this] ()
+    //    {
+    //        TournamentGridDialog dialog(m_database, this);
+    //        dialog.exec();
+    //    });
 
     connectButtons();
     updateTournamentTreeWidget();
 
     ui->tournamentUidLabel->setVisible(false);
 
-//    connect(ui->pushButton_2, &QPushButton::clicked, this, &MainWindow::on_pushButton_2_clicked);
+    //    connect(ui->pushButton_2, &QPushButton::clicked, this, &MainWindow::on_pushButton_2_clicked);
 }
 
 MainWindow::~MainWindow()
@@ -310,30 +322,30 @@ void MainWindow::updateTournamentTreeWidget()
 
 void MainWindow::connectButtons()
 {
-    connect(ui->ordersAccreditationBtn, &QPushButton::clicked, [this] ()
-    {
-        long long tournamentUID = ui->tournamentUidLabel->text().toLongLong();
-        OneFieldSetupDialog dlg(tournamentUID, "IS_ACCREDITATED", this);
-        dlg.exec();
-    });
-//    connect(ui->ordersMedicalBtn, &QPushButton::clicked, [this] ()
+//    connect(ui->ordersAccreditationBtn, &QPushButton::clicked, [this] ()
 //    {
 //        long long tournamentUID = ui->tournamentUidLabel->text().toLongLong();
-//        OneFieldSetupDialog dlg(tournamentUID, "IS_MEDICAL", this);
+//        OneFieldSetupDialog dlg(tournamentUID, "IS_ACCREDITATED", this);
 //        dlg.exec();
 //    });
-//    connect(ui->ordersPayedBtn, &QPushButton::clicked, [this] ()
-//    {
-//        long long tournamentUID = ui->tournamentUidLabel->text().toLongLong();
-//        OneFieldSetupDialog dlg(tournamentUID, "IS_PAID", this);
-//        dlg.exec();
-//    });
-//    connect(ui->ordersWeightBtn, &QPushButton::clicked, [this] ()
-//    {
-//        long long tournamentUID = ui->tournamentUidLabel->text().toLongLong();
-//        OneFieldSetupDialog dlg(tournamentUID, "IS_WEIGHTED", this);
-//        dlg.exec();
-//    });
+    //    connect(ui->ordersMedicalBtn, &QPushButton::clicked, [this] ()
+    //    {
+    //        long long tournamentUID = ui->tournamentUidLabel->text().toLongLong();
+    //        OneFieldSetupDialog dlg(tournamentUID, "IS_MEDICAL", this);
+    //        dlg.exec();
+    //    });
+    //    connect(ui->ordersPayedBtn, &QPushButton::clicked, [this] ()
+    //    {
+    //        long long tournamentUID = ui->tournamentUidLabel->text().toLongLong();
+    //        OneFieldSetupDialog dlg(tournamentUID, "IS_PAID", this);
+    //        dlg.exec();
+    //    });
+    //    connect(ui->ordersWeightBtn, &QPushButton::clicked, [this] ()
+    //    {
+    //        long long tournamentUID = ui->tournamentUidLabel->text().toLongLong();
+    //        OneFieldSetupDialog dlg(tournamentUID, "IS_WEIGHTED", this);
+    //        dlg.exec();
+    //    });
     connect(ui->createOrdersBtn, &QPushButton::clicked, [this] ()
     {
         long long tournamentUID = ui->tournamentUidLabel->text().toLongLong();
@@ -382,48 +394,46 @@ void MainWindow::on_pushButtonWinnerReport_clicked()
 }
 
 
-    #include <QJsonDocument>
-    #include <QJsonParseError>
-    #include <QJsonObject>
-    #include <QJsonArray>
-    #include <QJsonValue>
-    #include <QJsonValuePtr>
-    #include <QJsonValueRef>
-    #include <QJsonValueRefPtr>
-    #include <QVariantMap>
-    #include <QFileDialog>
+
+
 
 
 void MainWindow::on_pushButton_clicked()
 {
-    //EbnutVBazu::setRandomWinner(m_database, 1);
+}
 
+void MainWindow::on_pushButtonLoadWinner_clicked()
+{
+    QString openFileName = QFileDialog::getOpenFileName(this);
+    if (openFileName.size() == 0) return;
+    //qDebug() << "openFileName: " << openFileName;
 
-    QJsonArray arr;
-    for (int i = 0; i < 2; ++i)
+    QFile jSonFile(openFileName);
+    if (!jSonFile.open(QIODevice::ReadOnly))
     {
-        QJsonObject a;
-        a["nameOfLeftFighter"] = "левый" + QString::number(i);
-        a["nameOfRightFighter"] = "правый" + QString::number(i);
-        a["fightId"] = "13";
-        arr.push_back(a);
-    }
-
-    //QString existingDirectory = QFileDialog::getExistingDirectory(this);
-    QString existingDirectory = QFileDialog::getExistingDirectory(this, tr("Select Folder"), "/", QFileDialog::ShowDirsOnly);
-    //existingDirectory = existingDirectory + QDir::separator() + "yes.json";
-    existingDirectory = existingDirectory + "/" + "yes.json";
-    qDebug() << existingDirectory;
-
-    //QFile saveFile(QStringLiteral(existingDirectory.toStdString()));
-
-    QFile saveFile(existingDirectory);
-    if (!saveFile.open(QIODevice::WriteOnly)) {
-        qWarning("Couldn't open save file.");
+        QMessageBox::information(this, ". . .", "Не возможно откыть файл", QMessageBox::Yes);
         return;
     }
 
-    qDebug() << saveFile.write(QJsonDocument(arr).toJson());
+    QFile file;
+    file.setFileName(openFileName);
+    file.open(QIODevice::ReadOnly | QIODevice::Text);
+    QJsonDocument d = QJsonDocument::fromJson(QString(file.readAll()).toUtf8());
+    file.close();
 
-
+    QJsonArray array = d.array();
+    for (int i = 0; i < array.size(); ++i)
+    {
+        QJsonObject object = array[i].toObject();
+        int TOURNAMENT_CATEGORIES_FK = object["TOURNAMENT_CATEGORIES_FK"].toInt();
+        int VERTEX = object["VERTEX"].toInt();
+        int orderUID = object["orderUID"].toInt();
+        qDebug() << TOURNAMENT_CATEGORIES_FK << VERTEX << orderUID;
+        DBUtils::setNodeOfGrid(m_database, TOURNAMENT_CATEGORIES_FK, VERTEX, orderUID);
+    }
 }
+
+
+
+
+

@@ -1,17 +1,21 @@
 package net.pskov;
 
+import com.google.gson.*;
+import com.google.gson.internal.bind.JsonTreeWriter;
 import net.java.games.input.Component;
 import net.pskov.controller.KeyboardController;
 import net.pskov.controller.MouseController;
+import net.pskov.someEnum.Player;
 import net.pskov.someEnum.StatusFighting;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashSet;
 
 public class JFrameMainJudge extends JFrame {
@@ -23,6 +27,8 @@ public class JFrameMainJudge extends JFrame {
 
     private JPanelScoreTable[] allJPanelScoreTable; // все табло, включая то, что у главного судьи (оно 0ое в массиве)
 
+    final JList<Fighting> jList; // список дерущихся
+
     private volatile Fighting activeFighting;
 
     private final MouseController[] mouseController;
@@ -33,6 +39,8 @@ public class JFrameMainJudge extends JFrame {
 
         mouseController = new MouseController[3];
         keyboardController = new KeyboardController();
+
+        jList = new JList<>();
 
         // получаем координаты левого верхнего всех мониторов
         GraphicsDevice[] screenDevices = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices();
@@ -69,7 +77,7 @@ public class JFrameMainJudge extends JFrame {
         setLocation(originPoint[0]);
         setUndecorated(true);
         setExtendedState(Frame.MAXIMIZED_BOTH);
-        setAlwaysOnTop(true);
+//        setAlwaysOnTop(true);
         requestFocus();
         addFocusListener(new FocusAdapter() {
             @Override
@@ -92,21 +100,29 @@ public class JFrameMainJudge extends JFrame {
 
     private void initJPanelStartPage() {
         // создания списка боёв
-        final JList<Fighting> jList;
-        Fighting[] fightings;
-        try {
-            fightings = new Fighting[]{
-                    new Fighting("Быстрий Иван", "Быстрый Егор", 4, "FC M-2", 1, 3, 2, ImageIO.read(new File("resources\\images\\rus.png")), ImageIO.read(new File("resources\\images\\Switzerland.png")), "Rus", "Switzerland"),
-                    new Fighting("Иван  Иванович", "Василий Васильевич", 1, "FC f-52", 2, 30, 20, ImageIO.read(new File("resources\\images\\Canada.png")), ImageIO.read(new File("resources\\images\\Qatar.png")), "Canada", "Qatar"),
-                    new Fighting("Петров Петрович", "Максим Максимыч", 2, "FC f-2", 3, 20, 13, ImageIO.read(new File("resources\\images\\rus.png")), ImageIO.read(new File("resources\\images\\Switzerland.png")), "Rus", "Switzerland"),
-                    new Fighting("Петрова Ирина", "Шаманова Виктория", 3, "FC f-2", 3, 20, 13, ImageIO.read(new File("resources\\images\\rus.png")), ImageIO.read(new File("resources\\images\\Switzerland.png")), "Rus", "Switzerland"),
-            };
+//        final JList<Fighting> jList;
+//        Fighting[] fightings;
+//        try {
+//            fightings = new Fighting[]{
+//                    new Fighting("Быстрий Иван", "Быстрый Егор", 4, "FC M-2", 1, 3, 2, ImageIO.read(new File("resources\\images\\rus.png")), ImageIO.read(new File("resources\\images\\Switzerland.png")), "Rus", "Switzerland"),
+//                    new Fighting("Иван  Иванович", "Василий Васильевич", 1, "FC f-52", 2, 30, 20, ImageIO.read(new File("resources\\images\\Canada.png")), ImageIO.read(new File("resources\\images\\Qatar.png")), "Canada", "Qatar"),
+//                    new Fighting("Петров Петрович", "Максим Максимыч", 2, "FC f-2", 3, 20, 13, ImageIO.read(new File("resources\\images\\rus.png")), ImageIO.read(new File("resources\\images\\Switzerland.png")), "Rus", "Switzerland"),
+//                    new Fighting("Петрова Ирина", "Шаманова Виктория", 3, "FC f-2", 3, 20, 13, ImageIO.read(new File("resources\\images\\rus.png")), ImageIO.read(new File("resources\\images\\Switzerland.png")), "Rus", "Switzerland"),
+//            };
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            fightings = new Fighting[0];
+//        }
+//        jList = new JList<>(fightings);
+//        jList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+//        JScrollPane jScrollPane = new JScrollPane(jList);
+//        jScrollPane.setPreferredSize(new Dimension(90, 13));
+//        if (0 < jList.getModel().getSize())
+//            jList.setSelectedIndex(0);
 
-        } catch (IOException e) {
-            e.printStackTrace();
-            fightings = new Fighting[0];
-        }
-        jList = new JList<>(fightings);
+
+        //jList = new JList<>();
         jList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JScrollPane jScrollPane = new JScrollPane(jList);
         jScrollPane.setPreferredSize(new Dimension(90, 13));
@@ -152,14 +168,45 @@ public class JFrameMainJudge extends JFrame {
                 chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
                 int returnVal = chooser.showOpenDialog(jPanelStartPage);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
-                    System.out.println("You chose to open this file: " +
-                            chooser.getSelectedFile().getAbsolutePath()
-                    ); // TODO
+                    String path = chooser.getSelectedFile().getAbsolutePath();
+                    System.out.println("You chose to open this file: " + path); // TODO
+                    String JSON_DATA;
+                    try {
+                        JSON_DATA = new String(Files.readAllBytes(Paths.get(path)), StandardCharsets.UTF_8);
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                        return;
+                    }
+
+                    final DefaultListModel<Fighting> listModel = new DefaultListModel<>();
+
+                    for (JsonElement jsonElement : new JsonParser().parse(JSON_DATA).getAsJsonArray()) {
+                        Fighting f = new Fighting(
+                                jsonElement.getAsJsonObject().get("nameOfLeftFighter").getAsString(),
+                                jsonElement.getAsJsonObject().get("nameOfRightFighter").toString(),
+                                jsonElement.getAsJsonObject().get("fightId").getAsInt(),
+                                jsonElement.getAsJsonObject().get("categoryOfFighting").getAsString(),
+                                jsonElement.getAsJsonObject().get("countOfRounds").getAsInt(),
+                                jsonElement.getAsJsonObject().get("durationOfRound").getAsInt(),
+                                jsonElement.getAsJsonObject().get("durationOfBreak").getAsInt(),
+                                jsonElement.getAsJsonObject().get("countryOfLeftFighter").getAsString(),
+                                jsonElement.getAsJsonObject().get("countryOfRightFighter").getAsString(),
+                                jsonElement.getAsJsonObject().get("TOURNAMENT_CATEGORIES_FK").getAsLong(),
+                                jsonElement.getAsJsonObject().get("VERTEX").getAsInt(),
+                                jsonElement.getAsJsonObject().get("orderUID_left").getAsLong(),
+                                jsonElement.getAsJsonObject().get("orderUID_right").getAsLong()
+                        );
+                        listModel.addElement(f);
+                        com.google.gson.stream.JsonWriter s = new JsonTreeWriter();
+
+                    }
+                    jList.setModel(listModel);
                 }
             }
         });
 
 
+        // выбор папки куда сохранять результаты
         JButton jButtonSaveFile = new JButton("Save results");
         jButtonSaveFile.addActionListener(new ActionListener() {
             @Override
@@ -168,7 +215,28 @@ public class JFrameMainJudge extends JFrame {
                 chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
                 int returnVal = chooser.showOpenDialog(jPanelStartPage);
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
-                    System.out.println("You chose to open this file: " + chooser.getSelectedFile().getAbsolutePath()); // TODO
+                    String choosedPath = chooser.getSelectedFile().getAbsolutePath();
+                    System.out.println("You chose to open this file: " + choosedPath); // TODO
+                    File file = new File(choosedPath, "result.json");
+
+                    JsonArray jsonArray = new JsonArray();
+                    for (int i = 0; i < jList.getModel().getSize(); ++i) {
+                        Fighting f = jList.getModel().getElementAt(i);
+                        if (f.getStatusFighting() == StatusFighting.finishPending) {
+                            JsonObject jsonObject = new JsonObject();
+                            jsonObject.addProperty("TOURNAMENT_CATEGORIES_FK", f.TOURNAMENT_CATEGORIES_FK);
+                            jsonObject.addProperty("VERTEX", f.VERTEX);
+                            jsonObject.addProperty("orderUID", f.getLoser(true) == Player.left ? f.orderUID_right : f.orderUID_left);
+                            jsonArray.add(jsonObject);
+                        }
+                    }
+
+                    try (PrintStream out = new PrintStream(file)) {
+                        out.print(new Gson().toJson(jsonArray));
+                    } catch (FileNotFoundException e1) {
+                        e1.printStackTrace();
+                    }
+
                 }
             }
         });
@@ -319,6 +387,26 @@ public class JFrameMainJudge extends JFrame {
                 add(jPanelStartPage);
                 revalidate();
                 repaint();
+
+                JsonArray jsonArray = new JsonArray();
+                for (int i = 0; i < jList.getModel().getSize(); ++i) {
+                    Fighting f = jList.getModel().getElementAt(i);
+                    if (f.getStatusFighting() == StatusFighting.finishPending) {
+                        JsonObject jsonObject = new JsonObject();
+                        jsonObject.addProperty("TOURNAMENT_CATEGORIES_FK", f.TOURNAMENT_CATEGORIES_FK);
+                        jsonObject.addProperty("VERTEX", f.VERTEX);
+                        jsonObject.addProperty("orderUID", f.getLoser(true) == Player.left ? f.orderUID_right : f.orderUID_left);
+                        jsonArray.add(jsonObject);
+                    }
+                }
+
+                try {
+                    try (PrintStream out = new PrintStream(new FileOutputStream("результаты боя.json"))) {
+                        out.print(new Gson().toJson(jsonArray));
+                    }
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

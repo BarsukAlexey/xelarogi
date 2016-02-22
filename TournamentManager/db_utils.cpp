@@ -293,6 +293,15 @@ QVector<DBUtils::Fighing> DBUtils::getListOfPairs(const QSqlDatabase& database, 
     return arr;
 }
 
+bool DBUtils::setNodeOfGrid(const QSqlDatabase& database, long long TOURNAMENT_CATEGORIES_FK, long long VERTEX, long long orderUID)
+{
+    QSqlQuery query("UPDATE GRID     SET ORDER_FK = ?     WHERE TOURNAMENT_CATEGORIES_FK = ? AND VERTEX = ?", database);
+    query.bindValue(0, orderUID);
+    query.bindValue(1, TOURNAMENT_CATEGORIES_FK);
+    query.bindValue(2, VERTEX);
+    return query.exec();
+}
+
 QVector<long long> DBUtils::get_UIDs_of_TOURNAMENT_CATEGORIES(const QSqlDatabase& database, long long tournamentUID)
 {
     QVector<long long> uids;

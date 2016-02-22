@@ -194,25 +194,25 @@ public class JPanelScoreTable extends JPanel {
 
 
             // флаг левого бойца
-            {
-                Dimension scaledDimension = GraphicsUtilities.getScaledDimension(f.getImageLeftConnerFlag(isThisForJudge).getWidth(), f.getImageLeftConnerFlag(isThisForJudge).getHeight(), (3.5 + 3.5 + 3.5) * wUnit, 2.5 * hUnit);
-                g.drawImage(
-                        f.getLoser(isThisForJudge) == Player.left ? GraphicsUtilities.getGrayImage(f.getImageLeftConnerFlag(isThisForJudge)) : f.getImageLeftConnerFlag(isThisForJudge),
-                        (int) ((10.5 * wUnit - scaledDimension.width) / 2),
-                        (int) hUnit,
-                        scaledDimension.width,
-                        scaledDimension.height,
-                        null
-                );
-
-                g.setColor(Color.WHITE);
-                g.drawRect(
-                        (int) ((10.5 * wUnit - scaledDimension.width) / 2),
-                        (int) hUnit,
-                        scaledDimension.width,
-                        scaledDimension.height
-                );
-            }
+//            {
+//                Dimension scaledDimension = GraphicsUtilities.getScaledDimension(f.getImageLeftConnerFlag(isThisForJudge).getWidth(), f.getImageLeftConnerFlag(isThisForJudge).getHeight(), (3.5 + 3.5 + 3.5) * wUnit, 2.5 * hUnit);
+//                g.drawImage(
+//                        f.getLoser(isThisForJudge) == Player.left ? GraphicsUtilities.getGrayImage(f.getImageLeftConnerFlag(isThisForJudge)) : f.getImageLeftConnerFlag(isThisForJudge),
+//                        (int) ((10.5 * wUnit - scaledDimension.width) / 2),
+//                        (int) hUnit,
+//                        scaledDimension.width,
+//                        scaledDimension.height,
+//                        null
+//                );
+//
+//                g.setColor(Color.WHITE);
+//                g.drawRect(
+//                        (int) ((10.5 * wUnit - scaledDimension.width) / 2),
+//                        (int) hUnit,
+//                        scaledDimension.width,
+//                        scaledDimension.height
+//                );
+//            }
 
             // название страны левого бойца
             GraphicsUtilities.drawTextInCenterOfRectangle(
@@ -241,25 +241,25 @@ public class JPanelScoreTable extends JPanel {
 
 
             // флаг правого бойца
-            {
-                Dimension scaledDimension = GraphicsUtilities.getScaledDimension(f.getImageRightConnerFlag(isThisForJudge).getWidth(), f.getImageRightConnerFlag(isThisForJudge).getHeight(), (3.5 + 3.5 + 3.5) * wUnit, 2.5 * hUnit);
-                g.drawImage(
-                        f.getLoser(isThisForJudge) == Player.right ? GraphicsUtilities.getGrayImage(f.getImageRightConnerFlag(isThisForJudge)) : f.getImageRightConnerFlag(isThisForJudge),
-                        (int) (scrDim.width / 2 + wUnit + (10.5 * wUnit - scaledDimension.width) / 2),
-                        (int) hUnit,
-                        scaledDimension.width,
-                        scaledDimension.height,
-                        null
-                );
-
-                g.setColor(Color.WHITE);
-                g.drawRect(
-                        (int) (scrDim.width / 2 + wUnit + (10.5 * wUnit - scaledDimension.width) / 2),
-                        (int) hUnit,
-                        scaledDimension.width,
-                        scaledDimension.height
-                );
-            }
+//            {
+//                Dimension scaledDimension = GraphicsUtilities.getScaledDimension(f.getImageRightConnerFlag(isThisForJudge).getWidth(), f.getImageRightConnerFlag(isThisForJudge).getHeight(), (3.5 + 3.5 + 3.5) * wUnit, 2.5 * hUnit);
+//                g.drawImage(
+//                        f.getLoser(isThisForJudge) == Player.right ? GraphicsUtilities.getGrayImage(f.getImageRightConnerFlag(isThisForJudge)) : f.getImageRightConnerFlag(isThisForJudge),
+//                        (int) (scrDim.width / 2 + wUnit + (10.5 * wUnit - scaledDimension.width) / 2),
+//                        (int) hUnit,
+//                        scaledDimension.width,
+//                        scaledDimension.height,
+//                        null
+//                );
+//
+//                g.setColor(Color.WHITE);
+//                g.drawRect(
+//                        (int) (scrDim.width / 2 + wUnit + (10.5 * wUnit - scaledDimension.width) / 2),
+//                        (int) hUnit,
+//                        scaledDimension.width,
+//                        scaledDimension.height
+//                );
+//            }
 
             // название страны правого бойца
             GraphicsUtilities.drawTextInCenterOfRectangle(

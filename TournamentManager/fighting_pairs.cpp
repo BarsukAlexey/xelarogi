@@ -151,6 +151,10 @@ void FightingPairs::printInJSON(const QVector<DBUtils::Fighing>& fighting, int r
         a["countryOfLeftFighter" ] = DBUtils::getField(database, "NAME", "REGIONS", DBUtils::getField(database, "REGION_FK", "ORDERS", f.UID0));
         a["countryOfRightFighter"] = DBUtils::getField(database, "NAME", "REGIONS", DBUtils::getField(database, "REGION_FK", "ORDERS", f.UID1));
 
+        a["TOURNAMENT_CATEGORIES_FK"] = f.TOURNAMENT_CATEGORIES_FK;
+        a["VERTEX"] = f.VERTEX;
+        a["orderUID_left"] = f.UID0;
+        a["orderUID_right"] = f.UID1;
 
         arr.push_back(a);
         //
