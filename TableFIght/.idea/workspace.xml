@@ -2,22 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="83b1860c-f795-499b-9148-903b15ce9e90" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/gson_2_2_2.xml" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/MyJinput.xml" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../TournamentManager/database/kickboxing.db" afterPath="$PROJECT_DIR$/../TournamentManager/database/kickboxing.db" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/net/pskov/Fighting.java" afterPath="$PROJECT_DIR$/src/net/pskov/Fighting.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/net/pskov/JDialogInitMice.java" afterPath="$PROJECT_DIR$/src/net/pskov/JDialogInitMice.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/net/pskov/JFrameMainJudge.java" afterPath="$PROJECT_DIR$/src/net/pskov/JFrameMainJudge.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/net/pskov/JPanelScoreTable.java" afterPath="$PROJECT_DIR$/src/net/pskov/JPanelScoreTable.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/untitled2.iml" afterPath="$PROJECT_DIR$/untitled2.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../Tasks.txt" afterPath="$PROJECT_DIR$/../Tasks.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../TournamentManager/db_utils.cpp" afterPath="$PROJECT_DIR$/../TournamentManager/db_utils.cpp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../TournamentManager/db_utils.h" afterPath="$PROJECT_DIR$/../TournamentManager/db_utils.h" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../TournamentManager/fighting_pairs.cpp" afterPath="$PROJECT_DIR$/../TournamentManager/fighting_pairs.cpp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../TournamentManager/mainwindow.cpp" afterPath="$PROJECT_DIR$/../TournamentManager/mainwindow.cpp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../TournamentManager/mainwindow.h" afterPath="$PROJECT_DIR$/../TournamentManager/mainwindow.h" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../TournamentManager/mainwindow.ui" afterPath="$PROJECT_DIR$/../TournamentManager/mainwindow.ui" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../TournamentManager/ui_mainwindow.h" afterPath="$PROJECT_DIR$/../TournamentManager/ui_mainwindow.h" />
     </list>
@@ -40,11 +28,11 @@
     <favorites_list name="untitled2" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file leaf-file-name="ControllerEnvironment.class" pinned="false" current-in-tab="false">
         <entry file="jar://$PROJECT_DIR$/lib/jinput-2.0.5.jar!/net/java/games/input/ControllerEnvironment.class">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-5.703704">
+            <state vertical-scroll-proportion="-56.48148">
               <caret line="76" column="0" selection-start-line="76" selection-start-column="0" selection-end-line="76" selection-end-column="0" />
               <folding />
             </state>
@@ -64,8 +52,8 @@
       <file leaf-file-name="JFrameMainJudge.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/net/pskov/JFrameMainJudge.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.33245382">
-              <caret line="40" column="0" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.7915567">
+              <caret line="185" column="99" selection-start-line="185" selection-start-column="99" selection-end-line="185" selection-end-column="99" />
               <folding />
             </state>
           </provider>
@@ -96,9 +84,9 @@
         <option value="$PROJECT_DIR$/src/net/pskov/JDialogInitMice.java" />
         <option value="$PROJECT_DIR$/src/trash/RawCollectionsExample.java" />
         <option value="$PROJECT_DIR$/src/net/pskov/Fighting.java" />
-        <option value="$PROJECT_DIR$/src/net/pskov/JFrameMainJudge.java" />
         <option value="C:/Program Files/Java/jdk1.8.0_60/src.zip!/java/security/ProtectionDomain.java" />
         <option value="$PROJECT_DIR$/untitled2.iml" />
+        <option value="$PROJECT_DIR$/src/net/pskov/JFrameMainJudge.java" />
       </list>
     </option>
   </component>
@@ -162,25 +150,11 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="untitled2" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="TableFIght" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="resources" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
       <pane id="PackagesPane" />
       <pane id="Scratches" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -517,7 +491,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1066" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.22271223" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -529,7 +503,7 @@
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5512679" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" x="526" y="726" width="1376" height="270" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5506608" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21428572" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.30597016" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.22435898" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -564,23 +538,66 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
+    <entry file="jar://$PROJECT_DIR$/lib/jinput-2.0.5.jar!/net/java/games/input/ControllerEnvironment.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="76" column="0" selection-start-line="76" selection-start-column="0" selection-end-line="76" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/net/pskov/controller/KeyboardController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/net/pskov/JFrameMainJudge.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="40" column="0" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/untitled2.iml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/lib/jinput-2.0.5.jar!/net/java/games/input/ControllerEnvironment.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="76" column="0" selection-start-line="76" selection-start-column="0" selection-end-line="76" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/net/pskov/controller/KeyboardController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/net/pskov/JFrameMainJudge.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/net/pskov/Fighting.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="65" column="4" selection-start-line="65" selection-start-column="4" selection-end-line="65" selection-end-column="4" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#16121#16122#0" expanded="false" />
-            <element signature="e#16155#16156#0" expanded="false" />
-            <element signature="e#16199#16200#0" expanded="false" />
-            <element signature="e#16229#16230#0" expanded="false" />
-            <element signature="e#16278#16279#0" expanded="false" />
-            <element signature="e#16306#16307#0" expanded="false" />
-            <element signature="e#16364#16365#0" expanded="false" />
-            <element signature="e#16405#16406#0" expanded="false" />
-            <element signature="e#22369#22370#0" expanded="false" />
-            <element signature="e#22406#22407#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -596,10 +613,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="2" column="27" selection-start-line="2" selection-start-column="27" selection-end-line="2" selection-end-column="27" />
-          <folding>
-            <element signature="e#305#306#0" expanded="true" />
-            <element signature="e#339#340#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -615,19 +628,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#16121#16122#0" expanded="false" />
-            <element signature="e#16155#16156#0" expanded="false" />
-            <element signature="e#16199#16200#0" expanded="false" />
-            <element signature="e#16229#16230#0" expanded="false" />
-            <element signature="e#16278#16279#0" expanded="false" />
-            <element signature="e#16306#16307#0" expanded="false" />
-            <element signature="e#16364#16365#0" expanded="false" />
-            <element signature="e#16405#16406#0" expanded="false" />
-            <element signature="e#22369#22370#0" expanded="false" />
-            <element signature="e#22406#22407#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -635,19 +635,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="365" column="63" selection-start-line="365" selection-start-column="63" selection-end-line="365" selection-end-column="63" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#16121#16122#0" expanded="false" />
-            <element signature="e#16155#16156#0" expanded="false" />
-            <element signature="e#16199#16200#0" expanded="false" />
-            <element signature="e#16229#16230#0" expanded="false" />
-            <element signature="e#16278#16279#0" expanded="false" />
-            <element signature="e#16306#16307#0" expanded="false" />
-            <element signature="e#16364#16365#0" expanded="false" />
-            <element signature="e#16405#16406#0" expanded="false" />
-            <element signature="e#22369#22370#0" expanded="false" />
-            <element signature="e#22406#22407#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -685,19 +672,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="318" column="79" selection-start-line="318" selection-start-column="79" selection-end-line="318" selection-end-column="79" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#16121#16122#0" expanded="false" />
-            <element signature="e#16155#16156#0" expanded="false" />
-            <element signature="e#16199#16200#0" expanded="false" />
-            <element signature="e#16229#16230#0" expanded="false" />
-            <element signature="e#16278#16279#0" expanded="false" />
-            <element signature="e#16306#16307#0" expanded="false" />
-            <element signature="e#16364#16365#0" expanded="false" />
-            <element signature="e#16405#16406#0" expanded="false" />
-            <element signature="e#22369#22370#0" expanded="false" />
-            <element signature="e#22406#22407#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -735,19 +709,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#16121#16122#0" expanded="false" />
-            <element signature="e#16155#16156#0" expanded="false" />
-            <element signature="e#16199#16200#0" expanded="false" />
-            <element signature="e#16229#16230#0" expanded="false" />
-            <element signature="e#16278#16279#0" expanded="false" />
-            <element signature="e#16306#16307#0" expanded="false" />
-            <element signature="e#16364#16365#0" expanded="false" />
-            <element signature="e#16405#16406#0" expanded="false" />
-            <element signature="e#22369#22370#0" expanded="false" />
-            <element signature="e#22406#22407#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -913,19 +874,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.06613757">
           <caret line="65" column="4" selection-start-line="65" selection-start-column="4" selection-end-line="65" selection-end-column="4" />
-          <folding>
-            <element signature="imports" expanded="false" />
-            <element signature="e#16121#16122#0" expanded="false" />
-            <element signature="e#16155#16156#0" expanded="false" />
-            <element signature="e#16199#16200#0" expanded="false" />
-            <element signature="e#16229#16230#0" expanded="false" />
-            <element signature="e#16278#16279#0" expanded="false" />
-            <element signature="e#16306#16307#0" expanded="false" />
-            <element signature="e#16364#16365#0" expanded="false" />
-            <element signature="e#16405#16406#0" expanded="false" />
-            <element signature="e#22369#22370#0" expanded="false" />
-            <element signature="e#22406#22407#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -933,24 +881,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.27704486">
           <caret line="12" column="27" selection-start-line="12" selection-start-column="27" selection-end-line="12" selection-end-column="27" />
-          <folding>
-            <element signature="e#305#306#0" expanded="true" />
-            <element signature="e#339#340#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/untitled2.iml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.3192612">
-          <caret line="20" column="9" selection-start-line="20" selection-start-column="9" selection-end-line="20" selection-end-column="9" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="jar://$PROJECT_DIR$/lib/jinput-2.0.5.jar!/net/java/games/input/ControllerEnvironment.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-5.703704">
+        <state vertical-scroll-proportion="-56.48148">
           <caret line="76" column="0" selection-start-line="76" selection-start-column="0" selection-end-line="76" selection-end-column="0" />
           <folding />
         </state>
@@ -964,10 +900,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/untitled2.iml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.13192612">
+          <caret line="2" column="73" selection-start-line="2" selection-start-column="73" selection-end-line="2" selection-end-column="73" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/net/pskov/JFrameMainJudge.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33245382">
-          <caret line="40" column="0" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.7915567">
+          <caret line="185" column="99" selection-start-line="185" selection-start-column="99" selection-end-line="185" selection-end-column="99" />
           <folding />
         </state>
       </provider>
@@ -1037,7 +981,7 @@
       </state>
       <state key="ProjectLibrariesConfigurable.UI">
         <settings>
-          <last-edited>gson-2.2.2</last-edited>
+          <last-edited>MyJinput</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>

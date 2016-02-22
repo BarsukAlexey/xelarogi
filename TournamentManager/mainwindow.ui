@@ -142,13 +142,6 @@
               </widget>
              </item>
              <item>
-              <widget class="QPushButton" name="pushButtonGrid">
-               <property name="text">
-                <string>Турнирные сетки</string>
-               </property>
-              </widget>
-             </item>
-             <item>
               <widget class="QPushButton" name="pushButtonFightinDistribution">
                <property name="text">
                 <string>График распеределения боёв</string>
@@ -156,9 +149,9 @@
               </widget>
              </item>
              <item>
-              <widget class="QPushButton" name="pushButtonPair">
+              <widget class="QPushButton" name="pushButtonGrid">
                <property name="text">
-                <string>Составы пар</string>
+                <string>Турнирные сетки</string>
                </property>
               </widget>
              </item>
@@ -166,6 +159,13 @@
               <widget class="QPushButton" name="pushButtonProtokolVzveshinanya">
                <property name="text">
                 <string>Протоколы взвешивания</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="pushButtonPair">
+               <property name="text">
+                <string>Составы пар</string>
                </property>
               </widget>
              </item>

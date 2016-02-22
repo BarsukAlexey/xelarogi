@@ -183,7 +183,7 @@ public class JFrameMainJudge extends JFrame {
                     for (JsonElement jsonElement : new JsonParser().parse(JSON_DATA).getAsJsonArray()) {
                         Fighting f = new Fighting(
                                 jsonElement.getAsJsonObject().get("nameOfLeftFighter").getAsString(),
-                                jsonElement.getAsJsonObject().get("nameOfRightFighter").toString(),
+                                jsonElement.getAsJsonObject().get("nameOfRightFighter").getAsString(),
                                 jsonElement.getAsJsonObject().get("fightId").getAsInt(),
                                 jsonElement.getAsJsonObject().get("categoryOfFighting").getAsString(),
                                 jsonElement.getAsJsonObject().get("countOfRounds").getAsInt(),
