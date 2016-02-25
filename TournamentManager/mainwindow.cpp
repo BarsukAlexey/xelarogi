@@ -299,35 +299,26 @@ void MainWindow::updateTournamentTreeWidget()
 
 void MainWindow::connectButtons()
 {
-    connect(ui->ordersAccreditationBtn, &QPushButton::clicked, [this] ()
-    {
-        long long tournamentUID = ui->tournamentUidLabel->text().toLongLong();
-        OneFieldSetupDialog dlg(tournamentUID, "IS_ACCREDITATED", this);
-        dlg.exec();
-    });
-    connect(ui->ordersMedicalBtn, &QPushButton::clicked, [this] ()
-    {
-        long long tournamentUID = ui->tournamentUidLabel->text().toLongLong();
-        OneFieldSetupDialog dlg(tournamentUID, "IS_MEDICAL", this);
-        dlg.exec();
-    });
-    connect(ui->ordersPayedBtn, &QPushButton::clicked, [this] ()
-    {
-        long long tournamentUID = ui->tournamentUidLabel->text().toLongLong();
-        OneFieldSetupDialog dlg(tournamentUID, "IS_PAID", this);
-        dlg.exec();
-    });
-    connect(ui->ordersWeightBtn, &QPushButton::clicked, [this] ()
-    {
-        long long tournamentUID = ui->tournamentUidLabel->text().toLongLong();
-        OneFieldSetupDialog dlg(tournamentUID, "IS_WEIGHTED", this);
-        dlg.exec();
-    });
     connect(ui->createOrdersBtn, &QPushButton::clicked, [this] ()
     {
         long long tournamentUID = ui->tournamentUidLabel->text().toLongLong();
         CreateTournamentOrdersDialog dlg(m_database, tournamentUID, this,
-        {"IS_WEIGHTED", "IS_MEDICAL", "IS_ACCREDITATED", "IS_PAID", "UID"});
+        {"IS_WEIGHTED", "IS_MEDICAL", "IS_ACCREDITATED", "IS_PAID",
+         "UID",
+         "COACH_FK", "CLUB_FK",
+         "COUNTRY_FK", "REGION_FK",
+         "BIRTHDATE", "SEX_FK",
+         "SPORT_CATEGORY_FK",
+         "TOURNAMENT_CATEGORY_FK",
+         "IS_DELETED"
+        });
+        dlg.exec();
+    });
+
+    connect(ui->createTournamentCategoriesBtn, &QPushButton::clicked, [this] ()
+    {
+        long long tournamentUID = ui->tournamentUidLabel->text().toLongLong();
+        CreateTournamentCategoriesDialog dlg(tournamentUID, this);
         dlg.exec();
     });
 }

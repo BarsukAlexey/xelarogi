@@ -27,7 +27,6 @@
 
 #include "databaseexpert.h"
 #include "webreportdialog.h"
-#include "addorderdialog.h"
 
 
 namespace Ui {
@@ -50,45 +49,34 @@ public:
 
 private slots:
     void loadFromExcel();
+    void updateFillOrderWidget(long long orderUID);
 
 private:
     long long getCountryUID(QString countryName);
     long long getRegionUID(QString regionName, long long countryUID);
     long long getRegionUnitUID(QString unitName, long long regionUID, long long countryUID);
     long long getGenderUID(QString genderName);
-    long long getCategoryUID(QString categoryName);
+    long long getTournamentCategoryUID(long long sexUID, double age, double weight);
+    long long getSportCategoryUID(QString categoryName);
     long long getTypeUID(QString typeName);
     long long getClubUID(QString clubName, long long coutryUID, long long regionUID, long long unitUID);
     long long getCoachUID(QString coachName, long long clubUID);
+
+
+    void updateSexComboBox(long long currentUID);
+    void updateCountryComboBox(long long currentUID);
+    void updateRegionComboBox(long long regionUID, long long countryUID);
+    void updateRegionUnitComboBox(long long regionUnitUID, long long regionUID);
+    void updateSportCategoryComboBox(long long currentUID);
+    void updateTypeComboBox(long long currentUID);
+    void updateClubComboBox(long long clubUID, long long regionUID);
+    void updateCoachComboBox(long long coachUID, long long clubUID);
 
 private:
     Ui::CreateTournamentOrdersDialog *ui;
     const QSqlDatabase & m_database;
     long long mTournamentUID;
     QStringList mHiddenColumns;
-
-};
-
-class OrdersRelationDelegate : public QItemDelegate
-{
-public:
-
-    explicit OrdersRelationDelegate(QObject *aParent = 0)
-        : QItemDelegate(aParent)
-    {}
-    ~OrdersRelationDelegate() { }
-
-    void paint(QPainter *painter,
-               const QStyleOptionViewItem &option,
-               const QModelIndex &index) const;
-
-    QWidget *createEditor(QWidget *aParent,
-                          const QStyleOptionViewItem &option,
-                          const QModelIndex &index) const;
-
-    void setModelData(QWidget *editor,
-                      QAbstractItemModel *model,
-                      const QModelIndex &index) const;
 
 };
 

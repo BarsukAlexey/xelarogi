@@ -19,12 +19,10 @@
 #include <QtWidgets/QDialogButtonBox>
 #include <QtWidgets/QDoubleSpinBox>
 #include <QtWidgets/QGridLayout>
-#include <QtWidgets/QGroupBox>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
-#include <QtWidgets/QRadioButton>
 #include <QtWidgets/QVBoxLayout>
 
 QT_BEGIN_NAMESPACE
@@ -51,12 +49,14 @@ public:
     QLabel *label_11;
     QLabel *label_12;
     QLabel *label_13;
+    QLabel *label_14;
     QVBoxLayout *verticalLayout_4;
     QDateEdit *birthdayDE;
-    QDoubleSpinBox *doubleSpinBox;
+    QDoubleSpinBox *weightDSB;
     QComboBox *countriesCB;
     QComboBox *regionsCB;
     QComboBox *regionUnitsCB;
+    QComboBox *gendersCB;
     QHBoxLayout *horizontalLayout_3;
     QVBoxLayout *verticalLayout_5;
     QLabel *label_6;
@@ -70,10 +70,6 @@ public:
     QComboBox *tournamentCategoriesCB;
     QComboBox *clubsCB;
     QComboBox *coachsCB;
-    QGroupBox *groupBox;
-    QGridLayout *gridLayout;
-    QRadioButton *femaleRB;
-    QRadioButton *maleRB;
 
     void setupUi(QDialog *AddOrderDialog)
     {
@@ -176,6 +172,11 @@ public:
 
         verticalLayout_3->addWidget(label_13);
 
+        label_14 = new QLabel(AddOrderDialog);
+        label_14->setObjectName(QStringLiteral("label_14"));
+
+        verticalLayout_3->addWidget(label_14);
+
 
         horizontalLayout_2->addLayout(verticalLayout_3);
 
@@ -186,12 +187,12 @@ public:
 
         verticalLayout_4->addWidget(birthdayDE);
 
-        doubleSpinBox = new QDoubleSpinBox(AddOrderDialog);
-        doubleSpinBox->setObjectName(QStringLiteral("doubleSpinBox"));
-        doubleSpinBox->setMaximum(1000);
-        doubleSpinBox->setValue(50);
+        weightDSB = new QDoubleSpinBox(AddOrderDialog);
+        weightDSB->setObjectName(QStringLiteral("weightDSB"));
+        weightDSB->setMaximum(1000);
+        weightDSB->setValue(50);
 
-        verticalLayout_4->addWidget(doubleSpinBox);
+        verticalLayout_4->addWidget(weightDSB);
 
         countriesCB = new QComboBox(AddOrderDialog);
         countriesCB->setObjectName(QStringLiteral("countriesCB"));
@@ -207,6 +208,11 @@ public:
         regionUnitsCB->setObjectName(QStringLiteral("regionUnitsCB"));
 
         verticalLayout_4->addWidget(regionUnitsCB);
+
+        gendersCB = new QComboBox(AddOrderDialog);
+        gendersCB->setObjectName(QStringLiteral("gendersCB"));
+
+        verticalLayout_4->addWidget(gendersCB);
 
 
         horizontalLayout_2->addLayout(verticalLayout_4);
@@ -279,43 +285,8 @@ public:
 
         gridLayout_2->addLayout(horizontalLayout_3, 1, 1, 2, 1);
 
-        groupBox = new QGroupBox(AddOrderDialog);
-        groupBox->setObjectName(QStringLiteral("groupBox"));
-        groupBox->setFlat(false);
-        gridLayout = new QGridLayout(groupBox);
-        gridLayout->setObjectName(QStringLiteral("gridLayout"));
-        femaleRB = new QRadioButton(groupBox);
-        femaleRB->setObjectName(QStringLiteral("femaleRB"));
-
-        gridLayout->addWidget(femaleRB, 1, 1, 1, 1);
-
-        maleRB = new QRadioButton(groupBox);
-        maleRB->setObjectName(QStringLiteral("maleRB"));
-
-        gridLayout->addWidget(maleRB, 0, 1, 1, 1);
-
-
-        gridLayout_2->addWidget(groupBox, 3, 1, 1, 1);
-
         buttonBox->raise();
         tournamentLabel->raise();
-        label->raise();
-        secondNameLE->raise();
-        label_2->raise();
-        firstNameLE->raise();
-        label_3->raise();
-        PatronymicLE->raise();
-        label_4->raise();
-        birthdayDE->raise();
-        label_5->raise();
-        doubleSpinBox->raise();
-        label_6->raise();
-        sportCategoriesCB->raise();
-        label_7->raise();
-        typesCB->raise();
-        label_8->raise();
-        tournamentCategoriesCB->raise();
-        groupBox->raise();
 
         retranslateUi(AddOrderDialog);
         QObject::connect(buttonBox, SIGNAL(accepted()), AddOrderDialog, SLOT(accept()));
@@ -336,14 +307,12 @@ public:
         label_11->setText(QApplication::translate("AddOrderDialog", "\320\241\321\202\321\200\320\260\320\275\320\260", 0));
         label_12->setText(QApplication::translate("AddOrderDialog", "\320\240\320\265\320\263\320\270\320\276\320\275", 0));
         label_13->setText(QApplication::translate("AddOrderDialog", "\320\235\320\260\321\201\320\265\320\273\320\265\320\275\320\275\321\213\320\271 \320\277\321\203\320\275\320\272\321\202", 0));
+        label_14->setText(QApplication::translate("AddOrderDialog", "\320\237\320\276\320\273", 0));
         label_6->setText(QApplication::translate("AddOrderDialog", "\320\241\320\277\320\276\321\200\321\202\320\270\320\262\320\275\321\213\320\271 \321\200\320\260\320\267\321\200\321\217\320\264", 0));
         label_7->setText(QApplication::translate("AddOrderDialog", "\320\240\320\260\320\267\320\264\320\265\320\273 \321\201\320\276\321\200\320\265\320\262\320\275\320\276\320\262\320\260\320\275\320\270\321\217", 0));
         label_8->setText(QApplication::translate("AddOrderDialog", "\320\232\320\260\321\202\320\265\320\263\320\276\321\200\320\270\321\217 \321\202\321\203\321\200\320\275\320\270\321\200\320\260", 0));
         label_9->setText(QApplication::translate("AddOrderDialog", "\320\232\320\273\321\203\320\261", 0));
         label_10->setText(QApplication::translate("AddOrderDialog", "\320\242\321\200\320\265\320\275\320\265\321\200", 0));
-        groupBox->setTitle(QApplication::translate("AddOrderDialog", "\320\237\320\276\320\273", 0));
-        femaleRB->setText(QApplication::translate("AddOrderDialog", "\320\226\320\265\320\275\321\201\320\272\320\270\320\271", 0));
-        maleRB->setText(QApplication::translate("AddOrderDialog", "\320\234\321\203\320\266\321\201\320\272\320\276\320\271", 0));
     } // retranslateUi
 
 };
