@@ -217,7 +217,7 @@ QVector<DBUtils::NodeOfTournirGrid> DBUtils::getNodes(const QSqlDatabase& databa
             }
             region = queryRegion.value("SHORTNAME").toString();
         }
-        arr.push_back(NodeOfTournirGrid({query.value("VERTEX").toInt(), name, region, isFighing, orderUID.toLongLong()}));
+        arr.push_back(NodeOfTournirGrid({query.value("VERTEX").toInt(), name, region, isFighing, orderUID.toLongLong(), query.value("result").toString()}));
     }
 
     qSort(arr);
@@ -293,12 +293,13 @@ QVector<DBUtils::Fighing> DBUtils::getListOfPairs(const QSqlDatabase& database, 
     return arr;
 }
 
-bool DBUtils::setNodeOfGrid(const QSqlDatabase& database, long long TOURNAMENT_CATEGORIES_FK, long long VERTEX, long long orderUID)
+bool DBUtils::setNodeOfGrid(const QSqlDatabase& database, long long TOURNAMENT_CATEGORIES_FK, long long VERTEX, long long orderUID, QString result)
 {
-    QSqlQuery query("UPDATE GRID     SET ORDER_FK = ?     WHERE TOURNAMENT_CATEGORIES_FK = ? AND VERTEX = ?", database);
+    QSqlQuery query("UPDATE GRID     SET ORDER_FK = ? , result = ?     WHERE TOURNAMENT_CATEGORIES_FK = ? AND VERTEX = ?", database);
     query.bindValue(0, orderUID);
-    query.bindValue(1, TOURNAMENT_CATEGORIES_FK);
-    query.bindValue(2, VERTEX);
+    query.bindValue(1, result);
+    query.bindValue(2, TOURNAMENT_CATEGORIES_FK);
+    query.bindValue(3, VERTEX);
     return query.exec();
 }
 

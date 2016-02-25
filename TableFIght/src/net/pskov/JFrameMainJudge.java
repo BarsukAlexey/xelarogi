@@ -16,6 +16,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Date;
 import java.util.HashSet;
 
 public class JFrameMainJudge extends JFrame {
@@ -217,16 +218,17 @@ public class JFrameMainJudge extends JFrame {
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     String choosedPath = chooser.getSelectedFile().getAbsolutePath();
                     System.out.println("You chose to open this file: " + choosedPath); // TODO
-                    File file = new File(choosedPath, "result.json");
+                    File file = new File(choosedPath, "result" + new Date().getTime() + ".json");
 
                     JsonArray jsonArray = new JsonArray();
                     for (int i = 0; i < jList.getModel().getSize(); ++i) {
                         Fighting f = jList.getModel().getElementAt(i);
-                        if (f.getStatusFighting() == StatusFighting.finishPending) {
+                        if (f.getStatusFighting() == StatusFighting.finishPending||f.getStatusFighting() == StatusFighting.disqualification) {
                             JsonObject jsonObject = new JsonObject();
                             jsonObject.addProperty("TOURNAMENT_CATEGORIES_FK", f.TOURNAMENT_CATEGORIES_FK);
                             jsonObject.addProperty("VERTEX", f.VERTEX);
                             jsonObject.addProperty("orderUID", f.getLoser(true) == Player.left ? f.orderUID_right : f.orderUID_left);
+                            jsonObject.addProperty("result", f.getResult());
                             jsonArray.add(jsonObject);
                         }
                     }
@@ -278,6 +280,9 @@ public class JFrameMainJudge extends JFrame {
                 new JLabel("Z - ex. to red"),
                 new JLabel("M - ex. to blue"),
                 new JLabel("V - cancel last ex."),
+                new JLabel(" "),
+                new JLabel("W - неявка кр. угла"),
+                new JLabel("I - неявка син. угла"),
                 new JLabel(" "),
                 new JLabel("SPACE - start/pause round and exit"),
         };
@@ -373,8 +378,16 @@ public class JFrameMainJudge extends JFrame {
         if (pressedKeys.contains(Component.Identifier.Key.M)) {
             activeFighting.addExToRight();
         }
+        if (pressedKeys.contains(Component.Identifier.Key.W)) {
+            activeFighting.neyvka(Player.left);
+        }
+        if (pressedKeys.contains(Component.Identifier.Key.I)) {
+            activeFighting.neyvka(Player.right);
+        }
 
-        // поставить на паузу
+
+
+
         if (pressedKeys.contains(Component.Identifier.Key.SPACE)) {
             if (activeFighting.getStatusFighting() == StatusFighting.notBegin) {
                 activeFighting.startRound();
@@ -382,7 +395,9 @@ public class JFrameMainJudge extends JFrame {
                 activeFighting.pauseRound();
             } else if (activeFighting.getStatusFighting() == StatusFighting.fightingPause) {
                 activeFighting.continueRound();
-            } else if (activeFighting.getStatusFighting() == StatusFighting.finishPending) {
+//            } else if (activeFighting.getStatusFighting() == StatusFighting.finishPending ||
+//                    activeFighting.getStatusFighting() == StatusFighting.disqualification) {
+            } else {
                 remove(jPanelFighting);
                 add(jPanelStartPage);
                 revalidate();
@@ -391,11 +406,12 @@ public class JFrameMainJudge extends JFrame {
                 JsonArray jsonArray = new JsonArray();
                 for (int i = 0; i < jList.getModel().getSize(); ++i) {
                     Fighting f = jList.getModel().getElementAt(i);
-                    if (f.getStatusFighting() == StatusFighting.finishPending) {
+                    if (f.getStatusFighting() == StatusFighting.finishPending||f.getStatusFighting() == StatusFighting.disqualification) {
                         JsonObject jsonObject = new JsonObject();
                         jsonObject.addProperty("TOURNAMENT_CATEGORIES_FK", f.TOURNAMENT_CATEGORIES_FK);
                         jsonObject.addProperty("VERTEX", f.VERTEX);
                         jsonObject.addProperty("orderUID", f.getLoser(true) == Player.left ? f.orderUID_right : f.orderUID_left);
+                        jsonObject.addProperty("result", f.getResult());
                         jsonArray.add(jsonObject);
                     }
                 }

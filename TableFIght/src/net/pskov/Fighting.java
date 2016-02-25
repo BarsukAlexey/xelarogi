@@ -64,6 +64,7 @@ public class Fighting {
     final int VERTEX;
     final long orderUID_left;
     final long orderUID_right;
+    String result;
 
     public Fighting(
             String nameOfLeftFighter,
@@ -214,10 +215,14 @@ public class Fighting {
                     sumOfPause = 0;
 
                     if (currentRound == countOfRounds) {
-                        if (findWinner() != Player.unknown)
+                        if (findWinner() != Player.unknown) {
                             statusFighting = StatusFighting.finishPending;
-                        else
+                            result = getCountJudgeForLeftFighter(true) + " " + getCountJudgeForRightFighter(true);
+                        }
+                        else {
                             statusFighting = StatusFighting.finishTie;
+                            result = getCountJudgeForLeftFighter(true) + " " + getCountJudgeForRightFighter(true);
+                        }
                     } else {
                         statusFighting = StatusFighting._break;
                     }
@@ -244,6 +249,7 @@ public class Fighting {
         } else if (statusFighting == StatusFighting.finishTie) {
             int l = getCountJudgeForLeftFighter(true);
             int r = getCountJudgeForRightFighter(true);
+            result = getCountJudgeForLeftFighter(true) + " " + getCountJudgeForRightFighter(true);
             if (l < r) {
                 statusFighting = StatusFighting.finishPending;
             } else if (l > r) {
@@ -671,6 +677,16 @@ public class Fighting {
         return fightId + separator +
                 nameOfLeftFighter + " " + countryOfLeftFighter + " " + separator +
                 nameOfRightFighter + " " + countryOfRightFighter + " " + separator;
+    }
+
+    public synchronized String getResult() {
+        return result;
+    }
+
+    public synchronized void neyvka(Player player) {
+        statusFighting = StatusFighting.disqualification;
+        disqualifiedPlayer = player;
+        result = "Неявка";
     }
 }
 

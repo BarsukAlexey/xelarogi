@@ -184,7 +184,10 @@ void RenderAreaWidget::paintRect(int i, int j, QPainter& painter, const DBUtils:
     QRect rectRegion(QPoint(rect.topLeft().x(), rect.topLeft().y() + rect.height() / 2), QSize(rect.width(), rect.height() / 2));
 
     painter.drawText(rectName  , Qt::AlignHCenter | Qt::AlignVCenter, node.name);
-    painter.drawText(rectRegion, Qt::AlignHCenter | Qt::AlignVCenter, node.region);
+    if (node.isFighing)
+        painter.drawText(rectRegion, Qt::AlignHCenter | Qt::AlignVCenter, node.result);
+    else
+        painter.drawText(rectRegion, Qt::AlignHCenter | Qt::AlignVCenter, node.region);
 }
 
 void RenderAreaWidget::paintLine(QPoint aa, QPoint bb, QPainter& painter)
@@ -258,7 +261,10 @@ void RenderAreaWidget::onSaveInExcel()
         QPoint p = getCell(node.v);
 
         QAxObject* cell = sheet->querySubObject( "Cells( int, int )", p.x() + 1, p.y() + 1);
-        cell->setProperty("Value", QVariant(node.name));
+        if (node.isFighing)
+            cell->setProperty("Value", QVariant(node.name + " (" + node.result + ")"));
+        else
+            cell->setProperty("Value", QVariant(node.name));
         QAxObject *border = cell->querySubObject("Borders()");
         border->setProperty("LineStyle", 1);
         border->setProperty("Weight", 2);

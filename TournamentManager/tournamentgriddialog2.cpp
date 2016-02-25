@@ -291,7 +291,7 @@ void TournamentGridDialog2::onButtonGenerateGrid()
         if (isLeaf[v]) continue;
         maxDistationToLeaf[v] = qMin(maxDistationToLeaf[2 * v], maxDistationToLeaf[2 * v + 1]) + 1;
 
-        QSqlQuery query("INSERT INTO GRID VALUES (?, ?, ?, null)", database);
+        QSqlQuery query("INSERT INTO GRID VALUES (?, ?, ?, null, null)", database);
         query.bindValue(0, tournamentCategories);
         query.bindValue(1, v);
         query.bindValue(2, "true");
@@ -369,7 +369,7 @@ void TournamentGridDialog2::onButtonGenerateGrid()
             a = b;
         }
 
-        QSqlQuery query("INSERT INTO GRID VALUES (?, ?, ?, ?)", database);
+        QSqlQuery query("INSERT INTO GRID VALUES (?, ?, ?, ?, null)", database);
         query.bindValue(0, tournamentCategories);
         query.bindValue(1, vertex);
         query.bindValue(2, "false");
@@ -424,7 +424,7 @@ void TournamentGridDialog2::onButtonGenerateGrid()
             }
         }
         {
-            QSqlQuery query("INSERT INTO GRID VALUES (?, ?, ?, ?)", database);
+            QSqlQuery query("INSERT INTO GRID VALUES (?, ?, ?, ?, null)", database);
             query.bindValue(0, tournamentCategories);
             query.bindValue(1, v);
             query.bindValue(2, "false");
@@ -433,7 +433,7 @@ void TournamentGridDialog2::onButtonGenerateGrid()
                 qDebug() << "\n" << __PRETTY_FUNCTION__ << "\n" << query.lastError().text() << "\n" << query.lastQuery() << "\n";
         }
         {
-            QSqlQuery query("INSERT INTO GRID VALUES (?, ?, ?, ?)", database);
+            QSqlQuery query("INSERT INTO GRID VALUES (?, ?, ?, ?, null)", database);
             query.bindValue(0, tournamentCategories);
             query.bindValue(1, v ^ 1);     // отличается этим от предыдущего блока
             query.bindValue(2, "false");
@@ -459,7 +459,7 @@ void TournamentGridDialog2::onButtonGenerateGrid()
             notUsedFighters.insert(a);
         }
         {
-            QSqlQuery query("INSERT INTO GRID VALUES (?, ?, ?, ?)", database);
+            QSqlQuery query("INSERT INTO GRID VALUES (?, ?, ?, ?, null)", database);
             query.bindValue(0, tournamentCategories);
             query.bindValue(1, v);
             query.bindValue(2, "false");
@@ -500,7 +500,7 @@ void TournamentGridDialog2::setInGridBestFigher(int v, const QVector<bool>& isLe
             //qDebug() << bestFighters[0].orderUID << " " << bestFighters[0].priority << " " << v;
 
 
-            QSqlQuery query("INSERT INTO GRID VALUES (?, ?, ?, ?)", database);
+            QSqlQuery query("INSERT INTO GRID VALUES (?, ?, ?, ?, null)", database);
             query.bindValue(0, tournamentCategories);
             query.bindValue(1, v);
             query.bindValue(2, "false");

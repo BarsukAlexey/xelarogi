@@ -428,8 +428,9 @@ void MainWindow::on_pushButtonLoadWinner_clicked()
         int TOURNAMENT_CATEGORIES_FK = object["TOURNAMENT_CATEGORIES_FK"].toInt();
         int VERTEX = object["VERTEX"].toInt();
         int orderUID = object["orderUID"].toInt();
+        QString result = object["result"].toString();
         qDebug() << TOURNAMENT_CATEGORIES_FK << VERTEX << orderUID;
-        DBUtils::setNodeOfGrid(m_database, TOURNAMENT_CATEGORIES_FK, VERTEX, orderUID);
+        DBUtils::setNodeOfGrid(m_database, TOURNAMENT_CATEGORIES_FK, VERTEX, orderUID, result);
     }
 }
 
