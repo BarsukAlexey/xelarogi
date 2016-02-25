@@ -2,19 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="83b1860c-f795-499b-9148-903b15ce9e90" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/resources/sounds/stuk_molotka.wav" afterPath="$PROJECT_DIR$/resources/sounds/stuk_molotka.wav" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../TournamentManager/database/kickboxing.db" afterPath="$PROJECT_DIR$/../TournamentManager/database/kickboxing.db" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/net/pskov/Fighting.java" afterPath="$PROJECT_DIR$/src/net/pskov/Fighting.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/net/pskov/JFrameMainJudge.java" afterPath="$PROJECT_DIR$/src/net/pskov/JFrameMainJudge.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/результаты боя.json" afterPath="$PROJECT_DIR$/результаты боя.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../TournamentManager/db_utils.cpp" afterPath="$PROJECT_DIR$/../TournamentManager/db_utils.cpp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../TournamentManager/db_utils.h" afterPath="$PROJECT_DIR$/../TournamentManager/db_utils.h" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../TournamentManager/mainwindow.cpp" afterPath="$PROJECT_DIR$/../TournamentManager/mainwindow.cpp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../TournamentManager/mainwindow.ui" afterPath="$PROJECT_DIR$/../TournamentManager/mainwindow.ui" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../TournamentManager/renderareawidget.cpp" afterPath="$PROJECT_DIR$/../TournamentManager/renderareawidget.cpp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../TournamentManager/tournamentgriddialog2.cpp" afterPath="$PROJECT_DIR$/../TournamentManager/tournamentgriddialog2.cpp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../TournamentManager/ui_mainwindow.h" afterPath="$PROJECT_DIR$/../TournamentManager/ui_mainwindow.h" />
     </list>
     <ignored path="untitled2.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -48,12 +36,24 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="untitled2.iml" pinned="false" current-in-tab="true">
+      <file leaf-file-name="untitled2.iml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/untitled2.iml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.41666666">
+            <state vertical-scroll-proportion="0.0">
               <caret line="12" column="9" selection-start-line="12" selection-start-column="9" selection-end-line="12" selection-end-column="9" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Fighting.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/net/pskov/Fighting.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.57222223">
+              <caret line="312" column="28" selection-start-line="312" selection-start-column="28" selection-end-line="312" selection-end-column="28" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -84,8 +84,8 @@
         <option value="$PROJECT_DIR$/src/trash/RawCollectionsExample.java" />
         <option value="C:/Program Files/Java/jdk1.8.0_60/src.zip!/java/security/ProtectionDomain.java" />
         <option value="$PROJECT_DIR$/untitled2.iml" />
-        <option value="$PROJECT_DIR$/src/net/pskov/Fighting.java" />
         <option value="$PROJECT_DIR$/src/net/pskov/JFrameMainJudge.java" />
+        <option value="$PROJECT_DIR$/src/net/pskov/Fighting.java" />
       </list>
     </option>
   </component>
@@ -127,8 +127,9 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
       <pane id="Scratches" />
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -199,7 +200,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -594,7 +594,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -627,7 +626,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -669,7 +667,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -931,7 +928,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-0.39817974">
           <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -950,18 +946,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/pskov/Fighting.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-4.3103447">
-          <caret line="666" column="5" selection-start-line="666" selection-start-column="5" selection-end-line="666" selection-end-column="5" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#23146#23147#0" expanded="true" />
-            <element signature="e#23175#23176#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/net/pskov/JFrameMainJudge.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -974,9 +958,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/untitled2.iml">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.41666666">
+        <state vertical-scroll-proportion="0.0">
           <caret line="12" column="9" selection-start-line="12" selection-start-column="9" selection-end-line="12" selection-end-column="9" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/net/pskov/Fighting.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.57222223">
+          <caret line="312" column="28" selection-start-line="312" selection-start-column="28" selection-end-line="312" selection-end-column="28" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

@@ -310,6 +310,7 @@ public class Fighting {
         statusFighting = StatusFighting.disqualification;
 
         disqualifiedPlayer = player;
+        result = "Дисквал.";
     }
 
     /**
