@@ -1,8 +1,6 @@
 package net.pskov;
 
-import net.java.games.input.Controller;
-import net.java.games.input.ControllerEnvironment;
-import net.java.games.input.Mouse;
+import net.java.games.input.*;
 import net.pskov.controller.MouseController;
 
 import javax.swing.*;
@@ -14,11 +12,12 @@ import java.util.ArrayList;
 public class JDialogInitMice extends JDialog {
 
     final MouseController[] mouseControllers;
-    boolean isInterrupt;
+    volatile boolean isInterrupt;
 
     JDialogInitMice(JFrame parent, MouseController[] mouseControllers) {
         super(parent, true);
         this.mouseControllers = mouseControllers;
+
 
         JPanel jPanel = new JPanel();
         jPanel.setLayout(new BoxLayout(jPanel, BoxLayout.Y_AXIS));
@@ -72,6 +71,8 @@ public class JDialogInitMice extends JDialog {
         setVisible(true);
     }
 
+
+
     class ThreadLOL extends Thread {
         @Override
         public void run() {
@@ -85,16 +86,18 @@ public class JDialogInitMice extends JDialog {
                     }
                 }
                 MouseController[] newMouseControllers = new MouseController[3];
+                System.err.println("allMouseController.size() " + allMouseController.size());
                 for (int i = 0; i < 3 && !isInterrupt; i++) {
                     cyc:
                     while (!isInterrupt) {
                         long startTime = System.currentTimeMillis();
-//                        System.err.println("OK + " + i + "     " + allMouseController.size());
+                        System.err.println("OK + " + i + "     " + allMouseController.size());
                         for (MouseController mouseController : allMouseController) {
                             mouseController.update();
                             if (mouseController.wasLeftClick() || mouseController.wasRightClick()) {
                                 newMouseControllers[i] = mouseController;
                                 allMouseController.remove(mouseController);
+                                System.err.println("OK + " + i + "     " + allMouseController.size());
                                 break cyc;
                             }
                         }

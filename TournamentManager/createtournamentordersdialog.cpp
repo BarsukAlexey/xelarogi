@@ -50,7 +50,7 @@ CreateTournamentOrdersDialog::CreateTournamentOrdersDialog(const QSqlDatabase &d
         }
     }
     allowTournamentCategories += ")";
-    model->setFilter("TOURNAMENT_CATEGORY_FK IN " + allowTournamentCategories + " AND IS_DELETED IS NULL ");
+    model->setFilter("TOURNAMENT_CATEGORY_FK IN " + allowTournamentCategories + " AND IS_VALID = 1 ");
 
     model->select();
 
@@ -93,7 +93,7 @@ CreateTournamentOrdersDialog::CreateTournamentOrdersDialog(const QSqlDatabase &d
                 long long orderUID = ind.data().toLongLong();
 
                 QSqlQuery updateQuery;
-                if (!updateQuery.prepare("UPDATE ORDERS SET IS_DELETED = 1 WHERE UID = ?"))
+                if (!updateQuery.prepare("UPDATE ORDERS SET IS_VALID = 0 WHERE UID = ?"))
                     qDebug() << updateQuery.lastError().text();
                 updateQuery.bindValue(0, orderUID);
                 if (!updateQuery.exec())
@@ -156,7 +156,7 @@ CreateTournamentOrdersDialog::CreateTournamentOrdersDialog(const QSqlDatabase &d
         model->setFilter(QString("SECOND_NAME LIKE '%%1%' "
                                  "AND TOURNAMENT_CATEGORY_FK IN %2 "
                                  "AND ORDERS.FIRST_NAME LIKE '%%3%' "
-                                 "AND IS_DELETED IS NULL ")
+                                 "AND IS_VALID = 1 ")
                          .arg(secondNameMask, allowTournamentCategories, ui->filterFirstNameLE->text())
                          );
         if (!model->select())
@@ -167,7 +167,7 @@ CreateTournamentOrdersDialog::CreateTournamentOrdersDialog(const QSqlDatabase &d
         model->setFilter(QString("SECOND_NAME LIKE '%%1%' "
                                  "AND TOURNAMENT_CATEGORY_FK IN %2 "
                                  "AND ORDERS.FIRST_NAME LIKE '%%3%' "
-                                 "AND IS_DELETED IS NULL ")
+                                 "AND IS_VALID = 1 ")
                          .arg(ui->filterSecondNameLE->text(), allowTournamentCategories, firstNameMask)
                          );
         if (!model->select())
@@ -323,7 +323,7 @@ void CreateTournamentOrdersDialog::loadFromExcel()
 {
     QAxObject* excel = new QAxObject( "Excel.Application", 0 );
     QAxObject* workbooks = excel->querySubObject( "Workbooks" );
-    QAxObject* workbook = workbooks->querySubObject( "Open(const QString&)", "C:/orders.xlsx" );
+    QAxObject* workbook = workbooks->querySubObject( "Open(const QString&)", "D:/orders.xlsx" );
 
     QAxObject* sheets = workbook->querySubObject( "Sheets" );
     int sheetCount = sheets->dynamicCall("Count()").toInt();

@@ -4,7 +4,6 @@ import javafx.util.Pair;
 import net.pskov.someEnum.Player;
 import net.pskov.someEnum.StatusFighting;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.Arrays;
 import java.util.Stack;
@@ -25,8 +24,8 @@ public class Fighting {
     private final int durationOfBreak; // длительности раунда в секундах
 
     // флаги стран
-    private final BufferedImage imageLeftConnerFlag;
-    private final BufferedImage imageRightConnerFlag;
+//    private final BufferedImage imageLeftConnerFlag;
+//    private final BufferedImage imageRightConnerFlag;
 
     // название стран
     private final String countryOfLeftFighter;
@@ -61,6 +60,12 @@ public class Fighting {
     private final Sound soundGong; // звук гонга
     private final Sound soundHumerBit; // звук отбивки молоточков
 
+    final long TOURNAMENT_CATEGORIES_FK;
+    final int VERTEX;
+    final long orderUID_left;
+    final long orderUID_right;
+    String result;
+
     public Fighting(
             String nameOfLeftFighter,
             String nameOfRightFighter,
@@ -72,10 +77,15 @@ public class Fighting {
             int durationOfRound,
             int durationOfBreak,
 
-            BufferedImage imageLeftConnerFlag,
-            BufferedImage imageRightConnerFlag,
+//            BufferedImage imageLeftConnerFlag,
+//            BufferedImage imageRightConnerFlag,
             String countryOfLeftFighter,
-            String countryOfRightFighter
+            String countryOfRightFighter,
+
+            long TOURNAMENT_CATEGORIES_FK,
+            int VERTEX,
+            long orderUID_left,
+            long orderUID_right
     ) {
         this.nameOfLeftFighter = nameOfLeftFighter;
         this.nameOfRightFighter = nameOfRightFighter;
@@ -87,8 +97,8 @@ public class Fighting {
         this.durationOfRound = durationOfRound;
         this.durationOfBreak = durationOfBreak;
 
-        this.imageLeftConnerFlag = imageLeftConnerFlag;
-        this.imageRightConnerFlag = imageRightConnerFlag;
+//        this.imageLeftConnerFlag = imageLeftConnerFlag;
+//        this.imageRightConnerFlag = imageRightConnerFlag;
 
         this.countryOfLeftFighter = countryOfLeftFighter;
         this.countryOfRightFighter = countryOfRightFighter;
@@ -100,6 +110,12 @@ public class Fighting {
 
         soundGong = new Sound(new File("resources\\sounds\\gong.wav"));
         soundHumerBit = new Sound(new File("resources\\sounds\\stuk_molotka.wav"));
+
+
+        this.TOURNAMENT_CATEGORIES_FK = TOURNAMENT_CATEGORIES_FK;
+        this.VERTEX = VERTEX;
+        this.orderUID_left = orderUID_left;
+        this.orderUID_right = orderUID_right;
     }
 
     private synchronized void init() {
@@ -199,10 +215,14 @@ public class Fighting {
                     sumOfPause = 0;
 
                     if (currentRound == countOfRounds) {
-                        if (findWinner() != Player.unknown)
+                        if (findWinner() != Player.unknown) {
                             statusFighting = StatusFighting.finishPending;
-                        else
+                            result = getCountJudgeForLeftFighter(true) + " " + getCountJudgeForRightFighter(true);
+                        }
+                        else {
                             statusFighting = StatusFighting.finishTie;
+                            result = getCountJudgeForLeftFighter(true) + " " + getCountJudgeForRightFighter(true);
+                        }
                     } else {
                         statusFighting = StatusFighting._break;
                     }
@@ -229,6 +249,7 @@ public class Fighting {
         } else if (statusFighting == StatusFighting.finishTie) {
             int l = getCountJudgeForLeftFighter(true);
             int r = getCountJudgeForRightFighter(true);
+            result = getCountJudgeForLeftFighter(true) + " " + getCountJudgeForRightFighter(true);
             if (l < r) {
                 statusFighting = StatusFighting.finishPending;
             } else if (l > r) {
@@ -289,6 +310,7 @@ public class Fighting {
         statusFighting = StatusFighting.disqualification;
 
         disqualifiedPlayer = player;
+        result = "Дисквал.";
     }
 
     /**
@@ -316,7 +338,7 @@ public class Fighting {
 
         ++countOfMinusToLeft;
         for (int i = 0; i < 3; i++) {
-            ++countOfPointsForTheRightFighter[currentRound][i];
+            countOfPointsForTheRightFighter[currentRound][i] += 3;
         }
         stackOfMinus.add(new Pair<>(Player.left, currentRound));
 
@@ -336,7 +358,7 @@ public class Fighting {
 
         ++countOfMinusToRight;
         for (int i = 0; i < 3; i++) {
-            ++countOfPointsForTheLeftFighter[currentRound][i];
+            countOfPointsForTheLeftFighter[currentRound][i] += 3;
         }
         stackOfMinus.add(new Pair<>(Player.right, currentRound));
 
@@ -346,7 +368,7 @@ public class Fighting {
     }
 
     /**
-     * Откатываем последнее предупреждение
+     * Откатываем последний minus
      */
     public synchronized void cancelLastMinus() {
         if (stackOfMinus.isEmpty())
@@ -358,12 +380,12 @@ public class Fighting {
         if (player == Player.left) {
             --countOfMinusToLeft;
             for (int i = 0; i < 3; i++) {
-                --countOfPointsForTheRightFighter[idRound][i];
+                countOfPointsForTheRightFighter[idRound][i] -= 3;
             }
         } else {
             --countOfMinusToRight;
             for (int i = 0; i < 3; i++) {
-                --countOfPointsForTheLeftFighter[idRound][i];
+                countOfPointsForTheLeftFighter[idRound][i] -= 3;
             }
         }
         if (statusFighting == StatusFighting.disqualification && countOfMinusToLeft <= 2 && countOfMinusToRight <= 2) {
@@ -493,13 +515,13 @@ public class Fighting {
         return categoryOfFighting;
     }
 
-    public synchronized BufferedImage getImageLeftConnerFlag(boolean isForJudge) {
-        return isForJudge ? imageLeftConnerFlag : imageRightConnerFlag;
-    }
+//    public synchronized BufferedImage getImageLeftConnerFlag(boolean isForJudge) {
+//        return isForJudge ? imageLeftConnerFlag : imageRightConnerFlag;
+//    }
 
-    public synchronized BufferedImage getImageRightConnerFlag(boolean isForJudge) {
-        return isForJudge ? imageRightConnerFlag : imageLeftConnerFlag;
-    }
+//    public synchronized BufferedImage getImageRightConnerFlag(boolean isForJudge) {
+//        return isForJudge ? imageRightConnerFlag : imageLeftConnerFlag;
+//    }
 
     public synchronized String getCountryOfLeftFighter(boolean isForJudge) {
         return isForJudge ? countryOfLeftFighter : countryOfRightFighter;
@@ -656,6 +678,16 @@ public class Fighting {
         return fightId + separator +
                 nameOfLeftFighter + " " + countryOfLeftFighter + " " + separator +
                 nameOfRightFighter + " " + countryOfRightFighter + " " + separator;
+    }
+
+    public synchronized String getResult() {
+        return result;
+    }
+
+    public synchronized void neyvka(Player player) {
+        statusFighting = StatusFighting.disqualification;
+        disqualifiedPlayer = player;
+        result = "Неявка";
     }
 }
 

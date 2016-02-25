@@ -14,6 +14,7 @@ TARGET = TournamentManager
 TEMPLATE = app
 
 
+
 SOURCES += main.cpp\
         mainwindow.cpp \
     handbookdialog.cpp \
@@ -26,7 +27,14 @@ SOURCES += main.cpp\
     createtournamentordersdialog.cpp \
     renderareawidget.cpp \
     tournamentgriddialog2.cpp \
-    createtournamentcategoriesdialog.cpp
+    createtournamentcategoriesdialog.cpp \
+    fiting_distribution.cpp \
+    excel_utils.cpp \
+    fighting_pairs.cpp \
+    db_utils.cpp \
+    weighing_protocol.cpp \
+    winner_report.cpp \
+    ebnutvbazu.cpp
 
 HEADERS  += mainwindow.h \
     handbookdialog.h \
@@ -39,7 +47,14 @@ HEADERS  += mainwindow.h \
     createtournamentordersdialog.h \
     renderareawidget.h \
     tournamentgriddialog2.h \
-    createtournamentcategoriesdialog.h
+    createtournamentcategoriesdialog.h \
+    fiting_distribution.h \
+    excel_utils.h \
+    fighting_pairs.h \
+    db_utils.h \
+    weighing_protocol.h \
+    winner_report.h \
+    ebnutvbazu.h
 
 FORMS    += mainwindow.ui \
     handbookdialog.ui \

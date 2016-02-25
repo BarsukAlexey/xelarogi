@@ -27,7 +27,9 @@
 #include <time.h>
 #include <set>
 #include <QtGlobal>
+#include <QDate>
 #include <assert.h>
+#include <string>
 
 
 TournamentGridDialog2::TournamentGridDialog2(const QSqlDatabase &_database, long long _tournamentUID, QWidget *_parent)
@@ -39,12 +41,13 @@ TournamentGridDialog2::TournamentGridDialog2(const QSqlDatabase &_database, long
     specialGroup = QVector<int>(4, false);
 
 
-    ebnutVBazyGovno(); // TODO DELETE THIS
+    //ebnutVBazyGovno(); // TODO DELETE THIS
 
 
     QWidget *leftPane = new QWidget;
     leftPane->setBackgroundRole(QPalette::Dark);
     qComboBoxSelectCategory = new QComboBox;
+    qComboBoxSelectCategory->setMaxVisibleItems(200);
     qTableWidget = new QTableWidget(0, 3);
     qTableWidget->setColumnCount(3);
     qTableWidget->setHorizontalHeaderLabels(QStringList({"Спортсмен", "Регион", "Приоритет"}));
@@ -155,13 +158,11 @@ void TournamentGridDialog2::onActivatedCategory(int id)
     tournamentCategories = qComboBoxSelectCategory->itemData(id, Qt::UserRole).toInt();
 
     pRenderArea->slotSetTournamentCategories(tournamentCategories);
+    //qDebug() << __LINE__ << __PRETTY_FUNCTION__ << "tournamentCategories: " << tournamentCategories;
 
-    QSqlQuery query("SELECT * FROM ORDERS WHERE TOURNAMENT_CATEGORY_FK = ? AND IS_WEIGHTED = ? AND IS_MEDICAL = ? AND IS_ACCREDITATED = ? AND IS_PAID = ?", database);
+    QSqlQuery query("SELECT * FROM ORDERS WHERE TOURNAMENT_CATEGORY_FK = ? AND IS_VALID = ?", database);
     query.bindValue(0, tournamentCategories);
     query.bindValue(1, "true");
-    query.bindValue(2, "true");
-    query.bindValue(3, "true");
-    query.bindValue(4, "true");
 
     //qDebug() << "\n" << __PRETTY_FUNCTION__  << "\n" << "tournamentCategories: " << tournamentCategories << "\n";
 
@@ -290,7 +291,7 @@ void TournamentGridDialog2::onButtonGenerateGrid()
         if (isLeaf[v]) continue;
         maxDistationToLeaf[v] = qMin(maxDistationToLeaf[2 * v], maxDistationToLeaf[2 * v + 1]) + 1;
 
-        QSqlQuery query("INSERT INTO GRID VALUES (?, ?, ?, null)", database);
+        QSqlQuery query("INSERT INTO GRID VALUES (?, ?, ?, null, null)", database);
         query.bindValue(0, tournamentCategories);
         query.bindValue(1, v);
         query.bindValue(2, "true");
@@ -368,7 +369,7 @@ void TournamentGridDialog2::onButtonGenerateGrid()
             a = b;
         }
 
-        QSqlQuery query("INSERT INTO GRID VALUES (?, ?, ?, ?)", database);
+        QSqlQuery query("INSERT INTO GRID VALUES (?, ?, ?, ?, null)", database);
         query.bindValue(0, tournamentCategories);
         query.bindValue(1, vertex);
         query.bindValue(2, "false");
@@ -423,7 +424,7 @@ void TournamentGridDialog2::onButtonGenerateGrid()
             }
         }
         {
-            QSqlQuery query("INSERT INTO GRID VALUES (?, ?, ?, ?)", database);
+            QSqlQuery query("INSERT INTO GRID VALUES (?, ?, ?, ?, null)", database);
             query.bindValue(0, tournamentCategories);
             query.bindValue(1, v);
             query.bindValue(2, "false");
@@ -432,7 +433,7 @@ void TournamentGridDialog2::onButtonGenerateGrid()
                 qDebug() << "\n" << __PRETTY_FUNCTION__ << "\n" << query.lastError().text() << "\n" << query.lastQuery() << "\n";
         }
         {
-            QSqlQuery query("INSERT INTO GRID VALUES (?, ?, ?, ?)", database);
+            QSqlQuery query("INSERT INTO GRID VALUES (?, ?, ?, ?, null)", database);
             query.bindValue(0, tournamentCategories);
             query.bindValue(1, v ^ 1);     // отличается этим от предыдущего блока
             query.bindValue(2, "false");
@@ -458,7 +459,7 @@ void TournamentGridDialog2::onButtonGenerateGrid()
             notUsedFighters.insert(a);
         }
         {
-            QSqlQuery query("INSERT INTO GRID VALUES (?, ?, ?, ?)", database);
+            QSqlQuery query("INSERT INTO GRID VALUES (?, ?, ?, ?, null)", database);
             query.bindValue(0, tournamentCategories);
             query.bindValue(1, v);
             query.bindValue(2, "false");
@@ -499,7 +500,7 @@ void TournamentGridDialog2::setInGridBestFigher(int v, const QVector<bool>& isLe
             //qDebug() << bestFighters[0].orderUID << " " << bestFighters[0].priority << " " << v;
 
 
-            QSqlQuery query("INSERT INTO GRID VALUES (?, ?, ?, ?)", database);
+            QSqlQuery query("INSERT INTO GRID VALUES (?, ?, ?, ?, null)", database);
             query.bindValue(0, tournamentCategories);
             query.bindValue(1, v);
             query.bindValue(2, "false");
@@ -549,82 +550,3 @@ TournamentGridDialog2::~TournamentGridDialog2(){}
 
 
 
-
-
-
-//
-void TournamentGridDialog2::ebnutVBazyGovno()
-{
-    return ;
-    qDebug() << "ebnutVBazyGovno";
-    QSqlQuery *query;
-
-    query = new QSqlQuery("DELETE FROM ORDERS", database);
-    if (!query->exec())
-        qDebug() << "\n" << __PRETTY_FUNCTION__ << "\n" << query->lastError().text() << "\n" << query->lastQuery() << "\n";
-    delete query;
-
-    query = new QSqlQuery("DELETE FROM TOURNAMENT_CATEGORIES", database);
-    if (!query->exec())
-        qDebug() << "\n" << __PRETTY_FUNCTION__ << "\n" << query->lastError().text() << "\n" << query->lastQuery() << "\n";
-    delete query;
-
-    query = new QSqlQuery("DELETE FROM GRID", database);
-    if (!query->exec())
-        qDebug() << "\n" << __PRETTY_FUNCTION__ << "\n" << query->lastError().text() << "\n" << query->lastQuery() << "\n";
-    delete query;
-
-    long long UID      = 10;
-    long long UID_girl = 1000;
-    int countGirl = 1;
-    for(int age = 10, stepAge = 7; age <= 45; age += stepAge)
-    {
-        for(int weight = 30, stepWeight = 21; weight <= 100; weight += stepWeight, ++UID, ++countGirl)
-        {
-            query = new QSqlQuery("INSERT INTO TOURNAMENT_CATEGORIES VALUES (?, ?, ?, ?, ?, ?, 1)", database);
-            QString str;
-            str.sprintf("Девушки от %d до %d лет, от %d до %d кг", age, age + stepAge, weight, weight + stepWeight);
-            query->bindValue(0, UID);
-            query->bindValue(1,  str);
-            query->bindValue(2, age);
-            query->bindValue(3, age + stepAge);
-            query->bindValue(4, weight);
-            query->bindValue(5, weight + stepWeight);
-            if (!query->exec())
-                qDebug() << "\n" << __PRETTY_FUNCTION__ << "\n" << query->lastError().text() << "\n" << query->lastQuery() << "\n";
-            delete query;
-
-            for (int j = 0; j < countGirl; ++j, ++UID_girl){
-                query = new QSqlQuery("INSERT INTO ORDERS VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", database);
-                query->bindValue(0, UID_girl);
-                query->bindValue(1, "Name" + QString('A' + j));
-                query->bindValue(2, "Second" + QString(char('A' + j)));
-                query->bindValue(3, "Patr" + QString(char('A' + j)));
-                query->bindValue(4, "2000-01-01");
-                query->bindValue(5, "2");
-                query->bindValue(6, "50");
-                query->bindValue(7, "1");
-                query->bindValue(8, UID);
-                query->bindValue(9, "1");
-                query->bindValue(10, "1");
-                query->bindValue(11, "2");
-                query->bindValue(12, "1");
-                query->bindValue(13, "1");
-                query->bindValue(14, "1");
-
-                query->bindValue(15, "true");
-                query->bindValue(16, "true");
-                query->bindValue(17, "true");
-                query->bindValue(18, "true");
-                if (!query->exec())
-                {
-                    qDebug() << "\n" << __PRETTY_FUNCTION__ << "\n" << query->lastError().text() << "\n" << query->lastQuery() << "\n";
-                    return;
-                }
-                delete query;
-            }
-
-            qDebug() << "DONE " << UID;
-        }
-    }
-}

@@ -22,7 +22,9 @@
 #include <QAxBase>
 #include <QDebug>
 #include <QAxObject>
-#include "QVariant"
+#include <QAxWidget>
+
+//#include "QVariant"
 
 
 RenderAreaWidget::RenderAreaWidget(QWidget *parent, int widthCell, int heightCell, const QSqlDatabase &_database)
@@ -59,7 +61,7 @@ void RenderAreaWidget::paintEvent(QPaintEvent* )
 
     QPainter painter(this);
 
-    QVector<NodeOfTournirGrid> nodes = getNodes();
+    QVector<DBUtils::NodeOfTournirGrid> nodes = DBUtils::getNodes(database, tournamentCategories);
     if (nodes.empty()) return;
     qSort(nodes);
 
@@ -68,13 +70,13 @@ void RenderAreaWidget::paintEvent(QPaintEvent* )
     countRows = 2 * (1 << (countColumns - 1)) - 1;
     setNormalSize();
 
-    for (const NodeOfTournirGrid& node : nodes)
+    for (const DBUtils::NodeOfTournirGrid& node : nodes)
     {
         QPoint cell = getCell(node.v);
         paintRect(cell.x(), cell.y(), painter, node);
         for (int child : {2 * node.v, 2 * node.v + 1})
         {
-            if (qBinaryFind(nodes, NodeOfTournirGrid({child, "", "", false})) != nodes.end() )
+            if (qBinaryFind(nodes, DBUtils::NodeOfTournirGrid({child, "", "", false, -1})) != nodes.end() )
             {
                 paintLine(getCell(node.v), getCell(child), painter);
             }
@@ -86,8 +88,8 @@ void RenderAreaWidget::mousePressEvent(QMouseEvent* event)
 {
     QPoint p(event->y() / heightCell, event->x() / widthCell);
 
-    NodeOfTournirGrid currentNode = noNode;
-    for (const NodeOfTournirGrid& node : getNodes())
+    DBUtils::NodeOfTournirGrid currentNode = noNode;
+    for (const DBUtils::NodeOfTournirGrid& node : DBUtils::getNodes(database, tournamentCategories))
         if (getCell(node.v) == p)
             currentNode = node;
     if (currentNode.v == noNode.v) return;
@@ -113,8 +115,8 @@ void RenderAreaWidget::mousePressEvent(QMouseEvent* event)
         }
         else
         {
-            NodeOfTournirGrid node0 = selectedNode;
-            NodeOfTournirGrid node1 = currentNode;
+            DBUtils::NodeOfTournirGrid node0 = selectedNode;
+            DBUtils::NodeOfTournirGrid node1 = currentNode;
             selectedNode = noNode;
             if (!node0.isFighing && !node1.isFighing)
             {
@@ -169,19 +171,23 @@ void RenderAreaWidget::mousePressEvent(QMouseEvent* event)
 
 
 
-void RenderAreaWidget::paintRect(int i, int j, QPainter& painter, const NodeOfTournirGrid& node)
+void RenderAreaWidget::paintRect(int i, int j, QPainter& painter, const DBUtils::NodeOfTournirGrid& node)
 {
     QRect rect(j * widthCell, i * heightCell, widthCell, heightCell);
     if (node.v == selectedNode.v)
         painter.fillRect(rect, QBrush(Qt::green));
-    else
-        painter.fillRect(rect, QBrush(Qt::gray));
+    //else
+        //painter.fillRect(rect, QBrush(Qt::gray));
+        //painter.fillRect(rect, QBrush(Qt::lightGray));
     painter.drawRect(rect);
     QRect rectName(rect.topLeft(), QSize(rect.width(), rect.height() / 2));
     QRect rectRegion(QPoint(rect.topLeft().x(), rect.topLeft().y() + rect.height() / 2), QSize(rect.width(), rect.height() / 2));
 
     painter.drawText(rectName  , Qt::AlignHCenter | Qt::AlignVCenter, node.name);
-    painter.drawText(rectRegion, Qt::AlignHCenter | Qt::AlignVCenter, node.region);
+    if (node.isFighing)
+        painter.drawText(rectRegion, Qt::AlignHCenter | Qt::AlignVCenter, node.result);
+    else
+        painter.drawText(rectRegion, Qt::AlignHCenter | Qt::AlignVCenter, node.region);
 }
 
 void RenderAreaWidget::paintLine(QPoint aa, QPoint bb, QPainter& painter)
@@ -200,61 +206,7 @@ void RenderAreaWidget::setNormalSize()
 }
 
 
-QVector<RenderAreaWidget::NodeOfTournirGrid> RenderAreaWidget::getNodes()
-{
-    QVector<RenderAreaWidget::NodeOfTournirGrid> arr;
-    //getNodes_ForDebuging(1, arr);
 
-    //
-    QSqlQuery query("SELECT * FROM GRID WHERE TOURNAMENT_CATEGORIES_FK = ? ", database);
-    query.bindValue(0, tournamentCategories);
-    if (query.exec())
-    {
-        while (query.next())
-        {
-            QString orderUID = query.value("ORDER_FK").toString();
-            QString name = "Unknown";
-            QString region = "";
-            bool isFighing = query.value("IS_FIGHTING").toBool();
-            if (orderUID.size() != 0)
-            {
-                QSqlQuery queryOrder("SELECT * FROM ORDERS WHERE UID = ? ", database);
-                queryOrder.bindValue(0, orderUID);
-                if (!(queryOrder.exec() && queryOrder.next()))
-                {
-                    qDebug() << __PRETTY_FUNCTION__ << " " << queryOrder.lastError().text() << "\n" << queryOrder.lastQuery();
-                    arr.clear();
-                    return arr;
-                }
-                //name = queryOrder.value("SECOND_NAME").toString() + " " + queryOrder.value("FIRST_NAME").toString();
-                name = queryOrder.value("SECOND_NAME").toString();
-
-                QSqlQuery queryRegion("SELECT * FROM REGIONS WHERE UID = ? ", database);
-                //qDebug() << __PRETTY_FUNCTION__ << queryOrder.value("REGION_FK").toString();
-                queryRegion.bindValue(0, queryOrder.value("REGION_FK").toString());
-                if (!(queryRegion.exec() && queryRegion.next()))
-                {
-                    qDebug() << __PRETTY_FUNCTION__ << " " << queryRegion.lastError().text() << "\n" << queryRegion.lastQuery();
-                    arr.clear();
-                    return arr;
-                }
-                region = queryRegion.value("SHORTNAME").toString();
-            }
-
-
-
-            arr.push_back(RenderAreaWidget::NodeOfTournirGrid({query.value("VERTEX").toInt(), name, region, isFighing}));
-        }
-    }
-    else
-    {
-        qDebug() << __PRETTY_FUNCTION__ << " " << query.lastError().text() << "\n" << query.lastQuery();
-        arr.clear();
-        return arr;
-    }
-    qSort(arr);
-    return arr;
-}
 
 void RenderAreaWidget::slotSetTournamentCategories(int tournamentCategories)
 {
@@ -279,7 +231,7 @@ void RenderAreaWidget::heightChanged(int height)
 
 void RenderAreaWidget::onSaveInExcel()
 {
-    QVector<NodeOfTournirGrid> nodes = getNodes();
+    QVector<DBUtils::NodeOfTournirGrid> nodes = DBUtils::getNodes(database, tournamentCategories);
     if (nodes.empty()) return;
     qSort(nodes);
 
@@ -287,23 +239,32 @@ void RenderAreaWidget::onSaveInExcel()
     countRows = 2 * (1 << (countColumns - 1)) - 1;
 
 
-    QAxObject* excel = new QAxObject( "Excel.Application", this );
-    excel->setProperty("Visible", true);
-    QAxObject* workbooks = excel->querySubObject( "Workbooks" );
-    QAxObject* workbook = workbooks->querySubObject( "Open(const QString&)", "D:/test_t.xlsx" );
+//    QAxObject* excel = new QAxObject( "Excel.Application", this );
+//    excel->setProperty("Visible", true);
+//    QAxObject* workbooks = excel->querySubObject( "Workbooks" );
+//    QAxObject* workbook = workbooks->querySubObject( "Open(const QString&)", "D:/test_t.xlsx" );
+//    QAxObject* sheets = workbook->querySubObject( "Sheets" );
+//    int sheetNumber = 1;
+//    QAxObject* sheet = sheets->querySubObject( "Item( int )", sheetNumber );
 
-    QAxObject* sheets = workbook->querySubObject( "Sheets" );
-    int sheetNumber = 1;
-    QAxObject* sheet = sheets->querySubObject( "Item( int )", sheetNumber );
+    QAxWidget excel("Excel.Application");
+    excel.setProperty("Visible", true);
+    QAxObject *workbooks = excel.querySubObject("WorkBooks");
+    workbooks->dynamicCall("Add");
+    QAxObject *workbook = excel.querySubObject("ActiveWorkBook");
+    QAxObject *sheets = workbook->querySubObject("WorkSheets");
+    QAxObject* sheet = sheets->querySubObject( "Item( int )", 1);
 
-
-    for (const NodeOfTournirGrid& node : nodes)
+    for (const DBUtils::NodeOfTournirGrid& node : nodes)
     {
 
         QPoint p = getCell(node.v);
 
         QAxObject* cell = sheet->querySubObject( "Cells( int, int )", p.x() + 1, p.y() + 1);
-        cell->setProperty("Value", QVariant(node.name));
+        if (node.isFighing)
+            cell->setProperty("Value", QVariant(node.name + " (" + node.result + ")"));
+        else
+            cell->setProperty("Value", QVariant(node.name));
         QAxObject *border = cell->querySubObject("Borders()");
         border->setProperty("LineStyle", 1);
         border->setProperty("Weight", 2);
@@ -311,7 +272,7 @@ void RenderAreaWidget::onSaveInExcel()
 
         for (int child : {2 * node.v, 2 * node.v + 1})
         {
-            if (qBinaryFind(nodes, NodeOfTournirGrid({child, "", "", false})) != nodes.end() )
+            if (qBinaryFind(nodes, DBUtils::NodeOfTournirGrid({child, "", "", false, -1})) != nodes.end() )
             {
                 QPoint aa = getCell(node.v);
                 QPoint bb = getCell(child);
@@ -330,11 +291,11 @@ void RenderAreaWidget::onSaveInExcel()
         }
     }
 
-    workbook->dynamicCall("Close()");
+    //workbook->dynamicCall("Close()");
     delete sheet;
     delete sheets;
     delete workbook;
     delete workbooks;
-    excel->dynamicCall("Quit()");
-    delete excel;
+    //excel->dynamicCall("Quit()");
+    //delete excel;
 }
