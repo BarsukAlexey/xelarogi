@@ -89,6 +89,10 @@ WinnerReport::WinnerReport(const QSqlDatabase& database, const long long tournam
                     ExcelUtils::setValue(sheet, currentRow, 3, DBUtils::getField(database, "SHORTNAME", "SPORT_CATEGORIES", DBUtils::getField(database, "SPORT_CATEGORY_FK", "ORDERS", orderUID)));
                     ExcelUtils::setValue(sheet, currentRow, 4,  DBUtils::getField(database, "NAME", "REGIONS", DBUtils::getField(database, "REGION_FK", "ORDERS", orderUID)));
                 }
+                else
+                {
+                    break;
+                }
                 ExcelUtils::setBorder(sheet, currentRow, 1, currentRow, heads.size());
                 place = qMin(3, place + 1);
                 ++currentRow;

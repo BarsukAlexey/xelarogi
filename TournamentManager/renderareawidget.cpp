@@ -22,7 +22,9 @@
 #include <QAxBase>
 #include <QDebug>
 #include <QAxObject>
-#include "QVariant"
+#include <QAxWidget>
+
+//#include "QVariant"
 
 
 RenderAreaWidget::RenderAreaWidget(QWidget *parent, int widthCell, int heightCell, const QSqlDatabase &_database)
@@ -234,15 +236,21 @@ void RenderAreaWidget::onSaveInExcel()
     countRows = 2 * (1 << (countColumns - 1)) - 1;
 
 
-    QAxObject* excel = new QAxObject( "Excel.Application", this );
-    excel->setProperty("Visible", true);
-    QAxObject* workbooks = excel->querySubObject( "Workbooks" );
-    QAxObject* workbook = workbooks->querySubObject( "Open(const QString&)", "D:/test_t.xlsx" );
+//    QAxObject* excel = new QAxObject( "Excel.Application", this );
+//    excel->setProperty("Visible", true);
+//    QAxObject* workbooks = excel->querySubObject( "Workbooks" );
+//    QAxObject* workbook = workbooks->querySubObject( "Open(const QString&)", "D:/test_t.xlsx" );
+//    QAxObject* sheets = workbook->querySubObject( "Sheets" );
+//    int sheetNumber = 1;
+//    QAxObject* sheet = sheets->querySubObject( "Item( int )", sheetNumber );
 
-    QAxObject* sheets = workbook->querySubObject( "Sheets" );
-    int sheetNumber = 1;
-    QAxObject* sheet = sheets->querySubObject( "Item( int )", sheetNumber );
-
+    QAxWidget excel("Excel.Application");
+    excel.setProperty("Visible", true);
+    QAxObject *workbooks = excel.querySubObject("WorkBooks");
+    workbooks->dynamicCall("Add");
+    QAxObject *workbook = excel.querySubObject("ActiveWorkBook");
+    QAxObject *sheets = workbook->querySubObject("WorkSheets");
+    QAxObject* sheet = sheets->querySubObject( "Item( int )", 1);
 
     for (const DBUtils::NodeOfTournirGrid& node : nodes)
     {
@@ -277,11 +285,11 @@ void RenderAreaWidget::onSaveInExcel()
         }
     }
 
-    workbook->dynamicCall("Close()");
+    //workbook->dynamicCall("Close()");
     delete sheet;
     delete sheets;
     delete workbook;
     delete workbooks;
-    excel->dynamicCall("Quit()");
-    delete excel;
+    //excel->dynamicCall("Quit()");
+    //delete excel;
 }

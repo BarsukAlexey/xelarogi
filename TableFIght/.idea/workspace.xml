@@ -2,12 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="83b1860c-f795-499b-9148-903b15ce9e90" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../TournamentManager/database/kickboxing.db" afterPath="$PROJECT_DIR$/../TournamentManager/database/kickboxing.db" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/net/pskov/JFrameMainJudge.java" afterPath="$PROJECT_DIR$/src/net/pskov/JFrameMainJudge.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/untitled2.iml" afterPath="$PROJECT_DIR$/untitled2.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../Tasks.txt" afterPath="$PROJECT_DIR$/../Tasks.txt" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../TournamentManager/mainwindow.ui" afterPath="$PROJECT_DIR$/../TournamentManager/mainwindow.ui" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../TournamentManager/ui_mainwindow.h" afterPath="$PROJECT_DIR$/../TournamentManager/ui_mainwindow.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../TournamentManager/renderareawidget.cpp" afterPath="$PROJECT_DIR$/../TournamentManager/renderareawidget.cpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../TournamentManager/winner_report.cpp" afterPath="$PROJECT_DIR$/../TournamentManager/winner_report.cpp" />
     </list>
     <ignored path="untitled2.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -32,7 +31,7 @@
       <file leaf-file-name="ControllerEnvironment.class" pinned="false" current-in-tab="false">
         <entry file="jar://$PROJECT_DIR$/lib/jinput-2.0.5.jar!/net/java/games/input/ControllerEnvironment.class">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-56.48148">
+            <state vertical-scroll-proportion="0.0">
               <caret line="76" column="0" selection-start-line="76" selection-start-column="0" selection-end-line="76" selection-end-column="0" />
               <folding />
             </state>
@@ -49,11 +48,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="JFrameMainJudge.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="JFrameMainJudge.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/net/pskov/JFrameMainJudge.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.7915567">
+            <state vertical-scroll-proportion="0.0">
               <caret line="185" column="99" selection-start-line="185" selection-start-column="99" selection-end-line="185" selection-end-column="99" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="untitled2.iml" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/untitled2.iml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.7915567">
+              <caret line="12" column="9" selection-start-line="12" selection-start-column="9" selection-end-line="12" selection-end-column="9" />
               <folding />
             </state>
           </provider>
@@ -128,6 +137,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -153,8 +164,6 @@
         </subPane>
       </pane>
       <pane id="Scope" />
-      <pane id="PackagesPane" />
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -886,7 +895,7 @@
     </entry>
     <entry file="jar://$PROJECT_DIR$/lib/jinput-2.0.5.jar!/net/java/games/input/ControllerEnvironment.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-56.48148">
+        <state vertical-scroll-proportion="0.0">
           <caret line="76" column="0" selection-start-line="76" selection-start-column="0" selection-end-line="76" selection-end-column="0" />
           <folding />
         </state>
@@ -900,18 +909,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/untitled2.iml">
+    <entry file="file://$PROJECT_DIR$/src/net/pskov/JFrameMainJudge.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.13192612">
-          <caret line="2" column="73" selection-start-line="2" selection-start-column="73" selection-end-line="2" selection-end-column="73" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="185" column="99" selection-start-line="185" selection-start-column="99" selection-end-line="185" selection-end-column="99" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/pskov/JFrameMainJudge.java">
+    <entry file="file://$PROJECT_DIR$/untitled2.iml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.7915567">
-          <caret line="185" column="99" selection-start-line="185" selection-start-column="99" selection-end-line="185" selection-end-column="99" />
+          <caret line="12" column="9" selection-start-line="12" selection-start-column="9" selection-end-line="12" selection-end-column="9" />
           <folding />
         </state>
       </provider>
