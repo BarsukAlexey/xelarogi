@@ -76,6 +76,7 @@ public:
         tableView->setObjectName(QStringLiteral("tableView"));
         tableView->setFocusPolicy(Qt::NoFocus);
         tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        tableView->setAlternatingRowColors(true);
         splitter->addWidget(tableView);
         tableView->verticalHeader()->setVisible(false);
         tableView->verticalHeader()->setHighlightSections(false);

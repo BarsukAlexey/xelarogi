@@ -49,9 +49,15 @@ public:
 
 private slots:
     void loadFromExcel();
-    void updateFillOrderWidget(long long orderUID);
+    void updateFillOrderWidget(long long orderUID = -1);
 
 private:
+    void addContextMenu();
+    void addSearchFilters();
+    void setComboBoxDependencies();
+    QString getAllowTournamentCategories();
+    QString getTournamentName();
+
     long long getCountryUID(QString countryName);
     long long getRegionUID(QString regionName, long long countryUID);
     long long getRegionUnitUID(QString unitName, long long regionUID, long long countryUID);
