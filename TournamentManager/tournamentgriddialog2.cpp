@@ -162,7 +162,7 @@ void TournamentGridDialog2::onActivatedCategory(int id)
 
     QSqlQuery query("SELECT * FROM ORDERS WHERE TOURNAMENT_CATEGORY_FK = ? AND IS_VALID = ?", database);
     query.bindValue(0, tournamentCategories);
-    query.bindValue(1, "true");
+    query.bindValue(1, 1);
 
     //qDebug() << "\n" << __PRETTY_FUNCTION__  << "\n" << "tournamentCategories: " << tournamentCategories << "\n";
 

@@ -21,6 +21,11 @@
 #include <QVariantMap>
 #include <QFileDialog>
 
+#include <QSqlQuery>
+#include <QSqlError>
+
+#include <algorithm>
+
 
 FightingPairs::FightingPairs(const QSqlDatabase &_database, long long _tournamentUID, QWidget* parent) :
     QDialog(parent),
@@ -31,8 +36,41 @@ FightingPairs::FightingPairs(const QSqlDatabase &_database, long long _tournamen
     globalListsOfPairs = DBUtils::getListsOfPairs(database, tournamentUID);
     for(const QVector<DBUtils::Fighing>& x : globalListsOfPairs)
     {
+        QSqlQuery queryCOUNT("SELECT count() AS COUNT FROM ORDERS WHERE TOURNAMENT_CATEGORY_FK = ? AND IS_VALID = ? GROUP BY TOURNAMENT_CATEGORY_FK", database);
+        queryCOUNT.bindValue(0, x[0].TOURNAMENT_CATEGORIES_FK);
+        queryCOUNT.bindValue(1, 1);
+        if (!queryCOUNT.exec())
+        {
+            qDebug() << __LINE__ << __PRETTY_FUNCTION__ << queryCOUNT.lastError().text() << " " << queryCOUNT.lastQuery();
+            continue;
+        }
+        int count = 0;
+        if (queryCOUNT.next())
+            count = queryCOUNT.value("COUNT").toInt();
+        QVector<int> fights;
+        for (int fight = 1; ; fight *= 2)
+        {
+            if (count < 2 * fight)
+            {
+                if (0 < count - fight) fights.push_back(count - fight);
+                break;
+            }
+            else
+                fights.push_back(fight);
+        }
+        std::reverse(fights.begin(), fights.end());
+        QString foo;
+        foo += "(";
+        for (int x : fights)
+            foo = foo + " " + QString::number(x);
+        foo += ")";
+
+
         QString str = DBUtils::get__NAME_OF_TOURNAMENT_CATEGORIES(database, x[0].TOURNAMENT_CATEGORIES_FK) +
-                "; кол-во пар: " + QString::number(x.size());
+                "; кол-во пар: " + QString::number(x.size()) +
+                "; кол-во участников: " + QString::number(count) +
+                "; распределение боёв: " + foo
+                ;
         qListWidget->addItem(str);
     }
     qListWidget->setSelectionMode(QAbstractItemView::SelectionMode::MultiSelection);
@@ -99,19 +137,19 @@ void FightingPairs::printInExcel(QAxObject *sheet, const QVector<DBUtils::Fighin
             ++currentRow;
 
             ExcelUtils::setValue(sheet, currentRow, 1, "Возраст: " +
-                QString::number(DBUtils::get__AGE_FROM(database, f.TOURNAMENT_CATEGORIES_FK)) +
-                " - " +
-                QString::number(DBUtils::get__AGE_TILL(database, f.TOURNAMENT_CATEGORIES_FK))
-            );
+                                 QString::number(DBUtils::get__AGE_FROM(database, f.TOURNAMENT_CATEGORIES_FK)) +
+                                 " - " +
+                                 QString::number(DBUtils::get__AGE_TILL(database, f.TOURNAMENT_CATEGORIES_FK))
+                                 );
             ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 3);
             ++currentRow;
 
             ExcelUtils::setValue(sheet, currentRow, 1, "Вес: " +
-                DBUtils::get__WEIGHT_FROM(database, f.TOURNAMENT_CATEGORIES_FK) +
-                " - " +
-                DBUtils::get__WEIGHT_TILL(database, f.TOURNAMENT_CATEGORIES_FK) +
-                " кг"
-            );
+                                 DBUtils::get__WEIGHT_FROM(database, f.TOURNAMENT_CATEGORIES_FK) +
+                                 " - " +
+                                 DBUtils::get__WEIGHT_TILL(database, f.TOURNAMENT_CATEGORIES_FK) +
+                                 " кг"
+                                 );
             ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 3);
             ++currentRow;
         }
