@@ -70,6 +70,7 @@ public:
     QLabel *label_26;
     QLabel *label_28;
     QLabel *label_29;
+    QLabel *label_3;
     QVBoxLayout *verticalLayout_11;
     QDateEdit *birthdayDE;
     QDoubleSpinBox *weightDSB;
@@ -81,9 +82,11 @@ public:
     QComboBox *typesCB;
     QComboBox *clubsCB;
     QComboBox *coachsCB;
-    QPushButton *addOrderBtn;
+    QComboBox *tournamentCategoriesCB;
+    QHBoxLayout *horizontalLayout_4;
     QPushButton *changeOrderBtn;
-    QSpacerItem *verticalSpacer;
+    QPushButton *addOrderBtn;
+    QSpacerItem *horizontalSpacer_4;
     QHBoxLayout *horizontalLayout_2;
     QPushButton *loadBtn;
     QSpacerItem *horizontalSpacer_3;
@@ -93,7 +96,7 @@ public:
     {
         if (CreateTournamentOrdersDialog->objectName().isEmpty())
             CreateTournamentOrdersDialog->setObjectName(QStringLiteral("CreateTournamentOrdersDialog"));
-        CreateTournamentOrdersDialog->resize(841, 545);
+        CreateTournamentOrdersDialog->resize(636, 522);
         gridLayout = new QGridLayout(CreateTournamentOrdersDialog);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
         verticalLayout = new QVBoxLayout();
@@ -107,7 +110,11 @@ public:
         label = new QLabel(CreateTournamentOrdersDialog);
         label->setObjectName(QStringLiteral("label"));
         QFont font;
-        font.setPointSize(18);
+        font.setFamily(QStringLiteral("Times New Roman"));
+        font.setPointSize(12);
+        font.setBold(false);
+        font.setItalic(false);
+        font.setWeight(50);
         label->setFont(font);
 
         horizontalLayout->addWidget(label);
@@ -146,9 +153,16 @@ public:
 
         splitter = new QSplitter(CreateTournamentOrdersDialog);
         splitter->setObjectName(QStringLiteral("splitter"));
+        QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(splitter->sizePolicy().hasHeightForWidth());
+        splitter->setSizePolicy(sizePolicy);
         splitter->setOrientation(Qt::Horizontal);
         tableView = new QTableView(splitter);
         tableView->setObjectName(QStringLiteral("tableView"));
+        sizePolicy.setHeightForWidth(tableView->sizePolicy().hasHeightForWidth());
+        tableView->setSizePolicy(sizePolicy);
         tableView->setFocusPolicy(Qt::NoFocus);
         tableView->setContextMenuPolicy(Qt::CustomContextMenu);
         tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -161,6 +175,8 @@ public:
         tableView->verticalHeader()->setVisible(false);
         widget = new QWidget(splitter);
         widget->setObjectName(QStringLiteral("widget"));
+        sizePolicy.setHeightForWidth(widget->sizePolicy().hasHeightForWidth());
+        widget->setSizePolicy(sizePolicy);
         widget->setMinimumSize(QSize(0, 0));
         gridLayout_2 = new QGridLayout(widget);
         gridLayout_2->setObjectName(QStringLiteral("gridLayout_2"));
@@ -266,6 +282,11 @@ public:
 
         verticalLayout_10->addWidget(label_29);
 
+        label_3 = new QLabel(widget);
+        label_3->setObjectName(QStringLiteral("label_3"));
+
+        verticalLayout_10->addWidget(label_3);
+
 
         horizontalLayout_7->addLayout(verticalLayout_10);
 
@@ -323,29 +344,40 @@ public:
 
         verticalLayout_11->addWidget(coachsCB);
 
+        tournamentCategoriesCB = new QComboBox(widget);
+        tournamentCategoriesCB->setObjectName(QStringLiteral("tournamentCategoriesCB"));
+
+        verticalLayout_11->addWidget(tournamentCategoriesCB);
+
 
         horizontalLayout_7->addLayout(verticalLayout_11);
 
 
-        gridLayout_2->addLayout(horizontalLayout_7, 1, 0, 3, 1);
+        gridLayout_2->addLayout(horizontalLayout_7, 1, 0, 1, 1);
+
+        horizontalLayout_4 = new QHBoxLayout();
+        horizontalLayout_4->setObjectName(QStringLiteral("horizontalLayout_4"));
+        changeOrderBtn = new QPushButton(widget);
+        changeOrderBtn->setObjectName(QStringLiteral("changeOrderBtn"));
+        changeOrderBtn->setEnabled(false);
+
+        horizontalLayout_4->addWidget(changeOrderBtn);
 
         addOrderBtn = new QPushButton(widget);
         addOrderBtn->setObjectName(QStringLiteral("addOrderBtn"));
 
-        gridLayout_2->addWidget(addOrderBtn, 6, 0, 1, 1);
+        horizontalLayout_4->addWidget(addOrderBtn);
 
-        changeOrderBtn = new QPushButton(widget);
-        changeOrderBtn->setObjectName(QStringLiteral("changeOrderBtn"));
+        horizontalSpacer_4 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-        gridLayout_2->addWidget(changeOrderBtn, 5, 0, 1, 1);
+        horizontalLayout_4->addItem(horizontalSpacer_4);
+
+
+        gridLayout_2->addLayout(horizontalLayout_4, 2, 0, 1, 1);
 
         splitter->addWidget(widget);
 
         verticalLayout->addWidget(splitter);
-
-        verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-
-        verticalLayout->addItem(verticalSpacer);
 
         horizontalLayout_2 = new QHBoxLayout();
         horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
@@ -395,8 +427,9 @@ public:
         label_26->setText(QApplication::translate("CreateTournamentOrdersDialog", "\320\240\320\260\320\267\320\264\320\265\320\273 \321\201\320\276\321\200\320\265\320\262\320\275\320\276\320\262\320\260\320\275\320\270\321\217", 0));
         label_28->setText(QApplication::translate("CreateTournamentOrdersDialog", "\320\232\320\273\321\203\320\261", 0));
         label_29->setText(QApplication::translate("CreateTournamentOrdersDialog", "\320\242\321\200\320\265\320\275\320\265\321\200", 0));
-        addOrderBtn->setText(QApplication::translate("CreateTournamentOrdersDialog", "\320\224\320\276\320\261\320\260\320\262\320\270\321\202\321\214", 0));
+        label_3->setText(QApplication::translate("CreateTournamentOrdersDialog", "\320\232\320\260\321\202\320\265\320\263\320\276\321\200\320\270\321\217 \321\202\321\203\321\200\320\275\320\270\321\200\320\260", 0));
         changeOrderBtn->setText(QApplication::translate("CreateTournamentOrdersDialog", "\320\237\321\200\320\270\320\274\320\265\320\275\320\270\321\202\321\214 \320\270\320\267\320\274\320\265\320\275\320\265\320\275\320\270\321\217", 0));
+        addOrderBtn->setText(QApplication::translate("CreateTournamentOrdersDialog", "\320\224\320\276\320\261\320\260\320\262\320\270\321\202\321\214", 0));
         loadBtn->setText(QApplication::translate("CreateTournamentOrdersDialog", "\320\227\320\260\320\263\321\200\321\203\320\267\320\270\321\202\321\214 \320\270\320\267 excel", 0));
         btnExit->setText(QApplication::translate("CreateTournamentOrdersDialog", "\320\227\320\260\320\272\321\200\321\213\321\202\321\214", 0));
     } // retranslateUi

@@ -30,7 +30,9 @@ private:
     void updateTable();
     void updateDataWidget(long long categoryUID);
     void fillSexComboBox();
+    void fillTypeComboBox();
     void selectSexByUID(long long sexUID);
+    void selectTypeByUID(long long typeUID);
     void addContextMenu();
 
 private:

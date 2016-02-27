@@ -24,6 +24,8 @@
 #include <QChar>
 #include <QAxObject>
 #include <QAxBase>
+#include <QMessageBox>
+#include <QFileDialog>
 
 #include "databaseexpert.h"
 #include "webreportdialog.h"
@@ -40,9 +42,7 @@ class CreateTournamentOrdersDialog : public QDialog
 public:
     explicit CreateTournamentOrdersDialog(const QSqlDatabase & database,
                                             long long tournamentUID,
-                                            QWidget *parent = 0,
-                                            QStringList hiddenColumns = QStringList()
-                                            );
+                                            QWidget *parent = 0);
     ~CreateTournamentOrdersDialog();
 
     static QSqlRecord m_record;
@@ -77,12 +77,13 @@ private:
     void updateTypeComboBox(long long currentUID);
     void updateClubComboBox(long long clubUID, long long regionUID);
     void updateCoachComboBox(long long coachUID, long long clubUID);
+    void updateTournamentCategoriesComboBox(long long currentUID);
 
 private:
     Ui::CreateTournamentOrdersDialog *ui;
     const QSqlDatabase & m_database;
     long long mTournamentUID;
-    QStringList mHiddenColumns;
+    QString mGlobalError = "";
 
 };
 

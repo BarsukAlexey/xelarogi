@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>646</width>
-    <height>254</height>
+    <height>324</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -67,7 +67,7 @@
              <item>
               <widget class="QLabel" name="label">
                <property name="text">
-                <string>Возраст свыше</string>
+                <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Возраст от&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                </property>
               </widget>
              </item>
@@ -89,6 +89,34 @@
               <widget class="QLabel" name="label_4">
                <property name="text">
                 <string>Вес до</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_9">
+               <property name="text">
+                <string>Раздел</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_7">
+               <property name="text">
+                <string>Продолжительность боя</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_8">
+               <property name="text">
+                <string>Продолжительность перерыва</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_10">
+               <property name="text">
+                <string>Количество раундов</string>
                </property>
               </widget>
              </item>
@@ -130,6 +158,18 @@
                </property>
               </widget>
              </item>
+             <item>
+              <widget class="QComboBox" name="typeCB"/>
+             </item>
+             <item>
+              <widget class="QSpinBox" name="durationFightingSB"/>
+             </item>
+             <item>
+              <widget class="QSpinBox" name="durationBreakSB"/>
+             </item>
+             <item>
+              <widget class="QSpinBox" name="roundCountSB"/>
+             </item>
             </layout>
            </item>
           </layout>
@@ -157,6 +197,9 @@
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
       <widget class="QPushButton" name="applyBtn">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="text">
         <string>Применить изменения</string>
        </property>

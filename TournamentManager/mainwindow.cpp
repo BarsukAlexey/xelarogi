@@ -104,16 +104,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->orderAction, &QAction::triggered, [this] () {
         HandbookDialog handbookDlg(QString("ORDERS"), QString("Заявки"), m_database, this,
-        {"IS_WEIGHTED", "IS_MEDICAL", "IS_ACCREDITATED", "IS_PAID", "COACH_FK", "CLUB_FK",
-         /*"COUNTRY_FK", "REGION_FK", "REGION_UNIT_FK",*/ "UID"});
+        {"UID"});
         handbookDlg.exec();
     });
-
-    //    connect(ui->pushButton, &QPushButton::clicked, [this] ()
-    //    {
-    //        TournamentGridDialog dialog(m_database, this);
-    //        dialog.exec();
-    //    });
 
     connectButtons();
     updateTournamentTreeWidget();
@@ -325,16 +318,7 @@ void MainWindow::connectButtons()
     connect(ui->createOrdersBtn, &QPushButton::clicked, [this] ()
     {
         long long tournamentUID = ui->tournamentUidLabel->text().toLongLong();
-        CreateTournamentOrdersDialog dlg(m_database, tournamentUID, this,
-        {"IS_WEIGHTED", "IS_MEDICAL", "IS_ACCREDITATED", "IS_PAID",
-         "UID",
-         "COACH_FK", "CLUB_FK",
-         "COUNTRY_FK", "REGION_FK",
-         "BIRTHDATE", "SEX_FK",
-         "SPORT_CATEGORY_FK",
-         "TOURNAMENT_CATEGORY_FK",
-         "IS_VALID"
-        });
+        CreateTournamentOrdersDialog dlg(m_database, tournamentUID, this);
         dlg.exec();
     });
 

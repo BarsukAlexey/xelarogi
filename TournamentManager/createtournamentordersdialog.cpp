@@ -5,25 +5,37 @@ QSqlRecord CreateTournamentOrdersDialog::m_record;
 
 CreateTournamentOrdersDialog::CreateTournamentOrdersDialog(const QSqlDatabase &database,
                                                            long long tournamentUID,
-                                                           QWidget *parent,
-                                                           QStringList hiddenColumns
+                                                           QWidget *parent
                                                            ):
     m_database(database),
     mTournamentUID(tournamentUID),
-    mHiddenColumns(hiddenColumns),
     QDialog(parent),
     ui(new Ui::CreateTournamentOrdersDialog)
 {
     ui->setupUi(this);
-
     ui->label->setText(getTournamentName());
 
     QMap<QString, QString> rusFieldNames = DataBaseExpert::fieldTranslationMap(m_database);
     auto ralTablesForFields = DataBaseExpert::ralationTablesForFields(m_database);
-    m_record = database.record("ORDERS");
+    m_record = m_database.record("ORDERS");
 
-    QSqlRelationalTableModel * model = new QSqlRelationalTableModel(0, database);
+    QSqlRelationalTableModel * model = new QSqlRelationalTableModel();
     model->setTable("ORDERS");
+    model->setFilter("TOURNAMENT_CATEGORY_FK IN " + getAllowTournamentCategories() + " AND IS_VALID = 1 ");
+    ui->tableView->setModel(model);
+    model->select();
+
+    ui->tableView->setColumnHidden(model->fieldIndex("UID"), true);
+    ui->tableView->setColumnHidden(model->fieldIndex("COACH_FK"), true);
+    ui->tableView->setColumnHidden(model->fieldIndex("CLUB_FK"), true);
+    ui->tableView->setColumnHidden(model->fieldIndex("COUNTRY_FK"), true);
+    ui->tableView->setColumnHidden(model->fieldIndex("REGION_FK"), true);
+    ui->tableView->setColumnHidden(model->fieldIndex("BIRTHDATE"), true);
+    ui->tableView->setColumnHidden(model->fieldIndex("SEX_FK"), true);
+    ui->tableView->setColumnHidden(model->fieldIndex("SPORT_CATEGORY_FK"), true);
+    ui->tableView->setColumnHidden(model->fieldIndex("TOURNAMENT_CATEGORY_FK"), true);
+    ui->tableView->setColumnHidden(model->fieldIndex("IS_VALID"), true);
+
     for (int i = 0; i < m_record.count(); ++i)
     {
         QString fieldName = m_record.fieldName(i);
@@ -32,26 +44,12 @@ CreateTournamentOrdersDialog::CreateTournamentOrdersDialog(const QSqlDatabase &d
             model->setRelation(i, QSqlRelation(ralTablesForFields[fieldName], "UID", "NAME"));
         }
     }
-    model->setEditStrategy(QSqlTableModel::OnManualSubmit);
-
-    model->setFilter("TOURNAMENT_CATEGORY_FK IN " + getAllowTournamentCategories() + " AND IS_VALID = 1 ");
-
-    model->select();
 
     for (int i = 0; i < m_record.count(); ++i)
     {
         model->setHeaderData(i, Qt::Horizontal, rusFieldNames[m_record.fieldName(i)]);
     }
-
-    ui->tableView->setModel(model);
-
-    for (int i = 0; i < m_record.count(); ++i)
-    {
-        if (mHiddenColumns.contains(m_record.fieldName(i), Qt::CaseInsensitive))
-        {
-            ui->tableView->setColumnHidden(i, true);
-        }
-    }
+    model->select();
 
     connect(ui->btnExit, &QPushButton::clicked, [this]()
     {
@@ -68,15 +66,16 @@ CreateTournamentOrdersDialog::CreateTournamentOrdersDialog(const QSqlDatabase &d
     updateFillOrderWidget();
     setComboBoxDependencies();
 
-    ui->changeOrderBtn->setEnabled(false);
-    connect(ui->tableView, &QTableView::clicked, [this] (const QModelIndex & index)
+    connect(ui->tableView, &QTableView::clicked, [this] (const QModelIndex& index)
     {
-        ui->changeOrderBtn->setEnabled(true);
+        if (index != QModelIndex())
+        {
+            ui->changeOrderBtn->setEnabled(true);
 
-        QModelIndex ind = index.model()->index(index.row(), 0);
-        long long uid = ind.data().toLongLong();
-
-        updateFillOrderWidget(uid);
+            QModelIndex ind = index.model()->index(index.row(), 0);
+            long long uid = ind.data().toLongLong();
+            updateFillOrderWidget(uid);
+        }
     });
 
     addSearchFilters();
@@ -88,62 +87,68 @@ CreateTournamentOrdersDialog::CreateTournamentOrdersDialog(const QSqlDatabase &d
         QString patronymic = ui->patronymicLE->text();
         QDate birthdate = ui->birthdayDE->date();
         double weight = ui->weightDSB->value();
-        long long sexUID = ui->gendersCB->currentData(Qt::UserRole).toLongLong();
 
+        long long sexUID = ui->gendersCB->currentData(Qt::UserRole).toLongLong();
         long long sportCategoryUID = ui->sportCategoriesCB->currentData(Qt::UserRole).toLongLong();
         long long typeUID = ui->typesCB->currentData(Qt::UserRole).toLongLong();
         long long clubUID = ui->clubsCB->currentData(Qt::UserRole).toLongLong();
         long long coachUID = ui->coachsCB->currentData(Qt::UserRole).toLongLong();
-
         long long countryUID = ui->countriesCB->currentData(Qt::UserRole).toLongLong();
         long long regionUID = ui->regionsCB->currentData(Qt::UserRole).toLongLong();
         long long regionUnitUID = ui->regionUnitsCB->currentData(Qt::UserRole).toLongLong();
+        long long tournamentCategoryUID = ui->tournamentCategoriesCB->currentData(Qt::UserRole).toLongLong();
 
-        double age = QDate::currentDate().year() - birthdate.year();
-        if (QDate::currentDate().month() == birthdate.month() &&
-            QDate::currentDate().day() < birthdate.day())
+        QString error = "";
+        if (sexUID < 0 || ui->gendersCB->currentData(Qt::DisplayRole).toString().isEmpty())                     error += "пол, ";
+        if (sportCategoryUID < 0 || ui->sportCategoriesCB->currentData(Qt::DisplayRole).toString().isEmpty())   error += "разряд, ";
+        if (typeUID < 0 || ui->typesCB->currentData(Qt::DisplayRole).toString().isEmpty())                      error += "раздел, ";
+        if (clubUID < 0 || ui->clubsCB->currentData(Qt::DisplayRole).toString().isEmpty())                      error += "клуб, ";
+        if (coachUID < 0 || ui->coachsCB->currentData(Qt::DisplayRole).toString().isEmpty())                    error += "тренер, ";
+        if (countryUID < 0 || ui->countriesCB->currentData(Qt::DisplayRole).toString().isEmpty())               error += "страна, ";
+        if (regionUID < 0 || ui->regionsCB->currentData(Qt::DisplayRole).toString().isEmpty())                  error += "регион, ";
+        if (regionUnitUID < 0 || ui->regionUnitsCB->currentData(Qt::DisplayRole).toString().isEmpty())          error += "населенный пункт, ";
+        if (tournamentCategoryUID < 0 || ui->tournamentCategoriesCB->currentData(Qt::DisplayRole).toString().isEmpty()) error += "категория турнира, ";
+
+        if (error.isEmpty())
         {
-            age -= 1.0;
+            QSqlQuery insertQuery;
+            if (!insertQuery.prepare(
+                    "INSERT INTO ORDERS("
+                    " FIRST_NAME, SECOND_NAME, PATRONYMIC,"
+                    " BIRTHDATE, WEIGHT, SEX_FK,"
+                    " COUNTRY_FK, REGION_FK, REGION_UNIT_FK,"
+                    " TOURNAMENT_CATEGORY_FK, TYPE_FK, "
+                    " CLUB_FK, COACH_FK,"
+                    " SPORT_CATEGORY_FK, IS_VALID) "
+                    "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)"
+                    ))
+                qDebug() << insertQuery.lastError().text();
+
+            insertQuery.bindValue(0, firstName);
+            insertQuery.bindValue(1, secondName);
+            insertQuery.bindValue(2, patronymic);
+            insertQuery.bindValue(3, birthdate.toString("yyyy-MM-dd"));
+            insertQuery.bindValue(4, weight);
+            insertQuery.bindValue(5, sexUID);
+            insertQuery.bindValue(6, countryUID);
+            insertQuery.bindValue(7, regionUID);
+            insertQuery.bindValue(8, regionUnitUID);
+            insertQuery.bindValue(9, tournamentCategoryUID);
+            insertQuery.bindValue(10, typeUID);
+            insertQuery.bindValue(11, clubUID);
+            insertQuery.bindValue(12, coachUID);
+            insertQuery.bindValue(13, sportCategoryUID);
+
+            if (!insertQuery.exec())
+                qDebug() << insertQuery.lastError().text();
+
+            model->select();
+            qDebug() << "added";
         }
-        else if (QDate::currentDate().month() < birthdate.month())
+        else
         {
-            age -= 1.0;
+            QMessageBox::warning(this, "Заполнены не все поля", "Вы не указали: " + error + " - заполните эти поля");
         }
-        long long tournamentCategoryUID = getTournamentCategoryUID(sexUID, age, weight);
-
-        QSqlQuery insertQuery;
-        if (!insertQuery.prepare(
-                "INSERT INTO ORDERS("
-                " FIRST_NAME, SECOND_NAME, PATRONYMIC,"
-                " BIRTHDATE, WEIGHT, SEX_FK,"
-                " COUNTRY_FK, REGION_FK, REGION_UNIT_FK,"
-                " TOURNAMENT_CATEGORY_FK, TYPE_FK, "
-                " CLUB_FK, COACH_FK,"
-                " SPORT_CATEGORY_FK, "
-                " IS_MEDICAL, IS_WEIGHTED, IS_ACCREDITATED, IS_PAID) "
-                "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, 1, 1, 1)"
-                ))
-            qDebug() << insertQuery.lastError().text();
-
-        insertQuery.bindValue(0, firstName);
-        insertQuery.bindValue(1, secondName);
-        insertQuery.bindValue(2, patronymic);
-        insertQuery.bindValue(3, birthdate.toString("yyyy-MM-dd"));
-        insertQuery.bindValue(4, weight);
-        insertQuery.bindValue(5, sexUID);
-        insertQuery.bindValue(6, countryUID);
-        insertQuery.bindValue(7, regionUID);
-        insertQuery.bindValue(8, regionUnitUID);
-        insertQuery.bindValue(9, tournamentCategoryUID);
-        insertQuery.bindValue(10, typeUID);
-        insertQuery.bindValue(11, clubUID);
-        insertQuery.bindValue(12, coachUID);
-        insertQuery.bindValue(13, sportCategoryUID);
-
-        if (!insertQuery.exec())
-            qDebug() << insertQuery.lastError().text();
-
-        model->select();
     });
 
     connect(ui->changeOrderBtn, &QPushButton::clicked, [this, model] ()
@@ -159,64 +164,71 @@ CreateTournamentOrdersDialog::CreateTournamentOrdersDialog(const QSqlDatabase &d
             QString patronymic = ui->patronymicLE->text();
             QDate birthdate = ui->birthdayDE->date();
             double weight = ui->weightDSB->value();
-            long long sexUID = ui->gendersCB->currentData(Qt::UserRole).toLongLong();
 
+            long long sexUID = ui->gendersCB->currentData(Qt::UserRole).toLongLong();
             long long sportCategoryUID = ui->sportCategoriesCB->currentData(Qt::UserRole).toLongLong();
             long long typeUID = ui->typesCB->currentData(Qt::UserRole).toLongLong();
             long long clubUID = ui->clubsCB->currentData(Qt::UserRole).toLongLong();
             long long coachUID = ui->coachsCB->currentData(Qt::UserRole).toLongLong();
-
             long long countryUID = ui->countriesCB->currentData(Qt::UserRole).toLongLong();
             long long regionUID = ui->regionsCB->currentData(Qt::UserRole).toLongLong();
             long long regionUnitUID = ui->regionUnitsCB->currentData(Qt::UserRole).toLongLong();
+            long long tournamentCategoryUID = ui->tournamentCategoriesCB->currentData(Qt::UserRole).toLongLong();
 
-            double age = QDate::currentDate().year() - birthdate.year();
-            if (QDate::currentDate().month() == birthdate.month() &&
-                QDate::currentDate().day() < birthdate.day())
+            QString error = "";
+            if (sexUID < 0 || ui->gendersCB->currentData(Qt::DisplayRole).toString().isEmpty())                     error += "пол, ";
+            if (sportCategoryUID < 0 || ui->sportCategoriesCB->currentData(Qt::DisplayRole).toString().isEmpty())   error += "разряд, ";
+            if (typeUID < 0 || ui->typesCB->currentData(Qt::DisplayRole).toString().isEmpty())                      error += "раздел, ";
+            if (clubUID < 0 || ui->clubsCB->currentData(Qt::DisplayRole).toString().isEmpty())                      error += "клуб, ";
+            if (coachUID < 0 || ui->coachsCB->currentData(Qt::DisplayRole).toString().isEmpty())                    error += "тренер, ";
+            if (countryUID < 0 || ui->countriesCB->currentData(Qt::DisplayRole).toString().isEmpty())               error += "страна, ";
+            if (regionUID < 0 || ui->regionsCB->currentData(Qt::DisplayRole).toString().isEmpty())                  error += "регион, ";
+            if (regionUnitUID < 0 || ui->regionUnitsCB->currentData(Qt::DisplayRole).toString().isEmpty())          error += "населенный пункт, ";
+            if (tournamentCategoryUID < 0 || ui->tournamentCategoriesCB->currentData(Qt::DisplayRole).toString().isEmpty()) error += "категория турнира, ";
+
+            if (error.isEmpty())
             {
-                age -= 1.0;
+                QSqlQuery updateQuery;
+                if (!updateQuery.prepare(
+                        "UPDATE ORDERS "
+                        " SET "
+                        " FIRST_NAME = ?, SECOND_NAME = ?, PATRONYMIC = ?,"
+                        " BIRTHDATE = ?, WEIGHT = ?, SEX_FK = ?,"
+                        " COUNTRY_FK = ?, REGION_FK = ?, REGION_UNIT_FK = ?,"
+                        " TOURNAMENT_CATEGORY_FK = ?, TYPE_FK = ?, "
+                        " CLUB_FK = ?, COACH_FK = ?,"
+                        " SPORT_CATEGORY_FK = ? "
+                        " WHERE UID = ? "
+                        ))
+                    qDebug() << updateQuery.lastError().text();
+
+                updateQuery.bindValue(0, firstName);
+                updateQuery.bindValue(1, secondName);
+                updateQuery.bindValue(2, patronymic);
+                updateQuery.bindValue(3, birthdate.toString("yyyy-MM-dd"));
+                updateQuery.bindValue(4, weight);
+                updateQuery.bindValue(5, sexUID);
+                updateQuery.bindValue(6, countryUID);
+                updateQuery.bindValue(7, regionUID);
+                updateQuery.bindValue(8, regionUnitUID);
+                updateQuery.bindValue(9, tournamentCategoryUID);
+                updateQuery.bindValue(10, typeUID);
+                updateQuery.bindValue(11, clubUID);
+                updateQuery.bindValue(12, coachUID);
+                updateQuery.bindValue(13, sportCategoryUID);
+                updateQuery.bindValue(14, uid);
+
+                if (!updateQuery.exec())
+                    qDebug() << updateQuery.lastError().text();
+
+                model->select();
+                ui->tableView->setCurrentIndex(ui->tableView->model()->index(index.row(), 0));
+                qDebug() << "changed";
             }
-            else if (QDate::currentDate().month() < birthdate.month())
+            else
             {
-                age -= 1.0;
+                QMessageBox::warning(this, "Заполнены не все поля", "Вы не указали: " + error + " - заполните эти поля");
             }
-            long long tournamentCategoryUID = getTournamentCategoryUID(sexUID, age, weight);
-
-            QSqlQuery updateQuery;
-            if (!updateQuery.prepare(
-                    "UPDATE ORDERS "
-                    " SET "
-                    " FIRST_NAME = ?, SECOND_NAME = ?, PATRONYMIC = ?,"
-                    " BIRTHDATE = ?, WEIGHT = ?, SEX_FK = ?,"
-                    " COUNTRY_FK = ?, REGION_FK = ?, REGION_UNIT_FK = ?,"
-                    " TOURNAMENT_CATEGORY_FK = ?, TYPE_FK = ?, "
-                    " CLUB_FK = ?, COACH_FK = ?,"
-                    " SPORT_CATEGORY_FK = ?, "
-                    " IS_MEDICAL = 1, IS_WEIGHTED = 1, IS_ACCREDITATED = 1, IS_PAID = 1 "
-                    " WHERE UID = ? "
-                    ))
-                qDebug() << updateQuery.lastError().text();
-
-            updateQuery.bindValue(0, firstName);
-            updateQuery.bindValue(1, secondName);
-            updateQuery.bindValue(2, patronymic);
-            updateQuery.bindValue(3, birthdate.toString("yyyy-MM-dd"));
-            updateQuery.bindValue(4, weight);
-            updateQuery.bindValue(5, sexUID);
-            updateQuery.bindValue(6, countryUID);
-            updateQuery.bindValue(7, regionUID);
-            updateQuery.bindValue(8, regionUnitUID);
-            updateQuery.bindValue(9, tournamentCategoryUID);
-            updateQuery.bindValue(10, typeUID);
-            updateQuery.bindValue(11, clubUID);
-            updateQuery.bindValue(12, coachUID);
-            updateQuery.bindValue(13, sportCategoryUID);
-            updateQuery.bindValue(14, uid);
-
-            if (!updateQuery.exec())
-                qDebug() << updateQuery.lastError().text();
-
-            model->select();
         }
     });
 }
@@ -228,12 +240,24 @@ CreateTournamentOrdersDialog::~CreateTournamentOrdersDialog()
 
 void CreateTournamentOrdersDialog::loadFromExcel()
 {
+    QString filePath = QFileDialog::getOpenFileName(this, tr("Выберите файл, в котором содержатся заявки"),
+                                                    "C:/", tr("Excel 97 (*.xls);;Excel (*.xlsx)"));
+
+    if (filePath.isEmpty()) return;
+
+
     QAxObject* excel = new QAxObject( "Excel.Application", 0 );
     QAxObject* workbooks = excel->querySubObject( "Workbooks" );
-    QAxObject* workbook = workbooks->querySubObject( "Open(const QString&)", "D:/orders.xlsx" );
+    QAxObject* workbook = workbooks->querySubObject( "Open(const QString&)", filePath );
 
     QAxObject* sheets = workbook->querySubObject( "Sheets" );
     int sheetCount = sheets->dynamicCall("Count()").toInt();
+
+    int totalOrders = 0;
+    int addOrders = 0;
+    int duplicateOrders = 0;
+    int noUIDsOrders = 0;
+    int errorOrders = 0;
 
     for (int sheetNumber = 1; sheetNumber <= sheetCount; ++sheetNumber)
     {
@@ -342,38 +366,87 @@ void CreateTournamentOrdersDialog::loadFromExcel()
             {
                 age -= 1.0;
             }
+
+            totalOrders++;
+
+            mGlobalError = "";
             long long tournamentCategoryUID = getTournamentCategoryUID(getGenderUID(gender), age, weight.toDouble());
+            if (mGlobalError != "")
+            {
+                QMessageBox::information(this, "Не найдена категория для спортсмена", mGlobalError);
+                noUIDsOrders++;
+            }
+            else
+            {
+                QSqlQuery findQuery;
+                if (!findQuery.prepare("SELECT * FROM ORDERS "
+                                     "WHERE "
+                                     " FIRST_NAME = ? AND SECOND_NAME = ? AND PATRONYMIC = ? AND "
+                                     " COUNTRY_FK = ? AND REGION_FK = ? AND REGION_UNIT_FK = ? AND "
+                                     " BIRTHDATE = ? AND WEIGHT = ? AND SEX_FK = ? AND "
+                                     " TOURNAMENT_CATEGORY_FK = ? AND TYPE_FK = ? AND "
+                                     " CLUB_FK = ? AND COACH_FK = ? AND "
+                                     " SPORT_CATEGORY_FK = ? AND "
+                                     " IS_VALID = 1"
+                                ))
+                    qDebug() << findQuery.lastError().text();
+                findQuery.bindValue(0, firstName);
+                findQuery.bindValue(1, secondName);
+                findQuery.bindValue(2, patronymic);
+                findQuery.bindValue(3, countryUID);
+                findQuery.bindValue(4, regionUID);
+                findQuery.bindValue(5, unitUID);
+                findQuery.bindValue(6, QDate::fromString(birthday, "dd.MM.yyyy").toString("yyyy-MM-dd"));
+                findQuery.bindValue(7, weight.toDouble());
+                findQuery.bindValue(8, getGenderUID(gender));
+                findQuery.bindValue(9, tournamentCategoryUID);
+                findQuery.bindValue(10, getTypeUID(sportKind));
+                findQuery.bindValue(11, clubUID);
+                findQuery.bindValue(12, getCoachUID(coachName, clubUID));
+                findQuery.bindValue(13, getSportCategoryUID(category));
 
+                if (findQuery.exec() && findQuery.next())
+                {
+                    duplicateOrders++;
+                }
+                else
+                {
+                    QSqlQuery query;
+                    if (!query.prepare(  "INSERT INTO ORDERS("
+                                         "FIRST_NAME, SECOND_NAME, PATRONYMIC, "
+                                         "COUNTRY_FK, REGION_FK, REGION_UNIT_FK, "
+                                         "BIRTHDATE, WEIGHT, SEX_FK, "
+                                         "TOURNAMENT_CATEGORY_FK, TYPE_FK, "
+                                         "CLUB_FK, COACH_FK, "
+                                         "SPORT_CATEGORY_FK, "
+                                         "IS_VALID) "
+                                    "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)"
+                                    ))
+                        qDebug() << query.lastError().text();
+                    query.bindValue(0, firstName);
+                    query.bindValue(1, secondName);
+                    query.bindValue(2, patronymic);
+                    query.bindValue(3, countryUID);
+                    query.bindValue(4, regionUID);
+                    query.bindValue(5, unitUID);
+                    query.bindValue(6, QDate::fromString(birthday, "dd.MM.yyyy").toString("yyyy-MM-dd"));
+                    query.bindValue(7, weight.toDouble());
+                    query.bindValue(8, getGenderUID(gender));
+                    query.bindValue(9, tournamentCategoryUID);
+                    query.bindValue(10, getTypeUID(sportKind));
+                    query.bindValue(11, clubUID);
+                    query.bindValue(12, getCoachUID(coachName, clubUID));
+                    query.bindValue(13, getSportCategoryUID(category));
 
-            QSqlQuery query;
-            if (!query.prepare(  "INSERT INTO ORDERS("
-                                 "FIRST_NAME, SECOND_NAME, PATRONYMIC, "
-                                 "COUNTRY_FK, REGION_FK, REGION_UNIT_FK, "
-                                 "BIRTHDATE, WEIGHT, SEX_FK, "
-                                 "TOURNAMENT_CATEGORY_FK, TYPE_FK, "
-                                 "CLUB_FK, COACH_FK, "
-                                 "SPORT_CATEGORY_FK, "
-                                 "IS_MEDICAL, IS_WEIGHTED, IS_ACCREDITATED, IS_PAID) "
-                            "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, 1, 1, 1)"
-                            ))
-                qDebug() << query.lastError().text();
-            query.bindValue(0, firstName);
-            query.bindValue(1, secondName);
-            query.bindValue(2, patronymic);
-            query.bindValue(3, countryUID);
-            query.bindValue(4, regionUID);
-            query.bindValue(5, unitUID);
-            query.bindValue(6, QDate::fromString(birthday, "dd.MM.yyyy").toString("yyyy-MM-dd"));
-            query.bindValue(7, weight.toDouble());
-            query.bindValue(8, getGenderUID(gender));
-            query.bindValue(9, tournamentCategoryUID);
-            query.bindValue(10, getTypeUID(sportKind));
-            query.bindValue(11, clubUID);
-            query.bindValue(12, getCoachUID(coachName, clubUID));
-            query.bindValue(13, getSportCategoryUID(category));
-
-            if (query.exec()) ;
-            else qDebug() << query.lastError().text();
+                    if (query.exec())
+                        addOrders++;
+                    else
+                    {
+                        qDebug() << query.lastError().text();
+                        errorOrders++;
+                    }
+                }
+            }
         }
     }
 
@@ -382,6 +455,12 @@ void CreateTournamentOrdersDialog::loadFromExcel()
     delete workbook;
     excel->dynamicCall("Quit()");
     delete excel;
+
+    QMessageBox::information(this, "Добавление заявок выполнено", "Всего распознано заявок: " + QString::number(totalOrders) + "\n"
+                                                                  "Добавлено заявок: " + QString::number(addOrders) + "\n"
+                                                                  "Не добавлены (нет категории): " + QString::number(noUIDsOrders) + "\n"
+                                                                  "Проигнорированы (уже содержатся в базе): " + QString::number(duplicateOrders) + "\n"
+                                                                  "Произошла ошибка при добавлении заявок: " + QString::number(errorOrders));
 }
 
 void CreateTournamentOrdersDialog::updateFillOrderWidget(long long orderUID)
@@ -391,35 +470,40 @@ void CreateTournamentOrdersDialog::updateFillOrderWidget(long long orderUID)
     long long sportCategoryUID = -1;
     long long typeUID = -1;
     long long clubUID = -1, coachUID = -1;
+    long long tournamentCategoryUID = -1;
 
-    QSqlQuery query;
-    if (!query.prepare("SELECT * FROM ORDERS WHERE UID = ?"))
-        qDebug() << query.lastError().text();
-    query.bindValue(0, orderUID);
-
-    if (query.exec() && query.next())
+    if (orderUID >= 0)
     {
-        QDate birthdate = QDate::fromString(query.value("BIRTHDATE").toString(), "yyyy-MM-dd");
+        QSqlQuery query;
+        if (!query.prepare("SELECT * FROM ORDERS WHERE UID = ?"))
+            qDebug() << query.lastError().text();
+        query.bindValue(0, orderUID);
 
-        sexUID = query.value("SEX_FK").toLongLong();
-        countryUID = query.value("COUNTRY_FK").toLongLong();
-        regionUID = query.value("REGION_FK").toLongLong();
-        regionUnitUID = query.value("REGION_UNIT_FK").toLongLong();
-        sportCategoryUID = query.value("SPORT_CATEGORY_FK").toLongLong();
-        typeUID = query.value("TYPE_FK").toLongLong();
-        clubUID = query.value("CLUB_FK").toLongLong();
-        coachUID = query.value("COACH_FK").toLongLong();
+        if (query.exec() && query.next())
+        {
+            QDate birthdate = QDate::fromString(query.value("BIRTHDATE").toString(), "yyyy-MM-dd");
+
+            sexUID = query.value("SEX_FK").toLongLong();
+            countryUID = query.value("COUNTRY_FK").toLongLong();
+            regionUID = query.value("REGION_FK").toLongLong();
+            regionUnitUID = query.value("REGION_UNIT_FK").toLongLong();
+            sportCategoryUID = query.value("SPORT_CATEGORY_FK").toLongLong();
+            typeUID = query.value("TYPE_FK").toLongLong();
+            clubUID = query.value("CLUB_FK").toLongLong();
+            coachUID = query.value("COACH_FK").toLongLong();
+            tournamentCategoryUID = query.value("TOURNAMENT_CATEGORY_FK").toLongLong();
 
 
-        ui->firstNameLE->setText(query.value("FIRST_NAME").toString());
-        ui->secondNameLE->setText(query.value("SECOND_NAME").toString());
-        ui->patronymicLE->setText(query.value("PATRONYMIC").toString());
-        ui->birthdayDE->setDate(birthdate);
-        ui->weightDSB->setValue(query.value("WEIGHT").toDouble());
-    }
-    else
-    {
-        qDebug() << query.lastError().text();
+            ui->firstNameLE->setText(query.value("FIRST_NAME").toString());
+            ui->secondNameLE->setText(query.value("SECOND_NAME").toString());
+            ui->patronymicLE->setText(query.value("PATRONYMIC").toString());
+            ui->birthdayDE->setDate(birthdate);
+            ui->weightDSB->setValue(query.value("WEIGHT").toDouble());
+        }
+        else
+        {
+            qDebug() << query.lastError().text();
+        }
     }
 
     updateSexComboBox(sexUID);
@@ -430,7 +514,7 @@ void CreateTournamentOrdersDialog::updateFillOrderWidget(long long orderUID)
     updateTypeComboBox(typeUID);
     updateClubComboBox(clubUID, regionUID);
     updateCoachComboBox(coachUID, clubUID);
-
+    updateTournamentCategoriesComboBox(tournamentCategoryUID);
 }
 
 void CreateTournamentOrdersDialog::addContextMenu()
@@ -652,30 +736,38 @@ long long CreateTournamentOrdersDialog::getRegionUnitUID(QString unitName, long 
 long long CreateTournamentOrdersDialog::getGenderUID(QString genderName)
 {
     QSqlQuery query;
-    query.prepare("SELECT UID FROM SEXES WHERE NAME = ?");
-    query.bindValue(0, genderName);
-    bool isFind = ( query.exec() && query.next() );
-    if (isFind)
+    if (!query.prepare("SELECT UID FROM SEXES"))
+        qDebug() << query.lastError().text();
+    if (query.exec())
     {
-        return query.value("UID").toLongLong();
+        while (query.next())
+        {
+            QString name = query.value("NAME").toString();
+            if (name.contains(genderName, Qt::CaseInsensitive))
+            {
+                return query.value("UID").toLongLong();
+            }
+        }
     }
     else
     {
-        query.clear();
-        query.prepare("INSERT INTO SEXES(NAME, SHORTNAME) VALUES(?, ?)");
-        query.bindValue(0, genderName);
-        query.bindValue(1, genderName.left(1).toUpper());
+        qDebug() << query.lastError().text();
+    }
 
-        if (query.exec())
-        {
-            query.clear();
-            return getGenderUID(genderName);
-        }
-        else
-        {
-            qDebug() << query.lastError().text();
-            return -100;
-        }
+    query.clear();
+    query.prepare("INSERT INTO SEXES(NAME, SHORTNAME) VALUES(?, ?)");
+    query.bindValue(0, genderName);
+    query.bindValue(1, genderName.left(1).toUpper());
+
+    if (query.exec())
+    {
+        query.clear();
+        return getGenderUID(genderName);
+    }
+    else
+    {
+        qDebug() << query.lastError().text();
+        return -100;
     }
 }
 
@@ -700,7 +792,7 @@ long long CreateTournamentOrdersDialog::getTournamentCategoryUID(long long sexUI
             double eps = 1e-8;
             if (age > ageFrom - eps && age < ageTill + eps)
             {
-                if (weight > weightFrom - eps && weight < weightTill + eps)
+                if (weight > weightFrom + eps && weight < weightTill + eps)
                 {
                     isFind = true;
                     return query.value("UID").toLongLong();
@@ -710,16 +802,7 @@ long long CreateTournamentOrdersDialog::getTournamentCategoryUID(long long sexUI
 
         if (!isFind)
         {
-            QSqlQuery insertQuery;
-            if (!insertQuery.prepare("INSERT INTO TOURNAMENT_CATEGORIES(SEX_FK, AGE_FROM, AGE_TILL, WEIGHT_FROM, WEIGHT_TILL, TOURNAMENT_FK) "
-                                     "VALUES(?, ?, ?, ?, ?, ?)"))
-                qDebug() << insertQuery.lastError().text();
-            insertQuery.bindValue(0, sexUID);
-            insertQuery.bindValue(1, age);
-            insertQuery.bindValue(2, age);
-            insertQuery.bindValue(3, weight);
-            insertQuery.bindValue(4, weight);
-            insertQuery.bindValue(5, mTournamentUID);
+            mGlobalError = "Не создана категория турнира для возраста " + QString::number(age) + " и веса " + QString::number(weight) + ". Заявка добавлена не будет.";
         }
     }
     else
@@ -864,7 +947,6 @@ long long CreateTournamentOrdersDialog::getCoachUID(QString coachName, long long
 void CreateTournamentOrdersDialog::updateSexComboBox(long long currentUID)
 {
     ui->gendersCB->clear();
-    ui->gendersCB->addItem("Выберете пол");
 
     QSqlQuery query;
     if (!query.prepare("SELECT * FROM SEXES"))
@@ -872,7 +954,7 @@ void CreateTournamentOrdersDialog::updateSexComboBox(long long currentUID)
 
     if (query.exec())
     {
-       int index = 1;
+       int index = 0;
        while (query.next())
        {
            ui->gendersCB->addItem(query.value("NAME").toString(), Qt::DisplayRole);
@@ -886,7 +968,7 @@ void CreateTournamentOrdersDialog::updateSexComboBox(long long currentUID)
     }
     else
     {
-       query.lastError().text();
+       qDebug() << query.lastError().text();
     }
 
     query.clear();
@@ -895,7 +977,6 @@ void CreateTournamentOrdersDialog::updateSexComboBox(long long currentUID)
 void CreateTournamentOrdersDialog::updateCountryComboBox(long long currentUID)
 {
     ui->countriesCB->clear();
-    ui->countriesCB->addItem("Выберете страну");
 
     QSqlQuery query;
     if (!query.prepare("SELECT * FROM COUNTRIES"))
@@ -903,7 +984,7 @@ void CreateTournamentOrdersDialog::updateCountryComboBox(long long currentUID)
 
     if (query.exec())
     {
-       int index = 1;
+       int index = 0;
        while (query.next())
        {
            ui->countriesCB->addItem(query.value("NAME").toString(), Qt::DisplayRole);
@@ -917,7 +998,7 @@ void CreateTournamentOrdersDialog::updateCountryComboBox(long long currentUID)
     }
     else
     {
-       query.lastError().text();
+       qDebug() << query.lastError().text();
     }
 
     query.clear();
@@ -926,7 +1007,6 @@ void CreateTournamentOrdersDialog::updateCountryComboBox(long long currentUID)
 void CreateTournamentOrdersDialog::updateRegionComboBox(long long regionUID, long long countryUID)
 {
     ui->regionsCB->clear();
-    ui->regionsCB->addItem("Выберете регион");
 
     QSqlQuery query;
     if (!query.prepare("SELECT * FROM REGIONS WHERE COUNTRY_FK = ?"))
@@ -935,7 +1015,7 @@ void CreateTournamentOrdersDialog::updateRegionComboBox(long long regionUID, lon
 
     if (query.exec())
     {
-       int index = 1;
+       int index = 0;
        while (query.next())
        {
            ui->regionsCB->addItem(query.value("NAME").toString(), Qt::DisplayRole);
@@ -949,7 +1029,7 @@ void CreateTournamentOrdersDialog::updateRegionComboBox(long long regionUID, lon
     }
     else
     {
-       query.lastError().text();
+       qDebug() << query.lastError().text();
     }
 
     query.clear();
@@ -958,7 +1038,6 @@ void CreateTournamentOrdersDialog::updateRegionComboBox(long long regionUID, lon
 void CreateTournamentOrdersDialog::updateRegionUnitComboBox(long long regionUnitUID, long long regionUID)
 {
     ui->regionUnitsCB->clear();
-    ui->regionUnitsCB->addItem("Выберете населенный пункт");
 
     QSqlQuery query;
     if (!query.prepare("SELECT * FROM REGION_UNITS WHERE REGION_FK = ?"))
@@ -967,7 +1046,7 @@ void CreateTournamentOrdersDialog::updateRegionUnitComboBox(long long regionUnit
 
     if (query.exec())
     {
-       int index = 1;
+       int index = 0;
        while (query.next())
        {
            ui->regionUnitsCB->addItem(query.value("NAME").toString(), Qt::DisplayRole);
@@ -981,7 +1060,7 @@ void CreateTournamentOrdersDialog::updateRegionUnitComboBox(long long regionUnit
     }
     else
     {
-       query.lastError().text();
+       qDebug() << query.lastError().text();
     }
 
     query.clear();
@@ -990,7 +1069,6 @@ void CreateTournamentOrdersDialog::updateRegionUnitComboBox(long long regionUnit
 void CreateTournamentOrdersDialog::updateSportCategoryComboBox(long long currentUID)
 {
     ui->sportCategoriesCB->clear();
-    ui->sportCategoriesCB->addItem("Выберете разряд");
 
     QSqlQuery query;
     if (!query.prepare("SELECT * FROM SPORT_CATEGORIES"))
@@ -998,7 +1076,7 @@ void CreateTournamentOrdersDialog::updateSportCategoryComboBox(long long current
 
     if (query.exec())
     {
-       int index = 1;
+       int index = 0;
        while (query.next())
        {
            ui->sportCategoriesCB->addItem(query.value("NAME").toString(), Qt::DisplayRole);
@@ -1012,7 +1090,7 @@ void CreateTournamentOrdersDialog::updateSportCategoryComboBox(long long current
     }
     else
     {
-       query.lastError().text();
+       qDebug() << query.lastError().text();
     }
 
     query.clear();
@@ -1021,7 +1099,6 @@ void CreateTournamentOrdersDialog::updateSportCategoryComboBox(long long current
 void CreateTournamentOrdersDialog::updateTypeComboBox(long long currentUID)
 {
     ui->typesCB->clear();
-    ui->typesCB->addItem("Выберете раздел");
 
     QSqlQuery query;
     if (!query.prepare("SELECT * FROM TYPES"))
@@ -1029,7 +1106,7 @@ void CreateTournamentOrdersDialog::updateTypeComboBox(long long currentUID)
 
     if (query.exec())
     {
-       int index = 1;
+       int index = 0;
        while (query.next())
        {
            ui->typesCB->addItem(query.value("NAME").toString(), Qt::DisplayRole);
@@ -1043,7 +1120,7 @@ void CreateTournamentOrdersDialog::updateTypeComboBox(long long currentUID)
     }
     else
     {
-       query.lastError().text();
+       qDebug() << query.lastError().text();
     }
 
     query.clear();
@@ -1052,7 +1129,6 @@ void CreateTournamentOrdersDialog::updateTypeComboBox(long long currentUID)
 void CreateTournamentOrdersDialog::updateClubComboBox(long long clubUID, long long regionUID)
 {
     ui->clubsCB->clear();
-    ui->clubsCB->addItem("Выберете клуб");
 
     QSqlQuery query;
     if (!query.prepare("SELECT * FROM CLUBS WHERE REGION_FK = ?"))
@@ -1061,7 +1137,7 @@ void CreateTournamentOrdersDialog::updateClubComboBox(long long clubUID, long lo
 
     if (query.exec())
     {
-       int index = 1;
+       int index = 0;
        while (query.next())
        {
            ui->clubsCB->addItem(query.value("NAME").toString(), Qt::DisplayRole);
@@ -1075,7 +1151,7 @@ void CreateTournamentOrdersDialog::updateClubComboBox(long long clubUID, long lo
     }
     else
     {
-       query.lastError().text();
+       qDebug() << query.lastError().text();
     }
 
     query.clear();
@@ -1084,7 +1160,6 @@ void CreateTournamentOrdersDialog::updateClubComboBox(long long clubUID, long lo
 void CreateTournamentOrdersDialog::updateCoachComboBox(long long coachUID, long long clubUID)
 {
     ui->coachsCB->clear();
-    ui->coachsCB->addItem("Выберете тренера");
 
     QSqlQuery query;
     if (!query.prepare("SELECT * FROM COACHS WHERE CLUB_FK = ?"))
@@ -1093,7 +1168,7 @@ void CreateTournamentOrdersDialog::updateCoachComboBox(long long coachUID, long 
 
     if (query.exec())
     {
-       int index = 1;
+       int index = 0;
        while (query.next())
        {
            ui->coachsCB->addItem(query.value("NAME").toString(), Qt::DisplayRole);
@@ -1107,7 +1182,38 @@ void CreateTournamentOrdersDialog::updateCoachComboBox(long long coachUID, long 
     }
     else
     {
-       query.lastError().text();
+       qDebug() << query.lastError().text();
+    }
+
+    query.clear();
+}
+
+void CreateTournamentOrdersDialog::updateTournamentCategoriesComboBox(long long currentUID)
+{
+    ui->tournamentCategoriesCB->clear();
+
+    QSqlQuery query;
+    if (!query.prepare("SELECT * FROM TOURNAMENT_CATEGORIES WHERE TOURNAMENT_FK = ?"))
+        qDebug() << query.lastError().text();
+    query.bindValue(0, mTournamentUID);
+
+    if (query.exec())
+    {
+       int index = 0;
+       while (query.next())
+       {
+           ui->tournamentCategoriesCB->addItem(query.value("NAME").toString(), Qt::DisplayRole);
+           ui->tournamentCategoriesCB->setItemData(index, query.value("UID"), Qt::UserRole);
+
+           if (query.value("UID").toLongLong() == currentUID)
+               ui->tournamentCategoriesCB->setCurrentIndex(index);
+
+           ++index;
+       }
+    }
+    else
+    {
+       qDebug() << query.lastError().text();
     }
 
     query.clear();
