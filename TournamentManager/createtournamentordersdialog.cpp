@@ -364,6 +364,7 @@ void CreateTournamentOrdersDialog::loadFromExcel()
                 }
                 coachName += arg;
             }
+            long long coachUID = getCoachUID(coachName, clubUID);
 
             // TODO check if exist
 
@@ -379,10 +380,14 @@ void CreateTournamentOrdersDialog::loadFromExcel()
                 age -= 1.0;
             }
 
+            long long genderUID = getGenderUID(gender);
+            long long typeUID = getTypeUID(type);
+            long long sportCategoryUID = getSportCategoryUID(sportKind);
+
             totalOrders++;
 
             mGlobalError = "";
-            long long tournamentCategoryUID = getTournamentCategoryUID(getGenderUID(gender), age, weight.toDouble(), getTypeUID(type), gender, type);
+            long long tournamentCategoryUID = getTournamentCategoryUID(genderUID, age, weight.toDouble(), typeUID, gender, type);
             if (mGlobalError != "")
             {
                 QMessageBox::information(this, "Не найдена категория для спортсмена", mGlobalError);
@@ -410,12 +415,12 @@ void CreateTournamentOrdersDialog::loadFromExcel()
                 findQuery.bindValue(5, unitUID);
                 findQuery.bindValue(6, QDate::fromString(birthday, "dd.MM.yyyy").toString("yyyy-MM-dd"));
                 findQuery.bindValue(7, weight.toDouble());
-                findQuery.bindValue(8, getGenderUID(gender));
+                findQuery.bindValue(8, genderUID);
                 findQuery.bindValue(9, tournamentCategoryUID);
-                findQuery.bindValue(10, getTypeUID(type));
+                findQuery.bindValue(10, typeUID);
                 findQuery.bindValue(11, clubUID);
-                findQuery.bindValue(12, getCoachUID(coachName, clubUID));
-                findQuery.bindValue(13, getSportCategoryUID(sportKind));
+                findQuery.bindValue(12, coachUID);
+                findQuery.bindValue(13, sportCategoryUID);
 
                 if (findQuery.exec() && findQuery.next())
                 {
@@ -443,12 +448,12 @@ void CreateTournamentOrdersDialog::loadFromExcel()
                     query.bindValue(5, unitUID);
                     query.bindValue(6, QDate::fromString(birthday, "dd.MM.yyyy").toString("yyyy-MM-dd"));
                     query.bindValue(7, weight.toDouble());
-                    query.bindValue(8, getGenderUID(gender));
+                    query.bindValue(8, genderUID);
                     query.bindValue(9, tournamentCategoryUID);
-                    query.bindValue(10, getTypeUID(type));
+                    query.bindValue(10, typeUID);
                     query.bindValue(11, clubUID);
-                    query.bindValue(12, getCoachUID(coachName, clubUID));
-                    query.bindValue(13, getSportCategoryUID(sportKind));
+                    query.bindValue(12, coachUID);
+                    query.bindValue(13, sportCategoryUID);
 
                     if (query.exec())
                         addOrders++;
