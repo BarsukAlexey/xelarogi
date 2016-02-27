@@ -36,7 +36,8 @@ SOURCES += main.cpp\
     winner_report.cpp \
     ebnutvbazu.cpp \
     renderarearesultdialog.cpp \
-    createtypedialog.cpp
+    createtypedialog.cpp \
+    generatetournamentcategoriesdialog.cpp
 
 HEADERS  += mainwindow.h \
     handbookdialog.h \
@@ -58,7 +59,8 @@ HEADERS  += mainwindow.h \
     winner_report.h \
     ebnutvbazu.h \
     renderarearesultdialog.h \
-    createtypedialog.h
+    createtypedialog.h \
+    generatetournamentcategoriesdialog.h
 
 FORMS    += mainwindow.ui \
     handbookdialog.ui \
@@ -69,4 +71,5 @@ FORMS    += mainwindow.ui \
     createtournamentordersdialog.ui \
     createtournamentcategoriesdialog.ui \
     renderarearesultdialog.ui \
-    createtypedialog.ui
+    createtypedialog.ui \
+    generatetournamentcategoriesdialog.ui
