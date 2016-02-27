@@ -34,7 +34,8 @@ SOURCES += main.cpp\
     db_utils.cpp \
     weighing_protocol.cpp \
     winner_report.cpp \
-    ebnutvbazu.cpp
+    ebnutvbazu.cpp \
+    renderarearesultdialog.cpp
 
 HEADERS  += mainwindow.h \
     handbookdialog.h \
@@ -54,7 +55,8 @@ HEADERS  += mainwindow.h \
     db_utils.h \
     weighing_protocol.h \
     winner_report.h \
-    ebnutvbazu.h
+    ebnutvbazu.h \
+    renderarearesultdialog.h
 
 FORMS    += mainwindow.ui \
     handbookdialog.ui \
@@ -63,4 +65,5 @@ FORMS    += mainwindow.ui \
     tournamentgriddialog.ui \
     createtournamentdialog.ui \
     createtournamentordersdialog.ui \
-    createtournamentcategoriesdialog.ui
+    createtournamentcategoriesdialog.ui \
+    renderarearesultdialog.ui

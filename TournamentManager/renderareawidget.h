@@ -10,6 +10,7 @@
 #include <QSet>
 #include <QPoint>
 #include <QSqlDatabase>
+#include "renderarearesultdialog.h"
 
 
 class RenderAreaWidget : public QWidget

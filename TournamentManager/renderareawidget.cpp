@@ -148,6 +148,11 @@ void RenderAreaWidget::mousePressEvent(QMouseEvent* event)
             if (node0.v > node1.v) std::swap(node0, node1);
             if (2 * node0.v == node1.v || 2 * node0.v + 1 == node1.v)
             {
+                RenderAreaResultDialog dlg(node1.name, node1.region, this);
+                dlg.exec();
+
+                node0.result = RenderAreaResultDialog::mLastResult;
+
                 QString orderUID;
                 {
                     QSqlQuery query("SELECT * FROM GRID WHERE TOURNAMENT_CATEGORIES_FK = ? AND VERTEX = ?", database);
