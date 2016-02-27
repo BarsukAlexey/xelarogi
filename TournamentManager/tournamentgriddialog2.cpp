@@ -512,6 +512,7 @@ void TournamentGridDialog2::setInGridBestFigher(int v, const QVector<bool>& isLe
     }
     else if (v <= 3)
     {
+        // TODO ЗДЕСЬ ПЛОХАЯ БАГА. УЧИТЫВАЙ  КОЛИЧЕСТВО СВОБОДНЫХ ВЕРШИН или ЛИСТОВ
         QVector<TournamentGridDialog2::BestFigher> left, right;
         if ((distToLeaf[2 * v] == distToLeaf[2 * v + 1]) && (rand() % 2 == 0))
         {

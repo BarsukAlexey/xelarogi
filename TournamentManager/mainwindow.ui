@@ -75,7 +75,7 @@
       <widget class="QStackedWidget" name="stackedWidget">
        <property name="minimumSize">
         <size>
-         <width>200</width>
+         <width>0</width>
          <height>0</height>
         </size>
        </property>
@@ -135,13 +135,17 @@
           <widget class="QLabel" name="tournamentLabel">
            <property name="font">
             <font>
-             <pointsize>14</pointsize>
+             <family>Times New Roman</family>
+             <pointsize>12</pointsize>
              <weight>50</weight>
              <bold>false</bold>
             </font>
            </property>
            <property name="text">
             <string>Турнир. Как убрать это при запуске?</string>
+           </property>
+           <property name="wordWrap">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -250,20 +254,6 @@
         </layout>
        </widget>
       </widget>
-     </widget>
-    </item>
-    <item>
-     <widget class="QPushButton" name="btnExcel">
-      <property name="text">
-       <string>Заполнить страны из Excel</string>
-      </property>
-     </widget>
-    </item>
-    <item>
-     <widget class="QPushButton" name="pushButton">
-      <property name="text">
-       <string>PushButton</string>
-      </property>
      </widget>
     </item>
    </layout>

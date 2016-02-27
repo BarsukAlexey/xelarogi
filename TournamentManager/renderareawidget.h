@@ -11,6 +11,8 @@
 #include <QPoint>
 #include <QSqlDatabase>
 #include "renderarearesultdialog.h"
+#include "db_utils.h"
+#include "excel_utils.h"
 
 
 class RenderAreaWidget : public QWidget
@@ -42,6 +44,9 @@ private:
     //QVector<NodeOfTournirGrid> getNodes();
     int log2(int x);
     QPoint getCell(int v);
+
+    long long getTournamentUID() const;
+    QString getCategoryName() const;
 
 signals:
 

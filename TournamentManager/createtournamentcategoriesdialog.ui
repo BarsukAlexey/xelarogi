@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>646</width>
-    <height>324</height>
+    <height>333</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -42,6 +42,12 @@
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>300</width>
+        <height>0</height>
+       </size>
       </property>
       <layout class="QGridLayout" name="gridLayout">
        <item row="0" column="0">
@@ -102,14 +108,14 @@
              <item>
               <widget class="QLabel" name="label_7">
                <property name="text">
-                <string>Продолжительность боя</string>
+                <string>Длительность боя</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QLabel" name="label_8">
                <property name="text">
-                <string>Продолжительность перерыва</string>
+                <string>Перерыв, сек</string>
                </property>
               </widget>
              </item>

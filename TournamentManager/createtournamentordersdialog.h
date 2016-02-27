@@ -62,7 +62,7 @@ private:
     long long getRegionUID(QString regionName, long long countryUID);
     long long getRegionUnitUID(QString unitName, long long regionUID, long long countryUID);
     long long getGenderUID(QString genderName);
-    long long getTournamentCategoryUID(long long sexUID, double age, double weight);
+    long long getTournamentCategoryUID(long long sexUID, double age, double weight, long long typeUID);
     long long getSportCategoryUID(QString categoryName);
     long long getTypeUID(QString typeName);
     long long getClubUID(QString clubName, long long coutryUID, long long regionUID, long long unitUID);
@@ -78,6 +78,8 @@ private:
     void updateClubComboBox(long long clubUID, long long regionUID);
     void updateCoachComboBox(long long coachUID, long long clubUID);
     void updateTournamentCategoriesComboBox(long long currentUID);
+
+    void fillNullString(QString& s);
 
 private:
     Ui::CreateTournamentOrdersDialog *ui;

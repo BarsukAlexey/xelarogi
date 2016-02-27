@@ -112,8 +112,6 @@ MainWindow::MainWindow(QWidget *parent) :
     updateTournamentTreeWidget();
 
     ui->tournamentUidLabel->setVisible(false);
-
-    //    connect(ui->pushButton_2, &QPushButton::clicked, this, &MainWindow::on_pushButton_2_clicked);
 }
 
 MainWindow::~MainWindow()

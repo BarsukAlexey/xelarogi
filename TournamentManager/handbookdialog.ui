@@ -14,13 +14,6 @@
    <string>Dialog</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="3" column="0">
-    <widget class="QLabel" name="label_2">
-     <property name="text">
-      <string>&lt;a href=&quot;http://127.0.0.1:49255/viewer/frameset?__report=C%3A%5CUsers%5CАлексей%5Cworkspace%5CReports%5Ctest_report.rptdesign&amp;__format=html&amp;__svg=true&amp;__locale=ru_RU&amp;__timezone=W-SU&amp;__masterpage=true&amp;__rtl=false&amp;__cubememsize=100&amp;__resourceFolder=C%3A%5CUsers%5CАлексей%5Cworkspace%5CReports&amp;998452581&quot;&gt; Посмотреть тестовый отчет &lt;/a&gt;</string>
-     </property>
-    </widget>
-   </item>
    <item row="0" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
@@ -104,13 +97,6 @@
       </widget>
      </item>
     </layout>
-   </item>
-   <item row="4" column="0">
-    <widget class="QLabel" name="label_3">
-     <property name="text">
-      <string>&lt;a href=&quot;http://127.0.0.1:49255/viewer/frameset?__report=C%3A%5CUsers%5CАлексей%5Cworkspace%5CReports%5Ctest_report.rptdesign&amp;__format=xlsx&amp;__svg=true&amp;__locale=ru_RU&amp;__timezone=W-SU&amp;__masterpage=true&amp;__rtl=false&amp;__cubememsize=100&amp;__resourceFolder=C%3A%5CUsers%5CАлексей%5Cworkspace%5CReports&amp;998452581&quot;&gt; Получить тестовый отчет в формате excel &lt;/a&gt;</string>
-     </property>
-    </widget>
    </item>
   </layout>
  </widget>

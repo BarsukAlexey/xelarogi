@@ -21,16 +21,27 @@ CreateTournamentDialog::CreateTournamentDialog(QWidget *parent) :
         {
 
             QSqlQuery query;
-            query.prepare("INSERT INTO TOURNAMENTS(NAME, SHORTNAME, DATE_BEGIN, DATE_END) "
-                          "VALUES(?, ?, ?, ?)");
+            if (!query.prepare("INSERT INTO TOURNAMENTS("
+                          "NAME, SHORTNAME, DATE_BEGIN, DATE_END, "
+                          "MAIN_JUDGE, MAIN_SECRETARY, ASSOCIATE_MAIN_JUDGE"
+                          ") "
+                          "VALUES(?, ?, ?, ?, ?, ?, ?)"))
+                qDebug() << query.lastError().text();
             query.bindValue(0, name);
             query.bindValue(1, shortName);
             query.bindValue(2, startDate.toString("yyyy-MM-dd"));
             query.bindValue(3, endDate.toString("yyyy-MM-dd"));
+            query.bindValue(4, ui->mainJudgeLE->text());
+            query.bindValue(5, ui->mainSecretaryLE->text());
+            query.bindValue(6, ui->mainJudgeHelperLE->text());
 
             if (!query.exec())
                 qDebug() << query.lastError().text();
 
+        }
+        else
+        {
+            QMessageBox::information(this, "Турнир не будет создан", "Такой турнир уже существует");
         }
     });
 }

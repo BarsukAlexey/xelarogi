@@ -54,6 +54,44 @@ QPoint RenderAreaWidget::getCell(int v)
     return p;
 }
 
+long long RenderAreaWidget::getTournamentUID() const
+{
+    long long tournamentUID = -1;
+    QSqlQuery query;
+    if (!query.prepare("SELECT * FROM TOURNAMENT_CATEGORIES WHERE UID = ?"))
+        qDebug() << query.lastError().text();
+    query.bindValue(0, tournamentCategories);
+    if (query.exec() && query.next())
+    {
+        tournamentUID = query.value("TOURNAMENT_FK").toLongLong();
+    }
+    else
+    {
+        qDebug() << query.lastError().text();
+    }
+
+    return tournamentUID;
+}
+
+QString RenderAreaWidget::getCategoryName() const
+{
+    QString name = "";
+    QSqlQuery query;
+    if (!query.prepare("SELECT NAME FROM TOURNAMENT_CATEGORIES WHERE UID = ?"))
+        qDebug() << query.lastError().text();
+    query.bindValue(0, tournamentCategories);
+    if (query.exec() && query.next())
+    {
+        name = query.value("NAME").toString();
+    }
+    else
+    {
+        qDebug() << query.lastError().text();
+    }
+
+    return name;
+}
+
 void RenderAreaWidget::paintEvent(QPaintEvent* )
 {
     //qDebug() << __PRETTY_FUNCTION__ << " " << QDateTime::currentDateTime();
@@ -162,10 +200,11 @@ void RenderAreaWidget::mousePressEvent(QMouseEvent* event)
                         qDebug() << __PRETTY_FUNCTION__ << " " << query.lastError().text() << "\n" << query.lastQuery();
                     orderUID = query.value("ORDER_FK").toString();
                 }
-                QSqlQuery query("UPDATE GRID SET ORDER_FK = ? WHERE TOURNAMENT_CATEGORIES_FK = ? AND VERTEX = ?", database);
+                QSqlQuery query("UPDATE GRID SET ORDER_FK = ?, RESULT = ? WHERE TOURNAMENT_CATEGORIES_FK = ? AND VERTEX = ?", database);
                 query.bindValue(0, orderUID);
-                query.bindValue(1, tournamentCategories);
-                query.bindValue(2, node0.v);
+                query.bindValue(1, node0.result);
+                query.bindValue(2, tournamentCategories);
+                query.bindValue(3, node0.v);
                 if (!query.exec())
                     qDebug() << __PRETTY_FUNCTION__ << " " << query.lastError().text() << "\n" << query.lastQuery();
             }
@@ -260,16 +299,24 @@ void RenderAreaWidget::onSaveInExcel()
     QAxObject *sheets = workbook->querySubObject("WorkSheets");
     QAxObject* sheet = sheets->querySubObject( "Item( int )", 1);
 
+    int offset = 3;
+    ExcelUtils::setValue(sheet, 2, 1, getCategoryName(), -1);
+
+    int maxRow = offset;
+
     for (const DBUtils::NodeOfTournirGrid& node : nodes)
     {
 
         QPoint p = getCell(node.v);
 
-        QAxObject* cell = sheet->querySubObject( "Cells( int, int )", p.x() + 1, p.y() + 1);
+        QAxObject* cell = sheet->querySubObject( "Cells( int, int )", p.x() + 1 + offset, p.y() + 1);
+        maxRow = qMax(maxRow, p.x() + 1 + offset);
+
         if (node.isFighing)
             cell->setProperty("Value", QVariant(node.name + " (" + node.result + ")"));
         else
             cell->setProperty("Value", QVariant(node.name));
+
         QAxObject *border = cell->querySubObject("Borders()");
         border->setProperty("LineStyle", 1);
         border->setProperty("Weight", 2);
@@ -286,15 +333,29 @@ void RenderAreaWidget::onSaveInExcel()
                 QPoint b(qMax(aa.x(), bb.x()), qMax(aa.y(), bb.y()));
                 for (int row = a.x(); row <= b.x(); ++row)
                 {
-                    cell = sheet->querySubObject( "Cells( int, int )", row + 1, a.y() + 1);
+                    cell = sheet->querySubObject( "Cells( int, int )", row + 1 + offset, a.y() + 1);
                     QAxObject *border = cell->querySubObject("Borders(xlEdgeRight)");
                     border->setProperty("LineStyle", 1);
                     border->setProperty("Weight", 2);
                     delete border;
+
+                    maxRow = qMax(maxRow, row + 1 + offset);
                 }
             }
         }
     }
+
+    maxRow += 2;
+    long long tournamentUID = getTournamentUID();
+
+    ExcelUtils::setValue(sheet, maxRow, 1, "Главный судья: " + DBUtils::get_MAIN_JUDGE(database, tournamentUID), 0);
+    ++maxRow;
+
+    ExcelUtils::setValue(sheet, maxRow, 1, "Главный секретарь: " + DBUtils::get_MAIN_SECRETARY(database, tournamentUID), 0);
+    ++maxRow;
+
+    ExcelUtils::setValue(sheet, maxRow, 1, "Заместитель главного судьи: " + DBUtils::get_ASSOCIATE_MAIN_JUDGE(database, tournamentUID), 0);
+    ++maxRow;
 
     //workbook->dynamicCall("Close()");
     delete sheet;
