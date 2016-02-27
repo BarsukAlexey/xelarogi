@@ -382,7 +382,7 @@ void CreateTournamentOrdersDialog::loadFromExcel()
             totalOrders++;
 
             mGlobalError = "";
-            long long tournamentCategoryUID = getTournamentCategoryUID(getGenderUID(gender), age, weight.toDouble(), getTypeUID(type));
+            long long tournamentCategoryUID = getTournamentCategoryUID(getGenderUID(gender), age, weight.toDouble(), getTypeUID(type), gender, type);
             if (mGlobalError != "")
             {
                 QMessageBox::information(this, "Не найдена категория для спортсмена", mGlobalError);
@@ -819,7 +819,7 @@ long long CreateTournamentOrdersDialog::getGenderUID(QString genderName)
     }
 }
 
-long long CreateTournamentOrdersDialog::getTournamentCategoryUID(long long sexUID, double age, double weight, long long typeUID)
+long long CreateTournamentOrdersDialog::getTournamentCategoryUID(long long sexUID, double age, double weight, long long typeUID, const QString &sexName, const QString &typeName)
 {
     QSqlQuery query;
     if (!query.prepare("SELECT * FROM TOURNAMENT_CATEGORIES WHERE SEX_FK = ? AND TOURNAMENT_FK = ? AND TYPE_FK = ?"))
@@ -851,7 +851,13 @@ long long CreateTournamentOrdersDialog::getTournamentCategoryUID(long long sexUI
 
         if (!isFind)
         {
-            mGlobalError = "Не создана категория турнира для возраста " + QString::number(age) + " и веса " + QString::number(weight) + ". Заявка добавлена не будет.";
+            mGlobalError = "Не обнаружена необходимая категория турнира для:\n"
+                           "  Вес: " + QString::number(weight) + "\n"
+                           "  Возраст: " + QString::number(age) + "\n"
+                           "  Раздел: " + typeName + "\n"
+                           "  Пол: " + sexName + "\n"
+                           "\n" +
+                           "Добавьте соответствующую категорию и повторите попытку";
         }
     }
     else
