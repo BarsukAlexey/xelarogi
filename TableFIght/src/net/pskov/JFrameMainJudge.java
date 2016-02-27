@@ -149,6 +149,8 @@ public class JFrameMainJudge extends JFrame {
                 activeFighting = selectedValue;
                 for (JPanelScoreTable panelScoreTable : allJPanelScoreTable) {
                     panelScoreTable.setFighting(activeFighting);
+                    panelScoreTable.revalidate();  // TODO?
+                    panelScoreTable.repaint(); // TODO?
                 }
 
                 // в окне главного судьи убираем панельку jPanelStartPage, заменяем её на панельку, в которой смотрим за результатами боя
@@ -402,6 +404,11 @@ public class JFrameMainJudge extends JFrame {
                 add(jPanelStartPage);
                 revalidate();
                 repaint();
+                for (JPanelScoreTable panelScoreTable : allJPanelScoreTable) {
+                    panelScoreTable.setFighting(null);
+                    panelScoreTable.revalidate();  // TODO?
+                    panelScoreTable.repaint(); // TODO?
+                }
 
                 JsonArray jsonArray = new JsonArray();
                 for (int i = 0; i < jList.getModel().getSize(); ++i) {

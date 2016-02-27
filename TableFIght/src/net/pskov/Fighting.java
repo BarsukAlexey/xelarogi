@@ -269,36 +269,37 @@ public class Fighting {
             statusFighting = StatusFighting.finishPending;
             return Player.left;
         } else {
-            return findWinnerInCaseOfTieByEuropeanRules();
+            //return findWinnerInCaseOfTieByEuropeanRules();
+            return Player.unknown;
         }
     }
 
-    private Player findWinnerInCaseOfTieByEuropeanRules() {
-        int idJudge = -1;
-        for (int i = 0; i < 3; i++) {
-            int countPointLeft = 0;
-            int countPointRight = 0;
-            for (int round = 1; round <= countOfRounds; round++) {
-                countPointLeft += countOfPointsForTheLeftFighter[round][i];
-                countPointRight += countOfPointsForTheRightFighter[round][i];
-            }
-            if (countPointLeft == countPointRight) {
-                idJudge = i;
-                break;
-            }
-        }
-        if (idJudge == -1) return Player.unknown;
-        for (int round = countOfRounds - 1; round >= 1; round--) {
-            if (countOfPointsForTheLeftFighter[round][idJudge] < countOfPointsForTheRightFighter[round][idJudge]) {
-                statusFighting = StatusFighting.finishPending;
-                return Player.right;
-            } else if (countOfPointsForTheLeftFighter[round][idJudge] > countOfPointsForTheRightFighter[round][idJudge]) {
-                statusFighting = StatusFighting.finishPending;
-                return Player.left;
-            }
-        }
-        return Player.unknown;
-    }
+//    private Player findWinnerInCaseOfTieByEuropeanRules() {
+//        int idJudge = -1;
+//        for (int i = 0; i < 3; i++) {
+//            int countPointLeft = 0;
+//            int countPointRight = 0;
+//            for (int round = 1; round <= countOfRounds; round++) {
+//                countPointLeft += countOfPointsForTheLeftFighter[round][i];
+//                countPointRight += countOfPointsForTheRightFighter[round][i];
+//            }
+//            if (countPointLeft == countPointRight) {
+//                idJudge = i;
+//                break;
+//            }
+//        }
+//        if (idJudge == -1) return Player.unknown;
+//        for (int round = countOfRounds - 1; round >= 1; round--) {
+//            if (countOfPointsForTheLeftFighter[round][idJudge] < countOfPointsForTheRightFighter[round][idJudge]) {
+//                statusFighting = StatusFighting.finishPending;
+//                return Player.right;
+//            } else if (countOfPointsForTheLeftFighter[round][idJudge] > countOfPointsForTheRightFighter[round][idJudge]) {
+//                statusFighting = StatusFighting.finishPending;
+//                return Player.left;
+//            }
+//        }
+//        return Player.unknown;
+//    }
 
     /**
      * Дисквалификация конкретного бойца
@@ -597,7 +598,7 @@ public class Fighting {
             }
             return Player.unknown;
         } else {
-            Player loser = getLoser(false);
+            Player loser = getLoser(true);
             if (loser == Player.left)
                 return Player.right;
             if (loser == Player.right)
