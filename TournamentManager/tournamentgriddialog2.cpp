@@ -525,7 +525,12 @@ void TournamentGridDialog2::setInGridBestFigher(int v, const QVector<bool>& isLe
             if (1 < bestFighters.size()) right.push_back(bestFighters[1]);
         }
 
-        if (2 < bestFighters.size()) left .push_back(bestFighters[2]);
+        if (2 < bestFighters.size()) {
+            if (isLeaf[2 * v + 1]) // сработает только когда у нас 3 участника
+                right.push_back(bestFighters[2]);
+            else
+                left.push_back(bestFighters[2]);
+        }
         if (3 < bestFighters.size()) right.push_back(bestFighters[3]);
 
         setInGridBestFigher(2 * v + 1, isLeaf, distToLeaf, left        , vertexOfBest);

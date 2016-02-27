@@ -685,10 +685,10 @@ public class Fighting {
         return result;
     }
 
-    public synchronized void neyvka(Player player) {
+    public synchronized void stopFightingBlyatSuka(Player player, String res) {
         statusFighting = StatusFighting.disqualification;
         disqualifiedPlayer = player;
-        result = "Неявка";
+        result = res;
     }
 }
 

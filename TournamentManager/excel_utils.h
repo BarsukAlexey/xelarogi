@@ -10,10 +10,14 @@ class ExcelUtils
 public:
     static void uniteRange(QAxObject *, int, int, int, int);
     static void setValue(QAxObject* sheet, int row, int column, QString text, int hAligment = 1, int vAligment = 1);
-    static void setBorder(QAxObject* sheet, int row0, int column0, int row1, int column1);
+    static void setBorder(QAxObject* sheet, int row0, int column0, int row1, int column1, int Weight = 2);
     static void setColumnAutoFit(QAxObject *sheet, int column);
+
     static void setRowAutoFit(QAxObject *sheet, int row);
     static void setRowHeight(QAxObject *sheet, int row, int height);
+
+    static void setColumnWidth(QAxObject *sheet, int column, int height);
+
     static void setPageOrientation(QAxObject* sheet, int orientation);
     static void setWrapText(QAxObject* sheet, int row, int column);
     static void generateDocumentation(QAxObject* p);

@@ -215,7 +215,7 @@ QVector<DBUtils::NodeOfTournirGrid> DBUtils::getNodes(const QSqlDatabase& databa
                 arr.clear();
                 return arr;
             }
-            region = queryRegion.value("SHORTNAME").toString();
+            region = queryRegion.value("NAME").toString();
         }
         arr.push_back(NodeOfTournirGrid({query.value("VERTEX").toInt(), name, region, isFighing, orderUID.toLongLong(), query.value("result").toString()}));
     }

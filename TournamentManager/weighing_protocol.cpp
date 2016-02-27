@@ -80,7 +80,7 @@ WeighingProtocol::WeighingProtocol(const QSqlDatabase& database, const long long
             ExcelUtils::setValue(sheet, currentRow, 3, DBUtils::getFieldDate(database, "BIRTHDATE", "ORDERS", leaf.UID));
             ExcelUtils::setValue(sheet, currentRow, 4, DBUtils::getField(database, "NAME", "REGIONS", DBUtils::getField(database, "REGION_FK", "ORDERS", leaf.UID)));
             ExcelUtils::setValue(sheet, currentRow, 5, DBUtils::getField(database, "NAME", "CLUBS", DBUtils::getField(database, "CLUB_FK", "ORDERS", leaf.UID)));
-            ExcelUtils::setValue(sheet, currentRow, 6, DBUtils::getField(database, "SHORTNAME", "SPORT_CATEGORIES", DBUtils::getField(database, "SPORT_CATEGORY_FK", "ORDERS", leaf.UID)));
+            ExcelUtils::setValue(sheet, currentRow, 6, DBUtils::getField(database, "NAME", "SPORT_CATEGORIES", DBUtils::getField(database, "SPORT_CATEGORY_FK", "ORDERS", leaf.UID)));
             ExcelUtils::setValue(sheet, currentRow, 7, DBUtils::getField(database, "WEIGHT", "ORDERS", leaf.UID));
             ExcelUtils::setValue(sheet, currentRow, 8, DBUtils::getField(database, "NAME", "COACHS", DBUtils::getField(database, "COACH_FK", "ORDERS", leaf.UID)));
             ExcelUtils::setValue(sheet, currentRow, 9, QString::number(maxVertex - leaf.v + 1));

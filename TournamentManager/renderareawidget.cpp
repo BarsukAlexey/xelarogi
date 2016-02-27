@@ -137,10 +137,11 @@ void RenderAreaWidget::mousePressEvent(QMouseEvent* event)
         {
             if (selectedNode.v == currentNode.v && selectedNode.isFighing)
             {
-                QSqlQuery query("UPDATE GRID SET ORDER_FK = ? WHERE TOURNAMENT_CATEGORIES_FK = ? AND VERTEX = ?", database);
+                QSqlQuery query("UPDATE GRID SET ORDER_FK = ?, result = ? WHERE TOURNAMENT_CATEGORIES_FK = ? AND VERTEX = ?", database);
                 query.bindValue(0, QVariant(QVariant::Int));
-                query.bindValue(1, tournamentCategories);
-                query.bindValue(2, selectedNode.v);
+                query.bindValue(1, QVariant(QVariant::String));
+                query.bindValue(2, tournamentCategories);
+                query.bindValue(3, selectedNode.v);
                 if (!query.exec())
                     qDebug() << __PRETTY_FUNCTION__ << " " << query.lastError().text() << "\n" << query.lastQuery();
             }
@@ -273,6 +274,7 @@ void RenderAreaWidget::heightChanged(int height)
     repaint();
 }
 
+#include "excel_utils.h"
 void RenderAreaWidget::onSaveInExcel()
 {
     QVector<DBUtils::NodeOfTournirGrid> nodes = DBUtils::getNodes(database, tournamentCategories);
@@ -300,7 +302,7 @@ void RenderAreaWidget::onSaveInExcel()
     QAxObject* sheet = sheets->querySubObject( "Item( int )", 1);
 
     int offset = 3;
-    ExcelUtils::setValue(sheet, 2, 1, getCategoryName(), -1);
+
 
     int maxRow = offset;
 
@@ -309,18 +311,14 @@ void RenderAreaWidget::onSaveInExcel()
 
         QPoint p = getCell(node.v);
 
-        QAxObject* cell = sheet->querySubObject( "Cells( int, int )", p.x() + 1 + offset, p.y() + 1);
         maxRow = qMax(maxRow, p.x() + 1 + offset);
 
         if (node.isFighing)
-            cell->setProperty("Value", QVariant(node.name + " (" + node.result + ")"));
+            ExcelUtils::setValue(sheet, p.x() + 1 + offset, p.y() + 1, node.name + "\r\n" + node.result);
         else
-            cell->setProperty("Value", QVariant(node.name));
+            ExcelUtils::setValue(sheet, p.x() + 1 + offset, p.y() + 1, node.name + "\r\n" + node.region);
 
-        QAxObject *border = cell->querySubObject("Borders()");
-        border->setProperty("LineStyle", 1);
-        border->setProperty("Weight", 2);
-        delete cell;
+        ExcelUtils::setBorder(sheet, p.x() + 1 + offset, p.y() + 1, p.x() + 1 + offset, p.y() + 1, 3);
 
         for (int child : {2 * node.v, 2 * node.v + 1})
         {
@@ -333,17 +331,25 @@ void RenderAreaWidget::onSaveInExcel()
                 QPoint b(qMax(aa.x(), bb.x()), qMax(aa.y(), bb.y()));
                 for (int row = a.x(); row <= b.x(); ++row)
                 {
-                    cell = sheet->querySubObject( "Cells( int, int )", row + 1 + offset, a.y() + 1);
+                    QAxObject *cell = sheet->querySubObject( "Cells( int, int )", row + 1 + offset, a.y() + 1);
                     QAxObject *border = cell->querySubObject("Borders(xlEdgeRight)");
                     border->setProperty("LineStyle", 1);
-                    border->setProperty("Weight", 2);
+                    border->setProperty("Weight", 3);
                     delete border;
+                    delete cell;
 
                     maxRow = qMax(maxRow, row + 1 + offset);
                 }
             }
         }
     }
+
+    for (int i = 1; i < 30; ++i) ExcelUtils::setRowHeight(sheet, i, 50);
+    for (int i = 1; i < 30; ++i) ExcelUtils::setColumnWidth(sheet, i, 50);
+    for (int i = 1; i < 30; ++i) ExcelUtils::setColumnAutoFit(sheet, i);
+    for (int i = 1; i < 30; ++i) ExcelUtils::setRowAutoFit(sheet, i);
+
+    ExcelUtils::setValue(sheet, 2, 1, getCategoryName(), 0);
 
     maxRow += 2;
     long long tournamentUID = getTournamentUID();

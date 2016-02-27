@@ -32,7 +32,7 @@ void ExcelUtils::setValue(QAxObject* sheet, int row, int column, QString text, i
     delete cell;
 }
 
-void ExcelUtils::setBorder(QAxObject* sheet, int row0, int column0, int row1, int column1)
+void ExcelUtils::setBorder(QAxObject* sheet, int row0, int column0, int row1, int column1, int Weight)
 {
     QAxObject* cell1 = sheet->querySubObject("Cells(QVariant&, QVariant&)", row0, column0);
     QAxObject* cell2 = sheet->querySubObject("Cells(QVariant&, QVariant&)", row1, column1);
@@ -46,7 +46,7 @@ void ExcelUtils::setBorder(QAxObject* sheet, int row0, int column0, int row1, in
     // тип линии (там пунктиры,сплошная и так далее)
     border->setProperty("LineStyle",1);
     // толщина
-    border->setProperty("Weight",2);
+    border->setProperty("Weight", Weight);
 }
 
 void ExcelUtils::setColumnAutoFit(QAxObject* sheet, int column)
@@ -72,6 +72,12 @@ void ExcelUtils::setRowHeight(QAxObject* sheet, int row, int height)
 //    razmer->setProperty("RowHeight",100);
     QAxObject *pRow = sheet->querySubObject("Rows(QVariant&)", row);
     pRow->setProperty("RowHeight", height);
+}
+
+void ExcelUtils::setColumnWidth(QAxObject* sheet, int column, int height)
+{
+    QAxObject *pRow = sheet->querySubObject("Columns(QVariant&)", column);
+    pRow->setProperty("ColumnWidth", height);
 }
 
 // 1 - портретная, 2 - альбомная

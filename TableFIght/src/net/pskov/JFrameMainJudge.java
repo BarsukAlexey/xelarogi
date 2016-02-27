@@ -271,22 +271,40 @@ public class JFrameMainJudge extends JFrame {
         JPanel jPanelRight = new JPanel();
         jPanelRight.setLayout(new BoxLayout(jPanelRight, BoxLayout.Y_AXIS));
         JLabel[] jLabels = new JLabel[]{
-                new JLabel("Q - minus to red"),
-                new JLabel("O - minus to blue"),
-                new JLabel("T - cancel last minus"),
+                new JLabel("Q - minus кр. углу"),
+                new JLabel("O - minus син. углу"),
+                new JLabel("T - отмена последнего minus"),
                 new JLabel(" "),
-                new JLabel("A - fo. to red"),
-                new JLabel("K - fo. to blue"),
-                new JLabel("G - cancel last fo."),
+                new JLabel("A - fo. кр. углу"),
+                new JLabel("K - fo. син. углу"),
+                new JLabel("G - отмена последнего fo."),
                 new JLabel(" "),
-                new JLabel("Z - ex. to red"),
-                new JLabel("M - ex. to blue"),
-                new JLabel("V - cancel last ex."),
+                new JLabel("Z - ex. кр. углу"),
+                new JLabel("M - ex. син. углу"),
+                new JLabel("V - отмена последнего ex."),
                 new JLabel(" "),
-                new JLabel("W - неявка кр. угла"),
-                new JLabel("I - неявка син. угла"),
+                new JLabel("W - нокаут кр. угла"),
+                new JLabel("I - нокаут син. угла"),
                 new JLabel(" "),
-                new JLabel("SPACE - start/pause round and exit"),
+                new JLabel("S - отказ от боя кр. угла"),
+                new JLabel("J - отказ от боя син. угла"),
+                new JLabel(" "),
+                new JLabel("X - дисквалификация кр. угла"),
+                new JLabel("N - дисквалификация син. угла"),
+                new JLabel(" "),
+                new JLabel("E - остановка боя рефери кр. угла"),
+                new JLabel("U - остановка боя рефери син. угла"),
+                new JLabel(" "),
+                new JLabel("D - технический нокаут кр. угла"),
+                new JLabel("H - технический нокаут син. угла"),
+                new JLabel(" "),
+                new JLabel("C - невозможность продолжать бой кр. угла"),
+                new JLabel("B - невозможность продолжать бой син. угла"),
+                new JLabel(" "),
+                new JLabel("R - отказ секунданта кр. угла"),
+                new JLabel("Y - отказ секунданта син. угла"),
+                new JLabel(" "),
+                new JLabel("SPACE - начать бой/пауза/выход"),
         };
         for (JLabel jLabel : jLabels) {
             Font font = jLabel.getFont();
@@ -380,12 +398,27 @@ public class JFrameMainJudge extends JFrame {
         if (pressedKeys.contains(Component.Identifier.Key.M)) {
             activeFighting.addExToRight();
         }
-        if (pressedKeys.contains(Component.Identifier.Key.W)) {
-            activeFighting.neyvka(Player.left);
-        }
-        if (pressedKeys.contains(Component.Identifier.Key.I)) {
-            activeFighting.neyvka(Player.right);
-        }
+
+        if (pressedKeys.contains(Component.Identifier.Key.W)) activeFighting.stopFightingBlyatSuka(Player.left, "КО");
+        if (pressedKeys.contains(Component.Identifier.Key.I)) activeFighting.stopFightingBlyatSuka(Player.right, "КО");
+
+        if (pressedKeys.contains(Component.Identifier.Key.S)) activeFighting.stopFightingBlyatSuka(Player.left, "L");
+        if (pressedKeys.contains(Component.Identifier.Key.J)) activeFighting.stopFightingBlyatSuka(Player.right, "L");
+
+        if (pressedKeys.contains(Component.Identifier.Key.X)) activeFighting.stopFightingBlyatSuka(Player.left, "DISQ");
+        if (pressedKeys.contains(Component.Identifier.Key.N)) activeFighting.stopFightingBlyatSuka(Player.right, "DISQ");
+
+        if (pressedKeys.contains(Component.Identifier.Key.E)) activeFighting.stopFightingBlyatSuka(Player.left, "RSC");
+        if (pressedKeys.contains(Component.Identifier.Key.U)) activeFighting.stopFightingBlyatSuka(Player.right, "RSC");
+
+        if (pressedKeys.contains(Component.Identifier.Key.D)) activeFighting.stopFightingBlyatSuka(Player.left, "RSCH");
+        if (pressedKeys.contains(Component.Identifier.Key.H)) activeFighting.stopFightingBlyatSuka(Player.right, "RSCH");
+
+        if (pressedKeys.contains(Component.Identifier.Key.C)) activeFighting.stopFightingBlyatSuka(Player.left, "AB");
+        if (pressedKeys.contains(Component.Identifier.Key.B)) activeFighting.stopFightingBlyatSuka(Player.right, "AB");
+
+        if (pressedKeys.contains(Component.Identifier.Key.R)) activeFighting.stopFightingBlyatSuka(Player.left, "WO");
+        if (pressedKeys.contains(Component.Identifier.Key.Y)) activeFighting.stopFightingBlyatSuka(Player.right, "WO");
 
 
 

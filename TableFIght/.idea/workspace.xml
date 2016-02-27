@@ -7,14 +7,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="83b1860c-f795-499b-9148-903b15ce9e90" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/artifacts/untitled2_jar.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/libraries/MyJinput.xml" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../TournamentManager/database/kickboxing.db" afterPath="$PROJECT_DIR$/../TournamentManager/database/kickboxing.db" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/net/pskov/Fighting.java" afterPath="$PROJECT_DIR$/src/net/pskov/Fighting.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/net/pskov/JFrameMainJudge.java" afterPath="$PROJECT_DIR$/src/net/pskov/JFrameMainJudge.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/untitled2.iml" afterPath="$PROJECT_DIR$/untitled2.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/результаты боя.json" afterPath="$PROJECT_DIR$/результаты боя.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../TournamentManager/db_utils.cpp" afterPath="$PROJECT_DIR$/../TournamentManager/db_utils.cpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../TournamentManager/excel_utils.cpp" afterPath="$PROJECT_DIR$/../TournamentManager/excel_utils.cpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../TournamentManager/excel_utils.h" afterPath="$PROJECT_DIR$/../TournamentManager/excel_utils.h" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../TournamentManager/renderareawidget.cpp" afterPath="$PROJECT_DIR$/../TournamentManager/renderareawidget.cpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../TournamentManager/tournamentgriddialog2.cpp" afterPath="$PROJECT_DIR$/../TournamentManager/tournamentgriddialog2.cpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../TournamentManager/weighing_protocol.cpp" afterPath="$PROJECT_DIR$/../TournamentManager/weighing_protocol.cpp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../TournamentManager/winner_report.cpp" afterPath="$PROJECT_DIR$/../TournamentManager/winner_report.cpp" />
     </list>
     <ignored path="untitled2.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -35,55 +37,52 @@
     <favorites_list name="untitled2" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="JFrameMainJudge.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/net/pskov/JFrameMainJudge.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="407" column="43" selection-start-line="407" selection-start-column="43" selection-end-line="407" selection-end-column="43" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="JPanelScoreTable.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/net/pskov/JPanelScoreTable.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="20" column="44" selection-start-line="20" selection-start-column="44" selection-end-line="20" selection-end-column="44" />
-              <folding>
-                <element signature="e#444#445#0" expanded="true" />
-                <element signature="e#470#471#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Fighting.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/net/pskov/Fighting.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="283" column="46" selection-start-line="283" selection-start-column="46" selection-end-line="283" selection-end-column="46" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="untitled2.iml" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/untitled2.iml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.2844141">
-              <caret line="10" column="23" selection-start-line="10" selection-start-column="23" selection-end-line="10" selection-end-column="23" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <splitter split-orientation="horizontal" split-proportion="0.7366738">
+      <split-first>
+        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+          <file leaf-file-name="JFrameMainJudge.java" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/src/net/pskov/JFrameMainJudge.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="0.10193548">
+                  <caret line="392" column="41" selection-start-line="392" selection-start-column="41" selection-end-line="392" selection-end-column="41" />
+                  <folding>
+                    <element signature="imports" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="Fighting.java" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/net/pskov/Fighting.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="0.0">
+                  <caret line="687" column="50" selection-start-line="687" selection-start-column="50" selection-end-line="687" selection-end-column="50" />
+                  <folding>
+                    <element signature="imports" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-first>
+      <split-second>
+        <leaf>
+          <file leaf-file-name="JFrameMainJudge.java" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/src/net/pskov/JFrameMainJudge.java">
+              <provider selected="true" editor-type-id="text-editor">
+                <state vertical-scroll-proportion="0.36">
+                  <caret line="289" column="56" selection-start-line="289" selection-start-column="56" selection-end-line="289" selection-end-column="56" />
+                  <folding>
+                    <element signature="imports" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-second>
+    </splitter>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -110,8 +109,8 @@
         <option value="C:/Program Files/Java/jdk1.8.0_60/src.zip!/java/security/ProtectionDomain.java" />
         <option value="$PROJECT_DIR$/untitled2.iml" />
         <option value="$PROJECT_DIR$/.idea/workspace.xml" />
-        <option value="$PROJECT_DIR$/src/net/pskov/JFrameMainJudge.java" />
         <option value="$PROJECT_DIR$/src/net/pskov/Fighting.java" />
+        <option value="$PROJECT_DIR$/src/net/pskov/JFrameMainJudge.java" />
       </list>
     </option>
   </component>
@@ -153,8 +152,9 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
       <pane id="Scope" />
+      <pane id="PackagesPane" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -211,7 +211,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -535,6 +534,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3296582" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3296582" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.11466373" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" x="526" y="726" width="1376" height="270" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5506608" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.18176973" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -542,15 +542,14 @@
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.15214995" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Documentation" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" show_stripe_button="true" weight="0.4189636" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" x="307" y="209" width="1289" height="617" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.11466373" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" x="526" y="726" width="1376" height="270" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3290398" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.15214995" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -918,19 +917,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/pskov/JFrameMainJudge.java">
+    <entry file="file://$PROJECT_DIR$/untitled2.iml">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="407" column="43" selection-start-line="407" selection-start-column="43" selection-end-line="407" selection-end-column="43" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state vertical-scroll-proportion="0.48295453">
+          <caret line="17" column="16" selection-start-line="0" selection-start-column="0" selection-end-line="20" selection-end-column="9" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/net/pskov/JPanelScoreTable.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state vertical-scroll-proportion="0.028409092">
           <caret line="20" column="44" selection-start-line="20" selection-start-column="44" selection-end-line="20" selection-end-column="44" />
           <folding>
             <element signature="e#444#445#0" expanded="true" />
@@ -942,18 +939,20 @@
     <entry file="file://$PROJECT_DIR$/src/net/pskov/Fighting.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="283" column="46" selection-start-line="283" selection-start-column="46" selection-end-line="283" selection-end-column="46" />
+          <caret line="687" column="50" selection-start-line="687" selection-start-column="50" selection-end-line="687" selection-end-column="50" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/untitled2.iml">
+    <entry file="file://$PROJECT_DIR$/src/net/pskov/JFrameMainJudge.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.2844141">
-          <caret line="10" column="23" selection-start-line="10" selection-start-column="23" selection-end-line="10" selection-end-column="23" />
-          <folding />
+        <state vertical-scroll-proportion="0.10193548">
+          <caret line="392" column="41" selection-start-line="392" selection-start-column="41" selection-end-line="392" selection-end-column="41" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

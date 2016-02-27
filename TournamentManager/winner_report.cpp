@@ -86,7 +86,7 @@ WinnerReport::WinnerReport(const QSqlDatabase& database, const long long tournam
                 if (orderUID != 0)
                 {
                     ExcelUtils::setValue(sheet, currentRow, 2, DBUtils::getField(database, "SECOND_NAME", "ORDERS", orderUID) + " " + DBUtils::getField(database, "FIRST_NAME", "ORDERS", orderUID));
-                    ExcelUtils::setValue(sheet, currentRow, 3, DBUtils::getField(database, "SHORTNAME", "SPORT_CATEGORIES", DBUtils::getField(database, "SPORT_CATEGORY_FK", "ORDERS", orderUID)));
+                    ExcelUtils::setValue(sheet, currentRow, 3, DBUtils::getField(database, "NAME", "SPORT_CATEGORIES", DBUtils::getField(database, "SPORT_CATEGORY_FK", "ORDERS", orderUID)));
                     ExcelUtils::setValue(sheet, currentRow, 4,  DBUtils::getField(database, "NAME", "REGIONS", DBUtils::getField(database, "REGION_FK", "ORDERS", orderUID)));
                 }
                 else
