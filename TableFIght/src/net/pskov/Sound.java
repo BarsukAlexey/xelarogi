@@ -1,16 +1,7 @@
 package net.pskov;
 
+import javax.sound.sampled.*;
 import java.io.File;
-import java.io.IOException;
-
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.FloatControl;
-import javax.sound.sampled.LineEvent;
-import javax.sound.sampled.LineListener;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class Sound {
     private boolean released = false;
@@ -26,9 +17,8 @@ public class Sound {
             clip.addLineListener(new Listener());
             volumeC = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
             released = true;
-        } catch (IOException | UnsupportedAudioFileException | LineUnavailableException exc) {
-            exc.printStackTrace();
-            released = false;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -44,7 +34,7 @@ public class Sound {
 
     //Запуск
     /*
-	  breakOld определяет поведение, если звук уже играется
+      breakOld определяет поведение, если звук уже играется
 	  Если reakOld==true, о звук будет прерван и запущен заново
 	  Иначе ничего не произойдёт
 	*/
@@ -76,8 +66,8 @@ public class Sound {
     }
 
     //Установка громкости
-	/*
-	  x долже быть в пределах от 0 до 1 (от самого тихого к самому громкому)
+    /*
+      x долже быть в пределах от 0 до 1 (от самого тихого к самому громкому)
 	*/
     public void setVolume(float x) {
         if (x < 0) x = 0;

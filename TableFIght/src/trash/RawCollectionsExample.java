@@ -51,9 +51,10 @@ public class RawCollectionsExample {
 
         String str = new Gson().toJson(arr);
         try {
-            try (PrintStream out = new PrintStream(new FileOutputStream("результаты боя.json"))) {
-                out.print(str);
-            }
+            PrintStream out = new PrintStream(new FileOutputStream("результаты боя.json"));
+            out.print(str);
+            out.flush();
+            out.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

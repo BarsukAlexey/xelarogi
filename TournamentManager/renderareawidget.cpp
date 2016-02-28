@@ -349,10 +349,13 @@ void RenderAreaWidget::onSaveInExcel()
     for (int i = 1; i < 30; ++i) ExcelUtils::setColumnAutoFit(sheet, i);
     for (int i = 1; i < 30; ++i) ExcelUtils::setRowAutoFit(sheet, i);
 
+    long long tournamentUID = getTournamentUID();
+
+    ExcelUtils::setValue(sheet, 1, 1, DBUtils::getField(database, "NAME", "TOURNAMENTS", tournamentUID), 0);
     ExcelUtils::setValue(sheet, 2, 1, getCategoryName(), 0);
 
     maxRow += 2;
-    long long tournamentUID = getTournamentUID();
+
 
     ExcelUtils::setValue(sheet, maxRow, 1, "Главный судья: " + DBUtils::get_MAIN_JUDGE(database, tournamentUID), 0);
     ++maxRow;

@@ -133,15 +133,15 @@ public class Fighting {
 
         disqualifiedPlayer = Player.unknown;
 
-        stackOfMinus = new Stack<>();
+        stackOfMinus = new Stack<Pair<Player, Integer>>();
         countOfMinusToLeft = 0;
         countOfMinusToRight = 0;
 
-        stackOfForestalling = new Stack<>();
+        stackOfForestalling = new Stack<Player>();
         countOfForestallingToLeft = 0;
         countOfForestallingToRight = 0;
 
-        stackOfEx = new Stack<>();
+        stackOfEx = new Stack<Player>();
         countOfExToLeft = 0;
         countOfExToRight = 0;
     }
@@ -217,11 +217,11 @@ public class Fighting {
                     if (currentRound == countOfRounds) {
                         if (findWinner() != Player.unknown) {
                             statusFighting = StatusFighting.finishPending;
-                            result = getCountJudgeForLeftFighter(true) + " " + getCountJudgeForRightFighter(true);
+                            result = getCountJudgeForLeftFighter(true) + " : " + getCountJudgeForRightFighter(true);
                         }
                         else {
                             statusFighting = StatusFighting.finishTie;
-                            result = getCountJudgeForLeftFighter(true) + " " + getCountJudgeForRightFighter(true);
+                            result = getCountJudgeForLeftFighter(true) + " : " + getCountJudgeForRightFighter(true);
                         }
                     } else {
                         statusFighting = StatusFighting._break;
@@ -249,7 +249,7 @@ public class Fighting {
         } else if (statusFighting == StatusFighting.finishTie) {
             int l = getCountJudgeForLeftFighter(true);
             int r = getCountJudgeForRightFighter(true);
-            result = getCountJudgeForLeftFighter(true) + " " + getCountJudgeForRightFighter(true);
+            result = getCountJudgeForLeftFighter(true) + " : " + getCountJudgeForRightFighter(true);
             if (l < r) {
                 statusFighting = StatusFighting.finishPending;
             } else if (l > r) {
@@ -311,7 +311,7 @@ public class Fighting {
         statusFighting = StatusFighting.disqualification;
 
         disqualifiedPlayer = player;
-        result = "Дисквал.";
+        result = "DISQ";
     }
 
     /**
@@ -341,7 +341,8 @@ public class Fighting {
         for (int i = 0; i < 3; i++) {
             countOfPointsForTheRightFighter[currentRound][i] += 3;
         }
-        stackOfMinus.add(new Pair<>(Player.left, currentRound));
+        //stackOfMinus.add(new Pair<>(Player.left, currentRound));
+        stackOfMinus.add(new Pair<Player, Integer>(Player.left, currentRound));
 
         if (countOfMinusToLeft == 3) {
             disqualify(Player.left);
@@ -361,7 +362,8 @@ public class Fighting {
         for (int i = 0; i < 3; i++) {
             countOfPointsForTheLeftFighter[currentRound][i] += 3;
         }
-        stackOfMinus.add(new Pair<>(Player.right, currentRound));
+        //stackOfMinus.add(new Pair<>(Player.right, currentRound));
+        stackOfMinus.add(new Pair<Player, Integer>(Player.right, currentRound));
 
         if (countOfMinusToRight == 3) {
             disqualify(Player.right);

@@ -5,18 +5,29 @@ import javax.swing.*;
 public class ThisIsMainClass {
 
     public static void main(String[] args) {
-        try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    try {
+                        UIManager.setLookAndFeel(info.getClassName());
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (InstantiationException e) {
+                        e.printStackTrace();
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    } catch (UnsupportedLookAndFeelException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 }
             }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ThisIsMainClass.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
 
-        SwingUtilities.invokeLater(JFrameMainJudge::new);
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new JFrameMainJudge();
+            }
+        });
     }
 }
 

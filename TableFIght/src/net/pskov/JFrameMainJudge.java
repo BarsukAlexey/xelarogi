@@ -41,7 +41,7 @@ public class JFrameMainJudge extends JFrame {
         mouseController = new MouseController[3];
         keyboardController = new KeyboardController();
 
-        jList = new JList<>();
+        jList = new JList<Fighting>();
 
         // получаем координаты левого верхнего всех мониторов
         GraphicsDevice[] screenDevices = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices();
@@ -181,7 +181,7 @@ public class JFrameMainJudge extends JFrame {
                         return;
                     }
 
-                    final DefaultListModel<Fighting> listModel = new DefaultListModel<>();
+                    final DefaultListModel<Fighting> listModel = new DefaultListModel<Fighting>();
 
                     for (JsonElement jsonElement : new JsonParser().parse(JSON_DATA).getAsJsonArray()) {
                         Fighting f = new Fighting(
@@ -225,7 +225,7 @@ public class JFrameMainJudge extends JFrame {
                     JsonArray jsonArray = new JsonArray();
                     for (int i = 0; i < jList.getModel().getSize(); ++i) {
                         Fighting f = jList.getModel().getElementAt(i);
-                        if (f.getStatusFighting() == StatusFighting.finishPending||f.getStatusFighting() == StatusFighting.disqualification) {
+                        if (f.getStatusFighting() == StatusFighting.finishPending || f.getStatusFighting() == StatusFighting.disqualification) {
                             JsonObject jsonObject = new JsonObject();
                             jsonObject.addProperty("TOURNAMENT_CATEGORIES_FK", f.TOURNAMENT_CATEGORIES_FK);
                             jsonObject.addProperty("VERTEX", f.VERTEX);
@@ -235,8 +235,11 @@ public class JFrameMainJudge extends JFrame {
                         }
                     }
 
-                    try (PrintStream out = new PrintStream(file)) {
+                    try {
+                        PrintStream out = new PrintStream(file);
                         out.print(new Gson().toJson(jsonArray));
+                        out.flush();
+                        out.close();
                     } catch (FileNotFoundException e1) {
                         e1.printStackTrace();
                     }
@@ -406,13 +409,15 @@ public class JFrameMainJudge extends JFrame {
         if (pressedKeys.contains(Component.Identifier.Key.J)) activeFighting.stopFightingBlyatSuka(Player.right, "L");
 
         if (pressedKeys.contains(Component.Identifier.Key.X)) activeFighting.stopFightingBlyatSuka(Player.left, "DISQ");
-        if (pressedKeys.contains(Component.Identifier.Key.N)) activeFighting.stopFightingBlyatSuka(Player.right, "DISQ");
+        if (pressedKeys.contains(Component.Identifier.Key.N))
+            activeFighting.stopFightingBlyatSuka(Player.right, "DISQ");
 
         if (pressedKeys.contains(Component.Identifier.Key.E)) activeFighting.stopFightingBlyatSuka(Player.left, "RSC");
         if (pressedKeys.contains(Component.Identifier.Key.U)) activeFighting.stopFightingBlyatSuka(Player.right, "RSC");
 
         if (pressedKeys.contains(Component.Identifier.Key.D)) activeFighting.stopFightingBlyatSuka(Player.left, "RSCH");
-        if (pressedKeys.contains(Component.Identifier.Key.H)) activeFighting.stopFightingBlyatSuka(Player.right, "RSCH");
+        if (pressedKeys.contains(Component.Identifier.Key.H))
+            activeFighting.stopFightingBlyatSuka(Player.right, "RSCH");
 
         if (pressedKeys.contains(Component.Identifier.Key.C)) activeFighting.stopFightingBlyatSuka(Player.left, "AB");
         if (pressedKeys.contains(Component.Identifier.Key.B)) activeFighting.stopFightingBlyatSuka(Player.right, "AB");
@@ -421,13 +426,13 @@ public class JFrameMainJudge extends JFrame {
         if (pressedKeys.contains(Component.Identifier.Key.Y)) activeFighting.stopFightingBlyatSuka(Player.right, "WO");
 
 
-
-
         if (pressedKeys.contains(Component.Identifier.Key.SPACE)) {
             if (activeFighting.getStatusFighting() == StatusFighting.notBegin) {
                 activeFighting.startRound();
             } else if (activeFighting.getStatusFighting() == StatusFighting.fighting) {
                 activeFighting.pauseRound();
+            } else if (activeFighting.getStatusFighting() == StatusFighting._break) {
+                // ничего не надо делать
             } else if (activeFighting.getStatusFighting() == StatusFighting.fightingPause) {
                 activeFighting.continueRound();
 //            } else if (activeFighting.getStatusFighting() == StatusFighting.finishPending ||
@@ -446,7 +451,7 @@ public class JFrameMainJudge extends JFrame {
                 JsonArray jsonArray = new JsonArray();
                 for (int i = 0; i < jList.getModel().getSize(); ++i) {
                     Fighting f = jList.getModel().getElementAt(i);
-                    if (f.getStatusFighting() == StatusFighting.finishPending||f.getStatusFighting() == StatusFighting.disqualification) {
+                    if (f.getStatusFighting() == StatusFighting.finishPending || f.getStatusFighting() == StatusFighting.disqualification) {
                         JsonObject jsonObject = new JsonObject();
                         jsonObject.addProperty("TOURNAMENT_CATEGORIES_FK", f.TOURNAMENT_CATEGORIES_FK);
                         jsonObject.addProperty("VERTEX", f.VERTEX);
@@ -457,9 +462,10 @@ public class JFrameMainJudge extends JFrame {
                 }
 
                 try {
-                    try (PrintStream out = new PrintStream(new FileOutputStream("результаты боя.json"))) {
-                        out.print(new Gson().toJson(jsonArray));
-                    }
+                    PrintStream out = new PrintStream(new FileOutputStream("результаты боя.json"));
+                    out.print(new Gson().toJson(jsonArray));
+                    out.flush();
+                    out.close();
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -517,7 +523,7 @@ public class JFrameMainJudge extends JFrame {
 
 
     private JFrame createFrameAtLocation(Point p, JPanel jPanel) {
-        JFrame frame = new JFrame();
+        final JFrame frame = new JFrame();
         frame.add(jPanel);
         frame.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         frame.setLocation(p);

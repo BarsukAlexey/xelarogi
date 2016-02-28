@@ -155,11 +155,11 @@ void FightingPairs::printInExcel(QAxObject *sheet, const QVector<DBUtils::Fighin
         }
 
         ExcelUtils::setValue(sheet, currentRow, 1, QString::number(pair));
-        ExcelUtils::setValue(sheet, currentRow, 2, DBUtils::getSecondNameAndOneLetterOfName(database, f.UID0) + "(" +
-                             DBUtils::getField(database, "SHORTNAME", "REGIONS", DBUtils::getField(database, "COUNTRY_FK", "ORDERS", f.UID0)) +
+        ExcelUtils::setValue(sheet, currentRow, 2, DBUtils::getField(database, "SECOND_NAME", "ORDERS", f.UID0) + " " + DBUtils::getField(database, "FIRST_NAME", "ORDERS", f.UID0) + "(" +
+                             DBUtils::getField(database, "NAME", "REGIONS", DBUtils::getField(database, "REGION_FK", "ORDERS", f.UID0)) +
                              ")");
-        ExcelUtils::setValue(sheet, currentRow, 3, DBUtils::getSecondNameAndOneLetterOfName(database, f.UID1) + "(" +
-                             DBUtils::getField(database, "SHORTNAME", "REGIONS", DBUtils::getField(database, "COUNTRY_FK", "ORDERS", f.UID1)) +
+        ExcelUtils::setValue(sheet, currentRow, 3, DBUtils::getField(database, "SECOND_NAME", "ORDERS", f.UID1) + " " + DBUtils::getField(database, "FIRST_NAME", "ORDERS", f.UID1) + "(" +
+                             DBUtils::getField(database, "NAME", "REGIONS", DBUtils::getField(database, "REGION_FK", "ORDERS", f.UID1)) +
                              ")");
         ExcelUtils::setBorder(sheet, currentRow, 1, currentRow, 3);
         ++currentRow;

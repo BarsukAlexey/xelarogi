@@ -76,7 +76,7 @@ WeighingProtocol::WeighingProtocol(const QSqlDatabase& database, const long long
             ExcelUtils::setBorder(sheet, currentRow, 1, currentRow, heads.size());
 
             ExcelUtils::setValue(sheet, currentRow, 1, QString::number(number));
-            ExcelUtils::setValue(sheet, currentRow, 2, DBUtils::getSecondNameAndOneLetterOfName(database, leaf.UID));
+            ExcelUtils::setValue(sheet, currentRow, 2, DBUtils::getField(database, "SECOND_NAME", "ORDERS", leaf.UID) + " " + DBUtils::getField(database, "FIRST_NAME", "ORDERS", leaf.UID));
             ExcelUtils::setValue(sheet, currentRow, 3, DBUtils::getFieldDate(database, "BIRTHDATE", "ORDERS", leaf.UID));
             ExcelUtils::setValue(sheet, currentRow, 4, DBUtils::getField(database, "NAME", "REGIONS", DBUtils::getField(database, "REGION_FK", "ORDERS", leaf.UID)));
             ExcelUtils::setValue(sheet, currentRow, 5, DBUtils::getField(database, "NAME", "CLUBS", DBUtils::getField(database, "CLUB_FK", "ORDERS", leaf.UID)));

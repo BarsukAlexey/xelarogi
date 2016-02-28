@@ -202,8 +202,8 @@ QVector<DBUtils::NodeOfTournirGrid> DBUtils::getNodes(const QSqlDatabase& databa
                 arr.clear();
                 return arr;
             }
-            //name = queryOrder.value("SECOND_NAME").toString() + " " + queryOrder.value("FIRST_NAME").toString();
-            name = queryOrder.value("SECOND_NAME").toString();
+            name = queryOrder.value("SECOND_NAME").toString() + " " + queryOrder.value("FIRST_NAME").toString();
+            //name = queryOrder.value("SECOND_NAME").toString();
 
             QSqlQuery queryRegion("SELECT * FROM REGIONS WHERE UID = ? ", database);
             //qDebug() << __PRETTY_FUNCTION__ << queryOrder.value("REGION_FK").toString();

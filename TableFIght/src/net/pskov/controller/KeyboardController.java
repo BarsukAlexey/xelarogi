@@ -21,7 +21,7 @@ public class KeyboardController {
     }
 
     public HashSet<Component.Identifier> capture() {
-        HashSet<Component.Identifier> set = new HashSet<>();
+        HashSet<Component.Identifier> set = new HashSet<Component.Identifier>();
         for (Keyboard keyboard : m_keyboard) {
             if (!keyboard.poll()) {
                 continue;

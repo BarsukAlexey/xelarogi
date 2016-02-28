@@ -19,7 +19,7 @@ public class JDialogInitMice extends JDialog {
         this.mouseControllers = mouseControllers;
 
 
-        JPanel jPanel = new JPanel();
+        final JPanel jPanel = new JPanel();
         jPanel.setLayout(new BoxLayout(jPanel, BoxLayout.Y_AXIS));
         jPanel.add(new JLabel("Welcome to master of mice setting!"));
         jPanel.add(new JLabel("To continue click next..."));
@@ -77,7 +77,7 @@ public class JDialogInitMice extends JDialog {
         @Override
         public void run() {
             synchronized (mouseControllers) {
-                ArrayList<MouseController> allMouseController = new ArrayList<>();
+                ArrayList<MouseController> allMouseController = new ArrayList<MouseController>();
                 for (Controller controller : ControllerEnvironment.getDefaultEnvironment().getControllers()) {
                     if (controller.getType() == Controller.Type.MOUSE) {
                         Mouse mouse = (Mouse) controller;
