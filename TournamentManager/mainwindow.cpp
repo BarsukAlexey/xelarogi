@@ -394,6 +394,8 @@ void MainWindow::on_pushButtonLoadWinner_clicked()
     QJsonDocument d = QJsonDocument::fromJson(QString(file.readAll()).toUtf8());
     file.close();
 
+    int okCount = 0;
+    int errorCount = 0;
     QJsonArray array = d.array();
     for (int i = 0; i < array.size(); ++i)
     {
@@ -403,8 +405,20 @@ void MainWindow::on_pushButtonLoadWinner_clicked()
         int orderUID = object["orderUID"].toInt();
         QString result = object["result"].toString();
         qDebug() << TOURNAMENT_CATEGORIES_FK << VERTEX << orderUID;
-        DBUtils::setNodeOfGrid(m_database, TOURNAMENT_CATEGORIES_FK, VERTEX, orderUID, result);
+        if (DBUtils::setNodeOfGrid(m_database, TOURNAMENT_CATEGORIES_FK, VERTEX, orderUID, result))
+        {
+            okCount++;
+        }
+        else
+        {
+            ++errorCount;
+        }
     }
+
+    QMessageBox::information(this, "Результаты загрузки", "Успешно загруженно " +
+                             QString::number(okCount) + " результатов боев из " +
+                             QString::number(okCount + errorCount)
+                             );
 }
 
 
