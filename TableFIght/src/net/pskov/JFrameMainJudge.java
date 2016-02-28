@@ -19,6 +19,8 @@ import java.nio.file.Paths;
 import java.util.Date;
 import java.util.HashSet;
 
+//import java.nio.charset.StandardCharsets;
+
 public class JFrameMainJudge extends JFrame {
 
     private JPanel jPanelStartPage; // панелька, на которой выбирается бой, настраиваются мышки, сохраняются результаты...
@@ -176,6 +178,7 @@ public class JFrameMainJudge extends JFrame {
                     String JSON_DATA;
                     try {
                         JSON_DATA = new String(Files.readAllBytes(Paths.get(path)), StandardCharsets.UTF_8);
+//                        JSON_DATA = new String(Files.readAllBytes(Paths.get(path)));
                     } catch (IOException e1) {
                         e1.printStackTrace();
                         return;
