@@ -93,16 +93,19 @@ WeighingProtocol::WeighingProtocol(const QSqlDatabase& database, const long long
             ExcelUtils::setColumnAutoFit(sheet, column);
         }
 
-        ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, countColumns);
-        ExcelUtils::setValue(sheet, currentRow, 1, "Главный судья: " + DBUtils::get_MAIN_JUDGE(database, tournamentUID), 0);
+        ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 2);
+        ExcelUtils::setValue(sheet, currentRow, 1, "Главный судья: ", 0);
+        ExcelUtils::setValue(sheet, currentRow, 4, DBUtils::get_MAIN_JUDGE(database, tournamentUID), 0);
         ++currentRow;
 
-        ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, countColumns);
-        ExcelUtils::setValue(sheet, currentRow, 1, "Главный секретарь: " + DBUtils::get_MAIN_SECRETARY(database, tournamentUID), 0);
+        ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 2);
+        ExcelUtils::setValue(sheet, currentRow, 1, "Главный секретарь: ", 0);
+        ExcelUtils::setValue(sheet, currentRow, 4, DBUtils::get_MAIN_SECRETARY(database, tournamentUID), 0);
         ++currentRow;
 
-        ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, countColumns);
-        ExcelUtils::setValue(sheet, currentRow, 1, "Зам. главного судьи: " + DBUtils::get_ASSOCIATE_MAIN_JUDGE(database, tournamentUID), 0);
+        ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 2);
+        ExcelUtils::setValue(sheet, currentRow, 1, "Зам. главного судьи: ", 0);
+        ExcelUtils::setValue(sheet, currentRow, 4, DBUtils::get_ASSOCIATE_MAIN_JUDGE(database, tournamentUID), 0);
         ++currentRow;
 
         ExcelUtils::setPageOrientation(sheet, 2);

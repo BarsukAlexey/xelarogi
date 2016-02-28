@@ -357,13 +357,19 @@ void RenderAreaWidget::onSaveInExcel()
     maxRow += 2;
 
 
-    ExcelUtils::setValue(sheet, maxRow, 1, "Главный судья: " + DBUtils::get_MAIN_JUDGE(database, tournamentUID), 0);
+    ExcelUtils::uniteRange(sheet, maxRow, 1, maxRow, 2);
+    ExcelUtils::setValue(sheet, maxRow, 1, "Главный судья: ", 0);
+    ExcelUtils::setValue(sheet, maxRow, 4, DBUtils::get_MAIN_JUDGE(database, tournamentUID), 0);
     ++maxRow;
 
-    ExcelUtils::setValue(sheet, maxRow, 1, "Главный секретарь: " + DBUtils::get_MAIN_SECRETARY(database, tournamentUID), 0);
+    ExcelUtils::uniteRange(sheet, maxRow, 1, maxRow, 2);
+    ExcelUtils::setValue(sheet, maxRow, 1, "Главный секретарь: ", 0);
+    ExcelUtils::setValue(sheet, maxRow, 4, DBUtils::get_MAIN_SECRETARY(database, tournamentUID), 0);
     ++maxRow;
 
-    ExcelUtils::setValue(sheet, maxRow, 1, "Зам. главного судьи: " + DBUtils::get_ASSOCIATE_MAIN_JUDGE(database, tournamentUID), 0);
+    ExcelUtils::uniteRange(sheet, maxRow, 1, maxRow, 2);
+    ExcelUtils::setValue(sheet, maxRow, 1, "Зам. главного судьи: ", 0);
+    ExcelUtils::setValue(sheet, maxRow, 4, DBUtils::get_ASSOCIATE_MAIN_JUDGE(database, tournamentUID), 0);
     ++maxRow;
 
     //workbook->dynamicCall("Close()");
