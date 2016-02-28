@@ -31,6 +31,7 @@ class Ui_GenerateTournamentCategoriesDialog
 {
 public:
     QGridLayout *gridLayout;
+    QDialogButtonBox *buttonBox;
     QVBoxLayout *verticalLayout_4;
     QHBoxLayout *horizontalLayout_2;
     QVBoxLayout *verticalLayout;
@@ -52,15 +53,30 @@ public:
     QLabel *label_7;
     QLineEdit *weightsLE;
     QLabel *label_8;
-    QDialogButtonBox *buttonBox;
+    QHBoxLayout *horizontalLayout_3;
+    QVBoxLayout *verticalLayout_5;
+    QLabel *label_9;
+    QLabel *label_10;
+    QLabel *label_11;
+    QVBoxLayout *verticalLayout_6;
+    QSpinBox *duratiobFightingSB;
+    QSpinBox *durationBreakSB;
+    QSpinBox *roundCountSB;
 
     void setupUi(QDialog *GenerateTournamentCategoriesDialog)
     {
         if (GenerateTournamentCategoriesDialog->objectName().isEmpty())
             GenerateTournamentCategoriesDialog->setObjectName(QStringLiteral("GenerateTournamentCategoriesDialog"));
-        GenerateTournamentCategoriesDialog->resize(315, 230);
+        GenerateTournamentCategoriesDialog->resize(333, 299);
         gridLayout = new QGridLayout(GenerateTournamentCategoriesDialog);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
+        buttonBox = new QDialogButtonBox(GenerateTournamentCategoriesDialog);
+        buttonBox->setObjectName(QStringLiteral("buttonBox"));
+        buttonBox->setOrientation(Qt::Horizontal);
+        buttonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
+
+        gridLayout->addWidget(buttonBox, 2, 0, 1, 1);
+
         verticalLayout_4 = new QVBoxLayout();
         verticalLayout_4->setObjectName(QStringLiteral("verticalLayout_4"));
         horizontalLayout_2 = new QHBoxLayout();
@@ -117,6 +133,7 @@ public:
 
         ageFromSB = new QSpinBox(GenerateTournamentCategoriesDialog);
         ageFromSB->setObjectName(QStringLiteral("ageFromSB"));
+        ageFromSB->setMaximum(9999);
 
         horizontalLayout->addWidget(ageFromSB);
 
@@ -127,6 +144,7 @@ public:
 
         ageTillSB = new QSpinBox(GenerateTournamentCategoriesDialog);
         ageTillSB->setObjectName(QStringLiteral("ageTillSB"));
+        ageTillSB->setMaximum(9999);
 
         horizontalLayout->addWidget(ageTillSB);
 
@@ -169,12 +187,52 @@ public:
 
         gridLayout->addLayout(verticalLayout_4, 0, 0, 1, 1);
 
-        buttonBox = new QDialogButtonBox(GenerateTournamentCategoriesDialog);
-        buttonBox->setObjectName(QStringLiteral("buttonBox"));
-        buttonBox->setOrientation(Qt::Horizontal);
-        buttonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
+        horizontalLayout_3 = new QHBoxLayout();
+        horizontalLayout_3->setObjectName(QStringLiteral("horizontalLayout_3"));
+        verticalLayout_5 = new QVBoxLayout();
+        verticalLayout_5->setObjectName(QStringLiteral("verticalLayout_5"));
+        label_9 = new QLabel(GenerateTournamentCategoriesDialog);
+        label_9->setObjectName(QStringLiteral("label_9"));
 
-        gridLayout->addWidget(buttonBox, 1, 0, 1, 1);
+        verticalLayout_5->addWidget(label_9);
+
+        label_10 = new QLabel(GenerateTournamentCategoriesDialog);
+        label_10->setObjectName(QStringLiteral("label_10"));
+
+        verticalLayout_5->addWidget(label_10);
+
+        label_11 = new QLabel(GenerateTournamentCategoriesDialog);
+        label_11->setObjectName(QStringLiteral("label_11"));
+
+        verticalLayout_5->addWidget(label_11);
+
+
+        horizontalLayout_3->addLayout(verticalLayout_5);
+
+        verticalLayout_6 = new QVBoxLayout();
+        verticalLayout_6->setObjectName(QStringLiteral("verticalLayout_6"));
+        duratiobFightingSB = new QSpinBox(GenerateTournamentCategoriesDialog);
+        duratiobFightingSB->setObjectName(QStringLiteral("duratiobFightingSB"));
+        duratiobFightingSB->setMaximum(9999999);
+
+        verticalLayout_6->addWidget(duratiobFightingSB);
+
+        durationBreakSB = new QSpinBox(GenerateTournamentCategoriesDialog);
+        durationBreakSB->setObjectName(QStringLiteral("durationBreakSB"));
+        durationBreakSB->setMaximum(9999999);
+
+        verticalLayout_6->addWidget(durationBreakSB);
+
+        roundCountSB = new QSpinBox(GenerateTournamentCategoriesDialog);
+        roundCountSB->setObjectName(QStringLiteral("roundCountSB"));
+
+        verticalLayout_6->addWidget(roundCountSB);
+
+
+        horizontalLayout_3->addLayout(verticalLayout_6);
+
+
+        gridLayout->addLayout(horizontalLayout_3, 1, 0, 1, 1);
 
 
         retranslateUi(GenerateTournamentCategoriesDialog);
@@ -196,6 +254,9 @@ public:
         label_7->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\223\321\200\320\260\320\275\320\270\321\207\320\275\321\213\320\265 \320\267\320\275\320\260\321\207\320\265\320\275\320\270\321\217 \320\262\320\265\321\201\320\260", 0));
         weightsLE->setPlaceholderText(QApplication::translate("GenerateTournamentCategoriesDialog", "15;20;35.5;40;48;61.5;80", 0));
         label_8->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\321\200\320\260\320\267\320\264\320\265\320\273\321\217\320\271\321\202\320\265 \320\262\320\265\320\273\320\270\321\207\320\270\320\275\321\213 \321\201\320\270\320\274\320\262\320\276\320\273\320\276\320\274 \";\" (\321\202\320\276\321\207\320\272\320\260 \321\201 \320\267\320\260\320\277\321\217\321\202\320\276\320\271)", 0));
+        label_9->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\237\321\200\320\276\320\264\320\276\320\273\320\266\320\270\321\202\320\265\320\273\321\214\320\275\320\276\321\201\321\202\321\214 \321\200\320\260\321\203\320\275\320\264\320\260 (\320\262 \321\201\320\265\320\272.)", 0));
+        label_10->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\237\321\200\320\276\320\264\320\276\320\273\320\266\320\270\321\202\320\265\320\273\321\214\320\275\320\276\321\201\321\202\321\214 \320\277\320\265\321\200\320\265\321\200\321\213\320\262\320\260 (\320\262 \321\201\320\265\320\272.)", 0));
+        label_11->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\232\320\276\320\273\320\270\321\207\320\265\321\201\321\202\320\262\320\276 \321\200\320\260\321\203\320\275\320\264\320\276\320\262", 0));
     } // retranslateUi
 
 };

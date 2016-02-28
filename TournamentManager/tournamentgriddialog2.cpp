@@ -58,12 +58,14 @@ TournamentGridDialog2::TournamentGridDialog2(const QSqlDatabase &_database, long
     qTableWidget->setFocusPolicy(Qt::NoFocus);
     QPushButton *buttonGenerate = new QPushButton("Сгенерировать сетку");
     QPushButton *buttonDelete = new QPushButton("Удалить сетку");
+    QLineEdit* filterCategoriesLE = new QLineEdit;
     {
         QGridLayout *mainLayout = new QGridLayout;
-        mainLayout->addWidget(qComboBoxSelectCategory, 0, 0, 1, 2);
-        mainLayout->addWidget(qTableWidget, 1, 0, 1, 2);
-        mainLayout->addWidget(buttonDelete, 2, 0);
-        mainLayout->addWidget(buttonGenerate, 2, 1);
+        mainLayout->addWidget(filterCategoriesLE, 0, 0, 1, 2);
+        mainLayout->addWidget(qComboBoxSelectCategory, 1, 0, 1, 2);
+        mainLayout->addWidget(qTableWidget, 2, 0, 10, 2);
+        mainLayout->addWidget(buttonDelete, 12, 0);
+        mainLayout->addWidget(buttonGenerate, 12, 1);
         leftPane->setLayout(mainLayout);
     }
 
@@ -121,27 +123,15 @@ TournamentGridDialog2::TournamentGridDialog2(const QSqlDatabase &_database, long
     connect(buttonSave, SIGNAL(clicked()), pRenderArea, SLOT(onSaveInExcel()));
 
 
-    //заполняем qComboBoxSelectCategory категориями турнира
-    QSqlQuery query("SELECT * FROM TOURNAMENT_CATEGORIES WHERE TOURNAMENT_FK = ?", database);
-    query.bindValue(0, tournamentUID);
-    if (query.exec())
-    {
-        while (query.next())
-        {
-            QString categoryUID = query.value("UID").toString();
-            QString categoryName = query.value("NAME").toString();
-
-            QListWidgetItem* item = new QListWidgetItem();
-            item->setData(Qt::DisplayRole, categoryName);
-            item->setData(Qt::UserRole, categoryUID);
-
-            qComboBoxSelectCategory->addItem(categoryName, categoryUID);
-        }
-    }
+    fillCategoryCombobox();
     connect(qComboBoxSelectCategory, SIGNAL(activated(int)), this, SLOT(onActivatedCategory(int)));
     if (0 < qComboBoxSelectCategory->count())
         onActivatedCategory(0);
 
+    connect(filterCategoriesLE, &QLineEdit::textChanged, [this] (const QString& filter)
+    {
+        fillCategoryCombobox(filter);
+    });
 
     //showMaximized();
 
@@ -546,6 +536,38 @@ void TournamentGridDialog2::setInGridBestFigher(int v, const QVector<bool>& isLe
 }
 
 TournamentGridDialog2::~TournamentGridDialog2(){}
+
+void TournamentGridDialog2::fillCategoryCombobox(QString filterStr)
+{
+    qComboBoxSelectCategory->clear();
+
+    QStringList filters = filterStr.split(" ", QString::SkipEmptyParts);
+    QString whereStatement = "";
+    for (const QString& filter: filters)
+    {
+        whereStatement += " AND NAME LIKE '%" + filter + "%' ";
+    }
+
+    QSqlQuery query("SELECT * FROM TOURNAMENT_CATEGORIES WHERE TOURNAMENT_FK = ? " + whereStatement, database);
+    query.bindValue(0, tournamentUID);
+    if (query.exec())
+    {
+        while (query.next())
+        {
+            QString categoryUID = query.value("UID").toString();
+            QString categoryName = query.value("NAME").toString();
+
+            QListWidgetItem* item = new QListWidgetItem();
+            item->setData(Qt::DisplayRole, categoryName);
+            item->setData(Qt::UserRole, categoryUID);
+
+            qComboBoxSelectCategory->addItem(categoryName, categoryUID);
+        }
+    }
+
+    if (0 < qComboBoxSelectCategory->count())
+        onActivatedCategory(0);
+}
 
 
 

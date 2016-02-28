@@ -19,11 +19,17 @@ GenerateTournamentCategoriesDialog::GenerateTournamentCategoriesDialog(long long
         int ageFrom = ui->ageFromSB->value();
         int ageTill = ui->ageTillSB->value();
 
+        int durationFighting = ui->duratiobFightingSB->value();
+        int durationBreak = ui->durationBreakSB->value();
+        int roundCount = ui->roundCountSB->value();
+
         QString weightCorrect = ui->weightsLE->text().trimmed().replace(",", ".");
         QStringList weights = weightCorrect.split(";", QString::SkipEmptyParts);
 
         if (weights.size() > 0 && weights.front() != "0")
             weights.push_front("0");
+
+        QString newCategoryMsg = "Добавлены новые категории:\n";
 
         for (int index = 0; index < (int)weights.size(); index++)
         {
@@ -50,8 +56,9 @@ GenerateTournamentCategoriesDialog::GenerateTournamentCategoriesDialog(long long
             QSqlQuery query;
             if (!query.prepare("INSERT INTO TOURNAMENT_CATEGORIES("
                                "NAME, AGE_FROM, AGE_TILL, WEIGHT_FROM, WEIGHT_TILL,"
-                               "SEX_FK, TYPE_FK, TOURNAMENT_FK) "
-                               "VALUES (?, ?, ?, ?, ?, ?, ?, ?)"))
+                               "SEX_FK, TYPE_FK, TOURNAMENT_FK,"
+                               "DURATION_FIGHING, DURATION_BREAK, ROUND_COUNT) "
+                               "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"))
                 qDebug() << query.lastError().text();
             query.bindValue(0, modifyName);
             query.bindValue(1, ageFrom);
@@ -61,16 +68,22 @@ GenerateTournamentCategoriesDialog::GenerateTournamentCategoriesDialog(long long
             query.bindValue(5, sexUID);
             query.bindValue(6, typeUID);
             query.bindValue(7, mTournamentUID);
+            query.bindValue(8, durationFighting);
+            query.bindValue(9, durationBreak);
+            query.bindValue(10, roundCount);
 
             if (!query.exec())
                 qDebug() << query.lastError().text();
             else
             {
-                QMessageBox::information(this, "Добавлена новая категория", "Добавлена новая категория: " + modifyName);
+                newCategoryMsg += "\t" + modifyName + "\n";
             }
 
             query.clear();
         }
+
+        QMessageBox::information(this, "Добавлены новые категории", newCategoryMsg);
+
     });
 }
 

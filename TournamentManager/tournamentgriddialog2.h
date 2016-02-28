@@ -6,6 +6,7 @@
 #include <QSqlDatabase>
 #include <QComboBox>
 #include <QTableWidget>
+#include <QLineEdit>
 
 class TournamentGridDialog2 : public QDialog
 {
@@ -49,6 +50,7 @@ public:
     void ebnutVBazyGovno();
 
 private:
+    void fillCategoryCombobox(QString filterStr = "");
     void setInGridBestFigher(int v, const QVector<bool>& isLeaf, const QVector<int>& distToLeaf, const QVector<TournamentGridDialog2::BestFigher>& bestFighters, QHash<long long, int>& vertexOfBest);
 
 private slots:
