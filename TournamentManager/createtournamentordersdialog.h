@@ -77,7 +77,7 @@ private:
     void updateTypeComboBox(long long currentUID);
     void updateClubComboBox(long long clubUID, long long regionUID);
     void updateCoachComboBox(long long coachUID, long long clubUID);
-    void updateTournamentCategoriesComboBox(long long currentUID);
+    void updateTournamentCategoriesComboBox(long long currentUID, long long sexUID, long long typeUID);
 
     void fillNullString(QString& s);
 

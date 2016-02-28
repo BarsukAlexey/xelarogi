@@ -534,7 +534,7 @@ void CreateTournamentOrdersDialog::updateFillOrderWidget(long long orderUID)
     updateTypeComboBox(typeUID);
     updateClubComboBox(clubUID, regionUID);
     updateCoachComboBox(coachUID, clubUID);
-    updateTournamentCategoriesComboBox(tournamentCategoryUID);
+    updateTournamentCategoriesComboBox(tournamentCategoryUID, sexUID, typeUID);
 }
 
 void CreateTournamentOrdersDialog::addContextMenu()
@@ -630,6 +630,18 @@ void CreateTournamentOrdersDialog::setComboBoxDependencies()
     {
         long long clubUID = ui->clubsCB->currentData(Qt::UserRole).toLongLong();
         updateCoachComboBox(-1, clubUID);
+    });
+    connect(ui->gendersCB, &QComboBox::currentTextChanged, [this] (const QString&)
+    {
+        long long sexUID = ui->gendersCB->currentData(Qt::UserRole).toLongLong();
+        long long typeUID = ui->typesCB->currentData(Qt::UserRole).toLongLong();
+        updateTournamentCategoriesComboBox(-1, sexUID, typeUID);
+    });
+    connect(ui->typesCB, &QComboBox::currentTextChanged, [this] (const QString&)
+    {
+        long long sexUID = ui->gendersCB->currentData(Qt::UserRole).toLongLong();
+        long long typeUID = ui->typesCB->currentData(Qt::UserRole).toLongLong();
+        updateTournamentCategoriesComboBox(-1, sexUID, typeUID);
     });
 }
 
@@ -923,7 +935,7 @@ long long CreateTournamentOrdersDialog::getTypeUID(QString typeName)
         while (query.next())
         {
             QString name = query.value("NAME").toString();
-            if (name.trimmed().toUpper() == typeName.trimmed().toUpper())
+            if (name.trimmed().toUpper().contains(typeName.trimmed().toUpper()))
             {
                 return query.value("UID").toLongLong();
             }
@@ -1281,14 +1293,16 @@ void CreateTournamentOrdersDialog::updateCoachComboBox(long long coachUID, long 
     query.clear();
 }
 
-void CreateTournamentOrdersDialog::updateTournamentCategoriesComboBox(long long currentUID)
+void CreateTournamentOrdersDialog::updateTournamentCategoriesComboBox(long long currentUID, long long sexUID, long long typeUID)
 {
     ui->tournamentCategoriesCB->clear();
 
     QSqlQuery query;
-    if (!query.prepare("SELECT * FROM TOURNAMENT_CATEGORIES WHERE TOURNAMENT_FK = ?"))
+    if (!query.prepare("SELECT * FROM TOURNAMENT_CATEGORIES WHERE TOURNAMENT_FK = ? AND SEX_FK = ? AND TYPE_FK = ?"))
         qDebug() << query.lastError().text();
     query.bindValue(0, mTournamentUID);
+    query.bindValue(1, sexUID);
+    query.bindValue(2, typeUID);
 
     if (query.exec())
     {

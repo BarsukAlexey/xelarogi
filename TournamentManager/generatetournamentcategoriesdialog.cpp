@@ -21,6 +21,10 @@ GenerateTournamentCategoriesDialog::GenerateTournamentCategoriesDialog(long long
 
         QString weightCorrect = ui->weightsLE->text().trimmed().replace(",", ".");
         QStringList weights = weightCorrect.split(";", QString::SkipEmptyParts);
+
+        if (weights.size() > 0 && weights.front() != "0")
+            weights.push_front("0");
+
         for (int index = 0; index < (int)weights.size(); index++)
         {
             QString modifyName = name;
@@ -30,17 +34,17 @@ GenerateTournamentCategoriesDialog::GenerateTournamentCategoriesDialog(long long
             {
                 weightTill = weights[index + 1].toDouble();
 
-                modifyName += ", " +
+                modifyName += ", " + QString::number(ageFrom) + "-" + QString::number(ageTill) + " лет, " +
                         ui->typeCB->currentText() + ", " +
-                        QString::number(weightFrom) + "-" + QString::number(weightTill);
+                        QString::number(weightFrom) + "-" + QString::number(weightTill) + " кг.";
             }
             else
             {
                 weightTill = 100000.0;
 
-                modifyName += ", " +
+                modifyName += ", " + QString::number(ageFrom) + "-" + QString::number(ageTill) + " лет, " +
                         ui->typeCB->currentText() + ", " +
-                        QString::number(weightFrom) + "+";
+                        QString::number(weightFrom) + "+ кг.";
             }
 
             QSqlQuery query;
