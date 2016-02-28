@@ -38,20 +38,13 @@ protected:
     void paintEvent(QPaintEvent * event) override;
 
 private slots:
-    void on_btnExcel_clicked();
+    //void on_btnExcel_clicked();
 
     void on_pushButtonGrid_clicked();
-
     void on_pushButtonFightinDistribution_clicked();
-
     void on_pushButtonPair_clicked();
-
     void on_pushButtonProtokolVzveshinanya_clicked();
-
     void on_pushButtonWinnerReport_clicked();
-
-    void on_pushButton_clicked();
-
     void on_pushButtonLoadWinner_clicked();
 
 private:

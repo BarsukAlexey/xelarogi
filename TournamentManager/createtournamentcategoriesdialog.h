@@ -9,6 +9,7 @@
 #include <QSqlRelationalTableModel>
 #include <QMenu>
 #include <QAction>
+#include <createtypedialog.h>
 
 namespace Ui {
 class CreateTournamentCategoriesDialog;

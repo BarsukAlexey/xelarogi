@@ -62,7 +62,7 @@ private:
     long long getRegionUID(QString regionName, long long countryUID);
     long long getRegionUnitUID(QString unitName, long long regionUID, long long countryUID);
     long long getGenderUID(QString genderName);
-    long long getTournamentCategoryUID(long long sexUID, double age, double weight, long long typeUID);
+    long long getTournamentCategoryUID(long long sexUID, double age, double weight, long long typeUID, const QString& sexName, const QString& typeName);
     long long getSportCategoryUID(QString categoryName);
     long long getTypeUID(QString typeName);
     long long getClubUID(QString clubName, long long coutryUID, long long regionUID, long long unitUID);

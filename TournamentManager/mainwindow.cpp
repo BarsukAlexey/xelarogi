@@ -127,6 +127,7 @@ void MainWindow::paintEvent(QPaintEvent *event)
     QMainWindow::paintEvent(event);
 }
 
+/*
 void MainWindow::on_btnExcel_clicked()
 {
     QAxObject* excel = new QAxObject( "Excel.Application", 0 );
@@ -188,6 +189,7 @@ void MainWindow::on_btnExcel_clicked()
     excel->dynamicCall("Quit()");
     delete excel;
 }
+*/
 
 void MainWindow::updateTournamentTreeWidget()
 {
@@ -364,15 +366,6 @@ void MainWindow::on_pushButtonWinnerReport_clicked()
     long long routnamentUID = ui->tournamentUidLabel->text().toLongLong();
     qDebug() << "routnamentUID: " << routnamentUID;
     WinnerReport(m_database, routnamentUID, this);
-}
-
-
-
-
-
-
-void MainWindow::on_pushButton_clicked()
-{
 }
 
 void MainWindow::on_pushButtonLoadWinner_clicked()

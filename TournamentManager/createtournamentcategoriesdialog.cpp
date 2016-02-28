@@ -33,6 +33,17 @@ CreateTournamentCategoriesDialog::CreateTournamentCategoriesDialog(long long tou
     });
 
     addContextMenu();
+
+    connect(ui->addTypeBtn, &QPushButton::clicked, [this] ()
+    {
+        CreateTypeDialog dlg(this);
+        if (dlg.exec() == QDialog::Accepted)
+        {
+            long long selectedTypeUID = ui->typeCB->currentData(Qt::UserRole).toLongLong();
+            fillTypeComboBox();
+            selectTypeByUID(selectedTypeUID);
+        }
+    });
 }
 
 CreateTournamentCategoriesDialog::~CreateTournamentCategoriesDialog()
