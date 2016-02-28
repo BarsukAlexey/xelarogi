@@ -300,6 +300,9 @@ void RenderAreaWidget::onSaveInExcel()
     QAxObject *workbook = excel.querySubObject("ActiveWorkBook");
     QAxObject *sheets = workbook->querySubObject("WorkSheets");
     QAxObject* sheet = sheets->querySubObject( "Item( int )", 1);
+    QString sheetName = DBUtils::getField(database, "NAME", "TOURNAMENT_CATEGORIES", tournamentCategories);
+    sheetName = sheetName.replace(" ", "");
+    sheet->setProperty("Name", sheetName.left(31));
 
     int offset = 3;
 
@@ -358,16 +361,19 @@ void RenderAreaWidget::onSaveInExcel()
 
 
     ExcelUtils::uniteRange(sheet, maxRow, 1, maxRow, 2);
+    ExcelUtils::setRowHeight(sheet, maxRow, 25);
     ExcelUtils::setValue(sheet, maxRow, 1, "Главный судья: ", 0);
     ExcelUtils::setValue(sheet, maxRow, 4, DBUtils::get_MAIN_JUDGE(database, tournamentUID), 0);
     ++maxRow;
 
     ExcelUtils::uniteRange(sheet, maxRow, 1, maxRow, 2);
+    ExcelUtils::setRowHeight(sheet, maxRow, 25);
     ExcelUtils::setValue(sheet, maxRow, 1, "Главный секретарь: ", 0);
     ExcelUtils::setValue(sheet, maxRow, 4, DBUtils::get_MAIN_SECRETARY(database, tournamentUID), 0);
     ++maxRow;
 
     ExcelUtils::uniteRange(sheet, maxRow, 1, maxRow, 2);
+    ExcelUtils::setRowHeight(sheet, maxRow, 25);
     ExcelUtils::setValue(sheet, maxRow, 1, "Зам. главного судьи: ", 0);
     ExcelUtils::setValue(sheet, maxRow, 4, DBUtils::get_ASSOCIATE_MAIN_JUDGE(database, tournamentUID), 0);
     ++maxRow;

@@ -8,10 +8,12 @@ ErrorMessagesDialog::ErrorMessagesDialog(QStringList list, QWidget *parent) :
     ui->setupUi(this);
 
     ui->plainTextEdit->clear();
+    QString message = "";
     for (const QString& line : list)
     {
-        ui->plainTextEdit->insertPlainText(ui->plainTextEdit->toPlainText() + "\n" + line);
+        message += "\n" + line;
     }
+    ui->plainTextEdit->insertPlainText(message);
 }
 
 ErrorMessagesDialog::~ErrorMessagesDialog()

@@ -39,6 +39,12 @@ WinnerReport::WinnerReport(const QSqlDatabase& database, const long long tournam
         sheets->querySubObject("Add");
         QAxObject *sheet = sheets->querySubObject( "Item( int )", 1);
 
+        QString sheetName = DBUtils::getField(database, "SHORTNAME", "SEXES", sex_fk);
+        sheetName += "," + DBUtils::getField(database, "NAME", "TYPES", type_fk);
+        sheetName += "," + QString::number(age_from) + "-" + QString::number(age_till) + "лет";
+        sheet->setProperty("Name", sheetName.left(31));
+
+
         ExcelUtils::setValue     (sheet, currentRow, 1, DBUtils::getField(database, "NAME", "TOURNAMENTS", tournamentUID));
         ExcelUtils::setWrapText  (sheet, currentRow, 1);
         //ExcelUtils::setRowAutoFit(sheet, currentRow);
@@ -104,16 +110,19 @@ WinnerReport::WinnerReport(const QSqlDatabase& database, const long long tournam
 
 
         ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 2);
+        ExcelUtils::setRowHeight(sheet, currentRow, 25);
         ExcelUtils::setValue(sheet, currentRow, 1, "Главный судья: ", 0);
         ExcelUtils::setValue(sheet, currentRow, 4, DBUtils::get_MAIN_JUDGE(database, tournamentUID), 0);
         ++currentRow;
 
         ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 2);
+        ExcelUtils::setRowHeight(sheet, currentRow, 25);
         ExcelUtils::setValue(sheet, currentRow, 1, "Главный секретарь: ", 0);
         ExcelUtils::setValue(sheet, currentRow, 4, DBUtils::get_MAIN_SECRETARY(database, tournamentUID), 0);
         ++currentRow;
 
         ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 2);
+        ExcelUtils::setRowHeight(sheet, currentRow, 25);
         ExcelUtils::setValue(sheet, currentRow, 1, "Зам. главного судьи: ", 0);
         ExcelUtils::setValue(sheet, currentRow, 4, DBUtils::get_ASSOCIATE_MAIN_JUDGE(database, tournamentUID), 0);
         ++currentRow;

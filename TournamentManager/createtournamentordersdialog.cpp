@@ -477,6 +477,7 @@ void CreateTournamentOrdersDialog::loadFromExcel()
 
     if (errors.size() > 0)
     {
+        qDebug() << errors.size() << " errors";
         ErrorMessagesDialog dlg(errors, this);
         dlg.exec();
     }

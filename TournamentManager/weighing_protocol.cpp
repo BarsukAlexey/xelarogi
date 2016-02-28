@@ -30,6 +30,12 @@ WeighingProtocol::WeighingProtocol(const QSqlDatabase& database, const long long
 
         sheets->querySubObject("Add");
         QAxObject *sheet = sheets->querySubObject( "Item( int )", 1);
+        QString sheetName = DBUtils::getField(database, "SHORTNAME", "SEXES", DBUtils::getField(database, "SEX_FK", "TOURNAMENT_CATEGORIES", uidCategory)) + "," +
+                            DBUtils::getField(database, "NAME", "TYPES", DBUtils::getField(database, "TYPE_FK", "TOURNAMENT_CATEGORIES", uidCategory)) + "," +
+                            DBUtils::getField(database, "AGE_FROM", "TOURNAMENT_CATEGORIES", uidCategory) + "-" + DBUtils::getField(database, "AGE_TILL", "TOURNAMENT_CATEGORIES", uidCategory) + "л," +
+                            DBUtils::getField(database, "WEIGHT_FROM", "TOURNAMENT_CATEGORIES", uidCategory) + "-" + DBUtils::getField(database, "WEIGHT_TILL", "TOURNAMENT_CATEGORIES", uidCategory) + "кг"
+                            ;
+        sheet->setProperty("Name", sheetName.left(31));
 
         int currentRow = 2;
 
@@ -94,16 +100,19 @@ WeighingProtocol::WeighingProtocol(const QSqlDatabase& database, const long long
         }
 
         ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 2);
+        ExcelUtils::setRowHeight(sheet, currentRow, 25);
         ExcelUtils::setValue(sheet, currentRow, 1, "Главный судья: ", 0);
         ExcelUtils::setValue(sheet, currentRow, 4, DBUtils::get_MAIN_JUDGE(database, tournamentUID), 0);
         ++currentRow;
 
         ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 2);
+        ExcelUtils::setRowHeight(sheet, currentRow, 25);
         ExcelUtils::setValue(sheet, currentRow, 1, "Главный секретарь: ", 0);
         ExcelUtils::setValue(sheet, currentRow, 4, DBUtils::get_MAIN_SECRETARY(database, tournamentUID), 0);
         ++currentRow;
 
         ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 2);
+        ExcelUtils::setRowHeight(sheet, currentRow, 25);
         ExcelUtils::setValue(sheet, currentRow, 1, "Зам. главного судьи: ", 0);
         ExcelUtils::setValue(sheet, currentRow, 4, DBUtils::get_ASSOCIATE_MAIN_JUDGE(database, tournamentUID), 0);
         ++currentRow;
