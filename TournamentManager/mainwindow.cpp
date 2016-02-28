@@ -328,6 +328,13 @@ void MainWindow::connectButtons()
         CreateTournamentCategoriesDialog dlg(tournamentUID, this);
         dlg.exec();
     });
+
+    connect(ui->genTournamentCategoriesBtn, &QPushButton::clicked, [this] ()
+    {
+        long long tournamentUID = ui->tournamentUidLabel->text().toLongLong();
+        GenerateTournamentCategoriesDialog dlg(tournamentUID, this);
+        dlg.exec();
+    });
 }
 
 

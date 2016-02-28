@@ -182,12 +182,25 @@
             </widget>
            </item>
            <item>
+            <widget class="QPushButton" name="genTournamentCategoriesBtn">
+             <property name="text">
+              <string>Добавление группы категорий турнира</string>
+             </property>
+            </widget>
+           </item>
+           <item>
             <widget class="QPushButton" name="createOrdersBtn">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>40</height>
+              </size>
              </property>
              <property name="text">
               <string>Заявки</string>

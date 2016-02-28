@@ -21,6 +21,7 @@
 #include "createtournamentdialog.h"
 #include "createtournamentordersdialog.h"
 #include "createtournamentcategoriesdialog.h"
+#include "generatetournamentcategoriesdialog.h"
 
 namespace Ui {
 class MainWindow;
