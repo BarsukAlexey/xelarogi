@@ -259,6 +259,7 @@ void CreateTournamentOrdersDialog::loadFromExcel()
     int noUIDsOrders = 0;
     int errorOrders = 0;
 
+    QStringList errors;
     for (int sheetNumber = 1; sheetNumber <= sheetCount; ++sheetNumber)
     {
         QAxObject* sheet = sheets->querySubObject( "Item( int )", sheetNumber );
@@ -390,7 +391,7 @@ void CreateTournamentOrdersDialog::loadFromExcel()
             long long tournamentCategoryUID = getTournamentCategoryUID(genderUID, age, weight.toDouble(), typeUID, gender, type);
             if (mGlobalError != "")
             {
-                QMessageBox::information(this, "Не найдена категория для спортсмена", mGlobalError);
+                errors << mGlobalError + " (Спортсмен: " + secondName + " " + firstName + " " + patronymic + ")";
                 noUIDsOrders++;
             }
             else
@@ -467,11 +468,18 @@ void CreateTournamentOrdersDialog::loadFromExcel()
         }
     }
 
+
     // clean up and close up
     workbook->dynamicCall("Close()");
     delete workbook;
     excel->dynamicCall("Quit()");
     delete excel;
+
+    if (errors.size() > 0)
+    {
+        ErrorMessagesDialog dlg(errors, this);
+        dlg.exec();
+    }
 
     QMessageBox::information(this, "Добавление заявок выполнено", "Всего распознано заявок: " + QString::number(totalOrders) + "\n"
                                                                   "Добавлено заявок: " + QString::number(addOrders) + "\n"
@@ -869,12 +877,11 @@ long long CreateTournamentOrdersDialog::getTournamentCategoryUID(long long sexUI
         if (!isFind)
         {
             mGlobalError = "Не обнаружена необходимая категория турнира для:\n"
-                           "  Вес: " + QString::number(weight) + "\n"
-                           "  Возраст: " + QString::number(age) + "\n"
-                           "  Раздел: " + typeName + "\n"
-                           "  Пол: " + sexName + "\n"
-                           "\n" +
-                           "Добавьте соответствующую категорию и повторите попытку";
+                           "   Вес: " + QString::number(weight) + "\n"
+                           "   Возраст: " + QString::number(age) + "\n"
+                           "   Раздел: " + typeName + "\n"
+                           "   Пол: " + sexName + "\n"
+                           "   Добавьте соответствующую категорию и повторите попытку ";
         }
     }
     else

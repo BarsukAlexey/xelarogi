@@ -188,7 +188,7 @@ FitingDistribution::FitingDistribution(const QSqlDatabase &database, const long 
         ++currentRow;
 
         ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 2 + 3 * days.size());
-        ExcelUtils::setValue(sheet, currentRow, 1, "Заместитель главного судьи: " + DBUtils::get_ASSOCIATE_MAIN_JUDGE(database, tournamentUID), 0);
+        ExcelUtils::setValue(sheet, currentRow, 1, "Зам. главного судьи: " + DBUtils::get_ASSOCIATE_MAIN_JUDGE(database, tournamentUID), 0);
         ++currentRow;
 
         ExcelUtils::setPageOrientation(sheet, 2);

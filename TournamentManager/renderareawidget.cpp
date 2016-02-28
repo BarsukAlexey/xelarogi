@@ -363,7 +363,7 @@ void RenderAreaWidget::onSaveInExcel()
     ExcelUtils::setValue(sheet, maxRow, 1, "Главный секретарь: " + DBUtils::get_MAIN_SECRETARY(database, tournamentUID), 0);
     ++maxRow;
 
-    ExcelUtils::setValue(sheet, maxRow, 1, "Заместитель главного судьи: " + DBUtils::get_ASSOCIATE_MAIN_JUDGE(database, tournamentUID), 0);
+    ExcelUtils::setValue(sheet, maxRow, 1, "Зам. главного судьи: " + DBUtils::get_ASSOCIATE_MAIN_JUDGE(database, tournamentUID), 0);
     ++maxRow;
 
     //workbook->dynamicCall("Close()");

@@ -102,7 +102,7 @@ WeighingProtocol::WeighingProtocol(const QSqlDatabase& database, const long long
         ++currentRow;
 
         ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, countColumns);
-        ExcelUtils::setValue(sheet, currentRow, 1, "Заместитель главного судьи: " + DBUtils::get_ASSOCIATE_MAIN_JUDGE(database, tournamentUID), 0);
+        ExcelUtils::setValue(sheet, currentRow, 1, "Зам. главного судьи: " + DBUtils::get_ASSOCIATE_MAIN_JUDGE(database, tournamentUID), 0);
         ++currentRow;
 
         ExcelUtils::setPageOrientation(sheet, 2);

@@ -37,7 +37,8 @@ SOURCES += main.cpp\
     ebnutvbazu.cpp \
     renderarearesultdialog.cpp \
     createtypedialog.cpp \
-    generatetournamentcategoriesdialog.cpp
+    generatetournamentcategoriesdialog.cpp \
+    errormessagesdialog.cpp
 
 HEADERS  += mainwindow.h \
     handbookdialog.h \
@@ -60,7 +61,8 @@ HEADERS  += mainwindow.h \
     ebnutvbazu.h \
     renderarearesultdialog.h \
     createtypedialog.h \
-    generatetournamentcategoriesdialog.h
+    generatetournamentcategoriesdialog.h \
+    errormessagesdialog.h
 
 FORMS    += mainwindow.ui \
     handbookdialog.ui \
@@ -72,4 +74,5 @@ FORMS    += mainwindow.ui \
     createtournamentcategoriesdialog.ui \
     renderarearesultdialog.ui \
     createtypedialog.ui \
-    generatetournamentcategoriesdialog.ui
+    generatetournamentcategoriesdialog.ui \
+    errormessagesdialog.ui

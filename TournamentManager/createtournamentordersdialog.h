@@ -29,6 +29,7 @@
 
 #include "databaseexpert.h"
 #include "webreportdialog.h"
+#include "errormessagesdialog.h"
 
 
 namespace Ui {
