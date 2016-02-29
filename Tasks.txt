@@ -15,3 +15,8 @@
 
 -12) Разобраться с подключением JAVA-блядо-библиотек. Собрать это говно в jar или exe файл.
 +13) при дисквалификафии не выйти из турнира
+14) 
+	Just - la la la la la – It goes around the world
+	Just - la la la la la - It's all around the world
+	Just - la la la la la - And everybody's singing 
+	La la la la la - And now the bells are ringing
