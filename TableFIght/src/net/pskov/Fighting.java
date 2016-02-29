@@ -64,7 +64,7 @@ public class Fighting {
     final int VERTEX;
     final long orderUID_left;
     final long orderUID_right;
-    String result;
+    private volatile String result;
 
     public Fighting(
             String nameOfLeftFighter,
@@ -221,7 +221,7 @@ public class Fighting {
                         }
                         else {
                             statusFighting = StatusFighting.finishTie;
-                            result = getCountJudgeForLeftFighter(true) + " : " + getCountJudgeForRightFighter(true);
+                            //result = getCountJudgeForLeftFighter(true) + " : " + getCountJudgeForRightFighter(true);
                         }
                     } else {
                         statusFighting = StatusFighting._break;
@@ -258,8 +258,8 @@ public class Fighting {
         }
     }
 
-    private Player findWinner() {
-        statusFighting = StatusFighting.finishTie;
+    private synchronized Player findWinner() {
+        //statusFighting = StatusFighting.finishTie;
         int l = getCountJudgeForLeftFighter(true);
         int r = getCountJudgeForRightFighter(true);
         if (l < r) {
@@ -306,7 +306,7 @@ public class Fighting {
      *
      * @param player - этого бойца мы дисквалифицируем
      */
-    void disqualify(Player player) {
+    synchronized void disqualify(Player player) {
         statusFightingBeforeDisqualification = statusFighting;
         statusFighting = StatusFighting.disqualification;
 
@@ -317,7 +317,7 @@ public class Fighting {
     /**
      * Отменить дисквалификацию и продолжить раунд
      */
-    void rollBackDisqualification() {
+    synchronized void rollBackDisqualification() {
         statusFighting = statusFightingBeforeDisqualification;
         statusFightingBeforeDisqualification = null;
 

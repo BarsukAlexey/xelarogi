@@ -2,55 +2,195 @@
 <p>The  COM object is a QAxObject with the CLSID .</p>
 <h3>Interfaces</h3>
 <ul>
-<li>PageSetup
+<li>_Workbook
 </ul>
 <h3>Event Interfaces</h3>
 <ul>
-<li>IUnknown
+<li>WorkbookEvents
 </ul>
 <h2>Public Slots:</h2>
 <ul>
-<li>QVariant <a href="#PrintQuality"><b>PrintQuality</b></a>(QVariant Index = 0);</li>
-<li>void <a href="#SetAlignMarginsHeaderFooter"><b>SetAlignMarginsHeaderFooter</b></a>(bool AlignMarginsHeaderFooter);</li>
-<li>void <a href="#SetBlackAndWhite"><b>SetBlackAndWhite</b></a>(bool BlackAndWhite);</li>
-<li>void <a href="#SetBottomMargin"><b>SetBottomMargin</b></a>(double BottomMargin);</li>
-<li>void <a href="#SetCenterFooter"><b>SetCenterFooter</b></a>(QString CenterFooter);</li>
-<li>void <a href="#SetCenterHeader"><b>SetCenterHeader</b></a>(QString CenterHeader);</li>
-<li>void <a href="#SetCenterHorizontally"><b>SetCenterHorizontally</b></a>(bool CenterHorizontally);</li>
-<li>void <a href="#SetCenterVertically"><b>SetCenterVertically</b></a>(bool CenterVertically);</li>
-<li>void <a href="#SetChartSize"><b>SetChartSize</b></a>(XlObjectSize ChartSize);</li>
-<li>void <a href="#SetDifferentFirstPageHeaderFooter"><b>SetDifferentFirstPageHeaderFooter</b></a>(bool DifferentFirstPageHeaderFooter);</li>
-<li>void <a href="#SetDraft"><b>SetDraft</b></a>(bool Draft);</li>
-<li>void <a href="#SetFirstPageNumber"><b>SetFirstPageNumber</b></a>(int FirstPageNumber);</li>
-<li>void <a href="#SetFitToPagesTall"><b>SetFitToPagesTall</b></a>(QVariant FitToPagesTall);</li>
-<li>void <a href="#SetFitToPagesWide"><b>SetFitToPagesWide</b></a>(QVariant FitToPagesWide);</li>
-<li>void <a href="#SetFooterMargin"><b>SetFooterMargin</b></a>(double FooterMargin);</li>
-<li>void <a href="#SetHeaderMargin"><b>SetHeaderMargin</b></a>(double HeaderMargin);</li>
-<li>void <a href="#SetLeftFooter"><b>SetLeftFooter</b></a>(QString LeftFooter);</li>
-<li>void <a href="#SetLeftHeader"><b>SetLeftHeader</b></a>(QString LeftHeader);</li>
-<li>void <a href="#SetLeftMargin"><b>SetLeftMargin</b></a>(double LeftMargin);</li>
-<li>void <a href="#SetOddAndEvenPagesHeaderFooter"><b>SetOddAndEvenPagesHeaderFooter</b></a>(bool OddAndEvenPagesHeaderFooter);</li>
-<li>void <a href="#SetOrder"><b>SetOrder</b></a>(XlOrder Order);</li>
-<li>void <a href="#SetOrientation"><b>SetOrientation</b></a>(XlPageOrientation Orientation);</li>
-<li>void <a href="#SetPaperSize"><b>SetPaperSize</b></a>(XlPaperSize PaperSize);</li>
-<li>void <a href="#SetPrintArea"><b>SetPrintArea</b></a>(QString PrintArea);</li>
-<li>void <a href="#SetPrintComments"><b>SetPrintComments</b></a>(XlPrintLocation PrintComments);</li>
-<li>void <a href="#SetPrintErrors"><b>SetPrintErrors</b></a>(XlPrintErrors PrintErrors);</li>
-<li>void <a href="#SetPrintGridlines"><b>SetPrintGridlines</b></a>(bool PrintGridlines);</li>
-<li>void <a href="#SetPrintHeadings"><b>SetPrintHeadings</b></a>(bool PrintHeadings);</li>
-<li>void <a href="#SetPrintNotes"><b>SetPrintNotes</b></a>(bool PrintNotes);</li>
-<li>QVariant <a href="#SetPrintQuality"><b>SetPrintQuality</b></a>(QVariant Index = 0, QVariant rhs = 0);</li>
-<li>void <a href="#SetPrintTitleColumns"><b>SetPrintTitleColumns</b></a>(QString PrintTitleColumns);</li>
-<li>void <a href="#SetPrintTitleRows"><b>SetPrintTitleRows</b></a>(QString PrintTitleRows);</li>
-<li>void <a href="#SetRightFooter"><b>SetRightFooter</b></a>(QString RightFooter);</li>
-<li>void <a href="#SetRightHeader"><b>SetRightHeader</b></a>(QString RightHeader);</li>
-<li>void <a href="#SetRightMargin"><b>SetRightMargin</b></a>(double RightMargin);</li>
-<li>void <a href="#SetScaleWithDocHeaderFooter"><b>SetScaleWithDocHeaderFooter</b></a>(bool ScaleWithDocHeaderFooter);</li>
-<li>void <a href="#SetTopMargin"><b>SetTopMargin</b></a>(double TopMargin);</li>
-<li>void <a href="#SetZoom"><b>SetZoom</b></a>(QVariant Zoom);</li>
+<li>void <a href="#AcceptAllChanges"><b>AcceptAllChanges</b></a>(QVariant When = 0, QVariant Who = 0, QVariant Where = 0);</li>
+<li>void <a href="#Activate"><b>Activate</b></a>();</li>
+<li>void <a href="#AddToFavorites"><b>AddToFavorites</b></a>();</li>
+<li>void <a href="#ApplyTheme"><b>ApplyTheme</b></a>(QString Filename);</li>
+<li>void <a href="#BreakLink"><b>BreakLink</b></a>(QString Name, XlLinkType Type);</li>
+<li>bool <a href="#CanCheckIn"><b>CanCheckIn</b></a>();</li>
+<li>void <a href="#ChangeFileAccess"><b>ChangeFileAccess</b></a>(XlFileAccess Mode, QVariant WritePassword = 0, QVariant Notify = 0);</li>
+<li>void <a href="#ChangeLink"><b>ChangeLink</b></a>(QString Name, QString NewName, XlLinkType Type = 0);</li>
+<li>void <a href="#CheckIn"><b>CheckIn</b></a>(QVariant SaveChanges = 0, QVariant Comments = 0, QVariant MakePublic = 0);</li>
+<li>void <a href="#CheckInWithVersion"><b>CheckInWithVersion</b></a>(QVariant SaveChanges = 0, QVariant Comments = 0, QVariant MakePublic = 0, QVariant VersionType = 0);</li>
+<li>void <a href="#Close"><b>Close</b></a>(QVariant SaveChanges = 0, QVariant Filename = 0, QVariant RouteWorkbook = 0);</li>
+<li>QVariant <a href="#Colors"><b>Colors</b></a>(QVariant Index = 0);</li>
+<li>void <a href="#CreateForecastSheet"><b>CreateForecastSheet</b></a>(IDispatch* Timeline, IDispatch* Values, QVariant ForecastStart = 0, QVariant ForecastEnd = 0, QVariant ConfInt = 0, QVariant Seasonality = 0, QVariant DataCompletion = 0, QVariant Aggregation = 0, QVariant ChartType = 0, QVariant ShowStatsTable = 0);</li>
+<li>void <a href="#DeleteNumberFormat"><b>DeleteNumberFormat</b></a>(QString NumberFormat);</li>
+<li>void <a href="#Dummy16"><b>Dummy16</b></a>();</li>
+<li>void <a href="#Dummy17"><b>Dummy17</b></a>(int calcid);</li>
+<li>void <a href="#Dummy26"><b>Dummy26</b></a>();</li>
+<li>void <a href="#Dummy27"><b>Dummy27</b></a>();</li>
+<li>void <a href="#EnableConnections"><b>EnableConnections</b></a>();</li>
+<li>void <a href="#EndReview"><b>EndReview</b></a>();</li>
+<li>bool <a href="#ExclusiveAccess"><b>ExclusiveAccess</b></a>();</li>
+<li>void <a href="#ExportAsFixedFormat"><b>ExportAsFixedFormat</b></a>(XlFixedFormatType Type, QVariant Filename = 0, QVariant Quality = 0, QVariant IncludeDocProperties = 0, QVariant IgnorePrintAreas = 0, QVariant From = 0, QVariant To = 0, QVariant OpenAfterPublish = 0, QVariant FixedFormatExtClassPtr = 0);</li>
+<li>void <a href="#FollowHyperlink"><b>FollowHyperlink</b></a>(QString Address, QVariant SubAddress = 0, QVariant NewWindow = 0, QVariant AddHistory = 0, QVariant ExtraInfo = 0, QVariant Method = 0, QVariant HeaderInfo = 0);</li>
+<li>void <a href="#ForwardMailer"><b>ForwardMailer</b></a>();</li>
+<li>IDispatch* <a href="#GetWorkflowTasks"><b>GetWorkflowTasks</b></a>();</li>
+<li>IDispatch* <a href="#GetWorkflowTemplates"><b>GetWorkflowTemplates</b></a>();</li>
+<li>void <a href="#HighlightChangesOptions"><b>HighlightChangesOptions</b></a>(QVariant When = 0, QVariant Who = 0, QVariant Where = 0);</li>
+<li>QVariant <a href="#LinkInfo"><b>LinkInfo</b></a>(QString Name, XlLinkInfo LinkInfo, QVariant Type = 0, QVariant EditionRef = 0);</li>
+<li>QVariant <a href="#LinkSources"><b>LinkSources</b></a>(QVariant Type = 0);</li>
+<li>void <a href="#LockServerFile"><b>LockServerFile</b></a>();</li>
+<li>void <a href="#MergeWorkbook"><b>MergeWorkbook</b></a>(QVariant Filename);</li>
+<li>IDispatch* <a href="#NewWindow"><b>NewWindow</b></a>();</li>
+<li>void <a href="#OpenLinks"><b>OpenLinks</b></a>(QString Name, QVariant ReadOnly = 0, QVariant Type = 0);</li>
+<li>IDispatch* <a href="#PivotCaches"><b>PivotCaches</b></a>();</li>
+<li>void <a href="#PivotTableWizard"><b>PivotTableWizard</b></a>(QVariant SourceType = 0, QVariant SourceData = 0, QVariant TableDestination = 0, QVariant TableName = 0, QVariant RowGrand = 0, QVariant ColumnGrand = 0, QVariant SaveData = 0, QVariant HasAutoFormat = 0, QVariant AutoPage = 0, QVariant Reserved = 0, QVariant BackgroundQuery = 0, QVariant OptimizeCache = 0, QVariant PageFieldOrder = 0, QVariant PageFieldWrapCount = 0, QVariant ReadData = 0, QVariant Connection = 0);</li>
+<li>void <a href="#Post"><b>Post</b></a>(QVariant DestName = 0);</li>
+<li>void <a href="#PrintOut"><b>PrintOut</b></a>(QVariant From = 0, QVariant To = 0, QVariant Copies = 0, QVariant Preview = 0, QVariant ActivePrinter = 0, QVariant PrintToFile = 0, QVariant Collate = 0, QVariant PrToFileName = 0, QVariant IgnorePrintAreas = 0);</li>
+<li>void <a href="#PrintPreview"><b>PrintPreview</b></a>(QVariant EnableChanges = 0);</li>
+<li>void <a href="#Protect"><b>Protect</b></a>(QVariant Password = 0, QVariant Structure = 0, QVariant Windows = 0);</li>
+<li>void <a href="#ProtectSharing"><b>ProtectSharing</b></a>(QVariant Filename = 0, QVariant Password = 0, QVariant WriteResPassword = 0, QVariant ReadOnlyRecommended = 0, QVariant CreateBackup = 0, QVariant SharingPassword = 0, QVariant FileFormat = 0);</li>
+<li>void <a href="#PurgeChangeHistoryNow"><b>PurgeChangeHistoryNow</b></a>(int Days, QVariant SharingPassword = 0);</li>
+<li>void <a href="#RecheckSmartTags"><b>RecheckSmartTags</b></a>();</li>
+<li>void <a href="#RefreshAll"><b>RefreshAll</b></a>();</li>
+<li>void <a href="#RejectAllChanges"><b>RejectAllChanges</b></a>(QVariant When = 0, QVariant Who = 0, QVariant Where = 0);</li>
+<li>void <a href="#ReloadAs"><b>ReloadAs</b></a>(Office::MsoEncoding Encoding);</li>
+<li>void <a href="#RemoveDocumentInformation"><b>RemoveDocumentInformation</b></a>(XlRemoveDocInfoType RemoveDocInfoType);</li>
+<li>void <a href="#RemoveUser"><b>RemoveUser</b></a>(int Index);</li>
+<li>void <a href="#Reply"><b>Reply</b></a>();</li>
+<li>void <a href="#ReplyAll"><b>ReplyAll</b></a>();</li>
+<li>void <a href="#ReplyWithChanges"><b>ReplyWithChanges</b></a>(QVariant ShowMessage = 0);</li>
+<li>void <a href="#ResetColors"><b>ResetColors</b></a>();</li>
+<li>void <a href="#Route"><b>Route</b></a>();</li>
+<li>void <a href="#RunAutoMacros"><b>RunAutoMacros</b></a>(XlRunAutoMacro Which);</li>
+<li>void <a href="#Save"><b>Save</b></a>();</li>
+<li>void <a href="#SaveAs"><b>SaveAs</b></a>(QVariant Filename = 0, QVariant FileFormat = 0, QVariant Password = 0, QVariant WriteResPassword = 0, QVariant ReadOnlyRecommended = 0, QVariant CreateBackup = 0, XlSaveAsAccessMode AccessMode = 0, QVariant ConflictResolution = 0, QVariant AddToMru = 0, QVariant TextCodepage = 0, QVariant TextVisualLayout = 0, QVariant Local = 0);</li>
+<li>void <a href="#SaveAsXMLData"><b>SaveAsXMLData</b></a>(QString Filename, IDispatch* Map);</li>
+<li>void <a href="#SaveCopyAs"><b>SaveCopyAs</b></a>(QVariant Filename = 0);</li>
+<li>void <a href="#SendFaxOverInternet"><b>SendFaxOverInternet</b></a>(QVariant Recipients = 0, QVariant Subject = 0, QVariant ShowMessage = 0);</li>
+<li>void <a href="#SendForReview"><b>SendForReview</b></a>(QVariant Recipients = 0, QVariant Subject = 0, QVariant ShowMessage = 0, QVariant IncludeAttachment = 0);</li>
+<li>void <a href="#SendMail"><b>SendMail</b></a>(QVariant Recipients, QVariant Subject = 0, QVariant ReturnReceipt = 0);</li>
+<li>void <a href="#SendMailer"><b>SendMailer</b></a>(QVariant FileFormat = 0, XlPriority Priority = 0);</li>
+<li>void <a href="#SetAcceptLabelsInFormulas"><b>SetAcceptLabelsInFormulas</b></a>(bool AcceptLabelsInFormulas);</li>
+<li>void <a href="#SetAccuracyVersion"><b>SetAccuracyVersion</b></a>(int AccuracyVersion);</li>
+<li>void <a href="#SetAuthor"><b>SetAuthor</b></a>(QString Author);</li>
+<li>void <a href="#SetAutoUpdateFrequency"><b>SetAutoUpdateFrequency</b></a>(int AutoUpdateFrequency);</li>
+<li>void <a href="#SetAutoUpdateSaveChanges"><b>SetAutoUpdateSaveChanges</b></a>(bool AutoUpdateSaveChanges);</li>
+<li>void <a href="#SetChangeHistoryDuration"><b>SetChangeHistoryDuration</b></a>(int ChangeHistoryDuration);</li>
+<li>void <a href="#SetChartDataPointTrack"><b>SetChartDataPointTrack</b></a>(bool ChartDataPointTrack);</li>
+<li>void <a href="#SetCheckCompatibility"><b>SetCheckCompatibility</b></a>(bool CheckCompatibility);</li>
+<li>QVariant <a href="#SetColors"><b>SetColors</b></a>(QVariant Index = 0, QVariant rhs = 0);</li>
+<li>void <a href="#SetComments"><b>SetComments</b></a>(QString Comments);</li>
+<li>void <a href="#SetConflictResolution"><b>SetConflictResolution</b></a>(XlSaveConflictResolution ConflictResolution);</li>
+<li>void <a href="#SetDate1904"><b>SetDate1904</b></a>(bool Date1904);</li>
+<li>void <a href="#SetDefaultPivotTableStyle"><b>SetDefaultPivotTableStyle</b></a>(QVariant DefaultPivotTableStyle);</li>
+<li>void <a href="#SetDefaultSlicerStyle"><b>SetDefaultSlicerStyle</b></a>(QVariant DefaultSlicerStyle);</li>
+<li>void <a href="#SetDefaultTableStyle"><b>SetDefaultTableStyle</b></a>(QVariant DefaultTableStyle);</li>
+<li>void <a href="#SetDefaultTimelineStyle"><b>SetDefaultTimelineStyle</b></a>(QVariant DefaultTimelineStyle);</li>
+<li>void <a href="#SetDisplayDrawingObjects"><b>SetDisplayDrawingObjects</b></a>(XlDisplayDrawingObjects DisplayDrawingObjects);</li>
+<li>void <a href="#SetDisplayInkComments"><b>SetDisplayInkComments</b></a>(bool DisplayInkComments);</li>
+<li>void <a href="#SetDoNotPromptForConvert"><b>SetDoNotPromptForConvert</b></a>(bool DoNotPromptForConvert);</li>
+<li>void <a href="#SetEnableAutoRecover"><b>SetEnableAutoRecover</b></a>(bool EnableAutoRecover);</li>
+<li>void <a href="#SetEncryptionProvider"><b>SetEncryptionProvider</b></a>(QString EncryptionProvider);</li>
+<li>void <a href="#SetEnvelopeVisible"><b>SetEnvelopeVisible</b></a>(bool EnvelopeVisible);</li>
+<li>void <a href="#SetFinal"><b>SetFinal</b></a>(bool Final);</li>
+<li>void <a href="#SetForceFullCalculation"><b>SetForceFullCalculation</b></a>(bool ForceFullCalculation);</li>
+<li>void <a href="#SetHasMailer"><b>SetHasMailer</b></a>(bool HasMailer);</li>
+<li>void <a href="#SetHasRoutingSlip"><b>SetHasRoutingSlip</b></a>(bool HasRoutingSlip);</li>
+<li>void <a href="#SetHighlightChangesOnScreen"><b>SetHighlightChangesOnScreen</b></a>(bool HighlightChangesOnScreen);</li>
+<li>void <a href="#SetInactiveListBorderVisible"><b>SetInactiveListBorderVisible</b></a>(bool InactiveListBorderVisible);</li>
+<li>void <a href="#SetIsAddin"><b>SetIsAddin</b></a>(bool IsAddin);</li>
+<li>void <a href="#SetKeepChangeHistory"><b>SetKeepChangeHistory</b></a>(bool KeepChangeHistory);</li>
+<li>void <a href="#SetKeywords"><b>SetKeywords</b></a>(QString Keywords);</li>
+<li>void <a href="#SetLinkOnData"><b>SetLinkOnData</b></a>(QString Name, QVariant Procedure = 0);</li>
+<li>void <a href="#SetListChangesOnNewSheet"><b>SetListChangesOnNewSheet</b></a>(bool ListChangesOnNewSheet);</li>
+<li>void <a href="#SetOnSave"><b>SetOnSave</b></a>(QString OnSave);</li>
+<li>void <a href="#SetOnSheetActivate"><b>SetOnSheetActivate</b></a>(QString OnSheetActivate);</li>
+<li>void <a href="#SetOnSheetDeactivate"><b>SetOnSheetDeactivate</b></a>(QString OnSheetDeactivate);</li>
+<li>void <a href="#SetPassword"><b>SetPassword</b></a>(QString Password);</li>
+<li>void <a href="#SetPasswordEncryptionOptions"><b>SetPasswordEncryptionOptions</b></a>(QVariant PasswordEncryptionProvider = 0, QVariant PasswordEncryptionAlgorithm = 0, QVariant PasswordEncryptionKeyLength = 0, QVariant PasswordEncryptionFileProperties = 0);</li>
+<li>void <a href="#SetPersonalViewListSettings"><b>SetPersonalViewListSettings</b></a>(bool PersonalViewListSettings);</li>
+<li>void <a href="#SetPersonalViewPrintSettings"><b>SetPersonalViewPrintSettings</b></a>(bool PersonalViewPrintSettings);</li>
+<li>void <a href="#SetPrecisionAsDisplayed"><b>SetPrecisionAsDisplayed</b></a>(bool PrecisionAsDisplayed);</li>
+<li>void <a href="#SetReadOnlyRecommended"><b>SetReadOnlyRecommended</b></a>(bool ReadOnlyRecommended);</li>
+<li>void <a href="#SetRemovePersonalInformation"><b>SetRemovePersonalInformation</b></a>(bool RemovePersonalInformation);</li>
+<li>void <a href="#SetSaveLinkValues"><b>SetSaveLinkValues</b></a>(bool SaveLinkValues);</li>
+<li>void <a href="#SetSaved"><b>SetSaved</b></a>(bool Saved);</li>
+<li>void <a href="#SetShowConflictHistory"><b>SetShowConflictHistory</b></a>(bool ShowConflictHistory);</li>
+<li>void <a href="#SetShowPivotChartActiveFields"><b>SetShowPivotChartActiveFields</b></a>(bool ShowPivotChartActiveFields);</li>
+<li>void <a href="#SetShowPivotTableFieldList"><b>SetShowPivotTableFieldList</b></a>(bool ShowPivotTableFieldList);</li>
+<li>void <a href="#SetSubject"><b>SetSubject</b></a>(QString Subject);</li>
+<li>void <a href="#SetTemplateRemoveExtData"><b>SetTemplateRemoveExtData</b></a>(bool TemplateRemoveExtData);</li>
+<li>void <a href="#SetTitle"><b>SetTitle</b></a>(QString Title);</li>
+<li>void <a href="#SetUpdateLinks"><b>SetUpdateLinks</b></a>(XlUpdateLinks UpdateLinks);</li>
+<li>void <a href="#SetUpdateRemoteReferences"><b>SetUpdateRemoteReferences</b></a>(bool UpdateRemoteReferences);</li>
+<li>void <a href="#SetUserControl"><b>SetUserControl</b></a>(bool UserControl);</li>
+<li>void <a href="#SetWritePassword"><b>SetWritePassword</b></a>(QString WritePassword);</li>
+<li>void <a href="#ToggleFormsDesign"><b>ToggleFormsDesign</b></a>();</li>
+<li>void <a href="#Unprotect"><b>Unprotect</b></a>(QVariant Password = 0);</li>
+<li>void <a href="#UnprotectSharing"><b>UnprotectSharing</b></a>(QVariant SharingPassword = 0);</li>
+<li>void <a href="#UpdateFromFile"><b>UpdateFromFile</b></a>();</li>
+<li>void <a href="#UpdateLink"><b>UpdateLink</b></a>(QVariant Name = 0, QVariant Type = 0);</li>
+<li>void <a href="#WebPagePreview"><b>WebPagePreview</b></a>();</li>
+<li>XlXmlImportResult <a href="#XmlImport"><b>XmlImport</b></a>(QString Url, IDispatch** ImportMap, QVariant Overwrite = 0, QVariant Destination = 0);</li>
+<li>XlXmlImportResult <a href="#XmlImportXml"><b>XmlImportXml</b></a>(QString Data, IDispatch** ImportMap, QVariant Overwrite = 0, QVariant Destination = 0);</li>
+<li>void <a href="#_PrintOut"><b>_PrintOut</b></a>(QVariant From = 0, QVariant To = 0, QVariant Copies = 0, QVariant Preview = 0, QVariant ActivePrinter = 0, QVariant PrintToFile = 0, QVariant Collate = 0, QVariant PrToFileName = 0);</li>
+<li>void <a href="#_Protect"><b>_Protect</b></a>(QVariant Password = 0, QVariant Structure = 0, QVariant Windows = 0);</li>
+<li>void <a href="#_ProtectSharing"><b>_ProtectSharing</b></a>(QVariant Filename = 0, QVariant Password = 0, QVariant WriteResPassword = 0, QVariant ReadOnlyRecommended = 0, QVariant CreateBackup = 0, QVariant SharingPassword = 0);</li>
+<li>void <a href="#_SaveAs"><b>_SaveAs</b></a>(QVariant Filename = 0, QVariant FileFormat = 0, QVariant Password = 0, QVariant WriteResPassword = 0, QVariant ReadOnlyRecommended = 0, QVariant CreateBackup = 0, XlSaveAsAccessMode AccessMode = 0, QVariant ConflictResolution = 0, QVariant AddToMru = 0, QVariant TextCodepage = 0, QVariant TextVisualLayout = 0);</li>
+<li>void <a href="#__PrintOut"><b>__PrintOut</b></a>(QVariant From = 0, QVariant To = 0, QVariant Copies = 0, QVariant Preview = 0, QVariant ActivePrinter = 0, QVariant PrintToFile = 0, QVariant Collate = 0);</li>
+<li>void <a href="#sblt"><b>sblt</b></a>(QString s);</li>
+<li>void <a href="#set_CodeName"><b>set_CodeName</b></a>(QString _CodeName);</li>
 </ul>
 <h2>Signals:</h2>
 <ul>
+<li>void <a href="#Activate"><b>Activate</b></a>();</li>
+<li>void <a href="#AddRef"><b>AddRef</b></a>();</li>
+<li>void <a href="#AddinInstall"><b>AddinInstall</b></a>();</li>
+<li>void <a href="#AddinUninstall"><b>AddinUninstall</b></a>();</li>
+<li>void <a href="#AfterSave"><b>AfterSave</b></a>(bool Success);</li>
+<li>void <a href="#AfterXmlExport"><b>AfterXmlExport</b></a>(IDispatch* Map, QString Url, XlXmlExportResult Result);</li>
+<li>void <a href="#AfterXmlImport"><b>AfterXmlImport</b></a>(IDispatch* Map, bool IsRefresh, XlXmlImportResult Result);</li>
+<li>void <a href="#BeforeClose"><b>BeforeClose</b></a>(bool& Cancel);</li>
+<li>void <a href="#BeforePrint"><b>BeforePrint</b></a>(bool& Cancel);</li>
+<li>void <a href="#BeforeSave"><b>BeforeSave</b></a>(bool SaveAsUI, bool& Cancel);</li>
+<li>void <a href="#BeforeXmlExport"><b>BeforeXmlExport</b></a>(IDispatch* Map, QString Url, bool& Cancel);</li>
+<li>void <a href="#BeforeXmlImport"><b>BeforeXmlImport</b></a>(IDispatch* Map, QString Url, bool IsRefresh, bool& Cancel);</li>
+<li>void <a href="#Deactivate"><b>Deactivate</b></a>();</li>
+<li>void <a href="#GetIDsOfNames"><b>GetIDsOfNames</b></a>(GUID* riid, int** rgszNames, uint cNames, uint lcid, int& rgdispid);</li>
+<li>void <a href="#GetTypeInfo"><b>GetTypeInfo</b></a>(uint itinfo, uint lcid, void** pptinfo);</li>
+<li>void <a href="#GetTypeInfoCount"><b>GetTypeInfoCount</b></a>(uint& pctinfo);</li>
+<li>void <a href="#Invoke"><b>Invoke</b></a>(int dispidMember, GUID* riid, uint lcid, uint wFlags, DISPPARAMS* pdispparams, QVariant& pvarResult, EXCEPINFO*& pexcepinfo, uint& puArgErr);</li>
+<li>void <a href="#ModelChange"><b>ModelChange</b></a>(IDispatch* Changes);</li>
+<li>void <a href="#NewChart"><b>NewChart</b></a>(IDispatch* Ch);</li>
+<li>void <a href="#NewSheet"><b>NewSheet</b></a>(IDispatch* Sh);</li>
+<li>void <a href="#Open"><b>Open</b></a>();</li>
+<li>void <a href="#PivotTableCloseConnection"><b>PivotTableCloseConnection</b></a>(IDispatch* Target);</li>
+<li>void <a href="#PivotTableOpenConnection"><b>PivotTableOpenConnection</b></a>(IDispatch* Target);</li>
+<li>void <a href="#QueryInterface"><b>QueryInterface</b></a>(GUID* riid, void** ppvObj);</li>
+<li>void <a href="#Release"><b>Release</b></a>();</li>
+<li>void <a href="#RowsetComplete"><b>RowsetComplete</b></a>(QString Description, QString Sheet, bool Success);</li>
+<li>void <a href="#SheetActivate"><b>SheetActivate</b></a>(IDispatch* Sh);</li>
+<li>void <a href="#SheetBeforeDelete"><b>SheetBeforeDelete</b></a>(IDispatch* Sh);</li>
+<li>void <a href="#SheetBeforeDoubleClick"><b>SheetBeforeDoubleClick</b></a>(IDispatch* Sh, IDispatch* Target, bool& Cancel);</li>
+<li>void <a href="#SheetBeforeRightClick"><b>SheetBeforeRightClick</b></a>(IDispatch* Sh, IDispatch* Target, bool& Cancel);</li>
+<li>void <a href="#SheetCalculate"><b>SheetCalculate</b></a>(IDispatch* Sh);</li>
+<li>void <a href="#SheetChange"><b>SheetChange</b></a>(IDispatch* Sh, IDispatch* Target);</li>
+<li>void <a href="#SheetDeactivate"><b>SheetDeactivate</b></a>(IDispatch* Sh);</li>
+<li>void <a href="#SheetFollowHyperlink"><b>SheetFollowHyperlink</b></a>(IDispatch* Sh, IDispatch* Target);</li>
+<li>void <a href="#SheetLensGalleryRenderComplete"><b>SheetLensGalleryRenderComplete</b></a>(IDispatch* Sh);</li>
+<li>void <a href="#SheetPivotTableAfterValueChange"><b>SheetPivotTableAfterValueChange</b></a>(IDispatch* Sh, IDispatch* TargetPivotTable, IDispatch* TargetRange);</li>
+<li>void <a href="#SheetPivotTableBeforeAllocateChanges"><b>SheetPivotTableBeforeAllocateChanges</b></a>(IDispatch* Sh, IDispatch* TargetPivotTable, int ValueChangeStart, int ValueChangeEnd, bool& Cancel);</li>
+<li>void <a href="#SheetPivotTableBeforeCommitChanges"><b>SheetPivotTableBeforeCommitChanges</b></a>(IDispatch* Sh, IDispatch* TargetPivotTable, int ValueChangeStart, int ValueChangeEnd, bool& Cancel);</li>
+<li>void <a href="#SheetPivotTableBeforeDiscardChanges"><b>SheetPivotTableBeforeDiscardChanges</b></a>(IDispatch* Sh, IDispatch* TargetPivotTable, int ValueChangeStart, int ValueChangeEnd);</li>
+<li>void <a href="#SheetPivotTableChangeSync"><b>SheetPivotTableChangeSync</b></a>(IDispatch* Sh, IDispatch* Target);</li>
+<li>void <a href="#SheetPivotTableUpdate"><b>SheetPivotTableUpdate</b></a>(IDispatch* Sh, IDispatch* Target);</li>
+<li>void <a href="#SheetSelectionChange"><b>SheetSelectionChange</b></a>(IDispatch* Sh, IDispatch* Target);</li>
+<li>void <a href="#SheetTableUpdate"><b>SheetTableUpdate</b></a>(IDispatch* Sh, IDispatch* Target);</li>
+<li>void <a href="#Sync"><b>Sync</b></a>(Office::MsoSyncEventType SyncEventType);</li>
+<li>void <a href="#WindowActivate"><b>WindowActivate</b></a>(IDispatch* Wn);</li>
+<li>void <a href="#WindowDeactivate"><b>WindowDeactivate</b></a>(IDispatch* Wn);</li>
+<li>void <a href="#WindowResize"><b>WindowResize</b></a>(IDispatch* Wn);</li>
 <li>void <a href="#exception"><b>exception</b></a>(int code, QString source, QString disc, QString help);</li>
 <li>void <a href="#propertyChanged"><b>propertyChanged</b></a>(QString name);</li>
 <li>void <a href="#signal"><b>signal</b></a>(QString name, int argc, void* argv);</li>
@@ -58,55 +198,141 @@
 <h2>Properties:</h2>
 <ul>
 <li>QString <a href="#objectName"><b>objectName</b></a>;</li>
-<li>bool <a href="#AlignMarginsHeaderFooter"><b>AlignMarginsHeaderFooter</b></a>;</li>
+<li>bool <a href="#AcceptLabelsInFormulas"><b>AcceptLabelsInFormulas</b></a>;</li>
+<li>int <a href="#AccuracyVersion"><b>AccuracyVersion</b></a>;</li>
+<li>IDispatch* <a href="#ActiveChart"><b>ActiveChart</b></a>;</li>
+<li>IDispatch* <a href="#ActiveSheet"><b>ActiveSheet</b></a>;</li>
+<li>IDispatch* <a href="#ActiveSlicer"><b>ActiveSlicer</b></a>;</li>
 <li>IDispatch* <a href="#Application"><b>Application</b></a>;</li>
-<li>bool <a href="#BlackAndWhite"><b>BlackAndWhite</b></a>;</li>
-<li>double <a href="#BottomMargin"><b>BottomMargin</b></a>;</li>
-<li>QString <a href="#CenterFooter"><b>CenterFooter</b></a>;</li>
-<li>IDispatch* <a href="#CenterFooterPicture"><b>CenterFooterPicture</b></a>;</li>
-<li>QString <a href="#CenterHeader"><b>CenterHeader</b></a>;</li>
-<li>IDispatch* <a href="#CenterHeaderPicture"><b>CenterHeaderPicture</b></a>;</li>
-<li>bool <a href="#CenterHorizontally"><b>CenterHorizontally</b></a>;</li>
-<li>bool <a href="#CenterVertically"><b>CenterVertically</b></a>;</li>
-<li>XlObjectSize <a href="#ChartSize"><b>ChartSize</b></a>;</li>
+<li>QString <a href="#Author"><b>Author</b></a>;</li>
+<li>int <a href="#AutoUpdateFrequency"><b>AutoUpdateFrequency</b></a>;</li>
+<li>bool <a href="#AutoUpdateSaveChanges"><b>AutoUpdateSaveChanges</b></a>;</li>
+<li>IDispatch* <a href="#BuiltinDocumentProperties"><b>BuiltinDocumentProperties</b></a>;</li>
+<li>int <a href="#CalculationVersion"><b>CalculationVersion</b></a>;</li>
+<li>bool <a href="#CaseSensitive"><b>CaseSensitive</b></a>;</li>
+<li>int <a href="#ChangeHistoryDuration"><b>ChangeHistoryDuration</b></a>;</li>
+<li>bool <a href="#ChartDataPointTrack"><b>ChartDataPointTrack</b></a>;</li>
+<li>IDispatch* <a href="#Charts"><b>Charts</b></a>;</li>
+<li>bool <a href="#CheckCompatibility"><b>CheckCompatibility</b></a>;</li>
+<li>QString <a href="#CodeName"><b>CodeName</b></a>;</li>
+<li>QVariant <a href="#Colors"><b>Colors</b></a>;</li>
+<li>IDispatch* <a href="#CommandBars"><b>CommandBars</b></a>;</li>
+<li>QString <a href="#Comments"><b>Comments</b></a>;</li>
+<li>XlSaveConflictResolution <a href="#ConflictResolution"><b>ConflictResolution</b></a>;</li>
+<li>IDispatch* <a href="#Connections"><b>Connections</b></a>;</li>
+<li>bool <a href="#ConnectionsDisabled"><b>ConnectionsDisabled</b></a>;</li>
+<li>IDispatch* <a href="#Container"><b>Container</b></a>;</li>
+<li>IDispatch* <a href="#ContentTypeProperties"><b>ContentTypeProperties</b></a>;</li>
+<li>bool <a href="#CreateBackup"><b>CreateBackup</b></a>;</li>
 <li>XlCreator <a href="#Creator"><b>Creator</b></a>;</li>
-<li>bool <a href="#DifferentFirstPageHeaderFooter"><b>DifferentFirstPageHeaderFooter</b></a>;</li>
-<li>bool <a href="#Draft"><b>Draft</b></a>;</li>
-<li>IDispatch* <a href="#EvenPage"><b>EvenPage</b></a>;</li>
-<li>IDispatch* <a href="#FirstPage"><b>FirstPage</b></a>;</li>
-<li>int <a href="#FirstPageNumber"><b>FirstPageNumber</b></a>;</li>
-<li>QVariant <a href="#FitToPagesTall"><b>FitToPagesTall</b></a>;</li>
-<li>QVariant <a href="#FitToPagesWide"><b>FitToPagesWide</b></a>;</li>
-<li>double <a href="#FooterMargin"><b>FooterMargin</b></a>;</li>
-<li>double <a href="#HeaderMargin"><b>HeaderMargin</b></a>;</li>
-<li>QString <a href="#LeftFooter"><b>LeftFooter</b></a>;</li>
-<li>IDispatch* <a href="#LeftFooterPicture"><b>LeftFooterPicture</b></a>;</li>
-<li>QString <a href="#LeftHeader"><b>LeftHeader</b></a>;</li>
-<li>IDispatch* <a href="#LeftHeaderPicture"><b>LeftHeaderPicture</b></a>;</li>
-<li>double <a href="#LeftMargin"><b>LeftMargin</b></a>;</li>
-<li>bool <a href="#OddAndEvenPagesHeaderFooter"><b>OddAndEvenPagesHeaderFooter</b></a>;</li>
-<li>XlOrder <a href="#Order"><b>Order</b></a>;</li>
-<li>XlPageOrientation <a href="#Orientation"><b>Orientation</b></a>;</li>
-<li>IDispatch* <a href="#Pages"><b>Pages</b></a>;</li>
-<li>XlPaperSize <a href="#PaperSize"><b>PaperSize</b></a>;</li>
+<li>IDispatch* <a href="#CustomDocumentProperties"><b>CustomDocumentProperties</b></a>;</li>
+<li>IDispatch* <a href="#CustomViews"><b>CustomViews</b></a>;</li>
+<li>IDispatch* <a href="#CustomXMLParts"><b>CustomXMLParts</b></a>;</li>
+<li>bool <a href="#Date1904"><b>Date1904</b></a>;</li>
+<li>QVariant <a href="#DefaultPivotTableStyle"><b>DefaultPivotTableStyle</b></a>;</li>
+<li>QVariant <a href="#DefaultSlicerStyle"><b>DefaultSlicerStyle</b></a>;</li>
+<li>QVariant <a href="#DefaultTableStyle"><b>DefaultTableStyle</b></a>;</li>
+<li>QVariant <a href="#DefaultTimelineStyle"><b>DefaultTimelineStyle</b></a>;</li>
+<li>IDispatch* <a href="#DialogSheets"><b>DialogSheets</b></a>;</li>
+<li>XlDisplayDrawingObjects <a href="#DisplayDrawingObjects"><b>DisplayDrawingObjects</b></a>;</li>
+<li>bool <a href="#DisplayInkComments"><b>DisplayInkComments</b></a>;</li>
+<li>bool <a href="#DoNotPromptForConvert"><b>DoNotPromptForConvert</b></a>;</li>
+<li>IDispatch* <a href="#DocumentInspectors"><b>DocumentInspectors</b></a>;</li>
+<li>IDispatch* <a href="#DocumentLibraryVersions"><b>DocumentLibraryVersions</b></a>;</li>
+<li>bool <a href="#EnableAutoRecover"><b>EnableAutoRecover</b></a>;</li>
+<li>QString <a href="#EncryptionProvider"><b>EncryptionProvider</b></a>;</li>
+<li>bool <a href="#EnvelopeVisible"><b>EnvelopeVisible</b></a>;</li>
+<li>IDispatch* <a href="#Excel4IntlMacroSheets"><b>Excel4IntlMacroSheets</b></a>;</li>
+<li>IDispatch* <a href="#Excel4MacroSheets"><b>Excel4MacroSheets</b></a>;</li>
+<li>bool <a href="#Excel8CompatibilityMode"><b>Excel8CompatibilityMode</b></a>;</li>
+<li>XlFileFormat <a href="#FileFormat"><b>FileFormat</b></a>;</li>
+<li>bool <a href="#Final"><b>Final</b></a>;</li>
+<li>bool <a href="#ForceFullCalculation"><b>ForceFullCalculation</b></a>;</li>
+<li>QString <a href="#FullName"><b>FullName</b></a>;</li>
+<li>QString <a href="#FullNameURLEncoded"><b>FullNameURLEncoded</b></a>;</li>
+<li>IDispatch* <a href="#HTMLProject"><b>HTMLProject</b></a>;</li>
+<li>bool <a href="#HasMailer"><b>HasMailer</b></a>;</li>
+<li>bool <a href="#HasPassword"><b>HasPassword</b></a>;</li>
+<li>bool <a href="#HasRoutingSlip"><b>HasRoutingSlip</b></a>;</li>
+<li>bool <a href="#HasVBProject"><b>HasVBProject</b></a>;</li>
+<li>bool <a href="#HighlightChangesOnScreen"><b>HighlightChangesOnScreen</b></a>;</li>
+<li>IDispatch* <a href="#IconSets"><b>IconSets</b></a>;</li>
+<li>bool <a href="#InactiveListBorderVisible"><b>InactiveListBorderVisible</b></a>;</li>
+<li>bool <a href="#IsAddin"><b>IsAddin</b></a>;</li>
+<li>bool <a href="#IsInplace"><b>IsInplace</b></a>;</li>
+<li>bool <a href="#KeepChangeHistory"><b>KeepChangeHistory</b></a>;</li>
+<li>QString <a href="#Keywords"><b>Keywords</b></a>;</li>
+<li>bool <a href="#ListChangesOnNewSheet"><b>ListChangesOnNewSheet</b></a>;</li>
+<li>IDispatch* <a href="#Mailer"><b>Mailer</b></a>;</li>
+<li>IDispatch* <a href="#Model"><b>Model</b></a>;</li>
+<li>IDispatch* <a href="#Modules"><b>Modules</b></a>;</li>
+<li>bool <a href="#MultiUserEditing"><b>MultiUserEditing</b></a>;</li>
+<li>QString <a href="#Name"><b>Name</b></a>;</li>
+<li>IDispatch* <a href="#Names"><b>Names</b></a>;</li>
+<li>QString <a href="#OnSave"><b>OnSave</b></a>;</li>
+<li>QString <a href="#OnSheetActivate"><b>OnSheetActivate</b></a>;</li>
+<li>QString <a href="#OnSheetDeactivate"><b>OnSheetDeactivate</b></a>;</li>
 <li>IDispatch* <a href="#Parent"><b>Parent</b></a>;</li>
-<li>QString <a href="#PrintArea"><b>PrintArea</b></a>;</li>
-<li>XlPrintLocation <a href="#PrintComments"><b>PrintComments</b></a>;</li>
-<li>XlPrintErrors <a href="#PrintErrors"><b>PrintErrors</b></a>;</li>
-<li>bool <a href="#PrintGridlines"><b>PrintGridlines</b></a>;</li>
-<li>bool <a href="#PrintHeadings"><b>PrintHeadings</b></a>;</li>
-<li>bool <a href="#PrintNotes"><b>PrintNotes</b></a>;</li>
-<li>QVariant <a href="#PrintQuality"><b>PrintQuality</b></a>;</li>
-<li>QString <a href="#PrintTitleColumns"><b>PrintTitleColumns</b></a>;</li>
-<li>QString <a href="#PrintTitleRows"><b>PrintTitleRows</b></a>;</li>
-<li>QString <a href="#RightFooter"><b>RightFooter</b></a>;</li>
-<li>IDispatch* <a href="#RightFooterPicture"><b>RightFooterPicture</b></a>;</li>
-<li>QString <a href="#RightHeader"><b>RightHeader</b></a>;</li>
-<li>IDispatch* <a href="#RightHeaderPicture"><b>RightHeaderPicture</b></a>;</li>
-<li>double <a href="#RightMargin"><b>RightMargin</b></a>;</li>
-<li>bool <a href="#ScaleWithDocHeaderFooter"><b>ScaleWithDocHeaderFooter</b></a>;</li>
-<li>double <a href="#TopMargin"><b>TopMargin</b></a>;</li>
-<li>QVariant <a href="#Zoom"><b>Zoom</b></a>;</li>
+<li>QString <a href="#Password"><b>Password</b></a>;</li>
+<li>QString <a href="#PasswordEncryptionAlgorithm"><b>PasswordEncryptionAlgorithm</b></a>;</li>
+<li>bool <a href="#PasswordEncryptionFileProperties"><b>PasswordEncryptionFileProperties</b></a>;</li>
+<li>int <a href="#PasswordEncryptionKeyLength"><b>PasswordEncryptionKeyLength</b></a>;</li>
+<li>QString <a href="#PasswordEncryptionProvider"><b>PasswordEncryptionProvider</b></a>;</li>
+<li>QString <a href="#Path"><b>Path</b></a>;</li>
+<li>IDispatch* <a href="#Permission"><b>Permission</b></a>;</li>
+<li>bool <a href="#PersonalViewListSettings"><b>PersonalViewListSettings</b></a>;</li>
+<li>bool <a href="#PersonalViewPrintSettings"><b>PersonalViewPrintSettings</b></a>;</li>
+<li>IDispatch* <a href="#PivotTables"><b>PivotTables</b></a>;</li>
+<li>bool <a href="#PrecisionAsDisplayed"><b>PrecisionAsDisplayed</b></a>;</li>
+<li>bool <a href="#ProtectStructure"><b>ProtectStructure</b></a>;</li>
+<li>bool <a href="#ProtectWindows"><b>ProtectWindows</b></a>;</li>
+<li>IDispatch* <a href="#PublishObjects"><b>PublishObjects</b></a>;</li>
+<li>IDispatch* <a href="#Queries"><b>Queries</b></a>;</li>
+<li>bool <a href="#ReadOnly"><b>ReadOnly</b></a>;</li>
+<li>bool <a href="#ReadOnlyRecommended"><b>ReadOnlyRecommended</b></a>;</li>
+<li>bool <a href="#RemovePersonalInformation"><b>RemovePersonalInformation</b></a>;</li>
+<li>IDispatch* <a href="#Research"><b>Research</b></a>;</li>
+<li>int <a href="#RevisionNumber"><b>RevisionNumber</b></a>;</li>
+<li>bool <a href="#Routed"><b>Routed</b></a>;</li>
+<li>IDispatch* <a href="#RoutingSlip"><b>RoutingSlip</b></a>;</li>
+<li>bool <a href="#SaveLinkValues"><b>SaveLinkValues</b></a>;</li>
+<li>bool <a href="#Saved"><b>Saved</b></a>;</li>
+<li>IDispatch* <a href="#ServerPolicy"><b>ServerPolicy</b></a>;</li>
+<li>IDispatch* <a href="#ServerViewableItems"><b>ServerViewableItems</b></a>;</li>
+<li>IDispatch* <a href="#SharedWorkspace"><b>SharedWorkspace</b></a>;</li>
+<li>IDispatch* <a href="#Sheets"><b>Sheets</b></a>;</li>
+<li>bool <a href="#ShowConflictHistory"><b>ShowConflictHistory</b></a>;</li>
+<li>bool <a href="#ShowPivotChartActiveFields"><b>ShowPivotChartActiveFields</b></a>;</li>
+<li>bool <a href="#ShowPivotTableFieldList"><b>ShowPivotTableFieldList</b></a>;</li>
+<li>IDispatch* <a href="#Signatures"><b>Signatures</b></a>;</li>
+<li>IDispatch* <a href="#SlicerCaches"><b>SlicerCaches</b></a>;</li>
+<li>IDispatch* <a href="#SmartDocument"><b>SmartDocument</b></a>;</li>
+<li>IDispatch* <a href="#SmartTagOptions"><b>SmartTagOptions</b></a>;</li>
+<li>IDispatch* <a href="#Styles"><b>Styles</b></a>;</li>
+<li>QString <a href="#Subject"><b>Subject</b></a>;</li>
+<li>IDispatch* <a href="#Sync"><b>Sync</b></a>;</li>
+<li>IDispatch* <a href="#TableStyles"><b>TableStyles</b></a>;</li>
+<li>bool <a href="#TemplateRemoveExtData"><b>TemplateRemoveExtData</b></a>;</li>
+<li>IDispatch* <a href="#Theme"><b>Theme</b></a>;</li>
+<li>QString <a href="#Title"><b>Title</b></a>;</li>
+<li>XlUpdateLinks <a href="#UpdateLinks"><b>UpdateLinks</b></a>;</li>
+<li>bool <a href="#UpdateRemoteReferences"><b>UpdateRemoteReferences</b></a>;</li>
+<li>bool <a href="#UseWholeCellCriteria"><b>UseWholeCellCriteria</b></a>;</li>
+<li>bool <a href="#UseWildcards"><b>UseWildcards</b></a>;</li>
+<li>bool <a href="#UserControl"><b>UserControl</b></a>;</li>
+<li>QVariant <a href="#UserStatus"><b>UserStatus</b></a>;</li>
+<li>bool <a href="#VBASigned"><b>VBASigned</b></a>;</li>
+<li>IDispatch* <a href="#VBProject"><b>VBProject</b></a>;</li>
+<li>IDispatch* <a href="#WebOptions"><b>WebOptions</b></a>;</li>
+<li>IDispatch* <a href="#Windows"><b>Windows</b></a>;</li>
+<li>IDispatch* <a href="#Worksheets"><b>Worksheets</b></a>;</li>
+<li>QString <a href="#WritePassword"><b>WritePassword</b></a>;</li>
+<li>bool <a href="#WriteReserved"><b>WriteReserved</b></a>;</li>
+<li>QString <a href="#WriteReservedBy"><b>WriteReservedBy</b></a>;</li>
+<li>IDispatch* <a href="#XmlMaps"><b>XmlMaps</b></a>;</li>
+<li>IDispatch* <a href="#XmlNamespaces"><b>XmlNamespaces</b></a>;</li>
+<li>QString <a href="#_CodeName"><b>_CodeName</b></a>;</li>
+<li>bool <a href="#_ReadOnlyRecommended"><b>_ReadOnlyRecommended</b></a>;</li>
 <li>QString <a href="#control"><b>control</b></a>;</li>
 </ul>
 <hr><h2>Member Type Documentation</h2>
@@ -3176,309 +3402,1263 @@
 <li>xlYes	=1</li>
 </ul>
 <hr><h2>Member Function Documentation</h2>
-<h3><a name=PrintQuality></a>QVariant PrintQuality (QVariant Index)<tt> [slot]</tt></h3>
+<h3><a name=AcceptAllChanges></a>void AcceptAllChanges (QVariant When, QVariant Who, QVariant Where)<tt> [slot]</tt></h3>
 <p>
 <p>Connect a signal to this slot:<pre>
-	QObject::connect(sender, SIGNAL(someSignal(QVariant)), object, SLOT(PrintQuality(QVariant)));</pre>
+	QObject::connect(sender, SIGNAL(someSignal(QVariant, QVariant, QVariant)), object, SLOT(AcceptAllChanges(QVariant, QVariant, QVariant)));</pre>
 <p>Or call the function directly:<pre>
 	QVariantList params = ...
-	QVariant result = object->dynamicCall("PrintQuality(QVariant)", params);</pre>
+	object->dynamicCall("AcceptAllChanges(QVariant, QVariant, QVariant)", params);</pre>
 
-<h3><a name=SetAlignMarginsHeaderFooter></a>void SetAlignMarginsHeaderFooter (bool AlignMarginsHeaderFooter)<tt> [slot]</tt></h3>
+<h3><a name=Activate></a>void Activate ()<tt> [slot]</tt></h3>
 <p>
 <p>Connect a signal to this slot:<pre>
-	QObject::connect(sender, SIGNAL(someSignal(bool)), object, SLOT(SetAlignMarginsHeaderFooter(bool)));</pre>
+	QObject::connect(sender, SIGNAL(someSignal()), object, SLOT(Activate()));</pre>
 <p>Or call the function directly:<pre>
-	QVariantList params = ...
-	object->dynamicCall("SetAlignMarginsHeaderFooter(bool)", params);</pre>
+	object->dynamicCall("Activate()");</pre>
 
-<h3><a name=SetBlackAndWhite></a>void SetBlackAndWhite (bool BlackAndWhite)<tt> [slot]</tt></h3>
+<h3><a name=AddToFavorites></a>void AddToFavorites ()<tt> [slot]</tt></h3>
 <p>
 <p>Connect a signal to this slot:<pre>
-	QObject::connect(sender, SIGNAL(someSignal(bool)), object, SLOT(SetBlackAndWhite(bool)));</pre>
+	QObject::connect(sender, SIGNAL(someSignal()), object, SLOT(AddToFavorites()));</pre>
 <p>Or call the function directly:<pre>
-	QVariantList params = ...
-	object->dynamicCall("SetBlackAndWhite(bool)", params);</pre>
+	object->dynamicCall("AddToFavorites()");</pre>
 
-<h3><a name=SetBottomMargin></a>void SetBottomMargin (double BottomMargin)<tt> [slot]</tt></h3>
+<h3><a name=ApplyTheme></a>void ApplyTheme (QString Filename)<tt> [slot]</tt></h3>
 <p>
 <p>Connect a signal to this slot:<pre>
-	QObject::connect(sender, SIGNAL(someSignal(double)), object, SLOT(SetBottomMargin(double)));</pre>
+	QObject::connect(sender, SIGNAL(someSignal(QString)), object, SLOT(ApplyTheme(QString)));</pre>
 <p>Or call the function directly:<pre>
 	QVariantList params = ...
-	object->dynamicCall("SetBottomMargin(double)", params);</pre>
+	object->dynamicCall("ApplyTheme(QString)", params);</pre>
 
-<h3><a name=SetCenterFooter></a>void SetCenterFooter (QString CenterFooter)<tt> [slot]</tt></h3>
+<h3><a name=BreakLink></a>void BreakLink (QString Name, XlLinkType Type)<tt> [slot]</tt></h3>
 <p>
 <p>Connect a signal to this slot:<pre>
-	QObject::connect(sender, SIGNAL(someSignal(QString)), object, SLOT(SetCenterFooter(QString)));</pre>
+	QObject::connect(sender, SIGNAL(someSignal(QString, XlLinkType)), object, SLOT(BreakLink(QString, XlLinkType)));</pre>
 <p>Or call the function directly:<pre>
 	QVariantList params = ...
-	object->dynamicCall("SetCenterFooter(QString)", params);</pre>
+	object->dynamicCall("BreakLink(QString, XlLinkType)", params);</pre>
 
-<h3><a name=SetCenterHeader></a>void SetCenterHeader (QString CenterHeader)<tt> [slot]</tt></h3>
+<h3><a name=CanCheckIn></a>bool CanCheckIn ()<tt> [slot]</tt></h3>
 <p>
 <p>Connect a signal to this slot:<pre>
-	QObject::connect(sender, SIGNAL(someSignal(QString)), object, SLOT(SetCenterHeader(QString)));</pre>
+	QObject::connect(sender, SIGNAL(someSignal()), object, SLOT(CanCheckIn()));</pre>
 <p>Or call the function directly:<pre>
-	QVariantList params = ...
-	object->dynamicCall("SetCenterHeader(QString)", params);</pre>
+	bool result = object->dynamicCall("CanCheckIn()").toBool();</pre>
 
-<h3><a name=SetCenterHorizontally></a>void SetCenterHorizontally (bool CenterHorizontally)<tt> [slot]</tt></h3>
+<h3><a name=ChangeFileAccess></a>void ChangeFileAccess (XlFileAccess Mode, QVariant WritePassword, QVariant Notify)<tt> [slot]</tt></h3>
 <p>
 <p>Connect a signal to this slot:<pre>
-	QObject::connect(sender, SIGNAL(someSignal(bool)), object, SLOT(SetCenterHorizontally(bool)));</pre>
+	QObject::connect(sender, SIGNAL(someSignal(XlFileAccess, QVariant, QVariant)), object, SLOT(ChangeFileAccess(XlFileAccess, QVariant, QVariant)));</pre>
 <p>Or call the function directly:<pre>
 	QVariantList params = ...
-	object->dynamicCall("SetCenterHorizontally(bool)", params);</pre>
+	object->dynamicCall("ChangeFileAccess(XlFileAccess, QVariant, QVariant)", params);</pre>
 
-<h3><a name=SetCenterVertically></a>void SetCenterVertically (bool CenterVertically)<tt> [slot]</tt></h3>
+<h3><a name=ChangeLink></a>void ChangeLink (QString Name, QString NewName, XlLinkType Type)<tt> [slot]</tt></h3>
 <p>
 <p>Connect a signal to this slot:<pre>
-	QObject::connect(sender, SIGNAL(someSignal(bool)), object, SLOT(SetCenterVertically(bool)));</pre>
+	QObject::connect(sender, SIGNAL(someSignal(QString, QString, XlLinkType)), object, SLOT(ChangeLink(QString, QString, XlLinkType)));</pre>
 <p>Or call the function directly:<pre>
 	QVariantList params = ...
-	object->dynamicCall("SetCenterVertically(bool)", params);</pre>
+	object->dynamicCall("ChangeLink(QString, QString, XlLinkType)", params);</pre>
 
-<h3><a name=SetChartSize></a>void SetChartSize (XlObjectSize ChartSize)<tt> [slot]</tt></h3>
+<h3><a name=CheckIn></a>void CheckIn (QVariant SaveChanges, QVariant Comments, QVariant MakePublic)<tt> [slot]</tt></h3>
 <p>
 <p>Connect a signal to this slot:<pre>
-	QObject::connect(sender, SIGNAL(someSignal(XlObjectSize)), object, SLOT(SetChartSize(XlObjectSize)));</pre>
+	QObject::connect(sender, SIGNAL(someSignal(QVariant, QVariant, QVariant)), object, SLOT(CheckIn(QVariant, QVariant, QVariant)));</pre>
 <p>Or call the function directly:<pre>
 	QVariantList params = ...
-	object->dynamicCall("SetChartSize(XlObjectSize)", params);</pre>
+	object->dynamicCall("CheckIn(QVariant, QVariant, QVariant)", params);</pre>
 
-<h3><a name=SetDifferentFirstPageHeaderFooter></a>void SetDifferentFirstPageHeaderFooter (bool DifferentFirstPageHeaderFooter)<tt> [slot]</tt></h3>
+<h3><a name=CheckInWithVersion></a>void CheckInWithVersion (QVariant SaveChanges, QVariant Comments, QVariant MakePublic, QVariant VersionType)<tt> [slot]</tt></h3>
 <p>
 <p>Connect a signal to this slot:<pre>
-	QObject::connect(sender, SIGNAL(someSignal(bool)), object, SLOT(SetDifferentFirstPageHeaderFooter(bool)));</pre>
+	QObject::connect(sender, SIGNAL(someSignal(QVariant, QVariant, QVariant, QVariant)), object, SLOT(CheckInWithVersion(QVariant, QVariant, QVariant, QVariant)));</pre>
 <p>Or call the function directly:<pre>
 	QVariantList params = ...
-	object->dynamicCall("SetDifferentFirstPageHeaderFooter(bool)", params);</pre>
+	object->dynamicCall("CheckInWithVersion(QVariant, QVariant, QVariant, QVariant)", params);</pre>
 
-<h3><a name=SetDraft></a>void SetDraft (bool Draft)<tt> [slot]</tt></h3>
+<h3><a name=Close></a>void Close (QVariant SaveChanges, QVariant Filename, QVariant RouteWorkbook)<tt> [slot]</tt></h3>
 <p>
 <p>Connect a signal to this slot:<pre>
-	QObject::connect(sender, SIGNAL(someSignal(bool)), object, SLOT(SetDraft(bool)));</pre>
+	QObject::connect(sender, SIGNAL(someSignal(QVariant, QVariant, QVariant)), object, SLOT(Close(QVariant, QVariant, QVariant)));</pre>
 <p>Or call the function directly:<pre>
 	QVariantList params = ...
-	object->dynamicCall("SetDraft(bool)", params);</pre>
+	object->dynamicCall("Close(QVariant, QVariant, QVariant)", params);</pre>
 
-<h3><a name=SetFirstPageNumber></a>void SetFirstPageNumber (int FirstPageNumber)<tt> [slot]</tt></h3>
+<h3><a name=Colors></a>QVariant Colors (QVariant Index)<tt> [slot]</tt></h3>
 <p>
 <p>Connect a signal to this slot:<pre>
-	QObject::connect(sender, SIGNAL(someSignal(int)), object, SLOT(SetFirstPageNumber(int)));</pre>
+	QObject::connect(sender, SIGNAL(someSignal(QVariant)), object, SLOT(Colors(QVariant)));</pre>
 <p>Or call the function directly:<pre>
 	QVariantList params = ...
-	object->dynamicCall("SetFirstPageNumber(int)", params);</pre>
+	QVariant result = object->dynamicCall("Colors(QVariant)", params);</pre>
 
-<h3><a name=SetFitToPagesTall></a>void SetFitToPagesTall (QVariant FitToPagesTall)<tt> [slot]</tt></h3>
+<h3><a name=CreateForecastSheet></a>void CreateForecastSheet (IDispatch* Timeline, IDispatch* Values, QVariant ForecastStart, QVariant ForecastEnd, QVariant ConfInt, QVariant Seasonality, QVariant DataCompletion, QVariant Aggregation, QVariant ChartType, QVariant ShowStatsTable)<tt> [slot]</tt></h3>
 <p>
 <p>Connect a signal to this slot:<pre>
-	QObject::connect(sender, SIGNAL(someSignal(QVariant)), object, SLOT(SetFitToPagesTall(QVariant)));</pre>
+	QObject::connect(sender, SIGNAL(someSignal(IDispatch*, IDispatch*, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant)), object, SLOT(CreateForecastSheet(IDispatch*, IDispatch*, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant)));</pre>
 <p>Or call the function directly:<pre>
 	QVariantList params = ...
-	object->dynamicCall("SetFitToPagesTall(QVariant)", params);</pre>
+	object->dynamicCall("CreateForecastSheet(IDispatch*, IDispatch*, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant)", params);</pre>
 
-<h3><a name=SetFitToPagesWide></a>void SetFitToPagesWide (QVariant FitToPagesWide)<tt> [slot]</tt></h3>
+<h3><a name=DeleteNumberFormat></a>void DeleteNumberFormat (QString NumberFormat)<tt> [slot]</tt></h3>
 <p>
 <p>Connect a signal to this slot:<pre>
-	QObject::connect(sender, SIGNAL(someSignal(QVariant)), object, SLOT(SetFitToPagesWide(QVariant)));</pre>
+	QObject::connect(sender, SIGNAL(someSignal(QString)), object, SLOT(DeleteNumberFormat(QString)));</pre>
 <p>Or call the function directly:<pre>
 	QVariantList params = ...
-	object->dynamicCall("SetFitToPagesWide(QVariant)", params);</pre>
+	object->dynamicCall("DeleteNumberFormat(QString)", params);</pre>
 
-<h3><a name=SetFooterMargin></a>void SetFooterMargin (double FooterMargin)<tt> [slot]</tt></h3>
+<h3><a name=Dummy16></a>void Dummy16 ()<tt> [slot]</tt></h3>
 <p>
 <p>Connect a signal to this slot:<pre>
-	QObject::connect(sender, SIGNAL(someSignal(double)), object, SLOT(SetFooterMargin(double)));</pre>
+	QObject::connect(sender, SIGNAL(someSignal()), object, SLOT(Dummy16()));</pre>
 <p>Or call the function directly:<pre>
-	QVariantList params = ...
-	object->dynamicCall("SetFooterMargin(double)", params);</pre>
+	object->dynamicCall("Dummy16()");</pre>
 
-<h3><a name=SetHeaderMargin></a>void SetHeaderMargin (double HeaderMargin)<tt> [slot]</tt></h3>
+<h3><a name=Dummy17></a>void Dummy17 (int calcid)<tt> [slot]</tt></h3>
 <p>
 <p>Connect a signal to this slot:<pre>
-	QObject::connect(sender, SIGNAL(someSignal(double)), object, SLOT(SetHeaderMargin(double)));</pre>
+	QObject::connect(sender, SIGNAL(someSignal(int)), object, SLOT(Dummy17(int)));</pre>
 <p>Or call the function directly:<pre>
 	QVariantList params = ...
-	object->dynamicCall("SetHeaderMargin(double)", params);</pre>
+	object->dynamicCall("Dummy17(int)", params);</pre>
 
-<h3><a name=SetLeftFooter></a>void SetLeftFooter (QString LeftFooter)<tt> [slot]</tt></h3>
+<h3><a name=Dummy26></a>void Dummy26 ()<tt> [slot]</tt></h3>
 <p>
 <p>Connect a signal to this slot:<pre>
-	QObject::connect(sender, SIGNAL(someSignal(QString)), object, SLOT(SetLeftFooter(QString)));</pre>
+	QObject::connect(sender, SIGNAL(someSignal()), object, SLOT(Dummy26()));</pre>
 <p>Or call the function directly:<pre>
-	QVariantList params = ...
-	object->dynamicCall("SetLeftFooter(QString)", params);</pre>
+	object->dynamicCall("Dummy26()");</pre>
 
-<h3><a name=SetLeftHeader></a>void SetLeftHeader (QString LeftHeader)<tt> [slot]</tt></h3>
+<h3><a name=Dummy27></a>void Dummy27 ()<tt> [slot]</tt></h3>
 <p>
 <p>Connect a signal to this slot:<pre>
-	QObject::connect(sender, SIGNAL(someSignal(QString)), object, SLOT(SetLeftHeader(QString)));</pre>
+	QObject::connect(sender, SIGNAL(someSignal()), object, SLOT(Dummy27()));</pre>
 <p>Or call the function directly:<pre>
-	QVariantList params = ...
-	object->dynamicCall("SetLeftHeader(QString)", params);</pre>
+	object->dynamicCall("Dummy27()");</pre>
 
-<h3><a name=SetLeftMargin></a>void SetLeftMargin (double LeftMargin)<tt> [slot]</tt></h3>
+<h3><a name=EnableConnections></a>void EnableConnections ()<tt> [slot]</tt></h3>
 <p>
 <p>Connect a signal to this slot:<pre>
-	QObject::connect(sender, SIGNAL(someSignal(double)), object, SLOT(SetLeftMargin(double)));</pre>
+	QObject::connect(sender, SIGNAL(someSignal()), object, SLOT(EnableConnections()));</pre>
 <p>Or call the function directly:<pre>
-	QVariantList params = ...
-	object->dynamicCall("SetLeftMargin(double)", params);</pre>
+	object->dynamicCall("EnableConnections()");</pre>
 
-<h3><a name=SetOddAndEvenPagesHeaderFooter></a>void SetOddAndEvenPagesHeaderFooter (bool OddAndEvenPagesHeaderFooter)<tt> [slot]</tt></h3>
+<h3><a name=EndReview></a>void EndReview ()<tt> [slot]</tt></h3>
 <p>
 <p>Connect a signal to this slot:<pre>
-	QObject::connect(sender, SIGNAL(someSignal(bool)), object, SLOT(SetOddAndEvenPagesHeaderFooter(bool)));</pre>
+	QObject::connect(sender, SIGNAL(someSignal()), object, SLOT(EndReview()));</pre>
 <p>Or call the function directly:<pre>
-	QVariantList params = ...
-	object->dynamicCall("SetOddAndEvenPagesHeaderFooter(bool)", params);</pre>
+	object->dynamicCall("EndReview()");</pre>
 
-<h3><a name=SetOrder></a>void SetOrder (XlOrder Order)<tt> [slot]</tt></h3>
+<h3><a name=ExclusiveAccess></a>bool ExclusiveAccess ()<tt> [slot]</tt></h3>
 <p>
 <p>Connect a signal to this slot:<pre>
-	QObject::connect(sender, SIGNAL(someSignal(XlOrder)), object, SLOT(SetOrder(XlOrder)));</pre>
+	QObject::connect(sender, SIGNAL(someSignal()), object, SLOT(ExclusiveAccess()));</pre>
 <p>Or call the function directly:<pre>
-	QVariantList params = ...
-	object->dynamicCall("SetOrder(XlOrder)", params);</pre>
+	bool result = object->dynamicCall("ExclusiveAccess()").toBool();</pre>
 
-<h3><a name=SetOrientation></a>void SetOrientation (XlPageOrientation Orientation)<tt> [slot]</tt></h3>
+<h3><a name=ExportAsFixedFormat></a>void ExportAsFixedFormat (XlFixedFormatType Type, QVariant Filename, QVariant Quality, QVariant IncludeDocProperties, QVariant IgnorePrintAreas, QVariant From, QVariant To, QVariant OpenAfterPublish, QVariant FixedFormatExtClassPtr)<tt> [slot]</tt></h3>
 <p>
 <p>Connect a signal to this slot:<pre>
-	QObject::connect(sender, SIGNAL(someSignal(XlPageOrientation)), object, SLOT(SetOrientation(XlPageOrientation)));</pre>
+	QObject::connect(sender, SIGNAL(someSignal(XlFixedFormatType, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant)), object, SLOT(ExportAsFixedFormat(XlFixedFormatType, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant)));</pre>
 <p>Or call the function directly:<pre>
 	QVariantList params = ...
-	object->dynamicCall("SetOrientation(XlPageOrientation)", params);</pre>
+	object->dynamicCall("ExportAsFixedFormat(XlFixedFormatType, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant)", params);</pre>
 
-<h3><a name=SetPaperSize></a>void SetPaperSize (XlPaperSize PaperSize)<tt> [slot]</tt></h3>
+<h3><a name=FollowHyperlink></a>void FollowHyperlink (QString Address, QVariant SubAddress, QVariant NewWindow, QVariant AddHistory, QVariant ExtraInfo, QVariant Method, QVariant HeaderInfo)<tt> [slot]</tt></h3>
 <p>
 <p>Connect a signal to this slot:<pre>
-	QObject::connect(sender, SIGNAL(someSignal(XlPaperSize)), object, SLOT(SetPaperSize(XlPaperSize)));</pre>
+	QObject::connect(sender, SIGNAL(someSignal(QString, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant)), object, SLOT(FollowHyperlink(QString, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant)));</pre>
 <p>Or call the function directly:<pre>
 	QVariantList params = ...
-	object->dynamicCall("SetPaperSize(XlPaperSize)", params);</pre>
+	object->dynamicCall("FollowHyperlink(QString, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant)", params);</pre>
 
-<h3><a name=SetPrintArea></a>void SetPrintArea (QString PrintArea)<tt> [slot]</tt></h3>
+<h3><a name=ForwardMailer></a>void ForwardMailer ()<tt> [slot]</tt></h3>
 <p>
 <p>Connect a signal to this slot:<pre>
-	QObject::connect(sender, SIGNAL(someSignal(QString)), object, SLOT(SetPrintArea(QString)));</pre>
+	QObject::connect(sender, SIGNAL(someSignal()), object, SLOT(ForwardMailer()));</pre>
 <p>Or call the function directly:<pre>
-	QVariantList params = ...
-	object->dynamicCall("SetPrintArea(QString)", params);</pre>
+	object->dynamicCall("ForwardMailer()");</pre>
 
-<h3><a name=SetPrintComments></a>void SetPrintComments (XlPrintLocation PrintComments)<tt> [slot]</tt></h3>
+<h3><a name=GetWorkflowTasks></a>IDispatch* GetWorkflowTasks ()<tt> [slot]</tt></h3>
 <p>
 <p>Connect a signal to this slot:<pre>
-	QObject::connect(sender, SIGNAL(someSignal(XlPrintLocation)), object, SLOT(SetPrintComments(XlPrintLocation)));</pre>
+	QObject::connect(sender, SIGNAL(someSignal()), object, SLOT(GetWorkflowTasks()));</pre>
 <p>Or call the function directly:<pre>
-	QVariantList params = ...
-	object->dynamicCall("SetPrintComments(XlPrintLocation)", params);</pre>
+	QAxObject * result = object->querySubObject("GetWorkflowTasks()");</pre>
 
-<h3><a name=SetPrintErrors></a>void SetPrintErrors (XlPrintErrors PrintErrors)<tt> [slot]</tt></h3>
+<h3><a name=GetWorkflowTemplates></a>IDispatch* GetWorkflowTemplates ()<tt> [slot]</tt></h3>
 <p>
 <p>Connect a signal to this slot:<pre>
-	QObject::connect(sender, SIGNAL(someSignal(XlPrintErrors)), object, SLOT(SetPrintErrors(XlPrintErrors)));</pre>
+	QObject::connect(sender, SIGNAL(someSignal()), object, SLOT(GetWorkflowTemplates()));</pre>
 <p>Or call the function directly:<pre>
-	QVariantList params = ...
-	object->dynamicCall("SetPrintErrors(XlPrintErrors)", params);</pre>
+	QAxObject * result = object->querySubObject("GetWorkflowTemplates()");</pre>
 
-<h3><a name=SetPrintGridlines></a>void SetPrintGridlines (bool PrintGridlines)<tt> [slot]</tt></h3>
+<h3><a name=HighlightChangesOptions></a>void HighlightChangesOptions (QVariant When, QVariant Who, QVariant Where)<tt> [slot]</tt></h3>
 <p>
 <p>Connect a signal to this slot:<pre>
-	QObject::connect(sender, SIGNAL(someSignal(bool)), object, SLOT(SetPrintGridlines(bool)));</pre>
+	QObject::connect(sender, SIGNAL(someSignal(QVariant, QVariant, QVariant)), object, SLOT(HighlightChangesOptions(QVariant, QVariant, QVariant)));</pre>
 <p>Or call the function directly:<pre>
 	QVariantList params = ...
-	object->dynamicCall("SetPrintGridlines(bool)", params);</pre>
+	object->dynamicCall("HighlightChangesOptions(QVariant, QVariant, QVariant)", params);</pre>
 
-<h3><a name=SetPrintHeadings></a>void SetPrintHeadings (bool PrintHeadings)<tt> [slot]</tt></h3>
+<h3><a name=LinkInfo></a>QVariant LinkInfo (QString Name, XlLinkInfo LinkInfo, QVariant Type, QVariant EditionRef)<tt> [slot]</tt></h3>
 <p>
 <p>Connect a signal to this slot:<pre>
-	QObject::connect(sender, SIGNAL(someSignal(bool)), object, SLOT(SetPrintHeadings(bool)));</pre>
+	QObject::connect(sender, SIGNAL(someSignal(QString, XlLinkInfo, QVariant, QVariant)), object, SLOT(LinkInfo(QString, XlLinkInfo, QVariant, QVariant)));</pre>
 <p>Or call the function directly:<pre>
 	QVariantList params = ...
-	object->dynamicCall("SetPrintHeadings(bool)", params);</pre>
+	QVariant result = object->dynamicCall("LinkInfo(QString, XlLinkInfo, QVariant, QVariant)", params);</pre>
 
-<h3><a name=SetPrintNotes></a>void SetPrintNotes (bool PrintNotes)<tt> [slot]</tt></h3>
+<h3><a name=LinkSources></a>QVariant LinkSources (QVariant Type)<tt> [slot]</tt></h3>
 <p>
 <p>Connect a signal to this slot:<pre>
-	QObject::connect(sender, SIGNAL(someSignal(bool)), object, SLOT(SetPrintNotes(bool)));</pre>
+	QObject::connect(sender, SIGNAL(someSignal(QVariant)), object, SLOT(LinkSources(QVariant)));</pre>
 <p>Or call the function directly:<pre>
 	QVariantList params = ...
-	object->dynamicCall("SetPrintNotes(bool)", params);</pre>
+	QVariant result = object->dynamicCall("LinkSources(QVariant)", params);</pre>
 
-<h3><a name=SetPrintQuality></a>QVariant SetPrintQuality (QVariant Index, QVariant rhs)<tt> [slot]</tt></h3>
+<h3><a name=LockServerFile></a>void LockServerFile ()<tt> [slot]</tt></h3>
 <p>
 <p>Connect a signal to this slot:<pre>
-	QObject::connect(sender, SIGNAL(someSignal(QVariant, QVariant)), object, SLOT(SetPrintQuality(QVariant, QVariant)));</pre>
+	QObject::connect(sender, SIGNAL(someSignal()), object, SLOT(LockServerFile()));</pre>
 <p>Or call the function directly:<pre>
-	QVariantList params = ...
-	QVariant result = object->dynamicCall("SetPrintQuality(QVariant, QVariant)", params);</pre>
+	object->dynamicCall("LockServerFile()");</pre>
 
-<h3><a name=SetPrintTitleColumns></a>void SetPrintTitleColumns (QString PrintTitleColumns)<tt> [slot]</tt></h3>
+<h3><a name=MergeWorkbook></a>void MergeWorkbook (QVariant Filename)<tt> [slot]</tt></h3>
 <p>
 <p>Connect a signal to this slot:<pre>
-	QObject::connect(sender, SIGNAL(someSignal(QString)), object, SLOT(SetPrintTitleColumns(QString)));</pre>
+	QObject::connect(sender, SIGNAL(someSignal(QVariant)), object, SLOT(MergeWorkbook(QVariant)));</pre>
 <p>Or call the function directly:<pre>
 	QVariantList params = ...
-	object->dynamicCall("SetPrintTitleColumns(QString)", params);</pre>
+	object->dynamicCall("MergeWorkbook(QVariant)", params);</pre>
 
-<h3><a name=SetPrintTitleRows></a>void SetPrintTitleRows (QString PrintTitleRows)<tt> [slot]</tt></h3>
+<h3><a name=NewWindow></a>IDispatch* NewWindow ()<tt> [slot]</tt></h3>
 <p>
 <p>Connect a signal to this slot:<pre>
-	QObject::connect(sender, SIGNAL(someSignal(QString)), object, SLOT(SetPrintTitleRows(QString)));</pre>
+	QObject::connect(sender, SIGNAL(someSignal()), object, SLOT(NewWindow()));</pre>
 <p>Or call the function directly:<pre>
-	QVariantList params = ...
-	object->dynamicCall("SetPrintTitleRows(QString)", params);</pre>
+	QAxObject * result = object->querySubObject("NewWindow()");</pre>
 
-<h3><a name=SetRightFooter></a>void SetRightFooter (QString RightFooter)<tt> [slot]</tt></h3>
+<h3><a name=OpenLinks></a>void OpenLinks (QString Name, QVariant ReadOnly, QVariant Type)<tt> [slot]</tt></h3>
 <p>
 <p>Connect a signal to this slot:<pre>
-	QObject::connect(sender, SIGNAL(someSignal(QString)), object, SLOT(SetRightFooter(QString)));</pre>
+	QObject::connect(sender, SIGNAL(someSignal(QString, QVariant, QVariant)), object, SLOT(OpenLinks(QString, QVariant, QVariant)));</pre>
 <p>Or call the function directly:<pre>
 	QVariantList params = ...
-	object->dynamicCall("SetRightFooter(QString)", params);</pre>
+	object->dynamicCall("OpenLinks(QString, QVariant, QVariant)", params);</pre>
 
-<h3><a name=SetRightHeader></a>void SetRightHeader (QString RightHeader)<tt> [slot]</tt></h3>
+<h3><a name=PivotCaches></a>IDispatch* PivotCaches ()<tt> [slot]</tt></h3>
 <p>
 <p>Connect a signal to this slot:<pre>
-	QObject::connect(sender, SIGNAL(someSignal(QString)), object, SLOT(SetRightHeader(QString)));</pre>
+	QObject::connect(sender, SIGNAL(someSignal()), object, SLOT(PivotCaches()));</pre>
 <p>Or call the function directly:<pre>
-	QVariantList params = ...
-	object->dynamicCall("SetRightHeader(QString)", params);</pre>
+	QAxObject * result = object->querySubObject("PivotCaches()");</pre>
 
-<h3><a name=SetRightMargin></a>void SetRightMargin (double RightMargin)<tt> [slot]</tt></h3>
+<h3><a name=PivotTableWizard></a>void PivotTableWizard (QVariant SourceType, QVariant SourceData, QVariant TableDestination, QVariant TableName, QVariant RowGrand, QVariant ColumnGrand, QVariant SaveData, QVariant HasAutoFormat, QVariant AutoPage, QVariant Reserved, QVariant BackgroundQuery, QVariant OptimizeCache, QVariant PageFieldOrder, QVariant PageFieldWrapCount, QVariant ReadData, QVariant Connection)<tt> [slot]</tt></h3>
 <p>
 <p>Connect a signal to this slot:<pre>
-	QObject::connect(sender, SIGNAL(someSignal(double)), object, SLOT(SetRightMargin(double)));</pre>
+	QObject::connect(sender, SIGNAL(someSignal(QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant)), object, SLOT(PivotTableWizard(QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant)));</pre>
 <p>Or call the function directly:<pre>
 	QVariantList params = ...
-	object->dynamicCall("SetRightMargin(double)", params);</pre>
+	object->dynamicCall("PivotTableWizard(QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant)", params);</pre>
 
-<h3><a name=SetScaleWithDocHeaderFooter></a>void SetScaleWithDocHeaderFooter (bool ScaleWithDocHeaderFooter)<tt> [slot]</tt></h3>
+<h3><a name=Post></a>void Post (QVariant DestName)<tt> [slot]</tt></h3>
 <p>
 <p>Connect a signal to this slot:<pre>
-	QObject::connect(sender, SIGNAL(someSignal(bool)), object, SLOT(SetScaleWithDocHeaderFooter(bool)));</pre>
+	QObject::connect(sender, SIGNAL(someSignal(QVariant)), object, SLOT(Post(QVariant)));</pre>
 <p>Or call the function directly:<pre>
 	QVariantList params = ...
-	object->dynamicCall("SetScaleWithDocHeaderFooter(bool)", params);</pre>
+	object->dynamicCall("Post(QVariant)", params);</pre>
 
-<h3><a name=SetTopMargin></a>void SetTopMargin (double TopMargin)<tt> [slot]</tt></h3>
+<h3><a name=PrintOut></a>void PrintOut (QVariant From, QVariant To, QVariant Copies, QVariant Preview, QVariant ActivePrinter, QVariant PrintToFile, QVariant Collate, QVariant PrToFileName, QVariant IgnorePrintAreas)<tt> [slot]</tt></h3>
 <p>
 <p>Connect a signal to this slot:<pre>
-	QObject::connect(sender, SIGNAL(someSignal(double)), object, SLOT(SetTopMargin(double)));</pre>
+	QObject::connect(sender, SIGNAL(someSignal(QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant)), object, SLOT(PrintOut(QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant)));</pre>
 <p>Or call the function directly:<pre>
 	QVariantList params = ...
-	object->dynamicCall("SetTopMargin(double)", params);</pre>
+	object->dynamicCall("PrintOut(QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant)", params);</pre>
 
-<h3><a name=SetZoom></a>void SetZoom (QVariant Zoom)<tt> [slot]</tt></h3>
+<h3><a name=PrintPreview></a>void PrintPreview (QVariant EnableChanges)<tt> [slot]</tt></h3>
 <p>
 <p>Connect a signal to this slot:<pre>
-	QObject::connect(sender, SIGNAL(someSignal(QVariant)), object, SLOT(SetZoom(QVariant)));</pre>
+	QObject::connect(sender, SIGNAL(someSignal(QVariant)), object, SLOT(PrintPreview(QVariant)));</pre>
 <p>Or call the function directly:<pre>
 	QVariantList params = ...
-	object->dynamicCall("SetZoom(QVariant)", params);</pre>
+	object->dynamicCall("PrintPreview(QVariant)", params);</pre>
+
+<h3><a name=Protect></a>void Protect (QVariant Password, QVariant Structure, QVariant Windows)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QVariant, QVariant, QVariant)), object, SLOT(Protect(QVariant, QVariant, QVariant)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("Protect(QVariant, QVariant, QVariant)", params);</pre>
+
+<h3><a name=ProtectSharing></a>void ProtectSharing (QVariant Filename, QVariant Password, QVariant WriteResPassword, QVariant ReadOnlyRecommended, QVariant CreateBackup, QVariant SharingPassword, QVariant FileFormat)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant)), object, SLOT(ProtectSharing(QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("ProtectSharing(QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant)", params);</pre>
+
+<h3><a name=PurgeChangeHistoryNow></a>void PurgeChangeHistoryNow (int Days, QVariant SharingPassword)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(int, QVariant)), object, SLOT(PurgeChangeHistoryNow(int, QVariant)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("PurgeChangeHistoryNow(int, QVariant)", params);</pre>
+
+<h3><a name=RecheckSmartTags></a>void RecheckSmartTags ()<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal()), object, SLOT(RecheckSmartTags()));</pre>
+<p>Or call the function directly:<pre>
+	object->dynamicCall("RecheckSmartTags()");</pre>
+
+<h3><a name=RefreshAll></a>void RefreshAll ()<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal()), object, SLOT(RefreshAll()));</pre>
+<p>Or call the function directly:<pre>
+	object->dynamicCall("RefreshAll()");</pre>
+
+<h3><a name=RejectAllChanges></a>void RejectAllChanges (QVariant When, QVariant Who, QVariant Where)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QVariant, QVariant, QVariant)), object, SLOT(RejectAllChanges(QVariant, QVariant, QVariant)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("RejectAllChanges(QVariant, QVariant, QVariant)", params);</pre>
+
+<h3><a name=ReloadAs></a>void ReloadAs (Office::MsoEncoding Encoding)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(Office::MsoEncoding)), object, SLOT(ReloadAs(Office::MsoEncoding)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("ReloadAs(Office::MsoEncoding)", params);</pre>
+
+<h3><a name=RemoveDocumentInformation></a>void RemoveDocumentInformation (XlRemoveDocInfoType RemoveDocInfoType)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(XlRemoveDocInfoType)), object, SLOT(RemoveDocumentInformation(XlRemoveDocInfoType)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("RemoveDocumentInformation(XlRemoveDocInfoType)", params);</pre>
+
+<h3><a name=RemoveUser></a>void RemoveUser (int Index)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(int)), object, SLOT(RemoveUser(int)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("RemoveUser(int)", params);</pre>
+
+<h3><a name=Reply></a>void Reply ()<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal()), object, SLOT(Reply()));</pre>
+<p>Or call the function directly:<pre>
+	object->dynamicCall("Reply()");</pre>
+
+<h3><a name=ReplyAll></a>void ReplyAll ()<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal()), object, SLOT(ReplyAll()));</pre>
+<p>Or call the function directly:<pre>
+	object->dynamicCall("ReplyAll()");</pre>
+
+<h3><a name=ReplyWithChanges></a>void ReplyWithChanges (QVariant ShowMessage)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QVariant)), object, SLOT(ReplyWithChanges(QVariant)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("ReplyWithChanges(QVariant)", params);</pre>
+
+<h3><a name=ResetColors></a>void ResetColors ()<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal()), object, SLOT(ResetColors()));</pre>
+<p>Or call the function directly:<pre>
+	object->dynamicCall("ResetColors()");</pre>
+
+<h3><a name=Route></a>void Route ()<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal()), object, SLOT(Route()));</pre>
+<p>Or call the function directly:<pre>
+	object->dynamicCall("Route()");</pre>
+
+<h3><a name=RunAutoMacros></a>void RunAutoMacros (XlRunAutoMacro Which)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(XlRunAutoMacro)), object, SLOT(RunAutoMacros(XlRunAutoMacro)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("RunAutoMacros(XlRunAutoMacro)", params);</pre>
+
+<h3><a name=Save></a>void Save ()<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal()), object, SLOT(Save()));</pre>
+<p>Or call the function directly:<pre>
+	object->dynamicCall("Save()");</pre>
+
+<h3><a name=SaveAs></a>void SaveAs (QVariant Filename, QVariant FileFormat, QVariant Password, QVariant WriteResPassword, QVariant ReadOnlyRecommended, QVariant CreateBackup, XlSaveAsAccessMode AccessMode, QVariant ConflictResolution, QVariant AddToMru, QVariant TextCodepage, QVariant TextVisualLayout, QVariant Local)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, XlSaveAsAccessMode, QVariant, QVariant, QVariant, QVariant, QVariant)), object, SLOT(SaveAs(QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, XlSaveAsAccessMode, QVariant, QVariant, QVariant, QVariant, QVariant)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SaveAs(QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, XlSaveAsAccessMode, QVariant, QVariant, QVariant, QVariant, QVariant)", params);</pre>
+
+<h3><a name=SaveAsXMLData></a>void SaveAsXMLData (QString Filename, IDispatch* Map)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QString, IDispatch*)), object, SLOT(SaveAsXMLData(QString, IDispatch*)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SaveAsXMLData(QString, IDispatch*)", params);</pre>
+
+<h3><a name=SaveCopyAs></a>void SaveCopyAs (QVariant Filename)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QVariant)), object, SLOT(SaveCopyAs(QVariant)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SaveCopyAs(QVariant)", params);</pre>
+
+<h3><a name=SendFaxOverInternet></a>void SendFaxOverInternet (QVariant Recipients, QVariant Subject, QVariant ShowMessage)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QVariant, QVariant, QVariant)), object, SLOT(SendFaxOverInternet(QVariant, QVariant, QVariant)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SendFaxOverInternet(QVariant, QVariant, QVariant)", params);</pre>
+
+<h3><a name=SendForReview></a>void SendForReview (QVariant Recipients, QVariant Subject, QVariant ShowMessage, QVariant IncludeAttachment)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QVariant, QVariant, QVariant, QVariant)), object, SLOT(SendForReview(QVariant, QVariant, QVariant, QVariant)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SendForReview(QVariant, QVariant, QVariant, QVariant)", params);</pre>
+
+<h3><a name=SendMail></a>void SendMail (QVariant Recipients, QVariant Subject, QVariant ReturnReceipt)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QVariant, QVariant, QVariant)), object, SLOT(SendMail(QVariant, QVariant, QVariant)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SendMail(QVariant, QVariant, QVariant)", params);</pre>
+
+<h3><a name=SendMailer></a>void SendMailer (QVariant FileFormat, XlPriority Priority)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QVariant, XlPriority)), object, SLOT(SendMailer(QVariant, XlPriority)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SendMailer(QVariant, XlPriority)", params);</pre>
+
+<h3><a name=SetAcceptLabelsInFormulas></a>void SetAcceptLabelsInFormulas (bool AcceptLabelsInFormulas)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(bool)), object, SLOT(SetAcceptLabelsInFormulas(bool)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetAcceptLabelsInFormulas(bool)", params);</pre>
+
+<h3><a name=SetAccuracyVersion></a>void SetAccuracyVersion (int AccuracyVersion)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(int)), object, SLOT(SetAccuracyVersion(int)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetAccuracyVersion(int)", params);</pre>
+
+<h3><a name=SetAuthor></a>void SetAuthor (QString Author)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QString)), object, SLOT(SetAuthor(QString)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetAuthor(QString)", params);</pre>
+
+<h3><a name=SetAutoUpdateFrequency></a>void SetAutoUpdateFrequency (int AutoUpdateFrequency)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(int)), object, SLOT(SetAutoUpdateFrequency(int)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetAutoUpdateFrequency(int)", params);</pre>
+
+<h3><a name=SetAutoUpdateSaveChanges></a>void SetAutoUpdateSaveChanges (bool AutoUpdateSaveChanges)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(bool)), object, SLOT(SetAutoUpdateSaveChanges(bool)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetAutoUpdateSaveChanges(bool)", params);</pre>
+
+<h3><a name=SetChangeHistoryDuration></a>void SetChangeHistoryDuration (int ChangeHistoryDuration)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(int)), object, SLOT(SetChangeHistoryDuration(int)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetChangeHistoryDuration(int)", params);</pre>
+
+<h3><a name=SetChartDataPointTrack></a>void SetChartDataPointTrack (bool ChartDataPointTrack)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(bool)), object, SLOT(SetChartDataPointTrack(bool)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetChartDataPointTrack(bool)", params);</pre>
+
+<h3><a name=SetCheckCompatibility></a>void SetCheckCompatibility (bool CheckCompatibility)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(bool)), object, SLOT(SetCheckCompatibility(bool)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetCheckCompatibility(bool)", params);</pre>
+
+<h3><a name=SetColors></a>QVariant SetColors (QVariant Index, QVariant rhs)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QVariant, QVariant)), object, SLOT(SetColors(QVariant, QVariant)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	QVariant result = object->dynamicCall("SetColors(QVariant, QVariant)", params);</pre>
+
+<h3><a name=SetComments></a>void SetComments (QString Comments)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QString)), object, SLOT(SetComments(QString)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetComments(QString)", params);</pre>
+
+<h3><a name=SetConflictResolution></a>void SetConflictResolution (XlSaveConflictResolution ConflictResolution)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(XlSaveConflictResolution)), object, SLOT(SetConflictResolution(XlSaveConflictResolution)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetConflictResolution(XlSaveConflictResolution)", params);</pre>
+
+<h3><a name=SetDate1904></a>void SetDate1904 (bool Date1904)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(bool)), object, SLOT(SetDate1904(bool)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetDate1904(bool)", params);</pre>
+
+<h3><a name=SetDefaultPivotTableStyle></a>void SetDefaultPivotTableStyle (QVariant DefaultPivotTableStyle)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QVariant)), object, SLOT(SetDefaultPivotTableStyle(QVariant)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetDefaultPivotTableStyle(QVariant)", params);</pre>
+
+<h3><a name=SetDefaultSlicerStyle></a>void SetDefaultSlicerStyle (QVariant DefaultSlicerStyle)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QVariant)), object, SLOT(SetDefaultSlicerStyle(QVariant)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetDefaultSlicerStyle(QVariant)", params);</pre>
+
+<h3><a name=SetDefaultTableStyle></a>void SetDefaultTableStyle (QVariant DefaultTableStyle)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QVariant)), object, SLOT(SetDefaultTableStyle(QVariant)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetDefaultTableStyle(QVariant)", params);</pre>
+
+<h3><a name=SetDefaultTimelineStyle></a>void SetDefaultTimelineStyle (QVariant DefaultTimelineStyle)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QVariant)), object, SLOT(SetDefaultTimelineStyle(QVariant)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetDefaultTimelineStyle(QVariant)", params);</pre>
+
+<h3><a name=SetDisplayDrawingObjects></a>void SetDisplayDrawingObjects (XlDisplayDrawingObjects DisplayDrawingObjects)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(XlDisplayDrawingObjects)), object, SLOT(SetDisplayDrawingObjects(XlDisplayDrawingObjects)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetDisplayDrawingObjects(XlDisplayDrawingObjects)", params);</pre>
+
+<h3><a name=SetDisplayInkComments></a>void SetDisplayInkComments (bool DisplayInkComments)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(bool)), object, SLOT(SetDisplayInkComments(bool)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetDisplayInkComments(bool)", params);</pre>
+
+<h3><a name=SetDoNotPromptForConvert></a>void SetDoNotPromptForConvert (bool DoNotPromptForConvert)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(bool)), object, SLOT(SetDoNotPromptForConvert(bool)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetDoNotPromptForConvert(bool)", params);</pre>
+
+<h3><a name=SetEnableAutoRecover></a>void SetEnableAutoRecover (bool EnableAutoRecover)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(bool)), object, SLOT(SetEnableAutoRecover(bool)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetEnableAutoRecover(bool)", params);</pre>
+
+<h3><a name=SetEncryptionProvider></a>void SetEncryptionProvider (QString EncryptionProvider)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QString)), object, SLOT(SetEncryptionProvider(QString)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetEncryptionProvider(QString)", params);</pre>
+
+<h3><a name=SetEnvelopeVisible></a>void SetEnvelopeVisible (bool EnvelopeVisible)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(bool)), object, SLOT(SetEnvelopeVisible(bool)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetEnvelopeVisible(bool)", params);</pre>
+
+<h3><a name=SetFinal></a>void SetFinal (bool Final)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(bool)), object, SLOT(SetFinal(bool)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetFinal(bool)", params);</pre>
+
+<h3><a name=SetForceFullCalculation></a>void SetForceFullCalculation (bool ForceFullCalculation)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(bool)), object, SLOT(SetForceFullCalculation(bool)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetForceFullCalculation(bool)", params);</pre>
+
+<h3><a name=SetHasMailer></a>void SetHasMailer (bool HasMailer)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(bool)), object, SLOT(SetHasMailer(bool)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetHasMailer(bool)", params);</pre>
+
+<h3><a name=SetHasRoutingSlip></a>void SetHasRoutingSlip (bool HasRoutingSlip)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(bool)), object, SLOT(SetHasRoutingSlip(bool)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetHasRoutingSlip(bool)", params);</pre>
+
+<h3><a name=SetHighlightChangesOnScreen></a>void SetHighlightChangesOnScreen (bool HighlightChangesOnScreen)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(bool)), object, SLOT(SetHighlightChangesOnScreen(bool)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetHighlightChangesOnScreen(bool)", params);</pre>
+
+<h3><a name=SetInactiveListBorderVisible></a>void SetInactiveListBorderVisible (bool InactiveListBorderVisible)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(bool)), object, SLOT(SetInactiveListBorderVisible(bool)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetInactiveListBorderVisible(bool)", params);</pre>
+
+<h3><a name=SetIsAddin></a>void SetIsAddin (bool IsAddin)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(bool)), object, SLOT(SetIsAddin(bool)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetIsAddin(bool)", params);</pre>
+
+<h3><a name=SetKeepChangeHistory></a>void SetKeepChangeHistory (bool KeepChangeHistory)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(bool)), object, SLOT(SetKeepChangeHistory(bool)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetKeepChangeHistory(bool)", params);</pre>
+
+<h3><a name=SetKeywords></a>void SetKeywords (QString Keywords)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QString)), object, SLOT(SetKeywords(QString)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetKeywords(QString)", params);</pre>
+
+<h3><a name=SetLinkOnData></a>void SetLinkOnData (QString Name, QVariant Procedure)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QString, QVariant)), object, SLOT(SetLinkOnData(QString, QVariant)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetLinkOnData(QString, QVariant)", params);</pre>
+
+<h3><a name=SetListChangesOnNewSheet></a>void SetListChangesOnNewSheet (bool ListChangesOnNewSheet)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(bool)), object, SLOT(SetListChangesOnNewSheet(bool)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetListChangesOnNewSheet(bool)", params);</pre>
+
+<h3><a name=SetOnSave></a>void SetOnSave (QString OnSave)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QString)), object, SLOT(SetOnSave(QString)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetOnSave(QString)", params);</pre>
+
+<h3><a name=SetOnSheetActivate></a>void SetOnSheetActivate (QString OnSheetActivate)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QString)), object, SLOT(SetOnSheetActivate(QString)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetOnSheetActivate(QString)", params);</pre>
+
+<h3><a name=SetOnSheetDeactivate></a>void SetOnSheetDeactivate (QString OnSheetDeactivate)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QString)), object, SLOT(SetOnSheetDeactivate(QString)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetOnSheetDeactivate(QString)", params);</pre>
+
+<h3><a name=SetPassword></a>void SetPassword (QString Password)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QString)), object, SLOT(SetPassword(QString)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetPassword(QString)", params);</pre>
+
+<h3><a name=SetPasswordEncryptionOptions></a>void SetPasswordEncryptionOptions (QVariant PasswordEncryptionProvider, QVariant PasswordEncryptionAlgorithm, QVariant PasswordEncryptionKeyLength, QVariant PasswordEncryptionFileProperties)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QVariant, QVariant, QVariant, QVariant)), object, SLOT(SetPasswordEncryptionOptions(QVariant, QVariant, QVariant, QVariant)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetPasswordEncryptionOptions(QVariant, QVariant, QVariant, QVariant)", params);</pre>
+
+<h3><a name=SetPersonalViewListSettings></a>void SetPersonalViewListSettings (bool PersonalViewListSettings)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(bool)), object, SLOT(SetPersonalViewListSettings(bool)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetPersonalViewListSettings(bool)", params);</pre>
+
+<h3><a name=SetPersonalViewPrintSettings></a>void SetPersonalViewPrintSettings (bool PersonalViewPrintSettings)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(bool)), object, SLOT(SetPersonalViewPrintSettings(bool)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetPersonalViewPrintSettings(bool)", params);</pre>
+
+<h3><a name=SetPrecisionAsDisplayed></a>void SetPrecisionAsDisplayed (bool PrecisionAsDisplayed)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(bool)), object, SLOT(SetPrecisionAsDisplayed(bool)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetPrecisionAsDisplayed(bool)", params);</pre>
+
+<h3><a name=SetReadOnlyRecommended></a>void SetReadOnlyRecommended (bool ReadOnlyRecommended)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(bool)), object, SLOT(SetReadOnlyRecommended(bool)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetReadOnlyRecommended(bool)", params);</pre>
+
+<h3><a name=SetRemovePersonalInformation></a>void SetRemovePersonalInformation (bool RemovePersonalInformation)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(bool)), object, SLOT(SetRemovePersonalInformation(bool)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetRemovePersonalInformation(bool)", params);</pre>
+
+<h3><a name=SetSaveLinkValues></a>void SetSaveLinkValues (bool SaveLinkValues)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(bool)), object, SLOT(SetSaveLinkValues(bool)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetSaveLinkValues(bool)", params);</pre>
+
+<h3><a name=SetSaved></a>void SetSaved (bool Saved)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(bool)), object, SLOT(SetSaved(bool)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetSaved(bool)", params);</pre>
+
+<h3><a name=SetShowConflictHistory></a>void SetShowConflictHistory (bool ShowConflictHistory)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(bool)), object, SLOT(SetShowConflictHistory(bool)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetShowConflictHistory(bool)", params);</pre>
+
+<h3><a name=SetShowPivotChartActiveFields></a>void SetShowPivotChartActiveFields (bool ShowPivotChartActiveFields)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(bool)), object, SLOT(SetShowPivotChartActiveFields(bool)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetShowPivotChartActiveFields(bool)", params);</pre>
+
+<h3><a name=SetShowPivotTableFieldList></a>void SetShowPivotTableFieldList (bool ShowPivotTableFieldList)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(bool)), object, SLOT(SetShowPivotTableFieldList(bool)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetShowPivotTableFieldList(bool)", params);</pre>
+
+<h3><a name=SetSubject></a>void SetSubject (QString Subject)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QString)), object, SLOT(SetSubject(QString)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetSubject(QString)", params);</pre>
+
+<h3><a name=SetTemplateRemoveExtData></a>void SetTemplateRemoveExtData (bool TemplateRemoveExtData)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(bool)), object, SLOT(SetTemplateRemoveExtData(bool)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetTemplateRemoveExtData(bool)", params);</pre>
+
+<h3><a name=SetTitle></a>void SetTitle (QString Title)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QString)), object, SLOT(SetTitle(QString)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetTitle(QString)", params);</pre>
+
+<h3><a name=SetUpdateLinks></a>void SetUpdateLinks (XlUpdateLinks UpdateLinks)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(XlUpdateLinks)), object, SLOT(SetUpdateLinks(XlUpdateLinks)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetUpdateLinks(XlUpdateLinks)", params);</pre>
+
+<h3><a name=SetUpdateRemoteReferences></a>void SetUpdateRemoteReferences (bool UpdateRemoteReferences)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(bool)), object, SLOT(SetUpdateRemoteReferences(bool)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetUpdateRemoteReferences(bool)", params);</pre>
+
+<h3><a name=SetUserControl></a>void SetUserControl (bool UserControl)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(bool)), object, SLOT(SetUserControl(bool)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetUserControl(bool)", params);</pre>
+
+<h3><a name=SetWritePassword></a>void SetWritePassword (QString WritePassword)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QString)), object, SLOT(SetWritePassword(QString)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetWritePassword(QString)", params);</pre>
+
+<h3><a name=ToggleFormsDesign></a>void ToggleFormsDesign ()<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal()), object, SLOT(ToggleFormsDesign()));</pre>
+<p>Or call the function directly:<pre>
+	object->dynamicCall("ToggleFormsDesign()");</pre>
+
+<h3><a name=Unprotect></a>void Unprotect (QVariant Password)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QVariant)), object, SLOT(Unprotect(QVariant)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("Unprotect(QVariant)", params);</pre>
+
+<h3><a name=UnprotectSharing></a>void UnprotectSharing (QVariant SharingPassword)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QVariant)), object, SLOT(UnprotectSharing(QVariant)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("UnprotectSharing(QVariant)", params);</pre>
+
+<h3><a name=UpdateFromFile></a>void UpdateFromFile ()<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal()), object, SLOT(UpdateFromFile()));</pre>
+<p>Or call the function directly:<pre>
+	object->dynamicCall("UpdateFromFile()");</pre>
+
+<h3><a name=UpdateLink></a>void UpdateLink (QVariant Name, QVariant Type)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QVariant, QVariant)), object, SLOT(UpdateLink(QVariant, QVariant)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("UpdateLink(QVariant, QVariant)", params);</pre>
+
+<h3><a name=WebPagePreview></a>void WebPagePreview ()<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal()), object, SLOT(WebPagePreview()));</pre>
+<p>Or call the function directly:<pre>
+	object->dynamicCall("WebPagePreview()");</pre>
+
+<h3><a name=XmlImport></a>XlXmlImportResult XmlImport (QString Url, IDispatch** ImportMap, QVariant Overwrite, QVariant Destination)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QString, IDispatch**, QVariant, QVariant)), object, SLOT(XmlImport(QString, IDispatch**, QVariant, QVariant)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	XlXmlImportResult result = object->dynamicCall("XmlImport(QString, IDispatch**, QVariant, QVariant)", params).toInt();</pre>
+
+<h3><a name=XmlImportXml></a>XlXmlImportResult XmlImportXml (QString Data, IDispatch** ImportMap, QVariant Overwrite, QVariant Destination)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QString, IDispatch**, QVariant, QVariant)), object, SLOT(XmlImportXml(QString, IDispatch**, QVariant, QVariant)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	XlXmlImportResult result = object->dynamicCall("XmlImportXml(QString, IDispatch**, QVariant, QVariant)", params).toInt();</pre>
+
+<h3><a name=_PrintOut></a>void _PrintOut (QVariant From, QVariant To, QVariant Copies, QVariant Preview, QVariant ActivePrinter, QVariant PrintToFile, QVariant Collate, QVariant PrToFileName)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant)), object, SLOT(_PrintOut(QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("_PrintOut(QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant)", params);</pre>
+
+<h3><a name=_Protect></a>void _Protect (QVariant Password, QVariant Structure, QVariant Windows)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QVariant, QVariant, QVariant)), object, SLOT(_Protect(QVariant, QVariant, QVariant)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("_Protect(QVariant, QVariant, QVariant)", params);</pre>
+
+<h3><a name=_ProtectSharing></a>void _ProtectSharing (QVariant Filename, QVariant Password, QVariant WriteResPassword, QVariant ReadOnlyRecommended, QVariant CreateBackup, QVariant SharingPassword)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QVariant, QVariant, QVariant, QVariant, QVariant, QVariant)), object, SLOT(_ProtectSharing(QVariant, QVariant, QVariant, QVariant, QVariant, QVariant)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("_ProtectSharing(QVariant, QVariant, QVariant, QVariant, QVariant, QVariant)", params);</pre>
+
+<h3><a name=_SaveAs></a>void _SaveAs (QVariant Filename, QVariant FileFormat, QVariant Password, QVariant WriteResPassword, QVariant ReadOnlyRecommended, QVariant CreateBackup, XlSaveAsAccessMode AccessMode, QVariant ConflictResolution, QVariant AddToMru, QVariant TextCodepage, QVariant TextVisualLayout)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, XlSaveAsAccessMode, QVariant, QVariant, QVariant, QVariant)), object, SLOT(_SaveAs(QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, XlSaveAsAccessMode, QVariant, QVariant, QVariant, QVariant)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("_SaveAs(QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, XlSaveAsAccessMode, QVariant, QVariant, QVariant, QVariant)", params);</pre>
+
+<h3><a name=__PrintOut></a>void __PrintOut (QVariant From, QVariant To, QVariant Copies, QVariant Preview, QVariant ActivePrinter, QVariant PrintToFile, QVariant Collate)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant)), object, SLOT(__PrintOut(QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("__PrintOut(QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant)", params);</pre>
+
+<h3><a name=sblt></a>void sblt (QString s)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QString)), object, SLOT(sblt(QString)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("sblt(QString)", params);</pre>
+
+<h3><a name=set_CodeName></a>void set_CodeName (QString _CodeName)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QString)), object, SLOT(set_CodeName(QString)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("set_CodeName(QString)", params);</pre>
+
+<h3><a name=Activate></a>void Activate ()<tt> [signal]</tt></h3>
+<p>
+<p>Connect a slot to this signal:<pre>
+	QObject::connect(object, SIGNAL(Activate()), receiver, SLOT(someSlot()));</pre>
+
+<h3><a name=AddRef></a>void AddRef ()<tt> [signal]</tt></h3>
+<p>
+<p>Connect a slot to this signal:<pre>
+	QObject::connect(object, SIGNAL(AddRef()), receiver, SLOT(someSlot()));</pre>
+
+<h3><a name=AddinInstall></a>void AddinInstall ()<tt> [signal]</tt></h3>
+<p>
+<p>Connect a slot to this signal:<pre>
+	QObject::connect(object, SIGNAL(AddinInstall()), receiver, SLOT(someSlot()));</pre>
+
+<h3><a name=AddinUninstall></a>void AddinUninstall ()<tt> [signal]</tt></h3>
+<p>
+<p>Connect a slot to this signal:<pre>
+	QObject::connect(object, SIGNAL(AddinUninstall()), receiver, SLOT(someSlot()));</pre>
+
+<h3><a name=AfterSave></a>void AfterSave (bool Success)<tt> [signal]</tt></h3>
+<p>
+<p>Connect a slot to this signal:<pre>
+	QObject::connect(object, SIGNAL(AfterSave(bool)), receiver, SLOT(someSlot(bool)));</pre>
+
+<h3><a name=AfterXmlExport></a>void AfterXmlExport (IDispatch* Map, QString Url, XlXmlExportResult Result)<tt> [signal]</tt></h3>
+<p>
+<p>Connect a slot to this signal:<pre>
+	QObject::connect(object, SIGNAL(AfterXmlExport(IDispatch*, QString, XlXmlExportResult)), receiver, SLOT(someSlot(IDispatch*, QString, XlXmlExportResult)));</pre>
+
+<h3><a name=AfterXmlImport></a>void AfterXmlImport (IDispatch* Map, bool IsRefresh, XlXmlImportResult Result)<tt> [signal]</tt></h3>
+<p>
+<p>Connect a slot to this signal:<pre>
+	QObject::connect(object, SIGNAL(AfterXmlImport(IDispatch*, bool, XlXmlImportResult)), receiver, SLOT(someSlot(IDispatch*, bool, XlXmlImportResult)));</pre>
+
+<h3><a name=BeforeClose></a>void BeforeClose (bool& Cancel)<tt> [signal]</tt></h3>
+<p>
+<p>Connect a slot to this signal:<pre>
+	QObject::connect(object, SIGNAL(BeforeClose(bool&)), receiver, SLOT(someSlot(bool&)));</pre>
+
+<h3><a name=BeforePrint></a>void BeforePrint (bool& Cancel)<tt> [signal]</tt></h3>
+<p>
+<p>Connect a slot to this signal:<pre>
+	QObject::connect(object, SIGNAL(BeforePrint(bool&)), receiver, SLOT(someSlot(bool&)));</pre>
+
+<h3><a name=BeforeSave></a>void BeforeSave (bool SaveAsUI, bool& Cancel)<tt> [signal]</tt></h3>
+<p>
+<p>Connect a slot to this signal:<pre>
+	QObject::connect(object, SIGNAL(BeforeSave(bool, bool&)), receiver, SLOT(someSlot(bool, bool&)));</pre>
+
+<h3><a name=BeforeXmlExport></a>void BeforeXmlExport (IDispatch* Map, QString Url, bool& Cancel)<tt> [signal]</tt></h3>
+<p>
+<p>Connect a slot to this signal:<pre>
+	QObject::connect(object, SIGNAL(BeforeXmlExport(IDispatch*, QString, bool&)), receiver, SLOT(someSlot(IDispatch*, QString, bool&)));</pre>
+
+<h3><a name=BeforeXmlImport></a>void BeforeXmlImport (IDispatch* Map, QString Url, bool IsRefresh, bool& Cancel)<tt> [signal]</tt></h3>
+<p>
+<p>Connect a slot to this signal:<pre>
+	QObject::connect(object, SIGNAL(BeforeXmlImport(IDispatch*, QString, bool, bool&)), receiver, SLOT(someSlot(IDispatch*, QString, bool, bool&)));</pre>
+
+<h3><a name=Deactivate></a>void Deactivate ()<tt> [signal]</tt></h3>
+<p>
+<p>Connect a slot to this signal:<pre>
+	QObject::connect(object, SIGNAL(Deactivate()), receiver, SLOT(someSlot()));</pre>
+
+<h3><a name=GetIDsOfNames></a>void GetIDsOfNames (GUID* riid, int** rgszNames, uint cNames, uint lcid, int& rgdispid)<tt> [signal]</tt></h3>
+<p>
+<p>Connect a slot to this signal:<pre>
+	QObject::connect(object, SIGNAL(GetIDsOfNames(GUID*, int**, uint, uint, int&)), receiver, SLOT(someSlot(GUID*, int**, uint, uint, int&)));</pre>
+
+<h3><a name=GetTypeInfo></a>void GetTypeInfo (uint itinfo, uint lcid, void** pptinfo)<tt> [signal]</tt></h3>
+<p>
+<p>Connect a slot to this signal:<pre>
+	QObject::connect(object, SIGNAL(GetTypeInfo(uint, uint, void**)), receiver, SLOT(someSlot(uint, uint, void**)));</pre>
+
+<h3><a name=GetTypeInfoCount></a>void GetTypeInfoCount (uint& pctinfo)<tt> [signal]</tt></h3>
+<p>
+<p>Connect a slot to this signal:<pre>
+	QObject::connect(object, SIGNAL(GetTypeInfoCount(uint&)), receiver, SLOT(someSlot(uint&)));</pre>
+
+<h3><a name=Invoke></a>void Invoke (int dispidMember, GUID* riid, uint lcid, uint wFlags, DISPPARAMS* pdispparams, QVariant& pvarResult, EXCEPINFO*& pexcepinfo, uint& puArgErr)<tt> [signal]</tt></h3>
+<p>
+<p>Connect a slot to this signal:<pre>
+	QObject::connect(object, SIGNAL(Invoke(int, GUID*, uint, uint, DISPPARAMS*, QVariant&, EXCEPINFO*&, uint&)), receiver, SLOT(someSlot(int, GUID*, uint, uint, DISPPARAMS*, QVariant&, EXCEPINFO*&, uint&)));</pre>
+
+<h3><a name=ModelChange></a>void ModelChange (IDispatch* Changes)<tt> [signal]</tt></h3>
+<p>
+<p>Connect a slot to this signal:<pre>
+	QObject::connect(object, SIGNAL(ModelChange(IDispatch*)), receiver, SLOT(someSlot(IDispatch*)));</pre>
+
+<h3><a name=NewChart></a>void NewChart (IDispatch* Ch)<tt> [signal]</tt></h3>
+<p>
+<p>Connect a slot to this signal:<pre>
+	QObject::connect(object, SIGNAL(NewChart(IDispatch*)), receiver, SLOT(someSlot(IDispatch*)));</pre>
+
+<h3><a name=NewSheet></a>void NewSheet (IDispatch* Sh)<tt> [signal]</tt></h3>
+<p>
+<p>Connect a slot to this signal:<pre>
+	QObject::connect(object, SIGNAL(NewSheet(IDispatch*)), receiver, SLOT(someSlot(IDispatch*)));</pre>
+
+<h3><a name=Open></a>void Open ()<tt> [signal]</tt></h3>
+<p>
+<p>Connect a slot to this signal:<pre>
+	QObject::connect(object, SIGNAL(Open()), receiver, SLOT(someSlot()));</pre>
+
+<h3><a name=PivotTableCloseConnection></a>void PivotTableCloseConnection (IDispatch* Target)<tt> [signal]</tt></h3>
+<p>
+<p>Connect a slot to this signal:<pre>
+	QObject::connect(object, SIGNAL(PivotTableCloseConnection(IDispatch*)), receiver, SLOT(someSlot(IDispatch*)));</pre>
+
+<h3><a name=PivotTableOpenConnection></a>void PivotTableOpenConnection (IDispatch* Target)<tt> [signal]</tt></h3>
+<p>
+<p>Connect a slot to this signal:<pre>
+	QObject::connect(object, SIGNAL(PivotTableOpenConnection(IDispatch*)), receiver, SLOT(someSlot(IDispatch*)));</pre>
+
+<h3><a name=QueryInterface></a>void QueryInterface (GUID* riid, void** ppvObj)<tt> [signal]</tt></h3>
+<p>
+<p>Connect a slot to this signal:<pre>
+	QObject::connect(object, SIGNAL(QueryInterface(GUID*, void**)), receiver, SLOT(someSlot(GUID*, void**)));</pre>
+
+<h3><a name=Release></a>void Release ()<tt> [signal]</tt></h3>
+<p>
+<p>Connect a slot to this signal:<pre>
+	QObject::connect(object, SIGNAL(Release()), receiver, SLOT(someSlot()));</pre>
+
+<h3><a name=RowsetComplete></a>void RowsetComplete (QString Description, QString Sheet, bool Success)<tt> [signal]</tt></h3>
+<p>
+<p>Connect a slot to this signal:<pre>
+	QObject::connect(object, SIGNAL(RowsetComplete(QString, QString, bool)), receiver, SLOT(someSlot(QString, QString, bool)));</pre>
+
+<h3><a name=SheetActivate></a>void SheetActivate (IDispatch* Sh)<tt> [signal]</tt></h3>
+<p>
+<p>Connect a slot to this signal:<pre>
+	QObject::connect(object, SIGNAL(SheetActivate(IDispatch*)), receiver, SLOT(someSlot(IDispatch*)));</pre>
+
+<h3><a name=SheetBeforeDelete></a>void SheetBeforeDelete (IDispatch* Sh)<tt> [signal]</tt></h3>
+<p>
+<p>Connect a slot to this signal:<pre>
+	QObject::connect(object, SIGNAL(SheetBeforeDelete(IDispatch*)), receiver, SLOT(someSlot(IDispatch*)));</pre>
+
+<h3><a name=SheetBeforeDoubleClick></a>void SheetBeforeDoubleClick (IDispatch* Sh, IDispatch* Target, bool& Cancel)<tt> [signal]</tt></h3>
+<p>
+<p>Connect a slot to this signal:<pre>
+	QObject::connect(object, SIGNAL(SheetBeforeDoubleClick(IDispatch*, IDispatch*, bool&)), receiver, SLOT(someSlot(IDispatch*, IDispatch*, bool&)));</pre>
+
+<h3><a name=SheetBeforeRightClick></a>void SheetBeforeRightClick (IDispatch* Sh, IDispatch* Target, bool& Cancel)<tt> [signal]</tt></h3>
+<p>
+<p>Connect a slot to this signal:<pre>
+	QObject::connect(object, SIGNAL(SheetBeforeRightClick(IDispatch*, IDispatch*, bool&)), receiver, SLOT(someSlot(IDispatch*, IDispatch*, bool&)));</pre>
+
+<h3><a name=SheetCalculate></a>void SheetCalculate (IDispatch* Sh)<tt> [signal]</tt></h3>
+<p>
+<p>Connect a slot to this signal:<pre>
+	QObject::connect(object, SIGNAL(SheetCalculate(IDispatch*)), receiver, SLOT(someSlot(IDispatch*)));</pre>
+
+<h3><a name=SheetChange></a>void SheetChange (IDispatch* Sh, IDispatch* Target)<tt> [signal]</tt></h3>
+<p>
+<p>Connect a slot to this signal:<pre>
+	QObject::connect(object, SIGNAL(SheetChange(IDispatch*, IDispatch*)), receiver, SLOT(someSlot(IDispatch*, IDispatch*)));</pre>
+
+<h3><a name=SheetDeactivate></a>void SheetDeactivate (IDispatch* Sh)<tt> [signal]</tt></h3>
+<p>
+<p>Connect a slot to this signal:<pre>
+	QObject::connect(object, SIGNAL(SheetDeactivate(IDispatch*)), receiver, SLOT(someSlot(IDispatch*)));</pre>
+
+<h3><a name=SheetFollowHyperlink></a>void SheetFollowHyperlink (IDispatch* Sh, IDispatch* Target)<tt> [signal]</tt></h3>
+<p>
+<p>Connect a slot to this signal:<pre>
+	QObject::connect(object, SIGNAL(SheetFollowHyperlink(IDispatch*, IDispatch*)), receiver, SLOT(someSlot(IDispatch*, IDispatch*)));</pre>
+
+<h3><a name=SheetLensGalleryRenderComplete></a>void SheetLensGalleryRenderComplete (IDispatch* Sh)<tt> [signal]</tt></h3>
+<p>
+<p>Connect a slot to this signal:<pre>
+	QObject::connect(object, SIGNAL(SheetLensGalleryRenderComplete(IDispatch*)), receiver, SLOT(someSlot(IDispatch*)));</pre>
+
+<h3><a name=SheetPivotTableAfterValueChange></a>void SheetPivotTableAfterValueChange (IDispatch* Sh, IDispatch* TargetPivotTable, IDispatch* TargetRange)<tt> [signal]</tt></h3>
+<p>
+<p>Connect a slot to this signal:<pre>
+	QObject::connect(object, SIGNAL(SheetPivotTableAfterValueChange(IDispatch*, IDispatch*, IDispatch*)), receiver, SLOT(someSlot(IDispatch*, IDispatch*, IDispatch*)));</pre>
+
+<h3><a name=SheetPivotTableBeforeAllocateChanges></a>void SheetPivotTableBeforeAllocateChanges (IDispatch* Sh, IDispatch* TargetPivotTable, int ValueChangeStart, int ValueChangeEnd, bool& Cancel)<tt> [signal]</tt></h3>
+<p>
+<p>Connect a slot to this signal:<pre>
+	QObject::connect(object, SIGNAL(SheetPivotTableBeforeAllocateChanges(IDispatch*, IDispatch*, int, int, bool&)), receiver, SLOT(someSlot(IDispatch*, IDispatch*, int, int, bool&)));</pre>
+
+<h3><a name=SheetPivotTableBeforeCommitChanges></a>void SheetPivotTableBeforeCommitChanges (IDispatch* Sh, IDispatch* TargetPivotTable, int ValueChangeStart, int ValueChangeEnd, bool& Cancel)<tt> [signal]</tt></h3>
+<p>
+<p>Connect a slot to this signal:<pre>
+	QObject::connect(object, SIGNAL(SheetPivotTableBeforeCommitChanges(IDispatch*, IDispatch*, int, int, bool&)), receiver, SLOT(someSlot(IDispatch*, IDispatch*, int, int, bool&)));</pre>
+
+<h3><a name=SheetPivotTableBeforeDiscardChanges></a>void SheetPivotTableBeforeDiscardChanges (IDispatch* Sh, IDispatch* TargetPivotTable, int ValueChangeStart, int ValueChangeEnd)<tt> [signal]</tt></h3>
+<p>
+<p>Connect a slot to this signal:<pre>
+	QObject::connect(object, SIGNAL(SheetPivotTableBeforeDiscardChanges(IDispatch*, IDispatch*, int, int)), receiver, SLOT(someSlot(IDispatch*, IDispatch*, int, int)));</pre>
+
+<h3><a name=SheetPivotTableChangeSync></a>void SheetPivotTableChangeSync (IDispatch* Sh, IDispatch* Target)<tt> [signal]</tt></h3>
+<p>
+<p>Connect a slot to this signal:<pre>
+	QObject::connect(object, SIGNAL(SheetPivotTableChangeSync(IDispatch*, IDispatch*)), receiver, SLOT(someSlot(IDispatch*, IDispatch*)));</pre>
+
+<h3><a name=SheetPivotTableUpdate></a>void SheetPivotTableUpdate (IDispatch* Sh, IDispatch* Target)<tt> [signal]</tt></h3>
+<p>
+<p>Connect a slot to this signal:<pre>
+	QObject::connect(object, SIGNAL(SheetPivotTableUpdate(IDispatch*, IDispatch*)), receiver, SLOT(someSlot(IDispatch*, IDispatch*)));</pre>
+
+<h3><a name=SheetSelectionChange></a>void SheetSelectionChange (IDispatch* Sh, IDispatch* Target)<tt> [signal]</tt></h3>
+<p>
+<p>Connect a slot to this signal:<pre>
+	QObject::connect(object, SIGNAL(SheetSelectionChange(IDispatch*, IDispatch*)), receiver, SLOT(someSlot(IDispatch*, IDispatch*)));</pre>
+
+<h3><a name=SheetTableUpdate></a>void SheetTableUpdate (IDispatch* Sh, IDispatch* Target)<tt> [signal]</tt></h3>
+<p>
+<p>Connect a slot to this signal:<pre>
+	QObject::connect(object, SIGNAL(SheetTableUpdate(IDispatch*, IDispatch*)), receiver, SLOT(someSlot(IDispatch*, IDispatch*)));</pre>
+
+<h3><a name=Sync></a>void Sync (Office::MsoSyncEventType SyncEventType)<tt> [signal]</tt></h3>
+<p>
+<p>Connect a slot to this signal:<pre>
+	QObject::connect(object, SIGNAL(Sync(Office::MsoSyncEventType)), receiver, SLOT(someSlot(Office::MsoSyncEventType)));</pre>
+
+<h3><a name=WindowActivate></a>void WindowActivate (IDispatch* Wn)<tt> [signal]</tt></h3>
+<p>
+<p>Connect a slot to this signal:<pre>
+	QObject::connect(object, SIGNAL(WindowActivate(IDispatch*)), receiver, SLOT(someSlot(IDispatch*)));</pre>
+
+<h3><a name=WindowDeactivate></a>void WindowDeactivate (IDispatch* Wn)<tt> [signal]</tt></h3>
+<p>
+<p>Connect a slot to this signal:<pre>
+	QObject::connect(object, SIGNAL(WindowDeactivate(IDispatch*)), receiver, SLOT(someSlot(IDispatch*)));</pre>
+
+<h3><a name=WindowResize></a>void WindowResize (IDispatch* Wn)<tt> [signal]</tt></h3>
+<p>
+<p>Connect a slot to this signal:<pre>
+	QObject::connect(object, SIGNAL(WindowResize(IDispatch*)), receiver, SLOT(someSlot(IDispatch*)));</pre>
 
 <h3><a name=exception></a>void exception (int code, QString source, QString disc, QString help)<tt> [signal]</tt></h3>
 <p>
@@ -3507,16 +4687,45 @@ Set this property' value using QObject::setProperty:<pre>
 </pre>
 Or using the <a href="#setObjectName">setObjectName</a> slot.
 
-<h3><a name=AlignMarginsHeaderFooter></a>bool AlignMarginsHeaderFooter</h3>
+<h3><a name=AcceptLabelsInFormulas></a>bool AcceptLabelsInFormulas</h3>
 <p>
 <p>Read this property's value using QObject::property:<pre>
-	bool val = object->property("AlignMarginsHeaderFooter").toBool();
+	bool val = object->property("AcceptLabelsInFormulas").toBool();
 </pre>
 Set this property' value using QObject::setProperty:<pre>
 	bool newValue = ...
-	object->setProperty("AlignMarginsHeaderFooter", newValue);
+	object->setProperty("AcceptLabelsInFormulas", newValue);
 </pre>
-Or using the <a href="#SetAlignMarginsHeaderFooter">SetAlignMarginsHeaderFooter</a> slot.
+Or using the <a href="#SetAcceptLabelsInFormulas">SetAcceptLabelsInFormulas</a> slot.
+
+<h3><a name=AccuracyVersion></a>int AccuracyVersion</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	int val = object->property("AccuracyVersion").toInt();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	int newValue = ...
+	object->setProperty("AccuracyVersion", newValue);
+</pre>
+Or using the <a href="#SetAccuracyVersion">SetAccuracyVersion</a> slot.
+
+<h3><a name=ActiveChart></a>IDispatch* ActiveChart</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	IDispatch* val = object->property("ActiveChart").toIDispatch*();
+</pre>
+
+<h3><a name=ActiveSheet></a>IDispatch* ActiveSheet</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	IDispatch* val = object->property("ActiveSheet").toIDispatch*();
+</pre>
+
+<h3><a name=ActiveSlicer></a>IDispatch* ActiveSlicer</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	IDispatch* val = object->property("ActiveSlicer").toIDispatch*();
+</pre>
 
 <h3><a name=Application></a>IDispatch* Application</h3>
 <p>
@@ -3524,95 +4733,171 @@ Or using the <a href="#SetAlignMarginsHeaderFooter">SetAlignMarginsHeaderFooter<
 	IDispatch* val = object->property("Application").toIDispatch*();
 </pre>
 
-<h3><a name=BlackAndWhite></a>bool BlackAndWhite</h3>
+<h3><a name=Author></a>QString Author</h3>
 <p>
 <p>Read this property's value using QObject::property:<pre>
-	bool val = object->property("BlackAndWhite").toBool();
-</pre>
-Set this property' value using QObject::setProperty:<pre>
-	bool newValue = ...
-	object->setProperty("BlackAndWhite", newValue);
-</pre>
-Or using the <a href="#SetBlackAndWhite">SetBlackAndWhite</a> slot.
-
-<h3><a name=BottomMargin></a>double BottomMargin</h3>
-<p>
-<p>Read this property's value using QObject::property:<pre>
-	double val = object->property("BottomMargin").toDouble();
-</pre>
-Set this property' value using QObject::setProperty:<pre>
-	double newValue = ...
-	object->setProperty("BottomMargin", newValue);
-</pre>
-Or using the <a href="#SetBottomMargin">SetBottomMargin</a> slot.
-
-<h3><a name=CenterFooter></a>QString CenterFooter</h3>
-<p>
-<p>Read this property's value using QObject::property:<pre>
-	QString val = object->property("CenterFooter").toString();
+	QString val = object->property("Author").toString();
 </pre>
 Set this property' value using QObject::setProperty:<pre>
 	QString newValue = ...
-	object->setProperty("CenterFooter", newValue);
+	object->setProperty("Author", newValue);
 </pre>
-Or using the <a href="#SetCenterFooter">SetCenterFooter</a> slot.
+Or using the <a href="#SetAuthor">SetAuthor</a> slot.
 
-<h3><a name=CenterFooterPicture></a>IDispatch* CenterFooterPicture</h3>
+<h3><a name=AutoUpdateFrequency></a>int AutoUpdateFrequency</h3>
 <p>
 <p>Read this property's value using QObject::property:<pre>
-	IDispatch* val = object->property("CenterFooterPicture").toIDispatch*();
+	int val = object->property("AutoUpdateFrequency").toInt();
 </pre>
+Set this property' value using QObject::setProperty:<pre>
+	int newValue = ...
+	object->setProperty("AutoUpdateFrequency", newValue);
+</pre>
+Or using the <a href="#SetAutoUpdateFrequency">SetAutoUpdateFrequency</a> slot.
 
-<h3><a name=CenterHeader></a>QString CenterHeader</h3>
+<h3><a name=AutoUpdateSaveChanges></a>bool AutoUpdateSaveChanges</h3>
 <p>
 <p>Read this property's value using QObject::property:<pre>
-	QString val = object->property("CenterHeader").toString();
+	bool val = object->property("AutoUpdateSaveChanges").toBool();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	bool newValue = ...
+	object->setProperty("AutoUpdateSaveChanges", newValue);
+</pre>
+Or using the <a href="#SetAutoUpdateSaveChanges">SetAutoUpdateSaveChanges</a> slot.
+
+<h3><a name=BuiltinDocumentProperties></a>IDispatch* BuiltinDocumentProperties</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	IDispatch* val = object->property("BuiltinDocumentProperties").toIDispatch*();
+</pre>
+
+<h3><a name=CalculationVersion></a>int CalculationVersion</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	int val = object->property("CalculationVersion").toInt();
+</pre>
+
+<h3><a name=CaseSensitive></a>bool CaseSensitive</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	bool val = object->property("CaseSensitive").toBool();
+</pre>
+
+<h3><a name=ChangeHistoryDuration></a>int ChangeHistoryDuration</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	int val = object->property("ChangeHistoryDuration").toInt();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	int newValue = ...
+	object->setProperty("ChangeHistoryDuration", newValue);
+</pre>
+Or using the <a href="#SetChangeHistoryDuration">SetChangeHistoryDuration</a> slot.
+
+<h3><a name=ChartDataPointTrack></a>bool ChartDataPointTrack</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	bool val = object->property("ChartDataPointTrack").toBool();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	bool newValue = ...
+	object->setProperty("ChartDataPointTrack", newValue);
+</pre>
+Or using the <a href="#SetChartDataPointTrack">SetChartDataPointTrack</a> slot.
+
+<h3><a name=Charts></a>IDispatch* Charts</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	IDispatch* val = object->property("Charts").toIDispatch*();
+</pre>
+
+<h3><a name=CheckCompatibility></a>bool CheckCompatibility</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	bool val = object->property("CheckCompatibility").toBool();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	bool newValue = ...
+	object->setProperty("CheckCompatibility", newValue);
+</pre>
+Or using the <a href="#SetCheckCompatibility">SetCheckCompatibility</a> slot.
+
+<h3><a name=CodeName></a>QString CodeName</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	QString val = object->property("CodeName").toString();
+</pre>
+
+<h3><a name=Colors></a>QVariant Colors</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	QVariant val = object->property("Colors").toVariant();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	QVariant newValue = ...
+	object->setProperty("Colors", newValue);
+</pre>
+Or using the <a href="#SetColors">SetColors</a> slot.
+
+<h3><a name=CommandBars></a>IDispatch* CommandBars</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	IDispatch* val = object->property("CommandBars").toIDispatch*();
+</pre>
+
+<h3><a name=Comments></a>QString Comments</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	QString val = object->property("Comments").toString();
 </pre>
 Set this property' value using QObject::setProperty:<pre>
 	QString newValue = ...
-	object->setProperty("CenterHeader", newValue);
+	object->setProperty("Comments", newValue);
 </pre>
-Or using the <a href="#SetCenterHeader">SetCenterHeader</a> slot.
+Or using the <a href="#SetComments">SetComments</a> slot.
 
-<h3><a name=CenterHeaderPicture></a>IDispatch* CenterHeaderPicture</h3>
+<h3><a name=ConflictResolution></a>XlSaveConflictResolution ConflictResolution</h3>
 <p>
 <p>Read this property's value using QObject::property:<pre>
-	IDispatch* val = object->property("CenterHeaderPicture").toIDispatch*();
-</pre>
-
-<h3><a name=CenterHorizontally></a>bool CenterHorizontally</h3>
-<p>
-<p>Read this property's value using QObject::property:<pre>
-	bool val = object->property("CenterHorizontally").toBool();
-</pre>
-Set this property' value using QObject::setProperty:<pre>
-	bool newValue = ...
-	object->setProperty("CenterHorizontally", newValue);
-</pre>
-Or using the <a href="#SetCenterHorizontally">SetCenterHorizontally</a> slot.
-
-<h3><a name=CenterVertically></a>bool CenterVertically</h3>
-<p>
-<p>Read this property's value using QObject::property:<pre>
-	bool val = object->property("CenterVertically").toBool();
-</pre>
-Set this property' value using QObject::setProperty:<pre>
-	bool newValue = ...
-	object->setProperty("CenterVertically", newValue);
-</pre>
-Or using the <a href="#SetCenterVertically">SetCenterVertically</a> slot.
-
-<h3><a name=ChartSize></a>XlObjectSize ChartSize</h3>
-<p>
-<p>Read this property's value using QObject::property:<pre>
-	int val = object->property("ChartSize").toInt();
+	int val = object->property("ConflictResolution").toInt();
 </pre>
 Set this property' value using QObject::setProperty:<pre>
 	int newValue = ... // string representation of values also supported
-	object->setProperty("ChartSize", newValue);
+	object->setProperty("ConflictResolution", newValue);
 </pre>
-Or using the <a href="#SetChartSize">SetChartSize</a> slot.
-<p>See also <a href="#XlObjectSize">XlObjectSize</a>.
+Or using the <a href="#SetConflictResolution">SetConflictResolution</a> slot.
+<p>See also <a href="#XlSaveConflictResolution">XlSaveConflictResolution</a>.
+
+<h3><a name=Connections></a>IDispatch* Connections</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	IDispatch* val = object->property("Connections").toIDispatch*();
+</pre>
+
+<h3><a name=ConnectionsDisabled></a>bool ConnectionsDisabled</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	bool val = object->property("ConnectionsDisabled").toBool();
+</pre>
+
+<h3><a name=Container></a>IDispatch* Container</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	IDispatch* val = object->property("Container").toIDispatch*();
+</pre>
+
+<h3><a name=ContentTypeProperties></a>IDispatch* ContentTypeProperties</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	IDispatch* val = object->property("ContentTypeProperties").toIDispatch*();
+</pre>
+
+<h3><a name=CreateBackup></a>bool CreateBackup</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	bool val = object->property("CreateBackup").toBool();
+</pre>
 
 <h3><a name=Creator></a>XlCreator Creator</h3>
 <p>
@@ -3621,192 +4906,409 @@ Or using the <a href="#SetChartSize">SetChartSize</a> slot.
 </pre>
 <p>See also <a href="#XlCreator">XlCreator</a>.
 
-<h3><a name=DifferentFirstPageHeaderFooter></a>bool DifferentFirstPageHeaderFooter</h3>
+<h3><a name=CustomDocumentProperties></a>IDispatch* CustomDocumentProperties</h3>
 <p>
 <p>Read this property's value using QObject::property:<pre>
-	bool val = object->property("DifferentFirstPageHeaderFooter").toBool();
+	IDispatch* val = object->property("CustomDocumentProperties").toIDispatch*();
+</pre>
+
+<h3><a name=CustomViews></a>IDispatch* CustomViews</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	IDispatch* val = object->property("CustomViews").toIDispatch*();
+</pre>
+
+<h3><a name=CustomXMLParts></a>IDispatch* CustomXMLParts</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	IDispatch* val = object->property("CustomXMLParts").toIDispatch*();
+</pre>
+
+<h3><a name=Date1904></a>bool Date1904</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	bool val = object->property("Date1904").toBool();
 </pre>
 Set this property' value using QObject::setProperty:<pre>
 	bool newValue = ...
-	object->setProperty("DifferentFirstPageHeaderFooter", newValue);
+	object->setProperty("Date1904", newValue);
 </pre>
-Or using the <a href="#SetDifferentFirstPageHeaderFooter">SetDifferentFirstPageHeaderFooter</a> slot.
+Or using the <a href="#SetDate1904">SetDate1904</a> slot.
 
-<h3><a name=Draft></a>bool Draft</h3>
+<h3><a name=DefaultPivotTableStyle></a>QVariant DefaultPivotTableStyle</h3>
 <p>
 <p>Read this property's value using QObject::property:<pre>
-	bool val = object->property("Draft").toBool();
-</pre>
-Set this property' value using QObject::setProperty:<pre>
-	bool newValue = ...
-	object->setProperty("Draft", newValue);
-</pre>
-Or using the <a href="#SetDraft">SetDraft</a> slot.
-
-<h3><a name=EvenPage></a>IDispatch* EvenPage</h3>
-<p>
-<p>Read this property's value using QObject::property:<pre>
-	IDispatch* val = object->property("EvenPage").toIDispatch*();
-</pre>
-
-<h3><a name=FirstPage></a>IDispatch* FirstPage</h3>
-<p>
-<p>Read this property's value using QObject::property:<pre>
-	IDispatch* val = object->property("FirstPage").toIDispatch*();
-</pre>
-
-<h3><a name=FirstPageNumber></a>int FirstPageNumber</h3>
-<p>
-<p>Read this property's value using QObject::property:<pre>
-	int val = object->property("FirstPageNumber").toInt();
-</pre>
-Set this property' value using QObject::setProperty:<pre>
-	int newValue = ...
-	object->setProperty("FirstPageNumber", newValue);
-</pre>
-Or using the <a href="#SetFirstPageNumber">SetFirstPageNumber</a> slot.
-
-<h3><a name=FitToPagesTall></a>QVariant FitToPagesTall</h3>
-<p>
-<p>Read this property's value using QObject::property:<pre>
-	QVariant val = object->property("FitToPagesTall").toVariant();
+	QVariant val = object->property("DefaultPivotTableStyle").toVariant();
 </pre>
 Set this property' value using QObject::setProperty:<pre>
 	QVariant newValue = ...
-	object->setProperty("FitToPagesTall", newValue);
+	object->setProperty("DefaultPivotTableStyle", newValue);
 </pre>
-Or using the <a href="#SetFitToPagesTall">SetFitToPagesTall</a> slot.
+Or using the <a href="#SetDefaultPivotTableStyle">SetDefaultPivotTableStyle</a> slot.
 
-<h3><a name=FitToPagesWide></a>QVariant FitToPagesWide</h3>
+<h3><a name=DefaultSlicerStyle></a>QVariant DefaultSlicerStyle</h3>
 <p>
 <p>Read this property's value using QObject::property:<pre>
-	QVariant val = object->property("FitToPagesWide").toVariant();
+	QVariant val = object->property("DefaultSlicerStyle").toVariant();
 </pre>
 Set this property' value using QObject::setProperty:<pre>
 	QVariant newValue = ...
-	object->setProperty("FitToPagesWide", newValue);
+	object->setProperty("DefaultSlicerStyle", newValue);
 </pre>
-Or using the <a href="#SetFitToPagesWide">SetFitToPagesWide</a> slot.
+Or using the <a href="#SetDefaultSlicerStyle">SetDefaultSlicerStyle</a> slot.
 
-<h3><a name=FooterMargin></a>double FooterMargin</h3>
+<h3><a name=DefaultTableStyle></a>QVariant DefaultTableStyle</h3>
 <p>
 <p>Read this property's value using QObject::property:<pre>
-	double val = object->property("FooterMargin").toDouble();
+	QVariant val = object->property("DefaultTableStyle").toVariant();
 </pre>
 Set this property' value using QObject::setProperty:<pre>
-	double newValue = ...
-	object->setProperty("FooterMargin", newValue);
+	QVariant newValue = ...
+	object->setProperty("DefaultTableStyle", newValue);
 </pre>
-Or using the <a href="#SetFooterMargin">SetFooterMargin</a> slot.
+Or using the <a href="#SetDefaultTableStyle">SetDefaultTableStyle</a> slot.
 
-<h3><a name=HeaderMargin></a>double HeaderMargin</h3>
+<h3><a name=DefaultTimelineStyle></a>QVariant DefaultTimelineStyle</h3>
 <p>
 <p>Read this property's value using QObject::property:<pre>
-	double val = object->property("HeaderMargin").toDouble();
+	QVariant val = object->property("DefaultTimelineStyle").toVariant();
 </pre>
 Set this property' value using QObject::setProperty:<pre>
-	double newValue = ...
-	object->setProperty("HeaderMargin", newValue);
+	QVariant newValue = ...
+	object->setProperty("DefaultTimelineStyle", newValue);
 </pre>
-Or using the <a href="#SetHeaderMargin">SetHeaderMargin</a> slot.
+Or using the <a href="#SetDefaultTimelineStyle">SetDefaultTimelineStyle</a> slot.
 
-<h3><a name=LeftFooter></a>QString LeftFooter</h3>
+<h3><a name=DialogSheets></a>IDispatch* DialogSheets</h3>
 <p>
 <p>Read this property's value using QObject::property:<pre>
-	QString val = object->property("LeftFooter").toString();
+	IDispatch* val = object->property("DialogSheets").toIDispatch*();
+</pre>
+
+<h3><a name=DisplayDrawingObjects></a>XlDisplayDrawingObjects DisplayDrawingObjects</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	int val = object->property("DisplayDrawingObjects").toInt();
 </pre>
 Set this property' value using QObject::setProperty:<pre>
-	QString newValue = ...
-	object->setProperty("LeftFooter", newValue);
+	int newValue = ... // string representation of values also supported
+	object->setProperty("DisplayDrawingObjects", newValue);
 </pre>
-Or using the <a href="#SetLeftFooter">SetLeftFooter</a> slot.
+Or using the <a href="#SetDisplayDrawingObjects">SetDisplayDrawingObjects</a> slot.
+<p>See also <a href="#XlDisplayDrawingObjects">XlDisplayDrawingObjects</a>.
 
-<h3><a name=LeftFooterPicture></a>IDispatch* LeftFooterPicture</h3>
+<h3><a name=DisplayInkComments></a>bool DisplayInkComments</h3>
 <p>
 <p>Read this property's value using QObject::property:<pre>
-	IDispatch* val = object->property("LeftFooterPicture").toIDispatch*();
-</pre>
-
-<h3><a name=LeftHeader></a>QString LeftHeader</h3>
-<p>
-<p>Read this property's value using QObject::property:<pre>
-	QString val = object->property("LeftHeader").toString();
-</pre>
-Set this property' value using QObject::setProperty:<pre>
-	QString newValue = ...
-	object->setProperty("LeftHeader", newValue);
-</pre>
-Or using the <a href="#SetLeftHeader">SetLeftHeader</a> slot.
-
-<h3><a name=LeftHeaderPicture></a>IDispatch* LeftHeaderPicture</h3>
-<p>
-<p>Read this property's value using QObject::property:<pre>
-	IDispatch* val = object->property("LeftHeaderPicture").toIDispatch*();
-</pre>
-
-<h3><a name=LeftMargin></a>double LeftMargin</h3>
-<p>
-<p>Read this property's value using QObject::property:<pre>
-	double val = object->property("LeftMargin").toDouble();
-</pre>
-Set this property' value using QObject::setProperty:<pre>
-	double newValue = ...
-	object->setProperty("LeftMargin", newValue);
-</pre>
-Or using the <a href="#SetLeftMargin">SetLeftMargin</a> slot.
-
-<h3><a name=OddAndEvenPagesHeaderFooter></a>bool OddAndEvenPagesHeaderFooter</h3>
-<p>
-<p>Read this property's value using QObject::property:<pre>
-	bool val = object->property("OddAndEvenPagesHeaderFooter").toBool();
+	bool val = object->property("DisplayInkComments").toBool();
 </pre>
 Set this property' value using QObject::setProperty:<pre>
 	bool newValue = ...
-	object->setProperty("OddAndEvenPagesHeaderFooter", newValue);
+	object->setProperty("DisplayInkComments", newValue);
 </pre>
-Or using the <a href="#SetOddAndEvenPagesHeaderFooter">SetOddAndEvenPagesHeaderFooter</a> slot.
+Or using the <a href="#SetDisplayInkComments">SetDisplayInkComments</a> slot.
 
-<h3><a name=Order></a>XlOrder Order</h3>
+<h3><a name=DoNotPromptForConvert></a>bool DoNotPromptForConvert</h3>
 <p>
 <p>Read this property's value using QObject::property:<pre>
-	int val = object->property("Order").toInt();
+	bool val = object->property("DoNotPromptForConvert").toBool();
 </pre>
 Set this property' value using QObject::setProperty:<pre>
-	int newValue = ... // string representation of values also supported
-	object->setProperty("Order", newValue);
+	bool newValue = ...
+	object->setProperty("DoNotPromptForConvert", newValue);
 </pre>
-Or using the <a href="#SetOrder">SetOrder</a> slot.
-<p>See also <a href="#XlOrder">XlOrder</a>.
+Or using the <a href="#SetDoNotPromptForConvert">SetDoNotPromptForConvert</a> slot.
 
-<h3><a name=Orientation></a>XlPageOrientation Orientation</h3>
+<h3><a name=DocumentInspectors></a>IDispatch* DocumentInspectors</h3>
 <p>
 <p>Read this property's value using QObject::property:<pre>
-	int val = object->property("Orientation").toInt();
+	IDispatch* val = object->property("DocumentInspectors").toIDispatch*();
+</pre>
+
+<h3><a name=DocumentLibraryVersions></a>IDispatch* DocumentLibraryVersions</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	IDispatch* val = object->property("DocumentLibraryVersions").toIDispatch*();
+</pre>
+
+<h3><a name=EnableAutoRecover></a>bool EnableAutoRecover</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	bool val = object->property("EnableAutoRecover").toBool();
 </pre>
 Set this property' value using QObject::setProperty:<pre>
-	int newValue = ... // string representation of values also supported
-	object->setProperty("Orientation", newValue);
+	bool newValue = ...
+	object->setProperty("EnableAutoRecover", newValue);
 </pre>
-Or using the <a href="#SetOrientation">SetOrientation</a> slot.
-<p>See also <a href="#XlPageOrientation">XlPageOrientation</a>.
+Or using the <a href="#SetEnableAutoRecover">SetEnableAutoRecover</a> slot.
 
-<h3><a name=Pages></a>IDispatch* Pages</h3>
+<h3><a name=EncryptionProvider></a>QString EncryptionProvider</h3>
 <p>
 <p>Read this property's value using QObject::property:<pre>
-	IDispatch* val = object->property("Pages").toIDispatch*();
-</pre>
-
-<h3><a name=PaperSize></a>XlPaperSize PaperSize</h3>
-<p>
-<p>Read this property's value using QObject::property:<pre>
-	int val = object->property("PaperSize").toInt();
+	QString val = object->property("EncryptionProvider").toString();
 </pre>
 Set this property' value using QObject::setProperty:<pre>
-	int newValue = ... // string representation of values also supported
-	object->setProperty("PaperSize", newValue);
+	QString newValue = ...
+	object->setProperty("EncryptionProvider", newValue);
 </pre>
-Or using the <a href="#SetPaperSize">SetPaperSize</a> slot.
-<p>See also <a href="#XlPaperSize">XlPaperSize</a>.
+Or using the <a href="#SetEncryptionProvider">SetEncryptionProvider</a> slot.
+
+<h3><a name=EnvelopeVisible></a>bool EnvelopeVisible</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	bool val = object->property("EnvelopeVisible").toBool();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	bool newValue = ...
+	object->setProperty("EnvelopeVisible", newValue);
+</pre>
+Or using the <a href="#SetEnvelopeVisible">SetEnvelopeVisible</a> slot.
+
+<h3><a name=Excel4IntlMacroSheets></a>IDispatch* Excel4IntlMacroSheets</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	IDispatch* val = object->property("Excel4IntlMacroSheets").toIDispatch*();
+</pre>
+
+<h3><a name=Excel4MacroSheets></a>IDispatch* Excel4MacroSheets</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	IDispatch* val = object->property("Excel4MacroSheets").toIDispatch*();
+</pre>
+
+<h3><a name=Excel8CompatibilityMode></a>bool Excel8CompatibilityMode</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	bool val = object->property("Excel8CompatibilityMode").toBool();
+</pre>
+
+<h3><a name=FileFormat></a>XlFileFormat FileFormat</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	int val = object->property("FileFormat").toInt();
+</pre>
+<p>See also <a href="#XlFileFormat">XlFileFormat</a>.
+
+<h3><a name=Final></a>bool Final</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	bool val = object->property("Final").toBool();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	bool newValue = ...
+	object->setProperty("Final", newValue);
+</pre>
+Or using the <a href="#SetFinal">SetFinal</a> slot.
+
+<h3><a name=ForceFullCalculation></a>bool ForceFullCalculation</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	bool val = object->property("ForceFullCalculation").toBool();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	bool newValue = ...
+	object->setProperty("ForceFullCalculation", newValue);
+</pre>
+Or using the <a href="#SetForceFullCalculation">SetForceFullCalculation</a> slot.
+
+<h3><a name=FullName></a>QString FullName</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	QString val = object->property("FullName").toString();
+</pre>
+
+<h3><a name=FullNameURLEncoded></a>QString FullNameURLEncoded</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	QString val = object->property("FullNameURLEncoded").toString();
+</pre>
+
+<h3><a name=HTMLProject></a>IDispatch* HTMLProject</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	IDispatch* val = object->property("HTMLProject").toIDispatch*();
+</pre>
+
+<h3><a name=HasMailer></a>bool HasMailer</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	bool val = object->property("HasMailer").toBool();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	bool newValue = ...
+	object->setProperty("HasMailer", newValue);
+</pre>
+Or using the <a href="#SetHasMailer">SetHasMailer</a> slot.
+
+<h3><a name=HasPassword></a>bool HasPassword</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	bool val = object->property("HasPassword").toBool();
+</pre>
+
+<h3><a name=HasRoutingSlip></a>bool HasRoutingSlip</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	bool val = object->property("HasRoutingSlip").toBool();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	bool newValue = ...
+	object->setProperty("HasRoutingSlip", newValue);
+</pre>
+Or using the <a href="#SetHasRoutingSlip">SetHasRoutingSlip</a> slot.
+
+<h3><a name=HasVBProject></a>bool HasVBProject</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	bool val = object->property("HasVBProject").toBool();
+</pre>
+
+<h3><a name=HighlightChangesOnScreen></a>bool HighlightChangesOnScreen</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	bool val = object->property("HighlightChangesOnScreen").toBool();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	bool newValue = ...
+	object->setProperty("HighlightChangesOnScreen", newValue);
+</pre>
+Or using the <a href="#SetHighlightChangesOnScreen">SetHighlightChangesOnScreen</a> slot.
+
+<h3><a name=IconSets></a>IDispatch* IconSets</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	IDispatch* val = object->property("IconSets").toIDispatch*();
+</pre>
+
+<h3><a name=InactiveListBorderVisible></a>bool InactiveListBorderVisible</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	bool val = object->property("InactiveListBorderVisible").toBool();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	bool newValue = ...
+	object->setProperty("InactiveListBorderVisible", newValue);
+</pre>
+Or using the <a href="#SetInactiveListBorderVisible">SetInactiveListBorderVisible</a> slot.
+
+<h3><a name=IsAddin></a>bool IsAddin</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	bool val = object->property("IsAddin").toBool();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	bool newValue = ...
+	object->setProperty("IsAddin", newValue);
+</pre>
+Or using the <a href="#SetIsAddin">SetIsAddin</a> slot.
+
+<h3><a name=IsInplace></a>bool IsInplace</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	bool val = object->property("IsInplace").toBool();
+</pre>
+
+<h3><a name=KeepChangeHistory></a>bool KeepChangeHistory</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	bool val = object->property("KeepChangeHistory").toBool();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	bool newValue = ...
+	object->setProperty("KeepChangeHistory", newValue);
+</pre>
+Or using the <a href="#SetKeepChangeHistory">SetKeepChangeHistory</a> slot.
+
+<h3><a name=Keywords></a>QString Keywords</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	QString val = object->property("Keywords").toString();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	QString newValue = ...
+	object->setProperty("Keywords", newValue);
+</pre>
+Or using the <a href="#SetKeywords">SetKeywords</a> slot.
+
+<h3><a name=ListChangesOnNewSheet></a>bool ListChangesOnNewSheet</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	bool val = object->property("ListChangesOnNewSheet").toBool();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	bool newValue = ...
+	object->setProperty("ListChangesOnNewSheet", newValue);
+</pre>
+Or using the <a href="#SetListChangesOnNewSheet">SetListChangesOnNewSheet</a> slot.
+
+<h3><a name=Mailer></a>IDispatch* Mailer</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	IDispatch* val = object->property("Mailer").toIDispatch*();
+</pre>
+
+<h3><a name=Model></a>IDispatch* Model</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	IDispatch* val = object->property("Model").toIDispatch*();
+</pre>
+
+<h3><a name=Modules></a>IDispatch* Modules</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	IDispatch* val = object->property("Modules").toIDispatch*();
+</pre>
+
+<h3><a name=MultiUserEditing></a>bool MultiUserEditing</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	bool val = object->property("MultiUserEditing").toBool();
+</pre>
+
+<h3><a name=Name></a>QString Name</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	QString val = object->property("Name").toString();
+</pre>
+
+<h3><a name=Names></a>IDispatch* Names</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	IDispatch* val = object->property("Names").toIDispatch*();
+</pre>
+
+<h3><a name=OnSave></a>QString OnSave</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	QString val = object->property("OnSave").toString();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	QString newValue = ...
+	object->setProperty("OnSave", newValue);
+</pre>
+Or using the <a href="#SetOnSave">SetOnSave</a> slot.
+
+<h3><a name=OnSheetActivate></a>QString OnSheetActivate</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	QString val = object->property("OnSheetActivate").toString();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	QString newValue = ...
+	object->setProperty("OnSheetActivate", newValue);
+</pre>
+Or using the <a href="#SetOnSheetActivate">SetOnSheetActivate</a> slot.
+
+<h3><a name=OnSheetDeactivate></a>QString OnSheetDeactivate</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	QString val = object->property("OnSheetDeactivate").toString();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	QString newValue = ...
+	object->setProperty("OnSheetDeactivate", newValue);
+</pre>
+Or using the <a href="#SetOnSheetDeactivate">SetOnSheetDeactivate</a> slot.
 
 <h3><a name=Parent></a>IDispatch* Parent</h3>
 <p>
@@ -3814,184 +5316,461 @@ Or using the <a href="#SetPaperSize">SetPaperSize</a> slot.
 	IDispatch* val = object->property("Parent").toIDispatch*();
 </pre>
 
-<h3><a name=PrintArea></a>QString PrintArea</h3>
+<h3><a name=Password></a>QString Password</h3>
 <p>
 <p>Read this property's value using QObject::property:<pre>
-	QString val = object->property("PrintArea").toString();
+	QString val = object->property("Password").toString();
 </pre>
 Set this property' value using QObject::setProperty:<pre>
 	QString newValue = ...
-	object->setProperty("PrintArea", newValue);
+	object->setProperty("Password", newValue);
 </pre>
-Or using the <a href="#SetPrintArea">SetPrintArea</a> slot.
+Or using the <a href="#SetPassword">SetPassword</a> slot.
 
-<h3><a name=PrintComments></a>XlPrintLocation PrintComments</h3>
+<h3><a name=PasswordEncryptionAlgorithm></a>QString PasswordEncryptionAlgorithm</h3>
 <p>
 <p>Read this property's value using QObject::property:<pre>
-	int val = object->property("PrintComments").toInt();
+	QString val = object->property("PasswordEncryptionAlgorithm").toString();
+</pre>
+
+<h3><a name=PasswordEncryptionFileProperties></a>bool PasswordEncryptionFileProperties</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	bool val = object->property("PasswordEncryptionFileProperties").toBool();
+</pre>
+
+<h3><a name=PasswordEncryptionKeyLength></a>int PasswordEncryptionKeyLength</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	int val = object->property("PasswordEncryptionKeyLength").toInt();
+</pre>
+
+<h3><a name=PasswordEncryptionProvider></a>QString PasswordEncryptionProvider</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	QString val = object->property("PasswordEncryptionProvider").toString();
+</pre>
+
+<h3><a name=Path></a>QString Path</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	QString val = object->property("Path").toString();
+</pre>
+
+<h3><a name=Permission></a>IDispatch* Permission</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	IDispatch* val = object->property("Permission").toIDispatch*();
+</pre>
+
+<h3><a name=PersonalViewListSettings></a>bool PersonalViewListSettings</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	bool val = object->property("PersonalViewListSettings").toBool();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	bool newValue = ...
+	object->setProperty("PersonalViewListSettings", newValue);
+</pre>
+Or using the <a href="#SetPersonalViewListSettings">SetPersonalViewListSettings</a> slot.
+
+<h3><a name=PersonalViewPrintSettings></a>bool PersonalViewPrintSettings</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	bool val = object->property("PersonalViewPrintSettings").toBool();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	bool newValue = ...
+	object->setProperty("PersonalViewPrintSettings", newValue);
+</pre>
+Or using the <a href="#SetPersonalViewPrintSettings">SetPersonalViewPrintSettings</a> slot.
+
+<h3><a name=PivotTables></a>IDispatch* PivotTables</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	IDispatch* val = object->property("PivotTables").toIDispatch*();
+</pre>
+
+<h3><a name=PrecisionAsDisplayed></a>bool PrecisionAsDisplayed</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	bool val = object->property("PrecisionAsDisplayed").toBool();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	bool newValue = ...
+	object->setProperty("PrecisionAsDisplayed", newValue);
+</pre>
+Or using the <a href="#SetPrecisionAsDisplayed">SetPrecisionAsDisplayed</a> slot.
+
+<h3><a name=ProtectStructure></a>bool ProtectStructure</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	bool val = object->property("ProtectStructure").toBool();
+</pre>
+
+<h3><a name=ProtectWindows></a>bool ProtectWindows</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	bool val = object->property("ProtectWindows").toBool();
+</pre>
+
+<h3><a name=PublishObjects></a>IDispatch* PublishObjects</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	IDispatch* val = object->property("PublishObjects").toIDispatch*();
+</pre>
+
+<h3><a name=Queries></a>IDispatch* Queries</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	IDispatch* val = object->property("Queries").toIDispatch*();
+</pre>
+
+<h3><a name=ReadOnly></a>bool ReadOnly</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	bool val = object->property("ReadOnly").toBool();
+</pre>
+
+<h3><a name=ReadOnlyRecommended></a>bool ReadOnlyRecommended</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	bool val = object->property("ReadOnlyRecommended").toBool();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	bool newValue = ...
+	object->setProperty("ReadOnlyRecommended", newValue);
+</pre>
+Or using the <a href="#SetReadOnlyRecommended">SetReadOnlyRecommended</a> slot.
+
+<h3><a name=RemovePersonalInformation></a>bool RemovePersonalInformation</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	bool val = object->property("RemovePersonalInformation").toBool();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	bool newValue = ...
+	object->setProperty("RemovePersonalInformation", newValue);
+</pre>
+Or using the <a href="#SetRemovePersonalInformation">SetRemovePersonalInformation</a> slot.
+
+<h3><a name=Research></a>IDispatch* Research</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	IDispatch* val = object->property("Research").toIDispatch*();
+</pre>
+
+<h3><a name=RevisionNumber></a>int RevisionNumber</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	int val = object->property("RevisionNumber").toInt();
+</pre>
+
+<h3><a name=Routed></a>bool Routed</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	bool val = object->property("Routed").toBool();
+</pre>
+
+<h3><a name=RoutingSlip></a>IDispatch* RoutingSlip</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	IDispatch* val = object->property("RoutingSlip").toIDispatch*();
+</pre>
+
+<h3><a name=SaveLinkValues></a>bool SaveLinkValues</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	bool val = object->property("SaveLinkValues").toBool();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	bool newValue = ...
+	object->setProperty("SaveLinkValues", newValue);
+</pre>
+Or using the <a href="#SetSaveLinkValues">SetSaveLinkValues</a> slot.
+
+<h3><a name=Saved></a>bool Saved</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	bool val = object->property("Saved").toBool();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	bool newValue = ...
+	object->setProperty("Saved", newValue);
+</pre>
+Or using the <a href="#SetSaved">SetSaved</a> slot.
+
+<h3><a name=ServerPolicy></a>IDispatch* ServerPolicy</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	IDispatch* val = object->property("ServerPolicy").toIDispatch*();
+</pre>
+
+<h3><a name=ServerViewableItems></a>IDispatch* ServerViewableItems</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	IDispatch* val = object->property("ServerViewableItems").toIDispatch*();
+</pre>
+
+<h3><a name=SharedWorkspace></a>IDispatch* SharedWorkspace</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	IDispatch* val = object->property("SharedWorkspace").toIDispatch*();
+</pre>
+
+<h3><a name=Sheets></a>IDispatch* Sheets</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	IDispatch* val = object->property("Sheets").toIDispatch*();
+</pre>
+
+<h3><a name=ShowConflictHistory></a>bool ShowConflictHistory</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	bool val = object->property("ShowConflictHistory").toBool();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	bool newValue = ...
+	object->setProperty("ShowConflictHistory", newValue);
+</pre>
+Or using the <a href="#SetShowConflictHistory">SetShowConflictHistory</a> slot.
+
+<h3><a name=ShowPivotChartActiveFields></a>bool ShowPivotChartActiveFields</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	bool val = object->property("ShowPivotChartActiveFields").toBool();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	bool newValue = ...
+	object->setProperty("ShowPivotChartActiveFields", newValue);
+</pre>
+Or using the <a href="#SetShowPivotChartActiveFields">SetShowPivotChartActiveFields</a> slot.
+
+<h3><a name=ShowPivotTableFieldList></a>bool ShowPivotTableFieldList</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	bool val = object->property("ShowPivotTableFieldList").toBool();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	bool newValue = ...
+	object->setProperty("ShowPivotTableFieldList", newValue);
+</pre>
+Or using the <a href="#SetShowPivotTableFieldList">SetShowPivotTableFieldList</a> slot.
+
+<h3><a name=Signatures></a>IDispatch* Signatures</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	IDispatch* val = object->property("Signatures").toIDispatch*();
+</pre>
+
+<h3><a name=SlicerCaches></a>IDispatch* SlicerCaches</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	IDispatch* val = object->property("SlicerCaches").toIDispatch*();
+</pre>
+
+<h3><a name=SmartDocument></a>IDispatch* SmartDocument</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	IDispatch* val = object->property("SmartDocument").toIDispatch*();
+</pre>
+
+<h3><a name=SmartTagOptions></a>IDispatch* SmartTagOptions</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	IDispatch* val = object->property("SmartTagOptions").toIDispatch*();
+</pre>
+
+<h3><a name=Styles></a>IDispatch* Styles</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	IDispatch* val = object->property("Styles").toIDispatch*();
+</pre>
+
+<h3><a name=Subject></a>QString Subject</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	QString val = object->property("Subject").toString();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	QString newValue = ...
+	object->setProperty("Subject", newValue);
+</pre>
+Or using the <a href="#SetSubject">SetSubject</a> slot.
+
+<h3><a name=Sync></a>IDispatch* Sync</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	IDispatch* val = object->property("Sync").toIDispatch*();
+</pre>
+
+<h3><a name=TableStyles></a>IDispatch* TableStyles</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	IDispatch* val = object->property("TableStyles").toIDispatch*();
+</pre>
+
+<h3><a name=TemplateRemoveExtData></a>bool TemplateRemoveExtData</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	bool val = object->property("TemplateRemoveExtData").toBool();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	bool newValue = ...
+	object->setProperty("TemplateRemoveExtData", newValue);
+</pre>
+Or using the <a href="#SetTemplateRemoveExtData">SetTemplateRemoveExtData</a> slot.
+
+<h3><a name=Theme></a>IDispatch* Theme</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	IDispatch* val = object->property("Theme").toIDispatch*();
+</pre>
+
+<h3><a name=Title></a>QString Title</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	QString val = object->property("Title").toString();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	QString newValue = ...
+	object->setProperty("Title", newValue);
+</pre>
+Or using the <a href="#SetTitle">SetTitle</a> slot.
+
+<h3><a name=UpdateLinks></a>XlUpdateLinks UpdateLinks</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	int val = object->property("UpdateLinks").toInt();
 </pre>
 Set this property' value using QObject::setProperty:<pre>
 	int newValue = ... // string representation of values also supported
-	object->setProperty("PrintComments", newValue);
+	object->setProperty("UpdateLinks", newValue);
 </pre>
-Or using the <a href="#SetPrintComments">SetPrintComments</a> slot.
-<p>See also <a href="#XlPrintLocation">XlPrintLocation</a>.
+Or using the <a href="#SetUpdateLinks">SetUpdateLinks</a> slot.
+<p>See also <a href="#XlUpdateLinks">XlUpdateLinks</a>.
 
-<h3><a name=PrintErrors></a>XlPrintErrors PrintErrors</h3>
+<h3><a name=UpdateRemoteReferences></a>bool UpdateRemoteReferences</h3>
 <p>
 <p>Read this property's value using QObject::property:<pre>
-	int val = object->property("PrintErrors").toInt();
-</pre>
-Set this property' value using QObject::setProperty:<pre>
-	int newValue = ... // string representation of values also supported
-	object->setProperty("PrintErrors", newValue);
-</pre>
-Or using the <a href="#SetPrintErrors">SetPrintErrors</a> slot.
-<p>See also <a href="#XlPrintErrors">XlPrintErrors</a>.
-
-<h3><a name=PrintGridlines></a>bool PrintGridlines</h3>
-<p>
-<p>Read this property's value using QObject::property:<pre>
-	bool val = object->property("PrintGridlines").toBool();
+	bool val = object->property("UpdateRemoteReferences").toBool();
 </pre>
 Set this property' value using QObject::setProperty:<pre>
 	bool newValue = ...
-	object->setProperty("PrintGridlines", newValue);
+	object->setProperty("UpdateRemoteReferences", newValue);
 </pre>
-Or using the <a href="#SetPrintGridlines">SetPrintGridlines</a> slot.
+Or using the <a href="#SetUpdateRemoteReferences">SetUpdateRemoteReferences</a> slot.
 
-<h3><a name=PrintHeadings></a>bool PrintHeadings</h3>
+<h3><a name=UseWholeCellCriteria></a>bool UseWholeCellCriteria</h3>
 <p>
 <p>Read this property's value using QObject::property:<pre>
-	bool val = object->property("PrintHeadings").toBool();
+	bool val = object->property("UseWholeCellCriteria").toBool();
+</pre>
+
+<h3><a name=UseWildcards></a>bool UseWildcards</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	bool val = object->property("UseWildcards").toBool();
+</pre>
+
+<h3><a name=UserControl></a>bool UserControl</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	bool val = object->property("UserControl").toBool();
 </pre>
 Set this property' value using QObject::setProperty:<pre>
 	bool newValue = ...
-	object->setProperty("PrintHeadings", newValue);
+	object->setProperty("UserControl", newValue);
 </pre>
-Or using the <a href="#SetPrintHeadings">SetPrintHeadings</a> slot.
+Or using the <a href="#SetUserControl">SetUserControl</a> slot.
 
-<h3><a name=PrintNotes></a>bool PrintNotes</h3>
+<h3><a name=UserStatus></a>QVariant UserStatus</h3>
 <p>
 <p>Read this property's value using QObject::property:<pre>
-	bool val = object->property("PrintNotes").toBool();
+	QVariant val = object->property("UserStatus").toVariant();
 </pre>
-Set this property' value using QObject::setProperty:<pre>
-	bool newValue = ...
-	object->setProperty("PrintNotes", newValue);
-</pre>
-Or using the <a href="#SetPrintNotes">SetPrintNotes</a> slot.
 
-<h3><a name=PrintQuality></a>QVariant PrintQuality</h3>
+<h3><a name=VBASigned></a>bool VBASigned</h3>
 <p>
 <p>Read this property's value using QObject::property:<pre>
-	QVariant val = object->property("PrintQuality").toVariant();
+	bool val = object->property("VBASigned").toBool();
 </pre>
-Set this property' value using QObject::setProperty:<pre>
-	QVariant newValue = ...
-	object->setProperty("PrintQuality", newValue);
-</pre>
-Or using the <a href="#SetPrintQuality">SetPrintQuality</a> slot.
 
-<h3><a name=PrintTitleColumns></a>QString PrintTitleColumns</h3>
+<h3><a name=VBProject></a>IDispatch* VBProject</h3>
 <p>
 <p>Read this property's value using QObject::property:<pre>
-	QString val = object->property("PrintTitleColumns").toString();
+	IDispatch* val = object->property("VBProject").toIDispatch*();
 </pre>
-Set this property' value using QObject::setProperty:<pre>
-	QString newValue = ...
-	object->setProperty("PrintTitleColumns", newValue);
-</pre>
-Or using the <a href="#SetPrintTitleColumns">SetPrintTitleColumns</a> slot.
 
-<h3><a name=PrintTitleRows></a>QString PrintTitleRows</h3>
+<h3><a name=WebOptions></a>IDispatch* WebOptions</h3>
 <p>
 <p>Read this property's value using QObject::property:<pre>
-	QString val = object->property("PrintTitleRows").toString();
+	IDispatch* val = object->property("WebOptions").toIDispatch*();
 </pre>
-Set this property' value using QObject::setProperty:<pre>
-	QString newValue = ...
-	object->setProperty("PrintTitleRows", newValue);
-</pre>
-Or using the <a href="#SetPrintTitleRows">SetPrintTitleRows</a> slot.
 
-<h3><a name=RightFooter></a>QString RightFooter</h3>
+<h3><a name=Windows></a>IDispatch* Windows</h3>
 <p>
 <p>Read this property's value using QObject::property:<pre>
-	QString val = object->property("RightFooter").toString();
+	IDispatch* val = object->property("Windows").toIDispatch*();
+</pre>
+
+<h3><a name=Worksheets></a>IDispatch* Worksheets</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	IDispatch* val = object->property("Worksheets").toIDispatch*();
+</pre>
+
+<h3><a name=WritePassword></a>QString WritePassword</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	QString val = object->property("WritePassword").toString();
 </pre>
 Set this property' value using QObject::setProperty:<pre>
 	QString newValue = ...
-	object->setProperty("RightFooter", newValue);
+	object->setProperty("WritePassword", newValue);
 </pre>
-Or using the <a href="#SetRightFooter">SetRightFooter</a> slot.
+Or using the <a href="#SetWritePassword">SetWritePassword</a> slot.
 
-<h3><a name=RightFooterPicture></a>IDispatch* RightFooterPicture</h3>
+<h3><a name=WriteReserved></a>bool WriteReserved</h3>
 <p>
 <p>Read this property's value using QObject::property:<pre>
-	IDispatch* val = object->property("RightFooterPicture").toIDispatch*();
+	bool val = object->property("WriteReserved").toBool();
 </pre>
 
-<h3><a name=RightHeader></a>QString RightHeader</h3>
+<h3><a name=WriteReservedBy></a>QString WriteReservedBy</h3>
 <p>
 <p>Read this property's value using QObject::property:<pre>
-	QString val = object->property("RightHeader").toString();
+	QString val = object->property("WriteReservedBy").toString();
+</pre>
+
+<h3><a name=XmlMaps></a>IDispatch* XmlMaps</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	IDispatch* val = object->property("XmlMaps").toIDispatch*();
+</pre>
+
+<h3><a name=XmlNamespaces></a>IDispatch* XmlNamespaces</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	IDispatch* val = object->property("XmlNamespaces").toIDispatch*();
+</pre>
+
+<h3><a name=_CodeName></a>QString _CodeName</h3>
+<p>
+<p>Read this property's value using QObject::property:<pre>
+	QString val = object->property("_CodeName").toString();
 </pre>
 Set this property' value using QObject::setProperty:<pre>
 	QString newValue = ...
-	object->setProperty("RightHeader", newValue);
+	object->setProperty("_CodeName", newValue);
 </pre>
-Or using the <a href="#SetRightHeader">SetRightHeader</a> slot.
+Or using the <a href="#set_CodeName">set_CodeName</a> slot.
 
-<h3><a name=RightHeaderPicture></a>IDispatch* RightHeaderPicture</h3>
+<h3><a name=_ReadOnlyRecommended></a>bool _ReadOnlyRecommended</h3>
 <p>
 <p>Read this property's value using QObject::property:<pre>
-	IDispatch* val = object->property("RightHeaderPicture").toIDispatch*();
+	bool val = object->property("_ReadOnlyRecommended").toBool();
 </pre>
-
-<h3><a name=RightMargin></a>double RightMargin</h3>
-<p>
-<p>Read this property's value using QObject::property:<pre>
-	double val = object->property("RightMargin").toDouble();
-</pre>
-Set this property' value using QObject::setProperty:<pre>
-	double newValue = ...
-	object->setProperty("RightMargin", newValue);
-</pre>
-Or using the <a href="#SetRightMargin">SetRightMargin</a> slot.
-
-<h3><a name=ScaleWithDocHeaderFooter></a>bool ScaleWithDocHeaderFooter</h3>
-<p>
-<p>Read this property's value using QObject::property:<pre>
-	bool val = object->property("ScaleWithDocHeaderFooter").toBool();
-</pre>
-Set this property' value using QObject::setProperty:<pre>
-	bool newValue = ...
-	object->setProperty("ScaleWithDocHeaderFooter", newValue);
-</pre>
-Or using the <a href="#SetScaleWithDocHeaderFooter">SetScaleWithDocHeaderFooter</a> slot.
-
-<h3><a name=TopMargin></a>double TopMargin</h3>
-<p>
-<p>Read this property's value using QObject::property:<pre>
-	double val = object->property("TopMargin").toDouble();
-</pre>
-Set this property' value using QObject::setProperty:<pre>
-	double newValue = ...
-	object->setProperty("TopMargin", newValue);
-</pre>
-Or using the <a href="#SetTopMargin">SetTopMargin</a> slot.
-
-<h3><a name=Zoom></a>QVariant Zoom</h3>
-<p>
-<p>Read this property's value using QObject::property:<pre>
-	QVariant val = object->property("Zoom").toVariant();
-</pre>
-Set this property' value using QObject::setProperty:<pre>
-	QVariant newValue = ...
-	object->setProperty("Zoom", newValue);
-</pre>
-Or using the <a href="#SetZoom">SetZoom</a> slot.
 
 <h3><a name=control></a>QString control</h3>
 <p>

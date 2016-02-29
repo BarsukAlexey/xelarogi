@@ -314,7 +314,7 @@ public class JFrameMainJudge extends JFrame {
         };
         for (JLabel jLabel : jLabels) {
             Font font = jLabel.getFont();
-            jLabel.setFont(new Font(font.getName(), Font.PLAIN, 20));
+            //jLabel.setFont(new Font(font.getName(), Font.PLAIN, 20));
             jPanelRight.add(jLabel);
         }
 
@@ -434,13 +434,10 @@ public class JFrameMainJudge extends JFrame {
                 activeFighting.startRound();
             } else if (activeFighting.getStatusFighting() == StatusFighting.fighting) {
                 activeFighting.pauseRound();
-            } else if (activeFighting.getStatusFighting() == StatusFighting._break) {
-                // ничего не надо делать
             } else if (activeFighting.getStatusFighting() == StatusFighting.fightingPause) {
                 activeFighting.continueRound();
-//            } else if (activeFighting.getStatusFighting() == StatusFighting.finishPending ||
-//                    activeFighting.getStatusFighting() == StatusFighting.disqualification) {
-            } else {
+            } else if (activeFighting.getStatusFighting() == StatusFighting.finishPending ||
+                    activeFighting.getStatusFighting() == StatusFighting.disqualification) {
                 remove(jPanelFighting);
                 add(jPanelStartPage);
                 revalidate();
