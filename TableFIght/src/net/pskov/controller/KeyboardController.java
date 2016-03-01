@@ -26,7 +26,7 @@ public class KeyboardController {
             if (!keyboard.poll()) {
                 continue;
             }
-            EventQueue keyboardQueue = keyboard .getEventQueue();
+            EventQueue keyboardQueue = keyboard.getEventQueue();
             Event event = new Event();
             while (keyboardQueue.getNextEvent(event)) {
                 float pollData = event.getComponent().getPollData();

@@ -1,6 +1,5 @@
 package net.pskov;
 
-import javafx.util.Pair;
 import net.pskov.someEnum.Player;
 import net.pskov.someEnum.StatusFighting;
 
