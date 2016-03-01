@@ -13,9 +13,8 @@ TrophyGenerator::TrophyGenerator(const QSqlDatabase& database, const long long t
         QAxWidget excel("Excel.Application");
         excel.setProperty("Visible", true);
         QAxObject *workbooks = excel.querySubObject("WorkBooks");
-        workbooks->dynamicCall("Add");
-        QAxObject *workbook = excel.querySubObject("Open(const QString&)", filePath);
-        QAxObject *sheets = workbook->querySubObject("WorkSheets");
+        QAxObject *workbook = workbooks->querySubObject("Open(const QString&)", filePath);
+        QAxObject *sheets = workbook->querySubObject("Sheets");
 
         for(const std::tuple<long long, int, int, long long>& x : DBUtils::get_distinct_TYPE_FK_AgeFrom_AgeTill(database, tournamentUID))
         {
@@ -27,16 +26,6 @@ TrophyGenerator::TrophyGenerator(const QSqlDatabase& database, const long long t
 
             std::map<QString, QVector<long long> > stdMap = DBUtils::get_weight_and_orderUIDs(database, tournamentUID, type_fk, age_from, age_till, sex_fk).toStdMap();
             if (stdMap.empty()) continue;
-            qDebug() << type_fk << age_from << age_till << sex_fk;
-
-            int sheetCount = sheets->dynamicCall("Count()").toInt();
-            QAxObject *sheetToCopy  = sheetToCopy->querySubObject( "Item( int )", sheetCount);
-            QString newSheetName = sheetToCopy->property("Name").toString() + " (2)";
-            sheetToCopy->dynamicCall("Copy(const QVariant&)", sheetToCopy->asVariant());
-            delete sheetToCopy;
-
-            QAxObject * newSheet = workbook->querySubObject("Worksheets(const QVariant&)", newSheetName);
-            newSheet->setProperty("Name", "test" + QString::number(rand()) + QString::number(rand()));
 
             QString tournamentName = DBUtils::getField(database, "NAME", "TOURNAMENTS", tournamentUID);
             QString genderName = DBUtils::getField(database, "NAME", "SEXES", sex_fk);
@@ -44,7 +33,7 @@ TrophyGenerator::TrophyGenerator(const QSqlDatabase& database, const long long t
             QString typeName = DBUtils::getField(database, "NAME", "TYPES", type_fk);
             QString ageFrom = QString::number(age_from);
             QString ageTill = QString::number(age_till);
-            QString ageInterval = ageFrom + "-"  + ageTill;
+            QString ageInterval = ageFrom + "-"  + ageTill + " лет";
 
             for (const auto & val : stdMap)
             {
@@ -55,6 +44,16 @@ TrophyGenerator::TrophyGenerator(const QSqlDatabase& database, const long long t
                 {
                     if (orderUID != 0)
                     {
+                        int sheetCount = sheets->dynamicCall("Count()").toInt();
+                        QAxObject *sheetToCopy  = sheets->querySubObject( "Item( int )", sheetCount);
+                        QString newSheetName = sheetToCopy->property("Name").toString() + " (2)";
+                        sheetToCopy->dynamicCall("Copy(const QVariant&)", sheetToCopy->asVariant());
+                        delete sheetToCopy;
+
+                        QAxObject * newSheet = workbook->querySubObject("Worksheets(const QVariant&)", newSheetName);
+                        newSheetName = QString::number(place) + "," + genderShortName + "," + typeName + "," + QString::number(rand()) + "," + ageInterval + "," + weightInterval;
+                        newSheet->setProperty("Name", newSheetName.left(31));
+
                         QString secondName = DBUtils::getField(database, "SECOND_NAME", "ORDERS", orderUID);
                         QString firstName = DBUtils::getField(database, "FIRST_NAME", "ORDERS", orderUID);
                         QString fullName = secondName + " " + firstName;
@@ -134,6 +133,8 @@ TrophyGenerator::TrophyGenerator(const QSqlDatabase& database, const long long t
                         {
                             ExcelUtils::setValue(newSheet, somePoint.row, somePoint.column, weightInterval);
                         }
+
+                        delete newSheet;
                     }
                     else
                     {
@@ -145,8 +146,6 @@ TrophyGenerator::TrophyGenerator(const QSqlDatabase& database, const long long t
                     //++currentRow;
                 }
             }
-
-            delete newSheet;
         }
 
         delete sheets;

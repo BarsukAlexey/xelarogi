@@ -62,5 +62,6 @@ void TrophyGeneratorSettingsDialog::setExcelPointByComboBox(TrophyGeneratorSetti
 {
     point.row = getRow(cbRow);
     point.column = getColumn(cbColumn);
+    qSwap(point.row, point.column);
     point.isUsed = ( point.row > 0 && point.column > 0 );
 }
