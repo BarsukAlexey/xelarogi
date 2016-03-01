@@ -354,6 +354,17 @@ void MainWindow::connectButtons()
         GenerateTournamentCategoriesDialog dlg(tournamentUID, this);
         dlg.exec();
     });
+
+    connect(ui->trophyBtn, &QPushButton::clicked, [this] ()
+    {
+        TrophyGeneratorSettingsDialog dlg(this);
+        dlg.exec();
+        if (dlg.result() == QDialog::Accepted)
+        {
+            long long tournamentUID = ui->tournamentUidLabel->text().toLongLong();
+            TrophyGenerator trophyGenerator(m_database, tournamentUID);
+        }
+    });
 }
 
 

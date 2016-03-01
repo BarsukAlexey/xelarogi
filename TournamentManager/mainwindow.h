@@ -23,6 +23,8 @@
 #include "createtournamentcategoriesdialog.h"
 #include "generatetournamentcategoriesdialog.h"
 #include "logindialog.h"
+#include "trophygeneratorsettingsdialog.h"
+#include "trophygenerator.h"
 
 namespace Ui {
 class MainWindow;
