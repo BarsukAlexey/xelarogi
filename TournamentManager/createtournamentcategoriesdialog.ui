@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>646</width>
-    <height>333</height>
+    <height>338</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -188,13 +188,34 @@
               </layout>
              </item>
              <item>
-              <widget class="QSpinBox" name="durationFightingSB"/>
+              <widget class="QSpinBox" name="durationFightingSB">
+               <property name="minimum">
+                <number>10</number>
+               </property>
+               <property name="maximum">
+                <number>10000</number>
+               </property>
+               <property name="value">
+                <number>10</number>
+               </property>
+              </widget>
              </item>
              <item>
-              <widget class="QSpinBox" name="durationBreakSB"/>
+              <widget class="QSpinBox" name="durationBreakSB">
+               <property name="minimum">
+                <number>10</number>
+               </property>
+               <property name="maximum">
+                <number>10000</number>
+               </property>
+              </widget>
              </item>
              <item>
-              <widget class="QSpinBox" name="roundCountSB"/>
+              <widget class="QSpinBox" name="roundCountSB">
+               <property name="minimum">
+                <number>1</number>
+               </property>
+              </widget>
              </item>
             </layout>
            </item>

@@ -76,7 +76,7 @@ public:
     {
         if (CreateTournamentCategoriesDialog->objectName().isEmpty())
             CreateTournamentCategoriesDialog->setObjectName(QStringLiteral("CreateTournamentCategoriesDialog"));
-        CreateTournamentCategoriesDialog->resize(646, 333);
+        CreateTournamentCategoriesDialog->resize(646, 338);
         gridLayout_2 = new QGridLayout(CreateTournamentCategoriesDialog);
         gridLayout_2->setObjectName(QStringLiteral("gridLayout_2"));
         splitter = new QSplitter(CreateTournamentCategoriesDialog);
@@ -214,16 +214,22 @@ public:
 
         durationFightingSB = new QSpinBox(widget);
         durationFightingSB->setObjectName(QStringLiteral("durationFightingSB"));
+        durationFightingSB->setMinimum(10);
+        durationFightingSB->setMaximum(10000);
+        durationFightingSB->setValue(10);
 
         verticalLayout_2->addWidget(durationFightingSB);
 
         durationBreakSB = new QSpinBox(widget);
         durationBreakSB->setObjectName(QStringLiteral("durationBreakSB"));
+        durationBreakSB->setMinimum(10);
+        durationBreakSB->setMaximum(10000);
 
         verticalLayout_2->addWidget(durationBreakSB);
 
         roundCountSB = new QSpinBox(widget);
         roundCountSB->setObjectName(QStringLiteral("roundCountSB"));
+        roundCountSB->setMinimum(1);
 
         verticalLayout_2->addWidget(roundCountSB);
 

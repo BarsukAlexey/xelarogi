@@ -36,24 +36,24 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    bool mTryLogin = true;
-    while (mTryLogin)
-    {
-        LoginDialog loginDialog(this);
-        if (loginDialog.exec() == QDialog::Accepted)
-        {
-            break;
-        }
-        mTryLogin = LoginDialog::mOkBtnClicked;
-        if (!mTryLogin)
-        {
-            exit(0);
-        }
-        else
-        {
-            QMessageBox::warning(this, "Неудачная попытка авторизации", "Логи или пароль введены неверно");
-        }
-    }
+//    bool mTryLogin = true;
+//    while (mTryLogin)
+//    {
+//        LoginDialog loginDialog(this);
+//        if (loginDialog.exec() == QDialog::Accepted)
+//        {
+//            break;
+//        }
+//        mTryLogin = LoginDialog::mOkBtnClicked;
+//        if (!mTryLogin)
+//        {
+//            exit(0);
+//        }
+//        else
+//        {
+//            QMessageBox::warning(this, "Неудачная попытка авторизации", "Логи или пароль введены неверно");
+//        }
+//    }
 
     ui->setupUi(this);
 
