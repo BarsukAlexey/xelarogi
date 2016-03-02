@@ -39,7 +39,9 @@ SOURCES += main.cpp\
     createtypedialog.cpp \
     generatetournamentcategoriesdialog.cpp \
     errormessagesdialog.cpp \
-    logindialog.cpp
+    logindialog.cpp \
+    trophygenerator.cpp \
+    trophygeneratorsettingsdialog.cpp
 
 HEADERS  += mainwindow.h \
     handbookdialog.h \
@@ -64,7 +66,9 @@ HEADERS  += mainwindow.h \
     createtypedialog.h \
     generatetournamentcategoriesdialog.h \
     errormessagesdialog.h \
-    logindialog.h
+    logindialog.h \
+    trophygenerator.h \
+    trophygeneratorsettingsdialog.h
 
 FORMS    += mainwindow.ui \
     handbookdialog.ui \
@@ -78,4 +82,5 @@ FORMS    += mainwindow.ui \
     createtypedialog.ui \
     generatetournamentcategoriesdialog.ui \
     errormessagesdialog.ui \
-    logindialog.ui
+    logindialog.ui \
+    trophygeneratorsettingsdialog.ui

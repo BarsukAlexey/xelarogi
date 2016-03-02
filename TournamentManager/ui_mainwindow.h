@@ -70,6 +70,7 @@ public:
     QPushButton *pushButtonFightinDistribution;
     QPushButton *pushButtonLoadWinner;
     QPushButton *pushButtonWinnerReport;
+    QPushButton *trophyBtn;
     QSpacerItem *verticalSpacer;
     QMenuBar *menuBar;
     QMenu *handbookMenu;
@@ -252,6 +253,11 @@ public:
 
         verticalLayout->addWidget(pushButtonWinnerReport);
 
+        trophyBtn = new QPushButton(ordersPage);
+        trophyBtn->setObjectName(QStringLiteral("trophyBtn"));
+
+        verticalLayout->addWidget(trophyBtn);
+
         verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
         verticalLayout->addItem(verticalSpacer);
@@ -329,6 +335,7 @@ public:
         pushButtonFightinDistribution->setText(QApplication::translate("MainWindow", "\320\223\321\200\320\260\321\204\320\270\320\272 \321\200\320\260\321\201\320\277\320\265\321\200\320\265\320\264\320\265\320\273\320\265\320\275\320\270\321\217 \320\261\320\276\321\221\320\262", 0));
         pushButtonLoadWinner->setText(QApplication::translate("MainWindow", "\320\227\320\260\320\263\321\200\321\203\320\267\320\270\321\202\321\214 \321\200\320\265\320\267\321\203\320\273\321\214\321\202\320\260\321\202\321\213", 0));
         pushButtonWinnerReport->setText(QApplication::translate("MainWindow", "\320\241\320\277\320\270\321\201\320\276\320\272 \320\277\320\276\320\261\320\265\320\264\320\270\321\202\320\265\320\273\320\265\320\271", 0));
+        trophyBtn->setText(QApplication::translate("MainWindow", "\320\241\320\276\320\267\320\264\320\260\321\202\321\214 \320\263\321\200\320\260\320\274\320\276\321\202\321\213", 0));
         handbookMenu->setTitle(QApplication::translate("MainWindow", "\320\241\320\277\321\200\320\260\320\262\320\276\321\207\320\275\320\270\320\272\320\270", 0));
     } // retranslateUi
 
