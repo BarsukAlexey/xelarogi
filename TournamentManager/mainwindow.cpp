@@ -365,6 +365,47 @@ void MainWindow::connectButtons()
             TrophyGenerator trophyGenerator(m_database, tournamentUID);
         }
     });
+
+    connect(ui->testClearBtn, &QPushButton::clicked, [this]()
+    {
+        QSqlQuery query;
+
+        if (!query.prepare("DELETE FROM SEXES WHERE NAME IS NULL OR NAME LIKE ''"))
+            qDebug() << query.lastError().text();
+        if (!query.exec())
+            qDebug() << query.lastError().text();
+        query.clear();
+
+        if (!query.prepare("DELETE FROM TYPES WHERE NAME IS NULL OR NAME LIKE ''"))
+            qDebug() << query.lastError().text();
+        if (!query.exec())
+            qDebug() << query.lastError().text();
+        query.clear();
+
+        if (!query.prepare("DELETE FROM SPORT_CATEGORIES WHERE NAME IS NULL OR NAME LIKE ''"))
+            qDebug() << query.lastError().text();
+        if (!query.exec())
+            qDebug() << query.lastError().text();
+        query.clear();
+
+        if (!query.prepare("DELETE FROM TOURNAMENT_CATEGORIES WHERE NAME IS NULL OR NAME LIKE ''"))
+            qDebug() << query.lastError().text();
+        if (!query.exec())
+            qDebug() << query.lastError().text();
+        query.clear();
+
+        if (!query.prepare("DELETE FROM TOURNAMENTS WHERE NAME IS NULL OR NAME LIKE ''"))
+            qDebug() << query.lastError().text();
+        if (!query.exec())
+            qDebug() << query.lastError().text();
+        query.clear();
+
+        if (!query.prepare("DELETE FROM ORDERS WHERE REGION_FK IS NULL OR COUNTRY_FK IS NULL OR REGION_UNIT_FK IS NULL OR TYPE_FK IS NULL OR SEX_FK IS NULL OR TOURNAMENT_CATEGORY_FK IS NULL"))
+            qDebug() << query.lastError().text();
+        if (!query.exec())
+            qDebug() << query.lastError().text();
+        query.clear();
+    });
 }
 
 
