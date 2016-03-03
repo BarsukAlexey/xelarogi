@@ -169,6 +169,7 @@ public:
 
         testClearBtn = new QPushButton(generalPage);
         testClearBtn->setObjectName(QStringLiteral("testClearBtn"));
+        testClearBtn->setEnabled(false);
 
         verticalLayout_3->addWidget(testClearBtn);
 

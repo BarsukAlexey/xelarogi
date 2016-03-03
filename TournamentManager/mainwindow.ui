@@ -121,6 +121,9 @@
            </item>
            <item>
             <widget class="QPushButton" name="testClearBtn">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="text">
               <string>Удалить ошибочные записи из базы (тестовое)</string>
              </property>

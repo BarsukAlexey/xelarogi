@@ -402,7 +402,7 @@ void MainWindow::connectButtons()
 
         if (!query.prepare("DELETE FROM ORDERS WHERE REGION_FK IS NULL OR COUNTRY_FK IS NULL OR REGION_UNIT_FK IS NULL OR TYPE_FK IS NULL OR SEX_FK IS NULL OR TOURNAMENT_CATEGORY_FK IS NULL"))
             qDebug() << query.lastError().text();
-        if (!query.exec())
+        if (!query.exec()) // лучше
             qDebug() << query.lastError().text();
         query.clear();
     });
