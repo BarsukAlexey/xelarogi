@@ -280,7 +280,7 @@ void CreateTournamentOrdersDialog::loadFromExcel()
         long long countryUID = getCountryUID(countryName);
         long long regionUID = getRegionUID(regionName, countryUID);
 
-        for (int row = 15 ; row < intRowStart + intRows ; ++row) {
+        for (int row = 14 ; row < intRowStart + intRows ; ++row) {
 
             QAxObject* cell = sheet->querySubObject( "Cells( int, int )", row, 2 );
             QVariant value = cell->dynamicCall( "Value()" );
@@ -300,6 +300,7 @@ void CreateTournamentOrdersDialog::loadFromExcel()
             fillNullString(patronymic);
             delete cell;
 
+            if (secondName.trimmed().isEmpty() && row == 14) continue;
             if (secondName.trimmed().isEmpty()) break;
 
             cell = sheet->querySubObject( "Cells( int, int )", row, 4 );
