@@ -21,6 +21,9 @@ void ExcelUtils::uniteRange(QAxObject* sheet, int row0, int column0, int row1, i
 void ExcelUtils::setValue(QAxObject* sheet, int row, int column, QString text, int hAligment, int vAligment)
 {
     QAxObject *cell = sheet->querySubObject( "Cells( int, int )", row, column);
+    cell->setProperty("NumberFormat","@"); // ctrl+1 -> "формат ячеек" -> текстовый
+    // теперь excel никогда число в дату не исправит !
+
     cell->setProperty("Value", text);
 
     QVector<int> a; a << -4131 << -4108 << -4152;
@@ -110,4 +113,13 @@ void ExcelUtils::generateDocumentation(QAxObject* p)
     //sheet->setProperty("FitToPagesWide", 1);
     //sheet->setProperty("FitToPagesTall", 1);
     //for (auto x : pageSetup->propertyBag().keys()) qDebug() << x << pageSetup->propertyBag()[x];
+}
+
+void ExcelUtils::setFontBold(QAxObject* sheet, int row, int column, bool isBold)
+{
+    QAxObject *cell = sheet->querySubObject( "Cells( int, int )", row, column);
+    QAxObject *font = cell->querySubObject("Font");
+    font->setProperty("Bold", isBold);
+    delete font;
+    delete cell;
 }

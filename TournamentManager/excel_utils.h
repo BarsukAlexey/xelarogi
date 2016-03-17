@@ -21,6 +21,8 @@ public:
     static void setPageOrientation(QAxObject* sheet, int orientation);
     static void setWrapText(QAxObject* sheet, int row, int column);
     static void generateDocumentation(QAxObject* p);
+
+    static void setFontBold(QAxObject* sheet, int row, int column, bool isBold);
 };
 
 #endif // EXCELUTILS_H

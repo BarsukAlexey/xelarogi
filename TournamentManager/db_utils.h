@@ -78,7 +78,10 @@ public:
     static int     get__DURATION_FIGHING(const QSqlDatabase& database, long long UID);
     static int     get__DURATION_BREAK(const QSqlDatabase& database, long long UID);
     static int     get__ROUND_COUNT(const QSqlDatabase& database, long long UID);
+    static QString getNormanWeightRange(const QSqlDatabase& database, long long uidCategory);
 
+
+    static QString roundDouble(double x, int precision);
 
 };
 

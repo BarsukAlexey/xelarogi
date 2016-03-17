@@ -420,6 +420,28 @@ int DBUtils::get__ROUND_COUNT(const QSqlDatabase& database, long long UID)
     return res;
 }
 
+QString DBUtils::getNormanWeightRange(const QSqlDatabase& database, long long uidCategory)
+{
+    double a = DBUtils::getField(database, "WEIGHT_FROM", "TOURNAMENT_CATEGORIES", uidCategory).toDouble();
+    double b = DBUtils::getField(database, "WEIGHT_TILL", "TOURNAMENT_CATEGORIES", uidCategory).toDouble();
+    QString aa = roundDouble(a, 3);
+    QString bb = roundDouble(a, 3);
+
+    if (qAbs(a) < 1e-7)
+        return "до " + bb + " кг";
+    if (300 - 1e-7 <= b)
+        return "свыше " + aa + " кг";
+    return "от " + aa + " до " + bb + " кг";
+}
+
+QString DBUtils::roundDouble(double x, int precision)
+{
+    QString res = QString::number(x, 'f', 3);
+    res.remove( QRegExp("0+$") ); // Remove any number of trailing 0's
+    res.remove( QRegExp("\\.$") ); // If the last character is just a '.' then remove it
+    return res;
+}
+
 int DBUtils::get__AGE_FROM(const QSqlDatabase& database, long long UID)
 {
     QSqlQuery query("SELECT * FROM TOURNAMENT_CATEGORIES WHERE UID = ? ", database);

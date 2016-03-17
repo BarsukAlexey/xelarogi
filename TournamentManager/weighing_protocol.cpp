@@ -33,14 +33,15 @@ WeighingProtocol::WeighingProtocol(const QSqlDatabase& database, const long long
         QString sheetName = DBUtils::getField(database, "SHORTNAME", "SEXES", DBUtils::getField(database, "SEX_FK", "TOURNAMENT_CATEGORIES", uidCategory)) + "," +
                             DBUtils::getField(database, "NAME", "TYPES", DBUtils::getField(database, "TYPE_FK", "TOURNAMENT_CATEGORIES", uidCategory)) + "," +
                             DBUtils::getField(database, "AGE_FROM", "TOURNAMENT_CATEGORIES", uidCategory) + "-" + DBUtils::getField(database, "AGE_TILL", "TOURNAMENT_CATEGORIES", uidCategory) + "л," +
-                            DBUtils::getField(database, "WEIGHT_FROM", "TOURNAMENT_CATEGORIES", uidCategory) + "-" + DBUtils::getField(database, "WEIGHT_TILL", "TOURNAMENT_CATEGORIES", uidCategory) + "кг"
+                            (DBUtils::getNormanWeightRange(database, uidCategory).remove(QRegExp(" ")))
                             ;
         sheet->setProperty("Name", sheetName.left(31));
 
         int currentRow = 2;
 
-        ExcelUtils::setValue  (sheet, currentRow, 1, DBUtils::getNameTournamentByUID(database, tournamentUID));
-        ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, countColumns);
+        ExcelUtils::setValue   (sheet, currentRow, 1, DBUtils::getNameTournamentByUID(database, tournamentUID));
+        ExcelUtils::uniteRange (sheet, currentRow, 1, currentRow, countColumns);
+        ExcelUtils::setFontBold(sheet, currentRow, 1, true);
         ++currentRow;
 
         ExcelUtils::setValue  (sheet, currentRow, 1, "Протокол взвешивания");
@@ -55,7 +56,7 @@ WeighingProtocol::WeighingProtocol(const QSqlDatabase& database, const long long
         ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, countColumns);
         ++currentRow;
 
-        ExcelUtils::setValue  (sheet, currentRow, 1, "Вес: от " + DBUtils::getField(database, "WEIGHT_FROM", "TOURNAMENT_CATEGORIES", uidCategory) + " до " + DBUtils::getField(database, "WEIGHT_TILL", "TOURNAMENT_CATEGORIES", uidCategory));
+        ExcelUtils::setValue  (sheet, currentRow, 1, "Вес: " + DBUtils::getNormanWeightRange(database, uidCategory));
         ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, countColumns);
         ++currentRow;
 
@@ -87,7 +88,8 @@ WeighingProtocol::WeighingProtocol(const QSqlDatabase& database, const long long
             ExcelUtils::setValue(sheet, currentRow, 4, DBUtils::getField(database, "NAME", "REGIONS", DBUtils::getField(database, "REGION_FK", "ORDERS", leaf.UID)));
             ExcelUtils::setValue(sheet, currentRow, 5, DBUtils::getField(database, "NAME", "CLUBS", DBUtils::getField(database, "CLUB_FK", "ORDERS", leaf.UID)));
             ExcelUtils::setValue(sheet, currentRow, 6, DBUtils::getField(database, "NAME", "SPORT_CATEGORIES", DBUtils::getField(database, "SPORT_CATEGORY_FK", "ORDERS", leaf.UID)));
-            ExcelUtils::setValue(sheet, currentRow, 7, DBUtils::getField(database, "WEIGHT", "ORDERS", leaf.UID));
+            //ExcelUtils::setValue(sheet, currentRow, 7, DBUtils::getField(database, "WEIGHT", "ORDERS", leaf.UID));
+            ExcelUtils::setValue(sheet, currentRow, 7, DBUtils::roundDouble(DBUtils::getField(database, "WEIGHT", "ORDERS", leaf.UID).toDouble(), 3));
             ExcelUtils::setValue(sheet, currentRow, 8, DBUtils::getField(database, "NAME", "COACHS", DBUtils::getField(database, "COACH_FK", "ORDERS", leaf.UID)));
             ExcelUtils::setValue(sheet, currentRow, 9, QString::number(maxVertex - leaf.v + 1));
             ++currentRow;
@@ -117,7 +119,7 @@ WeighingProtocol::WeighingProtocol(const QSqlDatabase& database, const long long
         ExcelUtils::setValue(sheet, currentRow, 4, DBUtils::get_ASSOCIATE_MAIN_JUDGE(database, tournamentUID), 0);
         ++currentRow;
 
-        ExcelUtils::setPageOrientation(sheet, 2);
+        ExcelUtils::setPageOrientation(sheet, 1);
 
         delete sheet;
     }
