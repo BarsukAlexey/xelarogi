@@ -2,6 +2,8 @@
 
 #include <QVector>
 #include <QFile>
+#include <QDebug>
+#include <QVariant>
 
 
 
@@ -12,7 +14,6 @@ void ExcelUtils::uniteRange(QAxObject* sheet, int row0, int column0, int row1, i
     QAxObject* range = sheet->querySubObject("Range(const QVariant&, const QVariant&)", cell1->asVariant(), cell2->asVariant() );
     range->dynamicCall("Select()");
     range->dynamicCall("MergeCells", true);
-    //range->dynamicCall("HorizontalAlignment", -4108);
     delete range;
     delete cell2;
     delete cell1;
@@ -104,7 +105,7 @@ void ExcelUtils::setWrapText(QAxObject* sheet, int row, int column)
 void ExcelUtils::generateDocumentation(QAxObject* p)
 {
     QString localGenerateDocumentation = p->generateDocumentation();
-    QFile file("../info.html");
+    QFile file("../pageSetup.html");
     file.open(QIODevice::WriteOnly);
     file.write(localGenerateDocumentation.toStdString().c_str());
     file.close();
@@ -122,4 +123,15 @@ void ExcelUtils::setFontBold(QAxObject* sheet, int row, int column, bool isBold)
     font->setProperty("Bold", isBold);
     delete font;
     delete cell;
+}
+
+
+void ExcelUtils::setFitToPagesWide(QAxObject* sheet, int cnt)
+{
+    // http://aboutqt.blogspot.ru/2012_03_01_archive.html
+    QAxObject *pageSetup = sheet->querySubObject("PageSetup");
+    pageSetup->dynamicCall( "Zoom", false); // Отключаем свойство Zoom
+    pageSetup->dynamicCall( "FitToPagesTall", 100); // В 100 страницы по высоте
+    pageSetup->dynamicCall( "FitToPagesWide", 1); // В 1 страницу по ширине
+    delete pageSetup;
 }

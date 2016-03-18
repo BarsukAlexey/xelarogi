@@ -23,6 +23,7 @@ public:
     static void generateDocumentation(QAxObject* p);
 
     static void setFontBold(QAxObject* sheet, int row, int column, bool isBold);
+    static void setFitToPagesWide(QAxObject* sheet, int cnt);
 };
 
 #endif // EXCELUTILS_H

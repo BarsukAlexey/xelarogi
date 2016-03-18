@@ -66,6 +66,7 @@ WeighingProtocol::WeighingProtocol(const QSqlDatabase& database, const long long
 
         QStringList heads;
         heads << "#" << "Фамилия, Имя" << "Дата\r\nрождения" << "Город" << "Клуб" << "Спортивный\r\nразряд" << "Вес" << "Тренер" << "Номер\r\nжеребьёвки";
+        //heads << "sdsdsdd" << "sdsdsdd" << "sdsdsdd" << "sdsdsdd" << "sdsdsdd" << "sdsdsdd" << "sdsdsdd";
         for (int i = 0, column = 1; i < heads.size(); ++i, ++column)
         {
             ExcelUtils::setValue(sheet, currentRow, column, heads[i]);
@@ -119,8 +120,19 @@ WeighingProtocol::WeighingProtocol(const QSqlDatabase& database, const long long
         ExcelUtils::setValue(sheet, currentRow, 4, DBUtils::get_ASSOCIATE_MAIN_JUDGE(database, tournamentUID), 0);
         ++currentRow;
 
+
+        ExcelUtils::setFitToPagesWide(sheet, 1);
         ExcelUtils::setPageOrientation(sheet, 1);
 
+        for (int i = 0; i < 100; ++i){
+            ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 2);
+            ExcelUtils::setRowHeight(sheet, currentRow, 25);
+            ExcelUtils::setValue(sheet, currentRow, 1, "Зам. главного судьи: ", 0);
+            ExcelUtils::setValue(sheet, currentRow, 4, DBUtils::get_ASSOCIATE_MAIN_JUDGE(database, tournamentUID), 0);
+            ++currentRow;
+        }
+
+        return;  //TODO  DELETE
         delete sheet;
     }
 
