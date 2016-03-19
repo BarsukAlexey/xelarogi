@@ -98,7 +98,8 @@ FitingDistribution::FitingDistribution(const QSqlDatabase &database, const long 
                 QString WEIGHT_FROM = queryWEIGHT_FROM.value("WEIGHT_FROM").toString();
                 QString WEIGHT_TILL = queryWEIGHT_FROM.value("WEIGHT_TILL").toString();
 
-                ExcelUtils::setValue(sheet, currentRow, 1, WEIGHT_FROM + " - " + WEIGHT_TILL + " кг");
+
+                //ExcelUtils::setValue(sheet, currentRow, 1, WEIGHT_FROM + " - " + WEIGHT_TILL + " кг");
                 ExcelUtils::setBorder(sheet, currentRow, 1, currentRow, 2 + 3 * days.size());
 
 
@@ -114,6 +115,8 @@ FitingDistribution::FitingDistribution(const QSqlDatabase &database, const long 
                 }
 
                 long long UID_TOURNAMENT_CATEGORY = queryTOURNAMENT_CATEGORIES_UID.value("UID").toLongLong();
+
+                ExcelUtils::setValue(sheet, currentRow, 1, DBUtils::getNormanWeightRange(database,UID_TOURNAMENT_CATEGORY));
 
                 QSqlQuery queryCOUNT("SELECT count() AS COUNT FROM ORDERS WHERE TOURNAMENT_CATEGORY_FK = ? AND IS_VALID = ? GROUP BY TOURNAMENT_CATEGORY_FK", database);
                 queryCOUNT.bindValue(0, UID_TOURNAMENT_CATEGORY);
@@ -198,7 +201,12 @@ FitingDistribution::FitingDistribution(const QSqlDatabase &database, const long 
         ExcelUtils::setValue(sheet, currentRow, 4, DBUtils::get_ASSOCIATE_MAIN_JUDGE(database, tournamentUID), 0);
         ++currentRow;
 
+
+        ExcelUtils::setColumnAutoFit(sheet, 1);
+
         ExcelUtils::setPageOrientation(sheet, 2);
+        ExcelUtils::setFitToPagesWide(sheet, 1);
+
 
         delete sheet;
     }

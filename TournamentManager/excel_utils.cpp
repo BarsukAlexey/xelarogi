@@ -102,10 +102,10 @@ void ExcelUtils::setWrapText(QAxObject* sheet, int row, int column)
     delete cell;
 }
 
-void ExcelUtils::generateDocumentation(QAxObject* p)
+void ExcelUtils::generateDocumentation(QAxObject* p, const QString& name)
 {
     QString localGenerateDocumentation = p->generateDocumentation();
-    QFile file("../pageSetup.html");
+    QFile file("../" + name + ".html");
     file.open(QIODevice::WriteOnly);
     file.write(localGenerateDocumentation.toStdString().c_str());
     file.close();

@@ -21,6 +21,16 @@ WeighingProtocol::WeighingProtocol(const QSqlDatabase& database, const long long
     QAxObject *workbook = excel.querySubObject("ActiveWorkBook");
     QAxObject *sheets = workbook->querySubObject("WorkSheets");
 
+    ExcelUtils::generateDocumentation(workbooks, "workbooks");
+    ExcelUtils::generateDocumentation(workbook, "ActiveWorkBook");
+    ExcelUtils::generateDocumentation(sheets, "WorkSheets");
+
+
+    //workbook->dynamicCall("ApplyTheme(QString)", "lolka");
+    //workbook->dynamicCall("SaveCopyAs(QVariant)", "lolka");
+    //workbook->dynamicCall("CheckOut(QString)", "params");
+
+
     const int countColumns = 9;
 
     for (const long long uidCategory : DBUtils::get_UIDs_of_TOURNAMENT_CATEGORIES(database, tournamentUID))
@@ -126,6 +136,7 @@ WeighingProtocol::WeighingProtocol(const QSqlDatabase& database, const long long
 
         delete sheet;
     }
+
 
     delete sheets;
     delete workbook;

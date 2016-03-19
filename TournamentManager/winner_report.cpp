@@ -17,7 +17,7 @@ WinnerReport::WinnerReport(const QSqlDatabase& database, const long long tournam
     QAxObject *sheets = workbook->querySubObject("WorkSheets");
 
     QStringList heads;
-    heads << "Место" << "Фамилия, Имя" << "Разряд" << "Регион";
+    heads << "Место" << "Фамилия, Имя" << "Разряд" << "Регион" << "Тренер";
 
 
 
@@ -32,7 +32,7 @@ WinnerReport::WinnerReport(const QSqlDatabase& database, const long long tournam
 
         std::map<QString, QVector<long long> > stdMap = DBUtils::get_weight_and_orderUIDs(database, tournamentUID, type_fk, age_from, age_till, sex_fk).toStdMap();
         if (stdMap.empty()) continue;
-        qDebug() << type_fk << age_from << age_till << sex_fk;
+        //qDebug() << type_fk << age_from << age_till << sex_fk;
 
         int currentRow = 1;
 
@@ -46,14 +46,16 @@ WinnerReport::WinnerReport(const QSqlDatabase& database, const long long tournam
 
 
         ExcelUtils::setValue     (sheet, currentRow, 1, DBUtils::getField(database, "NAME", "TOURNAMENTS", tournamentUID));
+        ExcelUtils::setFontBold(sheet, currentRow, 1, true);
         ExcelUtils::setWrapText  (sheet, currentRow, 1);
         //ExcelUtils::setRowAutoFit(sheet, currentRow);
         ExcelUtils::uniteRange   (sheet, currentRow, 1, currentRow, heads.size());
         //ExcelUtils::setRowAutoFit(sheet, currentRow);
         ExcelUtils::setRowHeight(sheet, currentRow, 30);
+
         ++currentRow;
 
-        ExcelUtils::setValue     (sheet, currentRow, 1, "Список презёров");
+        ExcelUtils::setValue     (sheet, currentRow, 1, "Список призёров");
         ExcelUtils::uniteRange   (sheet, currentRow, 1, currentRow, heads.size());
         ++currentRow;
 
@@ -80,10 +82,10 @@ WinnerReport::WinnerReport(const QSqlDatabase& database, const long long tournam
         {
             const QString& weight = val.first;
 
-            ExcelUtils::setValue     (sheet, currentRow, 1, weight + " кг");
+            ExcelUtils::setValue     (sheet, currentRow, 1, weight);
             ExcelUtils::uniteRange   (sheet, currentRow, 1, currentRow, heads.size());
             ++currentRow;
-            qDebug() << "\t" << weight;
+            //qDebug() << "\t" << weight;
 
             int place = 1;
             for (const long long orderUID : val.second)
@@ -93,11 +95,12 @@ WinnerReport::WinnerReport(const QSqlDatabase& database, const long long tournam
                 {
                     ExcelUtils::setValue(sheet, currentRow, 2, DBUtils::getField(database, "SECOND_NAME", "ORDERS", orderUID) + " " + DBUtils::getField(database, "FIRST_NAME", "ORDERS", orderUID));
                     ExcelUtils::setValue(sheet, currentRow, 3, DBUtils::getField(database, "NAME", "SPORT_CATEGORIES", DBUtils::getField(database, "SPORT_CATEGORY_FK", "ORDERS", orderUID)));
-                    ExcelUtils::setValue(sheet, currentRow, 4,  DBUtils::getField(database, "NAME", "REGIONS", DBUtils::getField(database, "REGION_FK", "ORDERS", orderUID)));
+                    ExcelUtils::setValue(sheet, currentRow, 4, DBUtils::getField(database, "NAME", "REGIONS", DBUtils::getField(database, "REGION_FK", "ORDERS", orderUID)));
+                    ExcelUtils::setValue(sheet, currentRow, 5, DBUtils::getField(database, "NAME", "COACHS", DBUtils::getField(database, "COACH_FK", "ORDERS", orderUID)));
                 }
                 else
                 {
-                    break;
+                    continue;
                 }
                 ExcelUtils::setBorder(sheet, currentRow, 1, currentRow, heads.size());
                 place = qMin(3, place + 1);
