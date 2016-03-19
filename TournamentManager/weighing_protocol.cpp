@@ -121,18 +121,9 @@ WeighingProtocol::WeighingProtocol(const QSqlDatabase& database, const long long
         ++currentRow;
 
 
-        ExcelUtils::setFitToPagesWide(sheet, 1);
+        ExcelUtils::setFitToPagesWide(sheet);
         ExcelUtils::setPageOrientation(sheet, 1);
 
-        for (int i = 0; i < 100; ++i){
-            ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 2);
-            ExcelUtils::setRowHeight(sheet, currentRow, 25);
-            ExcelUtils::setValue(sheet, currentRow, 1, "Зам. главного судьи: ", 0);
-            ExcelUtils::setValue(sheet, currentRow, 4, DBUtils::get_ASSOCIATE_MAIN_JUDGE(database, tournamentUID), 0);
-            ++currentRow;
-        }
-
-        return;  //TODO  DELETE
         delete sheet;
     }
 

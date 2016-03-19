@@ -7,6 +7,7 @@
 #include <QComboBox>
 #include <QTableWidget>
 #include <QLineEdit>
+#include <QCheckBox>
 
 class TournamentGridDialog2 : public QDialog
 {
@@ -41,6 +42,8 @@ private:
     QTableWidget *qTableWidget;
     QString no_special_group = "нет";
     QVector<int> specialGroup;
+
+    QCheckBox * qCheckBox;
 
 public:
     TournamentGridDialog2(const QSqlDatabase &database, long long tournamentUID, QWidget *parent = 0);

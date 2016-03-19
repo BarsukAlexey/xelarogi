@@ -21,8 +21,6 @@ SOURCES += main.cpp\
     databaseexpert.cpp \
     webreportdialog.cpp \
     tournamentmanager.cpp \
-    tournamentgridwidget.cpp \
-    tournamentgriddialog.cpp \
     createtournamentdialog.cpp \
     createtournamentordersdialog.cpp \
     renderareawidget.cpp \
@@ -48,8 +46,6 @@ HEADERS  += mainwindow.h \
     databaseexpert.h \
     webreportdialog.h \
     tournamentmanager.h \
-    tournamentgridwidget.h \
-    tournamentgriddialog.h \
     createtournamentdialog.h \
     createtournamentordersdialog.h \
     renderareawidget.h \
@@ -73,8 +69,6 @@ HEADERS  += mainwindow.h \
 FORMS    += mainwindow.ui \
     handbookdialog.ui \
     webreportdialog.ui \
-    tournamentgridwidget.ui \
-    tournamentgriddialog.ui \
     createtournamentdialog.ui \
     createtournamentordersdialog.ui \
     createtournamentcategoriesdialog.ui \

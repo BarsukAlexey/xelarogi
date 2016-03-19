@@ -283,6 +283,8 @@ void RenderAreaWidget::onSaveInExcel()
 
     countColumns = log2(nodes.last().v) + 1;
     countRows = 2 * (1 << (countColumns - 1)) - 1;
+    int countPlayers = 0;
+    for (const DBUtils::NodeOfTournirGrid& node : nodes) if (!node.isFighing) ++countPlayers;
 
 
 //    QAxObject* excel = new QAxObject( "Excel.Application", this );
@@ -308,6 +310,7 @@ void RenderAreaWidget::onSaveInExcel()
 
 
     int maxRow = offset;
+    int maxColumn = 1;
 
     for (const DBUtils::NodeOfTournirGrid& node : nodes)
     {
@@ -315,6 +318,7 @@ void RenderAreaWidget::onSaveInExcel()
         QPoint p = getCell(node.v);
 
         maxRow = qMax(maxRow, p.x() + 1 + offset);
+        maxColumn = qMax(maxColumn, p.y() + 1);
 
         if (node.isFighing)
             ExcelUtils::setValue(sheet, p.x() + 1 + offset, p.y() + 1, node.name + "\r\n" + node.result);
@@ -342,20 +346,25 @@ void RenderAreaWidget::onSaveInExcel()
                     delete cell;
 
                     maxRow = qMax(maxRow, row + 1 + offset);
+                    maxColumn = qMax(maxColumn, a.y() + 1);
                 }
             }
         }
     }
 
-    for (int i = 1; i < 30; ++i) ExcelUtils::setRowHeight(sheet, i, 50);
-    for (int i = 1; i < 30; ++i) ExcelUtils::setColumnWidth(sheet, i, 50);
-    for (int i = 1; i < 30; ++i) ExcelUtils::setColumnAutoFit(sheet, i);
-    for (int i = 1; i < 30; ++i) ExcelUtils::setRowAutoFit(sheet, i);
+    for (int i = 1; i <= maxRow   ; ++i) ExcelUtils::setRowHeight(sheet, i, 50);
+    for (int i = 1; i <= maxColumn; ++i) ExcelUtils::setColumnWidth(sheet, i, 50);
+    for (int i = 1; i <= maxColumn; ++i) ExcelUtils::setColumnAutoFit(sheet, i);
+    for (int i = 1; i <= maxRow   ; ++i) ExcelUtils::setRowAutoFit(sheet, i);
 
     long long tournamentUID = getTournamentUID();
 
-    ExcelUtils::setValue(sheet, 1, 1, DBUtils::getField(database, "NAME", "TOURNAMENTS", tournamentUID), 0);
-    ExcelUtils::setValue(sheet, 2, 1, getCategoryName(), 0);
+    ExcelUtils::setValue(sheet, 1, 1, DBUtils::getField(database, "NAME", "TOURNAMENTS", tournamentUID));
+    ExcelUtils::uniteRange(sheet, 1, 1, 1, maxColumn);
+    ExcelUtils::setFontBold(sheet, 1, 1, true);
+
+    ExcelUtils::uniteRange(sheet, 2, 1, 2, maxColumn);
+    ExcelUtils::setValue(sheet, 2, 1, getCategoryName());
 
     maxRow += 2;
 
@@ -363,20 +372,23 @@ void RenderAreaWidget::onSaveInExcel()
     ExcelUtils::uniteRange(sheet, maxRow, 1, maxRow, 2);
     ExcelUtils::setRowHeight(sheet, maxRow, 25);
     ExcelUtils::setValue(sheet, maxRow, 1, "Главный судья: ", 0);
-    ExcelUtils::setValue(sheet, maxRow, 4, DBUtils::get_MAIN_JUDGE(database, tournamentUID), 0);
+    ExcelUtils::setValue(sheet, maxRow, 3, DBUtils::get_MAIN_JUDGE(database, tournamentUID), 0);
     ++maxRow;
 
     ExcelUtils::uniteRange(sheet, maxRow, 1, maxRow, 2);
     ExcelUtils::setRowHeight(sheet, maxRow, 25);
     ExcelUtils::setValue(sheet, maxRow, 1, "Главный секретарь: ", 0);
-    ExcelUtils::setValue(sheet, maxRow, 4, DBUtils::get_MAIN_SECRETARY(database, tournamentUID), 0);
+    ExcelUtils::setValue(sheet, maxRow, 3, DBUtils::get_MAIN_SECRETARY(database, tournamentUID), 0);
     ++maxRow;
 
     ExcelUtils::uniteRange(sheet, maxRow, 1, maxRow, 2);
     ExcelUtils::setRowHeight(sheet, maxRow, 25);
     ExcelUtils::setValue(sheet, maxRow, 1, "Зам. главного судьи: ", 0);
-    ExcelUtils::setValue(sheet, maxRow, 4, DBUtils::get_ASSOCIATE_MAIN_JUDGE(database, tournamentUID), 0);
+    ExcelUtils::setValue(sheet, maxRow, 3, DBUtils::get_ASSOCIATE_MAIN_JUDGE(database, tournamentUID), 0);
     ++maxRow;
+
+    ExcelUtils::setPageOrientation(sheet, 2);
+    ExcelUtils::setFitToPagesWide(sheet, countPlayers <= 8? 1 : 2);
 
     //workbook->dynamicCall("Close()");
     delete sheet;

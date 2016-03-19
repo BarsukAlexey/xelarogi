@@ -59,13 +59,17 @@ TournamentGridDialog2::TournamentGridDialog2(const QSqlDatabase &_database, long
     QPushButton *buttonGenerate = new QPushButton("Сгенерировать сетку");
     QPushButton *buttonDelete = new QPushButton("Удалить сетку");
     QLineEdit* filterCategoriesLE = new QLineEdit;
+    qCheckBox = new QCheckBox();
+    qCheckBox->setText("Скрыть категории без спортсменов");
+    qCheckBox->setCheckState(Qt::Checked);
     {
         QGridLayout *mainLayout = new QGridLayout;
         mainLayout->addWidget(filterCategoriesLE, 0, 0, 1, 2);
-        mainLayout->addWidget(qComboBoxSelectCategory, 1, 0, 1, 2);
-        mainLayout->addWidget(qTableWidget, 2, 0, 10, 2);
-        mainLayout->addWidget(buttonDelete, 12, 0);
-        mainLayout->addWidget(buttonGenerate, 12, 1);
+        mainLayout->addWidget(qCheckBox, 1, 0, 1, 2);
+        mainLayout->addWidget(qComboBoxSelectCategory, 2, 0, 1, 2);
+        mainLayout->addWidget(qTableWidget, 3, 0, 10, 2);
+        mainLayout->addWidget(buttonDelete, 13, 0);
+        mainLayout->addWidget(buttonGenerate, 13, 1);
         leftPane->setLayout(mainLayout);
     }
 
@@ -557,11 +561,14 @@ void TournamentGridDialog2::fillCategoryCombobox(QString filterStr)
             QString categoryUID = query.value("UID").toString();
             QString categoryName = query.value("NAME").toString();
 
-            QListWidgetItem* item = new QListWidgetItem();
-            item->setData(Qt::DisplayRole, categoryName);
-            item->setData(Qt::UserRole, categoryUID);
+            if (!qCheckBox->isChecked() || qCheckBox->isChecked() && 0 < DBUtils::getNodes(database, categoryUID.toLongLong()).size())
+            {
+                QListWidgetItem* item = new QListWidgetItem();
+                item->setData(Qt::DisplayRole, categoryName);
+                item->setData(Qt::UserRole, categoryUID);
 
-            qComboBoxSelectCategory->addItem(categoryName, categoryUID);
+                qComboBoxSelectCategory->addItem(categoryName, categoryUID);
+            }
         }
     }
 

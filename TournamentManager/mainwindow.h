@@ -17,7 +17,7 @@
 #include <QTreeWidgetItem>
 
 #include "tournamentmanager.h"
-#include "tournamentgriddialog.h"
+//#include "tournamentgriddialog.h"
 #include "createtournamentdialog.h"
 #include "createtournamentordersdialog.h"
 #include "createtournamentcategoriesdialog.h"
