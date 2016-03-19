@@ -144,21 +144,17 @@ void FightingPairs::printInExcel(QAxObject *sheet, const QVector<DBUtils::Fighin
             ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 3);
             ++currentRow;
 
-            ExcelUtils::setValue(sheet, currentRow, 1, "Вес: " +
-                                 DBUtils::get__WEIGHT_FROM(database, f.TOURNAMENT_CATEGORIES_FK) +
-                                 " - " +
-                                 DBUtils::get__WEIGHT_TILL(database, f.TOURNAMENT_CATEGORIES_FK) +
-                                 " кг"
-                                 );
+            ExcelUtils::setValue(sheet, currentRow, 1, "Вес: " + DBUtils::getNormanWeightRange(database, f.TOURNAMENT_CATEGORIES_FK));
+
             ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 3);
             ++currentRow;
         }
 
         ExcelUtils::setValue(sheet, currentRow, 1, QString::number(pair));
-        ExcelUtils::setValue(sheet, currentRow, 2, DBUtils::getField(database, "SECOND_NAME", "ORDERS", f.UID0) + " " + DBUtils::getField(database, "FIRST_NAME", "ORDERS", f.UID0) + "(" +
+        ExcelUtils::setValue(sheet, currentRow, 2, DBUtils::getField(database, "SECOND_NAME", "ORDERS", f.UID0) + " " + DBUtils::getField(database, "FIRST_NAME", "ORDERS", f.UID0) + " (" +
                              DBUtils::getField(database, "NAME", "REGIONS", DBUtils::getField(database, "REGION_FK", "ORDERS", f.UID0)) +
                              ")");
-        ExcelUtils::setValue(sheet, currentRow, 3, DBUtils::getField(database, "SECOND_NAME", "ORDERS", f.UID1) + " " + DBUtils::getField(database, "FIRST_NAME", "ORDERS", f.UID1) + "(" +
+        ExcelUtils::setValue(sheet, currentRow, 3, DBUtils::getField(database, "SECOND_NAME", "ORDERS", f.UID1) + " " + DBUtils::getField(database, "FIRST_NAME", "ORDERS", f.UID1) + " (" +
                              DBUtils::getField(database, "NAME", "REGIONS", DBUtils::getField(database, "REGION_FK", "ORDERS", f.UID1)) +
                              ")");
         ExcelUtils::setBorder(sheet, currentRow, 1, currentRow, 3);
@@ -221,7 +217,7 @@ void FightingPairs::onGoPress()
     for(QModelIndex index : qListWidget->selectionModel()->selectedIndexes())
     {
         int row = index.row();
-        qDebug() << "row: " << row;
+        //qDebug() << "row: " << row;
         listsOfPairs.push_back(globalListsOfPairs[row]);
     }
 
@@ -251,7 +247,7 @@ void FightingPairs::onGoPress()
     QAxObject *workbook = excel.querySubObject("ActiveWorkBook");
     QAxObject *sheets = workbook->querySubObject("WorkSheets");
 
-    for (int ringCount = ringSpinBox->value(), idRind = 1; 1 <= ringCount; --ringCount, ++idRind)
+    for (int ringCount = ringSpinBox->value(), idRing = 1; 1 <= ringCount; --ringCount, ++idRing)
     {
         int time = 0;
         for (const DBUtils::Fighing& f : fighing)
@@ -282,9 +278,13 @@ void FightingPairs::onGoPress()
 
         sheets->querySubObject("Add");
         QAxObject *sheet = sheets->querySubObject( "Item( int )", 1);
-        printInExcel(sheet, curFighing, idRind);
-        printInJSON(curFighing, idRind, existingDirectory);
+        sheet->setProperty("Name", "Ринг " + QString::number(idRing));
+        printInExcel(sheet, curFighing, idRing);
+        printInJSON(curFighing, idRing, existingDirectory);
 
+        ExcelUtils::setPageOrientation(sheet, 1);
+        ExcelUtils::setFitToPagesWide(sheet);
+        ExcelUtils::setCenterHorizontally(sheet, true);
         delete sheet;
     }
 

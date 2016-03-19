@@ -17,7 +17,7 @@ WeighingProtocol::WeighingProtocol(const QSqlDatabase& database, const long long
     QAxWidget excel("Excel.Application");
     excel.setProperty("Visible", true);
     QAxObject *workbooks = excel.querySubObject("WorkBooks");
-    workbooks->dynamicCall("Add", "dffdfdd");
+    workbooks->dynamicCall("Add");
     QAxObject *workbook = excel.querySubObject("ActiveWorkBook");
     QAxObject *sheets = workbook->querySubObject("WorkSheets");
 
@@ -126,6 +126,7 @@ WeighingProtocol::WeighingProtocol(const QSqlDatabase& database, const long long
 
         ExcelUtils::setFitToPagesWide(sheet);
         ExcelUtils::setPageOrientation(sheet, 1);
+        ExcelUtils::setCenterHorizontally(sheet, true);
 
         delete sheet;
     }

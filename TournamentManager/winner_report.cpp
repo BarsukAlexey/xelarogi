@@ -131,6 +131,7 @@ WinnerReport::WinnerReport(const QSqlDatabase& database, const long long tournam
         ++currentRow;
 
         ExcelUtils::setPageOrientation(sheet, 1);
+        ExcelUtils::setCenterHorizontally(sheet, true);
 
         delete sheet;
     }

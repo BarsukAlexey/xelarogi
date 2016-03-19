@@ -160,3 +160,10 @@ void ExcelUtils::saveAsFile(QAxObject* workbook, QString path, QString fileName)
 
     workbook->dynamicCall("SaveAs(QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant)", lstParam);
 }
+
+void ExcelUtils::setCenterHorizontally(QAxObject* sheet, bool flag)
+{
+    QAxObject *pageSetup = sheet->querySubObject("PageSetup");
+    pageSetup->dynamicCall("SetCenterHorizontally(bool)", flag);
+    delete pageSetup;
+}

@@ -428,7 +428,7 @@ QString DBUtils::getNormanWeightRange(const QSqlDatabase& database, long long ui
 
     if (qAbs(a) < 1e-7)
         return "до " + bb + " кг";
-    if (300 - 1e-7 <= b)
+    if (200 - 1e-7 <= b)
         return "свыше " + aa + " кг";
     return "от " + aa + " до " + bb + " кг";
 }

@@ -26,6 +26,8 @@ public:
     static void setFitToPagesWide(QAxObject* sheet, int countPageDown = 100);
 
     static void saveAsFile(QAxObject* workbook, QString path, QString fileName);
+    static void setCenterHorizontally(QAxObject* workbook, bool flag);
+
 };
 
 #endif // EXCELUTILS_H

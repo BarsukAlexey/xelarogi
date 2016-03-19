@@ -139,6 +139,10 @@ TournamentGridDialog2::TournamentGridDialog2(const QSqlDatabase &_database, long
 
     //showMaximized();
 
+    connect(qCheckBox, &QCheckBox::stateChanged, [this, filterCategoriesLE] ()
+    {
+        fillCategoryCombobox(filterCategoriesLE->text());
+    });
 
     setWindowFlags(windowFlags() | Qt::WindowMaximizeButtonHint);
 }
