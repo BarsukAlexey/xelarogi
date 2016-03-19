@@ -17,18 +17,11 @@ WeighingProtocol::WeighingProtocol(const QSqlDatabase& database, const long long
     QAxWidget excel("Excel.Application");
     excel.setProperty("Visible", true);
     QAxObject *workbooks = excel.querySubObject("WorkBooks");
-    workbooks->dynamicCall("Add");
+    workbooks->dynamicCall("Add", "dffdfdd");
     QAxObject *workbook = excel.querySubObject("ActiveWorkBook");
     QAxObject *sheets = workbook->querySubObject("WorkSheets");
 
-    ExcelUtils::generateDocumentation(workbooks, "workbooks");
-    ExcelUtils::generateDocumentation(workbook, "ActiveWorkBook");
-    ExcelUtils::generateDocumentation(sheets, "WorkSheets");
 
-
-    //workbook->dynamicCall("ApplyTheme(QString)", "lolka");
-    //workbook->dynamicCall("SaveCopyAs(QVariant)", "lolka");
-    //workbook->dynamicCall("CheckOut(QString)", "params");
 
 
     const int countColumns = 9;

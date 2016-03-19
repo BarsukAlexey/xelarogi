@@ -4,6 +4,7 @@
 #include <QFile>
 #include <QDebug>
 #include <QVariant>
+#include <QDir>
 
 
 
@@ -134,4 +135,28 @@ void ExcelUtils::setFitToPagesWide(QAxObject* sheet, int countPageDown)
     pageSetup->dynamicCall("FitToPagesTall", countPageDown); // В 100 страницы по высоте
     pageSetup->dynamicCall("FitToPagesWide", 1); // В 1 страницу по ширине
     delete pageSetup;
+}
+
+void ExcelUtils::saveAsFile(QAxObject* workbook, QString path, QString fileName)
+{
+    path = QDir::toNativeSeparators(path);
+    if (!path.endsWith(QDir::separator())) path += QDir::separator();
+    path = QDir::toNativeSeparators(path);
+
+
+    QList<QVariant> lstParam;
+    lstParam.append(path + fileName);
+    lstParam.append(-4143);
+    lstParam.append("");
+    lstParam.append("");
+    lstParam.append(false);
+    lstParam.append(false);
+    lstParam.append(1);
+    lstParam.append(2);
+    lstParam.append(false);
+    lstParam.append(false);
+    lstParam.append(false);
+    lstParam.append(false);
+
+    workbook->dynamicCall("SaveAs(QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant)", lstParam);
 }

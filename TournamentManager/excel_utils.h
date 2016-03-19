@@ -24,6 +24,8 @@ public:
 
     static void setFontBold(QAxObject* sheet, int row, int column, bool isBold);
     static void setFitToPagesWide(QAxObject* sheet, int countPageDown = 100);
+
+    static void saveAsFile(QAxObject* workbook, QString path, QString fileName);
 };
 
 #endif // EXCELUTILS_H

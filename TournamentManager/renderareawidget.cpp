@@ -1,3 +1,4 @@
+#include "excel_utils.h"
 #include "renderareawidget.h"
 
 #include <QPainter>
@@ -23,8 +24,7 @@
 #include <QDebug>
 #include <QAxObject>
 #include <QAxWidget>
-
-//#include "QVariant"
+#include <QFileDialog>
 
 
 RenderAreaWidget::RenderAreaWidget(QWidget *parent, int widthCell, int heightCell, const QSqlDatabase &_database)
@@ -274,9 +274,16 @@ void RenderAreaWidget::heightChanged(int height)
     repaint();
 }
 
-#include "excel_utils.h"
+
+
 void RenderAreaWidget::onSaveInExcel()
 {
+
+    QString directoryPath = QFileDialog::getExistingDirectory(this, tr("Выберите папку"), NULL, QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+    if (directoryPath.isNull()) return;
+    //qDebug() << dir;
+
+
     QVector<DBUtils::NodeOfTournirGrid> nodes = DBUtils::getNodes(database, tournamentCategories);
     if (nodes.empty()) return;
     qSort(nodes);
@@ -390,11 +397,17 @@ void RenderAreaWidget::onSaveInExcel()
     ExcelUtils::setPageOrientation(sheet, 2);
     ExcelUtils::setFitToPagesWide(sheet, countPlayers <= 8? 1 : 2);
 
-    //workbook->dynamicCall("Close()");
+
+
+    directoryPath = QDir::toNativeSeparators(directoryPath);
+    if (!directoryPath.endsWith(QDir::separator())) directoryPath += QDir::separator();
+    directoryPath = QDir::toNativeSeparators(directoryPath);
+    ExcelUtils::saveAsFile(workbook, directoryPath, sheetName + ".xls");
+
     delete sheet;
     delete sheets;
     delete workbook;
     delete workbooks;
-    //excel->dynamicCall("Quit()");
+    excel.dynamicCall("Quit()");
     //delete excel;
 }

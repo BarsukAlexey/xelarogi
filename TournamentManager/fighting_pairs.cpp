@@ -208,6 +208,7 @@ void FightingPairs::printInJSON(const QVector<DBUtils::Fighing>& fighting, int r
         return;
     }
     qDebug() << "writing: " << saveFile.write(QJsonDocument(arr).toJson()) << "БайТ";
+    qDebug() << "writing in: " << path;
 }
 
 
