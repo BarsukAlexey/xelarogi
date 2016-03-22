@@ -599,11 +599,16 @@ void CreateTournamentOrdersDialog::addSearchFilters()
     connect(ui->filterSecondNameLE, &QLineEdit::textChanged, [this] (const QString& secondNameMask)
     {
         QSqlRelationalTableModel* model = dynamic_cast<QSqlRelationalTableModel*>(ui->tableView->model());
-        model->setFilter(QString("SECOND_NAME LIKE '%%1%' "
-                                 "AND TOURNAMENT_CATEGORY_FK IN %2 "
+        model->setFilter(QString("ORDERS.SECOND_NAME LIKE '%%1%' "
+                                 "AND ORDERS.UID IN %2 "
                                  "AND ORDERS.FIRST_NAME LIKE '%%3%' "
+                                 "AND ORDERS.UID IN %4 "
+                                 "AND ORDERS.UID IN %5 "
                                  "AND IS_VALID = 1 ")
-                         .arg(secondNameMask, getAllowTournamentCategories(), ui->filterFirstNameLE->text())
+                         .arg(secondNameMask, getAllowOrderUIDsByCoach(ui->filterCoachLE->text()),
+                              ui->filterFirstNameLE->text(), getAllowOrderUIDsByRegion(ui->filterRegionLE->text()),
+                              getAllowOrderUIDsByRegionUnit(ui->filterRegionUintLE->text())
+                              )
                          );
         if (!model->select())
             qDebug() << model->lastError().text();
@@ -611,11 +616,69 @@ void CreateTournamentOrdersDialog::addSearchFilters()
     connect(ui->filterFirstNameLE, &QLineEdit::textChanged, [this] (const QString& firstNameMask)
     {
         QSqlRelationalTableModel* model = dynamic_cast<QSqlRelationalTableModel*>(ui->tableView->model());
-        model->setFilter(QString("SECOND_NAME LIKE '%%1%' "
-                                 "AND TOURNAMENT_CATEGORY_FK IN %2 "
+        model->setFilter(QString("ORDERS.SECOND_NAME LIKE '%%1%' "
+                                 "AND ORDERS.UID IN %2 "
                                  "AND ORDERS.FIRST_NAME LIKE '%%3%' "
+                                 "AND ORDERS.UID IN %4 "
+                                 "AND ORDERS.UID IN %5 "
                                  "AND IS_VALID = 1 ")
-                         .arg(ui->filterSecondNameLE->text(), getAllowTournamentCategories(), firstNameMask)
+                         .arg(ui->filterSecondNameLE->text(), getAllowOrderUIDsByCoach(ui->filterCoachLE->text()),
+                              firstNameMask, getAllowOrderUIDsByRegion(ui->filterRegionLE->text()),
+                              getAllowOrderUIDsByRegionUnit(ui->filterRegionUintLE->text())
+                              )
+                         );
+        if (!model->select())
+            qDebug() << model->lastError().text();
+    });
+    connect(ui->filterCoachLE, &QLineEdit::textChanged, [this] (const QString& coachNameMask)
+    {
+        QSqlRelationalTableModel* model = dynamic_cast<QSqlRelationalTableModel*>(ui->tableView->model());
+        model->setFilter(QString("ORDERS.UID IN %1 "
+                                 "AND ORDERS.SECOND_NAME LIKE '%%2%' "
+                                 "AND ORDERS.FIRST_NAME LIKE '%%3%' "
+                                 "AND ORDERS.UID IN %4 "
+                                 "AND ORDERS.UID IN %5 "
+                                 "AND IS_VALID = 1 ")
+                         .arg(getAllowOrderUIDsByCoach(coachNameMask), ui->filterSecondNameLE->text(),
+                              ui->filterFirstNameLE->text(), getAllowOrderUIDsByRegion(ui->filterRegionLE->text()),
+                              getAllowOrderUIDsByRegionUnit(ui->filterRegionUintLE->text())
+                              )
+                         );
+        if (!model->select())
+            qDebug() << model->lastError().text();
+    });
+    connect(ui->filterRegionLE, &QLineEdit::textChanged, [this] (const QString& regionNameMask)
+    {
+        QSqlRelationalTableModel* model = dynamic_cast<QSqlRelationalTableModel*>(ui->tableView->model());
+        model->setFilter(QString("ORDERS.UID IN %1 "
+                                 "AND ORDERS.SECOND_NAME LIKE '%%2%' "
+                                 "AND ORDERS.FIRST_NAME LIKE '%%3%' "
+                                 "AND ORDERS.UID IN %4 "
+                                 "AND ORDERS.UID IN %5 "
+                                 "AND IS_VALID = 1 ")
+                         .arg(getAllowOrderUIDsByCoach(ui->filterCoachLE->text()),
+                              ui->filterSecondNameLE->text(), ui->filterFirstNameLE->text(),
+                              getAllowOrderUIDsByRegion(regionNameMask),
+                              getAllowOrderUIDsByRegionUnit(ui->filterRegionUintLE->text())
+                              )
+                         );
+        if (!model->select())
+            qDebug() << model->lastError().text();
+    });
+    connect(ui->filterRegionUintLE, &QLineEdit::textChanged, [this] (const QString& regionUnitNameMask)
+    {
+        QSqlRelationalTableModel* model = dynamic_cast<QSqlRelationalTableModel*>(ui->tableView->model());
+        model->setFilter(QString("ORDERS.UID IN %1 "
+                                 "AND ORDERS.SECOND_NAME LIKE '%%2%' "
+                                 "AND ORDERS.FIRST_NAME LIKE '%%3%' "
+                                 "AND ORDERS.UID IN %4 "
+                                 "AND ORDERS.UID IN %5 "
+                                 "AND IS_VALID = 1 ")
+                         .arg(getAllowOrderUIDsByCoach(ui->filterCoachLE->text()),
+                              ui->filterSecondNameLE->text(), ui->filterFirstNameLE->text(),
+                              getAllowOrderUIDsByRegion(ui->filterRegionLE->text()),
+                              getAllowOrderUIDsByRegionUnit(regionUnitNameMask)
+                              )
                          );
         if (!model->select())
             qDebug() << model->lastError().text();
@@ -668,6 +731,93 @@ QString CreateTournamentOrdersDialog::getAllowTournamentCategories()
     allowTournamentCategories += ")";
 
     return allowTournamentCategories;
+}
+
+QString CreateTournamentOrdersDialog::getAllowOrderUIDsByCoach(const QString &coachNameMask)
+{
+    QString allowedOrders = "(-100";
+    QSqlQuery query;
+    if (!query.prepare("SELECT ORDERS.UID "
+                       "FROM ORDERS "
+                       "    LEFT JOIN COACHS ON COACHS.UID = ORDERS.COACH_FK "
+                       "    LEFT JOIN TOURNAMENT_CATEGORIES ON TOURNAMENT_CATEGORIES.UID = ORDERS.TOURNAMENT_CATEGORY_FK "
+                       "WHERE"
+                       "    TOURNAMENT_CATEGORIES.TOURNAMENT_FK = ? AND "
+                       "    COACHS.NAME LIKE '%" + coachNameMask + "%' "))
+        qDebug() << query.lastError().text();
+    query.bindValue(0, mTournamentUID);
+
+    if (query.exec())
+    {
+        while (query.next())
+        {
+            allowedOrders += ", " + query.value(0).toString();
+        }
+    }
+    else
+        qDebug() << query.lastError().text();
+
+    allowedOrders += ")";
+
+    return allowedOrders;
+}
+
+QString CreateTournamentOrdersDialog::getAllowOrderUIDsByRegion(const QString &regionNameMask)
+{
+    QString allowedOrders = "(-100";
+    QSqlQuery query;
+    if (!query.prepare("SELECT ORDERS.UID "
+                       "FROM ORDERS "
+                       "    LEFT JOIN REGIONS ON REGIONS.UID = ORDERS.REGION_FK "
+                       "    LEFT JOIN TOURNAMENT_CATEGORIES ON TOURNAMENT_CATEGORIES.UID = ORDERS.TOURNAMENT_CATEGORY_FK "
+                       "WHERE"
+                       "    TOURNAMENT_CATEGORIES.TOURNAMENT_FK = ? AND "
+                       "    REGIONS.NAME LIKE '%" + regionNameMask + "%' "))
+        qDebug() << query.lastError().text();
+    query.bindValue(0, mTournamentUID);
+
+    if (query.exec())
+    {
+        while (query.next())
+        {
+            allowedOrders += ", " + query.value(0).toString();
+        }
+    }
+    else
+        qDebug() << query.lastError().text();
+
+    allowedOrders += ")";
+
+    return allowedOrders;
+}
+
+QString CreateTournamentOrdersDialog::getAllowOrderUIDsByRegionUnit(const QString &regionUnitNameMask)
+{
+    QString allowedOrders = "(-100";
+    QSqlQuery query;
+    if (!query.prepare("SELECT ORDERS.UID "
+                       "FROM ORDERS "
+                       "    LEFT JOIN REGION_UNITS ON REGION_UNITS.UID = ORDERS.REGION_UNIT_FK "
+                       "    LEFT JOIN TOURNAMENT_CATEGORIES ON TOURNAMENT_CATEGORIES.UID = ORDERS.TOURNAMENT_CATEGORY_FK "
+                       "WHERE"
+                       "    TOURNAMENT_CATEGORIES.TOURNAMENT_FK = ? AND "
+                       "    REGION_UNITS.NAME LIKE '%" + regionUnitNameMask + "%' "))
+        qDebug() << query.lastError().text();
+    query.bindValue(0, mTournamentUID);
+
+    if (query.exec())
+    {
+        while (query.next())
+        {
+            allowedOrders += ", " + query.value(0).toString();
+        }
+    }
+    else
+        qDebug() << query.lastError().text();
+
+    allowedOrders += ")";
+
+    return allowedOrders;
 }
 
 QString CreateTournamentOrdersDialog::getTournamentName()

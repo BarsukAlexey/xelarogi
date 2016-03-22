@@ -57,6 +57,9 @@ private:
     void addSearchFilters();
     void setComboBoxDependencies();
     QString getAllowTournamentCategories();
+    QString getAllowOrderUIDsByCoach(const QString& coachNameMask);
+    QString getAllowOrderUIDsByRegion(const QString& regionNameMask);
+    QString getAllowOrderUIDsByRegionUnit(const QString& regionUnitNameMask);
     QString getTournamentName();
 
     long long getCountryUID(QString countryName);
