@@ -293,15 +293,6 @@ void RenderAreaWidget::onSaveInExcel()
     int countPlayers = 0;
     for (const DBUtils::NodeOfTournirGrid& node : nodes) if (!node.isFighing) ++countPlayers;
 
-
-//    QAxObject* excel = new QAxObject( "Excel.Application", this );
-//    excel->setProperty("Visible", true);
-//    QAxObject* workbooks = excel->querySubObject( "Workbooks" );
-//    QAxObject* workbook = workbooks->querySubObject( "Open(const QString&)", "D:/test_t.xlsx" );
-//    QAxObject* sheets = workbook->querySubObject( "Sheets" );
-//    int sheetNumber = 1;
-//    QAxObject* sheet = sheets->querySubObject( "Item( int )", sheetNumber );
-
     QAxWidget excel("Excel.Application");
     excel.setProperty("Visible", true);
     QAxObject *workbooks = excel.querySubObject("WorkBooks");
@@ -328,9 +319,9 @@ void RenderAreaWidget::onSaveInExcel()
         maxColumn = qMax(maxColumn, p.y() + 1);
 
         if (node.isFighing)
-            ExcelUtils::setValue(sheet, p.x() + 1 + offset, p.y() + 1, node.name + "\r\n" + node.result);
+            ExcelUtils::setValue(sheet, p.x() + 1 + offset, p.y() + 1, node.name + "\n" + node.result);
         else
-            ExcelUtils::setValue(sheet, p.x() + 1 + offset, p.y() + 1, node.name + "\r\n" + node.region);
+            ExcelUtils::setValue(sheet, p.x() + 1 + offset, p.y() + 1, node.name + "\n" + node.region);
 
         ExcelUtils::setBorder(sheet, p.x() + 1 + offset, p.y() + 1, p.x() + 1 + offset, p.y() + 1, 3);
 
@@ -366,9 +357,9 @@ void RenderAreaWidget::onSaveInExcel()
 
     long long tournamentUID = getTournamentUID();
 
-    ExcelUtils::setValue(sheet, 1, 1, DBUtils::getField(database, "NAME", "TOURNAMENTS", tournamentUID));
-    ExcelUtils::uniteRange(sheet, 1, 1, 1, maxColumn);
-    ExcelUtils::setFontBold(sheet, 1, 1, true);
+    maxColumn = qMax(4, maxColumn);
+
+    ExcelUtils::setTournamentName(sheet, DBUtils::getTournamentNameAsHeadOfDocument(database, tournamentUID), 1, 1, 1, maxColumn);
 
     ExcelUtils::uniteRange(sheet, 2, 1, 2, maxColumn);
     ExcelUtils::setValue(sheet, 2, 1, getCategoryName());
@@ -396,6 +387,7 @@ void RenderAreaWidget::onSaveInExcel()
 
     ExcelUtils::setPageOrientation(sheet, 2);
     ExcelUtils::setFitToPagesWide(sheet, countPlayers <= 8? 1 : 2);
+    ExcelUtils::setCenterHorizontally(sheet, true);
 
 
 

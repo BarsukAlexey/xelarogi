@@ -167,3 +167,11 @@ void ExcelUtils::setCenterHorizontally(QAxObject* sheet, bool flag)
     pageSetup->dynamicCall("SetCenterHorizontally(bool)", flag);
     delete pageSetup;
 }
+
+void ExcelUtils::setTournamentName(QAxObject* sheet, QString text, int row0, int column0, int row1, int column1)
+{
+    ExcelUtils::setValue(sheet, row0, column0, text);
+    ExcelUtils::setFontBold(sheet, row0, column0, true);
+    ExcelUtils::uniteRange(sheet, row0, column0, row1, column1);
+    ExcelUtils::setRowHeight(sheet, row0, 50);
+}

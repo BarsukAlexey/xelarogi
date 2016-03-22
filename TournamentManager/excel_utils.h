@@ -28,6 +28,7 @@ public:
     static void saveAsFile(QAxObject* workbook, QString path, QString fileName);
     static void setCenterHorizontally(QAxObject* workbook, bool flag);
 
+    static void setTournamentName(QAxObject* sheet, QString text, int row0, int column0, int row1, int column1);
 };
 
 #endif // EXCELUTILS_H

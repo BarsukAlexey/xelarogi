@@ -222,6 +222,7 @@ void MainWindow::updateTournamentTreeWidget()
 
     QSqlQuery query;
     query.prepare("SELECT * FROM TOURNAMENTS ORDER BY DATE_BEGIN ASC");
+    //query.prepare("SELECT * FROM TOURNAMENTS");
     int currentYear = -1000;
     if (query.exec())
     {
@@ -300,12 +301,13 @@ void MainWindow::updateTournamentTreeWidget()
     {
         QMenu menu;
 
-        connect(menu.addAction("Добавить"), &QAction::triggered, [this, pos] ()
-        {
-            CreateTournamentDialog dlg(this);
-            dlg.exec();
-            updateTournamentTreeWidget();
-        });
+        // я закоментировал. пусть пока добавляет турниры через основное меню, ибо в БД я добавил пару полей
+//        connect(menu.addAction("Добавить"), &QAction::triggered, [this, pos] ()
+//        {
+//            CreateTournamentDialog dlg(this);
+//            dlg.exec();
+//            updateTournamentTreeWidget();
+//        });
         connect(menu.addAction("Удалить"), &QAction::triggered, [this, pos] ()
         {
             QModelIndex index = ui->tournamentTreeWidget->indexAt(pos);
