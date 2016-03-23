@@ -58,8 +58,11 @@ private:
     void setComboBoxDependencies();
     QString getAllowTournamentCategories();
     QString getAllowOrderUIDsByCoach(const QString& coachNameMask);
+    QString getAllowOrderUIDsByCountry(const QString& countryNameMask);
     QString getAllowOrderUIDsByRegion(const QString& regionNameMask);
     QString getAllowOrderUIDsByRegionUnit(const QString& regionUnitNameMask);
+    QString getAllowOrderUIDsByGender(const QString& genderMask);
+    QString getAllowOrderUIDsbyTournamentCategory(const QString& tournamentCategoryMask);
     QString getTournamentName();
 
     long long getCountryUID(QString countryName);

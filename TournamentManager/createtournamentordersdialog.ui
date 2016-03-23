@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>828</width>
-    <height>522</height>
+    <width>845</width>
+    <height>601</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -74,20 +74,74 @@
       </layout>
      </item>
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
+      <layout class="QVBoxLayout" name="verticalLayout_6">
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_8">
          <item>
-          <widget class="QLineEdit" name="filterSecondNameLE">
-           <property name="placeholderText">
-            <string>Фамилия (фильтр)</string>
-           </property>
-          </widget>
+          <layout class="QVBoxLayout" name="verticalLayout_3">
+           <item>
+            <widget class="QLineEdit" name="filterSecondNameLE">
+             <property name="placeholderText">
+              <string>Фамилия (фильтр)</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="filterCountryLE">
+             <property name="placeholderText">
+              <string>Страна (фильтр)</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
          <item>
-          <widget class="QLineEdit" name="filterFirstNameLE">
+          <layout class="QVBoxLayout" name="verticalLayout_4">
+           <item>
+            <widget class="QLineEdit" name="filterFirstNameLE">
+             <property name="placeholderText">
+              <string>Имя  (фильтр)</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="filterRegionLE">
+             <property name="placeholderText">
+              <string>Регион (фильтр)</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_5">
+           <item>
+            <widget class="QLineEdit" name="filterSexLE">
+             <property name="placeholderText">
+              <string>Пол (фильтр)</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="filterRegionUintLE">
+             <property name="placeholderText">
+              <string>Населенный пункт (фильтр)</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_9">
+         <item>
+          <widget class="QLineEdit" name="filterTournamentCategoriesLE">
+           <property name="inputMask">
+            <string/>
+           </property>
            <property name="placeholderText">
-            <string>Имя  (фильтр)</string>
+            <string>Категория турнира (фильтр)</string>
            </property>
           </widget>
          </item>
@@ -97,57 +151,6 @@
             <string>Тренер (фильтр)</string>
            </property>
           </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="filterRegionLE">
-           <property name="placeholderText">
-            <string>Регион (фильтр)</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="filterRegionUintLE">
-           <property name="placeholderText">
-            <string>Населенный пункт (фильтр)</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_5">
-         <item>
-          <widget class="QLabel" name="label_4">
-           <property name="text">
-            <string>Раздел соревнования</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QComboBox" name="filterTypeCB"/>
-         </item>
-         <item>
-          <widget class="QLabel" name="label_5">
-           <property name="text">
-            <string>Категория турнира</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QComboBox" name="filterTournamentCategoriesCB"/>
-         </item>
-         <item>
-          <spacer name="horizontalSpacer_5">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>40</width>
-             <height>20</height>
-            </size>
-           </property>
-          </spacer>
          </item>
         </layout>
        </item>

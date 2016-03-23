@@ -42,19 +42,20 @@ public:
     QSpacerItem *horizontalSpacer_2;
     QHBoxLayout *horizontalLayout_3;
     QLabel *label_2;
-    QVBoxLayout *verticalLayout_2;
+    QVBoxLayout *verticalLayout_6;
     QHBoxLayout *horizontalLayout_8;
+    QVBoxLayout *verticalLayout_3;
     QLineEdit *filterSecondNameLE;
+    QLineEdit *filterCountryLE;
+    QVBoxLayout *verticalLayout_4;
     QLineEdit *filterFirstNameLE;
-    QLineEdit *filterCoachLE;
     QLineEdit *filterRegionLE;
+    QVBoxLayout *verticalLayout_5;
+    QLineEdit *filterSexLE;
     QLineEdit *filterRegionUintLE;
-    QHBoxLayout *horizontalLayout_5;
-    QLabel *label_4;
-    QComboBox *filterTypeCB;
-    QLabel *label_5;
-    QComboBox *filterTournamentCategoriesCB;
-    QSpacerItem *horizontalSpacer_5;
+    QHBoxLayout *horizontalLayout_9;
+    QLineEdit *filterTournamentCategoriesLE;
+    QLineEdit *filterCoachLE;
     QSplitter *splitter;
     QTableView *tableView;
     QWidget *widget;
@@ -106,7 +107,7 @@ public:
     {
         if (CreateTournamentOrdersDialog->objectName().isEmpty())
             CreateTournamentOrdersDialog->setObjectName(QStringLiteral("CreateTournamentOrdersDialog"));
-        CreateTournamentOrdersDialog->resize(828, 522);
+        CreateTournamentOrdersDialog->resize(845, 601);
         gridLayout = new QGridLayout(CreateTournamentOrdersDialog);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
         verticalLayout = new QVBoxLayout();
@@ -146,69 +147,75 @@ public:
 
         verticalLayout->addLayout(horizontalLayout_3);
 
-        verticalLayout_2 = new QVBoxLayout();
-        verticalLayout_2->setObjectName(QStringLiteral("verticalLayout_2"));
+        verticalLayout_6 = new QVBoxLayout();
+        verticalLayout_6->setObjectName(QStringLiteral("verticalLayout_6"));
         horizontalLayout_8 = new QHBoxLayout();
         horizontalLayout_8->setObjectName(QStringLiteral("horizontalLayout_8"));
+        verticalLayout_3 = new QVBoxLayout();
+        verticalLayout_3->setObjectName(QStringLiteral("verticalLayout_3"));
         filterSecondNameLE = new QLineEdit(CreateTournamentOrdersDialog);
         filterSecondNameLE->setObjectName(QStringLiteral("filterSecondNameLE"));
 
-        horizontalLayout_8->addWidget(filterSecondNameLE);
+        verticalLayout_3->addWidget(filterSecondNameLE);
 
+        filterCountryLE = new QLineEdit(CreateTournamentOrdersDialog);
+        filterCountryLE->setObjectName(QStringLiteral("filterCountryLE"));
+
+        verticalLayout_3->addWidget(filterCountryLE);
+
+
+        horizontalLayout_8->addLayout(verticalLayout_3);
+
+        verticalLayout_4 = new QVBoxLayout();
+        verticalLayout_4->setObjectName(QStringLiteral("verticalLayout_4"));
         filterFirstNameLE = new QLineEdit(CreateTournamentOrdersDialog);
         filterFirstNameLE->setObjectName(QStringLiteral("filterFirstNameLE"));
 
-        horizontalLayout_8->addWidget(filterFirstNameLE);
-
-        filterCoachLE = new QLineEdit(CreateTournamentOrdersDialog);
-        filterCoachLE->setObjectName(QStringLiteral("filterCoachLE"));
-
-        horizontalLayout_8->addWidget(filterCoachLE);
+        verticalLayout_4->addWidget(filterFirstNameLE);
 
         filterRegionLE = new QLineEdit(CreateTournamentOrdersDialog);
         filterRegionLE->setObjectName(QStringLiteral("filterRegionLE"));
 
-        horizontalLayout_8->addWidget(filterRegionLE);
+        verticalLayout_4->addWidget(filterRegionLE);
+
+
+        horizontalLayout_8->addLayout(verticalLayout_4);
+
+        verticalLayout_5 = new QVBoxLayout();
+        verticalLayout_5->setObjectName(QStringLiteral("verticalLayout_5"));
+        filterSexLE = new QLineEdit(CreateTournamentOrdersDialog);
+        filterSexLE->setObjectName(QStringLiteral("filterSexLE"));
+
+        verticalLayout_5->addWidget(filterSexLE);
 
         filterRegionUintLE = new QLineEdit(CreateTournamentOrdersDialog);
         filterRegionUintLE->setObjectName(QStringLiteral("filterRegionUintLE"));
 
-        horizontalLayout_8->addWidget(filterRegionUintLE);
+        verticalLayout_5->addWidget(filterRegionUintLE);
 
 
-        verticalLayout_2->addLayout(horizontalLayout_8);
-
-        horizontalLayout_5 = new QHBoxLayout();
-        horizontalLayout_5->setObjectName(QStringLiteral("horizontalLayout_5"));
-        label_4 = new QLabel(CreateTournamentOrdersDialog);
-        label_4->setObjectName(QStringLiteral("label_4"));
-
-        horizontalLayout_5->addWidget(label_4);
-
-        filterTypeCB = new QComboBox(CreateTournamentOrdersDialog);
-        filterTypeCB->setObjectName(QStringLiteral("filterTypeCB"));
-
-        horizontalLayout_5->addWidget(filterTypeCB);
-
-        label_5 = new QLabel(CreateTournamentOrdersDialog);
-        label_5->setObjectName(QStringLiteral("label_5"));
-
-        horizontalLayout_5->addWidget(label_5);
-
-        filterTournamentCategoriesCB = new QComboBox(CreateTournamentOrdersDialog);
-        filterTournamentCategoriesCB->setObjectName(QStringLiteral("filterTournamentCategoriesCB"));
-
-        horizontalLayout_5->addWidget(filterTournamentCategoriesCB);
-
-        horizontalSpacer_5 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        horizontalLayout_5->addItem(horizontalSpacer_5);
+        horizontalLayout_8->addLayout(verticalLayout_5);
 
 
-        verticalLayout_2->addLayout(horizontalLayout_5);
+        verticalLayout_6->addLayout(horizontalLayout_8);
+
+        horizontalLayout_9 = new QHBoxLayout();
+        horizontalLayout_9->setObjectName(QStringLiteral("horizontalLayout_9"));
+        filterTournamentCategoriesLE = new QLineEdit(CreateTournamentOrdersDialog);
+        filterTournamentCategoriesLE->setObjectName(QStringLiteral("filterTournamentCategoriesLE"));
+
+        horizontalLayout_9->addWidget(filterTournamentCategoriesLE);
+
+        filterCoachLE = new QLineEdit(CreateTournamentOrdersDialog);
+        filterCoachLE->setObjectName(QStringLiteral("filterCoachLE"));
+
+        horizontalLayout_9->addWidget(filterCoachLE);
 
 
-        verticalLayout->addLayout(verticalLayout_2);
+        verticalLayout_6->addLayout(horizontalLayout_9);
+
+
+        verticalLayout->addLayout(verticalLayout_6);
 
         splitter = new QSplitter(CreateTournamentOrdersDialog);
         splitter->setObjectName(QStringLiteral("splitter"));
@@ -472,12 +479,14 @@ public:
         label->setText(QApplication::translate("CreateTournamentOrdersDialog", "\320\241\320\277\321\200\320\260\320\262\320\276\321\207\320\275\320\270\320\272", 0));
         label_2->setText(QApplication::translate("CreateTournamentOrdersDialog", "\320\244\320\270\320\273\321\214\321\202\321\200", 0));
         filterSecondNameLE->setPlaceholderText(QApplication::translate("CreateTournamentOrdersDialog", "\320\244\320\260\320\274\320\270\320\273\320\270\321\217 (\321\204\320\270\320\273\321\214\321\202\321\200)", 0));
+        filterCountryLE->setPlaceholderText(QApplication::translate("CreateTournamentOrdersDialog", "\320\241\321\202\321\200\320\260\320\275\320\260 (\321\204\320\270\320\273\321\214\321\202\321\200)", 0));
         filterFirstNameLE->setPlaceholderText(QApplication::translate("CreateTournamentOrdersDialog", "\320\230\320\274\321\217  (\321\204\320\270\320\273\321\214\321\202\321\200)", 0));
-        filterCoachLE->setPlaceholderText(QApplication::translate("CreateTournamentOrdersDialog", "\320\242\321\200\320\265\320\275\320\265\321\200 (\321\204\320\270\320\273\321\214\321\202\321\200)", 0));
         filterRegionLE->setPlaceholderText(QApplication::translate("CreateTournamentOrdersDialog", "\320\240\320\265\320\263\320\270\320\276\320\275 (\321\204\320\270\320\273\321\214\321\202\321\200)", 0));
+        filterSexLE->setPlaceholderText(QApplication::translate("CreateTournamentOrdersDialog", "\320\237\320\276\320\273 (\321\204\320\270\320\273\321\214\321\202\321\200)", 0));
         filterRegionUintLE->setPlaceholderText(QApplication::translate("CreateTournamentOrdersDialog", "\320\235\320\260\321\201\320\265\320\273\320\265\320\275\320\275\321\213\320\271 \320\277\321\203\320\275\320\272\321\202 (\321\204\320\270\320\273\321\214\321\202\321\200)", 0));
-        label_4->setText(QApplication::translate("CreateTournamentOrdersDialog", "\320\240\320\260\320\267\320\264\320\265\320\273 \321\201\320\276\321\200\320\265\320\262\320\275\320\276\320\262\320\260\320\275\320\270\321\217", 0));
-        label_5->setText(QApplication::translate("CreateTournamentOrdersDialog", "\320\232\320\260\321\202\320\265\320\263\320\276\321\200\320\270\321\217 \321\202\321\203\321\200\320\275\320\270\321\200\320\260", 0));
+        filterTournamentCategoriesLE->setInputMask(QString());
+        filterTournamentCategoriesLE->setPlaceholderText(QApplication::translate("CreateTournamentOrdersDialog", "\320\232\320\260\321\202\320\265\320\263\320\276\321\200\320\270\321\217 \321\202\321\203\321\200\320\275\320\270\321\200\320\260 (\321\204\320\270\320\273\321\214\321\202\321\200)", 0));
+        filterCoachLE->setPlaceholderText(QApplication::translate("CreateTournamentOrdersDialog", "\320\242\321\200\320\265\320\275\320\265\321\200 (\321\204\320\270\320\273\321\214\321\202\321\200)", 0));
         label_16->setText(QApplication::translate("CreateTournamentOrdersDialog", "\320\244\320\260\320\274\320\270\320\273\320\270\321\217", 0));
         label_17->setText(QApplication::translate("CreateTournamentOrdersDialog", "\320\230\320\274\321\217", 0));
         label_18->setText(QApplication::translate("CreateTournamentOrdersDialog", "\320\236\321\202\321\207\320\265\321\201\321\202\320\262\320\276", 0));
