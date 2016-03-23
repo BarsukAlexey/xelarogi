@@ -86,15 +86,20 @@ FightingPairs::FightingPairs(const QSqlDatabase &_database, long long _tournamen
 
     QGridLayout *qGridLayout = new QGridLayout;
     qGridLayout->addWidget(qListWidget, 0, 0, 1, 2);
+
     qGridLayout->addWidget(new QLabel(QString("Кол-во рингов:")), 1, 0, Qt::AlignRight);
     qGridLayout->addWidget(ringSpinBox, 1, 1);
+
     qGridLayout->addWidget(new QLabel(QString("Дата + {утро, день, вечер}:")), 2, 0, Qt::AlignRight);
     qGridLayout->addWidget(qLineEdit = new QLineEdit(), 2, 1);
-    qGridLayout->addWidget(qPushButton, 3, 0, 1, 2);
+
+    qGridLayout->addWidget(checkBox = new QCheckBox("Сетка для поинтфайтинга:"), 3, 0, 1, 2, Qt::AlignCenter);
+
+    qGridLayout->addWidget(qPushButton, 4, 0, 1, 2);
 
     setLayout(qGridLayout);
 
-    resize(800, 800);
+    resize(800, 600);
     setWindowFlags(windowFlags() | Qt::WindowMaximizeButtonHint);
 
 
@@ -110,7 +115,8 @@ void FightingPairs::printInExcel(QAxObject *sheet, const QVector<DBUtils::Fighin
 {
 
 
-    int currentRow = 1;
+    int currentRow = 2;
+
 
     ExcelUtils::setValue(sheet, currentRow, 1, "Состав пар");
     ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 3);
@@ -163,6 +169,30 @@ void FightingPairs::printInExcel(QAxObject *sheet, const QVector<DBUtils::Fighin
 
     for (int column = 1; column <= 3; ++column)
         ExcelUtils::setColumnAutoFit(sheet, column);
+
+
+//    ExcelUtils::setValue(sheet, 1, 1, DBUtils::getField(database, "NAME", "TOURNAMENTS", tournamentUID));
+//    ExcelUtils::uniteRange(sheet, 1, 1, 1, 3);
+//    ExcelUtils::setFontBold(sheet, 1, 1, true);
+    ExcelUtils::setTournamentName(sheet, DBUtils::getTournamentNameAsHeadOfDocument(database, tournamentUID), 1, 1, 1, 3);
+
+    ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 2);
+    ExcelUtils::setRowHeight(sheet, currentRow, 25);
+    ExcelUtils::setValue(sheet, currentRow, 1, "Главный судья: ", 0);
+    ExcelUtils::setValue(sheet, currentRow, 3, DBUtils::get_MAIN_JUDGE(database, tournamentUID), 0);
+    ++currentRow;
+
+    ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 2);
+    ExcelUtils::setRowHeight(sheet, currentRow, 25);
+    ExcelUtils::setValue(sheet, currentRow, 1, "Главный секретарь: ", 0);
+    ExcelUtils::setValue(sheet, currentRow, 3, DBUtils::get_MAIN_SECRETARY(database, tournamentUID), 0);
+    ++currentRow;
+
+    ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 2);
+    ExcelUtils::setRowHeight(sheet, currentRow, 25);
+    ExcelUtils::setValue(sheet, currentRow, 1, "Зам. главного судьи: ", 0);
+    ExcelUtils::setValue(sheet, currentRow, 3, DBUtils::get_ASSOCIATE_MAIN_JUDGE(database, tournamentUID), 0);
+    ++currentRow;
 }
 
 void FightingPairs::printInJSON(const QVector<DBUtils::Fighing>& fighting, int ring, const QString& existingDirectory)
@@ -208,6 +238,48 @@ void FightingPairs::printInJSON(const QVector<DBUtils::Fighing>& fighting, int r
 }
 
 
+#include "renderareawidget.h"
+
+void FightingPairs::makeGridsForPointFighting(QString existingDirectory, QVector<QVector<DBUtils::Fighing> > listsOfPairs)
+{
+    QVector<int> durationOfGrid;
+    for (const auto fighing : listsOfPairs){
+        int time = 0;
+        for (const DBUtils::NodeOfTournirGrid f : DBUtils::getNodes(database, fighing[0].TOURNAMENT_CATEGORIES_FK))
+        {
+
+            if (!f.isFighing) continue;
+            time += DBUtils::get__DURATION_FIGHING(database, fighing[0].TOURNAMENT_CATEGORIES_FK) *
+                    DBUtils::get__ROUND_COUNT(database, fighing[0].TOURNAMENT_CATEGORIES_FK) +
+
+                    DBUtils::get__DURATION_BREAK(database, fighing[0].TOURNAMENT_CATEGORIES_FK) *
+                    (DBUtils::get__ROUND_COUNT(database, fighing[0].TOURNAMENT_CATEGORIES_FK) - 1);
+        }
+        durationOfGrid.push_back(time);
+    }
+    for (int ringCount = ringSpinBox->value(), idRing = 1; 1 <= ringCount; --ringCount, ++idRing)
+    {
+        int time = std::accumulate(durationOfGrid.begin(), durationOfGrid.end(), 0) / ringCount;
+        int curTime = 0;
+        QVector<QVector<DBUtils::Fighing> > curGrids;
+        while (curTime < time && listsOfPairs.size())
+        {
+            curTime += durationOfGrid.front();
+            durationOfGrid.pop_front();
+
+            curGrids.push_back(listsOfPairs.front());
+            listsOfPairs.pop_front();
+        }
+
+        for (int i = 0, fightingNumber = 1; i < curGrids.size(); ++i)
+        {
+            RenderAreaWidget::printTableGridInExcel(database, curGrids[i].front().TOURNAMENT_CATEGORIES_FK, true,
+                       existingDirectory, i == 0, i + 1 == curGrids.size(), fightingNumber, qLineEdit->text(), "Татами " +  QString::number(idRing));
+            //fightingNumber += curGrids[i].size();
+        }
+    }
+
+}
 
 void FightingPairs::onGoPress()
 {
@@ -229,6 +301,14 @@ void FightingPairs::onGoPress()
                 DBUtils::get__AGE_TILL(database, rhs[0].TOURNAMENT_CATEGORIES_FK);
     });
 
+    if (checkBox->isChecked())
+    {
+        makeGridsForPointFighting(existingDirectory, listsOfPairs);
+        return;
+    }
+
+
+
     QVector<DBUtils::Fighing> fighing;
     for (QVector<DBUtils::Fighing>& a : listsOfPairs)
     {
@@ -238,7 +318,6 @@ void FightingPairs::onGoPress()
         });
         fighing += a;
     }
-
 
     QAxWidget excel("Excel.Application");
     excel.setProperty("Visible", true);

@@ -282,25 +282,29 @@ void RenderAreaWidget::onSaveInExcel()
     QString directoryPath = QFileDialog::getExistingDirectory(this, tr("Выберите папку"), NULL, QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
     if (directoryPath.isNull()) return;
     //qDebug() << dir;
+    int foo = 12;
+    printTableGridInExcel(database, tournamentCategories, false, directoryPath, false, false, foo);
+}
 
+QPoint RenderAreaWidget::getCell(int v, int countColumns)
+{
+    QPoint p;
+    p.setY(countColumns - log2(v) - 1);
+    p.setX( (1 << (p.y() + 1)) * ((1 << (countColumns - p.y())) - 1 - v) + (1 << p.y()) - 1);
+    return p;
+}
 
-    QVector<DBUtils::NodeOfTournirGrid> nodes = DBUtils::getNodes(database, tournamentCategories);
+void RenderAreaWidget::printTableGridInExcel(const QSqlDatabase &database, int tournamentCategory,
+                                             bool likePointFighing, QString directoryPath, bool isFirst, bool isLast, int& fightingNumber, QString text, QString prefFileName)
+{
+    QVector<DBUtils::NodeOfTournirGrid> nodes = DBUtils::getNodes(database, tournamentCategory);
     if (nodes.empty()) return;
     qSort(nodes);
 
-    countColumns = log2(nodes.last().v) + 1;
-    countRows = 2 * (1 << (countColumns - 1)) - 1;
+    const int countColumns = log2(nodes.last().v) + 1;
+    //int countRows = 2 * (1 << (countColumns - 1)) - 1;
     int countPlayers = 0;
     for (const DBUtils::NodeOfTournirGrid& node : nodes) if (!node.isFighing) ++countPlayers;
-
-
-//    QAxObject* excel = new QAxObject( "Excel.Application", this );
-//    excel->setProperty("Visible", true);
-//    QAxObject* workbooks = excel->querySubObject( "Workbooks" );
-//    QAxObject* workbook = workbooks->querySubObject( "Open(const QString&)", "D:/test_t.xlsx" );
-//    QAxObject* sheets = workbook->querySubObject( "Sheets" );
-//    int sheetNumber = 1;
-//    QAxObject* sheet = sheets->querySubObject( "Item( int )", sheetNumber );
 
     QAxWidget excel("Excel.Application");
     excel.setProperty("Visible", true);
@@ -309,7 +313,7 @@ void RenderAreaWidget::onSaveInExcel()
     QAxObject *workbook = excel.querySubObject("ActiveWorkBook");
     QAxObject *sheets = workbook->querySubObject("WorkSheets");
     QAxObject* sheet = sheets->querySubObject( "Item( int )", 1);
-    QString sheetName = DBUtils::getField(database, "NAME", "TOURNAMENT_CATEGORIES", tournamentCategories);
+    QString sheetName = DBUtils::getField(database, "NAME", "TOURNAMENT_CATEGORIES", tournamentCategory);
     sheetName = sheetName.replace(" ", "");
     sheet->setProperty("Name", sheetName.left(31));
 
@@ -322,15 +326,15 @@ void RenderAreaWidget::onSaveInExcel()
     for (const DBUtils::NodeOfTournirGrid& node : nodes)
     {
 
-        QPoint p = getCell(node.v);
+        QPoint p = getCell(node.v, countColumns);
 
         maxRow = qMax(maxRow, p.x() + 1 + offset);
         maxColumn = qMax(maxColumn, p.y() + 1);
 
         if (node.isFighing)
-            ExcelUtils::setValue(sheet, p.x() + 1 + offset, p.y() + 1, node.name + "\r\n" + node.result);
+            ExcelUtils::setValue(sheet, p.x() + 1 + offset, p.y() + 1, node.name + "\n" + node.result);
         else
-            ExcelUtils::setValue(sheet, p.x() + 1 + offset, p.y() + 1, node.name + "\r\n" + node.region);
+            ExcelUtils::setValue(sheet, p.x() + 1 + offset, p.y() + 1, node.name + "\n" + node.region);
 
         ExcelUtils::setBorder(sheet, p.x() + 1 + offset, p.y() + 1, p.x() + 1 + offset, p.y() + 1, 3);
 
@@ -338,8 +342,8 @@ void RenderAreaWidget::onSaveInExcel()
         {
             if (qBinaryFind(nodes, DBUtils::NodeOfTournirGrid({child, "", "", false, -1})) != nodes.end() )
             {
-                QPoint aa = getCell(node.v);
-                QPoint bb = getCell(child);
+                QPoint aa = getCell(node.v, countColumns);
+                QPoint bb = getCell(child, countColumns);
 
                 QPoint a(qMin(aa.x(), bb.x()), qMin(aa.y(), bb.y()));
                 QPoint b(qMax(aa.x(), bb.x()), qMax(aa.y(), bb.y()));
@@ -359,20 +363,51 @@ void RenderAreaWidget::onSaveInExcel()
         }
     }
 
+    if (likePointFighing)
+    {
+        std::sort(nodes.begin(), nodes.end(),
+            [](const DBUtils::NodeOfTournirGrid& lhs, const DBUtils::NodeOfTournirGrid& rhs)  -> bool
+        {
+            return lhs.v > rhs.v;
+        });
+
+        while (nodes.size() && !nodes.front().isFighing) nodes.pop_front();
+
+        for (int i = 0; i < nodes.size(); ++i)
+        {
+            QPoint p = getCell(nodes[i].v, countColumns);
+
+            int curNumb = fightingNumber;
+            if (i == 0 && !isFirst)
+            {
+                --curNumb;
+//                qDebug() << "sdsdd:: --curNumb" << fightingNumber << curNumb;
+            }
+            if (i + 1 == nodes.size() && !isLast)
+                ++curNumb;
+
+            ExcelUtils::setValue(sheet, p.x() + 1 + offset, p.y(), QString::number(curNumb) + " / " + text);
+            //
+            ++fightingNumber;
+        }
+    }
+
     for (int i = 1; i <= maxRow   ; ++i) ExcelUtils::setRowHeight(sheet, i, 50);
     for (int i = 1; i <= maxColumn; ++i) ExcelUtils::setColumnWidth(sheet, i, 50);
     for (int i = 1; i <= maxColumn; ++i) ExcelUtils::setColumnAutoFit(sheet, i);
     for (int i = 1; i <= maxRow   ; ++i) ExcelUtils::setRowAutoFit(sheet, i);
 
-    long long tournamentUID = getTournamentUID();
+    long long tournamentUID = DBUtils::getField(database, "TOURNAMENT_FK", "TOURNAMENT_CATEGORIES", tournamentCategory).toLongLong();
 
-    ExcelUtils::setValue(sheet, 1, 1, DBUtils::getField(database, "NAME", "TOURNAMENTS", tournamentUID));
-    ExcelUtils::uniteRange(sheet, 1, 1, 1, maxColumn);
-    ExcelUtils::setFontBold(sheet, 1, 1, true);
+    maxColumn = qMax(4, maxColumn);
+
+    ExcelUtils::setTournamentName(sheet, DBUtils::getTournamentNameAsHeadOfDocument(database, tournamentUID), 1, 1, 1, maxColumn);
 
     ExcelUtils::uniteRange(sheet, 2, 1, 2, maxColumn);
-    ExcelUtils::setValue(sheet, 2, 1, getCategoryName());
+    ExcelUtils::setValue(sheet, 2, 1, DBUtils::getField(database, "NAME", "TOURNAMENT_CATEGORIES", tournamentCategory));
 
+    ExcelUtils::uniteRange(sheet, 3, 1, 3, maxColumn);
+    ExcelUtils::setValue(sheet, 3, 1, prefFileName);
     maxRow += 2;
 
 
@@ -396,18 +431,21 @@ void RenderAreaWidget::onSaveInExcel()
 
     ExcelUtils::setPageOrientation(sheet, 2);
     ExcelUtils::setFitToPagesWide(sheet, countPlayers <= 8? 1 : 2);
+    ExcelUtils::setCenterHorizontally(sheet, true);
+
+
 
 
 
     directoryPath = QDir::toNativeSeparators(directoryPath);
     if (!directoryPath.endsWith(QDir::separator())) directoryPath += QDir::separator();
     directoryPath = QDir::toNativeSeparators(directoryPath);
-    ExcelUtils::saveAsFile(workbook, directoryPath, sheetName + ".xls");
+    ExcelUtils::saveAsFile(workbook, directoryPath, prefFileName + sheetName + ".xls");
 
     delete sheet;
     delete sheets;
     delete workbook;
     delete workbooks;
     excel.dynamicCall("Quit()");
-    //delete excel;
+    /**/
 }

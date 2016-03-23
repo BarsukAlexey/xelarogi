@@ -53,6 +53,21 @@ QString DBUtils::getFieldDate(const QSqlDatabase& database, const QString& field
     return "";
 }
 
+QDate DBUtils::getFieldDateAsDate(const QSqlDatabase& database, const QString& field, const QString& table, const long long UID)
+{
+    QSqlQuery query("SELECT * FROM " + table + " WHERE UID = ?", database);
+    query.bindValue(0, UID);
+    if (query.exec() && query.next())
+    {
+        return query.value(field).toDate();
+    }
+    else
+    {
+        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << query.lastError().text() << query.lastQuery();
+    }
+    return QDate();
+}
+
 QString DBUtils::getNameTournamentByUID(const QSqlDatabase& database, const long long UID)
 {
     QSqlQuery query("SELECT NAME FROM TOURNAMENTS WHERE UID = ? ", database);
@@ -188,7 +203,7 @@ QVector<DBUtils::NodeOfTournirGrid> DBUtils::getNodes(const QSqlDatabase& databa
     while (query.next())
     {
         QString orderUID = query.value("ORDER_FK").toString();
-        QString name = "Unknown";
+        QString name = "";
         QString region = "";
         bool isFighing = query.value("IS_FIGHTING").toBool();
         if (orderUID.size() != 0)
@@ -275,7 +290,7 @@ QVector<DBUtils::Fighing> DBUtils::getListOfPairs(const QSqlDatabase& database, 
     {
         NodeOfTournirGrid node = nodes[i];
         //qDebug() << node.name;
-        if (node.name == "Unknown")
+        if (node.isFighing)
         {
             arr.push_back(Fighing({
                                       nodes[2 * node.v + 1 - 1].UID,
@@ -439,6 +454,53 @@ QString DBUtils::roundDouble(double x, int precision)
     res.remove( QRegExp("0+$") ); // Remove any number of trailing 0's
     res.remove( QRegExp("\\.$") ); // If the last character is just a '.' then remove it
     return res;
+}
+
+QString DBUtils::getRussianMonth(int m)
+{
+    QStringList month;
+    month << "января";
+    month << "февраля";
+    month << "марта";
+    month << "апреля";
+    month << "мая";
+    month << "июня";
+    month << "июля";
+    month << "августа";
+    month << "сентября";
+    month << "октября";
+    month << "ноября";
+    month << "декабря";
+    //qDebug() << month.size();
+    return 1 <= m && m <= 12? month[m - 1] : "";
+}
+
+QString DBUtils::getTournamentNameAsHeadOfDocument(const QSqlDatabase& database, long long tournamentUID)
+{
+    QDate a = DBUtils::getFieldDateAsDate(database, "DATE_WEIGHTING", "TOURNAMENTS", tournamentUID);
+    QDate b = DBUtils::getFieldDateAsDate(database, "DATE_END", "TOURNAMENTS", tournamentUID);
+    QString resA;
+    QString resB = QString::number(b.day()) + " " + getRussianMonth(b.month()) + " " + QString::number(b.year()) + " г.";
+    if (a.year() != b.year())
+    {
+        resA = QString::number(a.day()) + " " + getRussianMonth(a.month()) + " " + QString::number(a.year()) + " - ";
+    }
+    else if (a.month() != b.month())
+    {
+        resA = QString::number(a.day()) + " " + getRussianMonth(a.month()) + " - ";
+    }
+    else if (a.day() != b.day())
+    {
+        resA = QString::number(a.day()) + "-";
+    }
+    else
+    {
+        resA = "";
+    }
+    return DBUtils::getField(database, "NAME", "TOURNAMENTS", tournamentUID) + "\n" +
+           DBUtils::getField(database, "HOST", "TOURNAMENTS", tournamentUID) + ", " +
+           resA + resB;
+
 }
 
 int DBUtils::get__AGE_FROM(const QSqlDatabase& database, long long UID)

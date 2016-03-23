@@ -4,7 +4,9 @@
 #include <QSqlDatabase>
 #include <QStringList>
 #include <QMap>
+#include <QDate>
 #include <algorithm>
+
 
 class DBUtils
 {
@@ -38,7 +40,8 @@ public:
     static QString getField(const QSqlDatabase&, const QString& field, const QString& table, const QString& UID);
     static QString getField(const QSqlDatabase&, const QString& field, const QString& table, const long long UID);
     static QString getFieldDate(const QSqlDatabase&, const QString& field, const QString& table, const long long UID);
-
+    static QDate getFieldDateAsDate(const QSqlDatabase& database, const QString& field, const QString& table, const long long UID);
+    static QString getRussianMonth(int m);
 
     static QString getNameTournamentByUID(const QSqlDatabase& , long long);
     static QString getTypeNameByUID(const QSqlDatabase& , long long);
@@ -83,6 +86,7 @@ public:
 
     static QString roundDouble(double x, int precision);
 
+    static QString getTournamentNameAsHeadOfDocument(const QSqlDatabase& database, long long tournamentUID);
 };
 
 #endif // DBUTILS_H

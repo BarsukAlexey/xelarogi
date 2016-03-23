@@ -40,11 +40,12 @@ WeighingProtocol::WeighingProtocol(const QSqlDatabase& database, const long long
                             ;
         sheet->setProperty("Name", sheetName.left(31));
 
-        int currentRow = 2;
+        int currentRow = 1;
 
-        ExcelUtils::setValue   (sheet, currentRow, 1, DBUtils::getNameTournamentByUID(database, tournamentUID));
-        ExcelUtils::uniteRange (sheet, currentRow, 1, currentRow, countColumns);
-        ExcelUtils::setFontBold(sheet, currentRow, 1, true);
+//        ExcelUtils::setValue   (sheet, currentRow, 1, DBUtils::getNameTournamentByUID(database, tournamentUID));
+//        ExcelUtils::uniteRange (sheet, currentRow, 1, currentRow, countColumns);
+//        ExcelUtils::setFontBold(sheet, currentRow, 1, true);
+        ExcelUtils::setTournamentName(sheet, DBUtils::getTournamentNameAsHeadOfDocument(database, tournamentUID), currentRow, 1, currentRow, countColumns);
         ++currentRow;
 
         ExcelUtils::setValue  (sheet, currentRow, 1, "Протокол взвешивания");
@@ -68,7 +69,7 @@ WeighingProtocol::WeighingProtocol(const QSqlDatabase& database, const long long
         ++currentRow;
 
         QStringList heads;
-        heads << "#" << "Фамилия, Имя" << "Дата\r\nрождения" << "Город" << "Клуб" << "Спортивный\r\nразряд" << "Вес" << "Тренер" << "Номер\r\nжеребьёвки";
+        heads << "#" << "Фамилия, Имя" << "Дата\nрождения" << "Город" << "Клуб" << "Спортивный\nразряд" << "Вес" << "Тренер" << "Номер\nжеребьёвки";
         //heads << "sdsdsdd" << "sdsdsdd" << "sdsdsdd" << "sdsdsdd" << "sdsdsdd" << "sdsdsdd" << "sdsdsdd";
         for (int i = 0, column = 1; i < heads.size(); ++i, ++column)
         {

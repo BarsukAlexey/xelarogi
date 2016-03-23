@@ -280,7 +280,7 @@ void CreateTournamentOrdersDialog::loadFromExcel()
         long long countryUID = getCountryUID(countryName);
         long long regionUID = getRegionUID(regionName, countryUID);
 
-        for (int row = 15 ; row < intRowStart + intRows ; ++row) {
+        for (int row = 14; row < intRowStart + intRows ; ++row) {
 
             QAxObject* cell = sheet->querySubObject( "Cells( int, int )", row, 2 );
             QVariant value = cell->dynamicCall( "Value()" );
@@ -1203,9 +1203,9 @@ long long CreateTournamentOrdersDialog::getTournamentCategoryUID(long long sexUI
             double weightTill = query.value("WEIGHT_TILL").toDouble();
 
             double eps = 1e-8;
-            if (age > ageFrom - eps && age < ageTill + eps)
+            if (age > ageFrom - eps && age < ageTill + eps) // a <= b && b <= c
             {
-                if (weight > weightFrom + eps && weight < weightTill + eps)
+                if (weight > weightFrom + eps && weight < weightTill + eps) // a < w <= b
                 {
                     isFind = true;
                     return query.value("UID").toLongLong();

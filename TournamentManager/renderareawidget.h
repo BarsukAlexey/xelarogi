@@ -42,7 +42,7 @@ private:
     void paintLine(QPoint , QPoint , QPainter& painter);
     void setNormalSize();
     //QVector<NodeOfTournirGrid> getNodes();
-    int log2(int x);
+
     QPoint getCell(int v);
 
     long long getTournamentUID() const;
@@ -55,5 +55,13 @@ public slots:
     void widthChanged(int);
     void heightChanged(int);
     void onSaveInExcel();
+
+
+private:
+    static QPoint getCell(int v, int countColumns);
+
+public:
+    static int log2(int x);
+    static void printTableGridInExcel(const QSqlDatabase &database, int tournamentCategory, bool likePointFighing, QString path, bool isFirst, bool isLast, int& fightingNumber, QString text = "", QString prefFileName = "");
 };
 #endif // RENDERAREAWIDGET_H

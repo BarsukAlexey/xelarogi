@@ -45,13 +45,12 @@ WinnerReport::WinnerReport(const QSqlDatabase& database, const long long tournam
         sheet->setProperty("Name", sheetName.left(31));
 
 
-        ExcelUtils::setValue     (sheet, currentRow, 1, DBUtils::getField(database, "NAME", "TOURNAMENTS", tournamentUID));
-        ExcelUtils::setFontBold(sheet, currentRow, 1, true);
-        ExcelUtils::setWrapText  (sheet, currentRow, 1);
-        //ExcelUtils::setRowAutoFit(sheet, currentRow);
-        ExcelUtils::uniteRange   (sheet, currentRow, 1, currentRow, heads.size());
-        //ExcelUtils::setRowAutoFit(sheet, currentRow);
-        ExcelUtils::setRowHeight(sheet, currentRow, 30);
+        ExcelUtils::setTournamentName(sheet, DBUtils::getTournamentNameAsHeadOfDocument(database, tournamentUID), currentRow, 1, currentRow, heads.size());
+//        ExcelUtils::setValue     (sheet, currentRow, 1, DBUtils::getField(database, "NAME", "TOURNAMENTS", tournamentUID));
+//        ExcelUtils::setFontBold(sheet, currentRow, 1, true);
+//        ExcelUtils::setWrapText  (sheet, currentRow, 1);
+//        ExcelUtils::uniteRange   (sheet, currentRow, 1, currentRow, heads.size());
+//        ExcelUtils::setRowHeight(sheet, currentRow, 30);
 
         ++currentRow;
 

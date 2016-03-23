@@ -49,8 +49,10 @@ FitingDistribution::FitingDistribution(const QSqlDatabase &database, const long 
         int currentRow = 2;
 
 
-        ExcelUtils::setValue  (sheet, currentRow, 1, DBUtils::getNameTournamentByUID(database, tournamentUID));
-        ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 2 + 3 * days.size());
+//        ExcelUtils::setValue  (sheet, currentRow, 1, DBUtils::getNameTournamentByUID(database, tournamentUID));
+//        ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 2 + 3 * days.size());
+//        ExcelUtils::setFontBold(sheet, currentRow, 1, true);
+        ExcelUtils::setTournamentName(sheet, DBUtils::getTournamentNameAsHeadOfDocument(database, tournamentUID), currentRow, 1, currentRow, 2 + 3 * days.size());
         ++currentRow;
         ExcelUtils::setValue  (sheet, currentRow, 1, "Раздел: " + DBUtils::getTypeNameByUID(database, TYPE_FK));
         ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 2 + 3 * days.size());
@@ -223,7 +225,7 @@ void FitingDistribution::initTableHeads(QAxObject* sheet, int& currentRow, const
     ExcelUtils::setBorder(sheet, currentRow, 1, currentRow + 1, 2 + 3 * days.size());
 
     ExcelUtils::setValue(sheet, currentRow, 1, "Вес");
-    ExcelUtils::setValue(sheet, currentRow, 2, "Кол-во\n\rчеловек");
+    ExcelUtils::setValue(sheet, currentRow, 2, "Кол-во\nчеловек");
     ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow + 1, 1);
     ExcelUtils::uniteRange(sheet, currentRow, 2, currentRow + 1, 2);
 
