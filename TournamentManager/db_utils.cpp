@@ -203,7 +203,7 @@ QVector<DBUtils::NodeOfTournirGrid> DBUtils::getNodes(const QSqlDatabase& databa
     while (query.next())
     {
         QString orderUID = query.value("ORDER_FK").toString();
-        QString name = "Unknown";
+        QString name = "";
         QString region = "";
         bool isFighing = query.value("IS_FIGHTING").toBool();
         if (orderUID.size() != 0)
@@ -290,7 +290,7 @@ QVector<DBUtils::Fighing> DBUtils::getListOfPairs(const QSqlDatabase& database, 
     {
         NodeOfTournirGrid node = nodes[i];
         //qDebug() << node.name;
-        if (node.name == "Unknown")
+        if (node.isFighing)
         {
             arr.push_back(Fighing({
                                       nodes[2 * node.v + 1 - 1].UID,

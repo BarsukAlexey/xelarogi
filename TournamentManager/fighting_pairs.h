@@ -10,6 +10,7 @@
 #include <QSpinBox>
 #include <QAxObject>
 #include <QLineEdit>
+#include <QCheckBox>
 
 class FightingPairs : public QDialog
 {
@@ -26,10 +27,12 @@ private:
     QPushButton* qPushButton;
     QSpinBox* ringSpinBox;
     QLineEdit *qLineEdit;
+    QCheckBox *checkBox;
     QVector<QVector<DBUtils::Fighing> > globalListsOfPairs;
     void printInExcel(QAxObject *sheets, const QVector<DBUtils::Fighing>& fighting, int ring);
     void printInJSON(const QVector<DBUtils::Fighing>& fighting, int ring, const QString& path);
 
+    void makeGridsForPointFighting(QString existingDirectory, QVector<QVector<DBUtils::Fighing> > listsOfPairs);
 signals:
 
 public slots:
