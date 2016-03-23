@@ -231,6 +231,8 @@ CreateTournamentOrdersDialog::CreateTournamentOrdersDialog(const QSqlDatabase &d
             }
         }
     });
+
+    connect(ui->toExcelBtn, &QPushButton::clicked, this, &CreateTournamentOrdersDialog::saveToExcel);
 }
 
 CreateTournamentOrdersDialog::~CreateTournamentOrdersDialog()
@@ -490,6 +492,38 @@ void CreateTournamentOrdersDialog::loadFromExcel()
 
     QSqlRelationalTableModel* model = dynamic_cast<QSqlRelationalTableModel*>(ui->tableView->model());
     model->select();
+}
+
+void CreateTournamentOrdersDialog::saveToExcel()
+{
+    QAxWidget excel("Excel.Application");
+    excel.setProperty("Visible", true);
+    QAxObject *workbooks = excel.querySubObject("WorkBooks");
+    workbooks->dynamicCall("Add");
+    QAxObject *workbook = excel.querySubObject("ActiveWorkBook");
+    QAxObject *sheets = workbook->querySubObject("WorkSheets");
+    sheets->querySubObject("Add");
+    QAxObject *sheet = sheets->querySubObject( "Item( int )", 1);
+
+    QSqlRelationalTableModel* model = dynamic_cast<QSqlRelationalTableModel*>(ui->tableView->model());
+
+    for (int row = 0; row < model->rowCount(); ++row)
+    {
+            for (int column = 0; column < model->columnCount(); ++column)
+            {
+                QModelIndex index = model->index(row, column);
+                QString data = index.data().toString();
+
+                QAxObject* cell = sheet->querySubObject( "Cells( int, int )", row + 1, column + 1 );
+                cell->setProperty("Value", QVariant(data));
+                delete cell;
+            }
+    }
+
+    delete sheet;
+    delete sheets;
+    delete workbook;
+    delete workbooks;
 }
 
 void CreateTournamentOrdersDialog::updateFillOrderWidget(long long orderUID)

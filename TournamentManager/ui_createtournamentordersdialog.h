@@ -101,6 +101,8 @@ public:
     QHBoxLayout *horizontalLayout_2;
     QPushButton *loadBtn;
     QSpacerItem *horizontalSpacer_3;
+    QPushButton *toExcelBtn;
+    QSpacerItem *horizontalSpacer_5;
     QPushButton *btnExit;
 
     void setupUi(QDialog *CreateTournamentOrdersDialog)
@@ -452,9 +454,18 @@ public:
 
         horizontalLayout_2->addWidget(loadBtn);
 
-        horizontalSpacer_3 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+        horizontalSpacer_3 = new QSpacerItem(40, 20, QSizePolicy::Fixed, QSizePolicy::Minimum);
 
         horizontalLayout_2->addItem(horizontalSpacer_3);
+
+        toExcelBtn = new QPushButton(CreateTournamentOrdersDialog);
+        toExcelBtn->setObjectName(QStringLiteral("toExcelBtn"));
+
+        horizontalLayout_2->addWidget(toExcelBtn);
+
+        horizontalSpacer_5 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_2->addItem(horizontalSpacer_5);
 
         btnExit = new QPushButton(CreateTournamentOrdersDialog);
         btnExit->setObjectName(QStringLiteral("btnExit"));
@@ -504,6 +515,7 @@ public:
         changeOrderBtn->setText(QApplication::translate("CreateTournamentOrdersDialog", "\320\237\321\200\320\270\320\274\320\265\320\275\320\270\321\202\321\214 \320\270\320\267\320\274\320\265\320\275\320\265\320\275\320\270\321\217", 0));
         addOrderBtn->setText(QApplication::translate("CreateTournamentOrdersDialog", "\320\224\320\276\320\261\320\260\320\262\320\270\321\202\321\214", 0));
         loadBtn->setText(QApplication::translate("CreateTournamentOrdersDialog", "\320\227\320\260\320\263\321\200\321\203\320\267\320\270\321\202\321\214 \320\270\320\267 excel", 0));
+        toExcelBtn->setText(QApplication::translate("CreateTournamentOrdersDialog", "\320\222\321\213\320\263\321\200\321\203\320\267\320\270\321\202\321\214 \320\262 Excel", 0));
         btnExit->setText(QApplication::translate("CreateTournamentOrdersDialog", "\320\227\320\260\320\272\321\200\321\213\321\202\321\214", 0));
     } // retranslateUi
 

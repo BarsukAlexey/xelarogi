@@ -24,6 +24,7 @@
 #include <QChar>
 #include <QAxObject>
 #include <QAxBase>
+#include <QAxWidget>
 #include <QMessageBox>
 #include <QFileDialog>
 
@@ -50,6 +51,7 @@ public:
 
 private slots:
     void loadFromExcel();
+    void saveToExcel();
     void updateFillOrderWidget(long long orderUID = -1);
 
 private:
