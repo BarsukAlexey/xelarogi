@@ -36,7 +36,7 @@ WeighingProtocol::WeighingProtocol(const QSqlDatabase& database, const long long
         QString sheetName = DBUtils::getField(database, "SHORTNAME", "SEXES", DBUtils::getField(database, "SEX_FK", "TOURNAMENT_CATEGORIES", uidCategory)) + "," +
                             DBUtils::getField(database, "NAME", "TYPES", DBUtils::getField(database, "TYPE_FK", "TOURNAMENT_CATEGORIES", uidCategory)) + "," +
                             DBUtils::getField(database, "AGE_FROM", "TOURNAMENT_CATEGORIES", uidCategory) + "-" + DBUtils::getField(database, "AGE_TILL", "TOURNAMENT_CATEGORIES", uidCategory) + "л," +
-                            (DBUtils::getNormanWeightRange(database, uidCategory).remove(QRegExp(" ")))
+                            (DBUtils::getNormanWeightRangeFromTOURNAMENT_CATEGORIES(database, uidCategory).remove(QRegExp(" ")))
                             ;
         sheet->setProperty("Name", sheetName.left(31));
 
@@ -60,7 +60,7 @@ WeighingProtocol::WeighingProtocol(const QSqlDatabase& database, const long long
         ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, countColumns);
         ++currentRow;
 
-        ExcelUtils::setValue  (sheet, currentRow, 1, "Вес: " + DBUtils::getNormanWeightRange(database, uidCategory));
+        ExcelUtils::setValue  (sheet, currentRow, 1, "Вес: " + DBUtils::getNormanWeightRangeFromTOURNAMENT_CATEGORIES(database, uidCategory));
         ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, countColumns);
         ++currentRow;
 

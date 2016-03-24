@@ -13,6 +13,7 @@
 #include "weighing_protocol.h"
 #include "winner_report.h"
 #include "ebnutvbazu.h"
+#include "report_manda.h"
 
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -260,6 +261,10 @@ void MainWindow::updateTournamentTreeWidget()
             }
             ui->tournamentTreeWidget->addTopLevelItem(topLevel);
         }
+        if (0 < ui->tournamentTreeWidget->model()->rowCount())
+        {
+            ui->tournamentTreeWidget->setExpanded(ui->tournamentTreeWidget->model()->index(0, 0), true);// а то заябался запускать и открывать список =)
+        }
 
         connect(ui->tournamentTreeWidget, &QTreeWidget::clicked, [this] (const QModelIndex& index)
         {
@@ -498,3 +503,15 @@ void MainWindow::on_pushButtonLoadWinner_clicked()
 
 
 
+
+void MainWindow::on_manda_clicked()
+{
+    long long routnamentUID = ui->tournamentUidLabel->text().toLongLong();
+    qDebug() << "routnamentUID: " << routnamentUID;
+    ReportManda(m_database, routnamentUID);
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+
+}

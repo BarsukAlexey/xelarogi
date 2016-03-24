@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>798</width>
-    <height>479</height>
+    <height>504</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -263,6 +263,20 @@
             <widget class="QPushButton" name="trophyBtn">
              <property name="text">
               <string>Создать грамоты</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="manda">
+             <property name="text">
+              <string>Протокол мандатной комиссии</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButton">
+             <property name="text">
+              <string>Не нажимать</string>
              </property>
             </widget>
            </item>

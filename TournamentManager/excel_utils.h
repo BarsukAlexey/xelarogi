@@ -2,15 +2,39 @@
 #define EXCELUTILS_H
 
 #include <QAxObject>
+#include <QString>
 
 // http://www.wiki.crossplatform.ru/index.php/%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0_%D1%81_MS_Office_%D1%81_%D0%BF%D0%BE%D0%BC%D0%BE%D1%89%D1%8C%D1%8E_ActiveQt
 
 class ExcelUtils
 {
+
+public:
+
+    enum Border
+    {
+        all, xlEdgeTop, xlEdgeLeft, xlEdgeRight, xlEdgeBottom, xlDiagonalDown, xlDiagonalUp
+    };
+
+private:
+    static QString bordertoString(Border v)
+    {
+        switch (v)
+        {
+            case xlEdgeTop      : return "xlEdgeTop";
+            case xlEdgeLeft     : return "xlEdgeLeft";
+            case xlEdgeRight    : return "xlEdgeRight";
+            case xlEdgeBottom   : return "xlEdgeBottom";
+            case xlDiagonalDown : return "xlDiagonalDown";
+            case xlDiagonalUp   : return "xlDiagonalUp";
+            default             : return "";
+        }
+    }
+
 public:
     static void uniteRange(QAxObject* sheet, int row0, int column0, int row1, int column1);
     static void setValue(QAxObject* sheet, int row, int column, QString text, int hAligment = 1, int vAligment = 1);
-    static void setBorder(QAxObject* sheet, int row0, int column0, int row1, int column1, int Weight = 2);
+    static void setBorder(QAxObject* sheet, int row0, int column0, int row1, int column1, int Weight = 2, Border border = Border::all);
     static void setColumnAutoFit(QAxObject *sheet, int column);
 
     static void setRowAutoFit(QAxObject *sheet, int row);

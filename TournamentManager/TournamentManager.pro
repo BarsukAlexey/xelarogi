@@ -39,7 +39,8 @@ SOURCES += main.cpp\
     errormessagesdialog.cpp \
     logindialog.cpp \
     trophygenerator.cpp \
-    trophygeneratorsettingsdialog.cpp
+    trophygeneratorsettingsdialog.cpp \
+    report_manda.cpp
 
 HEADERS  += mainwindow.h \
     handbookdialog.h \
@@ -64,7 +65,8 @@ HEADERS  += mainwindow.h \
     errormessagesdialog.h \
     logindialog.h \
     trophygenerator.h \
-    trophygeneratorsettingsdialog.h
+    trophygeneratorsettingsdialog.h \
+    report_manda.h
 
 FORMS    += mainwindow.ui \
     handbookdialog.ui \

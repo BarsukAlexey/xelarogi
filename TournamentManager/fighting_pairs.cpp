@@ -150,7 +150,7 @@ void FightingPairs::printInExcel(QAxObject *sheet, const QVector<DBUtils::Fighin
             ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 3);
             ++currentRow;
 
-            ExcelUtils::setValue(sheet, currentRow, 1, "Вес: " + DBUtils::getNormanWeightRange(database, f.TOURNAMENT_CATEGORIES_FK));
+            ExcelUtils::setValue(sheet, currentRow, 1, "Вес: " + DBUtils::getNormanWeightRangeFromTOURNAMENT_CATEGORIES(database, f.TOURNAMENT_CATEGORIES_FK));
 
             ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 3);
             ++currentRow;

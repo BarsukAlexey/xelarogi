@@ -72,6 +72,8 @@ public:
     QPushButton *pushButtonLoadWinner;
     QPushButton *pushButtonWinnerReport;
     QPushButton *trophyBtn;
+    QPushButton *manda;
+    QPushButton *pushButton;
     QSpacerItem *verticalSpacer;
     QMenuBar *menuBar;
     QMenu *handbookMenu;
@@ -82,7 +84,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(798, 479);
+        MainWindow->resize(798, 504);
         countryAction = new QAction(MainWindow);
         countryAction->setObjectName(QStringLiteral("countryAction"));
         regionAction = new QAction(MainWindow);
@@ -265,6 +267,16 @@ public:
 
         verticalLayout->addWidget(trophyBtn);
 
+        manda = new QPushButton(ordersPage);
+        manda->setObjectName(QStringLiteral("manda"));
+
+        verticalLayout->addWidget(manda);
+
+        pushButton = new QPushButton(ordersPage);
+        pushButton->setObjectName(QStringLiteral("pushButton"));
+
+        verticalLayout->addWidget(pushButton);
+
         verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
         verticalLayout->addItem(verticalSpacer);
@@ -344,6 +356,8 @@ public:
         pushButtonLoadWinner->setText(QApplication::translate("MainWindow", "\320\227\320\260\320\263\321\200\321\203\320\267\320\270\321\202\321\214 \321\200\320\265\320\267\321\203\320\273\321\214\321\202\320\260\321\202\321\213", 0));
         pushButtonWinnerReport->setText(QApplication::translate("MainWindow", "\320\241\320\277\320\270\321\201\320\276\320\272 \320\277\320\276\320\261\320\265\320\264\320\270\321\202\320\265\320\273\320\265\320\271", 0));
         trophyBtn->setText(QApplication::translate("MainWindow", "\320\241\320\276\320\267\320\264\320\260\321\202\321\214 \320\263\321\200\320\260\320\274\320\276\321\202\321\213", 0));
+        manda->setText(QApplication::translate("MainWindow", "\320\237\321\200\320\276\321\202\320\276\320\272\320\276\320\273 \320\274\320\260\320\275\320\264\320\260\321\202\320\275\320\276\320\271 \320\272\320\276\320\274\320\270\321\201\321\201\320\270\320\270", 0));
+        pushButton->setText(QApplication::translate("MainWindow", "\320\235\320\265 \320\275\320\260\320\266\320\270\320\274\320\260\321\202\321\214", 0));
         handbookMenu->setTitle(QApplication::translate("MainWindow", "\320\241\320\277\321\200\320\260\320\262\320\276\321\207\320\275\320\270\320\272\320\270", 0));
     } // retranslateUi
 

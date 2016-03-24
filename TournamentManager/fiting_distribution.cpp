@@ -118,7 +118,7 @@ FitingDistribution::FitingDistribution(const QSqlDatabase &database, const long 
 
                 long long UID_TOURNAMENT_CATEGORY = queryTOURNAMENT_CATEGORIES_UID.value("UID").toLongLong();
 
-                ExcelUtils::setValue(sheet, currentRow, 1, DBUtils::getNormanWeightRange(database,UID_TOURNAMENT_CATEGORY));
+                ExcelUtils::setValue(sheet, currentRow, 1, DBUtils::getNormanWeightRangeFromTOURNAMENT_CATEGORIES(database,UID_TOURNAMENT_CATEGORY));
 
                 QSqlQuery queryCOUNT("SELECT count() AS COUNT FROM ORDERS WHERE TOURNAMENT_CATEGORY_FK = ? AND IS_VALID = ? GROUP BY TOURNAMENT_CATEGORY_FK", database);
                 queryCOUNT.bindValue(0, UID_TOURNAMENT_CATEGORY);

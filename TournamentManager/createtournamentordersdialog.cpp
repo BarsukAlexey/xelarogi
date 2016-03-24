@@ -1,5 +1,7 @@
 #include "createtournamentordersdialog.h"
 #include "ui_createtournamentordersdialog.h"
+#include "excel_utils.h"
+#include "db_utils.h"
 
 QSqlRecord CreateTournamentOrdersDialog::m_record;
 
@@ -507,6 +509,10 @@ void CreateTournamentOrdersDialog::saveToExcel()
 
     QSqlRelationalTableModel* model = dynamic_cast<QSqlRelationalTableModel*>(ui->tableView->model());
 
+
+    for (int column = 0; column < model->columnCount(); ++column)
+        ExcelUtils::setValue(sheet, 1, column + 1, model->headerData(column, Qt::Horizontal, Qt::DisplayRole).toString());
+
     for (int row = 0; row < model->rowCount(); ++row)
     {
             for (int column = 0; column < model->columnCount(); ++column)
@@ -514,11 +520,23 @@ void CreateTournamentOrdersDialog::saveToExcel()
                 QModelIndex index = model->index(row, column);
                 QString data = index.data().toString();
 
-                QAxObject* cell = sheet->querySubObject( "Cells( int, int )", row + 1, column + 1 );
-                cell->setProperty("Value", QVariant(data));
-                delete cell;
+                if (model->headerData(column, Qt::Horizontal, Qt::DisplayRole).toString() != "Вес")
+                {
+                    QAxObject* cell = sheet->querySubObject( "Cells( int, int )", row + 2, column + 1 );
+                    cell->setProperty("Value", QVariant(data));
+                    delete cell;
+                }
+                else
+                {
+                    QAxObject* cell = sheet->querySubObject( "Cells( int, int )", row + 2, column + 1 );
+                    cell->setProperty("Value", DBUtils::roundDouble(data.toDouble(), 4).replace(".", ","));
+                    delete cell;
+                }
             }
     }
+
+    for (int column = 0; column < model->columnCount(); ++column)
+        ExcelUtils::setColumnAutoFit(sheet, column + 1);
 
     delete sheet;
     delete sheets;

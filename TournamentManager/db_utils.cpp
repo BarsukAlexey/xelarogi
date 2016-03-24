@@ -203,7 +203,7 @@ QVector<DBUtils::NodeOfTournirGrid> DBUtils::getNodes(const QSqlDatabase& databa
     while (query.next())
     {
         QString orderUID = query.value("ORDER_FK").toString();
-        QString name = "";
+        QString name = "_________";
         QString region = "";
         bool isFighing = query.value("IS_FIGHTING").toBool();
         if (orderUID.size() != 0)
@@ -381,7 +381,7 @@ QMap<QString, QVector<long long> > DBUtils::get_weight_and_orderUIDs(const QSqlD
     {
 
         long long uidCategory = query.value("UID").toLongLong();
-        QString weight = DBUtils::getNormanWeightRange(database, uidCategory);
+        QString weight = DBUtils::getNormanWeightRangeFromTOURNAMENT_CATEGORIES(database, uidCategory);
 
         QVector<NodeOfTournirGrid> nodes = getNodes(database, uidCategory);
         for (int iter = 0; iter < 4 && !nodes.empty(); ++iter)
@@ -434,10 +434,15 @@ int DBUtils::get__ROUND_COUNT(const QSqlDatabase& database, long long UID)
     return res;
 }
 
-QString DBUtils::getNormanWeightRange(const QSqlDatabase& database, long long uidCategory)
+QString DBUtils::getNormanWeightRangeFromTOURNAMENT_CATEGORIES(const QSqlDatabase& database, long long uidCategory)
 {
     double a = DBUtils::getField(database, "WEIGHT_FROM", "TOURNAMENT_CATEGORIES", uidCategory).toDouble();
     double b = DBUtils::getField(database, "WEIGHT_TILL", "TOURNAMENT_CATEGORIES", uidCategory).toDouble();
+    return getNormanWeightRange(a, b);
+}
+
+QString DBUtils::getNormanWeightRange(double a, double b)
+{
     QString aa = roundDouble(a, 3);
     QString bb = roundDouble(b, 3);
 

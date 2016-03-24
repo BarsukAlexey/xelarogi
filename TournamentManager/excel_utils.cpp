@@ -37,21 +37,17 @@ void ExcelUtils::setValue(QAxObject* sheet, int row, int column, QString text, i
     delete cell;
 }
 
-void ExcelUtils::setBorder(QAxObject* sheet, int row0, int column0, int row1, int column1, int Weight)
+void ExcelUtils::setBorder(QAxObject* sheet, int row0, int column0, int row1, int column1, int Weight, Border border2)
 {
     QAxObject* cell1 = sheet->querySubObject("Cells(QVariant&, QVariant&)", row0, column0);
     QAxObject* cell2 = sheet->querySubObject("Cells(QVariant&, QVariant&)", row1, column1);
     QAxObject* range = sheet->querySubObject("Range(const QVariant&, const QVariant&)", cell1->asVariant(), cell2->asVariant() );
 
-
-    // xlEdgeTop(верхняя граница) (xlEdgeLeft) левая,
-    // (xlEdgeRight) правая,(xlEdgeBottom) нижняя
-    // и 2 диагонали (xlDiagonalDown) (xlDiagonalUp)
-    QAxObject *border = range->querySubObject("Borders()");
+    QAxObject *borders = range->querySubObject( ("Borders(" + bordertoString(border2) + ")").toStdString().c_str() );
     // тип линии (там пунктиры,сплошная и так далее)
-    border->setProperty("LineStyle",1);
+    borders->setProperty("LineStyle", 1);
     // толщина
-    border->setProperty("Weight", Weight);
+    borders->setProperty("Weight", Weight);
 }
 
 void ExcelUtils::setColumnAutoFit(QAxObject* sheet, int column)

@@ -2,7 +2,7 @@
 <p>The  COM object is a QAxObject with the CLSID .</p>
 <h3>Interfaces</h3>
 <ul>
-<li>Workbooks
+<li>Sheets
 </ul>
 <h3>Event Interfaces</h3>
 <ul>
@@ -10,20 +10,20 @@
 </ul>
 <h2>Public Slots:</h2>
 <ul>
-<li>IDispatch* <a href="#Add"><b>Add</b></a>(QVariant Template = 0);</li>
-<li>bool <a href="#CanCheckOut"><b>CanCheckOut</b></a>(QString Filename);</li>
-<li>void <a href="#CheckOut"><b>CheckOut</b></a>(QString Filename);</li>
-<li>void <a href="#Close"><b>Close</b></a>();</li>
+<li>IDispatch* <a href="#Add"><b>Add</b></a>(QVariant Before = 0, QVariant After = 0, QVariant Count = 0, QVariant Type = 0);</li>
+<li>IDispatch* <a href="#Add2"><b>Add2</b></a>(QVariant Before = 0, QVariant After = 0, QVariant Count = 0, QVariant NewLayout = 0);</li>
+<li>void <a href="#Copy"><b>Copy</b></a>(QVariant Before = 0, QVariant After = 0);</li>
+<li>void <a href="#Delete"><b>Delete</b></a>();</li>
+<li>void <a href="#FillAcrossSheets"><b>FillAcrossSheets</b></a>(IDispatch* Range, XlFillWith Type = 0);</li>
 <li>IDispatch* <a href="#Item"><b>Item</b></a>(QVariant Index);</li>
-<li>IDispatch* <a href="#Open"><b>Open</b></a>(QString Filename, QVariant UpdateLinks = 0, QVariant ReadOnly = 0, QVariant Format = 0, QVariant Password = 0, QVariant WriteResPassword = 0, QVariant IgnoreReadOnlyRecommended = 0, QVariant Origin = 0, QVariant Delimiter = 0, QVariant Editable = 0, QVariant Notify = 0, QVariant Converter = 0, QVariant AddToMru = 0, QVariant Local = 0, QVariant CorruptLoad = 0);</li>
-<li>IDispatch* <a href="#OpenDatabase"><b>OpenDatabase</b></a>(QString Filename, QVariant CommandText = 0, QVariant CommandType = 0, QVariant BackgroundQuery = 0, QVariant ImportDataAs = 0);</li>
-<li>void <a href="#OpenText"><b>OpenText</b></a>(QString Filename, QVariant Origin = 0, QVariant StartRow = 0, QVariant DataType = 0, XlTextQualifier TextQualifier = 0, QVariant ConsecutiveDelimiter = 0, QVariant Tab = 0, QVariant Semicolon = 0, QVariant Comma = 0, QVariant Space = 0, QVariant Other = 0, QVariant OtherChar = 0, QVariant FieldInfo = 0, QVariant TextVisualLayout = 0, QVariant DecimalSeparator = 0, QVariant ThousandsSeparator = 0, QVariant TrailingMinusNumbers = 0, QVariant Local = 0);</li>
-<li>IDispatch* <a href="#OpenXML"><b>OpenXML</b></a>(QString Filename, QVariant Stylesheets = 0, QVariant LoadOption = 0);</li>
+<li>void <a href="#Move"><b>Move</b></a>(QVariant Before = 0, QVariant After = 0);</li>
+<li>void <a href="#PrintOut"><b>PrintOut</b></a>(QVariant From = 0, QVariant To = 0, QVariant Copies = 0, QVariant Preview = 0, QVariant ActivePrinter = 0, QVariant PrintToFile = 0, QVariant Collate = 0, QVariant PrToFileName = 0, QVariant IgnorePrintAreas = 0);</li>
+<li>void <a href="#PrintPreview"><b>PrintPreview</b></a>(QVariant EnableChanges = 0);</li>
+<li>void <a href="#Select"><b>Select</b></a>(QVariant Replace = 0);</li>
+<li>void <a href="#SetVisible"><b>SetVisible</b></a>(QVariant Visible);</li>
 <li>IDispatch* <a href="#_Default"><b>_Default</b></a>(QVariant Index);</li>
-<li>IDispatch* <a href="#_Open"><b>_Open</b></a>(QString Filename, QVariant UpdateLinks = 0, QVariant ReadOnly = 0, QVariant Format = 0, QVariant Password = 0, QVariant WriteResPassword = 0, QVariant IgnoreReadOnlyRecommended = 0, QVariant Origin = 0, QVariant Delimiter = 0, QVariant Editable = 0, QVariant Notify = 0, QVariant Converter = 0, QVariant AddToMru = 0);</li>
-<li>void <a href="#_OpenText"><b>_OpenText</b></a>(QString Filename, QVariant Origin = 0, QVariant StartRow = 0, QVariant DataType = 0, XlTextQualifier TextQualifier = 0, QVariant ConsecutiveDelimiter = 0, QVariant Tab = 0, QVariant Semicolon = 0, QVariant Comma = 0, QVariant Space = 0, QVariant Other = 0, QVariant OtherChar = 0, QVariant FieldInfo = 0, QVariant TextVisualLayout = 0, QVariant DecimalSeparator = 0, QVariant ThousandsSeparator = 0);</li>
-<li>IDispatch* <a href="#_OpenXML"><b>_OpenXML</b></a>(QString Filename, QVariant Stylesheets = 0);</li>
-<li>void <a href="#__OpenText"><b>__OpenText</b></a>(QString Filename, QVariant Origin = 0, QVariant StartRow = 0, QVariant DataType = 0, XlTextQualifier TextQualifier = 0, QVariant ConsecutiveDelimiter = 0, QVariant Tab = 0, QVariant Semicolon = 0, QVariant Comma = 0, QVariant Space = 0, QVariant Other = 0, QVariant OtherChar = 0, QVariant FieldInfo = 0, QVariant TextVisualLayout = 0);</li>
+<li>void <a href="#_PrintOut"><b>_PrintOut</b></a>(QVariant From = 0, QVariant To = 0, QVariant Copies = 0, QVariant Preview = 0, QVariant ActivePrinter = 0, QVariant PrintToFile = 0, QVariant Collate = 0, QVariant PrToFileName = 0);</li>
+<li>void <a href="#__PrintOut"><b>__PrintOut</b></a>(QVariant From = 0, QVariant To = 0, QVariant Copies = 0, QVariant Preview = 0, QVariant ActivePrinter = 0, QVariant PrintToFile = 0, QVariant Collate = 0);</li>
 </ul>
 <h2>Signals:</h2>
 <ul>
@@ -37,7 +37,10 @@
 <li>IDispatch* <a href="#Application"><b>Application</b></a>;</li>
 <li>int <a href="#Count"><b>Count</b></a>;</li>
 <li>XlCreator <a href="#Creator"><b>Creator</b></a>;</li>
+<li>IDispatch* <a href="#HPageBreaks"><b>HPageBreaks</b></a>;</li>
 <li>IDispatch* <a href="#Parent"><b>Parent</b></a>;</li>
+<li>IDispatch* <a href="#VPageBreaks"><b>VPageBreaks</b></a>;</li>
+<li>QVariant <a href="#Visible"><b>Visible</b></a>;</li>
 <li>IUnknown* <a href="#_NewEnum"><b>_NewEnum</b></a>;</li>
 <li>QString <a href="#control"><b>control</b></a>;</li>
 </ul>
@@ -3108,36 +3111,44 @@
 <li>xlYes	=1</li>
 </ul>
 <hr><h2>Member Function Documentation</h2>
-<h3><a name=Add></a>IDispatch* Add (QVariant Template)<tt> [slot]</tt></h3>
+<h3><a name=Add></a>IDispatch* Add (QVariant Before, QVariant After, QVariant Count, QVariant Type)<tt> [slot]</tt></h3>
 <p>
 <p>Connect a signal to this slot:<pre>
-	QObject::connect(sender, SIGNAL(someSignal(QVariant)), object, SLOT(Add(QVariant)));</pre>
+	QObject::connect(sender, SIGNAL(someSignal(QVariant, QVariant, QVariant, QVariant)), object, SLOT(Add(QVariant, QVariant, QVariant, QVariant)));</pre>
 <p>Or call the function directly:<pre>
 	QVariantList params = ...
-	QAxObject * result = object->querySubObject("Add(QVariant)", params);</pre>
+	QAxObject * result = object->querySubObject("Add(QVariant, QVariant, QVariant, QVariant)", params);</pre>
 
-<h3><a name=CanCheckOut></a>bool CanCheckOut (QString Filename)<tt> [slot]</tt></h3>
+<h3><a name=Add2></a>IDispatch* Add2 (QVariant Before, QVariant After, QVariant Count, QVariant NewLayout)<tt> [slot]</tt></h3>
 <p>
 <p>Connect a signal to this slot:<pre>
-	QObject::connect(sender, SIGNAL(someSignal(QString)), object, SLOT(CanCheckOut(QString)));</pre>
+	QObject::connect(sender, SIGNAL(someSignal(QVariant, QVariant, QVariant, QVariant)), object, SLOT(Add2(QVariant, QVariant, QVariant, QVariant)));</pre>
 <p>Or call the function directly:<pre>
 	QVariantList params = ...
-	bool result = object->dynamicCall("CanCheckOut(QString)", params).toBool();</pre>
+	QAxObject * result = object->querySubObject("Add2(QVariant, QVariant, QVariant, QVariant)", params);</pre>
 
-<h3><a name=CheckOut></a>void CheckOut (QString Filename)<tt> [slot]</tt></h3>
+<h3><a name=Copy></a>void Copy (QVariant Before, QVariant After)<tt> [slot]</tt></h3>
 <p>
 <p>Connect a signal to this slot:<pre>
-	QObject::connect(sender, SIGNAL(someSignal(QString)), object, SLOT(CheckOut(QString)));</pre>
+	QObject::connect(sender, SIGNAL(someSignal(QVariant, QVariant)), object, SLOT(Copy(QVariant, QVariant)));</pre>
 <p>Or call the function directly:<pre>
 	QVariantList params = ...
-	object->dynamicCall("CheckOut(QString)", params);</pre>
+	object->dynamicCall("Copy(QVariant, QVariant)", params);</pre>
 
-<h3><a name=Close></a>void Close ()<tt> [slot]</tt></h3>
+<h3><a name=Delete></a>void Delete ()<tt> [slot]</tt></h3>
 <p>
 <p>Connect a signal to this slot:<pre>
-	QObject::connect(sender, SIGNAL(someSignal()), object, SLOT(Close()));</pre>
+	QObject::connect(sender, SIGNAL(someSignal()), object, SLOT(Delete()));</pre>
 <p>Or call the function directly:<pre>
-	object->dynamicCall("Close()");</pre>
+	object->dynamicCall("Delete()");</pre>
+
+<h3><a name=FillAcrossSheets></a>void FillAcrossSheets (IDispatch* Range, XlFillWith Type)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(IDispatch*, XlFillWith)), object, SLOT(FillAcrossSheets(IDispatch*, XlFillWith)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("FillAcrossSheets(IDispatch*, XlFillWith)", params);</pre>
 
 <h3><a name=Item></a>IDispatch* Item (QVariant Index)<tt> [slot]</tt></h3>
 <p>
@@ -3147,37 +3158,45 @@
 	QVariantList params = ...
 	QAxObject * result = object->querySubObject("Item(QVariant)", params);</pre>
 
-<h3><a name=Open></a>IDispatch* Open (QString Filename, QVariant UpdateLinks, QVariant ReadOnly, QVariant Format, QVariant Password, QVariant WriteResPassword, QVariant IgnoreReadOnlyRecommended, QVariant Origin, QVariant Delimiter, QVariant Editable, QVariant Notify, QVariant Converter, QVariant AddToMru, QVariant Local, QVariant CorruptLoad)<tt> [slot]</tt></h3>
+<h3><a name=Move></a>void Move (QVariant Before, QVariant After)<tt> [slot]</tt></h3>
 <p>
 <p>Connect a signal to this slot:<pre>
-	QObject::connect(sender, SIGNAL(someSignal(QString, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant)), object, SLOT(Open(QString, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant)));</pre>
+	QObject::connect(sender, SIGNAL(someSignal(QVariant, QVariant)), object, SLOT(Move(QVariant, QVariant)));</pre>
 <p>Or call the function directly:<pre>
 	QVariantList params = ...
-	QAxObject * result = object->querySubObject("Open(QString, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant)", params);</pre>
+	object->dynamicCall("Move(QVariant, QVariant)", params);</pre>
 
-<h3><a name=OpenDatabase></a>IDispatch* OpenDatabase (QString Filename, QVariant CommandText, QVariant CommandType, QVariant BackgroundQuery, QVariant ImportDataAs)<tt> [slot]</tt></h3>
+<h3><a name=PrintOut></a>void PrintOut (QVariant From, QVariant To, QVariant Copies, QVariant Preview, QVariant ActivePrinter, QVariant PrintToFile, QVariant Collate, QVariant PrToFileName, QVariant IgnorePrintAreas)<tt> [slot]</tt></h3>
 <p>
 <p>Connect a signal to this slot:<pre>
-	QObject::connect(sender, SIGNAL(someSignal(QString, QVariant, QVariant, QVariant, QVariant)), object, SLOT(OpenDatabase(QString, QVariant, QVariant, QVariant, QVariant)));</pre>
+	QObject::connect(sender, SIGNAL(someSignal(QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant)), object, SLOT(PrintOut(QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant)));</pre>
 <p>Or call the function directly:<pre>
 	QVariantList params = ...
-	QAxObject * result = object->querySubObject("OpenDatabase(QString, QVariant, QVariant, QVariant, QVariant)", params);</pre>
+	object->dynamicCall("PrintOut(QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant)", params);</pre>
 
-<h3><a name=OpenText></a>void OpenText (QString Filename, QVariant Origin, QVariant StartRow, QVariant DataType, XlTextQualifier TextQualifier, QVariant ConsecutiveDelimiter, QVariant Tab, QVariant Semicolon, QVariant Comma, QVariant Space, QVariant Other, QVariant OtherChar, QVariant FieldInfo, QVariant TextVisualLayout, QVariant DecimalSeparator, QVariant ThousandsSeparator, QVariant TrailingMinusNumbers, QVariant Local)<tt> [slot]</tt></h3>
+<h3><a name=PrintPreview></a>void PrintPreview (QVariant EnableChanges)<tt> [slot]</tt></h3>
 <p>
 <p>Connect a signal to this slot:<pre>
-	QObject::connect(sender, SIGNAL(someSignal(QString, QVariant, QVariant, QVariant, XlTextQualifier, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant)), object, SLOT(OpenText(QString, QVariant, QVariant, QVariant, XlTextQualifier, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant)));</pre>
+	QObject::connect(sender, SIGNAL(someSignal(QVariant)), object, SLOT(PrintPreview(QVariant)));</pre>
 <p>Or call the function directly:<pre>
 	QVariantList params = ...
-	object->dynamicCall("OpenText(QString, QVariant, QVariant, QVariant, XlTextQualifier, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant)", params);</pre>
+	object->dynamicCall("PrintPreview(QVariant)", params);</pre>
 
-<h3><a name=OpenXML></a>IDispatch* OpenXML (QString Filename, QVariant Stylesheets, QVariant LoadOption)<tt> [slot]</tt></h3>
+<h3><a name=Select></a>void Select (QVariant Replace)<tt> [slot]</tt></h3>
 <p>
 <p>Connect a signal to this slot:<pre>
-	QObject::connect(sender, SIGNAL(someSignal(QString, QVariant, QVariant)), object, SLOT(OpenXML(QString, QVariant, QVariant)));</pre>
+	QObject::connect(sender, SIGNAL(someSignal(QVariant)), object, SLOT(Select(QVariant)));</pre>
 <p>Or call the function directly:<pre>
 	QVariantList params = ...
-	QAxObject * result = object->querySubObject("OpenXML(QString, QVariant, QVariant)", params);</pre>
+	object->dynamicCall("Select(QVariant)", params);</pre>
+
+<h3><a name=SetVisible></a>void SetVisible (QVariant Visible)<tt> [slot]</tt></h3>
+<p>
+<p>Connect a signal to this slot:<pre>
+	QObject::connect(sender, SIGNAL(someSignal(QVariant)), object, SLOT(SetVisible(QVariant)));</pre>
+<p>Or call the function directly:<pre>
+	QVariantList params = ...
+	object->dynamicCall("SetVisible(QVariant)", params);</pre>
 
 <h3><a name=_Default></a>IDispatch* _Default (QVariant Index)<tt> [slot]</tt></h3>
 <p>
@@ -3187,37 +3206,21 @@
 	QVariantList params = ...
 	QAxObject * result = object->querySubObject("_Default(QVariant)", params);</pre>
 
-<h3><a name=_Open></a>IDispatch* _Open (QString Filename, QVariant UpdateLinks, QVariant ReadOnly, QVariant Format, QVariant Password, QVariant WriteResPassword, QVariant IgnoreReadOnlyRecommended, QVariant Origin, QVariant Delimiter, QVariant Editable, QVariant Notify, QVariant Converter, QVariant AddToMru)<tt> [slot]</tt></h3>
+<h3><a name=_PrintOut></a>void _PrintOut (QVariant From, QVariant To, QVariant Copies, QVariant Preview, QVariant ActivePrinter, QVariant PrintToFile, QVariant Collate, QVariant PrToFileName)<tt> [slot]</tt></h3>
 <p>
 <p>Connect a signal to this slot:<pre>
-	QObject::connect(sender, SIGNAL(someSignal(QString, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant)), object, SLOT(_Open(QString, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant)));</pre>
+	QObject::connect(sender, SIGNAL(someSignal(QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant)), object, SLOT(_PrintOut(QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant)));</pre>
 <p>Or call the function directly:<pre>
 	QVariantList params = ...
-	QAxObject * result = object->querySubObject("_Open(QString, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant)", params);</pre>
+	object->dynamicCall("_PrintOut(QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant)", params);</pre>
 
-<h3><a name=_OpenText></a>void _OpenText (QString Filename, QVariant Origin, QVariant StartRow, QVariant DataType, XlTextQualifier TextQualifier, QVariant ConsecutiveDelimiter, QVariant Tab, QVariant Semicolon, QVariant Comma, QVariant Space, QVariant Other, QVariant OtherChar, QVariant FieldInfo, QVariant TextVisualLayout, QVariant DecimalSeparator, QVariant ThousandsSeparator)<tt> [slot]</tt></h3>
+<h3><a name=__PrintOut></a>void __PrintOut (QVariant From, QVariant To, QVariant Copies, QVariant Preview, QVariant ActivePrinter, QVariant PrintToFile, QVariant Collate)<tt> [slot]</tt></h3>
 <p>
 <p>Connect a signal to this slot:<pre>
-	QObject::connect(sender, SIGNAL(someSignal(QString, QVariant, QVariant, QVariant, XlTextQualifier, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant)), object, SLOT(_OpenText(QString, QVariant, QVariant, QVariant, XlTextQualifier, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant)));</pre>
+	QObject::connect(sender, SIGNAL(someSignal(QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant)), object, SLOT(__PrintOut(QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant)));</pre>
 <p>Or call the function directly:<pre>
 	QVariantList params = ...
-	object->dynamicCall("_OpenText(QString, QVariant, QVariant, QVariant, XlTextQualifier, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant)", params);</pre>
-
-<h3><a name=_OpenXML></a>IDispatch* _OpenXML (QString Filename, QVariant Stylesheets)<tt> [slot]</tt></h3>
-<p>
-<p>Connect a signal to this slot:<pre>
-	QObject::connect(sender, SIGNAL(someSignal(QString, QVariant)), object, SLOT(_OpenXML(QString, QVariant)));</pre>
-<p>Or call the function directly:<pre>
-	QVariantList params = ...
-	QAxObject * result = object->querySubObject("_OpenXML(QString, QVariant)", params);</pre>
-
-<h3><a name=__OpenText></a>void __OpenText (QString Filename, QVariant Origin, QVariant StartRow, QVariant DataType, XlTextQualifier TextQualifier, QVariant ConsecutiveDelimiter, QVariant Tab, QVariant Semicolon, QVariant Comma, QVariant Space, QVariant Other, QVariant OtherChar, QVariant FieldInfo, QVariant TextVisualLayout)<tt> [slot]</tt></h3>
-<p>
-<p>Connect a signal to this slot:<pre>
-	QObject::connect(sender, SIGNAL(someSignal(QString, QVariant, QVariant, QVariant, XlTextQualifier, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant)), object, SLOT(__OpenText(QString, QVariant, QVariant, QVariant, XlTextQualifier, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant)));</pre>
-<p>Or call the function directly:<pre>
-	QVariantList params = ...
-	object->dynamicCall("__OpenText(QString, QVariant, QVariant, QVariant, XlTextQualifier, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant)", params);</pre>
+	object->dynamicCall("__PrintOut(QVariant, QVariant, QVariant, QVariant, QVariant, QVariant, QVariant)", params);</pre>
 
 <h3><a name=exception></a>void exception (int code, QString source, QString disc, QString help)<tt> [signal]</tt></h3>
 <p>
@@ -3236,7 +3239,7 @@
 
 <hr><h2>Property Documentation</h2>
 <h3><a name=objectName></a>QString objectName</h3>
-<p>For more information, see help context 203080 in C:\Program Files (x86)\Microsoft Office\Office16\VBAXL10.CHM.
+<p>For more information, see help context 152087 in C:\Program Files (x86)\Microsoft Office\Office16\VBAXL10.CHM.
 <p>Read this property's value using QObject::property:<pre>
 	QString val = object->property("objectName").toString();
 </pre>
@@ -3247,38 +3250,61 @@ Set this property' value using QObject::setProperty:<pre>
 Or using the <a href="#setObjectName">setObjectName</a> slot.
 
 <h3><a name=Application></a>IDispatch* Application</h3>
-<p>For more information, see help context 203080 in C:\Program Files (x86)\Microsoft Office\Office16\VBAXL10.CHM.
+<p>For more information, see help context 152087 in C:\Program Files (x86)\Microsoft Office\Office16\VBAXL10.CHM.
 <p>Read this property's value using QObject::property:<pre>
 	IDispatch* val = object->property("Application").toIDispatch*();
 </pre>
 
 <h3><a name=Count></a>int Count</h3>
-<p>For more information, see help context 203080 in C:\Program Files (x86)\Microsoft Office\Office16\VBAXL10.CHM.
+<p>For more information, see help context 152087 in C:\Program Files (x86)\Microsoft Office\Office16\VBAXL10.CHM.
 <p>Read this property's value using QObject::property:<pre>
 	int val = object->property("Count").toInt();
 </pre>
 
 <h3><a name=Creator></a>XlCreator Creator</h3>
-<p>For more information, see help context 203080 in C:\Program Files (x86)\Microsoft Office\Office16\VBAXL10.CHM.
+<p>For more information, see help context 152087 in C:\Program Files (x86)\Microsoft Office\Office16\VBAXL10.CHM.
 <p>Read this property's value using QObject::property:<pre>
 	int val = object->property("Creator").toInt();
 </pre>
 <p>See also <a href="#XlCreator">XlCreator</a>.
 
+<h3><a name=HPageBreaks></a>IDispatch* HPageBreaks</h3>
+<p>For more information, see help context 152087 in C:\Program Files (x86)\Microsoft Office\Office16\VBAXL10.CHM.
+<p>Read this property's value using QObject::property:<pre>
+	IDispatch* val = object->property("HPageBreaks").toIDispatch*();
+</pre>
+
 <h3><a name=Parent></a>IDispatch* Parent</h3>
-<p>For more information, see help context 203080 in C:\Program Files (x86)\Microsoft Office\Office16\VBAXL10.CHM.
+<p>For more information, see help context 152087 in C:\Program Files (x86)\Microsoft Office\Office16\VBAXL10.CHM.
 <p>Read this property's value using QObject::property:<pre>
 	IDispatch* val = object->property("Parent").toIDispatch*();
 </pre>
 
+<h3><a name=VPageBreaks></a>IDispatch* VPageBreaks</h3>
+<p>For more information, see help context 152087 in C:\Program Files (x86)\Microsoft Office\Office16\VBAXL10.CHM.
+<p>Read this property's value using QObject::property:<pre>
+	IDispatch* val = object->property("VPageBreaks").toIDispatch*();
+</pre>
+
+<h3><a name=Visible></a>QVariant Visible</h3>
+<p>For more information, see help context 152087 in C:\Program Files (x86)\Microsoft Office\Office16\VBAXL10.CHM.
+<p>Read this property's value using QObject::property:<pre>
+	QVariant val = object->property("Visible").toVariant();
+</pre>
+Set this property' value using QObject::setProperty:<pre>
+	QVariant newValue = ...
+	object->setProperty("Visible", newValue);
+</pre>
+Or using the <a href="#SetVisible">SetVisible</a> slot.
+
 <h3><a name=_NewEnum></a>IUnknown* _NewEnum</h3>
-<p>For more information, see help context 203080 in C:\Program Files (x86)\Microsoft Office\Office16\VBAXL10.CHM.
+<p>For more information, see help context 152087 in C:\Program Files (x86)\Microsoft Office\Office16\VBAXL10.CHM.
 <p>Read this property's value using QObject::property:<pre>
 	IUnknown* val = object->property("_NewEnum").toIUnknown*();
 </pre>
 
 <h3><a name=control></a>QString control</h3>
-<p>For more information, see help context 203080 in C:\Program Files (x86)\Microsoft Office\Office16\VBAXL10.CHM.
+<p>For more information, see help context 152087 in C:\Program Files (x86)\Microsoft Office\Office16\VBAXL10.CHM.
 <p>Read this property's value using QObject::property:<pre>
 	QString val = object->property("control").toString();
 </pre>
