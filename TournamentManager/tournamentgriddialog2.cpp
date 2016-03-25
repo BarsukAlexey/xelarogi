@@ -49,8 +49,8 @@ TournamentGridDialog2::TournamentGridDialog2(const QSqlDatabase &_database, long
     qComboBoxSelectCategory = new QComboBox;
     qComboBoxSelectCategory->setMaxVisibleItems(200);
     qTableWidget = new QTableWidget(0, 3);
-    qTableWidget->setColumnCount(3);
-    qTableWidget->setHorizontalHeaderLabels(QStringList({"Спортсмен", "Регион", "Приоритет"}));
+    qTableWidget->setColumnCount(4);
+    qTableWidget->setHorizontalHeaderLabels(QStringList({"Спортсмен", "Регион", "Приоритет", "Разряд"}));
     qTableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
     qTableWidget->setSelectionMode(QAbstractItemView::SingleSelection);
     qTableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -137,7 +137,7 @@ TournamentGridDialog2::TournamentGridDialog2(const QSqlDatabase &_database, long
         fillCategoryCombobox(filter);
     });
 
-    //showMaximized();
+    showMaximized();
 
     connect(qCheckBox, &QCheckBox::stateChanged, [this, filterCategoriesLE] ()
     {
@@ -147,18 +147,22 @@ TournamentGridDialog2::TournamentGridDialog2(const QSqlDatabase &_database, long
     setWindowFlags(windowFlags() | Qt::WindowMaximizeButtonHint);
 }
 
-
+#include <QHeaderView>
 // юзер выбирает категорию турнира
 void TournamentGridDialog2::onActivatedCategory(int id)
 {
-    if (id < 0) return;
+    if (id < 0)
+    {
+        qTableWidget->setRowCount(0);
+        return;
+    }
     specialGroup = QVector<int>(4, false);
     tournamentCategories = qComboBoxSelectCategory->itemData(id, Qt::UserRole).toInt();
 
     pRenderArea->slotSetTournamentCategories(tournamentCategories);
     //qDebug() << __LINE__ << __PRETTY_FUNCTION__ << "tournamentCategories: " << tournamentCategories;
 
-    QSqlQuery query("SELECT * FROM ORDERS WHERE TOURNAMENT_CATEGORY_FK = ? AND IS_VALID = ?", database);
+    QSqlQuery query("SELECT * FROM ORDERS WHERE TOURNAMENT_CATEGORY_FK = ? AND IS_VALID = ? ORDER BY SECOND_NAME, FIRST_NAME", database);
     query.bindValue(0, tournamentCategories);
     query.bindValue(1, 1);
 
@@ -170,23 +174,14 @@ void TournamentGridDialog2::onActivatedCategory(int id)
         while (query.next())
         {
             QString name = query.value("SECOND_NAME").toString() + " " + query.value("FIRST_NAME").toString();
-            int idRegion = query.value("REGION_FK").toInt();
-            QSqlQuery q("SELECT * FROM REGIONS WHERE UID = ?", database);
-            q.bindValue(0, idRegion);
-            if (!q.exec())
-            {
-                qDebug() << "\n" << __PRETTY_FUNCTION__ << "\n" << q.lastError().text() << "\n" << q.lastQuery() << "\n";
-                continue;
-            }
-
-            q.next();
-            QString region = q.value("NAME").toString();
+            long long idRegion = query.value("REGION_FK").toInt();
+            QString region = DBUtils::getField("NAME", "REGIONS", idRegion);
 
             qTableWidget->setRowCount(qTableWidget->rowCount() + 1);
             QTableWidgetItem *item;
 
             item = new QTableWidgetItem(name);
-            item->setData(Qt::UserRole, query.value("UID").toInt());
+            item->setData(Qt::UserRole, query.value("UID").toLongLong());
             qTableWidget->setItem(qTableWidget->rowCount() - 1, 0, item);
 
             item = new QTableWidgetItem(region);
@@ -194,12 +189,16 @@ void TournamentGridDialog2::onActivatedCategory(int id)
             qTableWidget->setItem(qTableWidget->rowCount() - 1, 1, item);
 
             qTableWidget->setItem(qTableWidget->rowCount() - 1, 2, new QTableWidgetItem(no_special_group));
+
+            qTableWidget->setItem(qTableWidget->rowCount() - 1, 3, new QTableWidgetItem(DBUtils::getField("NAME", "SPORT_CATEGORIES", query.value("SPORT_CATEGORY_FK").toString())));
         }
     }
     else
     {
         qDebug() << "\n" << __PRETTY_FUNCTION__ << "\n" << query.lastError().text() << "\n" << query.lastQuery() << "\n";
     }
+
+    qTableWidget->resizeColumnsToContents();
 }
 
 // юзер кликает по участнику и у него меняется приоритет
@@ -556,7 +555,7 @@ void TournamentGridDialog2::fillCategoryCombobox(QString filterStr)
         whereStatement += " AND NAME LIKE '%" + filter + "%' ";
     }
 
-    QSqlQuery query("SELECT * FROM TOURNAMENT_CATEGORIES WHERE TOURNAMENT_FK = ? " + whereStatement, database);
+    QSqlQuery query("SELECT * FROM TOURNAMENT_CATEGORIES WHERE TOURNAMENT_FK = ? " + whereStatement + " ORDER BY SEX_FK, TYPE_FK, AGE_FROM, AGE_TILL, WEIGHT_FROM, WEIGHT_TILL ");
     query.bindValue(0, tournamentUID);
     if (query.exec())
     {
@@ -565,7 +564,15 @@ void TournamentGridDialog2::fillCategoryCombobox(QString filterStr)
             QString categoryUID = query.value("UID").toString();
             QString categoryName = query.value("NAME").toString();
 
-            if (!qCheckBox->isChecked() || qCheckBox->isChecked() && 0 < DBUtils::getNodes(categoryUID.toLongLong()).size())
+            int countMansInThisCategory = 228;
+            QSqlQuery queryCount("SELECT COUNT(*) AS CNT FROM ORDERS WHERE TOURNAMENT_CATEGORY_FK = ? ");
+            queryCount.bindValue(0, categoryUID);
+            if (!queryCount.exec() || !queryCount.next())
+                qDebug() << __PRETTY_FUNCTION__ << queryCount.lastError() << queryCount.lastQuery();
+            else
+                countMansInThisCategory = queryCount.value("CNT").toInt();
+
+            if (!qCheckBox->isChecked() || qCheckBox->isChecked() && 0 < countMansInThisCategory)
             {
                 QListWidgetItem* item = new QListWidgetItem();
                 item->setData(Qt::DisplayRole, categoryName);
