@@ -448,3 +448,9 @@ void RenderAreaWidget::printTableGridInExcel(const QSqlDatabase &database, int t
     excel.dynamicCall("Quit()");
     /**/
 }
+
+QString RenderAreaWidget::getNameOfLevel(int vertex)
+{
+    int level = RenderAreaWidget::log2(vertex) + 1;
+    return level == 1? "Финал" : level == 2? "Полуфинал" : "1 / " + QString::number(level);
+}

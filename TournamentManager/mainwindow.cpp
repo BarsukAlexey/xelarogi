@@ -32,6 +32,9 @@
 #include <QFileDialog>
 #include <QMessageBox>
 
+#include <QMouseEvent>
+
+
 using namespace std;
 
 MainWindow::MainWindow(QWidget *parent) :

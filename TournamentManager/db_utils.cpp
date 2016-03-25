@@ -259,23 +259,22 @@ QVector<QVector<DBUtils::Fighing>> DBUtils::getListsOfPairs(const QSqlDatabase& 
 {
     QVector<QVector<Fighing>> result;
 
-    QSqlQuery query_TOURNAMENT_CATEGORIES("SELECT * FROM TOURNAMENT_CATEGORIES WHERE TOURNAMENT_FK = ? ORDER BY TYPE_FK, AGE_FROM", database);
+    QSqlQuery query_TOURNAMENT_CATEGORIES("SELECT * FROM TOURNAMENT_CATEGORIES WHERE TOURNAMENT_FK = ? ORDER BY SEX_FK, TYPE_FK, AGE_FROM, AGE_TILL, WEIGHT_FROM, WEIGHT_TILL", database);
     query_TOURNAMENT_CATEGORIES.bindValue(0, tournamentUID);
     if (!query_TOURNAMENT_CATEGORIES.exec())
     {
-        qDebug() << __PRETTY_FUNCTION__ << query_TOURNAMENT_CATEGORIES.lastError().text() << query_TOURNAMENT_CATEGORIES.lastQuery();
-        result.clear();
+        qDebug() << __PRETTY_FUNCTION__ << query_TOURNAMENT_CATEGORIES.lastError() << query_TOURNAMENT_CATEGORIES.lastQuery();
         return result;
     }
     while (query_TOURNAMENT_CATEGORIES.next())
     {
         long long TOURNAMENT_CATEGORIES_UID = query_TOURNAMENT_CATEGORIES.value("UID").toLongLong();
+        //qDebug() << DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", TOURNAMENT_CATEGORIES_UID);
 
         QVector<Fighing> listOfPairs = getListOfPairs(database, TOURNAMENT_CATEGORIES_UID);
         if (listOfPairs.size())
             result.push_back(listOfPairs);
     }
-
     return result;
 }
 
@@ -327,18 +326,6 @@ QVector<long long> DBUtils::get_UIDs_of_TOURNAMENT_CATEGORIES(const QSqlDatabase
             uids.push_back(query.value("UID").toLongLong());
     //qDebug() << uids;
     return uids;
-}
-
-QString DBUtils::get__NAME_OF_TOURNAMENT_CATEGORIES(const QSqlDatabase& database, long long UID)
-{
-    QSqlQuery query("SELECT * FROM TOURNAMENT_CATEGORIES WHERE UID = ? ", database);
-    query.bindValue(0, UID);
-    QString res;
-    if (query.exec() && query.next())
-        res = query.value("NAME").toString();
-    else
-        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << query.lastError().text() << query.lastQuery();
-    return res;
 }
 
 

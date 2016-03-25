@@ -30,6 +30,7 @@
 #include <QDate>
 #include <assert.h>
 #include <string>
+#include <QTabWidget>
 
 
 TournamentGridDialog2::TournamentGridDialog2(const QSqlDatabase &_database, long long _tournamentUID, QWidget *_parent)
@@ -87,6 +88,9 @@ TournamentGridDialog2::TournamentGridDialog2(const QSqlDatabase &_database, long
     QScrollArea *pQScrollArea = new QScrollArea;
     pRenderArea = new RenderAreaWidget(pQScrollArea, widthSpinBox->value(), heightSpinBox->value(), database);
     pQScrollArea->setWidget(pRenderArea);
+    QTabWidget *qTabWidget = new QTabWidget();
+    qTabWidget->addTab(pQScrollArea, "Сетка");
+    qTabWidget->addTab(new QLabel("Табличка"), "Список");
 
     QLabel *widthQLabel = new QLabel("Ширина:");
     widthQLabel->setAlignment(Qt::AlignRight | Qt::AlignCenter);
@@ -101,7 +105,7 @@ TournamentGridDialog2::TournamentGridDialog2(const QSqlDatabase &_database, long
         mainLayout->addWidget(heightQLabel, 0, 3);
         mainLayout->addWidget(heightSpinBox, 0, 4);
 
-        mainLayout->addWidget(pQScrollArea, 1, 0, 1, 5);
+        mainLayout->addWidget(qTabWidget, 1, 0, 1, 5);
 
         rightPane->setLayout(mainLayout);
     }

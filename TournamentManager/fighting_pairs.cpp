@@ -1,6 +1,7 @@
 #include "fighting_pairs.h"
 #include "db_utils.h"
 #include "excel_utils.h"
+#include "renderareawidget.h"
 
 #include <QLabel>
 #include <QGridLayout>
@@ -25,6 +26,7 @@
 #include <QSqlError>
 
 #include <algorithm>
+
 
 
 FightingPairs::FightingPairs(const QSqlDatabase &_database, long long _tournamentUID, QWidget* parent) :
@@ -66,9 +68,9 @@ FightingPairs::FightingPairs(const QSqlDatabase &_database, long long _tournamen
         foo += ")";
 
 
-        QString str = DBUtils::get__NAME_OF_TOURNAMENT_CATEGORIES(database, x[0].TOURNAMENT_CATEGORIES_FK) +
+        QString str = DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", x[0].TOURNAMENT_CATEGORIES_FK) +
                 "; кол-во пар: " + QString::number(x.size()) +
-                "; кол-во участников: " + QString::number(count) +
+                "; кол-во участников: " + QString::number(count) + "(" + RenderAreaWidget::getNameOfLevel(x[0].VERTEX) + ")"
                 "; распределение боёв: " + foo
                 ;
         qListWidget->addItem(str);
@@ -136,22 +138,15 @@ void FightingPairs::printInExcel(QAxObject *sheet, const QVector<DBUtils::Fighin
         if (i == 0 || f.TOURNAMENT_CATEGORIES_FK != fighting[i - 1].TOURNAMENT_CATEGORIES_FK)
         {
             ++currentRow;
-            ++currentRow;
 
-            ExcelUtils::setValue(sheet, currentRow, 1,DBUtils::getField("NAME", "TYPES", DBUtils::getField("TYPE_FK", "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK)));
+            ExcelUtils::setValue(sheet, currentRow, 1, RenderAreaWidget::getNameOfLevel(f.VERTEX));
             ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 3);
+            ExcelUtils::setFontBold(sheet, currentRow, 1, true);
             ++currentRow;
 
-            ExcelUtils::setValue(sheet, currentRow, 1, "Возраст: " +
-                                 QString::number(DBUtils::get__AGE_FROM(database, f.TOURNAMENT_CATEGORIES_FK)) +
-                                 " - " +
-                                 QString::number(DBUtils::get__AGE_TILL(database, f.TOURNAMENT_CATEGORIES_FK))
-                                 );
-            ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 3);
-            ++currentRow;
-
-            ExcelUtils::setValue(sheet, currentRow, 1, "Вес: " + DBUtils::getNormanWeightRangeFromTOURNAMENT_CATEGORIES(f.TOURNAMENT_CATEGORIES_FK));
-
+            ExcelUtils::setValue(sheet, currentRow, 1, DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK)
+                                 // + " " + DBUtils::getField("AGE_FROM", "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK) + "-" + DBUtils::getField("AGE_TILL", "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK)
+            );
             ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 3);
             ++currentRow;
         }
@@ -171,9 +166,7 @@ void FightingPairs::printInExcel(QAxObject *sheet, const QVector<DBUtils::Fighin
         ExcelUtils::setColumnAutoFit(sheet, column);
 
 
-//    ExcelUtils::setValue(sheet, 1, 1, DBUtils::getField("NAME", "TOURNAMENTS", tournamentUID));
-//    ExcelUtils::uniteRange(sheet, 1, 1, 1, 3);
-//    ExcelUtils::setFontBold(sheet, 1, 1, true);
+
     ExcelUtils::setTournamentName(sheet, DBUtils::getTournamentNameAsHeadOfDocument(database, tournamentUID), 1, 1, 1, 3);
 
     ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 2);
@@ -296,11 +289,16 @@ void FightingPairs::onGoPress()
     }
 
     std::random_shuffle(listsOfPairs.begin(), listsOfPairs.end());
-    std::sort(std::begin(listsOfPairs), std::end(listsOfPairs),
-              [this] (const QVector<DBUtils::Fighing>& lhs, const QVector<DBUtils::Fighing>& rhs) {
-        return
-                DBUtils::get__AGE_TILL(database, lhs[0].TOURNAMENT_CATEGORIES_FK) <
-                DBUtils::get__AGE_TILL(database, rhs[0].TOURNAMENT_CATEGORIES_FK);
+    std::sort(listsOfPairs.begin(), listsOfPairs.end(),
+        [this] (const QVector<DBUtils::Fighing>& lhs, const QVector<DBUtils::Fighing>& rhs) {
+            for (QString field : {"AGE_FROM", "AGE_TILL", "WEIGHT_FROM", "WEIGHT_TILL"})
+            {
+                int a = DBUtils::getField(field, "TOURNAMENT_CATEGORIES", lhs[0].TOURNAMENT_CATEGORIES_FK).toDouble();
+                int b = DBUtils::getField(field, "TOURNAMENT_CATEGORIES", rhs[0].TOURNAMENT_CATEGORIES_FK).toDouble();
+                if (a != b)
+                    return a < b;
+            }
+            return false;
     });
 
     if (checkBox->isChecked())
