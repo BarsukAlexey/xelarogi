@@ -33,10 +33,10 @@ WeighingProtocol::WeighingProtocol(const QSqlDatabase& database, const long long
 
         sheets->querySubObject("Add");
         QAxObject *sheet = sheets->querySubObject( "Item( int )", 1);
-        QString sheetName = DBUtils::getField(database, "SHORTNAME", "SEXES", DBUtils::getField(database, "SEX_FK", "TOURNAMENT_CATEGORIES", uidCategory)) + "," +
-                            DBUtils::getField(database, "NAME", "TYPES", DBUtils::getField(database, "TYPE_FK", "TOURNAMENT_CATEGORIES", uidCategory)) + "," +
-                            DBUtils::getField(database, "AGE_FROM", "TOURNAMENT_CATEGORIES", uidCategory) + "-" + DBUtils::getField(database, "AGE_TILL", "TOURNAMENT_CATEGORIES", uidCategory) + "л," +
-                            (DBUtils::getNormanWeightRangeFromTOURNAMENT_CATEGORIES(database, uidCategory).remove(QRegExp(" ")))
+        QString sheetName = DBUtils::getField("SHORTNAME", "SEXES", DBUtils::getField("SEX_FK", "TOURNAMENT_CATEGORIES", uidCategory)) + "," +
+                            DBUtils::getField("NAME", "TYPES", DBUtils::getField("TYPE_FK", "TOURNAMENT_CATEGORIES", uidCategory)) + "," +
+                            DBUtils::getField("AGE_FROM", "TOURNAMENT_CATEGORIES", uidCategory) + "-" + DBUtils::getField("AGE_TILL", "TOURNAMENT_CATEGORIES", uidCategory) + "л," +
+                            (DBUtils::getNormanWeightRangeFromTOURNAMENT_CATEGORIES(uidCategory).remove(QRegExp(" ")))
                             ;
         sheet->setProperty("Name", sheetName.left(31));
 
@@ -52,19 +52,19 @@ WeighingProtocol::WeighingProtocol(const QSqlDatabase& database, const long long
         ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, countColumns);
         ++currentRow;
 
-        ExcelUtils::setValue  (sheet, currentRow, 1, "Раздел: " + DBUtils::getField(database, "NAME", "TYPES", DBUtils::getField(database, "TYPE_FK", "TOURNAMENT_CATEGORIES", uidCategory)));
+        ExcelUtils::setValue  (sheet, currentRow, 1, "Раздел: " + DBUtils::getField("NAME", "TYPES", DBUtils::getField("TYPE_FK", "TOURNAMENT_CATEGORIES", uidCategory)));
         ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, countColumns);
         ++currentRow;
 
-        ExcelUtils::setValue  (sheet, currentRow, 1, "Возраст: от " + DBUtils::getField(database, "AGE_FROM", "TOURNAMENT_CATEGORIES", uidCategory) + " до " + DBUtils::getField(database, "AGE_TILL", "TOURNAMENT_CATEGORIES", uidCategory));
+        ExcelUtils::setValue  (sheet, currentRow, 1, "Возраст: от " + DBUtils::getField("AGE_FROM", "TOURNAMENT_CATEGORIES", uidCategory) + " до " + DBUtils::getField("AGE_TILL", "TOURNAMENT_CATEGORIES", uidCategory));
         ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, countColumns);
         ++currentRow;
 
-        ExcelUtils::setValue  (sheet, currentRow, 1, "Вес: " + DBUtils::getNormanWeightRangeFromTOURNAMENT_CATEGORIES(database, uidCategory));
+        ExcelUtils::setValue  (sheet, currentRow, 1, "Вес: " + DBUtils::getNormanWeightRangeFromTOURNAMENT_CATEGORIES(uidCategory));
         ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, countColumns);
         ++currentRow;
 
-        ExcelUtils::setValue  (sheet, currentRow, 1, "Пол: " + DBUtils::getField(database, "SHORTNAME", "SEXES", DBUtils::getField(database, "SEX_FK", "TOURNAMENT_CATEGORIES", uidCategory)));
+        ExcelUtils::setValue  (sheet, currentRow, 1, "Пол: " + DBUtils::getField("SHORTNAME", "SEXES", DBUtils::getField("SEX_FK", "TOURNAMENT_CATEGORIES", uidCategory)));
         ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, countColumns);
         ++currentRow;
 
@@ -88,14 +88,14 @@ WeighingProtocol::WeighingProtocol(const QSqlDatabase& database, const long long
             ExcelUtils::setBorder(sheet, currentRow, 1, currentRow, heads.size());
 
             ExcelUtils::setValue(sheet, currentRow, 1, QString::number(number));
-            ExcelUtils::setValue(sheet, currentRow, 2, DBUtils::getField(database, "SECOND_NAME", "ORDERS", leaf.UID) + " " + DBUtils::getField(database, "FIRST_NAME", "ORDERS", leaf.UID));
+            ExcelUtils::setValue(sheet, currentRow, 2, DBUtils::getField("SECOND_NAME", "ORDERS", leaf.UID) + " " + DBUtils::getField("FIRST_NAME", "ORDERS", leaf.UID));
             ExcelUtils::setValue(sheet, currentRow, 3, DBUtils::getFieldDate(database, "BIRTHDATE", "ORDERS", leaf.UID));
-            ExcelUtils::setValue(sheet, currentRow, 4, DBUtils::getField(database, "NAME", "REGIONS", DBUtils::getField(database, "REGION_FK", "ORDERS", leaf.UID)));
-            ExcelUtils::setValue(sheet, currentRow, 5, DBUtils::getField(database, "NAME", "CLUBS", DBUtils::getField(database, "CLUB_FK", "ORDERS", leaf.UID)));
-            ExcelUtils::setValue(sheet, currentRow, 6, DBUtils::getField(database, "NAME", "SPORT_CATEGORIES", DBUtils::getField(database, "SPORT_CATEGORY_FK", "ORDERS", leaf.UID)));
-            //ExcelUtils::setValue(sheet, currentRow, 7, DBUtils::getField(database, "WEIGHT", "ORDERS", leaf.UID));
-            ExcelUtils::setValue(sheet, currentRow, 7, DBUtils::roundDouble(DBUtils::getField(database, "WEIGHT", "ORDERS", leaf.UID).toDouble(), 3));
-            ExcelUtils::setValue(sheet, currentRow, 8, DBUtils::getField(database, "NAME", "COACHS", DBUtils::getField(database, "COACH_FK", "ORDERS", leaf.UID)));
+            ExcelUtils::setValue(sheet, currentRow, 4, DBUtils::getField("NAME", "REGIONS", DBUtils::getField("REGION_FK", "ORDERS", leaf.UID)));
+            ExcelUtils::setValue(sheet, currentRow, 5, DBUtils::getField("NAME", "CLUBS", DBUtils::getField("CLUB_FK", "ORDERS", leaf.UID)));
+            ExcelUtils::setValue(sheet, currentRow, 6, DBUtils::getField("NAME", "SPORT_CATEGORIES", DBUtils::getField("SPORT_CATEGORY_FK", "ORDERS", leaf.UID)));
+            //ExcelUtils::setValue(sheet, currentRow, 7, DBUtils::getField("WEIGHT", "ORDERS", leaf.UID));
+            ExcelUtils::setValue(sheet, currentRow, 7, DBUtils::roundDouble(DBUtils::getField("WEIGHT", "ORDERS", leaf.UID).toDouble(), 3));
+            ExcelUtils::setValue(sheet, currentRow, 8, DBUtils::getField("NAME", "COACHS", DBUtils::getField("COACH_FK", "ORDERS", leaf.UID)));
             ExcelUtils::setValue(sheet, currentRow, 9, QString::number(maxVertex - leaf.v + 1));
             ++currentRow;
             ++number;

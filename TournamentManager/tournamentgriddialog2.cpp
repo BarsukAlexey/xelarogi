@@ -565,7 +565,7 @@ void TournamentGridDialog2::fillCategoryCombobox(QString filterStr)
             QString categoryUID = query.value("UID").toString();
             QString categoryName = query.value("NAME").toString();
 
-            if (!qCheckBox->isChecked() || qCheckBox->isChecked() && 0 < DBUtils::getNodes(database, categoryUID.toLongLong()).size())
+            if (!qCheckBox->isChecked() || qCheckBox->isChecked() && 0 < DBUtils::getNodes(categoryUID.toLongLong()).size())
             {
                 QListWidgetItem* item = new QListWidgetItem();
                 item->setData(Qt::DisplayRole, categoryName);

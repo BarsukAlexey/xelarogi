@@ -138,7 +138,7 @@ void FightingPairs::printInExcel(QAxObject *sheet, const QVector<DBUtils::Fighin
             ++currentRow;
             ++currentRow;
 
-            ExcelUtils::setValue(sheet, currentRow, 1,DBUtils::getField(database, "NAME", "TYPES", DBUtils::getField(database, "TYPE_FK", "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK)));
+            ExcelUtils::setValue(sheet, currentRow, 1,DBUtils::getField("NAME", "TYPES", DBUtils::getField("TYPE_FK", "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK)));
             ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 3);
             ++currentRow;
 
@@ -150,18 +150,18 @@ void FightingPairs::printInExcel(QAxObject *sheet, const QVector<DBUtils::Fighin
             ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 3);
             ++currentRow;
 
-            ExcelUtils::setValue(sheet, currentRow, 1, "Вес: " + DBUtils::getNormanWeightRangeFromTOURNAMENT_CATEGORIES(database, f.TOURNAMENT_CATEGORIES_FK));
+            ExcelUtils::setValue(sheet, currentRow, 1, "Вес: " + DBUtils::getNormanWeightRangeFromTOURNAMENT_CATEGORIES(f.TOURNAMENT_CATEGORIES_FK));
 
             ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 3);
             ++currentRow;
         }
 
         ExcelUtils::setValue(sheet, currentRow, 1, QString::number(pair));
-        ExcelUtils::setValue(sheet, currentRow, 2, DBUtils::getField(database, "SECOND_NAME", "ORDERS", f.UID0) + " " + DBUtils::getField(database, "FIRST_NAME", "ORDERS", f.UID0) + " (" +
-                             DBUtils::getField(database, "NAME", "REGIONS", DBUtils::getField(database, "REGION_FK", "ORDERS", f.UID0)) +
+        ExcelUtils::setValue(sheet, currentRow, 2, DBUtils::getField("SECOND_NAME", "ORDERS", f.UID0) + " " + DBUtils::getField("FIRST_NAME", "ORDERS", f.UID0) + " (" +
+                             DBUtils::getField("NAME", "REGIONS", DBUtils::getField("REGION_FK", "ORDERS", f.UID0)) +
                              ")");
-        ExcelUtils::setValue(sheet, currentRow, 3, DBUtils::getField(database, "SECOND_NAME", "ORDERS", f.UID1) + " " + DBUtils::getField(database, "FIRST_NAME", "ORDERS", f.UID1) + " (" +
-                             DBUtils::getField(database, "NAME", "REGIONS", DBUtils::getField(database, "REGION_FK", "ORDERS", f.UID1)) +
+        ExcelUtils::setValue(sheet, currentRow, 3, DBUtils::getField( "SECOND_NAME", "ORDERS", f.UID1) + " " + DBUtils::getField("FIRST_NAME", "ORDERS", f.UID1) + " (" +
+                             DBUtils::getField("NAME", "REGIONS", DBUtils::getField("REGION_FK", "ORDERS", f.UID1)) +
                              ")");
         ExcelUtils::setBorder(sheet, currentRow, 1, currentRow, 3);
         ++currentRow;
@@ -171,7 +171,7 @@ void FightingPairs::printInExcel(QAxObject *sheet, const QVector<DBUtils::Fighin
         ExcelUtils::setColumnAutoFit(sheet, column);
 
 
-//    ExcelUtils::setValue(sheet, 1, 1, DBUtils::getField(database, "NAME", "TOURNAMENTS", tournamentUID));
+//    ExcelUtils::setValue(sheet, 1, 1, DBUtils::getField("NAME", "TOURNAMENTS", tournamentUID));
 //    ExcelUtils::uniteRange(sheet, 1, 1, 1, 3);
 //    ExcelUtils::setFontBold(sheet, 1, 1, true);
     ExcelUtils::setTournamentName(sheet, DBUtils::getTournamentNameAsHeadOfDocument(database, tournamentUID), 1, 1, 1, 3);
@@ -202,18 +202,18 @@ void FightingPairs::printInJSON(const QVector<DBUtils::Fighing>& fighting, int r
     for (const DBUtils::Fighing& f : fighting)
     {
         QJsonObject a;
-        a["nameOfLeftFighter" ] = DBUtils::getField(database, "SECOND_NAME", "ORDERS", f.UID0) + " " + DBUtils::getField(database, "FIRST_NAME", "ORDERS", f.UID0);
-        a["nameOfRightFighter"] = DBUtils::getField(database, "SECOND_NAME", "ORDERS", f.UID1) + " " + DBUtils::getField(database, "FIRST_NAME", "ORDERS", f.UID1);
+        a["nameOfLeftFighter" ] = DBUtils::getField("SECOND_NAME", "ORDERS", f.UID0) + " " + DBUtils::getField("FIRST_NAME", "ORDERS", f.UID0);
+        a["nameOfRightFighter"] = DBUtils::getField("SECOND_NAME", "ORDERS", f.UID1) + " " + DBUtils::getField("FIRST_NAME", "ORDERS", f.UID1);
 
         a["fightId"] = fightingId;
-        a["categoryOfFighting"] = DBUtils::getField(database, "WEIGHT_TILL", "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK);
+        a["categoryOfFighting"] = DBUtils::getField( "WEIGHT_TILL", "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK);
 
-        a["countOfRounds"  ] = DBUtils::getField(database, "ROUND_COUNT"     , "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK);
-        a["durationOfRound"] = DBUtils::getField(database, "DURATION_FIGHING", "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK);
-        a["durationOfBreak"] = DBUtils::getField(database, "DURATION_BREAK"  , "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK);
+        a["countOfRounds"  ] = DBUtils::getField("ROUND_COUNT"     , "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK);
+        a["durationOfRound"] = DBUtils::getField("DURATION_FIGHING", "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK);
+        a["durationOfBreak"] = DBUtils::getField("DURATION_BREAK"  , "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK);
 
-        a["countryOfLeftFighter" ] = DBUtils::getField(database, "NAME", "REGIONS", DBUtils::getField(database, "REGION_FK", "ORDERS", f.UID0));
-        a["countryOfRightFighter"] = DBUtils::getField(database, "NAME", "REGIONS", DBUtils::getField(database, "REGION_FK", "ORDERS", f.UID1));
+        a["countryOfLeftFighter" ] = DBUtils::getField("NAME", "REGIONS", DBUtils::getField("REGION_FK", "ORDERS", f.UID0));
+        a["countryOfRightFighter"] = DBUtils::getField("NAME", "REGIONS", DBUtils::getField("REGION_FK", "ORDERS", f.UID1));
 
         a["TOURNAMENT_CATEGORIES_FK"] = f.TOURNAMENT_CATEGORIES_FK;
         a["VERTEX"] = f.VERTEX;
@@ -245,7 +245,7 @@ void FightingPairs::makeGridsForPointFighting(QString existingDirectory, QVector
     QVector<int> durationOfGrid;
     for (const auto fighing : listsOfPairs){
         int time = 0;
-        for (const DBUtils::NodeOfTournirGrid f : DBUtils::getNodes(database, fighing[0].TOURNAMENT_CATEGORIES_FK))
+        for (const DBUtils::NodeOfTournirGrid f : DBUtils::getNodes(fighing[0].TOURNAMENT_CATEGORIES_FK))
         {
 
             if (!f.isFighing) continue;
@@ -274,7 +274,9 @@ void FightingPairs::makeGridsForPointFighting(QString existingDirectory, QVector
         for (int i = 0, fightingNumber = 1; i < curGrids.size(); ++i)
         {
             RenderAreaWidget::printTableGridInExcel(database, curGrids[i].front().TOURNAMENT_CATEGORIES_FK, true,
-                       existingDirectory, i == 0, i + 1 == curGrids.size(), fightingNumber, qLineEdit->text(), "Татами " +  QString::number(idRing));
+                       existingDirectory, i == 0, i + 1 == curGrids.size(), fightingNumber, qLineEdit->text(),
+                            "Татами " +  QString("%1 (%2)").arg(idRing, 2, 10, QChar('0')).arg(i + 1, 2, 10, QChar('0'))
+                                                    );
             //fightingNumber += curGrids[i].size();
         }
     }

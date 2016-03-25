@@ -22,7 +22,7 @@ WinnerReport::WinnerReport(const QSqlDatabase& database, const long long tournam
 
 
 
-    for(const std::tuple<long long, int, int, long long>& x : DBUtils::get_distinct_TYPE_FK_AgeFrom_AgeTill(database, tournamentUID))
+    for(const std::tuple<long long, int, int, long long>& x : DBUtils::get_distinct_TYPE_FK_AgeFrom_AgeTill(tournamentUID))
     {
 
         const long long type_fk = std::get<0>(x);
@@ -30,7 +30,7 @@ WinnerReport::WinnerReport(const QSqlDatabase& database, const long long tournam
         const int age_till      = std::get<2>(x);
         const int sex_fk        = std::get<3>(x);
 
-        std::map<QString, QVector<long long> > stdMap = DBUtils::get_weight_and_orderUIDs(database, tournamentUID, type_fk, age_from, age_till, sex_fk).toStdMap();
+        std::map<QString, QVector<long long> > stdMap = DBUtils::get_weight_and_orderUIDs(tournamentUID, type_fk, age_from, age_till, sex_fk).toStdMap();
         if (stdMap.empty()) continue;
         //qDebug() << type_fk << age_from << age_till << sex_fk;
 
@@ -39,14 +39,14 @@ WinnerReport::WinnerReport(const QSqlDatabase& database, const long long tournam
         sheets->querySubObject("Add");
         QAxObject *sheet = sheets->querySubObject( "Item( int )", 1);
 
-        QString sheetName = DBUtils::getField(database, "SHORTNAME", "SEXES", sex_fk);
-        sheetName += "," + DBUtils::getField(database, "NAME", "TYPES", type_fk);
+        QString sheetName = DBUtils::getField("SHORTNAME", "SEXES", sex_fk);
+        sheetName += "," + DBUtils::getField("NAME", "TYPES", type_fk);
         sheetName += "," + QString::number(age_from) + "-" + QString::number(age_till) + "лет";
         sheet->setProperty("Name", sheetName.left(31));
 
 
         ExcelUtils::setTournamentName(sheet, DBUtils::getTournamentNameAsHeadOfDocument(database, tournamentUID), currentRow, 1, currentRow, heads.size());
-//        ExcelUtils::setValue     (sheet, currentRow, 1, DBUtils::getField(database, "NAME", "TOURNAMENTS", tournamentUID));
+//        ExcelUtils::setValue     (sheet, currentRow, 1, DBUtils::getField("NAME", "TOURNAMENTS", tournamentUID));
 //        ExcelUtils::setFontBold(sheet, currentRow, 1, true);
 //        ExcelUtils::setWrapText  (sheet, currentRow, 1);
 //        ExcelUtils::uniteRange   (sheet, currentRow, 1, currentRow, heads.size());
@@ -58,11 +58,11 @@ WinnerReport::WinnerReport(const QSqlDatabase& database, const long long tournam
         ExcelUtils::uniteRange   (sheet, currentRow, 1, currentRow, heads.size());
         ++currentRow;
 
-        ExcelUtils::setValue     (sheet, currentRow, 1, DBUtils::getField(database, "NAME", "TYPES", type_fk));
+        ExcelUtils::setValue     (sheet, currentRow, 1, DBUtils::getField("NAME", "TYPES", type_fk));
         ExcelUtils::uniteRange   (sheet, currentRow, 1, currentRow, heads.size());
         ++currentRow;
 
-        ExcelUtils::setValue     (sheet, currentRow, 1, DBUtils::getField(database, "SHORTNAME", "SEXES", sex_fk) + ", возраст: " + QString::number(age_from) + " - " + QString::number(age_till));
+        ExcelUtils::setValue     (sheet, currentRow, 1, DBUtils::getField("SHORTNAME", "SEXES", sex_fk) + ", возраст: " + QString::number(age_from) + " - " + QString::number(age_till));
         ExcelUtils::uniteRange   (sheet, currentRow, 1, currentRow, heads.size());
         ++currentRow;
 
@@ -92,10 +92,10 @@ WinnerReport::WinnerReport(const QSqlDatabase& database, const long long tournam
                 ExcelUtils::setValue(sheet, currentRow, 1, QString::number(place));
                 if (orderUID != 0)
                 {
-                    ExcelUtils::setValue(sheet, currentRow, 2, DBUtils::getField(database, "SECOND_NAME", "ORDERS", orderUID) + " " + DBUtils::getField(database, "FIRST_NAME", "ORDERS", orderUID));
-                    ExcelUtils::setValue(sheet, currentRow, 3, DBUtils::getField(database, "NAME", "SPORT_CATEGORIES", DBUtils::getField(database, "SPORT_CATEGORY_FK", "ORDERS", orderUID)));
-                    ExcelUtils::setValue(sheet, currentRow, 4, DBUtils::getField(database, "NAME", "REGIONS", DBUtils::getField(database, "REGION_FK", "ORDERS", orderUID)));
-                    ExcelUtils::setValue(sheet, currentRow, 5, DBUtils::getField(database, "NAME", "COACHS", DBUtils::getField(database, "COACH_FK", "ORDERS", orderUID)));
+                    ExcelUtils::setValue(sheet, currentRow, 2, DBUtils::getField("SECOND_NAME", "ORDERS", orderUID) + " " + DBUtils::getField("FIRST_NAME", "ORDERS", orderUID));
+                    ExcelUtils::setValue(sheet, currentRow, 3, DBUtils::getField("NAME", "SPORT_CATEGORIES", DBUtils::getField("SPORT_CATEGORY_FK", "ORDERS", orderUID)));
+                    ExcelUtils::setValue(sheet, currentRow, 4, DBUtils::getField("NAME", "REGIONS", DBUtils::getField("REGION_FK", "ORDERS", orderUID)));
+                    ExcelUtils::setValue(sheet, currentRow, 5, DBUtils::getField("NAME", "COACHS", DBUtils::getField("COACH_FK", "ORDERS", orderUID)));
                 }
                 else
                 {

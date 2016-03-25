@@ -45,7 +45,7 @@ FitingDistribution::FitingDistribution(const QSqlDatabase &database, const long 
 
         sheets->querySubObject("Add");
         QAxObject *sheet = sheets->querySubObject( "Item( int )", 1);
-        sheet->setProperty("Name", (DBUtils::getField(database, "NAME", "TYPES", TYPE_FK) + "," + AGE_FROM + "-" + queryTYPE_FK_AGE_FROM.value("AGE_TILL").toString() + "лет").left(31));
+        sheet->setProperty("Name", (DBUtils::getField("NAME", "TYPES", TYPE_FK) + "," + AGE_FROM + "-" + queryTYPE_FK_AGE_FROM.value("AGE_TILL").toString() + "лет").left(31));
         int currentRow = 2;
 
 
@@ -118,7 +118,7 @@ FitingDistribution::FitingDistribution(const QSqlDatabase &database, const long 
 
                 long long UID_TOURNAMENT_CATEGORY = queryTOURNAMENT_CATEGORIES_UID.value("UID").toLongLong();
 
-                ExcelUtils::setValue(sheet, currentRow, 1, DBUtils::getNormanWeightRangeFromTOURNAMENT_CATEGORIES(database,UID_TOURNAMENT_CATEGORY));
+                ExcelUtils::setValue(sheet, currentRow, 1, DBUtils::getNormanWeightRangeFromTOURNAMENT_CATEGORIES(UID_TOURNAMENT_CATEGORY));
 
                 QSqlQuery queryCOUNT("SELECT count() AS COUNT FROM ORDERS WHERE TOURNAMENT_CATEGORY_FK = ? AND IS_VALID = ? GROUP BY TOURNAMENT_CATEGORY_FK", database);
                 queryCOUNT.bindValue(0, UID_TOURNAMENT_CATEGORY);

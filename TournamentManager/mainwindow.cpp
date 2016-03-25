@@ -14,6 +14,7 @@
 #include "winner_report.h"
 #include "ebnutvbazu.h"
 #include "report_manda.h"
+#include "report_ministr.h"
 
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -223,7 +224,6 @@ void MainWindow::updateTournamentTreeWidget()
 
     QSqlQuery query;
     query.prepare("SELECT * FROM TOURNAMENTS ORDER BY DATE_BEGIN ASC");
-    //query.prepare("SELECT * FROM TOURNAMENTS");
     int currentYear = -1000;
     if (query.exec())
     {
@@ -255,7 +255,7 @@ void MainWindow::updateTournamentTreeWidget()
         {
             int year = pair.first;
             QTreeWidgetItem* topLevel = new QTreeWidgetItem({QString::number(year) + " год", ""});
-            for (auto item : items[year])
+            for (QTreeWidgetItem* item : items[year])
             {
                 topLevel->addChild(item);
             }
@@ -263,7 +263,12 @@ void MainWindow::updateTournamentTreeWidget()
         }
         if (0 < ui->tournamentTreeWidget->model()->rowCount())
         {
-            ui->tournamentTreeWidget->setExpanded(ui->tournamentTreeWidget->model()->index(0, 0), true);// а то заябался запускать и открывать список =)
+            QModelIndex localIndex = ui->tournamentTreeWidget->model()->index(0, 0);
+            ui->tournamentTreeWidget->setExpanded(localIndex, true);// а то заябался запускать и открывать список =)
+            //ui->tournamentTreeWidget->selectionModel()->select(localIndex, QItemSelectionModel::Select);
+            //ui->tournamentTreeWidget->setSelection(QRect(0, 0, 100, 100), );
+            //ui->tournamentTreeWidget->topLevelItem(2)->child(0);
+
         }
 
         connect(ui->tournamentTreeWidget, &QTreeWidget::clicked, [this] (const QModelIndex& index)
@@ -511,7 +516,10 @@ void MainWindow::on_manda_clicked()
     ReportManda(m_database, routnamentUID);
 }
 
-void MainWindow::on_pushButton_clicked()
-{
 
+void MainWindow::on_btn_report_ministr_clicked()
+{
+    long long routnamentUID = ui->tournamentUidLabel->text().toLongLong();
+    qDebug() << "routnamentUID: " << routnamentUID;
+    ReporMinistr d(routnamentUID);
 }

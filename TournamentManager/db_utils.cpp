@@ -8,9 +8,11 @@
 #include <utility>
 
 
-QString DBUtils::getField(const QSqlDatabase& database, const QString& field, const QString& table, const QString& UID)
+
+
+QString DBUtils::getField(const QString& field, const QString& table, const QString& UID)
 {
-    QSqlQuery query("SELECT * FROM " + table + " WHERE UID = ?", database);
+    QSqlQuery query("SELECT * FROM " + table + " WHERE UID = ?");
     query.bindValue(0, UID);
     if (query.exec() && query.next())
     {
@@ -18,14 +20,14 @@ QString DBUtils::getField(const QSqlDatabase& database, const QString& field, co
     }
     else
     {
-        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << query.lastError().text() << query.lastQuery();
+        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << query.lastError()<< query.lastQuery() << "  UID:" << UID;
     }
     return "";
 }
 
-QString DBUtils::getField(const QSqlDatabase& database, const QString& field, const QString& table, const long long UID)
+QString DBUtils::getField(const QString& field, const QString& table, const long long UID)
 {
-    QSqlQuery query("SELECT * FROM " + table + " WHERE UID = ?", database);
+    QSqlQuery query("SELECT * FROM " + table + " WHERE UID = ?");
     query.bindValue(0, UID);
     if (query.exec() && query.next())
     {
@@ -33,7 +35,7 @@ QString DBUtils::getField(const QSqlDatabase& database, const QString& field, co
     }
     else
     {
-        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << query.lastError().text() << query.lastQuery();
+        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << query.lastError().text() << query.lastQuery() << "  UID:" << UID;
     }
     return "";
 }
@@ -188,11 +190,11 @@ QString DBUtils::get_ASSOCIATE_MAIN_JUDGE(const QSqlDatabase& database, long lon
 }
 
 
-QVector<DBUtils::NodeOfTournirGrid> DBUtils::getNodes(const QSqlDatabase& database, long long tournamentCategories)
+QVector<DBUtils::NodeOfTournirGrid> DBUtils::getNodes(long long tournamentCategories)
 {
     QVector<DBUtils::NodeOfTournirGrid> arr;
 
-    QSqlQuery query("SELECT * FROM GRID WHERE TOURNAMENT_CATEGORIES_FK = ? ", database);
+    QSqlQuery query("SELECT * FROM GRID WHERE TOURNAMENT_CATEGORIES_FK = ? ");
     query.bindValue(0, tournamentCategories);
     if (!query.exec())
     {
@@ -208,29 +210,24 @@ QVector<DBUtils::NodeOfTournirGrid> DBUtils::getNodes(const QSqlDatabase& databa
         bool isFighing = query.value("IS_FIGHTING").toBool();
         if (orderUID.size() != 0)
         {
-            QSqlQuery queryOrder("SELECT * FROM ORDERS WHERE UID = ? ", database);
+            QSqlQuery queryOrder("SELECT * FROM ORDERS WHERE UID = ? ");
             queryOrder.bindValue(0, orderUID);
             if (!(queryOrder.exec() && queryOrder.next()))
-            {
-                qDebug() << __PRETTY_FUNCTION__ << " " << queryOrder.lastError().text() << "\n" << queryOrder.lastQuery();
-                qDebug() <<  "Нет такого orderUID" << orderUID;
-                arr.clear();
-                return arr;
-            }
-            name = queryOrder.value("SECOND_NAME").toString() + " " + queryOrder.value("FIRST_NAME").toString();
-            //name = queryOrder.value("SECOND_NAME").toString();
+                qDebug() << __PRETTY_FUNCTION__  << queryOrder.lastError().text()  << queryOrder.lastQuery()
+                         <<  "Нет такого orderUID" << orderUID;
+            else
+                name = queryOrder.value("SECOND_NAME").toString() + " " + queryOrder.value("FIRST_NAME").toString();
 
-            QSqlQuery queryRegion("SELECT * FROM REGIONS WHERE UID = ? ", database);
-            //qDebug() << __PRETTY_FUNCTION__ << queryOrder.value("REGION_FK").toString();
+
+            QSqlQuery queryRegion("SELECT * FROM REGIONS WHERE UID = ? ");
             queryRegion.bindValue(0, queryOrder.value("REGION_FK").toString());
             if (!(queryRegion.exec() && queryRegion.next()))
             {
-                qDebug() << __PRETTY_FUNCTION__ << " " << queryRegion.lastError().text() << "\n" << queryRegion.lastQuery();
-                qDebug() <<  "Нет такого REGION_FK" << queryOrder.value("REGION_FK").toString();
-                arr.clear();
-                return arr;
+                qDebug() << __PRETTY_FUNCTION__ << queryRegion.lastError().text() << queryRegion.lastQuery()
+                         <<  "Нет такого REGION_FK" << queryOrder.value("REGION_FK").toString();
             }
-            region = queryRegion.value("NAME").toString();
+            else
+                region = queryRegion.value("NAME").toString();
         }
         arr.push_back(NodeOfTournirGrid({query.value("VERTEX").toInt(), name, region, isFighing, orderUID.toLongLong(), query.value("result").toString()}));
     }
@@ -242,7 +239,7 @@ QVector<DBUtils::NodeOfTournirGrid> DBUtils::getNodes(const QSqlDatabase& databa
 QVector<DBUtils::NodeOfTournirGrid> DBUtils::getLeafOFTree(const QSqlDatabase& database, long long tournamentCategories)
 {
     QVector<DBUtils::NodeOfTournirGrid> res;
-    for (DBUtils::NodeOfTournirGrid node : getNodes(database, tournamentCategories))
+    for (DBUtils::NodeOfTournirGrid node : getNodes(tournamentCategories))
         if (!node.isFighing)
             res.push_back(node);
     if (!res.empty())
@@ -285,7 +282,7 @@ QVector<QVector<DBUtils::Fighing>> DBUtils::getListsOfPairs(const QSqlDatabase& 
 QVector<DBUtils::Fighing> DBUtils::getListOfPairs(const QSqlDatabase& database, long long tournamentCategory)
 {
     QVector<Fighing> arr;
-    QVector<NodeOfTournirGrid> nodes = getNodes(database, tournamentCategory);
+    QVector<NodeOfTournirGrid> nodes = getNodes(tournamentCategory);
     for (int i = nodes.size() - 1; 0 <= i; --i)
     {
         NodeOfTournirGrid node = nodes[i];
@@ -345,10 +342,10 @@ QString DBUtils::get__NAME_OF_TOURNAMENT_CATEGORIES(const QSqlDatabase& database
 }
 
 
-QVector<std::tuple<long long, int, int, long long> > DBUtils::get_distinct_TYPE_FK_AgeFrom_AgeTill(const QSqlDatabase& database, long long tournamentUID)
+QVector<std::tuple<long long, int, int, long long> > DBUtils::get_distinct_TYPE_FK_AgeFrom_AgeTill(long long tournamentUID)
 {
     QVector<std::tuple<long long, int, int, long long> > res;
-    QSqlQuery query("SELECT DISTINCT TYPE_FK, AGE_FROM, AGE_TILL, SEX_FK FROM TOURNAMENT_CATEGORIES WHERE TOURNAMENT_FK = ? ORDER BY TYPE_FK, AGE_TILL, SEX_FK", database);
+    QSqlQuery query("SELECT DISTINCT TYPE_FK, AGE_FROM, AGE_TILL, SEX_FK FROM TOURNAMENT_CATEGORIES WHERE TOURNAMENT_FK = ? ORDER BY TYPE_FK, AGE_TILL, SEX_FK");
     query.bindValue(0, tournamentUID);
     if (!query.exec())
     {
@@ -362,11 +359,10 @@ QVector<std::tuple<long long, int, int, long long> > DBUtils::get_distinct_TYPE_
     return res;
 }
 
-QMap<QString, QVector<long long> > DBUtils::get_weight_and_orderUIDs(const QSqlDatabase& database,
-                                                                     long long tournamentUID, long long TYPE_FK, int AGE_FROM, int AGE_TILL, int SEX_FK)
+QMap<QString, QVector<long long> > DBUtils::get_weight_and_orderUIDs(long long tournamentUID, long long TYPE_FK, int AGE_FROM, int AGE_TILL, int SEX_FK)
 {
     QMap<QString, QVector<long long> > res;
-    QSqlQuery query("SELECT UID FROM TOURNAMENT_CATEGORIES WHERE TOURNAMENT_FK = ? AND TYPE_FK = ? AND AGE_FROM = ? AND AGE_TILL = ? AND SEX_FK = ? ORDER BY WEIGHT_FROM, WEIGHT_TILL", database);
+    QSqlQuery query("SELECT UID FROM TOURNAMENT_CATEGORIES WHERE TOURNAMENT_FK = ? AND TYPE_FK = ? AND AGE_FROM = ? AND AGE_TILL = ? AND SEX_FK = ? ORDER BY WEIGHT_FROM, WEIGHT_TILL");
     query.bindValue(0, tournamentUID);
     query.bindValue(1, TYPE_FK);
     query.bindValue(2, AGE_FROM);
@@ -381,9 +377,9 @@ QMap<QString, QVector<long long> > DBUtils::get_weight_and_orderUIDs(const QSqlD
     {
 
         long long uidCategory = query.value("UID").toLongLong();
-        QString weight = DBUtils::getNormanWeightRangeFromTOURNAMENT_CATEGORIES(database, uidCategory);
+        QString weight = DBUtils::getNormanWeightRangeFromTOURNAMENT_CATEGORIES(uidCategory);
 
-        QVector<NodeOfTournirGrid> nodes = getNodes(database, uidCategory);
+        QVector<NodeOfTournirGrid> nodes = getNodes(uidCategory);
         for (int iter = 0; iter < 4 && !nodes.empty(); ++iter)
         {
             long long orderUID = nodes[0].UID;
@@ -434,10 +430,10 @@ int DBUtils::get__ROUND_COUNT(const QSqlDatabase& database, long long UID)
     return res;
 }
 
-QString DBUtils::getNormanWeightRangeFromTOURNAMENT_CATEGORIES(const QSqlDatabase& database, long long uidCategory)
+QString DBUtils::getNormanWeightRangeFromTOURNAMENT_CATEGORIES(long long uidCategory)
 {
-    double a = DBUtils::getField(database, "WEIGHT_FROM", "TOURNAMENT_CATEGORIES", uidCategory).toDouble();
-    double b = DBUtils::getField(database, "WEIGHT_TILL", "TOURNAMENT_CATEGORIES", uidCategory).toDouble();
+    double a = DBUtils::getField("WEIGHT_FROM", "TOURNAMENT_CATEGORIES", uidCategory).toDouble();
+    double b = DBUtils::getField("WEIGHT_TILL", "TOURNAMENT_CATEGORIES", uidCategory).toDouble();
     return getNormanWeightRange(a, b);
 }
 
@@ -502,8 +498,8 @@ QString DBUtils::getTournamentNameAsHeadOfDocument(const QSqlDatabase& database,
     {
         resA = "";
     }
-    return DBUtils::getField(database, "NAME", "TOURNAMENTS", tournamentUID) + "\n" +
-           DBUtils::getField(database, "HOST", "TOURNAMENTS", tournamentUID) + ", " +
+    return DBUtils::getField("NAME", "TOURNAMENTS", tournamentUID) + "\n" +
+           DBUtils::getField("HOST", "TOURNAMENTS", tournamentUID) + ", " +
            resA + resB;
 
 }

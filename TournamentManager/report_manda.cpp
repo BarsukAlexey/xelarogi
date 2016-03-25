@@ -30,8 +30,6 @@ ReportManda::ReportManda(const QSqlDatabase& database, const long long tournamen
     excel.setProperty("Visible", true);
     QAxObject *workbooks = excel.querySubObject("WorkBooks");
     workbooks->dynamicCall("Add");
-    ExcelUtils::generateDocumentation(workbooks, "workbooks");
-
     QAxObject *workbook = excel.querySubObject("ActiveWorkBook");
     QAxObject *sheets = workbook->querySubObject("WorkSheets");
 
@@ -67,7 +65,7 @@ ReportManda::ReportManda(const QSqlDatabase& database, const long long tournamen
         QVector<QString> uidsOfClubs;
         while (queryClubs.next()) uidsOfClubs << queryClubs.value("clubid12").toString();
         QVector<int> sumOfRow(uidsOfClubs.size());
-        //qDebug() << DBUtils::getField(database, "NAME", "TYPES", TYPE_FK) << AGE_FROM << AGE_TILL << uidsOfClubs;
+        //qDebug() << DBUtils::getField("NAME", "TYPES", TYPE_FK) << AGE_FROM << AGE_TILL << uidsOfClubs;
 
         if (uidsOfClubs.isEmpty()) continue;
 
@@ -77,7 +75,7 @@ ReportManda::ReportManda(const QSqlDatabase& database, const long long tournamen
         for (int i = 0; i < uidsOfClubs.size(); ++i)
         {
             ExcelUtils::setValue(sheet, startRow + i, 1, QString::number(i + 1));
-            ExcelUtils::setValue(sheet, startRow + i, 2, DBUtils::getField(database, "NAME", "CLUBS", uidsOfClubs[i]) + ", " + DBUtils::getField(database, "NAME", "REGIONS", DBUtils::getField(database, "REGION_FK", "CLUBS", uidsOfClubs[i])));
+            ExcelUtils::setValue(sheet, startRow + i, 2, DBUtils::getField("NAME", "CLUBS", uidsOfClubs[i]) + ", " + DBUtils::getField("NAME", "REGIONS", DBUtils::getField("REGION_FK", "CLUBS", uidsOfClubs[i])));
         }
         ExcelUtils::setBorder (sheet, startRow, 1, startRow + uidsOfClubs.size() - 1, 2);
         ExcelUtils::setBorder (sheet, startRow, 1, startRow + uidsOfClubs.size() - 1, 2, 3, ExcelUtils::Border::xlEdgeTop);
@@ -155,11 +153,11 @@ ReportManda::ReportManda(const QSqlDatabase& database, const long long tournamen
             while (querySPORT_CATEGORIES.next())
             {
                 QString SPORT_CATEGORY = querySPORT_CATEGORIES.value("UID_SC").toString();
-                //qDebug() << "\t\t" << DBUtils::getField(database, "NAME", "SPORT_CATEGORIES", SPORT_CATEGORY);
+                //qDebug() << "\t\t" << DBUtils::getField("NAME", "SPORT_CATEGORIES", SPORT_CATEGORY);
                 ++countSPORT_CATEGORIES;
                 int sumOfValuesForWeightAndSportCategory = 0;
 
-                ExcelUtils::setValue(sheet, startRow - 1, currentColumns, DBUtils::getField(database, "NAME", "SPORT_CATEGORIES", SPORT_CATEGORY));
+                ExcelUtils::setValue(sheet, startRow - 1, currentColumns, DBUtils::getField("NAME", "SPORT_CATEGORIES", SPORT_CATEGORY));
 
                 for (int i = 0; i < uidsOfClubs.size(); ++i)
                 {
@@ -257,11 +255,11 @@ ReportManda::ReportManda(const QSqlDatabase& database, const long long tournamen
         ExcelUtils::setValue(sheet, 2, 1, "Протокол мандатной комиссии");
 
 
-        ExcelUtils::setValue(sheet, startRow - 5, 1, "Раздел: " + DBUtils::getField(database, "NAME", "TYPES", TYPE_FK), 0);
+        ExcelUtils::setValue(sheet, startRow - 5, 1, "Раздел: " + DBUtils::getField("NAME", "TYPES", TYPE_FK), 0);
         ExcelUtils::setValue(sheet, startRow - 4, 1, "Возрастная категория: " + AGE_FROM + " - " + AGE_TILL + " лет", 0);
-        ExcelUtils::setValue(sheet, startRow - 3, 1, "Пол: " + DBUtils::getField(database, "SHORTNAME", "SEXES", SEX_FK), 0);
+        ExcelUtils::setValue(sheet, startRow - 3, 1, "Пол: " + DBUtils::getField("SHORTNAME", "SEXES", SEX_FK), 0);
 
-        sheet->setProperty("Name", (DBUtils::getField(database, "SHORTNAME", "SEXES", SEX_FK) + " " + DBUtils::getField(database, "NAME", "TYPES", TYPE_FK) + " " + AGE_FROM + "-" + AGE_TILL + "лет").left(31));
+        sheet->setProperty("Name", (DBUtils::getField("SHORTNAME", "SEXES", SEX_FK) + " " + DBUtils::getField("NAME", "TYPES", TYPE_FK) + " " + AGE_FROM + "-" + AGE_TILL + "лет").left(31));
 
         int maxRow = startRow + uidsOfClubs.size() + 3;
         ExcelUtils::uniteRange(sheet, maxRow, 1, maxRow, 2);

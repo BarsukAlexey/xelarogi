@@ -73,7 +73,7 @@ public:
     QPushButton *pushButtonWinnerReport;
     QPushButton *trophyBtn;
     QPushButton *manda;
-    QPushButton *pushButton;
+    QPushButton *btn_report_ministr;
     QSpacerItem *verticalSpacer;
     QMenuBar *menuBar;
     QMenu *handbookMenu;
@@ -272,10 +272,10 @@ public:
 
         verticalLayout->addWidget(manda);
 
-        pushButton = new QPushButton(ordersPage);
-        pushButton->setObjectName(QStringLiteral("pushButton"));
+        btn_report_ministr = new QPushButton(ordersPage);
+        btn_report_ministr->setObjectName(QStringLiteral("btn_report_ministr"));
 
-        verticalLayout->addWidget(pushButton);
+        verticalLayout->addWidget(btn_report_ministr);
 
         verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
@@ -357,7 +357,7 @@ public:
         pushButtonWinnerReport->setText(QApplication::translate("MainWindow", "\320\241\320\277\320\270\321\201\320\276\320\272 \320\277\320\276\320\261\320\265\320\264\320\270\321\202\320\265\320\273\320\265\320\271", 0));
         trophyBtn->setText(QApplication::translate("MainWindow", "\320\241\320\276\320\267\320\264\320\260\321\202\321\214 \320\263\321\200\320\260\320\274\320\276\321\202\321\213", 0));
         manda->setText(QApplication::translate("MainWindow", "\320\237\321\200\320\276\321\202\320\276\320\272\320\276\320\273 \320\274\320\260\320\275\320\264\320\260\321\202\320\275\320\276\320\271 \320\272\320\276\320\274\320\270\321\201\321\201\320\270\320\270", 0));
-        pushButton->setText(QApplication::translate("MainWindow", "\320\235\320\265 \320\275\320\260\320\266\320\270\320\274\320\260\321\202\321\214", 0));
+        btn_report_ministr->setText(QApplication::translate("MainWindow", "\320\236\321\202\321\207\321\221\321\202 \320\274\320\270\320\275\320\270\321\201\321\202\320\265\321\200\321\201\321\202\320\262\320\260", 0));
         handbookMenu->setTitle(QApplication::translate("MainWindow", "\320\241\320\277\321\200\320\260\320\262\320\276\321\207\320\275\320\270\320\272\320\270", 0));
     } // retranslateUi
 

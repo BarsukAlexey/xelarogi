@@ -37,8 +37,8 @@ public:
         int winer;
     };
 
-    static QString getField(const QSqlDatabase&, const QString& field, const QString& table, const QString& UID);
-    static QString getField(const QSqlDatabase&, const QString& field, const QString& table, const long long UID);
+    static QString getField(const QString& field, const QString& table, const QString& UID);
+    static QString getField(const QString& field, const QString& table, const long long UID);
     static QString getFieldDate(const QSqlDatabase&, const QString& field, const QString& table, const long long UID);
     static QDate getFieldDateAsDate(const QSqlDatabase& database, const QString& field, const QString& table, const long long UID);
     static QString getRussianMonth(int m);
@@ -59,7 +59,7 @@ public:
 
 
     // для таблицы GRID
-    static QVector<NodeOfTournirGrid> getNodes(const QSqlDatabase& database, long long tournamentCategories);
+    static QVector<NodeOfTournirGrid> getNodes(long long tournamentCategories);
     static QVector<NodeOfTournirGrid> getLeafOFTree(const QSqlDatabase& database, long long tournamentCategories);
     static QVector<QVector<DBUtils::Fighing>> getListsOfPairs(const QSqlDatabase& database, long long tournamentUID);
     static QVector<Fighing> getListOfPairs(const QSqlDatabase& database, long long TOURNAMENT_CATEGORIES_FK);
@@ -72,8 +72,8 @@ public:
     // для таблицы TOURNAMENT_CATEGORIES
     static QVector<long long> get_UIDs_of_TOURNAMENT_CATEGORIES(const QSqlDatabase& database, long long tournamentUID);
     static QString get__NAME_OF_TOURNAMENT_CATEGORIES(const QSqlDatabase& database, long long UID);
-    static QVector<std::tuple<long long, int, int, long long> > get_distinct_TYPE_FK_AgeFrom_AgeTill(const QSqlDatabase& database, long long tournamentUID);
-    static QMap<QString, QVector<long long> > get_weight_and_orderUIDs(const QSqlDatabase& database, long long tournamentUID, long long type_fk, int age_from, int age_till, int sex_fk);
+    static QVector<std::tuple<long long, int, int, long long> > get_distinct_TYPE_FK_AgeFrom_AgeTill(long long tournamentUID);
+    static QMap<QString, QVector<long long> > get_weight_and_orderUIDs(long long tournamentUID, long long type_fk, int age_from, int age_till, int sex_fk);
     static int     get__AGE_FROM(const QSqlDatabase& database, long long UID);
     static int     get__AGE_TILL(const QSqlDatabase& database, long long UID);
     static QString get__WEIGHT_FROM(const QSqlDatabase& database, long long UID);
@@ -81,7 +81,7 @@ public:
     static int     get__DURATION_FIGHING(const QSqlDatabase& database, long long UID);
     static int     get__DURATION_BREAK(const QSqlDatabase& database, long long UID);
     static int     get__ROUND_COUNT(const QSqlDatabase& database, long long UID);
-    static QString getNormanWeightRangeFromTOURNAMENT_CATEGORIES(const QSqlDatabase& database, long long uidCategory);
+    static QString getNormanWeightRangeFromTOURNAMENT_CATEGORIES(long long uidCategory);
     static QString getNormanWeightRange(double a, double b);
 
 

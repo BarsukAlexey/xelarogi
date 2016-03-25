@@ -99,7 +99,7 @@ void RenderAreaWidget::paintEvent(QPaintEvent* )
 
     QPainter painter(this);
 
-    QVector<DBUtils::NodeOfTournirGrid> nodes = DBUtils::getNodes(database, tournamentCategories);
+    QVector<DBUtils::NodeOfTournirGrid> nodes = DBUtils::getNodes(tournamentCategories);
     if (nodes.empty()) return;
     qSort(nodes);
 
@@ -127,7 +127,7 @@ void RenderAreaWidget::mousePressEvent(QMouseEvent* event)
     QPoint p(event->y() / heightCell, event->x() / widthCell);
 
     DBUtils::NodeOfTournirGrid currentNode = noNode;
-    for (const DBUtils::NodeOfTournirGrid& node : DBUtils::getNodes(database, tournamentCategories))
+    for (const DBUtils::NodeOfTournirGrid& node : DBUtils::getNodes(tournamentCategories))
         if (getCell(node.v) == p)
             currentNode = node;
     if (currentNode.v == noNode.v) return;
@@ -295,9 +295,9 @@ QPoint RenderAreaWidget::getCell(int v, int countColumns)
 }
 
 void RenderAreaWidget::printTableGridInExcel(const QSqlDatabase &database, int tournamentCategory,
-                                             bool likePointFighing, QString directoryPath, bool isFirst, bool isLast, int& fightingNumber, QString text, QString prefFileName)
+        bool likePointFighing, QString directoryPath, bool isFirst, bool isLast, int& fightingNumber, QString text, QString prefFileName)
 {
-    QVector<DBUtils::NodeOfTournirGrid> nodes = DBUtils::getNodes(database, tournamentCategory);
+    QVector<DBUtils::NodeOfTournirGrid> nodes = DBUtils::getNodes(tournamentCategory);
     if (nodes.empty()) return;
     qSort(nodes);
 
@@ -313,9 +313,8 @@ void RenderAreaWidget::printTableGridInExcel(const QSqlDatabase &database, int t
     QAxObject *workbook = excel.querySubObject("ActiveWorkBook");
     QAxObject *sheets = workbook->querySubObject("WorkSheets");
     QAxObject* sheet = sheets->querySubObject( "Item( int )", 1);
-    QString sheetName = DBUtils::getField(database, "NAME", "TOURNAMENT_CATEGORIES", tournamentCategory);
-    sheetName = sheetName.replace(" ", "");
-    sheet->setProperty("Name", sheetName.left(31));
+    QString sheetName = DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", tournamentCategory);
+    sheet->setProperty("Name", sheetName.replace(" ", "").left(31));
 
     int offset = 3;
 
@@ -397,17 +396,17 @@ void RenderAreaWidget::printTableGridInExcel(const QSqlDatabase &database, int t
     for (int i = 1; i <= maxColumn; ++i) ExcelUtils::setColumnAutoFit(sheet, i);
     for (int i = 1; i <= maxRow   ; ++i) ExcelUtils::setRowAutoFit(sheet, i);
 
-    long long tournamentUID = DBUtils::getField(database, "TOURNAMENT_FK", "TOURNAMENT_CATEGORIES", tournamentCategory).toLongLong();
+    long long tournamentUID = DBUtils::getField("TOURNAMENT_FK", "TOURNAMENT_CATEGORIES", tournamentCategory).toLongLong();
 
     maxColumn = qMax(4, maxColumn);
 
     ExcelUtils::setTournamentName(sheet, DBUtils::getTournamentNameAsHeadOfDocument(database, tournamentUID), 1, 1, 1, maxColumn);
 
     ExcelUtils::uniteRange(sheet, 2, 1, 2, maxColumn);
-    ExcelUtils::setValue(sheet, 2, 1, DBUtils::getField(database, "NAME", "TOURNAMENT_CATEGORIES", tournamentCategory));
+    ExcelUtils::setValue(sheet, 2, 1, DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", tournamentCategory));
 
     ExcelUtils::uniteRange(sheet, 3, 1, 3, maxColumn);
-    ExcelUtils::setValue(sheet, 3, 1, prefFileName);
+    ExcelUtils::setValue(sheet, 3, 1, prefFileName.left(prefFileName.length() - 5));
     maxRow += 2;
 
 
@@ -440,7 +439,7 @@ void RenderAreaWidget::printTableGridInExcel(const QSqlDatabase &database, int t
     directoryPath = QDir::toNativeSeparators(directoryPath);
     if (!directoryPath.endsWith(QDir::separator())) directoryPath += QDir::separator();
     directoryPath = QDir::toNativeSeparators(directoryPath);
-    ExcelUtils::saveAsFile(workbook, directoryPath, prefFileName + sheetName + ".xls");
+    ExcelUtils::saveAsFile(workbook, directoryPath, prefFileName + ", " + DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", tournamentCategory) + ".xls");
 
     delete sheet;
     delete sheets;

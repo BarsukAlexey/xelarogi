@@ -274,9 +274,9 @@
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="pushButton">
+            <widget class="QPushButton" name="btn_report_ministr">
              <property name="text">
-              <string>Не нажимать</string>
+              <string>Отчёт министерства</string>
              </property>
             </widget>
            </item>

@@ -118,7 +118,7 @@ void EbnutVBazu::setRandomWinner(const QSqlDatabase& database, long long tournam
     {
         qlonglong TOURNAMENT_CATEGORIES_FK = query.value("TOURNAMENT_CATEGORIES_FK").toLongLong();
         qDebug() << "TOURNAMENT_CATEGORIES_FK: " << TOURNAMENT_CATEGORIES_FK;
-        QVector<DBUtils::NodeOfTournirGrid> nodes = DBUtils::getNodes(database, TOURNAMENT_CATEGORIES_FK);
+        QVector<DBUtils::NodeOfTournirGrid> nodes = DBUtils::getNodes(TOURNAMENT_CATEGORIES_FK);
         for (int i = nodes.size() - 1; 0 <= i; --i)
         {
             int v = i + 1;
