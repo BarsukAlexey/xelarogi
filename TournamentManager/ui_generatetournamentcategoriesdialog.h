@@ -144,7 +144,9 @@ public:
 
         ageTillSB = new QSpinBox(GenerateTournamentCategoriesDialog);
         ageTillSB->setObjectName(QStringLiteral("ageTillSB"));
+        ageTillSB->setMinimum(1);
         ageTillSB->setMaximum(9999);
+        ageTillSB->setValue(1);
 
         horizontalLayout->addWidget(ageTillSB);
 
@@ -213,18 +215,24 @@ public:
         verticalLayout_6->setObjectName(QStringLiteral("verticalLayout_6"));
         duratiobFightingSB = new QSpinBox(GenerateTournamentCategoriesDialog);
         duratiobFightingSB->setObjectName(QStringLiteral("duratiobFightingSB"));
+        duratiobFightingSB->setMinimum(1);
         duratiobFightingSB->setMaximum(9999999);
+        duratiobFightingSB->setValue(120);
 
         verticalLayout_6->addWidget(duratiobFightingSB);
 
         durationBreakSB = new QSpinBox(GenerateTournamentCategoriesDialog);
         durationBreakSB->setObjectName(QStringLiteral("durationBreakSB"));
+        durationBreakSB->setMinimum(1);
         durationBreakSB->setMaximum(9999999);
+        durationBreakSB->setValue(60);
 
         verticalLayout_6->addWidget(durationBreakSB);
 
         roundCountSB = new QSpinBox(GenerateTournamentCategoriesDialog);
         roundCountSB->setObjectName(QStringLiteral("roundCountSB"));
+        roundCountSB->setMinimum(1);
+        roundCountSB->setValue(3);
 
         verticalLayout_6->addWidget(roundCountSB);
 

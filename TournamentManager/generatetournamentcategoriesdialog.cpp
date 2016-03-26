@@ -1,5 +1,6 @@
 #include "generatetournamentcategoriesdialog.h"
 #include "ui_generatetournamentcategoriesdialog.h"
+#include "db_utils.h"
 
 GenerateTournamentCategoriesDialog::GenerateTournamentCategoriesDialog(long long tournamentUID, QWidget *parent) :
     QDialog(parent),
@@ -22,36 +23,25 @@ GenerateTournamentCategoriesDialog::GenerateTournamentCategoriesDialog(long long
         int durationFighting = ui->duratiobFightingSB->value();
         int durationBreak = ui->durationBreakSB->value();
         int roundCount = ui->roundCountSB->value();
+        qDebug() << durationFighting << durationBreak << roundCount;
 
         QString weightCorrect = ui->weightsLE->text().trimmed().replace(",", ".");
         QStringList weights = weightCorrect.split(";", QString::SkipEmptyParts);
 
         if (weights.size() > 0 && weights.front() != "0")
             weights.push_front("0");
+        weights.push_back("100000.0");
 
         QString newCategoryMsg = "Добавлены новые категории:\n";
 
-        for (int index = 0; index < (int)weights.size(); index++)
+        for (int index = 0; index + 1 < weights.size(); index++)
         {
-            QString modifyName = name;
             double weightFrom = weights[index].toDouble();
-            double weightTill = weightFrom;
-            if (index + 1 < (int)weights.size())
-            {
-                weightTill = weights[index + 1].toDouble();
-
-                modifyName += ", " + QString::number(ageFrom) + "-" + QString::number(ageTill) + " лет, " +
-                        ui->typeCB->currentText() + ", " +
-                        QString::number(weightFrom) + "-" + QString::number(weightTill) + " кг.";
-            }
-            else
-            {
-                weightTill = 100000.0;
-
-                modifyName += ", " + QString::number(ageFrom) + "-" + QString::number(ageTill) + " лет, " +
-                        ui->typeCB->currentText() + ", " +
-                        QString::number(weightFrom) + "+ кг.";
-            }
+            double weightTill = weights[index + 1].toDouble();
+            QString modifyName = name + ", " +
+                (ageFrom == 0? "до " : QString::number(ageFrom) + "-") + QString::number(ageTill) + " лет, " +
+                ui->typeCB->currentText() + ", " +
+                DBUtils::getNormanWeightRange(weightFrom, weightTill) + ".";
 
             QSqlQuery query;
             if (!query.prepare("INSERT INTO TOURNAMENT_CATEGORIES("

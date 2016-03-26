@@ -93,8 +93,14 @@
        </item>
        <item>
         <widget class="QSpinBox" name="ageTillSB">
+         <property name="minimum">
+          <number>1</number>
+         </property>
          <property name="maximum">
           <number>9999</number>
+         </property>
+         <property name="value">
+          <number>1</number>
          </property>
         </widget>
        </item>
@@ -184,20 +190,39 @@
       <layout class="QVBoxLayout" name="verticalLayout_6">
        <item>
         <widget class="QSpinBox" name="duratiobFightingSB">
+         <property name="minimum">
+          <number>1</number>
+         </property>
          <property name="maximum">
           <number>9999999</number>
+         </property>
+         <property name="value">
+          <number>120</number>
          </property>
         </widget>
        </item>
        <item>
         <widget class="QSpinBox" name="durationBreakSB">
+         <property name="minimum">
+          <number>1</number>
+         </property>
          <property name="maximum">
           <number>9999999</number>
+         </property>
+         <property name="value">
+          <number>60</number>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QSpinBox" name="roundCountSB"/>
+        <widget class="QSpinBox" name="roundCountSB">
+         <property name="minimum">
+          <number>1</number>
+         </property>
+         <property name="value">
+          <number>3</number>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>
