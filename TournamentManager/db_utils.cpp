@@ -304,7 +304,18 @@ QVector<DBUtils::Fighing> DBUtils::getListOfPairs(const QSqlDatabase& database, 
     return arr;
 }
 
-bool DBUtils::setNodeOfGrid(const QSqlDatabase& database, long long TOURNAMENT_CATEGORIES_FK, long long VERTEX, long long orderUID, QString result)
+void DBUtils::insertLeafOfGrid(long long tournamentCategories, long long vertex, long long orderUID)
+{
+    QSqlQuery query("INSERT INTO GRID VALUES (?, ?, ?, ?, null) ");
+    query.bindValue(0, tournamentCategories);
+    query.bindValue(1, vertex);     // отличается этим от предыдущего блока
+    query.bindValue(2, "false");
+    query.bindValue(3, orderUID); // отличается этим от предыдущего блока
+    if (!query.exec())
+        qDebug() << __PRETTY_FUNCTION__ << query.lastError() << query.lastQuery();
+}
+
+bool DBUtils::updateNodeOfGrid(const QSqlDatabase& database, long long TOURNAMENT_CATEGORIES_FK, long long VERTEX, long long orderUID, QString result)
 {
     QSqlQuery query("UPDATE GRID     SET ORDER_FK = ? , result = ?     WHERE TOURNAMENT_CATEGORIES_FK = ? AND VERTEX = ?", database);
     query.bindValue(0, orderUID);

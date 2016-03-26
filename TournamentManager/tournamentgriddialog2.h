@@ -40,6 +40,7 @@ private:
     RenderAreaWidget *pRenderArea;
     QComboBox *qComboBoxSelectCategory;
     QTableWidget *qTableWidget;
+    QTableWidget * tableGrid;
     QString no_special_group = "нет";
     QVector<int> specialGroup;
 
@@ -51,10 +52,6 @@ public:
 
 public:
     void ebnutVBazyGovno();
-
-private:
-
-    void setInGridBestFigher(int v, const QVector<bool>& isLeaf, const QVector<int>& distToLeaf, const QVector<TournamentGridDialog2::BestFigher>& bestFighters, QHash<long long, int>& vertexOfBest);
 
 private slots:
     void onActivatedCategory(int id);

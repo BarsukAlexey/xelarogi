@@ -491,7 +491,7 @@ void MainWindow::on_pushButtonLoadWinner_clicked()
         int orderUID = object["orderUID"].toInt();
         QString result = object["result"].toString();
         qDebug() << TOURNAMENT_CATEGORIES_FK << VERTEX << orderUID;
-        if (DBUtils::setNodeOfGrid(m_database, TOURNAMENT_CATEGORIES_FK, VERTEX, orderUID, result))
+        if (DBUtils::updateNodeOfGrid(m_database, TOURNAMENT_CATEGORIES_FK, VERTEX, orderUID, result))
         {
             okCount++;
         }
