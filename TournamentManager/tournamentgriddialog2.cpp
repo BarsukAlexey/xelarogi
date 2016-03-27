@@ -92,14 +92,11 @@ TournamentGridDialog2::TournamentGridDialog2(const QSqlDatabase &_database, long
     QTabWidget *qTabWidget = new QTabWidget();
     qTabWidget->addTab(pQScrollArea, "Сетка"); // TODO!
     tableGrid = new QTableWidget();
-    tableGrid->setColumnCount(2);
-    tableGrid->setHorizontalHeaderLabels(QStringList({"Спортсмен A", "Спортсмен B"}));
+    tableGrid->setColumnCount(3);
+    tableGrid->setHorizontalHeaderLabels(QStringList({"Спортсмен A", "Спортсмен B", "Уровень"}));
     tableGrid->setEditTriggers(QAbstractItemView::NoEditTriggers);
     tableGrid->setSelectionMode(QAbstractItemView::SingleSelection);
-    //tableGrid->setSelectionBehavior(QAbstractItemView::SelectRows);
-    //tableGrid->setSelectionMode(QAbstractItemView::NoSelection);
     //tableGrid->setFocusPolicy(Qt::NoFocus);
-    tableGrid->setRowCount(150);
     qTabWidget->addTab(tableGrid, "Список");
 
 
@@ -169,6 +166,7 @@ void TournamentGridDialog2::onActivatedCategory(int id)
     if (id < 0)
     {
         qTableWidget->setRowCount(0);
+        tableGrid->setRowCount(0);
         return;
     }
     specialGroup = QVector<int>(4, false);
@@ -214,6 +212,8 @@ void TournamentGridDialog2::onActivatedCategory(int id)
     }
 
     qTableWidget->resizeColumnsToContents();
+
+    updateInfoTableGrid();
 }
 
 // юзер кликает по участнику и у него меняется приоритет
@@ -514,6 +514,8 @@ void TournamentGridDialog2::onButtonGenerateGrid()
     QSqlDatabase::database().commit();
 
     pRenderArea->repaint();
+    updateInfoTableGrid();
+
 }
 
 void TournamentGridDialog2::onButtonDelete()
@@ -543,12 +545,70 @@ void TournamentGridDialog2::onButtonDelete()
     if (!query.exec())
         qDebug() << __PRETTY_FUNCTION__ << " " << query.lastError().text() << " " << query.lastQuery();
     pRenderArea->repaint();
+    updateInfoTableGrid();
+
 }
 
 
 
 
 TournamentGridDialog2::~TournamentGridDialog2(){}
+
+void TournamentGridDialog2::updateInfoTableGrid()
+{
+    selectedRowOfRableGrid = -1;
+    selectedColumnOfRableGrid = -1;
+    QVector<DBUtils::NodeOfTournirGrid> nodes = DBUtils::getNodes(tournamentCategories);
+    {
+        QVector<DBUtils::NodeOfTournirGrid> leafs;
+        for (DBUtils::NodeOfTournirGrid node : nodes)
+            if (!node.isFighing)
+            {
+                leafs << node;
+            }
+        nodes = leafs;
+    }
+    std::random_shuffle(nodes.begin(), nodes.end());
+    std::sort(nodes.begin(), nodes.end(),
+        [this] (const DBUtils::NodeOfTournirGrid& lhs, const DBUtils::NodeOfTournirGrid& rhs) {
+            QString a = QString::number(lhs.v, 2);
+            QString b = QString::number(rhs.v, 2);
+            if (a.size() != b.size()) return a.size() < b.size();
+            return lhs.v > rhs.v;
+    });
+    tableGrid->setRowCount(0);
+    for (DBUtils::NodeOfTournirGrid node : nodes)
+    {
+        if ((node.v & 1) == 0) continue;
+
+        tableGrid->setRowCount(tableGrid->rowCount() + 1);
+
+        QTableWidgetItem *item;
+
+        item = new QTableWidgetItem(node.name + " (" + node.region + ")" /*QString::number(node.v)*/);
+        item->setData(Qt::UserRole, node.v);
+        tableGrid->setItem(tableGrid->rowCount() - 1, 0, item);
+
+
+        item = new QTableWidgetItem();
+        item->setData(Qt::UserRole, 0);
+        tableGrid->setItem(tableGrid->rowCount() - 1, 1, item);
+        for (DBUtils::NodeOfTournirGrid node2 : nodes)
+        {
+            if (node2.v != (node.v ^ 1)) continue;
+            item = new QTableWidgetItem(node2.name + " (" + node2.region + ")" /*QString::number(node2.v)*/);
+            item->setData(Qt::UserRole, node2.v);
+            tableGrid->setItem(tableGrid->rowCount() - 1, 1, item);
+            break;
+        }
+
+        item = new QTableWidgetItem(RenderAreaWidget::getNameOfLevel(node.v / 2));
+        tableGrid->setItem(tableGrid->rowCount() - 1, 2, item);
+    }
+    tableGrid->resizeColumnsToContents();
+    tableGrid->clearSelection();
+    tableGrid->clearFocus();
+}
 
 void TournamentGridDialog2::fillCategoryCombobox(QString filterStr)
 {
@@ -591,6 +651,44 @@ void TournamentGridDialog2::fillCategoryCombobox(QString filterStr)
 
     if (0 < qComboBoxSelectCategory->count())
         onActivatedCategory(0);
+}
+
+void TournamentGridDialog2::onCellClickedOntableGrid(int row, int column)
+{
+    //qDebug() << row << column;
+    //for (int i = 1; i <= 20; ++i) qDebug() << i << RenderAreaWidget::getNameOfLevel(i);
+    if ( 2 <= column || tableGrid->item(row, column)->data(Qt::UserRole).toInt() <= 0)
+    {
+        tableGrid->clearSelection();
+        tableGrid->clearFocus();
+        selectedRowOfRableGrid = -1;
+        selectedColumnOfRableGrid = -1;
+        return;
+    }
+
+    if (selectedRowOfRableGrid == -1 || selectedColumnOfRableGrid == -1)
+    {
+        selectedRowOfRableGrid = row;
+        selectedColumnOfRableGrid = column;
+    }
+    else
+    {
+        int vertexA = tableGrid->item(row, column)->data(Qt::UserRole).toInt();
+        int vertexB = tableGrid->item(selectedRowOfRableGrid, selectedColumnOfRableGrid)->data(Qt::UserRole).toInt();
+        qDebug() << vertexA << vertexB;
+        if (0 < vertexA && 0 < vertexB)
+        {
+            DBUtils::swapNodesOfGrid(tournamentCategories, vertexA, vertexB);
+            qDebug() << "DONE!";
+        }
+        updateInfoTableGrid();
+
+        tableGrid->clearSelection();
+        tableGrid->clearFocus();
+        selectedRowOfRableGrid = -1;
+        selectedColumnOfRableGrid = -1;
+    }
+
 }
 
 

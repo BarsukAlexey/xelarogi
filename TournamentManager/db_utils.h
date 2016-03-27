@@ -65,6 +65,7 @@ public:
     static QVector<Fighing> getListOfPairs(const QSqlDatabase& database, long long TOURNAMENT_CATEGORIES_FK);
     static void insertLeafOfGrid(long long TOURNAMENT_CATEGORIES_FK, long long VERTEX, long long orderUID);
     static bool updateNodeOfGrid(const QSqlDatabase& database, long long TOURNAMENT_CATEGORIES_FK, long long VERTEX, long long orderUID, QString result);
+    static void swapNodesOfGrid(long long tournamentCategories, int node0v, int node1v);
 
     static int isPow2(int a) {
       return !(a & (a - 1));

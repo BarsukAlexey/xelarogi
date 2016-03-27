@@ -325,6 +325,34 @@ bool DBUtils::updateNodeOfGrid(const QSqlDatabase& database, long long TOURNAMEN
     return query.exec();
 }
 
+void DBUtils::swapNodesOfGrid(long long tournamentCategories, int node0v, int node1v)
+{
+    {
+        QSqlQuery query("UPDATE GRID SET VERTEX = ? WHERE TOURNAMENT_CATEGORIES_FK = ? AND VERTEX = ?");
+        query.bindValue(0, 100500);
+        query.bindValue(1, tournamentCategories);
+        query.bindValue(2, node0v);
+        if (!query.exec())
+            qDebug() << __PRETTY_FUNCTION__ << " " << query.lastError().text() << "\n" << query.lastQuery();
+    }
+    {
+        QSqlQuery query("UPDATE GRID SET VERTEX = ? WHERE TOURNAMENT_CATEGORIES_FK = ? AND VERTEX = ?");
+        query.bindValue(0, node0v);
+        query.bindValue(1, tournamentCategories);
+        query.bindValue(2, node1v);
+        if (!query.exec())
+            qDebug() << __PRETTY_FUNCTION__ << " " << query.lastError().text() << "\n" << query.lastQuery();
+    }
+    {
+        QSqlQuery query("UPDATE GRID SET VERTEX = ? WHERE TOURNAMENT_CATEGORIES_FK = ? AND VERTEX = ?");
+        query.bindValue(0, node1v);
+        query.bindValue(1, tournamentCategories);
+        query.bindValue(2, 100500);
+        if (!query.exec())
+            qDebug() << __PRETTY_FUNCTION__ << " " << query.lastError().text() << "\n" << query.lastQuery();
+    }
+}
+
 QVector<long long> DBUtils::get_UIDs_of_TOURNAMENT_CATEGORIES(const QSqlDatabase& database, long long tournamentUID)
 {
     QVector<long long> uids;

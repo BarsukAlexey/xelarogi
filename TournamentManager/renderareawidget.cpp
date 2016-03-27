@@ -159,30 +159,7 @@ void RenderAreaWidget::mousePressEvent(QMouseEvent* event)
             selectedNode = noNode;
             if (!node0.isFighing && !node1.isFighing)
             {
-                {
-                    QSqlQuery query("UPDATE GRID SET VERTEX = ? WHERE TOURNAMENT_CATEGORIES_FK = ? AND VERTEX = ?", database);
-                    query.bindValue(0, 100500);
-                    query.bindValue(1, tournamentCategories);
-                    query.bindValue(2, node0.v);
-                    if (!query.exec())
-                        qDebug() << __PRETTY_FUNCTION__ << " " << query.lastError().text() << "\n" << query.lastQuery();
-                }
-                {
-                    QSqlQuery query("UPDATE GRID SET VERTEX = ? WHERE TOURNAMENT_CATEGORIES_FK = ? AND VERTEX = ?", database);
-                    query.bindValue(0, node0.v);
-                    query.bindValue(1, tournamentCategories);
-                    query.bindValue(2, node1.v);
-                    if (!query.exec())
-                        qDebug() << __PRETTY_FUNCTION__ << " " << query.lastError().text() << "\n" << query.lastQuery();
-                }
-                {
-                    QSqlQuery query("UPDATE GRID SET VERTEX = ? WHERE TOURNAMENT_CATEGORIES_FK = ? AND VERTEX = ?", database);
-                    query.bindValue(0, node1.v);
-                    query.bindValue(1, tournamentCategories);
-                    query.bindValue(2, 100500);
-                    if (!query.exec())
-                        qDebug() << __PRETTY_FUNCTION__ << " " << query.lastError().text() << "\n" << query.lastQuery();
-                }
+                DBUtils::swapNodesOfGrid(tournamentCategories, node0.v, node1.v);
             }
             if (node0.v > node1.v) std::swap(node0, node1);
             if (2 * node0.v == node1.v || 2 * node0.v + 1 == node1.v)
@@ -285,6 +262,8 @@ void RenderAreaWidget::onSaveInExcel()
     int foo = 12;
     printTableGridInExcel(database, tournamentCategories, false, directoryPath, false, false, foo);
 }
+
+
 
 QPoint RenderAreaWidget::getCell(int v, int countColumns)
 {
@@ -452,5 +431,5 @@ void RenderAreaWidget::printTableGridInExcel(const QSqlDatabase &database, int t
 QString RenderAreaWidget::getNameOfLevel(int vertex)
 {
     int level = RenderAreaWidget::log2(vertex) + 1;
-    return level == 1? "Финал" : level == 2? "Полуфинал" : "1 / " + QString::number(level);
+    return level == 1? "Финал" : level == 2? "Полуфинал" : "1 / " + QString::number(1 << level);
 }

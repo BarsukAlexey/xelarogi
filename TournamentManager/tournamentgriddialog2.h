@@ -45,13 +45,15 @@ private:
     QVector<int> specialGroup;
 
     QCheckBox * qCheckBox;
+    int selectedRowOfRableGrid;
+    int selectedColumnOfRableGrid;
 
 public:
     TournamentGridDialog2(const QSqlDatabase &database, long long tournamentUID, QWidget *parent = 0);
     ~TournamentGridDialog2();
 
-public:
-    void ebnutVBazyGovno();
+private:
+    void updateInfoTableGrid();
 
 private slots:
     void onActivatedCategory(int id);
@@ -62,5 +64,6 @@ private slots:
     void sdfsdfsf(){}
 
     void fillCategoryCombobox(QString filterStr = "");
+    void onCellClickedOntableGrid(int row, int column);
 };
 #endif // TOURNAMENTGRIDDIALOG2_H
