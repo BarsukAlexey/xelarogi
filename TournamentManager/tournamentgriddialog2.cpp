@@ -283,7 +283,7 @@ void TournamentGridDialog2::onCellCLickedForChangePrioritet(int row, int )
 // генерация турнирной сетки
 void TournamentGridDialog2::onButtonGenerateGrid()
 {
-    /*/
+    //
     {
         // проверяем есть ли турнирная сетка, если есть, то задаём вопрос
         QSqlQuery query("SELECT * FROM GRID WHERE TOURNAMENT_CATEGORIES_FK = ? ", database);

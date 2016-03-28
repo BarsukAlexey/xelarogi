@@ -98,7 +98,7 @@ FightingPairs::FightingPairs(const QSqlDatabase &_database, long long _tournamen
     qPushButton = new QPushButton("GO!");
 
     QGridLayout *qGridLayout = new QGridLayout;
-    qGridLayout->addWidget(qTableWidget, 0, 0, 1, 2, Qt::AlignHCenter | Qt::AlignVCenter);
+    qGridLayout->addWidget(qTableWidget, 0, 0, 1, 2);
 
     qGridLayout->addWidget(new QLabel(QString("Кол-во рингов:")), 1, 0, Qt::AlignRight);
     qGridLayout->addWidget(ringSpinBox, 1, 1);

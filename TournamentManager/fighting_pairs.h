@@ -11,6 +11,7 @@
 #include <QAxObject>
 #include <QLineEdit>
 #include <QCheckBox>
+#include <QTableWidget>
 
 class FightingPairs : public QDialog
 {
@@ -23,7 +24,8 @@ public:
 private:
     const QSqlDatabase &database;
     long long tournamentUID;
-    QListWidget* qListWidget;
+    //QListWidget* qListWidget;
+    QTableWidget * qTableWidget;
     QPushButton* qPushButton;
     QSpinBox* ringSpinBox;
     QLineEdit *qLineEdit;
