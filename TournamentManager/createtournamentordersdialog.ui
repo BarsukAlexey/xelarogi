@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>845</width>
+    <width>1210</width>
     <height>601</height>
    </rect>
   </property>
@@ -272,12 +272,18 @@
                <property name="text">
                 <string>Дата рождения</string>
                </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
               </widget>
              </item>
              <item>
               <widget class="QLabel" name="label_20">
                <property name="text">
                 <string>Вес</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                </property>
               </widget>
              </item>
@@ -286,12 +292,18 @@
                <property name="text">
                 <string>Страна</string>
                </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
               </widget>
              </item>
              <item>
               <widget class="QLabel" name="label_22">
                <property name="text">
                 <string>Регион</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                </property>
               </widget>
              </item>
@@ -300,12 +312,18 @@
                <property name="text">
                 <string>Населенный пункт</string>
                </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
               </widget>
              </item>
              <item>
               <widget class="QLabel" name="label_24">
                <property name="text">
                 <string>Пол</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                </property>
               </widget>
              </item>
@@ -314,12 +332,18 @@
                <property name="text">
                 <string>Спортивный разряд</string>
                </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
               </widget>
              </item>
              <item>
               <widget class="QLabel" name="label_26">
                <property name="text">
                 <string>Раздел соревнования</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                </property>
               </widget>
              </item>
@@ -328,6 +352,9 @@
                <property name="text">
                 <string>Клуб</string>
                </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
               </widget>
              </item>
              <item>
@@ -335,12 +362,18 @@
                <property name="text">
                 <string>Тренер</string>
                </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
               </widget>
              </item>
              <item>
               <widget class="QLabel" name="label_3">
                <property name="text">
                 <string>Категория турнира</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                </property>
               </widget>
              </item>
@@ -362,31 +395,67 @@
               </widget>
              </item>
              <item>
-              <widget class="QComboBox" name="countriesCB"/>
+              <widget class="QComboBox" name="countriesCB">
+               <property name="maxVisibleItems">
+                <number>69</number>
+               </property>
+              </widget>
              </item>
              <item>
-              <widget class="QComboBox" name="regionsCB"/>
+              <widget class="QComboBox" name="regionsCB">
+               <property name="maxVisibleItems">
+                <number>69</number>
+               </property>
+              </widget>
              </item>
              <item>
-              <widget class="QComboBox" name="regionUnitsCB"/>
+              <widget class="QComboBox" name="regionUnitsCB">
+               <property name="maxVisibleItems">
+                <number>69</number>
+               </property>
+              </widget>
              </item>
              <item>
-              <widget class="QComboBox" name="gendersCB"/>
+              <widget class="QComboBox" name="gendersCB">
+               <property name="maxVisibleItems">
+                <number>69</number>
+               </property>
+              </widget>
              </item>
              <item>
-              <widget class="QComboBox" name="sportCategoriesCB"/>
+              <widget class="QComboBox" name="sportCategoriesCB">
+               <property name="maxVisibleItems">
+                <number>69</number>
+               </property>
+              </widget>
              </item>
              <item>
-              <widget class="QComboBox" name="typesCB"/>
+              <widget class="QComboBox" name="typesCB">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+              </widget>
              </item>
              <item>
-              <widget class="QComboBox" name="clubsCB"/>
+              <widget class="QComboBox" name="clubsCB">
+               <property name="maxVisibleItems">
+                <number>69</number>
+               </property>
+              </widget>
              </item>
              <item>
-              <widget class="QComboBox" name="coachsCB"/>
+              <widget class="QComboBox" name="coachsCB">
+               <property name="maxVisibleItems">
+                <number>69</number>
+               </property>
+              </widget>
              </item>
              <item>
-              <widget class="QComboBox" name="tournamentCategoriesCB"/>
+              <widget class="QComboBox" name="tournamentCategoriesCB">
+               <property name="maxVisibleItems">
+                <number>69</number>
+               </property>
+              </widget>
              </item>
             </layout>
            </item>

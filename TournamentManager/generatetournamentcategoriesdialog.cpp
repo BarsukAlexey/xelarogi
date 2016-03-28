@@ -1,6 +1,7 @@
 #include "generatetournamentcategoriesdialog.h"
 #include "ui_generatetournamentcategoriesdialog.h"
 #include "db_utils.h"
+#include "createtypedialog.h"
 
 GenerateTournamentCategoriesDialog::GenerateTournamentCategoriesDialog(long long tournamentUID, QWidget *parent) :
     QDialog(parent),
@@ -38,8 +39,15 @@ GenerateTournamentCategoriesDialog::GenerateTournamentCategoriesDialog(long long
         {
             double weightFrom = weights[index].toDouble();
             double weightTill = weights[index + 1].toDouble();
+
+            QString ageStr;
+            if (ageFrom == 0) ageStr = "до " + QString::number(ageTill);
+            else if (ageTill == 99) ageStr = "от " + QString::number(ageFrom);
+            else ageStr += QString::number(ageFrom) + "-" + QString::number(ageTill);
+
+
             QString modifyName = name + ", " +
-                (ageFrom == 0? "до " : QString::number(ageFrom) + "-") + QString::number(ageTill) + " лет, " +
+                ageStr + " лет, " +
                 ui->typeCB->currentText() + ", " +
                 DBUtils::getNormanWeightRange(weightFrom, weightTill) + ".";
 
@@ -125,5 +133,14 @@ void GenerateTournamentCategoriesDialog::fillTypeCB()
     else
     {
         qDebug() << query.lastError().text();
+    }
+}
+
+void GenerateTournamentCategoriesDialog::on_pushButton_clicked()
+{
+    CreateTypeDialog dlg(this);
+    if (dlg.exec() == QDialog::Accepted)
+    {
+        fillTypeCB();
     }
 }

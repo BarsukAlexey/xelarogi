@@ -7,12 +7,14 @@ QSqlRecord CreateTournamentOrdersDialog::m_record;
 
 CreateTournamentOrdersDialog::CreateTournamentOrdersDialog(const QSqlDatabase &database,
                                                            long long tournamentUID,
-                                                           QWidget *parent
+                                                           QWidget *parent,
+                                                           QString filterSecondName,
+                                                           QString filterFirstName
                                                            ):
-    m_database(database),
-    mTournamentUID(tournamentUID),
     QDialog(parent),
-    ui(new Ui::CreateTournamentOrdersDialog)
+    ui(new Ui::CreateTournamentOrdersDialog),
+    m_database(database),
+    mTournamentUID(tournamentUID)
 {
     ui->setupUi(this);
     ui->label->setText(getTournamentName());
@@ -24,6 +26,7 @@ CreateTournamentOrdersDialog::CreateTournamentOrdersDialog(const QSqlDatabase &d
     QSqlRelationalTableModel * model = new QSqlRelationalTableModel();
     model->setTable("ORDERS");
     model->setFilter("TOURNAMENT_CATEGORY_FK IN " + getAllowTournamentCategories() + " AND IS_VALID = 1 ");
+    //model->setSort(); todo
     ui->tableView->setModel(model);
     model->select();
 
@@ -35,7 +38,7 @@ CreateTournamentOrdersDialog::CreateTournamentOrdersDialog(const QSqlDatabase &d
     ui->tableView->setColumnHidden(model->fieldIndex("BIRTHDATE"), true);
     ui->tableView->setColumnHidden(model->fieldIndex("SEX_FK"), true);
     ui->tableView->setColumnHidden(model->fieldIndex("SPORT_CATEGORY_FK"), true);
-    ui->tableView->setColumnHidden(model->fieldIndex("TOURNAMENT_CATEGORY_FK"), true);
+    //ui->tableView->setColumnHidden(model->fieldIndex("TOURNAMENT_CATEGORY_FK"), true);
     ui->tableView->setColumnHidden(model->fieldIndex("IS_VALID"), true);
 
     for (int i = 0; i < m_record.count(); ++i)
@@ -235,6 +238,11 @@ CreateTournamentOrdersDialog::CreateTournamentOrdersDialog(const QSqlDatabase &d
     });
 
     connect(ui->toExcelBtn, &QPushButton::clicked, this, &CreateTournamentOrdersDialog::saveToExcel);
+
+    //
+    ui->filterSecondNameLE->setText(filterSecondName);
+    ui->filterFirstNameLE->setText(filterFirstName);
+    setWindowFlags(windowFlags() | Qt::WindowMaximizeButtonHint);
 }
 
 CreateTournamentOrdersDialog::~CreateTournamentOrdersDialog()
@@ -1512,7 +1520,7 @@ void CreateTournamentOrdersDialog::updateRegionComboBox(long long regionUID, lon
     ui->regionsCB->clear();
 
     QSqlQuery query;
-    if (!query.prepare("SELECT * FROM REGIONS WHERE COUNTRY_FK = ?"))
+    if (!query.prepare("SELECT * FROM REGIONS WHERE COUNTRY_FK = ? ORDER BY NAME"))
         qDebug() << query.lastError().text();
     query.bindValue(0, countryUID);
 
@@ -1543,7 +1551,7 @@ void CreateTournamentOrdersDialog::updateRegionUnitComboBox(long long regionUnit
     ui->regionUnitsCB->clear();
 
     QSqlQuery query;
-    if (!query.prepare("SELECT * FROM REGION_UNITS WHERE REGION_FK = ?"))
+    if (!query.prepare("SELECT * FROM REGION_UNITS WHERE REGION_FK = ? ORDER BY NAME"))
         qDebug() << query.lastError().text();
     query.bindValue(0, regionUID);
 
@@ -1574,7 +1582,7 @@ void CreateTournamentOrdersDialog::updateSportCategoryComboBox(long long current
     ui->sportCategoriesCB->clear();
 
     QSqlQuery query;
-    if (!query.prepare("SELECT * FROM SPORT_CATEGORIES"))
+    if (!query.prepare("SELECT * FROM SPORT_CATEGORIES ORDER BY NAME"))
         qDebug() << query.lastError().text();
 
     if (query.exec())
@@ -1634,7 +1642,7 @@ void CreateTournamentOrdersDialog::updateClubComboBox(long long clubUID, long lo
     ui->clubsCB->clear();
 
     QSqlQuery query;
-    if (!query.prepare("SELECT * FROM CLUBS WHERE REGION_FK = ?"))
+    if (!query.prepare("SELECT * FROM CLUBS WHERE REGION_FK = ?  ORDER BY NAME"))
         qDebug() << query.lastError().text();
     query.bindValue(0, regionUID);
 
@@ -1665,7 +1673,7 @@ void CreateTournamentOrdersDialog::updateCoachComboBox(long long coachUID, long 
     ui->coachsCB->clear();
 
     QSqlQuery query;
-    if (!query.prepare("SELECT * FROM COACHS WHERE CLUB_FK = ?"))
+    if (!query.prepare("SELECT * FROM COACHS WHERE CLUB_FK = ?  ORDER BY NAME"))
         qDebug() << query.lastError().text();
     query.bindValue(0, clubUID);
 
@@ -1696,7 +1704,7 @@ void CreateTournamentOrdersDialog::updateTournamentCategoriesComboBox(long long 
     ui->tournamentCategoriesCB->clear();
 
     QSqlQuery query;
-    if (!query.prepare("SELECT * FROM TOURNAMENT_CATEGORIES WHERE TOURNAMENT_FK = ? AND SEX_FK = ? AND TYPE_FK = ?"))
+    if (!query.prepare("SELECT * FROM TOURNAMENT_CATEGORIES WHERE TOURNAMENT_FK = ? AND SEX_FK = ? AND TYPE_FK = ? ORDER BY SEX_FK, TYPE_FK, AGE_FROM, AGE_TILL, WEIGHT_FROM, WEIGHT_TILL"))
         qDebug() << query.lastError().text();
     query.bindValue(0, mTournamentUID);
     query.bindValue(1, sexUID);

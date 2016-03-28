@@ -1,5 +1,6 @@
 #include "createtournamentcategoriesdialog.h"
 #include "ui_createtournamentcategoriesdialog.h"
+#include "generatetournamentcategoriesdialog.h"
 
 CreateTournamentCategoriesDialog::CreateTournamentCategoriesDialog(long long tournamentUID, QWidget *parent) :
     QDialog(parent),
@@ -44,6 +45,8 @@ CreateTournamentCategoriesDialog::CreateTournamentCategoriesDialog(long long tou
             selectTypeByUID(selectedTypeUID);
         }
     });
+
+    setWindowFlags(windowFlags() | Qt::WindowMaximizeButtonHint);
 }
 
 CreateTournamentCategoriesDialog::~CreateTournamentCategoriesDialog()
@@ -55,8 +58,10 @@ void CreateTournamentCategoriesDialog::updateTable()
 {
     QSqlRelationalTableModel * model = new QSqlRelationalTableModel();
     model->setTable("TOURNAMENT_CATEGORIES");
-    model->setRelation(model->fieldIndex("SEX_FK"), QSqlRelation("SEXES", "UID", "NAME"));
-    model->setFilter("TOURNAMENT_FK = " + QString::number(mTournamentUID));
+    //model->setRelation(model->fieldIndex("SEX_FK"), QSqlRelation("SEXES", "UID", "NAME"));
+    model->setFilter("TOURNAMENT_FK = " + QString::number(mTournamentUID) +
+                " ORDER BY SEX_FK, TYPE_FK, AGE_FROM, AGE_TILL, WEIGHT_FROM, WEIGHT_TILL " );
+    //model->setFilter("TOURNAMENT_FK = " + QString::number(mTournamentUID) );
 
     ui->tableView->setModel(model);
     ui->tableView->setColumnHidden(model->fieldIndex("UID"), true);
@@ -66,18 +71,22 @@ void CreateTournamentCategoriesDialog::updateTable()
     ui->tableView->setColumnHidden(model->fieldIndex("WEIGHT_FROM"), true);
     ui->tableView->setColumnHidden(model->fieldIndex("WEIGHT_TILL"), true);
     ui->tableView->setColumnHidden(model->fieldIndex("SEX_FK"), true);
-    ui->tableView->setColumnHidden(model->fieldIndex("DURATION_FIGHING"), true);
-    ui->tableView->setColumnHidden(model->fieldIndex("DURATION_BREAK"), true);
-    ui->tableView->setColumnHidden(model->fieldIndex("ROUND_COUNT"), true);
+    //ui->tableView->setColumnHidden(model->fieldIndex("DURATION_FIGHING"), true);
+    //ui->tableView->setColumnHidden(model->fieldIndex("DURATION_BREAK"), true);
+    //ui->tableView->setColumnHidden(model->fieldIndex("ROUND_COUNT"), true);
     ui->tableView->setColumnHidden(model->fieldIndex("TYPE_FK"), true);
 
 
     model->setHeaderData(model->fieldIndex("NAME"), Qt::Horizontal, "Наименование");
+    model->setHeaderData(model->fieldIndex("DURATION_FIGHING"), Qt::Horizontal, "Длительность боя");
+    model->setHeaderData(model->fieldIndex("DURATION_BREAK"), Qt::Horizontal, "Перерыв");
+    model->setHeaderData(model->fieldIndex("ROUND_COUNT"), Qt::Horizontal, "Кол-во раундов");
 
     ui->tableView->resizeColumnsToContents();
     ui->tableView->horizontalHeader()->setStretchLastSection(true);
 
     model->select();
+    ui->tableView->resizeColumnsToContents();
 }
 
 void CreateTournamentCategoriesDialog::updateDataWidget(long long categoryUID)
@@ -298,4 +307,12 @@ void CreateTournamentCategoriesDialog::onChangeBtn(long long categoryUID)
     {
         qDebug() << updateQuery.lastError().text();
     }
+}
+
+
+void CreateTournamentCategoriesDialog::on_pushButton_clicked()
+{
+    GenerateTournamentCategoriesDialog(mTournamentUID, this).exec();
+    updateTable();
+    fillTypeComboBox();
 }

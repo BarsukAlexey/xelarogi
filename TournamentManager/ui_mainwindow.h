@@ -63,7 +63,6 @@ public:
     QVBoxLayout *verticalLayout;
     QSpacerItem *verticalSpacer_2;
     QPushButton *createTournamentCategoriesBtn;
-    QPushButton *genTournamentCategoriesBtn;
     QPushButton *createOrdersBtn;
     QPushButton *pushButtonProtokolVzveshinanya;
     QPushButton *pushButtonPair;
@@ -216,11 +215,6 @@ public:
 
         verticalLayout->addWidget(createTournamentCategoriesBtn);
 
-        genTournamentCategoriesBtn = new QPushButton(ordersPage);
-        genTournamentCategoriesBtn->setObjectName(QStringLiteral("genTournamentCategoriesBtn"));
-
-        verticalLayout->addWidget(genTournamentCategoriesBtn);
-
         createOrdersBtn = new QPushButton(ordersPage);
         createOrdersBtn->setObjectName(QStringLiteral("createOrdersBtn"));
         QSizePolicy sizePolicy2(QSizePolicy::Minimum, QSizePolicy::Expanding);
@@ -347,7 +341,6 @@ public:
         tournamentLabel->setText(QApplication::translate("MainWindow", "\320\242\321\203\321\200\320\275\320\270\321\200. \320\232\320\260\320\272 \321\203\320\261\321\200\320\260\321\202\321\214 \321\215\321\202\320\276 \320\277\321\200\320\270 \320\267\320\260\320\277\321\203\321\201\320\272\320\265?", 0));
         tournamentUidLabel->setText(QApplication::translate("MainWindow", "TextLabel", 0));
         createTournamentCategoriesBtn->setText(QApplication::translate("MainWindow", "\320\232\320\260\321\202\320\265\320\263\320\276\321\200\320\270\320\270 \321\202\321\203\321\200\320\275\320\270\321\200\320\260", 0));
-        genTournamentCategoriesBtn->setText(QApplication::translate("MainWindow", "\320\224\320\276\320\261\320\260\320\262\320\273\320\265\320\275\320\270\320\265 \320\263\321\200\321\203\320\277\320\277\321\213 \320\272\320\260\321\202\320\265\320\263\320\276\321\200\320\270\320\271 \321\202\321\203\321\200\320\275\320\270\321\200\320\260", 0));
         createOrdersBtn->setText(QApplication::translate("MainWindow", "\320\227\320\260\321\217\320\262\320\272\320\270", 0));
         pushButtonProtokolVzveshinanya->setText(QApplication::translate("MainWindow", "\320\237\321\200\320\276\321\202\320\276\320\272\320\276\320\273\321\213 \320\262\320\267\320\262\320\265\321\210\320\270\320\262\320\260\320\275\320\270\321\217", 0));
         pushButtonPair->setText(QApplication::translate("MainWindow", "\320\241\320\276\321\201\321\202\320\260\320\262\321\213 \320\277\320\260\321\200", 0));

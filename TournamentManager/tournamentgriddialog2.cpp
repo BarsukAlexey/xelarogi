@@ -1,5 +1,7 @@
 #include "tournamentgriddialog2.h"
 #include "renderareawidget.h"
+#include "createtournamentordersdialog.h"
+
 #include <QScrollArea>
 #include <QGridLayout>
 #include <QPushButton>
@@ -33,6 +35,8 @@
 #include <QTabWidget>
 #include <utility>
 #include <iostream>
+#include <QMenu>
+#include <QHeaderView>
 
 TournamentGridDialog2::TournamentGridDialog2(const QSqlDatabase &_database, long long _tournamentUID, QWidget *_parent)
     : QDialog(_parent),
@@ -149,17 +153,53 @@ TournamentGridDialog2::TournamentGridDialog2(const QSqlDatabase &_database, long
         fillCategoryCombobox(filter);
     });
 
-    //showMaximized();
-
     connect(qCheckBox, &QCheckBox::stateChanged, [this, filterCategoriesLE] ()
     {
         fillCategoryCombobox(filterCategoriesLE->text());
     });
 
+
+
+
+    qTableWidget->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(qTableWidget, &QTableView::customContextMenuRequested, [this] (const QPoint& pos)
+    {
+        QMenu * contextMenu = new QMenu();
+
+        QAction* restrictAction = new QAction(tr("Изменить категорию..."), contextMenu);
+        contextMenu->addAction(restrictAction);
+        connect(restrictAction, &QAction::triggered, [this, &pos] ()
+        {
+            QModelIndex index = qTableWidget->indexAt(pos);
+            if (index != QModelIndex())
+            {
+                long long orderUID = qTableWidget->item(index.row(), 0)->data(Qt::UserRole).toLongLong();
+                qDebug() << DBUtils::getSecondNameAndOneLetterOfName(QSqlDatabase::database(), orderUID);
+                CreateTournamentOrdersDialog(QSqlDatabase::database(), tournamentUID, this,
+                    DBUtils::getField("SECOND_NAME", "ORDERS", orderUID),
+                    DBUtils::getField("FIRST_NAME", "ORDERS", orderUID)
+                ).exec();
+                onActivatedCategory(qComboBoxSelectCategory->currentIndex());
+            }
+        });
+
+        QAction * delAction = new QAction(tr("Перейти в заявки..."), contextMenu);
+        contextMenu->addAction(delAction);
+        connect(delAction, &QAction::triggered, [this, &pos] ()
+        {
+            ;
+        });
+
+        contextMenu->exec(qTableWidget->viewport()->mapToGlobal(pos));
+    });
+
+
+
     setWindowFlags(windowFlags() | Qt::WindowMaximizeButtonHint);
+    //showMaximized();
 }
 
-#include <QHeaderView>
+
 // юзер выбирает категорию турнира
 void TournamentGridDialog2::onActivatedCategory(int id)
 {
@@ -318,8 +358,8 @@ void TournamentGridDialog2::onButtonGenerateGrid()
     QHash<int, QVector<int>> usualFighters;
     for (int row = 0; row < qTableWidget->rowCount(); ++row)
     {
-        int orderUID = qTableWidget->item(row, 0)->data(Qt::UserRole).toInt();
-        int region   = qTableWidget->item(row, 1)->data(Qt::UserRole).toInt();
+        long long orderUID = qTableWidget->item(row, 0)->data(Qt::UserRole).toLongLong();
+        long long region   = qTableWidget->item(row, 1)->data(Qt::UserRole).toLongLong();
         QString special_group = qTableWidget->item(row, 2)->data(Qt::DisplayRole).toString();
         if (special_group == no_special_group)
             usualFighters[region].push_back(orderUID);
@@ -434,8 +474,7 @@ void TournamentGridDialog2::onButtonGenerateGrid()
         int b = 2 * v;
         if (!isLeaf[v] && isLeaf[a] && isLeaf[b] && !isUsedLeaf[a] && !isUsedLeaf[b])
         {
-            freePairsOfLeafs << std::make_pair(a, b);
-            //qDebug() << "pair: " << a << b;
+            freePairsOfLeafs << (rand() & 1? std::make_pair(a, b) : std::make_pair(b, a));
         }
     }
     std::random_shuffle(freePairsOfLeafs.begin(), freePairsOfLeafs.end());
@@ -675,11 +714,11 @@ void TournamentGridDialog2::onCellClickedOntableGrid(int row, int column)
     {
         int vertexA = tableGrid->item(row, column)->data(Qt::UserRole).toInt();
         int vertexB = tableGrid->item(selectedRowOfRableGrid, selectedColumnOfRableGrid)->data(Qt::UserRole).toInt();
-        qDebug() << vertexA << vertexB;
+        //qDebug() << vertexA << vertexB;
         if (0 < vertexA && 0 < vertexB)
         {
             DBUtils::swapNodesOfGrid(tournamentCategories, vertexA, vertexB);
-            qDebug() << "DONE!";
+            //qDebug() << "DONE!";
         }
         updateInfoTableGrid();
 

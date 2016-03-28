@@ -16,30 +16,32 @@
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QDialogButtonBox>
-#include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
+#include <QtWidgets/QPushButton>
 #include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QSpinBox>
 #include <QtWidgets/QVBoxLayout>
+#include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
 
 class Ui_GenerateTournamentCategoriesDialog
 {
 public:
-    QGridLayout *gridLayout;
-    QDialogButtonBox *buttonBox;
+    QWidget *layoutWidget;
     QVBoxLayout *verticalLayout_4;
-    QHBoxLayout *horizontalLayout_2;
+    QHBoxLayout *horizontalLayout_4;
     QVBoxLayout *verticalLayout;
     QLabel *label;
     QLabel *label_2;
     QLabel *label_3;
     QVBoxLayout *verticalLayout_2;
     QLineEdit *nameLE;
+    QHBoxLayout *horizontalLayout_2;
+    QPushButton *pushButton;
     QComboBox *typeCB;
     QComboBox *sexCB;
     QHBoxLayout *horizontalLayout;
@@ -62,95 +64,112 @@ public:
     QSpinBox *duratiobFightingSB;
     QSpinBox *durationBreakSB;
     QSpinBox *roundCountSB;
+    QDialogButtonBox *buttonBox;
 
     void setupUi(QDialog *GenerateTournamentCategoriesDialog)
     {
         if (GenerateTournamentCategoriesDialog->objectName().isEmpty())
             GenerateTournamentCategoriesDialog->setObjectName(QStringLiteral("GenerateTournamentCategoriesDialog"));
-        GenerateTournamentCategoriesDialog->resize(333, 299);
-        gridLayout = new QGridLayout(GenerateTournamentCategoriesDialog);
-        gridLayout->setObjectName(QStringLiteral("gridLayout"));
-        buttonBox = new QDialogButtonBox(GenerateTournamentCategoriesDialog);
-        buttonBox->setObjectName(QStringLiteral("buttonBox"));
-        buttonBox->setOrientation(Qt::Horizontal);
-        buttonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
-
-        gridLayout->addWidget(buttonBox, 2, 0, 1, 1);
-
-        verticalLayout_4 = new QVBoxLayout();
+        GenerateTournamentCategoriesDialog->setEnabled(true);
+        GenerateTournamentCategoriesDialog->resize(304, 311);
+        QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(GenerateTournamentCategoriesDialog->sizePolicy().hasHeightForWidth());
+        GenerateTournamentCategoriesDialog->setSizePolicy(sizePolicy);
+        GenerateTournamentCategoriesDialog->setMinimumSize(QSize(304, 311));
+        GenerateTournamentCategoriesDialog->setMaximumSize(QSize(304, 311));
+        layoutWidget = new QWidget(GenerateTournamentCategoriesDialog);
+        layoutWidget->setObjectName(QStringLiteral("layoutWidget"));
+        layoutWidget->setGeometry(QRect(10, 12, 280, 286));
+        verticalLayout_4 = new QVBoxLayout(layoutWidget);
         verticalLayout_4->setObjectName(QStringLiteral("verticalLayout_4"));
-        horizontalLayout_2 = new QHBoxLayout();
-        horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
+        verticalLayout_4->setContentsMargins(0, 0, 0, 0);
+        horizontalLayout_4 = new QHBoxLayout();
+        horizontalLayout_4->setObjectName(QStringLiteral("horizontalLayout_4"));
         verticalLayout = new QVBoxLayout();
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
-        label = new QLabel(GenerateTournamentCategoriesDialog);
+        label = new QLabel(layoutWidget);
         label->setObjectName(QStringLiteral("label"));
 
         verticalLayout->addWidget(label);
 
-        label_2 = new QLabel(GenerateTournamentCategoriesDialog);
+        label_2 = new QLabel(layoutWidget);
         label_2->setObjectName(QStringLiteral("label_2"));
 
         verticalLayout->addWidget(label_2);
 
-        label_3 = new QLabel(GenerateTournamentCategoriesDialog);
+        label_3 = new QLabel(layoutWidget);
         label_3->setObjectName(QStringLiteral("label_3"));
 
         verticalLayout->addWidget(label_3);
 
 
-        horizontalLayout_2->addLayout(verticalLayout);
+        horizontalLayout_4->addLayout(verticalLayout);
 
         verticalLayout_2 = new QVBoxLayout();
         verticalLayout_2->setObjectName(QStringLiteral("verticalLayout_2"));
-        nameLE = new QLineEdit(GenerateTournamentCategoriesDialog);
+        nameLE = new QLineEdit(layoutWidget);
         nameLE->setObjectName(QStringLiteral("nameLE"));
 
         verticalLayout_2->addWidget(nameLE);
 
-        typeCB = new QComboBox(GenerateTournamentCategoriesDialog);
+        horizontalLayout_2 = new QHBoxLayout();
+        horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
+        pushButton = new QPushButton(layoutWidget);
+        pushButton->setObjectName(QStringLiteral("pushButton"));
+        pushButton->setMaximumSize(QSize(24, 16777215));
+
+        horizontalLayout_2->addWidget(pushButton);
+
+        typeCB = new QComboBox(layoutWidget);
         typeCB->setObjectName(QStringLiteral("typeCB"));
+        typeCB->setMaxVisibleItems(20);
 
-        verticalLayout_2->addWidget(typeCB);
+        horizontalLayout_2->addWidget(typeCB);
 
-        sexCB = new QComboBox(GenerateTournamentCategoriesDialog);
+
+        verticalLayout_2->addLayout(horizontalLayout_2);
+
+        sexCB = new QComboBox(layoutWidget);
         sexCB->setObjectName(QStringLiteral("sexCB"));
+        sexCB->setMaxVisibleItems(20);
 
         verticalLayout_2->addWidget(sexCB);
 
 
-        horizontalLayout_2->addLayout(verticalLayout_2);
+        horizontalLayout_4->addLayout(verticalLayout_2);
 
 
-        verticalLayout_4->addLayout(horizontalLayout_2);
+        verticalLayout_4->addLayout(horizontalLayout_4);
 
         horizontalLayout = new QHBoxLayout();
         horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
-        label_4 = new QLabel(GenerateTournamentCategoriesDialog);
+        label_4 = new QLabel(layoutWidget);
         label_4->setObjectName(QStringLiteral("label_4"));
 
         horizontalLayout->addWidget(label_4);
 
-        ageFromSB = new QSpinBox(GenerateTournamentCategoriesDialog);
+        ageFromSB = new QSpinBox(layoutWidget);
         ageFromSB->setObjectName(QStringLiteral("ageFromSB"));
         ageFromSB->setMaximum(9999);
 
         horizontalLayout->addWidget(ageFromSB);
 
-        label_5 = new QLabel(GenerateTournamentCategoriesDialog);
+        label_5 = new QLabel(layoutWidget);
         label_5->setObjectName(QStringLiteral("label_5"));
 
         horizontalLayout->addWidget(label_5);
 
-        ageTillSB = new QSpinBox(GenerateTournamentCategoriesDialog);
+        ageTillSB = new QSpinBox(layoutWidget);
         ageTillSB->setObjectName(QStringLiteral("ageTillSB"));
         ageTillSB->setMinimum(1);
-        ageTillSB->setMaximum(9999);
+        ageTillSB->setMaximum(99);
         ageTillSB->setValue(1);
 
         horizontalLayout->addWidget(ageTillSB);
 
-        label_6 = new QLabel(GenerateTournamentCategoriesDialog);
+        label_6 = new QLabel(layoutWidget);
         label_6->setObjectName(QStringLiteral("label_6"));
 
         horizontalLayout->addWidget(label_6);
@@ -164,17 +183,17 @@ public:
 
         verticalLayout_3 = new QVBoxLayout();
         verticalLayout_3->setObjectName(QStringLiteral("verticalLayout_3"));
-        label_7 = new QLabel(GenerateTournamentCategoriesDialog);
+        label_7 = new QLabel(layoutWidget);
         label_7->setObjectName(QStringLiteral("label_7"));
 
         verticalLayout_3->addWidget(label_7);
 
-        weightsLE = new QLineEdit(GenerateTournamentCategoriesDialog);
+        weightsLE = new QLineEdit(layoutWidget);
         weightsLE->setObjectName(QStringLiteral("weightsLE"));
 
         verticalLayout_3->addWidget(weightsLE);
 
-        label_8 = new QLabel(GenerateTournamentCategoriesDialog);
+        label_8 = new QLabel(layoutWidget);
         label_8->setObjectName(QStringLiteral("label_8"));
         QFont font;
         font.setPointSize(7);
@@ -186,24 +205,21 @@ public:
 
         verticalLayout_4->addLayout(verticalLayout_3);
 
-
-        gridLayout->addLayout(verticalLayout_4, 0, 0, 1, 1);
-
         horizontalLayout_3 = new QHBoxLayout();
         horizontalLayout_3->setObjectName(QStringLiteral("horizontalLayout_3"));
         verticalLayout_5 = new QVBoxLayout();
         verticalLayout_5->setObjectName(QStringLiteral("verticalLayout_5"));
-        label_9 = new QLabel(GenerateTournamentCategoriesDialog);
+        label_9 = new QLabel(layoutWidget);
         label_9->setObjectName(QStringLiteral("label_9"));
 
         verticalLayout_5->addWidget(label_9);
 
-        label_10 = new QLabel(GenerateTournamentCategoriesDialog);
+        label_10 = new QLabel(layoutWidget);
         label_10->setObjectName(QStringLiteral("label_10"));
 
         verticalLayout_5->addWidget(label_10);
 
-        label_11 = new QLabel(GenerateTournamentCategoriesDialog);
+        label_11 = new QLabel(layoutWidget);
         label_11->setObjectName(QStringLiteral("label_11"));
 
         verticalLayout_5->addWidget(label_11);
@@ -213,23 +229,23 @@ public:
 
         verticalLayout_6 = new QVBoxLayout();
         verticalLayout_6->setObjectName(QStringLiteral("verticalLayout_6"));
-        duratiobFightingSB = new QSpinBox(GenerateTournamentCategoriesDialog);
+        duratiobFightingSB = new QSpinBox(layoutWidget);
         duratiobFightingSB->setObjectName(QStringLiteral("duratiobFightingSB"));
-        duratiobFightingSB->setMinimum(1);
+        duratiobFightingSB->setMinimum(15);
         duratiobFightingSB->setMaximum(9999999);
         duratiobFightingSB->setValue(120);
 
         verticalLayout_6->addWidget(duratiobFightingSB);
 
-        durationBreakSB = new QSpinBox(GenerateTournamentCategoriesDialog);
+        durationBreakSB = new QSpinBox(layoutWidget);
         durationBreakSB->setObjectName(QStringLiteral("durationBreakSB"));
-        durationBreakSB->setMinimum(1);
+        durationBreakSB->setMinimum(10);
         durationBreakSB->setMaximum(9999999);
         durationBreakSB->setValue(60);
 
         verticalLayout_6->addWidget(durationBreakSB);
 
-        roundCountSB = new QSpinBox(GenerateTournamentCategoriesDialog);
+        roundCountSB = new QSpinBox(layoutWidget);
         roundCountSB->setObjectName(QStringLiteral("roundCountSB"));
         roundCountSB->setMinimum(1);
         roundCountSB->setValue(3);
@@ -240,7 +256,14 @@ public:
         horizontalLayout_3->addLayout(verticalLayout_6);
 
 
-        gridLayout->addLayout(horizontalLayout_3, 1, 0, 1, 1);
+        verticalLayout_4->addLayout(horizontalLayout_3);
+
+        buttonBox = new QDialogButtonBox(layoutWidget);
+        buttonBox->setObjectName(QStringLiteral("buttonBox"));
+        buttonBox->setOrientation(Qt::Horizontal);
+        buttonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
+
+        verticalLayout_4->addWidget(buttonBox);
 
 
         retranslateUi(GenerateTournamentCategoriesDialog);
@@ -256,6 +279,7 @@ public:
         label->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\235\320\260\320\270\320\274\320\265\320\275\320\276\320\262\320\260\320\275\320\270\320\265", 0));
         label_2->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\240\320\260\320\267\320\264\320\265\320\273", 0));
         label_3->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\237\320\276\320\273", 0));
+        pushButton->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "+", 0));
         label_4->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\222\320\276\320\267\321\200\320\260\321\201\321\202 \320\276\321\202", 0));
         label_5->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\273\320\265\321\202 \320\264\320\276", 0));
         label_6->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\273\320\265\321\202", 0));

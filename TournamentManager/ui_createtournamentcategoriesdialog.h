@@ -39,6 +39,7 @@ public:
     QTableView *tableView;
     QWidget *widget;
     QGridLayout *gridLayout;
+    QSpacerItem *verticalSpacer;
     QVBoxLayout *verticalLayout_5;
     QHBoxLayout *horizontalLayout;
     QVBoxLayout *verticalLayout;
@@ -65,7 +66,7 @@ public:
     QSpinBox *durationFightingSB;
     QSpinBox *durationBreakSB;
     QSpinBox *roundCountSB;
-    QSpacerItem *verticalSpacer;
+    QPushButton *pushButton;
     QHBoxLayout *horizontalLayout_2;
     QPushButton *applyBtn;
     QPushButton *addBtn;
@@ -76,7 +77,7 @@ public:
     {
         if (CreateTournamentCategoriesDialog->objectName().isEmpty())
             CreateTournamentCategoriesDialog->setObjectName(QStringLiteral("CreateTournamentCategoriesDialog"));
-        CreateTournamentCategoriesDialog->resize(646, 338);
+        CreateTournamentCategoriesDialog->resize(1069, 581);
         gridLayout_2 = new QGridLayout(CreateTournamentCategoriesDialog);
         gridLayout_2->setObjectName(QStringLiteral("gridLayout_2"));
         splitter = new QSplitter(CreateTournamentCategoriesDialog);
@@ -84,9 +85,11 @@ public:
         splitter->setOrientation(Qt::Horizontal);
         tableView = new QTableView(splitter);
         tableView->setObjectName(QStringLiteral("tableView"));
-        tableView->setFocusPolicy(Qt::NoFocus);
+        tableView->setFocusPolicy(Qt::ClickFocus);
         tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
         tableView->setAlternatingRowColors(true);
+        tableView->setSelectionMode(QAbstractItemView::SingleSelection);
+        tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
         splitter->addWidget(tableView);
         tableView->verticalHeader()->setVisible(false);
         tableView->verticalHeader()->setHighlightSections(false);
@@ -100,6 +103,10 @@ public:
         widget->setMinimumSize(QSize(300, 0));
         gridLayout = new QGridLayout(widget);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
+        verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        gridLayout->addItem(verticalSpacer, 2, 0, 1, 1);
+
         verticalLayout_5 = new QVBoxLayout();
         verticalLayout_5->setObjectName(QStringLiteral("verticalLayout_5"));
         horizontalLayout = new QHBoxLayout();
@@ -206,6 +213,7 @@ public:
 
         typeCB = new QComboBox(widget);
         typeCB->setObjectName(QStringLiteral("typeCB"));
+        typeCB->setMaxVisibleItems(30);
 
         horizontalLayout_3->addWidget(typeCB);
 
@@ -216,7 +224,7 @@ public:
         durationFightingSB->setObjectName(QStringLiteral("durationFightingSB"));
         durationFightingSB->setMinimum(10);
         durationFightingSB->setMaximum(10000);
-        durationFightingSB->setValue(10);
+        durationFightingSB->setValue(15);
 
         verticalLayout_2->addWidget(durationFightingSB);
 
@@ -242,9 +250,10 @@ public:
 
         gridLayout->addLayout(verticalLayout_5, 0, 0, 1, 1);
 
-        verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+        pushButton = new QPushButton(widget);
+        pushButton->setObjectName(QStringLiteral("pushButton"));
 
-        gridLayout->addItem(verticalSpacer, 1, 0, 1, 1);
+        gridLayout->addWidget(pushButton, 1, 0, 1, 1);
 
         splitter->addWidget(widget);
 
@@ -291,10 +300,11 @@ public:
         label_3->setText(QApplication::translate("CreateTournamentCategoriesDialog", "\320\222\320\265\321\201 \321\201\320\262\321\213\321\210\320\265", 0));
         label_4->setText(QApplication::translate("CreateTournamentCategoriesDialog", "\320\222\320\265\321\201 \320\264\320\276", 0));
         label_9->setText(QApplication::translate("CreateTournamentCategoriesDialog", "\320\240\320\260\320\267\320\264\320\265\320\273", 0));
-        label_7->setText(QApplication::translate("CreateTournamentCategoriesDialog", "\320\224\320\273\320\270\321\202\320\265\320\273\321\214\320\275\320\276\321\201\321\202\321\214 \320\261\320\276\321\217", 0));
-        label_8->setText(QApplication::translate("CreateTournamentCategoriesDialog", "\320\237\320\265\321\200\320\265\321\200\321\213\320\262, \321\201\320\265\320\272", 0));
+        label_7->setText(QApplication::translate("CreateTournamentCategoriesDialog", "\320\224\320\273\320\270\321\202\320\265\320\273\321\214\320\275\320\276\321\201\321\202\321\214 \320\261\320\276\321\217, \321\201.", 0));
+        label_8->setText(QApplication::translate("CreateTournamentCategoriesDialog", "\320\237\320\265\321\200\320\265\321\200\321\213\320\262, \321\201.", 0));
         label_10->setText(QApplication::translate("CreateTournamentCategoriesDialog", "\320\232\320\276\320\273\320\270\321\207\320\265\321\201\321\202\320\262\320\276 \321\200\320\260\321\203\320\275\320\264\320\276\320\262", 0));
         addTypeBtn->setText(QApplication::translate("CreateTournamentCategoriesDialog", "+", 0));
+        pushButton->setText(QApplication::translate("CreateTournamentCategoriesDialog", "\320\224\320\276\320\261\320\260\320\262\320\273\320\265\320\275\320\270\320\265 \320\263\321\200\321\203\320\277\320\277\321\213 \320\272\320\260\321\202\320\265\320\263\320\276\321\200\320\270\320\271 \321\202\321\203\321\200\320\275\320\270\321\200\320\260", 0));
         applyBtn->setText(QApplication::translate("CreateTournamentCategoriesDialog", "\320\237\321\200\320\270\320\274\320\265\320\275\320\270\321\202\321\214 \320\270\320\267\320\274\320\265\320\275\320\265\320\275\320\270\321\217", 0));
         addBtn->setText(QApplication::translate("CreateTournamentCategoriesDialog", "\320\224\320\276\320\261\320\260\320\262\320\270\321\202\321\214 \320\272\320\260\321\202\320\265\320\263\320\276\321\200\320\270\321\216", 0));
         okBtn->setText(QApplication::translate("CreateTournamentCategoriesDialog", "\320\222\321\213\320\271\321\202\320\270", 0));

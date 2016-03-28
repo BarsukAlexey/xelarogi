@@ -20,6 +20,9 @@ public:
     explicit GenerateTournamentCategoriesDialog(long long tournamentUID, QWidget *parent = 0);
     ~GenerateTournamentCategoriesDialog();
 
+private slots:
+    void on_pushButton_clicked();
+
 private:
     void fillSexCB();
     void fillTypeCB();

@@ -192,13 +192,6 @@
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="genTournamentCategoriesBtn">
-             <property name="text">
-              <string>Добавление группы категорий турнира</string>
-             </property>
-            </widget>
-           </item>
-           <item>
             <widget class="QPushButton" name="createOrdersBtn">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Minimum" vsizetype="Expanding">

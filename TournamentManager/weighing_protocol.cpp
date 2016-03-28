@@ -50,23 +50,28 @@ WeighingProtocol::WeighingProtocol(const QSqlDatabase& database, const long long
 
         ExcelUtils::setValue  (sheet, currentRow, 1, "Протокол взвешивания");
         ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, countColumns);
+        ExcelUtils::setFontBold(sheet, currentRow, 1, true);
         ++currentRow;
 
-        ExcelUtils::setValue  (sheet, currentRow, 1, "Раздел: " + DBUtils::getField("NAME", "TYPES", DBUtils::getField("TYPE_FK", "TOURNAMENT_CATEGORIES", uidCategory)));
+        ExcelUtils::setValue  (sheet, currentRow, 1, DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", uidCategory));
         ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, countColumns);
         ++currentRow;
 
-        ExcelUtils::setValue  (sheet, currentRow, 1, "Возраст: от " + DBUtils::getField("AGE_FROM", "TOURNAMENT_CATEGORIES", uidCategory) + " до " + DBUtils::getField("AGE_TILL", "TOURNAMENT_CATEGORIES", uidCategory));
-        ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, countColumns);
-        ++currentRow;
+//        ExcelUtils::setValue  (sheet, currentRow, 1, "Раздел: " + DBUtils::getField("NAME", "TYPES", DBUtils::getField("TYPE_FK", "TOURNAMENT_CATEGORIES", uidCategory)));
+//        ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, countColumns);
+//        ++currentRow;
 
-        ExcelUtils::setValue  (sheet, currentRow, 1, "Вес: " + DBUtils::getNormanWeightRangeFromTOURNAMENT_CATEGORIES(uidCategory));
-        ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, countColumns);
-        ++currentRow;
+//        ExcelUtils::setValue  (sheet, currentRow, 1, "Возраст: от " + DBUtils::getField("AGE_FROM", "TOURNAMENT_CATEGORIES", uidCategory) + " до " + DBUtils::getField("AGE_TILL", "TOURNAMENT_CATEGORIES", uidCategory));
+//        ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, countColumns);
+//        ++currentRow;
 
-        ExcelUtils::setValue  (sheet, currentRow, 1, "Пол: " + DBUtils::getField("SHORTNAME", "SEXES", DBUtils::getField("SEX_FK", "TOURNAMENT_CATEGORIES", uidCategory)));
-        ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, countColumns);
-        ++currentRow;
+//        ExcelUtils::setValue  (sheet, currentRow, 1, "Вес: " + DBUtils::getNormanWeightRangeFromTOURNAMENT_CATEGORIES(uidCategory));
+//        ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, countColumns);
+//        ++currentRow;
+
+//        ExcelUtils::setValue  (sheet, currentRow, 1, "Пол: " + DBUtils::getField("SHORTNAME", "SEXES", DBUtils::getField("SEX_FK", "TOURNAMENT_CATEGORIES", uidCategory)));
+//        ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, countColumns);
+//        ++currentRow;
 
         QStringList heads;
         heads << "#" << "Фамилия, Имя" << "Дата\nрождения" << "Город" << "Клуб" << "Спортивный\nразряд" << "Вес" << "Тренер" << "Номер\nжеребьёвки";

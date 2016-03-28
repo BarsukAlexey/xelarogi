@@ -109,7 +109,7 @@ public:
     {
         if (CreateTournamentOrdersDialog->objectName().isEmpty())
             CreateTournamentOrdersDialog->setObjectName(QStringLiteral("CreateTournamentOrdersDialog"));
-        CreateTournamentOrdersDialog->resize(845, 601);
+        CreateTournamentOrdersDialog->resize(1210, 601);
         gridLayout = new QGridLayout(CreateTournamentOrdersDialog);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
         verticalLayout = new QVBoxLayout();
@@ -302,56 +302,67 @@ public:
         verticalLayout_10->setObjectName(QStringLiteral("verticalLayout_10"));
         label_19 = new QLabel(widget);
         label_19->setObjectName(QStringLiteral("label_19"));
+        label_19->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
         verticalLayout_10->addWidget(label_19);
 
         label_20 = new QLabel(widget);
         label_20->setObjectName(QStringLiteral("label_20"));
+        label_20->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
         verticalLayout_10->addWidget(label_20);
 
         label_21 = new QLabel(widget);
         label_21->setObjectName(QStringLiteral("label_21"));
+        label_21->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
         verticalLayout_10->addWidget(label_21);
 
         label_22 = new QLabel(widget);
         label_22->setObjectName(QStringLiteral("label_22"));
+        label_22->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
         verticalLayout_10->addWidget(label_22);
 
         label_23 = new QLabel(widget);
         label_23->setObjectName(QStringLiteral("label_23"));
+        label_23->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
         verticalLayout_10->addWidget(label_23);
 
         label_24 = new QLabel(widget);
         label_24->setObjectName(QStringLiteral("label_24"));
+        label_24->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
         verticalLayout_10->addWidget(label_24);
 
         label_25 = new QLabel(widget);
         label_25->setObjectName(QStringLiteral("label_25"));
+        label_25->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
         verticalLayout_10->addWidget(label_25);
 
         label_26 = new QLabel(widget);
         label_26->setObjectName(QStringLiteral("label_26"));
+        label_26->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
         verticalLayout_10->addWidget(label_26);
 
         label_28 = new QLabel(widget);
         label_28->setObjectName(QStringLiteral("label_28"));
+        label_28->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
         verticalLayout_10->addWidget(label_28);
 
         label_29 = new QLabel(widget);
         label_29->setObjectName(QStringLiteral("label_29"));
+        label_29->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
         verticalLayout_10->addWidget(label_29);
 
         label_3 = new QLabel(widget);
         label_3->setObjectName(QStringLiteral("label_3"));
+        label_3->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
         verticalLayout_10->addWidget(label_3);
 
@@ -374,46 +385,55 @@ public:
 
         countriesCB = new QComboBox(widget);
         countriesCB->setObjectName(QStringLiteral("countriesCB"));
+        countriesCB->setMaxVisibleItems(69);
 
         verticalLayout_11->addWidget(countriesCB);
 
         regionsCB = new QComboBox(widget);
         regionsCB->setObjectName(QStringLiteral("regionsCB"));
+        regionsCB->setMaxVisibleItems(69);
 
         verticalLayout_11->addWidget(regionsCB);
 
         regionUnitsCB = new QComboBox(widget);
         regionUnitsCB->setObjectName(QStringLiteral("regionUnitsCB"));
+        regionUnitsCB->setMaxVisibleItems(69);
 
         verticalLayout_11->addWidget(regionUnitsCB);
 
         gendersCB = new QComboBox(widget);
         gendersCB->setObjectName(QStringLiteral("gendersCB"));
+        gendersCB->setMaxVisibleItems(69);
 
         verticalLayout_11->addWidget(gendersCB);
 
         sportCategoriesCB = new QComboBox(widget);
         sportCategoriesCB->setObjectName(QStringLiteral("sportCategoriesCB"));
+        sportCategoriesCB->setMaxVisibleItems(69);
 
         verticalLayout_11->addWidget(sportCategoriesCB);
 
         typesCB = new QComboBox(widget);
         typesCB->setObjectName(QStringLiteral("typesCB"));
+        typesCB->setEnabled(false);
 
         verticalLayout_11->addWidget(typesCB);
 
         clubsCB = new QComboBox(widget);
         clubsCB->setObjectName(QStringLiteral("clubsCB"));
+        clubsCB->setMaxVisibleItems(69);
 
         verticalLayout_11->addWidget(clubsCB);
 
         coachsCB = new QComboBox(widget);
         coachsCB->setObjectName(QStringLiteral("coachsCB"));
+        coachsCB->setMaxVisibleItems(69);
 
         verticalLayout_11->addWidget(coachsCB);
 
         tournamentCategoriesCB = new QComboBox(widget);
         tournamentCategoriesCB->setObjectName(QStringLiteral("tournamentCategoriesCB"));
+        tournamentCategoriesCB->setMaxVisibleItems(69);
 
         verticalLayout_11->addWidget(tournamentCategoriesCB);
 

@@ -44,7 +44,10 @@ class CreateTournamentOrdersDialog : public QDialog
 public:
     explicit CreateTournamentOrdersDialog(const QSqlDatabase & database,
                                             long long tournamentUID,
-                                            QWidget *parent = 0);
+                                            QWidget *parent = 0,
+                                            QString filterSecondName = "",
+                                            QString filterFirstName = ""
+                                          );
     ~CreateTournamentOrdersDialog();
 
     static QSqlRecord m_record;
