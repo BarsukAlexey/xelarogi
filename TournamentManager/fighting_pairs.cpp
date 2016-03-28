@@ -41,7 +41,7 @@ FightingPairs::FightingPairs(const QSqlDatabase &_database, long long _tournamen
     globalListsOfPairs = DBUtils::getListsOfPairs(database, tournamentUID);
     for(const QVector<DBUtils::Fighing>& x : globalListsOfPairs)
     {
-        QSqlQuery queryCOUNT("SELECT count() AS COUNT FROM ORDERS WHERE TOURNAMENT_CATEGORY_FK = ? AND IS_VALID = 1 GROUP BY TOURNAMENT_CATEGORY_FK", database);
+        QSqlQuery queryCOUNT("SELECT count() AS COUNT FROM ORDERS WHERE TOURNAMENT_CATEGORY_FK = ? GROUP BY TOURNAMENT_CATEGORY_FK", database);
         queryCOUNT.bindValue(0, x[0].TOURNAMENT_CATEGORIES_FK);
         if (!queryCOUNT.exec())
         {
@@ -98,7 +98,7 @@ FightingPairs::FightingPairs(const QSqlDatabase &_database, long long _tournamen
     qPushButton = new QPushButton("GO!");
 
     QGridLayout *qGridLayout = new QGridLayout;
-    qGridLayout->addWidget(qTableWidget, 0, 0, 1, 2, Qt::AlignHCenter | Qt::AlignVCenter);
+    qGridLayout->addWidget(qTableWidget, 0, 0, 1, 2);
 
     qGridLayout->addWidget(new QLabel(QString("Кол-во рингов:")), 1, 0, Qt::AlignRight);
     qGridLayout->addWidget(ringSpinBox, 1, 1);

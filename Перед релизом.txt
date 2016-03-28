@@ -1,0 +1,2 @@
+1) удалить все IS_VALID
+2) поменять местами в БД SECOND и FIRST NAMEs

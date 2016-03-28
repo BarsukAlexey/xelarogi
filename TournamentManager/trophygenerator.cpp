@@ -1,6 +1,6 @@
 #include "trophygenerator.h"
 
-TrophyGenerator::TrophyGenerator(const QSqlDatabase& database, const long long tournamentUID, QObject *parent) :
+TrophyGenerator::TrophyGenerator(const long long tournamentUID, QObject *parent) :
     QObject(parent),
     mTournamentUID(tournamentUID)
 {

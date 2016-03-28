@@ -19,7 +19,7 @@ class TrophyGenerator : public QObject
 {
     Q_OBJECT
 public:
-    explicit TrophyGenerator(const QSqlDatabase& database, const long long tournamentUID, QObject *parent = 0);
+    explicit TrophyGenerator(const long long tournamentUID, QObject *parent = 0);
 
 signals:
 

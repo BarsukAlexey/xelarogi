@@ -114,7 +114,7 @@ void RenderAreaWidget::paintEvent(QPaintEvent* )
         paintRect(cell.x(), cell.y(), painter, node);
         for (int child : {2 * node.v, 2 * node.v + 1})
         {
-            if (qBinaryFind(nodes, DBUtils::NodeOfTournirGrid({child, "", "", false, -1})) != nodes.end() )
+            if (qBinaryFind(nodes, DBUtils::NodeOfTournirGrid({child, "", "", false, -1, ""})) != nodes.end() )
             {
                 paintLine(getCell(node.v), getCell(child), painter);
             }
@@ -318,7 +318,7 @@ void RenderAreaWidget::printTableGridInExcel(const QSqlDatabase &database, int t
 
         for (int child : {2 * node.v, 2 * node.v + 1})
         {
-            if (qBinaryFind(nodes, DBUtils::NodeOfTournirGrid({child, "", "", false, -1})) != nodes.end() )
+            if (qBinaryFind(nodes, DBUtils::NodeOfTournirGrid({child, "", "", false, -1, ""})) != nodes.end() )
             {
                 QPoint aa = getCell(node.v, countColumns);
                 QPoint bb = getCell(child, countColumns);

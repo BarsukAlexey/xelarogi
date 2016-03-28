@@ -45,6 +45,7 @@ private:
     QVector<int> specialGroup;
 
     QCheckBox * qCheckBox;
+    QCheckBox * qCheckBoxBadTournGrid;
     int selectedRowOfRableGrid;
     int selectedColumnOfRableGrid;
 
@@ -53,15 +54,13 @@ public:
     ~TournamentGridDialog2();
 
 private:
-    void updateInfoTableGrid();
+    void fillTableGrid();
 
 private slots:
     void onActivatedCategory(int id);
     void onCellCLickedForChangePrioritet(int, int);
     void onButtonGenerateGrid();
     void onButtonDelete();
-
-    void sdfsdfsf(){}
 
     void fillCategoryCombobox(QString filterStr = "");
     void onCellClickedOntableGrid(int row, int column);

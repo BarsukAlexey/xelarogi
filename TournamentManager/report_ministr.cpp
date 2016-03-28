@@ -38,7 +38,7 @@ ReporMinistr::ReporMinistr(const long long tournamentUID)
                 "INNER JOIN REGIONS               ON ORDERS.REGION_FK              = REGIONS.UID "
                 "INNER JOIN TOURNAMENT_CATEGORIES ON ORDERS.TOURNAMENT_CATEGORY_FK = TOURNAMENT_CATEGORIES.UID "
             "WHERE "
-                "TOURNAMENT_CATEGORIES.TOURNAMENT_FK = ? AND IS_VALID = 1 "
+                "TOURNAMENT_CATEGORIES.TOURNAMENT_FK = ? "
             "GROUP BY "
                 "REGIONS.UID "
             "ORDER BY "
@@ -67,7 +67,7 @@ ReporMinistr::ReporMinistr(const long long tournamentUID)
                          "INNER JOIN REGIONS               ON ORDERS.REGION_FK              = REGIONS.UID "
                          "INNER JOIN TOURNAMENT_CATEGORIES ON ORDERS.TOURNAMENT_CATEGORY_FK = TOURNAMENT_CATEGORIES.UID "
                     "WHERE "
-                         "TOURNAMENT_CATEGORIES.TOURNAMENT_FK = ? AND IS_VALID = 1 AND ORDERS.SEX_FK = 1 AND REGIONS.UID = ? "
+                         "TOURNAMENT_CATEGORIES.TOURNAMENT_FK = ? AND ORDERS.SEX_FK = 1 AND REGIONS.UID = ? "
                     "GROUP BY "
                           "REGIONS.UID "
                 );
@@ -89,7 +89,7 @@ ReporMinistr::ReporMinistr(const long long tournamentUID)
                          "INNER JOIN REGIONS               ON ORDERS.REGION_FK              = REGIONS.UID "
                          "INNER JOIN TOURNAMENT_CATEGORIES ON ORDERS.TOURNAMENT_CATEGORY_FK = TOURNAMENT_CATEGORIES.UID "
                     "WHERE "
-                         "TOURNAMENT_CATEGORIES.TOURNAMENT_FK = ? AND IS_VALID = 1 AND ORDERS.SEX_FK = 2 AND REGIONS.UID = ? "
+                         "TOURNAMENT_CATEGORIES.TOURNAMENT_FK = ? AND ORDERS.SEX_FK = 2 AND REGIONS.UID = ? "
                     "GROUP BY "
                           "REGIONS.UID "
                 );
@@ -114,7 +114,7 @@ ReporMinistr::ReporMinistr(const long long tournamentUID)
                          "INNER JOIN REGIONS               ON ORDERS.REGION_FK              = REGIONS.UID "
                          "INNER JOIN TOURNAMENT_CATEGORIES ON ORDERS.TOURNAMENT_CATEGORY_FK = TOURNAMENT_CATEGORIES.UID "
                     "WHERE "
-                         "TOURNAMENT_CATEGORIES.TOURNAMENT_FK = ? AND IS_VALID = 1 AND REGIONS.UID = ? "
+                         "TOURNAMENT_CATEGORIES.TOURNAMENT_FK = ? AND REGIONS.UID = ? "
                     "GROUP BY "
                           "ORDERS.COACH_FK "
                 );

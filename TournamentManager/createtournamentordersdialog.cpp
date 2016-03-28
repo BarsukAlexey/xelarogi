@@ -25,8 +25,7 @@ CreateTournamentOrdersDialog::CreateTournamentOrdersDialog(const QSqlDatabase &d
 
     QSqlRelationalTableModel * model = new QSqlRelationalTableModel();
     model->setTable("ORDERS");
-    model->setFilter("TOURNAMENT_CATEGORY_FK IN " + getAllowTournamentCategories() + " AND IS_VALID = 1 ");
-    //model->setSort(); todo
+    model->setFilter("TOURNAMENT_CATEGORY_FK IN " + getAllowTournamentCategories());
     ui->tableView->setModel(model);
     model->select();
 
@@ -38,8 +37,6 @@ CreateTournamentOrdersDialog::CreateTournamentOrdersDialog(const QSqlDatabase &d
     ui->tableView->setColumnHidden(model->fieldIndex("BIRTHDATE"), true);
     ui->tableView->setColumnHidden(model->fieldIndex("SEX_FK"), true);
     ui->tableView->setColumnHidden(model->fieldIndex("SPORT_CATEGORY_FK"), true);
-    //ui->tableView->setColumnHidden(model->fieldIndex("TOURNAMENT_CATEGORY_FK"), true);
-    ui->tableView->setColumnHidden(model->fieldIndex("IS_VALID"), true);
 
     for (int i = 0; i < m_record.count(); ++i)
     {
@@ -124,8 +121,8 @@ CreateTournamentOrdersDialog::CreateTournamentOrdersDialog(const QSqlDatabase &d
                     " COUNTRY_FK, REGION_FK, REGION_UNIT_FK,"
                     " TOURNAMENT_CATEGORY_FK, TYPE_FK, "
                     " CLUB_FK, COACH_FK,"
-                    " SPORT_CATEGORY_FK, IS_VALID) "
-                    "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)"
+                    " SPORT_CATEGORY_FK) "
+                    "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
                     ))
                 qDebug() << insertQuery.lastError().text();
 
@@ -416,8 +413,7 @@ void CreateTournamentOrdersDialog::loadFromExcel()
                                      " BIRTHDATE = ? AND WEIGHT = ? AND SEX_FK = ? AND "
                                      " TOURNAMENT_CATEGORY_FK = ? AND TYPE_FK = ? AND "
                                      " CLUB_FK = ? AND COACH_FK = ? AND "
-                                     " SPORT_CATEGORY_FK = ? AND "
-                                     " IS_VALID = 1"
+                                     " SPORT_CATEGORY_FK = ? "
                                 ))
                     qDebug() << findQuery.lastError().text();
                 findQuery.bindValue(0, firstName);
@@ -448,9 +444,8 @@ void CreateTournamentOrdersDialog::loadFromExcel()
                                          "BIRTHDATE, WEIGHT, SEX_FK, "
                                          "TOURNAMENT_CATEGORY_FK, TYPE_FK, "
                                          "CLUB_FK, COACH_FK, "
-                                         "SPORT_CATEGORY_FK, "
-                                         "IS_VALID) "
-                                    "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)"
+                                         "SPORT_CATEGORY_FK) "
+                                    "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
                                     ))
                         qDebug() << query.lastError().text();
                     query.bindValue(0, firstName);
@@ -614,29 +609,29 @@ void CreateTournamentOrdersDialog::addContextMenu()
     {
         QMenu * contextMenu = new QMenu();
 
-        QAction* restrictAction = new QAction(tr("Отозвать заявку"), contextMenu);
-        contextMenu->addAction(restrictAction);
-        connect(restrictAction, &QAction::triggered, [this, &pos] ()
-        {
-            QModelIndex index = ui->tableView->indexAt(pos);
+//        QAction* restrictAction = new QAction(tr("Отозвать заявку"), contextMenu);
+//        contextMenu->addAction(restrictAction);
+//        connect(restrictAction, &QAction::triggered, [this, &pos] ()
+//        {
+//            QModelIndex index = ui->tableView->indexAt(pos);
 
-            if (index != QModelIndex())
-            {
-                QSqlRelationalTableModel* model = dynamic_cast<QSqlRelationalTableModel*>(ui->tableView->model());
+//            if (index != QModelIndex())
+//            {
+//                QSqlRelationalTableModel* model = dynamic_cast<QSqlRelationalTableModel*>(ui->tableView->model());
 
-                QModelIndex ind = index.model()->index(index.row(), 0);
-                long long orderUID = ind.data().toLongLong();
+//                QModelIndex ind = index.model()->index(index.row(), 0);
+//                long long orderUID = ind.data().toLongLong();
 
-                QSqlQuery updateQuery;
-                if (!updateQuery.prepare("UPDATE ORDERS SET IS_VALID = 0 WHERE UID = ?"))
-                    qDebug() << updateQuery.lastError().text();
-                updateQuery.bindValue(0, orderUID);
-                if (!updateQuery.exec())
-                    qDebug() << updateQuery.lastError().text();
+//                QSqlQuery updateQuery;
+//                if (!updateQuery.prepare("UPDATE ORDERS SET IS_VALID = 0 WHERE UID = ?"))
+//                    qDebug() << updateQuery.lastError().text();
+//                updateQuery.bindValue(0, orderUID);
+//                if (!updateQuery.exec())
+//                    qDebug() << updateQuery.lastError().text();
 
-                model->select();
-            }
-        });
+//                model->select();
+//            }
+//        });
 
         QAction * delAction = new QAction(tr("Удалить"), contextMenu);
         contextMenu->addAction(delAction);
@@ -666,8 +661,7 @@ void CreateTournamentOrdersDialog::addSearchFilters()
                                  "AND ORDERS.UID IN %5 "
                                  "AND ORDERS.UID IN %6 "
                                  "AND ORDERS.UID IN %7 "
-                                 "AND ORDERS.UID IN %8 "
-                                 "AND IS_VALID = 1 ")
+                                 "AND ORDERS.UID IN %8 ")
                          .arg(secondNameMask, getAllowOrderUIDsByCoach(ui->filterCoachLE->text()),
                               ui->filterFirstNameLE->text(), getAllowOrderUIDsByRegion(ui->filterRegionLE->text()),
                               getAllowOrderUIDsByRegionUnit(ui->filterRegionUintLE->text()),
@@ -689,8 +683,7 @@ void CreateTournamentOrdersDialog::addSearchFilters()
                                  "AND ORDERS.UID IN %5 "
                                  "AND ORDERS.UID IN %6 "
                                  "AND ORDERS.UID IN %7 "
-                                 "AND ORDERS.UID IN %8 "
-                                 "AND IS_VALID = 1 ")
+                                 "AND ORDERS.UID IN %8 ")
                          .arg(ui->filterSecondNameLE->text(), getAllowOrderUIDsByCoach(ui->filterCoachLE->text()),
                               firstNameMask, getAllowOrderUIDsByRegion(ui->filterRegionLE->text()),
                               getAllowOrderUIDsByRegionUnit(ui->filterRegionUintLE->text()),
@@ -712,8 +705,7 @@ void CreateTournamentOrdersDialog::addSearchFilters()
                                  "AND ORDERS.UID IN %5 "
                                  "AND ORDERS.UID IN %6 "
                                  "AND ORDERS.UID IN %7 "
-                                 "AND ORDERS.UID IN %8 "
-                                 "AND IS_VALID = 1 ")
+                                 "AND ORDERS.UID IN %8 ")
                          .arg(getAllowOrderUIDsByCoach(coachNameMask), ui->filterSecondNameLE->text(),
                               ui->filterFirstNameLE->text(), getAllowOrderUIDsByRegion(ui->filterRegionLE->text()),
                               getAllowOrderUIDsByRegionUnit(ui->filterRegionUintLE->text()),
@@ -735,8 +727,7 @@ void CreateTournamentOrdersDialog::addSearchFilters()
                                  "AND ORDERS.UID IN %5 "
                                  "AND ORDERS.UID IN %6 "
                                  "AND ORDERS.UID IN %7 "
-                                 "AND ORDERS.UID IN %8 "
-                                 "AND IS_VALID = 1 ")
+                                 "AND ORDERS.UID IN %8 ")
                          .arg(getAllowOrderUIDsByCoach(ui->filterCoachLE->text()),
                               ui->filterSecondNameLE->text(), ui->filterFirstNameLE->text(),
                               getAllowOrderUIDsByRegion(regionNameMask),
@@ -759,8 +750,7 @@ void CreateTournamentOrdersDialog::addSearchFilters()
                                  "AND ORDERS.UID IN %5 "
                                  "AND ORDERS.UID IN %6 "
                                  "AND ORDERS.UID IN %7 "
-                                 "AND ORDERS.UID IN %8 "
-                                 "AND IS_VALID = 1 ")
+                                 "AND ORDERS.UID IN %8 ")
                          .arg(getAllowOrderUIDsByCoach(ui->filterCoachLE->text()),
                               ui->filterSecondNameLE->text(), ui->filterFirstNameLE->text(),
                               getAllowOrderUIDsByRegion(ui->filterRegionLE->text()),
@@ -783,8 +773,7 @@ void CreateTournamentOrdersDialog::addSearchFilters()
                                  "AND ORDERS.UID IN %5 "
                                  "AND ORDERS.UID IN %6 "
                                  "AND ORDERS.UID IN %7 "
-                                 "AND ORDERS.UID IN %8 "
-                                 "AND IS_VALID = 1 ")
+                                 "AND ORDERS.UID IN %8 ")
                          .arg(getAllowOrderUIDsByCoach(ui->filterCoachLE->text()),
                               ui->filterSecondNameLE->text(), ui->filterFirstNameLE->text(),
                               getAllowOrderUIDsByRegion(ui->filterRegionLE->text()),
@@ -807,8 +796,7 @@ void CreateTournamentOrdersDialog::addSearchFilters()
                                  "AND ORDERS.UID IN %5 "
                                  "AND ORDERS.UID IN %6 "
                                  "AND ORDERS.UID IN %7 "
-                                 "AND ORDERS.UID IN %8 "
-                                 "AND IS_VALID = 1 ")
+                                 "AND ORDERS.UID IN %8 ")
                          .arg(getAllowOrderUIDsByCoach(ui->filterCoachLE->text()),
                               ui->filterSecondNameLE->text(), ui->filterFirstNameLE->text(),
                               getAllowOrderUIDsByRegion(ui->filterRegionLE->text()),
@@ -831,8 +819,7 @@ void CreateTournamentOrdersDialog::addSearchFilters()
                                  "AND ORDERS.UID IN %5 "
                                  "AND ORDERS.UID IN %6 "
                                  "AND ORDERS.UID IN %7 "
-                                 "AND ORDERS.UID IN %8 "
-                                 "AND IS_VALID = 1 ")
+                                 "AND ORDERS.UID IN %8 ")
                          .arg(getAllowOrderUIDsByCoach(ui->filterCoachLE->text()),
                               ui->filterSecondNameLE->text(), ui->filterFirstNameLE->text(),
                               getAllowOrderUIDsByRegion(ui->filterRegionLE->text()),

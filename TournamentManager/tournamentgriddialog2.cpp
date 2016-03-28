@@ -46,10 +46,6 @@ TournamentGridDialog2::TournamentGridDialog2(const QSqlDatabase &_database, long
     tournamentCategories = -1;
     specialGroup = QVector<int>(4, false);
 
-
-    //ebnutVBazyGovno(); // TODO DELETE THIS
-
-
     QWidget *leftPane = new QWidget;
     leftPane->setBackgroundRole(QPalette::Dark);
     qComboBoxSelectCategory = new QComboBox;
@@ -68,10 +64,14 @@ TournamentGridDialog2::TournamentGridDialog2(const QSqlDatabase &_database, long
     qCheckBox = new QCheckBox();
     qCheckBox->setText("Скрыть категории без спортсменов");
     qCheckBox->setCheckState(Qt::Checked);
+
+    qCheckBoxBadTournGrid = new QCheckBox();
+    qCheckBoxBadTournGrid->setText("Показывать только некорректные сетки");
     {
         QGridLayout *mainLayout = new QGridLayout;
         mainLayout->addWidget(filterCategoriesLE, 0, 0, 1, 2);
-        mainLayout->addWidget(qCheckBox, 1, 0, 1, 2);
+        mainLayout->addWidget(qCheckBox, 1, 0);
+        mainLayout->addWidget(qCheckBoxBadTournGrid, 1, 1);
         mainLayout->addWidget(qComboBoxSelectCategory, 2, 0, 1, 2);
         mainLayout->addWidget(qTableWidget, 3, 0, 10, 2);
         mainLayout->addWidget(buttonDelete, 13, 0);
@@ -96,8 +96,8 @@ TournamentGridDialog2::TournamentGridDialog2(const QSqlDatabase &_database, long
     QTabWidget *qTabWidget = new QTabWidget();
     qTabWidget->addTab(pQScrollArea, "Сетка"); // TODO!
     tableGrid = new QTableWidget();
-    tableGrid->setColumnCount(3);
-    tableGrid->setHorizontalHeaderLabels(QStringList({"Спортсмен A", "Спортсмен B", "Уровень"}));
+    tableGrid->setColumnCount(5);
+    tableGrid->setHorizontalHeaderLabels(QStringList({"Спортсмен A", "Регион A", "Спортсмен B", "Регион B", "Уровень"}));
     tableGrid->setEditTriggers(QAbstractItemView::NoEditTriggers);
     tableGrid->setSelectionMode(QAbstractItemView::SingleSelection);
     //tableGrid->setFocusPolicy(Qt::NoFocus);
@@ -133,7 +133,7 @@ TournamentGridDialog2::TournamentGridDialog2(const QSqlDatabase &_database, long
     QGridLayout *mainLayout = new QGridLayout;
     mainLayout->addWidget(splitter, 0, 0);
     setLayout(mainLayout);
-    resize(800, 800);
+
 
     connect(buttonGenerate, SIGNAL(clicked(bool)), SLOT(onButtonGenerateGrid()));
     connect(widthSpinBox, SIGNAL(valueChanged(int)), pRenderArea, SLOT(widthChanged(int)));
@@ -157,7 +157,10 @@ TournamentGridDialog2::TournamentGridDialog2(const QSqlDatabase &_database, long
     {
         fillCategoryCombobox(filterCategoriesLE->text());
     });
-
+    connect(qCheckBoxBadTournGrid, &QCheckBox::stateChanged, [this, filterCategoriesLE] ()
+    {
+        fillCategoryCombobox(filterCategoriesLE->text());
+    });
 
 
 
@@ -195,7 +198,9 @@ TournamentGridDialog2::TournamentGridDialog2(const QSqlDatabase &_database, long
 
 
 
+
     setWindowFlags(windowFlags() | Qt::WindowMaximizeButtonHint);
+    resize(1000, 700);
     //showMaximized();
 }
 
@@ -203,10 +208,11 @@ TournamentGridDialog2::TournamentGridDialog2(const QSqlDatabase &_database, long
 // юзер выбирает категорию турнира
 void TournamentGridDialog2::onActivatedCategory(int id)
 {
-    if (id < 0)
+    if (!(0 <= id && id < qComboBoxSelectCategory->count()))
     {
         qTableWidget->setRowCount(0);
         tableGrid->setRowCount(0);
+        pRenderArea->slotSetTournamentCategories(0);
         return;
     }
     specialGroup = QVector<int>(4, false);
@@ -215,9 +221,8 @@ void TournamentGridDialog2::onActivatedCategory(int id)
     pRenderArea->slotSetTournamentCategories(tournamentCategories);
     //qDebug() << __LINE__ << __PRETTY_FUNCTION__ << "tournamentCategories: " << tournamentCategories;
 
-    QSqlQuery query("SELECT * FROM ORDERS WHERE TOURNAMENT_CATEGORY_FK = ? AND IS_VALID = ? ORDER BY SECOND_NAME, FIRST_NAME", database);
+    QSqlQuery query("SELECT * FROM ORDERS WHERE TOURNAMENT_CATEGORY_FK = ? ORDER BY SECOND_NAME, FIRST_NAME", database);
     query.bindValue(0, tournamentCategories);
-    query.bindValue(1, 1);
 
     //qDebug() << "\n" << __PRETTY_FUNCTION__  << "\n" << "tournamentCategories: " << tournamentCategories << "\n";
 
@@ -248,12 +253,12 @@ void TournamentGridDialog2::onActivatedCategory(int id)
     }
     else
     {
-        qDebug() << "\n" << __PRETTY_FUNCTION__ << "\n" << query.lastError().text() << "\n" << query.lastQuery() << "\n";
+        qDebug() << __PRETTY_FUNCTION__  << query.lastError() << query.lastQuery();
     }
 
     qTableWidget->resizeColumnsToContents();
 
-    updateInfoTableGrid();
+    fillTableGrid();
 }
 
 // юзер кликает по участнику и у него меняется приоритет
@@ -553,7 +558,7 @@ void TournamentGridDialog2::onButtonGenerateGrid()
     QSqlDatabase::database().commit();
 
     pRenderArea->repaint();
-    updateInfoTableGrid();
+    fillTableGrid();
 
 }
 
@@ -584,7 +589,7 @@ void TournamentGridDialog2::onButtonDelete()
     if (!query.exec())
         qDebug() << __PRETTY_FUNCTION__ << " " << query.lastError().text() << " " << query.lastQuery();
     pRenderArea->repaint();
-    updateInfoTableGrid();
+    fillTableGrid();
 
 }
 
@@ -593,7 +598,7 @@ void TournamentGridDialog2::onButtonDelete()
 
 TournamentGridDialog2::~TournamentGridDialog2(){}
 
-void TournamentGridDialog2::updateInfoTableGrid()
+void TournamentGridDialog2::fillTableGrid()
 {
     selectedRowOfRableGrid = -1;
     selectedColumnOfRableGrid = -1;
@@ -624,25 +629,34 @@ void TournamentGridDialog2::updateInfoTableGrid()
 
         QTableWidgetItem *item;
 
-        item = new QTableWidgetItem(node.name + " (" + node.region + ")" /*QString::number(node.v)*/);
+        item = new QTableWidgetItem(node.name);
         item->setData(Qt::UserRole, node.v);
         tableGrid->setItem(tableGrid->rowCount() - 1, 0, item);
 
+        item = new QTableWidgetItem(node.region);
+        item->setData(Qt::UserRole, node.v);
+        tableGrid->setItem(tableGrid->rowCount() - 1, 1, item);
 
         item = new QTableWidgetItem();
         item->setData(Qt::UserRole, 0);
-        tableGrid->setItem(tableGrid->rowCount() - 1, 1, item);
+        tableGrid->setItem(tableGrid->rowCount() - 1, 2, item);
+        item = new QTableWidgetItem();
+        item->setData(Qt::UserRole, 0);
+        tableGrid->setItem(tableGrid->rowCount() - 1, 3, item);
         for (DBUtils::NodeOfTournirGrid node2 : nodes)
         {
             if (node2.v != (node.v ^ 1)) continue;
-            item = new QTableWidgetItem(node2.name + " (" + node2.region + ")" /*QString::number(node2.v)*/);
+            item = new QTableWidgetItem(node2.name);
             item->setData(Qt::UserRole, node2.v);
-            tableGrid->setItem(tableGrid->rowCount() - 1, 1, item);
+            tableGrid->setItem(tableGrid->rowCount() - 1, 2, item);
+            item = new QTableWidgetItem(node2.region);
+            item->setData(Qt::UserRole, node2.v);
+            tableGrid->setItem(tableGrid->rowCount() - 1, 3, item);
             break;
         }
 
         item = new QTableWidgetItem(RenderAreaWidget::getNameOfLevel(node.v / 2));
-        tableGrid->setItem(tableGrid->rowCount() - 1, 2, item);
+        tableGrid->setItem(tableGrid->rowCount() - 1, 4, item);
     }
     tableGrid->resizeColumnsToContents();
     tableGrid->clearSelection();
@@ -662,23 +676,40 @@ void TournamentGridDialog2::fillCategoryCombobox(QString filterStr)
 
     QSqlQuery query("SELECT * FROM TOURNAMENT_CATEGORIES WHERE TOURNAMENT_FK = ? " + whereStatement + " ORDER BY SEX_FK, TYPE_FK, AGE_FROM, AGE_TILL, WEIGHT_FROM, WEIGHT_TILL ");
     query.bindValue(0, tournamentUID);
-    if (query.exec())
+    if (!query.exec())
+    {
+        qDebug() << __PRETTY_FUNCTION__ << query.lastError() << query.lastQuery();
+    }
+    else
     {
         while (query.next())
         {
             QString categoryUID = query.value("UID").toString();
             QString categoryName = query.value("NAME").toString();
 
-            int countMansInThisCategory = 228;
-            QSqlQuery queryCount("SELECT COUNT(*) AS CNT FROM ORDERS WHERE TOURNAMENT_CATEGORY_FK = ? ");
-            queryCount.bindValue(0, categoryUID);
-            if (!queryCount.exec() || !queryCount.next())
-                qDebug() << __PRETTY_FUNCTION__ << queryCount.lastError() << queryCount.lastQuery();
-            else
-                countMansInThisCategory = queryCount.value("CNT").toInt();
-
-            if (!qCheckBox->isChecked() || (qCheckBox->isChecked() && 0 < countMansInThisCategory))
+            std::set<long long> mansFromOrder;
             {
+                QSqlQuery queryOrders("SELECT * FROM ORDERS WHERE TOURNAMENT_CATEGORY_FK = ? ");
+                queryOrders.bindValue(0, categoryUID);
+                if (!queryOrders.exec())
+                {
+                    qDebug() << __PRETTY_FUNCTION__ << queryOrders.lastError() << queryOrders.lastQuery();
+                    continue;
+                }
+                while (queryOrders.next())
+                    mansFromOrder.insert(queryOrders.value("UID").toLongLong());
+            }
+
+            std::set<long long> mansFromGrig;
+            for(DBUtils::NodeOfTournirGrid it : DBUtils::getNodes(categoryUID.toLongLong()))
+                if (0 < it.UID)
+                    mansFromGrig.insert(it.UID);
+
+            if (
+                ( qCheckBoxBadTournGrid->isChecked() && std::vector<long long>(mansFromOrder.begin(), mansFromOrder.end()) != std::vector<long long>(mansFromGrig.begin(), mansFromGrig.end()))
+                ||
+                (!qCheckBoxBadTournGrid->isChecked() && (!qCheckBox->isChecked() || (qCheckBox->isChecked() && 0 < mansFromOrder.size())))
+            ){
                 QListWidgetItem* item = new QListWidgetItem();
                 item->setData(Qt::DisplayRole, categoryName);
                 item->setData(Qt::UserRole, categoryUID);
@@ -688,15 +719,14 @@ void TournamentGridDialog2::fillCategoryCombobox(QString filterStr)
         }
     }
 
-    if (0 < qComboBoxSelectCategory->count())
-        onActivatedCategory(0);
+    onActivatedCategory(0);
 }
 
 void TournamentGridDialog2::onCellClickedOntableGrid(int row, int column)
 {
     //qDebug() << row << column;
     //for (int i = 1; i <= 20; ++i) qDebug() << i << RenderAreaWidget::getNameOfLevel(i);
-    if ( 2 <= column || tableGrid->item(row, column)->data(Qt::UserRole).toInt() <= 0)
+    if (tableGrid->item(row, column)->data(Qt::UserRole).toInt() <= 0)
     {
         tableGrid->clearSelection();
         tableGrid->clearFocus();
@@ -709,6 +739,8 @@ void TournamentGridDialog2::onCellClickedOntableGrid(int row, int column)
     {
         selectedRowOfRableGrid = row;
         selectedColumnOfRableGrid = column;
+        QModelIndex i = tableGrid->model()->index(row, column ^ 1);
+        tableGrid->selectionModel()->select(i, QItemSelectionModel::Select);
     }
     else
     {
@@ -720,7 +752,7 @@ void TournamentGridDialog2::onCellClickedOntableGrid(int row, int column)
             DBUtils::swapNodesOfGrid(tournamentCategories, vertexA, vertexB);
             //qDebug() << "DONE!";
         }
-        updateInfoTableGrid();
+        fillTableGrid();
 
         tableGrid->clearSelection();
         tableGrid->clearFocus();

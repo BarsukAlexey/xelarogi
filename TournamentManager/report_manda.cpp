@@ -49,8 +49,7 @@ ReportManda::ReportManda(const QSqlDatabase& database, const long long tournamen
                 "TOURNAMENT_CATEGORIES.SEX_FK   = ? AND "
                 "TOURNAMENT_CATEGORIES.TYPE_FK  = ? AND "
                 "TOURNAMENT_CATEGORIES.AGE_FROM = ? AND "
-                "TOURNAMENT_CATEGORIES.AGE_TILL = ? AND "
-                "ORDERS.IS_VALID = 1 "
+                "TOURNAMENT_CATEGORIES.AGE_TILL = ? "
             "GROUP BY CLUBS.UID"
             ,database);
         queryClubs.bindValue(0, SEX_FK);
@@ -92,8 +91,7 @@ ReportManda::ReportManda(const QSqlDatabase& database, const long long tournamen
                 "TOURNAMENT_CATEGORIES.SEX_FK   = ? AND "
                 "TOURNAMENT_CATEGORIES.TYPE_FK  = ? AND "
                 "TOURNAMENT_CATEGORIES.AGE_FROM = ? AND "
-                "TOURNAMENT_CATEGORIES.AGE_TILL = ? AND "
-                "ORDERS.IS_VALID = 1 "
+                "TOURNAMENT_CATEGORIES.AGE_TILL = ? "
             "GROUP BY WEIGHT_FROM, WEIGHT_TILL "
             "ORDER BY WEIGHT_FROM, WEIGHT_TILL "
             ,database);
@@ -128,7 +126,6 @@ ReportManda::ReportManda(const QSqlDatabase& database, const long long tournamen
                     "TOURNAMENT_CATEGORIES.AGE_TILL    = ? AND "
                     "TOURNAMENT_CATEGORIES.WEIGHT_FROM = ? AND "
                     "TOURNAMENT_CATEGORIES.WEIGHT_TILL = ? AND "
-                    "ORDERS.IS_VALID = 1 AND "
                     "1 <= LENGTH(SPORT_CATEGORIES.NAME)"
                 "GROUP BY "
                     "UID_SC "
@@ -174,7 +171,6 @@ ReportManda::ReportManda(const QSqlDatabase& database, const long long tournamen
                             "TOURNAMENT_CATEGORIES.AGE_TILL    = ? AND "
                             "TOURNAMENT_CATEGORIES.WEIGHT_FROM = ? AND "
                             "TOURNAMENT_CATEGORIES.WEIGHT_TILL = ? AND "
-                            "ORDERS.IS_VALID = 1                   AND "
                             "1 <= LENGTH(SPORT_CATEGORIES.NAME)    AND "
                             "SPORT_CATEGORIES.UID = ?              AND "
                             "CLUBS.UID = ? "

@@ -10,7 +10,7 @@
 
 
 
-QString DBUtils::getField(const QString& field, const QString& table, const QString& UID)
+QString DBUtils::getField(const QString& field, const QString& table, const QString& UID, QString PRETTY_FUNCTION)
 {
     QSqlQuery query("SELECT * FROM " + table + " WHERE UID = ?");
     query.bindValue(0, UID);
@@ -20,12 +20,12 @@ QString DBUtils::getField(const QString& field, const QString& table, const QStr
     }
     else
     {
-        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << query.lastError()<< query.lastQuery() << "  UID:" << UID;
+        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << PRETTY_FUNCTION << query.lastError()<< query.lastQuery() << "  UID:" << UID;
     }
     return "";
 }
 
-QString DBUtils::getField(const QString& field, const QString& table, const long long UID)
+QString DBUtils::getField(const QString& field, const QString& table, const long long UID, QString PRETTY_FUNCTION)
 {
     QSqlQuery query("SELECT * FROM " + table + " WHERE UID = ?");
     query.bindValue(0, UID);
@@ -35,12 +35,12 @@ QString DBUtils::getField(const QString& field, const QString& table, const long
     }
     else
     {
-        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << query.lastError().text() << query.lastQuery() << "  UID:" << UID;
+        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << PRETTY_FUNCTION << query.lastError()<< query.lastQuery() << "  UID:" << UID;
     }
     return "";
 }
 
-QString DBUtils::getFieldDate(const QSqlDatabase& database, const QString& field, const QString& table, const long long UID)
+QString DBUtils::getFieldDate(const QSqlDatabase& database, const QString& field, const QString& table, const long long UID, QString PRETTY_FUNCTION)
 {
     QSqlQuery query("SELECT * FROM " + table + " WHERE UID = ?", database);
     query.bindValue(0, UID);
@@ -50,7 +50,7 @@ QString DBUtils::getFieldDate(const QSqlDatabase& database, const QString& field
     }
     else
     {
-        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << query.lastError().text() << query.lastQuery();
+        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << PRETTY_FUNCTION << query.lastError()<< query.lastQuery() << "  UID:" << UID;
     }
     return "";
 }
@@ -199,7 +199,6 @@ QVector<DBUtils::NodeOfTournirGrid> DBUtils::getNodes(long long tournamentCatego
     if (!query.exec())
     {
         qDebug() << __PRETTY_FUNCTION__ << " " << query.lastError().text() << "\n" << query.lastQuery();
-        arr.clear();
         return arr;
     }
     while (query.next())
@@ -210,24 +209,9 @@ QVector<DBUtils::NodeOfTournirGrid> DBUtils::getNodes(long long tournamentCatego
         bool isFighing = query.value("IS_FIGHTING").toBool();
         if (orderUID.size() != 0)
         {
-            QSqlQuery queryOrder("SELECT * FROM ORDERS WHERE UID = ? ");
-            queryOrder.bindValue(0, orderUID);
-            if (!(queryOrder.exec() && queryOrder.next()))
-                qDebug() << __PRETTY_FUNCTION__  << queryOrder.lastError().text()  << queryOrder.lastQuery()
-                         <<  "Нет такого orderUID" << orderUID;
-            else
-                name = queryOrder.value("SECOND_NAME").toString() + " " + queryOrder.value("FIRST_NAME").toString();
-
-
-            QSqlQuery queryRegion("SELECT * FROM REGIONS WHERE UID = ? ");
-            queryRegion.bindValue(0, queryOrder.value("REGION_FK").toString());
-            if (!(queryRegion.exec() && queryRegion.next()))
-            {
-                qDebug() << __PRETTY_FUNCTION__ << queryRegion.lastError().text() << queryRegion.lastQuery()
-                         <<  "Нет такого REGION_FK" << queryOrder.value("REGION_FK").toString();
-            }
-            else
-                region = queryRegion.value("NAME").toString();
+            name   = DBUtils::getField("SECOND_NAME", "ORDERS", orderUID, __PRETTY_FUNCTION__) +  " " +
+                     DBUtils::getField("FIRST_NAME" , "ORDERS", orderUID, __PRETTY_FUNCTION__);
+            region = DBUtils::getField("NAME", "REGIONS", DBUtils::getField("REGION_FK", "ORDERS", orderUID, __PRETTY_FUNCTION__), __PRETTY_FUNCTION__);
         }
         arr.push_back(NodeOfTournirGrid({query.value("VERTEX").toInt(), name, region, isFighing, orderUID.toLongLong(), query.value("result").toString()}));
     }
@@ -278,7 +262,7 @@ QVector<QVector<DBUtils::Fighing>> DBUtils::getListsOfPairs(const QSqlDatabase& 
     return result;
 }
 
-QVector<DBUtils::Fighing> DBUtils::getListOfPairs(const QSqlDatabase& database, long long tournamentCategory)
+QVector<DBUtils::Fighing> DBUtils::getListOfPairs(const QSqlDatabase& , long long tournamentCategory)
 {
     QVector<Fighing> arr;
     QVector<NodeOfTournirGrid> nodes = getNodes(tournamentCategory);
@@ -477,7 +461,7 @@ QString DBUtils::getNormanWeightRange(double a, double b)
 
 QString DBUtils::roundDouble(double x, int precision)
 {
-    QString res = QString::number(x, 'f', 3);
+    QString res = QString::number(x, 'f', precision);
     res.remove( QRegExp("0+$") ); // Remove any number of trailing 0's
     res.remove( QRegExp("\\.$") ); // If the last character is just a '.' then remove it
     return res;

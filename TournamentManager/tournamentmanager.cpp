@@ -123,7 +123,7 @@ QVector<QVector<TournamentManager::Point>> TournamentManager::getTournamentRecta
     if (wasSpecificLevel) lowDeg *= 2;
     else addLayerCount = 0;
 
-    int wasLayerCount = addLayerCount;
+    //int wasLayerCount = addLayerCount;
     int vIndex = 0;
     QVector<QVector<Point>> levels;
     for (int i = 1; lowDeg > 0; i++)

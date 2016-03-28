@@ -377,7 +377,7 @@ void MainWindow::connectButtons()
         if (dlg.result() == QDialog::Accepted)
         {
             long long tournamentUID = ui->tournamentUidLabel->text().toLongLong();
-            TrophyGenerator trophyGenerator(m_database, tournamentUID);
+            TrophyGenerator trophyGenerator(tournamentUID);
         }
     });
 
@@ -428,7 +428,8 @@ void MainWindow::on_pushButtonGrid_clicked()
 {
     long long routnamentUID = ui->tournamentUidLabel->text().toLongLong();
     qDebug() << "routnamentUID: " << routnamentUID;
-    TournamentGridDialog2 dialog(m_database, routnamentUID, this);
+    //TournamentGridDialog2 dialog(m_database, routnamentUID, this);
+    TournamentGridDialog2 dialog(m_database, routnamentUID);
     dialog.exec();
 }
 

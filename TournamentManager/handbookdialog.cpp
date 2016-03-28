@@ -9,10 +9,11 @@ HandbookDialog::HandbookDialog(QString tableName, QString tableRusName,
                                const QSqlDatabase &database,
                                QWidget *parent,
                                QStringList hiddenColumns):
-    m_database(database),
-    mHiddenColumns(hiddenColumns),
+
     QDialog(parent),
-    ui(new Ui::HandbookDialog)
+    ui(new Ui::HandbookDialog),
+    m_database(database),
+    mHiddenColumns(hiddenColumns)
 {
     ui->setupUi(this);
 

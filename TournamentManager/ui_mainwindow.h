@@ -65,9 +65,9 @@ public:
     QPushButton *createTournamentCategoriesBtn;
     QPushButton *createOrdersBtn;
     QPushButton *pushButtonProtokolVzveshinanya;
-    QPushButton *pushButtonPair;
     QPushButton *pushButtonGrid;
     QPushButton *pushButtonFightinDistribution;
+    QPushButton *pushButtonPair;
     QPushButton *pushButtonLoadWinner;
     QPushButton *pushButtonWinnerReport;
     QPushButton *trophyBtn;
@@ -217,12 +217,12 @@ public:
 
         createOrdersBtn = new QPushButton(ordersPage);
         createOrdersBtn->setObjectName(QStringLiteral("createOrdersBtn"));
-        QSizePolicy sizePolicy2(QSizePolicy::Minimum, QSizePolicy::Expanding);
+        QSizePolicy sizePolicy2(QSizePolicy::Minimum, QSizePolicy::Fixed);
         sizePolicy2.setHorizontalStretch(0);
         sizePolicy2.setVerticalStretch(0);
         sizePolicy2.setHeightForWidth(createOrdersBtn->sizePolicy().hasHeightForWidth());
         createOrdersBtn->setSizePolicy(sizePolicy2);
-        createOrdersBtn->setMinimumSize(QSize(0, 40));
+        createOrdersBtn->setMinimumSize(QSize(0, 0));
 
         verticalLayout->addWidget(createOrdersBtn);
 
@@ -230,11 +230,6 @@ public:
         pushButtonProtokolVzveshinanya->setObjectName(QStringLiteral("pushButtonProtokolVzveshinanya"));
 
         verticalLayout->addWidget(pushButtonProtokolVzveshinanya);
-
-        pushButtonPair = new QPushButton(ordersPage);
-        pushButtonPair->setObjectName(QStringLiteral("pushButtonPair"));
-
-        verticalLayout->addWidget(pushButtonPair);
 
         pushButtonGrid = new QPushButton(ordersPage);
         pushButtonGrid->setObjectName(QStringLiteral("pushButtonGrid"));
@@ -245,6 +240,11 @@ public:
         pushButtonFightinDistribution->setObjectName(QStringLiteral("pushButtonFightinDistribution"));
 
         verticalLayout->addWidget(pushButtonFightinDistribution);
+
+        pushButtonPair = new QPushButton(ordersPage);
+        pushButtonPair->setObjectName(QStringLiteral("pushButtonPair"));
+
+        verticalLayout->addWidget(pushButtonPair);
 
         pushButtonLoadWinner = new QPushButton(ordersPage);
         pushButtonLoadWinner->setObjectName(QStringLiteral("pushButtonLoadWinner"));
@@ -343,9 +343,9 @@ public:
         createTournamentCategoriesBtn->setText(QApplication::translate("MainWindow", "\320\232\320\260\321\202\320\265\320\263\320\276\321\200\320\270\320\270 \321\202\321\203\321\200\320\275\320\270\321\200\320\260", 0));
         createOrdersBtn->setText(QApplication::translate("MainWindow", "\320\227\320\260\321\217\320\262\320\272\320\270", 0));
         pushButtonProtokolVzveshinanya->setText(QApplication::translate("MainWindow", "\320\237\321\200\320\276\321\202\320\276\320\272\320\276\320\273\321\213 \320\262\320\267\320\262\320\265\321\210\320\270\320\262\320\260\320\275\320\270\321\217", 0));
-        pushButtonPair->setText(QApplication::translate("MainWindow", "\320\241\320\276\321\201\321\202\320\260\320\262\321\213 \320\277\320\260\321\200", 0));
         pushButtonGrid->setText(QApplication::translate("MainWindow", "\320\242\321\203\321\200\320\275\320\270\321\200\320\275\321\213\320\265 \321\201\320\265\321\202\320\272\320\270", 0));
         pushButtonFightinDistribution->setText(QApplication::translate("MainWindow", "\320\223\321\200\320\260\321\204\320\270\320\272 \321\200\320\260\321\201\320\277\320\265\321\200\320\265\320\264\320\265\320\273\320\265\320\275\320\270\321\217 \320\261\320\276\321\221\320\262", 0));
+        pushButtonPair->setText(QApplication::translate("MainWindow", "\320\241\320\276\321\201\321\202\320\260\320\262\321\213 \320\277\320\260\321\200", 0));
         pushButtonLoadWinner->setText(QApplication::translate("MainWindow", "\320\227\320\260\320\263\321\200\321\203\320\267\320\270\321\202\321\214 \321\200\320\265\320\267\321\203\320\273\321\214\321\202\320\260\321\202\321\213", 0));
         pushButtonWinnerReport->setText(QApplication::translate("MainWindow", "\320\241\320\277\320\270\321\201\320\276\320\272 \320\277\320\276\320\261\320\265\320\264\320\270\321\202\320\265\320\273\320\265\320\271", 0));
         trophyBtn->setText(QApplication::translate("MainWindow", "\320\241\320\276\320\267\320\264\320\260\321\202\321\214 \320\263\321\200\320\260\320\274\320\276\321\202\321\213", 0));

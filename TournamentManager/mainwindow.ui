@@ -194,7 +194,7 @@
            <item>
             <widget class="QPushButton" name="createOrdersBtn">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -202,7 +202,7 @@
              <property name="minimumSize">
               <size>
                <width>0</width>
-               <height>40</height>
+               <height>0</height>
               </size>
              </property>
              <property name="text">
@@ -218,13 +218,6 @@
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="pushButtonPair">
-             <property name="text">
-              <string>Составы пар</string>
-             </property>
-            </widget>
-           </item>
-           <item>
             <widget class="QPushButton" name="pushButtonGrid">
              <property name="text">
               <string>Турнирные сетки</string>
@@ -235,6 +228,13 @@
             <widget class="QPushButton" name="pushButtonFightinDistribution">
              <property name="text">
               <string>График распеределения боёв</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButtonPair">
+             <property name="text">
+              <string>Составы пар</string>
              </property>
             </widget>
            </item>
