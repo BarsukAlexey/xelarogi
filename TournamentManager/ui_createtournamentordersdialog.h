@@ -231,7 +231,7 @@ public:
         tableView->setObjectName(QStringLiteral("tableView"));
         sizePolicy.setHeightForWidth(tableView->sizePolicy().hasHeightForWidth());
         tableView->setSizePolicy(sizePolicy);
-        tableView->setFocusPolicy(Qt::NoFocus);
+        tableView->setFocusPolicy(Qt::ClickFocus);
         tableView->setContextMenuPolicy(Qt::CustomContextMenu);
         tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
         tableView->setAlternatingRowColors(true);

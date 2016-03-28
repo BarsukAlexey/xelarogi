@@ -701,14 +701,18 @@ void TournamentGridDialog2::fillCategoryCombobox(QString filterStr)
             }
 
             std::set<long long> mansFromGrig;
+            bool haveSomeGridOrSomeOrders = 0 < mansFromOrder.size();
             for(DBUtils::NodeOfTournirGrid it : DBUtils::getNodes(categoryUID.toLongLong()))
+            {
+                haveSomeGridOrSomeOrders = true;
                 if (0 < it.UID)
                     mansFromGrig.insert(it.UID);
+            }
 
             if (
                 ( qCheckBoxBadTournGrid->isChecked() && std::vector<long long>(mansFromOrder.begin(), mansFromOrder.end()) != std::vector<long long>(mansFromGrig.begin(), mansFromGrig.end()))
                 ||
-                (!qCheckBoxBadTournGrid->isChecked() && (!qCheckBox->isChecked() || (qCheckBox->isChecked() && 0 < mansFromOrder.size())))
+                (!qCheckBoxBadTournGrid->isChecked() && (!qCheckBox->isChecked() || (qCheckBox->isChecked() && haveSomeGridOrSomeOrders)))
             ){
                 QListWidgetItem* item = new QListWidgetItem();
                 item->setData(Qt::DisplayRole, categoryName);

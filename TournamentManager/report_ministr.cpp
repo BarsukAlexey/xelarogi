@@ -24,8 +24,6 @@ ReporMinistr::ReporMinistr(const long long tournamentUID)
     QAxObject *sheets = workbook->querySubObject("WorkSheets");
 
 
-
-
     //
     {
         sheets->querySubObject("Add");
@@ -272,9 +270,11 @@ void ReporMinistr::f3(QAxObject* sheet, const long long tournamentUID)
         for (int iter = 0; iter < 4 && !nodes.empty(); ++iter)
         {
             long long orderUID = nodes[0].UID;
+            if (orderUID == 0)
+                break;
             long long region = DBUtils::getField("REGION_FK", "ORDERS", orderUID).toLongLong();
             if (regionAnsCntMedal.count(region) == 0)
-                regionAnsCntMedal[region] = QVector<int>(3);
+                regionAnsCntMedal[region] = QVector<int>(3, 0);
             ++regionAnsCntMedal[region][qMin(iter, 2)];
             for (int i = 0; i < nodes.size(); ++i)
                 while (i < nodes.size() && nodes[i].UID == orderUID)
@@ -300,7 +300,9 @@ void ReporMinistr::f3(QAxObject* sheet, const long long tournamentUID)
         int sum = 0;
         for (int j = 0; j < 3; ++j)
         {
-            ExcelUtils::setValue(sheet, 3 + i, 3 + j, QString::number(sum += res[i].second[j]));
+            if (res[i].second[j] != 0)
+                ExcelUtils::setValue(sheet, 3 + i, 3 + j, QString::number(res[i].second[j]));
+            sum += res[i].second[j];
         }
         ExcelUtils::setValue(sheet, 3 + i, 6, QString::number(sum));
     }

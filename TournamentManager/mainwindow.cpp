@@ -32,7 +32,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 
-#include <QMouseEvent>
+//#include <QMouseEvent>
 
 
 using namespace std;
@@ -428,8 +428,7 @@ void MainWindow::on_pushButtonGrid_clicked()
 {
     long long routnamentUID = ui->tournamentUidLabel->text().toLongLong();
     qDebug() << "routnamentUID: " << routnamentUID;
-    //TournamentGridDialog2 dialog(m_database, routnamentUID, this);
-    TournamentGridDialog2 dialog(m_database, routnamentUID);
+    TournamentGridDialog2 dialog(m_database, routnamentUID, this);
     dialog.exec();
 }
 

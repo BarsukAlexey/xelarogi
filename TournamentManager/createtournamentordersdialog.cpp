@@ -26,6 +26,7 @@ CreateTournamentOrdersDialog::CreateTournamentOrdersDialog(const QSqlDatabase &d
     QSqlRelationalTableModel * model = new QSqlRelationalTableModel();
     model->setTable("ORDERS");
     model->setFilter("TOURNAMENT_CATEGORY_FK IN " + getAllowTournamentCategories());
+    model->setSort(model->fieldIndex("SECOND_NAME"), Qt::AscendingOrder);
     ui->tableView->setModel(model);
     model->select();
 
