@@ -8,7 +8,7 @@
 #include <QDate>
 
 
-void EbnutVBazu::f(const QSqlDatabase &database, long long tournamentUID)
+void EbnutVBazu::f(const QSqlDatabase &database, long long )
 {
     qDebug() << "ebnutVBazyGovno";
     QSqlQuery *query;
@@ -106,7 +106,7 @@ void EbnutVBazu::f(const QSqlDatabase &database, long long tournamentUID)
 
 
 
-void EbnutVBazu::setRandomWinner(const QSqlDatabase& database, long long tournamentUID)
+void EbnutVBazu::setRandomWinner(const QSqlDatabase& , long long )
 {
     QSqlQuery query("SELECT DISTINCT TOURNAMENT_CATEGORIES_FK FROM GRID");
     if (!query.exec())

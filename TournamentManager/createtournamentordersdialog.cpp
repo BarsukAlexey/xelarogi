@@ -643,10 +643,12 @@ void CreateTournamentOrdersDialog::addContextMenu()
             QModelIndex index = ui->tableView->indexAt(pos);
             model->removeRow(index.row());
             model->submitAll();
+            model->select();
         });
 
 
         contextMenu->exec(ui->tableView->viewport()->mapToGlobal(pos));
+
     });
 }
 
