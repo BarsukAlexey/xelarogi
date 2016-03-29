@@ -441,10 +441,12 @@ void MainWindow::on_pushButtonFightinDistribution_clicked()
 
 void MainWindow::on_pushButtonPair_clicked()
 {
+    this->hide();
     long long routnamentUID = ui->tournamentUidLabel->text().toLongLong();
     qDebug() << "routnamentUID: " << routnamentUID;
     FightingPairs dialog(m_database, routnamentUID, this);
     dialog.exec();
+    this->show();
 }
 
 void MainWindow::on_pushButtonProtokolVzveshinanya_clicked()

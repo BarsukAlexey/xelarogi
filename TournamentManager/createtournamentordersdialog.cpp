@@ -31,14 +31,13 @@ CreateTournamentOrdersDialog::CreateTournamentOrdersDialog(const QSqlDatabase &d
     model->select();
 
     ui->tableView->setColumnHidden(model->fieldIndex("UID"), true);
-    ui->tableView->setColumnHidden(model->fieldIndex("COACH_FK"), true);
-    ui->tableView->setColumnHidden(model->fieldIndex("CLUB_FK"), true);
-    ui->tableView->setColumnHidden(model->fieldIndex("COUNTRY_FK"), true);
-    ui->tableView->setColumnHidden(model->fieldIndex("REGION_FK"), true);
-    ui->tableView->setColumnHidden(model->fieldIndex("BIRTHDATE"), true);
-    ui->tableView->setColumnHidden(model->fieldIndex("SEX_FK"), true);
-    ui->tableView->setColumnHidden(model->fieldIndex("SPORT_CATEGORY_FK"), true);
-
+//    ui->tableView->setColumnHidden(model->fieldIndex("COACH_FK"), true);
+//    ui->tableView->setColumnHidden(model->fieldIndex("CLUB_FK"), true);
+//    ui->tableView->setColumnHidden(model->fieldIndex("COUNTRY_FK"), true);
+//    ui->tableView->setColumnHidden(model->fieldIndex("REGION_FK"), true);
+//    ui->tableView->setColumnHidden(model->fieldIndex("BIRTHDATE"), true);
+//    ui->tableView->setColumnHidden(model->fieldIndex("SEX_FK"), true);
+//    ui->tableView->setColumnHidden(model->fieldIndex("SPORT_CATEGORY_FK"), true);
     for (int i = 0; i < m_record.count(); ++i)
     {
         QString fieldName = m_record.fieldName(i);

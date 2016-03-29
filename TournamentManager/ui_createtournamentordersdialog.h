@@ -237,6 +237,7 @@ public:
         tableView->setAlternatingRowColors(true);
         tableView->setSelectionMode(QAbstractItemView::SingleSelection);
         tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+        tableView->setSortingEnabled(true);
         splitter->addWidget(tableView);
         tableView->horizontalHeader()->setCascadingSectionResizes(true);
         tableView->horizontalHeader()->setStretchLastSection(true);
