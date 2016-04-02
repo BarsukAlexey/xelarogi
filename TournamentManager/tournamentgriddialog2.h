@@ -9,6 +9,10 @@
 #include <QLineEdit>
 #include <QCheckBox>
 #include <QStyledItemDelegate>
+#include <QGroupBox>
+#include <QRadioButton>
+
+
 
 class DrawBorderDelegate : public QStyledItemDelegate
 {
@@ -72,8 +76,12 @@ private:
     QVector<int> specialGroup;
 
     QTabWidget *qTabWidget;
-    QCheckBox * qCheckBox;
-    QCheckBox * qCheckBoxBadTournGrid;
+
+    QGroupBox *groupBox;
+    QRadioButton *radioButtonAll;
+    QRadioButton *radioButtonLonly;
+    QRadioButton *radioButtonInvalid;
+
     int selectedRowOfRableGrid;
     int selectedColumnOfRableGrid;
 

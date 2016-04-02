@@ -63,25 +63,25 @@ TournamentGridDialog2::TournamentGridDialog2(const QSqlDatabase &_database, long
     QPushButton *buttonGenerateAll = new QPushButton("Сгенерировать все сетки");
     QPushButton *buttonDelete = new QPushButton("Удалить сетку");
     QLineEdit* filterCategoriesLE = new QLineEdit;
-    qCheckBox = new QCheckBox();
-    qCheckBox->setText("Скрыть категории без спортсменов");
-    qCheckBox->setCheckState(Qt::Checked);
 
-    qCheckBoxBadTournGrid = new QCheckBox();
-    qCheckBoxBadTournGrid->setText("Показывать только некорректные сетки");
+    groupBox = new QGroupBox(tr("Фильтр категорий"));
+    radioButtonAll = new QRadioButton(tr("Все"));
+    radioButtonLonly = new QRadioButton(tr("Одиночки"));
+    radioButtonInvalid = new QRadioButton(tr("Не валидные категории"));
+    radioButtonAll->setChecked(true);
+    QHBoxLayout *hbox = new QHBoxLayout;
+    hbox->addWidget(radioButtonAll);
+    hbox->addWidget(radioButtonLonly);
+    hbox->addWidget(radioButtonInvalid);
+    hbox->addStretch(1);
+    groupBox->setLayout(hbox);
+
     {
         QGridLayout *mainLayout = new QGridLayout;
-        mainLayout->addWidget(filterCategoriesLE, 0, 0, 1, 3);
-        {
-            QHBoxLayout *qHBoxLayout = new QHBoxLayout();
-            qHBoxLayout->addWidget(qCheckBox);
-            qHBoxLayout->addWidget(qCheckBoxBadTournGrid);
-            QWidget* wdg = new QWidget();
-            wdg->setLayout(qHBoxLayout);
-            mainLayout->addWidget(wdg, 1, 0, 1, 1);
-        }
-        mainLayout->addWidget(qComboBoxSelectCategory, 2, 0, 1, 3);
-        mainLayout->addWidget(qTableWidget, 3, 0, 10, 3);
+        mainLayout->addWidget(filterCategoriesLE, 0, 0);
+        mainLayout->addWidget(groupBox, 1, 0);
+        mainLayout->addWidget(qComboBoxSelectCategory, 2, 0);
+        mainLayout->addWidget(qTableWidget, 3, 0);
         {
             QHBoxLayout *qHBoxLayout = new QHBoxLayout();
             qHBoxLayout->addWidget(buttonGenerateAll);
@@ -89,7 +89,7 @@ TournamentGridDialog2::TournamentGridDialog2(const QSqlDatabase &_database, long
             qHBoxLayout->addWidget(buttonGenerate);
             QWidget* wdg = new QWidget();
             wdg->setLayout(qHBoxLayout);
-            mainLayout->addWidget(wdg, 13, 0, 1, 3);
+            mainLayout->addWidget(wdg, 4, 0);
         }
         leftPane->setLayout(mainLayout);
     }
@@ -170,14 +170,10 @@ TournamentGridDialog2::TournamentGridDialog2(const QSqlDatabase &_database, long
         fillCategoryCombobox(filter);
     });
 
-    connect(qCheckBox, &QCheckBox::stateChanged, [this, filterCategoriesLE] ()
-    {
-        fillCategoryCombobox(filterCategoriesLE->text());
-    });
-    connect(qCheckBoxBadTournGrid, &QCheckBox::stateChanged, [this, filterCategoriesLE] ()
-    {
-        fillCategoryCombobox(filterCategoriesLE->text());
-    });
+
+    connect(radioButtonAll, &QRadioButton::clicked, [this, filterCategoriesLE] (){fillCategoryCombobox(filterCategoriesLE->text());});
+    connect(radioButtonLonly, &QRadioButton::clicked, [this, filterCategoriesLE] (){fillCategoryCombobox(filterCategoriesLE->text());});
+    connect(radioButtonInvalid, &QRadioButton::clicked, [this, filterCategoriesLE] (){fillCategoryCombobox(filterCategoriesLE->text());});
 
 
 
@@ -783,6 +779,7 @@ void TournamentGridDialog2::fillTableGrid()
 
 void TournamentGridDialog2::fillCategoryCombobox(QString filterStr)
 {
+    qDebug() << __LINE__ << "TournamentGridDialog2";
     qComboBoxSelectCategory->clear();
 
     QStringList filters = filterStr.split(" ", QString::SkipEmptyParts);
@@ -827,10 +824,11 @@ void TournamentGridDialog2::fillCategoryCombobox(QString filterStr)
                     mansFromGrig.insert(it.UID);
             }
 
+
             if (
-                ( qCheckBoxBadTournGrid->isChecked() && std::vector<long long>(mansFromOrder.begin(), mansFromOrder.end()) != std::vector<long long>(mansFromGrig.begin(), mansFromGrig.end()))
-                ||
-                (!qCheckBoxBadTournGrid->isChecked() && (!qCheckBox->isChecked() || (qCheckBox->isChecked() && haveSomeGridOrSomeOrders)))
+                radioButtonAll->isChecked() && haveSomeGridOrSomeOrders ||
+                radioButtonLonly->isChecked() && mansFromOrder.size() == 1 ||
+                radioButtonInvalid->isChecked() && std::vector<int>(mansFromOrder.begin(), mansFromOrder.end()) != std::vector<int>(mansFromGrig.begin(), mansFromGrig.end())
             ){
                 QListWidgetItem* item = new QListWidgetItem();
                 item->setData(Qt::DisplayRole, categoryName);
