@@ -32,7 +32,7 @@ public:
     {
         if (ErrorMessagesDialog->objectName().isEmpty())
             ErrorMessagesDialog->setObjectName(QStringLiteral("ErrorMessagesDialog"));
-        ErrorMessagesDialog->resize(533, 325);
+        ErrorMessagesDialog->resize(824, 451);
         gridLayout = new QGridLayout(ErrorMessagesDialog);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
         plainTextEdit = new QPlainTextEdit(ErrorMessagesDialog);

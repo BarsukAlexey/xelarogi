@@ -21,7 +21,6 @@ CreateTournamentCategoriesDialog::CreateTournamentCategoriesDialog(long long tou
     fillSexComboBox();
     fillTypeComboBox();
 
-    connect(ui->okBtn, &QPushButton::clicked, this, &CreateTournamentCategoriesDialog::accept);
     connect(ui->addBtn, &QPushButton::clicked, this, &CreateTournamentCategoriesDialog::onAddBtn);
     connect(ui->applyBtn, &QPushButton::clicked, [this] ()
     {
@@ -46,7 +45,7 @@ CreateTournamentCategoriesDialog::CreateTournamentCategoriesDialog(long long tou
         }
     });
 
-    setWindowFlags(windowFlags() | Qt::WindowMaximizeButtonHint);
+    setWindowFlags(windowFlags() | Qt::WindowMinMaxButtonsHint);
 }
 
 CreateTournamentCategoriesDialog::~CreateTournamentCategoriesDialog()
@@ -315,4 +314,9 @@ void CreateTournamentCategoriesDialog::on_pushButton_clicked()
     GenerateTournamentCategoriesDialog(mTournamentUID, this).exec();
     updateTable();
     fillTypeComboBox();
+}
+
+void CreateTournamentCategoriesDialog::on_okBtn_clicked()
+{
+
 }

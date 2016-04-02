@@ -109,6 +109,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->tournamentAction, &QAction::triggered, [this] () {
         HandbookDialog handbookDlg(QString("TOURNAMENTS"), QString("Турниры"), m_database, this, {"UID"});
         handbookDlg.exec();
+        updateTournamentTreeWidget();
     });
 
     connect(ui->tournamentCategoryAction, &QAction::triggered, [this] () {
@@ -264,14 +265,10 @@ void MainWindow::updateTournamentTreeWidget()
             }
             ui->tournamentTreeWidget->addTopLevelItem(topLevel);
         }
-        if (0 < ui->tournamentTreeWidget->model()->rowCount())
+        for (int i = 0; i <ui->tournamentTreeWidget->model()->rowCount(); ++i)
         {
-            QModelIndex localIndex = ui->tournamentTreeWidget->model()->index(0, 0);
-            ui->tournamentTreeWidget->setExpanded(localIndex, true);// а то заябался запускать и открывать список =)
-            //ui->tournamentTreeWidget->selectionModel()->select(localIndex, QItemSelectionModel::Select);
-            //ui->tournamentTreeWidget->setSelection(QRect(0, 0, 100, 100), );
-            //ui->tournamentTreeWidget->topLevelItem(2)->child(0);
-
+            QModelIndex localIndex = ui->tournamentTreeWidget->model()->index(i, 0);
+            ui->tournamentTreeWidget->setExpanded(localIndex, true);
         }
 
         connect(ui->tournamentTreeWidget, &QTreeWidget::clicked, [this] (const QModelIndex& index)
@@ -314,13 +311,13 @@ void MainWindow::updateTournamentTreeWidget()
     {
         QMenu menu;
 
-        // я закоментировал. пусть пока добавляет турниры через основное меню, ибо в БД я добавил пару полей
-//        connect(menu.addAction("Добавить"), &QAction::triggered, [this, pos] ()
-//        {
-//            CreateTournamentDialog dlg(this);
-//            dlg.exec();
-//            updateTournamentTreeWidget();
-//        });
+
+        connect(menu.addAction("Добавить..."), &QAction::triggered, [this, pos] ()
+        {
+            CreateTournamentDialog dlg(this);
+            dlg.exec();
+            updateTournamentTreeWidget();
+        });
         connect(menu.addAction("Удалить"), &QAction::triggered, [this, pos] ()
         {
             QModelIndex index = ui->tournamentTreeWidget->indexAt(pos);
@@ -351,24 +348,21 @@ void MainWindow::connectButtons()
 {
     connect(ui->createOrdersBtn, &QPushButton::clicked, [this] ()
     {
+        this->hide();
         long long tournamentUID = ui->tournamentUidLabel->text().toLongLong();
-        CreateTournamentOrdersDialog dlg(m_database, tournamentUID, this);
+        CreateTournamentOrdersDialog dlg(m_database, tournamentUID, 0);
         dlg.exec();
+        this->show();
     });
 
     connect(ui->createTournamentCategoriesBtn, &QPushButton::clicked, [this] ()
     {
+        this->hide();
         long long tournamentUID = ui->tournamentUidLabel->text().toLongLong();
-        CreateTournamentCategoriesDialog dlg(tournamentUID, this);
+        CreateTournamentCategoriesDialog dlg(tournamentUID, 0);
         dlg.exec();
+        this->show();
     });
-
-//    connect(ui->genTournamentCategoriesBtn, &QPushButton::clicked, [this] ()
-//    {
-//        long long tournamentUID = ui->tournamentUidLabel->text().toLongLong();
-//        GenerateTournamentCategoriesDialog dlg(tournamentUID, this);
-//        dlg.exec();
-//    });
 
     connect(ui->trophyBtn, &QPushButton::clicked, [this] ()
     {
@@ -426,10 +420,12 @@ void MainWindow::connectButtons()
 
 void MainWindow::on_pushButtonGrid_clicked()
 {
+    this->hide();
     long long routnamentUID = ui->tournamentUidLabel->text().toLongLong();
     qDebug() << "routnamentUID: " << routnamentUID;
-    TournamentGridDialog2 dialog(m_database, routnamentUID, this);
+    TournamentGridDialog2 dialog(m_database, routnamentUID, 0);
     dialog.exec();
+    this->show();
 }
 
 void MainWindow::on_pushButtonFightinDistribution_clicked()
@@ -444,7 +440,7 @@ void MainWindow::on_pushButtonPair_clicked()
     this->hide();
     long long routnamentUID = ui->tournamentUidLabel->text().toLongLong();
     qDebug() << "routnamentUID: " << routnamentUID;
-    FightingPairs dialog(m_database, routnamentUID, this);
+    FightingPairs dialog(m_database, routnamentUID, 0);
     dialog.exec();
     this->show();
 }
@@ -528,3 +524,4 @@ void MainWindow::on_btn_report_ministr_clicked()
     qDebug() << "routnamentUID: " << routnamentUID;
     ReporMinistr d(routnamentUID);
 }
+

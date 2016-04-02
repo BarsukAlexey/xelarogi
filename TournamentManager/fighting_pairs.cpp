@@ -113,8 +113,7 @@ FightingPairs::FightingPairs(const QSqlDatabase &_database, long long _tournamen
     setLayout(qGridLayout);
 
     resize(800, 600);
-    setWindowFlags(windowFlags() | Qt::WindowMaximizeButtonHint);
-
+    setWindowFlags(windowFlags() | Qt::WindowMinMaxButtonsHint);
 
     connect(qPushButton, SIGNAL(clicked()), SLOT(onGoPress()));
 }

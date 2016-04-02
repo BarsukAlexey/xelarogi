@@ -38,6 +38,7 @@
 #include <QMenu>
 #include <QHeaderView>
 
+
 TournamentGridDialog2::TournamentGridDialog2(const QSqlDatabase &_database, long long _tournamentUID, QWidget *_parent)
     : QDialog(_parent),
       database(_database),
@@ -59,6 +60,7 @@ TournamentGridDialog2::TournamentGridDialog2(const QSqlDatabase &_database, long
     qTableWidget->setSelectionMode(QAbstractItemView::NoSelection);
     qTableWidget->setFocusPolicy(Qt::NoFocus);
     QPushButton *buttonGenerate = new QPushButton("Сгенерировать сетку");
+    QPushButton *buttonGenerateAll = new QPushButton("Сгенерировать все сетки");
     QPushButton *buttonDelete = new QPushButton("Удалить сетку");
     QLineEdit* filterCategoriesLE = new QLineEdit;
     qCheckBox = new QCheckBox();
@@ -69,13 +71,26 @@ TournamentGridDialog2::TournamentGridDialog2(const QSqlDatabase &_database, long
     qCheckBoxBadTournGrid->setText("Показывать только некорректные сетки");
     {
         QGridLayout *mainLayout = new QGridLayout;
-        mainLayout->addWidget(filterCategoriesLE, 0, 0, 1, 2);
-        mainLayout->addWidget(qCheckBox, 1, 0);
-        mainLayout->addWidget(qCheckBoxBadTournGrid, 1, 1);
-        mainLayout->addWidget(qComboBoxSelectCategory, 2, 0, 1, 2);
-        mainLayout->addWidget(qTableWidget, 3, 0, 10, 2);
-        mainLayout->addWidget(buttonDelete, 13, 0);
-        mainLayout->addWidget(buttonGenerate, 13, 1);
+        mainLayout->addWidget(filterCategoriesLE, 0, 0, 1, 3);
+        {
+            QHBoxLayout *qHBoxLayout = new QHBoxLayout();
+            qHBoxLayout->addWidget(qCheckBox);
+            qHBoxLayout->addWidget(qCheckBoxBadTournGrid);
+            QWidget* wdg = new QWidget();
+            wdg->setLayout(qHBoxLayout);
+            mainLayout->addWidget(wdg, 1, 0, 1, 1);
+        }
+        mainLayout->addWidget(qComboBoxSelectCategory, 2, 0, 1, 3);
+        mainLayout->addWidget(qTableWidget, 3, 0, 10, 3);
+        {
+            QHBoxLayout *qHBoxLayout = new QHBoxLayout();
+            qHBoxLayout->addWidget(buttonGenerateAll);
+            qHBoxLayout->addWidget(buttonDelete);
+            qHBoxLayout->addWidget(buttonGenerate);
+            QWidget* wdg = new QWidget();
+            wdg->setLayout(qHBoxLayout);
+            mainLayout->addWidget(wdg, 13, 0, 1, 3);
+        }
         leftPane->setLayout(mainLayout);
     }
 
@@ -93,15 +108,15 @@ TournamentGridDialog2::TournamentGridDialog2(const QSqlDatabase &_database, long
     QScrollArea *pQScrollArea = new QScrollArea;
     pRenderArea = new RenderAreaWidget(pQScrollArea, widthSpinBox->value(), heightSpinBox->value(), database);
     pQScrollArea->setWidget(pRenderArea);
-    QTabWidget *qTabWidget = new QTabWidget();
-    qTabWidget->addTab(pQScrollArea, "Сетка"); // TODO!
+    qTabWidget = new QTabWidget();
+    qTabWidget->addTab(pQScrollArea, "Сетка");
     tableGrid = new QTableWidget();
     tableGrid->setColumnCount(5);
     tableGrid->setHorizontalHeaderLabels(QStringList({"Спортсмен A", "Регион A", "Спортсмен B", "Регион B", "Уровень"}));
     tableGrid->setEditTriggers(QAbstractItemView::NoEditTriggers);
     tableGrid->setSelectionMode(QAbstractItemView::SingleSelection);
-    //tableGrid->setFocusPolicy(Qt::NoFocus);
     qTabWidget->addTab(tableGrid, "Список");
+
 
 
     QLabel *widthQLabel = new QLabel("Ширина:");
@@ -142,6 +157,8 @@ TournamentGridDialog2::TournamentGridDialog2(const QSqlDatabase &_database, long
     connect(buttonDelete, SIGNAL(clicked()), SLOT(onButtonDelete()));
     connect(buttonSave, SIGNAL(clicked()), pRenderArea, SLOT(onSaveInExcel()));
     connect(tableGrid, SIGNAL(cellClicked(int,int)), SLOT(onCellClickedOntableGrid(int, int)));
+    connect(buttonGenerateAll, &QPushButton::clicked, this, &TournamentGridDialog2::onButtonGenerateAll);
+    connect(pRenderArea, &RenderAreaWidget::iChangeToutGrid, this, &TournamentGridDialog2::fillTableGrid);
 
     fillCategoryCombobox();
     connect(qComboBoxSelectCategory, SIGNAL(activated(int)), this, SLOT(onActivatedCategory(int)));
@@ -177,7 +194,7 @@ TournamentGridDialog2::TournamentGridDialog2(const QSqlDatabase &_database, long
             if (index != QModelIndex())
             {
                 long long orderUID = qTableWidget->item(index.row(), 0)->data(Qt::UserRole).toLongLong();
-                qDebug() << DBUtils::getSecondNameAndOneLetterOfName(QSqlDatabase::database(), orderUID);
+                //qDebug() << DBUtils::getSecondNameAndOneLetterOfName(QSqlDatabase::database(), orderUID);
                 CreateTournamentOrdersDialog(QSqlDatabase::database(), tournamentUID, this,
                     DBUtils::getField("SECOND_NAME", "ORDERS", orderUID),
                     DBUtils::getField("FIRST_NAME", "ORDERS", orderUID)
@@ -190,7 +207,8 @@ TournamentGridDialog2::TournamentGridDialog2(const QSqlDatabase &_database, long
         contextMenu->addAction(delAction);
         connect(delAction, &QAction::triggered, [this, &pos] ()
         {
-            ;
+            CreateTournamentOrdersDialog(QSqlDatabase::database(), tournamentUID, this).exec();
+            onActivatedCategory(qComboBoxSelectCategory->currentIndex());
         });
 
         contextMenu->exec(qTableWidget->viewport()->mapToGlobal(pos));
@@ -199,7 +217,10 @@ TournamentGridDialog2::TournamentGridDialog2(const QSqlDatabase &_database, long
 
 
 
-    setWindowFlags(windowFlags() | Qt::WindowMaximizeButtonHint);
+
+
+
+    setWindowFlags(windowFlags() | Qt::WindowMinMaxButtonsHint);
     resize(1000, 700);
     //showMaximized();
 }
@@ -285,36 +306,13 @@ void TournamentGridDialog2::onCellCLickedForChangePrioritet(int row, int )
     }
 }
 
-// генерация турнирной сетки
-void TournamentGridDialog2::onButtonGenerateGrid()
-{
-    //
-    {
-        // проверяем есть ли турнирная сетка, если есть, то задаём вопрос
-        QSqlQuery query("SELECT * FROM GRID WHERE TOURNAMENT_CATEGORIES_FK = ? ", database);
-        query.bindValue(0, tournamentCategories);
-        if (query.exec())
-        {
-            if (query.next())
-            {
-                QMessageBox::StandardButton reply;
-                reply = QMessageBox::question(this, "?", "Сетка уже есть. Новая генерация сетки приведет к потере старой сетки. Продолжить?", QMessageBox::Yes | QMessageBox::No);
-                if (reply == QMessageBox::No)
-                    return;
-            }
-        }
-        else
-        {
-            qDebug() << __PRETTY_FUNCTION__ << query.lastError() << query.lastQuery();
-            return;
-        }
-    }
-    /**/
 
+void TournamentGridDialog2::generatGrid(const long long tournamentCaterotyUID, QVector<long long> bestUID)
+{
     {
         // удалим старую сетку
-        QSqlQuery query("DELETE FROM GRID WHERE TOURNAMENT_CATEGORIES_FK = ? ", database);
-        query.bindValue(0, tournamentCategories);
+        QSqlQuery query("DELETE FROM GRID WHERE TOURNAMENT_CATEGORIES_FK = ? ");
+        query.bindValue(0, tournamentCaterotyUID);
         if (!query.exec())
         {
             qDebug() << __PRETTY_FUNCTION__ << query.lastError() << query.lastQuery();
@@ -323,35 +321,63 @@ void TournamentGridDialog2::onButtonGenerateGrid()
     }
 
 
-
-    QSqlDatabase::database().transaction();
-
-    int n = qTableWidget->rowCount();
-    if (n <= 0) return;
-    QVector<bool> isLeaf(2);
-    QQueue<int> queue;
-
-    int cnt = 1;
-    isLeaf[1] = true;
-    queue.enqueue(1);
-    while (cnt < n)
+    int n = 0;
+    std::set<RegionRandomOrders> notUsedFighters; // всех простых бойцов из another  кидаем в notUsedFighters
     {
-        int v = queue.dequeue();
-        isLeaf[v] = false;
-        isLeaf.push_back(true); // то же самое что и isLeaf[2 * v    ] = true
-        isLeaf.push_back(true); // то же самое что и isLeaf[2 * v + 1] = true
-        queue.enqueue(2 * v);
-        queue.enqueue(2 * v + 1);
-        cnt = cnt - 1 + 2;
+        QHash<long long, QVector<long long>> usualFighters;
+
+        QSqlQuery query("SELECT * FROM ORDERS WHERE TOURNAMENT_CATEGORY_FK = ? ORDER BY SECOND_NAME, FIRST_NAME");
+        query.addBindValue(tournamentCaterotyUID);
+        if (!query.exec())
+        {
+            qDebug() << __LINE__ << __PRETTY_FUNCTION__ << query.lastError() << query.lastQuery();
+            return;
+        }
+        while (query.next())
+        {
+            ++n;
+            long long orderUID = query.value("UID").toLongLong();
+            long long region   = query.value("REGION_FK").toLongLong();;
+            if (!bestUID.contains(orderUID))
+                usualFighters[region].push_back(orderUID);
+        }
+
+        for (auto it = usualFighters.begin(); it != usualFighters.end(); ++it)
+        {
+            std::random_shuffle(it.value().begin(), it.value().end());
+            notUsedFighters.insert(RegionRandomOrders({it.key(), rand(), it.value()}));
+        }
+    }
+    if (n <= 0) return;
+
+
+    QVector<bool> isLeaf(2);
+    {
+        QQueue<int> queue;
+        int cnt = 1;
+        isLeaf[1] = true;
+        queue.enqueue(1);
+        while (cnt < n)
+        {
+            int v = queue.dequeue();
+            isLeaf[v] = false;
+            isLeaf.push_back(true); // то же самое что и isLeaf[2 * v    ] = true
+            isLeaf.push_back(true); // то же самое что и isLeaf[2 * v + 1] = true
+            queue.enqueue(2 * v);
+            queue.enqueue(2 * v + 1);
+            cnt = cnt - 1 + 2;
+        }
     }
     const int maxVertex = isLeaf.size() - 1;
 
+
+    QSqlDatabase::database().transaction();
     for (int v = maxVertex;  1 <= v; --v)
     {
         if (isLeaf[v]) continue;
 
-        QSqlQuery query("INSERT INTO GRID VALUES (?, ?, ?, null, null)", database);
-        query.bindValue(0, tournamentCategories);
+        QSqlQuery query("INSERT INTO GRID VALUES (?, ?, ?, null, null)");
+        query.bindValue(0, tournamentCaterotyUID);
         query.bindValue(1, v);
         query.bindValue(2, "true");
         if (!query.exec())
@@ -359,78 +385,102 @@ void TournamentGridDialog2::onButtonGenerateGrid()
     }
 
 
-    QVector<BestFigher> bestFighters;
-    QHash<int, QVector<int>> usualFighters;
-    for (int row = 0; row < qTableWidget->rowCount(); ++row)
-    {
-        long long orderUID = qTableWidget->item(row, 0)->data(Qt::UserRole).toLongLong();
-        long long region   = qTableWidget->item(row, 1)->data(Qt::UserRole).toLongLong();
-        QString special_group = qTableWidget->item(row, 2)->data(Qt::DisplayRole).toString();
-        if (special_group == no_special_group)
-            usualFighters[region].push_back(orderUID);
-        else
-        {
-            int priority = special_group.toInt();
-            bestFighters.push_back(BestFigher(orderUID, priority, region));
-            //qDebug() << __LINE__ << __PRETTY_FUNCTION__ << orderUID << " " << priority << " " << region;
-        }
-    }
-
-    std::random_shuffle(bestFighters.begin(), bestFighters.end());
-    qSort(bestFighters.begin(), bestFighters.end());
-
-
     QVector<bool> isUsedLeaf(maxVertex + 1);
     QVector<long long> regionLeaf(maxVertex + 1);
-    if (!bestFighters.isEmpty())
+    QVector<int> vertexOfBest;
+    if (!bestUID.isEmpty())
     {
         QVector<QString> pref;
-        if (bestFighters.size() == 1) pref << "1";
-        if (bestFighters.size() == 2) pref << "11" << "10";
-        if (bestFighters.size() == 3) pref << "11" << "101" << "100";
-        if (bestFighters.size() == 4) pref << "111" << "110" << "101" << "100";
-        for (int i = 0; i < bestFighters.size(); ++i)
+        if (bestUID.size() == 1) pref << "1";
+        if (bestUID.size() == 2) pref << "11" << "10";
+        if (bestUID.size() == 3) pref << "11" << "101" << "100";
+        if (bestUID.size() == 4) pref << "111" << "101" << "110" << "100";
+        for (int i = 0; i < bestUID.size(); ++i)
         {
             int v = pref[i].toInt(0, 2);
             while (!isLeaf[v]) v = 2 * v + 1;
-            //qDebug() << v;
+            vertexOfBest << v;
 
             isUsedLeaf[v] = true;
-            regionLeaf[v] = DBUtils::getField("REGION_FK", "ORDERS", bestFighters[i].orderUID).toLongLong();
+            regionLeaf[v] = DBUtils::getField("REGION_FK", "ORDERS", bestUID[i]).toLongLong();
 
-            QSqlQuery query("INSERT INTO GRID VALUES (?, ?, ?, ?, null)", database);
-            query.bindValue(0, tournamentCategories);
+            QSqlQuery query("INSERT INTO GRID VALUES (?, ?, ?, ?, null)");
+            query.bindValue(0, tournamentCaterotyUID);
             query.bindValue(1, v);
             query.bindValue(2, "false");
-            query.bindValue(3, bestFighters[i].orderUID);
+            query.bindValue(3, bestUID[i]);
             if (!query.exec())
                 qDebug() << __PRETTY_FUNCTION__ << query.lastError() << query.lastQuery();
         }
     }
 
-    struct RegionRandomOrders
-    {
-        int region;
-        int random_number;
-        QVector<int> orderUIDs;
 
-        bool operator < (const RegionRandomOrders& a) const
+
+
+
+
+    if (2 <= n)
+    {
+        // пытаемся сделать так, чтобы в правом и в левом подДеревьях было по одному представителю от каждого региона
+        for (QString prefix : {"11", "10"})
         {
-            if (orderUIDs.size() != a.orderUIDs.size()) return orderUIDs.size() > a.orderUIDs.size();
-            if (random_number    != a.random_number   ) return random_number    < a.random_number;
-            return region < a.region;
+            QVector<int> vertex;
+            QSet<long long> usedRegions;
+            for (int v = 1; v <= maxVertex; ++v)
+                if (isLeaf[v] && QString::number(v, 2).startsWith(prefix))
+                {
+                    if (regionLeaf[v] != 0)
+                        usedRegions << regionLeaf[v];
+                    else
+                        vertex << v;
+                }
+            std::sort(vertex.begin(), vertex.end(), [](int a, int b){ return (a&1) > (b&1);});
+            for (int v : vertexOfBest) // делаем так, чтобы вначале найти пару особым бойцам
+                if (vertex.contains(v ^ 1))
+                {
+                    vertex.removeOne(v ^ 1);
+                    vertex.push_front(v ^ 1);
+                }
+
+
+            QVector<long long> orderUIDs;
+            {
+                QVector<RegionRandomOrders> arr;
+                while (0 < notUsedFighters.size() && vertex.size() != orderUIDs.size())
+                {
+                    RegionRandomOrders cur = *notUsedFighters.begin();
+                    notUsedFighters.erase(notUsedFighters.begin());
+                    if (!usedRegions.contains(cur.region))
+                        orderUIDs << cur.orderUIDs.takeLast();
+                    if (cur.orderUIDs.size())
+                    {
+                        cur.random_number = rand();
+                        arr << cur;
+                    }
+                }
+                for (RegionRandomOrders x : arr) notUsedFighters.insert(x);
+                if (1 <= orderUIDs.size())
+                    std::random_shuffle(orderUIDs.begin(), orderUIDs.end() - 1);
+            }
+
+
+            //qDebug() << "vertex: " << vertex;
+            while (!vertex.isEmpty() && !orderUIDs.isEmpty())
+            {
+                long long orderUID_V = orderUIDs.takeFirst();
+                int v = vertex.takeFirst();
+                //qDebug() << orderUID_V << " v:" << v;
+                DBUtils::insertLeafOfGrid(tournamentCaterotyUID, v, orderUID_V);
+                isUsedLeaf[v] = true;
+                regionLeaf[v] = DBUtils::getField("REGION_FK", "ORDERS", orderUID_V).toLongLong();
+            }
         }
-    };
-
-
-    std::set<RegionRandomOrders> notUsedFighters; // всех простых бойцов из another  кидаем в notUsedFighters
-    for (auto it = usualFighters.begin(); it != usualFighters.end(); ++it)
-    {
-        std::random_shuffle(it.value().begin(), it.value().end());
-        notUsedFighters.insert(RegionRandomOrders({it.key(), rand(), it.value()}));
     }
 
-    // находим пару для особых бойцов
+
+//
+
+    // находим пару для тех бойцов, для которые без пары
     for (int v = 1; v <= maxVertex; ++v)
     {
         int anotherVetex = v ^ 1;
@@ -446,7 +496,7 @@ void TournamentGridDialog2::onButtonGenerateGrid()
             {
                 RegionRandomOrders b = *notUsedFighters.begin();
                 notUsedFighters.erase(notUsedFighters.begin());
-                orderUID_V = b.orderUIDs.back(); b.orderUIDs.pop_back();
+                orderUID_V = b.orderUIDs.takeLast();
 
                 if (!b.orderUIDs.empty())
                 {
@@ -455,9 +505,7 @@ void TournamentGridDialog2::onButtonGenerateGrid()
                 }
             }
             else
-            {
-                orderUID_V = a.orderUIDs.back(); a.orderUIDs.pop_back();
-            }
+                orderUID_V = a.orderUIDs.takeLast();
 
             if (!a.orderUIDs.empty())
             {
@@ -465,7 +513,7 @@ void TournamentGridDialog2::onButtonGenerateGrid()
                 notUsedFighters.insert(a);
             }
 
-            DBUtils::insertLeafOfGrid(tournamentCategories, v, orderUID_V);
+            DBUtils::insertLeafOfGrid(tournamentCaterotyUID, v, orderUID_V);
             isUsedLeaf[v] = true;
             regionLeaf[v] = DBUtils::getField("REGION_FK", "ORDERS", orderUID_V).toLongLong();
             //qDebug() << v << "cur: " << DBUtils::getField("REGION_FK", "ORDERS", orderUID_V).toLongLong() <<  "regionAnother: " << regionAnother;
@@ -498,16 +546,16 @@ void TournamentGridDialog2::onButtonGenerateGrid()
         {
             RegionRandomOrders a = *notUsedFighters.begin();
             notUsedFighters.erase(notUsedFighters.begin());
-            orderUID0 = a.orderUIDs.back(); a.orderUIDs.pop_back();
+            orderUID0 = a.orderUIDs.takeLast();
             if (notUsedFighters.empty()) // соединяем двух чуваков с одного региона; какая жалость
             {
-                orderUID1 = a.orderUIDs.back(); a.orderUIDs.pop_back();
+                orderUID1 = a.orderUIDs.takeLast();
             }
             else
             {
                 RegionRandomOrders b = *notUsedFighters.begin();
                 notUsedFighters.erase(notUsedFighters.begin());
-                orderUID1 = b.orderUIDs.back(); b.orderUIDs.pop_back();
+                orderUID1 = b.orderUIDs.takeLast();
 
                 if (!b.orderUIDs.empty())
                 {
@@ -522,8 +570,8 @@ void TournamentGridDialog2::onButtonGenerateGrid()
             }
         }
 
-        DBUtils::insertLeafOfGrid(tournamentCategories, pair.first , orderUID0);
-        DBUtils::insertLeafOfGrid(tournamentCategories, pair.second, orderUID1);
+        DBUtils::insertLeafOfGrid(tournamentCaterotyUID, pair.first , orderUID0);
+        DBUtils::insertLeafOfGrid(tournamentCaterotyUID, pair.second, orderUID1);
 
         isUsedLeaf[pair.first ] = true;
         isUsedLeaf[pair.second] = true;
@@ -540,8 +588,7 @@ void TournamentGridDialog2::onButtonGenerateGrid()
         {
             RegionRandomOrders b = *notUsedFighters.begin();
             notUsedFighters.erase(notUsedFighters.begin());
-            long long orderUID = b.orderUIDs.back();
-            b.orderUIDs.pop_back();
+            long long orderUID = b.orderUIDs.takeLast();
 
             if (!b.orderUIDs.empty())
             {
@@ -549,17 +596,72 @@ void TournamentGridDialog2::onButtonGenerateGrid()
                 notUsedFighters.insert(b);
             }
 
-            DBUtils::insertLeafOfGrid(tournamentCategories, v, orderUID);
+            DBUtils::insertLeafOfGrid(tournamentCaterotyUID, v, orderUID);
             break;
         }
     }
-
     assert (notUsedFighters.empty());
+    /**/
     QSqlDatabase::database().commit();
+}
+
+
+// генерация турнирной сетки
+void TournamentGridDialog2::onButtonGenerateGrid()
+{
+    /*/
+    {
+        // проверяем есть ли турнирная сетка, если есть, то задаём вопрос
+        QSqlQuery query("SELECT * FROM GRID WHERE TOURNAMENT_CATEGORIES_FK = ? ", database);
+        query.bindValue(0, tournamentCategories);
+        if (query.exec())
+        {
+            if (query.next())
+            {
+                QMessageBox::StandardButton reply;
+                reply = QMessageBox::question(this, "?", "Сетка уже есть. Новая генерация сетки приведет к потере старой сетки. Продолжить?", QMessageBox::Yes | QMessageBox::No);
+                if (reply == QMessageBox::No)
+                    return;
+            }
+        }
+        else
+        {
+            qDebug() << __PRETTY_FUNCTION__ << query.lastError() << query.lastQuery();
+            return;
+        }
+    }
+    /**/
+
+    selectedRowOfRableGrid = -1;
+    selectedColumnOfRableGrid = -1;
+    pRenderArea->clearSelection();
+
+
+
+    QVector<std::pair<int, long long>> bestFighters;
+    for (int row = 0; row < qTableWidget->rowCount(); ++row)
+    {
+        long long orderUID = qTableWidget->item(row, 0)->data(Qt::UserRole).toLongLong();
+        QString special_group = qTableWidget->item(row, 2)->data(Qt::DisplayRole).toString();
+        if (special_group != no_special_group)
+        {
+            int priority = special_group.toInt();
+            bestFighters << std::make_pair(priority, orderUID);
+            //qDebug() << __LINE__ << __PRETTY_FUNCTION__ << orderUID << " " << priority << " " << region;
+        }
+    }
+    std::random_shuffle(bestFighters.begin(), bestFighters.end());
+    qSort(bestFighters.begin(), bestFighters.end(), [](const std::pair<int, long long> a, const std::pair<int, long long> b){
+        return a.first < b.first;
+    });
+    QVector<long long> bestUID;
+    for (std::pair<int, long long> f : bestFighters)
+        bestUID << f.second;
+
+    TournamentGridDialog2::generatGrid(tournamentCategories, bestUID);
 
     pRenderArea->repaint();
     fillTableGrid();
-
 }
 
 void TournamentGridDialog2::onButtonDelete()
@@ -620,7 +722,17 @@ void TournamentGridDialog2::fillTableGrid()
             if (a.size() != b.size()) return a.size() < b.size();
             return lhs.v > rhs.v;
     });
+
+    for(int i = 0; i < tableGrid->rowCount(); ++i)
+    {
+        QAbstractItemDelegate* delegate = tableGrid->itemDelegateForRow( i );
+        tableGrid->setItemDelegateForRow(i, 0);
+        if (delegate)
+            delete delegate; // Криво как свинячья пиписька но работает.
+    }
+
     tableGrid->setRowCount(0);
+    bool findCenter = false;
     for (DBUtils::NodeOfTournirGrid node : nodes)
     {
         if ((node.v & 1) == 0) continue;
@@ -657,6 +769,12 @@ void TournamentGridDialog2::fillTableGrid()
 
         item = new QTableWidgetItem(RenderAreaWidget::getNameOfLevel(node.v / 2));
         tableGrid->setItem(tableGrid->rowCount() - 1, 4, item);
+
+        if(!findCenter && QString::number(node.v, 2).startsWith("10"))
+        {
+            findCenter = true;
+            tableGrid->setItemDelegateForRow(tableGrid->rowCount() - 1, new DrawBorderDelegate(this));
+        }
     }
     tableGrid->resizeColumnsToContents();
     tableGrid->clearSelection();
@@ -764,6 +882,53 @@ void TournamentGridDialog2::onCellClickedOntableGrid(int row, int column)
         selectedColumnOfRableGrid = -1;
     }
 
+}
+
+#include <QProgressBar>
+void TournamentGridDialog2::onButtonGenerateAll()
+{
+    for (int sz = 0; sz <= 4; ++sz){ QSqlQuery("DELETE FROM GRID").exec();
+
+    QProgressBar progressBar(this);
+    progressBar.setMinimum(0);
+    {
+        QSqlQuery query("SELECT COUNT(*) AS CNT FROM TOURNAMENT_CATEGORIES WHERE TOURNAMENT_FK = ? ORDER BY SEX_FK, TYPE_FK, AGE_FROM, AGE_TILL, WEIGHT_FROM, WEIGHT_TILL ");
+        query.bindValue(0, tournamentUID);
+        if (query.exec() && query.next())
+            progressBar.setMaximum(query.value("CNT").toInt());
+        else
+            progressBar.setMaximum(0);
+    }
+    progressBar.setTextVisible(true);
+    progressBar.show();
+
+    QSqlQuery query("SELECT * FROM TOURNAMENT_CATEGORIES WHERE TOURNAMENT_FK = ? ORDER BY SEX_FK, TYPE_FK, AGE_FROM, AGE_TILL, WEIGHT_FROM, WEIGHT_TILL ");
+    query.bindValue(0, tournamentUID);
+    if (!query.exec())
+    {
+        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << query.lastError() << query.lastQuery();
+        return;
+    }
+    while (query.next())
+    {
+        qlonglong tcUID = query.value("UID").toLongLong();
+        QVector<long long> bestUID;
+
+        QSqlQuery queryOrder("SELECT * FROM ORDERS WHERE TOURNAMENT_CATEGORIES = ? ");
+        queryOrder.bindValue(0, tcUID);
+        queryOrder.exec();
+        while (queryOrder.next()) bestUID << queryOrder.value("UID").toLongLong();
+        std::random_shuffle(bestUID.begin(), bestUID.end());
+        bestUID.resize(qMin(bestUID.size(), sz));
+
+        if (DBUtils::getNodes(tcUID).isEmpty())
+            generatGrid(tcUID, bestUID);
+        progressBar.setValue(progressBar.value() + 1);
+    }
+
+    pRenderArea->repaint();
+    fillTableGrid();
+    }
 }
 
 

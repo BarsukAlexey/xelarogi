@@ -38,12 +38,14 @@ public:
     QLabel *label_6;
     QLabel *label_7;
     QLabel *label_8;
+    QLabel *label_9;
     QVBoxLayout *verticalLayout_3;
     QLineEdit *nameLE;
     QLineEdit *shortNameLE;
     QLineEdit *mainJudgeLE;
     QLineEdit *mainSecretaryLE;
     QLineEdit *mainJudgeHelperLE;
+    QLineEdit *lineEditHost;
     QHBoxLayout *horizontalLayout_3;
     QLabel *label_3;
     QLabel *label_4;
@@ -51,6 +53,8 @@ public:
     QLabel *label_5;
     QDateEdit *endDate;
     QSpacerItem *horizontalSpacer;
+    QLabel *label_10;
+    QDateEdit *weightDate;
     QDialogButtonBox *buttonBox;
     QSpacerItem *verticalSpacer;
 
@@ -58,7 +62,7 @@ public:
     {
         if (CreateTournamentDialog->objectName().isEmpty())
             CreateTournamentDialog->setObjectName(QStringLiteral("CreateTournamentDialog"));
-        CreateTournamentDialog->resize(517, 211);
+        CreateTournamentDialog->resize(667, 264);
         gridLayout = new QGridLayout(CreateTournamentDialog);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
         verticalLayout = new QVBoxLayout();
@@ -92,6 +96,11 @@ public:
 
         verticalLayout_2->addWidget(label_8);
 
+        label_9 = new QLabel(CreateTournamentDialog);
+        label_9->setObjectName(QStringLiteral("label_9"));
+
+        verticalLayout_2->addWidget(label_9);
+
 
         horizontalLayout->addLayout(verticalLayout_2);
 
@@ -121,6 +130,11 @@ public:
         mainJudgeHelperLE->setObjectName(QStringLiteral("mainJudgeHelperLE"));
 
         verticalLayout_3->addWidget(mainJudgeHelperLE);
+
+        lineEditHost = new QLineEdit(CreateTournamentDialog);
+        lineEditHost->setObjectName(QStringLiteral("lineEditHost"));
+
+        verticalLayout_3->addWidget(lineEditHost);
 
 
         horizontalLayout->addLayout(verticalLayout_3);
@@ -161,6 +175,17 @@ public:
 
         horizontalLayout_3->addItem(horizontalSpacer);
 
+        label_10 = new QLabel(CreateTournamentDialog);
+        label_10->setObjectName(QStringLiteral("label_10"));
+
+        horizontalLayout_3->addWidget(label_10);
+
+        weightDate = new QDateEdit(CreateTournamentDialog);
+        weightDate->setObjectName(QStringLiteral("weightDate"));
+        weightDate->setCalendarPopup(true);
+
+        horizontalLayout_3->addWidget(weightDate);
+
 
         verticalLayout->addLayout(horizontalLayout_3);
 
@@ -194,9 +219,11 @@ public:
         label_6->setText(QApplication::translate("CreateTournamentDialog", "\320\223\320\273\320\260\320\262\320\275\321\213\320\271 \321\201\321\203\320\264\321\214\321\217", 0));
         label_7->setText(QApplication::translate("CreateTournamentDialog", "\320\223\320\273\320\260\320\262\320\275\321\213\320\271 \321\201\320\265\320\272\321\200\320\265\321\202\320\260\321\200\321\214", 0));
         label_8->setText(QApplication::translate("CreateTournamentDialog", "\320\227\320\260\320\274. \320\263\320\273\320\260\320\262\320\275\320\276\320\263\320\276 \321\201\321\203\320\264\321\214\320\270", 0));
+        label_9->setText(QApplication::translate("CreateTournamentDialog", "\320\234\320\265\321\201\321\202\320\276 \320\277\321\200\320\276\320\262\320\265\320\264\320\265\320\275\320\270\321\217", 0));
         label_3->setText(QApplication::translate("CreateTournamentDialog", "\320\242\321\203\321\200\320\275\320\270\321\200 \320\261\321\203\320\264\320\265\321\202 \320\277\321\200\320\276\321\205\320\276\320\264\320\270\321\202\321\214", 0));
         label_4->setText(QApplication::translate("CreateTournamentDialog", "\321\201", 0));
         label_5->setText(QApplication::translate("CreateTournamentDialog", "\320\277\320\276", 0));
+        label_10->setText(QApplication::translate("CreateTournamentDialog", "\320\224\320\260\321\202\320\260 \320\262\320\267\320\262\320\265\321\210\320\270\320\262\320\260\320\275\320\270\321\217:", 0));
     } // retranslateUi
 
 };

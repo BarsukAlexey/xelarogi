@@ -51,6 +51,7 @@ private slots:
     void on_manda_clicked();
     void on_btn_report_ministr_clicked();
 
+
 private:
     void updateTournamentTreeWidget();
     void connectButtons();

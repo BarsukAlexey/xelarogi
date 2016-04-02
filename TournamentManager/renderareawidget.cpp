@@ -189,6 +189,8 @@ void RenderAreaWidget::mousePressEvent(QMouseEvent* event)
         }
     }
     repaint();
+    emit
+        iChangeToutGrid();
 }
 
 
@@ -261,6 +263,12 @@ void RenderAreaWidget::onSaveInExcel()
     //qDebug() << dir;
     int foo = 12;
     printTableGridInExcel(database, tournamentCategories, false, directoryPath, false, false, foo);
+}
+
+void RenderAreaWidget::clearSelection()
+{
+    selectedNode = noNode;
+    repaint();
 }
 
 

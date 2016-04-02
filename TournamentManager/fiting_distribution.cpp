@@ -122,7 +122,6 @@ FitingDistribution::FitingDistribution(const QSqlDatabase &database, const long 
 
                 QSqlQuery queryCOUNT("SELECT count() AS COUNT FROM ORDERS WHERE TOURNAMENT_CATEGORY_FK = ? GROUP BY TOURNAMENT_CATEGORY_FK", database);
                 queryCOUNT.bindValue(0, UID_TOURNAMENT_CATEGORY);
-                queryCOUNT.bindValue(1, 1);
                 if (!queryCOUNT.exec())
                 {
                     qDebug() << __LINE__ << __PRETTY_FUNCTION__ << queryCOUNT.lastError().text() << " " << queryCOUNT.lastQuery();

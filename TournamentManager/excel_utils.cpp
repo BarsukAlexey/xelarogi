@@ -22,6 +22,8 @@ void ExcelUtils::uniteRange(QAxObject* sheet, int row0, int column0, int row1, i
 
 void ExcelUtils::setValue(QAxObject* sheet, int row, int column, QString text, int hAligment, int vAligment)
 {
+    if (text.simplified().isEmpty()) return;
+
     QAxObject *cell = sheet->querySubObject( "Cells( int, int )", row, column);
     cell->setProperty("NumberFormat","@"); // ctrl+1 -> "формат ячеек" -> текстовый
     // теперь excel никогда число в дату не исправит !
@@ -170,4 +172,18 @@ void ExcelUtils::setTournamentName(QAxObject* sheet, QString text, int row0, int
     ExcelUtils::setFontBold(sheet, row0, column0, true);
     ExcelUtils::uniteRange(sheet, row0, column0, row1, column1);
     ExcelUtils::setRowHeight(sheet, row0, 50);
+}
+
+QString ExcelUtils::getValue(QAxObject* sheet, int row, int column)
+{
+    QAxObject* cell = sheet->querySubObject("Cells( int, int )", row, column);
+    //QString value = cell->dynamicCall("Value()").toString().simplified();
+    QString value = cell->dynamicCall("Value()").toString();
+    delete cell;
+    if (value.isNull())
+    {
+        //qDebug() << __LINE__ << __PRETTY_FUNCTION__ << "isNull";
+        return "";
+    }
+    return value;
 }

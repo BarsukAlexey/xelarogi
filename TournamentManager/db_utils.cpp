@@ -40,9 +40,9 @@ QString DBUtils::getField(const QString& field, const QString& table, const long
     return "";
 }
 
-QString DBUtils::getFieldDate(const QSqlDatabase& database, const QString& field, const QString& table, const long long UID, QString PRETTY_FUNCTION)
+QString DBUtils::getFieldDate(const QString& field, const QString& table, const long long UID, QString PRETTY_FUNCTION)
 {
-    QSqlQuery query("SELECT * FROM " + table + " WHERE UID = ?", database);
+    QSqlQuery query("SELECT * FROM " + table + " WHERE UID = ?");
     query.bindValue(0, UID);
     if (query.exec() && query.next())
     {

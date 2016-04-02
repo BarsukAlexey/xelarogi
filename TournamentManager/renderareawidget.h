@@ -49,12 +49,14 @@ private:
     QString getCategoryName() const;
 
 signals:
+    void iChangeToutGrid();
 
 public slots:
     void slotSetTournamentCategories(int tournamentCategories);
     void widthChanged(int);
     void heightChanged(int);
     void onSaveInExcel();
+    void clearSelection();
 
 
 private:

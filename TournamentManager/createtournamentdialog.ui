@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>517</width>
-    <height>211</height>
+    <width>667</width>
+    <height>264</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -55,6 +55,13 @@
            </property>
           </widget>
          </item>
+         <item>
+          <widget class="QLabel" name="label_9">
+           <property name="text">
+            <string>Место проведения</string>
+           </property>
+          </widget>
+         </item>
         </layout>
        </item>
        <item>
@@ -73,6 +80,9 @@
          </item>
          <item>
           <widget class="QLineEdit" name="mainJudgeHelperLE"/>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="lineEditHost"/>
          </item>
         </layout>
        </item>
@@ -127,6 +137,20 @@
           </size>
          </property>
         </spacer>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_10">
+         <property name="text">
+          <string>Дата взвешивания:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QDateEdit" name="weightDate">
+         <property name="calendarPopup">
+          <bool>true</bool>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>

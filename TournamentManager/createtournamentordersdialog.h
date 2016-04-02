@@ -68,7 +68,6 @@ private:
     QString getAllowOrderUIDsByRegionUnit(const QString& regionUnitNameMask);
     QString getAllowOrderUIDsByGender(const QString& genderMask);
     QString getAllowOrderUIDsbyTournamentCategory(const QString& tournamentCategoryMask);
-    QString getTournamentName();
 
     long long getCountryUID(QString countryName);
     long long getRegionUID(QString regionName, long long countryUID);
@@ -99,6 +98,9 @@ private:
     long long mTournamentUID;
     QString mGlobalError = "";
 
+    QHash<QString, QString> mCountry;
+    QHash<QString, QString> mRegion;
+    QHash<QString, QString> mType;
 };
 
 #endif // CREATETOURNAMENTORDERSDIALOG_H

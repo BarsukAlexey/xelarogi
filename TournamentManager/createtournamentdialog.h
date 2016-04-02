@@ -21,9 +21,6 @@ public:
     ~CreateTournamentDialog();
 
 private:
-    bool tournamentExist(QString name, QDate beginDate, QDate endDate);
-
-private:
     Ui::CreateTournamentDialog *ui;
 };
 

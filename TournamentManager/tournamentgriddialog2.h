@@ -8,28 +8,55 @@
 #include <QTableWidget>
 #include <QLineEdit>
 #include <QCheckBox>
+#include <QStyledItemDelegate>
+
+class DrawBorderDelegate : public QStyledItemDelegate
+{
+public:
+     DrawBorderDelegate( QObject* parent = 0 ) : QStyledItemDelegate( parent ) {}
+     void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
+     {
+        const QRect rect( option.rect );
+        painter->drawLine( rect.topLeft(), rect.topRight() );
+        QStyledItemDelegate::paint( painter, option, index );
+     }
+};
 
 class TournamentGridDialog2 : public QDialog
 {
     Q_OBJECT
 
 private:
-    struct BestFigher
+//    struct BestFigher
+//    {
+//        int orderUID;
+//        int priority;
+//        int region;
+
+//        BestFigher()
+//        {
+//        }
+
+//        BestFigher(int orderUID, int priority, int region) : orderUID(orderUID), priority(priority), region(region)
+//        {
+//        }
+
+//        bool operator < (const BestFigher& b) const {
+//            return priority < b.priority;
+//        }
+//    };
+
+    struct RegionRandomOrders
     {
-        int orderUID;
-        int priority;
-        int region;
+        long long region;
+        long long random_number;
+        QVector<long long> orderUIDs;
 
-        BestFigher()
+        bool operator < (const RegionRandomOrders& a) const
         {
-        }
-
-        BestFigher(int orderUID, int priority, int region) : orderUID(orderUID), priority(priority), region(region)
-        {
-        }
-
-        bool operator < (const BestFigher& b) const {
-            return priority < b.priority;
+            if (orderUIDs.size() != a.orderUIDs.size()) return orderUIDs.size() > a.orderUIDs.size();
+            if (random_number    != a.random_number   ) return random_number    < a.random_number;
+            return region < a.region;
         }
     };
 
@@ -40,10 +67,11 @@ private:
     RenderAreaWidget *pRenderArea;
     QComboBox *qComboBoxSelectCategory;
     QTableWidget *qTableWidget;
-    QTableWidget * tableGrid;
+    QTableWidget *tableGrid;
     QString no_special_group = "нет";
     QVector<int> specialGroup;
 
+    QTabWidget *qTabWidget;
     QCheckBox * qCheckBox;
     QCheckBox * qCheckBoxBadTournGrid;
     int selectedRowOfRableGrid;
@@ -54,7 +82,8 @@ public:
     ~TournamentGridDialog2();
 
 private:
-    void fillTableGrid();
+
+    static void generatGrid(const long long tournamentCaterotyUID, QVector<long long> bestFighters);
 
 private slots:
     void onActivatedCategory(int id);
@@ -64,5 +93,12 @@ private slots:
 
     void fillCategoryCombobox(QString filterStr = "");
     void onCellClickedOntableGrid(int row, int column);
+
+    void onButtonGenerateAll();
+    void fillTableGrid();
 };
+
+
+
+
 #endif // TOURNAMENTGRIDDIALOG2_H

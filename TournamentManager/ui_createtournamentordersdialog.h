@@ -34,7 +34,7 @@ QT_BEGIN_NAMESPACE
 class Ui_CreateTournamentOrdersDialog
 {
 public:
-    QGridLayout *gridLayout;
+    QVBoxLayout *verticalLayout_2;
     QVBoxLayout *verticalLayout;
     QHBoxLayout *horizontalLayout;
     QSpacerItem *horizontalSpacer;
@@ -59,18 +59,12 @@ public:
     QSplitter *splitter;
     QTableView *tableView;
     QWidget *widget;
-    QGridLayout *gridLayout_2;
-    QHBoxLayout *horizontalLayout_6;
+    QGridLayout *gridLayout;
+    QHBoxLayout *horizontalLayout_4;
     QVBoxLayout *verticalLayout_8;
     QLabel *label_16;
     QLabel *label_17;
     QLabel *label_18;
-    QVBoxLayout *verticalLayout_9;
-    QLineEdit *secondNameLE;
-    QLineEdit *firstNameLE;
-    QLineEdit *patronymicLE;
-    QHBoxLayout *horizontalLayout_7;
-    QVBoxLayout *verticalLayout_10;
     QLabel *label_19;
     QLabel *label_20;
     QLabel *label_21;
@@ -82,7 +76,10 @@ public:
     QLabel *label_28;
     QLabel *label_29;
     QLabel *label_3;
-    QVBoxLayout *verticalLayout_11;
+    QVBoxLayout *verticalLayout_7;
+    QLineEdit *secondNameLE;
+    QLineEdit *firstNameLE;
+    QLineEdit *patronymicLE;
     QDateEdit *birthdayDE;
     QDoubleSpinBox *weightDSB;
     QComboBox *countriesCB;
@@ -94,10 +91,11 @@ public:
     QComboBox *clubsCB;
     QComboBox *coachsCB;
     QComboBox *tournamentCategoriesCB;
-    QHBoxLayout *horizontalLayout_4;
+    QHBoxLayout *horizontalLayout_5;
+    QSpacerItem *horizontalSpacer_4;
     QPushButton *changeOrderBtn;
     QPushButton *addOrderBtn;
-    QSpacerItem *horizontalSpacer_4;
+    QSpacerItem *verticalSpacer;
     QHBoxLayout *horizontalLayout_2;
     QPushButton *loadBtn;
     QSpacerItem *horizontalSpacer_3;
@@ -109,9 +107,9 @@ public:
     {
         if (CreateTournamentOrdersDialog->objectName().isEmpty())
             CreateTournamentOrdersDialog->setObjectName(QStringLiteral("CreateTournamentOrdersDialog"));
-        CreateTournamentOrdersDialog->resize(1210, 601);
-        gridLayout = new QGridLayout(CreateTournamentOrdersDialog);
-        gridLayout->setObjectName(QStringLiteral("gridLayout"));
+        CreateTournamentOrdersDialog->resize(1201, 677);
+        verticalLayout_2 = new QVBoxLayout(CreateTournamentOrdersDialog);
+        verticalLayout_2->setObjectName(QStringLiteral("verticalLayout_2"));
         verticalLayout = new QVBoxLayout();
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
         horizontalLayout = new QHBoxLayout();
@@ -235,11 +233,11 @@ public:
         tableView->setContextMenuPolicy(Qt::CustomContextMenu);
         tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
         tableView->setAlternatingRowColors(true);
-        tableView->setSelectionMode(QAbstractItemView::SingleSelection);
+        tableView->setSelectionMode(QAbstractItemView::ExtendedSelection);
         tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
         tableView->setSortingEnabled(true);
         splitter->addWidget(tableView);
-        tableView->horizontalHeader()->setCascadingSectionResizes(true);
+        tableView->horizontalHeader()->setCascadingSectionResizes(false);
         tableView->horizontalHeader()->setStretchLastSection(true);
         tableView->verticalHeader()->setVisible(false);
         widget = new QWidget(splitter);
@@ -247,10 +245,10 @@ public:
         sizePolicy.setHeightForWidth(widget->sizePolicy().hasHeightForWidth());
         widget->setSizePolicy(sizePolicy);
         widget->setMinimumSize(QSize(0, 0));
-        gridLayout_2 = new QGridLayout(widget);
-        gridLayout_2->setObjectName(QStringLiteral("gridLayout_2"));
-        horizontalLayout_6 = new QHBoxLayout();
-        horizontalLayout_6->setObjectName(QStringLiteral("horizontalLayout_6"));
+        gridLayout = new QGridLayout(widget);
+        gridLayout->setObjectName(QStringLiteral("gridLayout"));
+        horizontalLayout_4 = new QHBoxLayout();
+        horizontalLayout_4->setObjectName(QStringLiteral("horizontalLayout_4"));
         verticalLayout_8 = new QVBoxLayout();
         verticalLayout_8->setObjectName(QStringLiteral("verticalLayout_8"));
         label_16 = new QLabel(widget);
@@ -258,211 +256,203 @@ public:
         QFont font1;
         font1.setPointSize(8);
         label_16->setFont(font1);
+        label_16->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
         verticalLayout_8->addWidget(label_16);
 
         label_17 = new QLabel(widget);
         label_17->setObjectName(QStringLiteral("label_17"));
+        label_17->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
         verticalLayout_8->addWidget(label_17);
 
         label_18 = new QLabel(widget);
         label_18->setObjectName(QStringLiteral("label_18"));
+        label_18->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
         verticalLayout_8->addWidget(label_18);
 
-
-        horizontalLayout_6->addLayout(verticalLayout_8);
-
-        verticalLayout_9 = new QVBoxLayout();
-        verticalLayout_9->setObjectName(QStringLiteral("verticalLayout_9"));
-        secondNameLE = new QLineEdit(widget);
-        secondNameLE->setObjectName(QStringLiteral("secondNameLE"));
-
-        verticalLayout_9->addWidget(secondNameLE);
-
-        firstNameLE = new QLineEdit(widget);
-        firstNameLE->setObjectName(QStringLiteral("firstNameLE"));
-
-        verticalLayout_9->addWidget(firstNameLE);
-
-        patronymicLE = new QLineEdit(widget);
-        patronymicLE->setObjectName(QStringLiteral("patronymicLE"));
-
-        verticalLayout_9->addWidget(patronymicLE);
-
-
-        horizontalLayout_6->addLayout(verticalLayout_9);
-
-
-        gridLayout_2->addLayout(horizontalLayout_6, 0, 0, 1, 1);
-
-        horizontalLayout_7 = new QHBoxLayout();
-        horizontalLayout_7->setObjectName(QStringLiteral("horizontalLayout_7"));
-        verticalLayout_10 = new QVBoxLayout();
-        verticalLayout_10->setObjectName(QStringLiteral("verticalLayout_10"));
         label_19 = new QLabel(widget);
         label_19->setObjectName(QStringLiteral("label_19"));
         label_19->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
-        verticalLayout_10->addWidget(label_19);
+        verticalLayout_8->addWidget(label_19);
 
         label_20 = new QLabel(widget);
         label_20->setObjectName(QStringLiteral("label_20"));
         label_20->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
-        verticalLayout_10->addWidget(label_20);
+        verticalLayout_8->addWidget(label_20);
 
         label_21 = new QLabel(widget);
         label_21->setObjectName(QStringLiteral("label_21"));
         label_21->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
-        verticalLayout_10->addWidget(label_21);
+        verticalLayout_8->addWidget(label_21);
 
         label_22 = new QLabel(widget);
         label_22->setObjectName(QStringLiteral("label_22"));
         label_22->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
-        verticalLayout_10->addWidget(label_22);
+        verticalLayout_8->addWidget(label_22);
 
         label_23 = new QLabel(widget);
         label_23->setObjectName(QStringLiteral("label_23"));
         label_23->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
-        verticalLayout_10->addWidget(label_23);
+        verticalLayout_8->addWidget(label_23);
 
         label_24 = new QLabel(widget);
         label_24->setObjectName(QStringLiteral("label_24"));
         label_24->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
-        verticalLayout_10->addWidget(label_24);
+        verticalLayout_8->addWidget(label_24);
 
         label_25 = new QLabel(widget);
         label_25->setObjectName(QStringLiteral("label_25"));
         label_25->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
-        verticalLayout_10->addWidget(label_25);
+        verticalLayout_8->addWidget(label_25);
 
         label_26 = new QLabel(widget);
         label_26->setObjectName(QStringLiteral("label_26"));
         label_26->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
-        verticalLayout_10->addWidget(label_26);
+        verticalLayout_8->addWidget(label_26);
 
         label_28 = new QLabel(widget);
         label_28->setObjectName(QStringLiteral("label_28"));
         label_28->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
-        verticalLayout_10->addWidget(label_28);
+        verticalLayout_8->addWidget(label_28);
 
         label_29 = new QLabel(widget);
         label_29->setObjectName(QStringLiteral("label_29"));
         label_29->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
-        verticalLayout_10->addWidget(label_29);
+        verticalLayout_8->addWidget(label_29);
 
         label_3 = new QLabel(widget);
         label_3->setObjectName(QStringLiteral("label_3"));
         label_3->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
-        verticalLayout_10->addWidget(label_3);
+        verticalLayout_8->addWidget(label_3);
 
 
-        horizontalLayout_7->addLayout(verticalLayout_10);
+        horizontalLayout_4->addLayout(verticalLayout_8);
 
-        verticalLayout_11 = new QVBoxLayout();
-        verticalLayout_11->setObjectName(QStringLiteral("verticalLayout_11"));
+        verticalLayout_7 = new QVBoxLayout();
+        verticalLayout_7->setObjectName(QStringLiteral("verticalLayout_7"));
+        secondNameLE = new QLineEdit(widget);
+        secondNameLE->setObjectName(QStringLiteral("secondNameLE"));
+
+        verticalLayout_7->addWidget(secondNameLE);
+
+        firstNameLE = new QLineEdit(widget);
+        firstNameLE->setObjectName(QStringLiteral("firstNameLE"));
+
+        verticalLayout_7->addWidget(firstNameLE);
+
+        patronymicLE = new QLineEdit(widget);
+        patronymicLE->setObjectName(QStringLiteral("patronymicLE"));
+
+        verticalLayout_7->addWidget(patronymicLE);
+
         birthdayDE = new QDateEdit(widget);
         birthdayDE->setObjectName(QStringLiteral("birthdayDE"));
 
-        verticalLayout_11->addWidget(birthdayDE);
+        verticalLayout_7->addWidget(birthdayDE);
 
         weightDSB = new QDoubleSpinBox(widget);
         weightDSB->setObjectName(QStringLiteral("weightDSB"));
         weightDSB->setMaximum(1000);
         weightDSB->setValue(50);
 
-        verticalLayout_11->addWidget(weightDSB);
+        verticalLayout_7->addWidget(weightDSB);
 
         countriesCB = new QComboBox(widget);
         countriesCB->setObjectName(QStringLiteral("countriesCB"));
         countriesCB->setMaxVisibleItems(69);
 
-        verticalLayout_11->addWidget(countriesCB);
+        verticalLayout_7->addWidget(countriesCB);
 
         regionsCB = new QComboBox(widget);
         regionsCB->setObjectName(QStringLiteral("regionsCB"));
         regionsCB->setMaxVisibleItems(69);
 
-        verticalLayout_11->addWidget(regionsCB);
+        verticalLayout_7->addWidget(regionsCB);
 
         regionUnitsCB = new QComboBox(widget);
         regionUnitsCB->setObjectName(QStringLiteral("regionUnitsCB"));
         regionUnitsCB->setMaxVisibleItems(69);
 
-        verticalLayout_11->addWidget(regionUnitsCB);
+        verticalLayout_7->addWidget(regionUnitsCB);
 
         gendersCB = new QComboBox(widget);
         gendersCB->setObjectName(QStringLiteral("gendersCB"));
         gendersCB->setMaxVisibleItems(69);
 
-        verticalLayout_11->addWidget(gendersCB);
+        verticalLayout_7->addWidget(gendersCB);
 
         sportCategoriesCB = new QComboBox(widget);
         sportCategoriesCB->setObjectName(QStringLiteral("sportCategoriesCB"));
         sportCategoriesCB->setMaxVisibleItems(69);
 
-        verticalLayout_11->addWidget(sportCategoriesCB);
+        verticalLayout_7->addWidget(sportCategoriesCB);
 
         typesCB = new QComboBox(widget);
         typesCB->setObjectName(QStringLiteral("typesCB"));
-        typesCB->setEnabled(false);
+        typesCB->setEnabled(true);
 
-        verticalLayout_11->addWidget(typesCB);
+        verticalLayout_7->addWidget(typesCB);
 
         clubsCB = new QComboBox(widget);
         clubsCB->setObjectName(QStringLiteral("clubsCB"));
         clubsCB->setMaxVisibleItems(69);
 
-        verticalLayout_11->addWidget(clubsCB);
+        verticalLayout_7->addWidget(clubsCB);
 
         coachsCB = new QComboBox(widget);
         coachsCB->setObjectName(QStringLiteral("coachsCB"));
         coachsCB->setMaxVisibleItems(69);
 
-        verticalLayout_11->addWidget(coachsCB);
+        verticalLayout_7->addWidget(coachsCB);
 
         tournamentCategoriesCB = new QComboBox(widget);
         tournamentCategoriesCB->setObjectName(QStringLiteral("tournamentCategoriesCB"));
         tournamentCategoriesCB->setMaxVisibleItems(69);
 
-        verticalLayout_11->addWidget(tournamentCategoriesCB);
+        verticalLayout_7->addWidget(tournamentCategoriesCB);
 
 
-        horizontalLayout_7->addLayout(verticalLayout_11);
+        horizontalLayout_4->addLayout(verticalLayout_7);
 
 
-        gridLayout_2->addLayout(horizontalLayout_7, 1, 0, 1, 1);
+        gridLayout->addLayout(horizontalLayout_4, 0, 0, 1, 1);
 
-        horizontalLayout_4 = new QHBoxLayout();
-        horizontalLayout_4->setObjectName(QStringLiteral("horizontalLayout_4"));
+        horizontalLayout_5 = new QHBoxLayout();
+        horizontalLayout_5->setObjectName(QStringLiteral("horizontalLayout_5"));
+        horizontalSpacer_4 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_5->addItem(horizontalSpacer_4);
+
         changeOrderBtn = new QPushButton(widget);
         changeOrderBtn->setObjectName(QStringLiteral("changeOrderBtn"));
         changeOrderBtn->setEnabled(false);
 
-        horizontalLayout_4->addWidget(changeOrderBtn);
+        horizontalLayout_5->addWidget(changeOrderBtn);
 
         addOrderBtn = new QPushButton(widget);
         addOrderBtn->setObjectName(QStringLiteral("addOrderBtn"));
 
-        horizontalLayout_4->addWidget(addOrderBtn);
-
-        horizontalSpacer_4 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        horizontalLayout_4->addItem(horizontalSpacer_4);
+        horizontalLayout_5->addWidget(addOrderBtn);
 
 
-        gridLayout_2->addLayout(horizontalLayout_4, 2, 0, 1, 1);
+        gridLayout->addLayout(horizontalLayout_5, 1, 0, 1, 1);
+
+        verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        gridLayout->addItem(verticalSpacer, 2, 0, 1, 1);
 
         splitter->addWidget(widget);
 
@@ -497,7 +487,7 @@ public:
         verticalLayout->addLayout(horizontalLayout_2);
 
 
-        gridLayout->addLayout(verticalLayout, 0, 0, 1, 1);
+        verticalLayout_2->addLayout(verticalLayout);
 
 
         retranslateUi(CreateTournamentOrdersDialog);

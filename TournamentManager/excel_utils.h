@@ -53,6 +53,8 @@ public:
     static void setCenterHorizontally(QAxObject* workbook, bool flag);
 
     static void setTournamentName(QAxObject* sheet, QString text, int row0, int column0, int row1, int column1);
+
+    static QString getValue(QAxObject* sheet, int row, int column);
 };
 
 #endif // EXCELUTILS_H

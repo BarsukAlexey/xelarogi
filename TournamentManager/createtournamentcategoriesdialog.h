@@ -29,6 +29,8 @@ private slots:
 
     void on_pushButton_clicked();
 
+    void on_okBtn_clicked();
+
 private:
     void updateTable();
     void updateDataWidget(long long categoryUID);

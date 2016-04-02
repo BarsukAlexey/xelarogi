@@ -41,7 +41,8 @@ SOURCES += main.cpp\
     trophygenerator.cpp \
     trophygeneratorsettingsdialog.cpp \
     report_manda.cpp \
-    report_ministr.cpp
+    report_ministr.cpp \
+    dialog_insert_data_in_database.cpp
 
 HEADERS  += mainwindow.h \
     handbookdialog.h \
@@ -68,7 +69,8 @@ HEADERS  += mainwindow.h \
     trophygenerator.h \
     trophygeneratorsettingsdialog.h \
     report_manda.h \
-    report_ministr.h
+    report_ministr.h \
+    dialog_insert_data_in_database.h
 
 FORMS    += mainwindow.ui \
     handbookdialog.ui \
@@ -81,4 +83,7 @@ FORMS    += mainwindow.ui \
     generatetournamentcategoriesdialog.ui \
     errormessagesdialog.ui \
     logindialog.ui \
-    trophygeneratorsettingsdialog.ui
+    trophygeneratorsettingsdialog.ui \
+    dialog_insert_data_in_database.ui
+
+DISTFILES +=
