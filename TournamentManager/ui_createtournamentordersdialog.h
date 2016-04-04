@@ -95,6 +95,9 @@ public:
     QSpacerItem *horizontalSpacer_4;
     QPushButton *changeOrderBtn;
     QPushButton *addOrderBtn;
+    QHBoxLayout *horizontalLayout_6;
+    QSpacerItem *horizontalSpacer_6;
+    QPushButton *pushButtonChangeCategory;
     QSpacerItem *verticalSpacer;
     QHBoxLayout *horizontalLayout_2;
     QPushButton *loadBtn;
@@ -239,7 +242,7 @@ public:
         splitter->addWidget(tableView);
         tableView->horizontalHeader()->setCascadingSectionResizes(false);
         tableView->horizontalHeader()->setStretchLastSection(true);
-        tableView->verticalHeader()->setVisible(false);
+        tableView->verticalHeader()->setVisible(true);
         widget = new QWidget(splitter);
         widget->setObjectName(QStringLiteral("widget"));
         sizePolicy.setHeightForWidth(widget->sizePolicy().hasHeightForWidth());
@@ -428,7 +431,7 @@ public:
         horizontalLayout_4->addLayout(verticalLayout_7);
 
 
-        gridLayout->addLayout(horizontalLayout_4, 0, 0, 1, 1);
+        gridLayout->addLayout(horizontalLayout_4, 0, 0, 1, 2);
 
         horizontalLayout_5 = new QHBoxLayout();
         horizontalLayout_5->setObjectName(QStringLiteral("horizontalLayout_5"));
@@ -448,11 +451,25 @@ public:
         horizontalLayout_5->addWidget(addOrderBtn);
 
 
-        gridLayout->addLayout(horizontalLayout_5, 1, 0, 1, 1);
+        gridLayout->addLayout(horizontalLayout_5, 1, 0, 1, 2);
+
+        horizontalLayout_6 = new QHBoxLayout();
+        horizontalLayout_6->setObjectName(QStringLiteral("horizontalLayout_6"));
+        horizontalSpacer_6 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_6->addItem(horizontalSpacer_6);
+
+        pushButtonChangeCategory = new QPushButton(widget);
+        pushButtonChangeCategory->setObjectName(QStringLiteral("pushButtonChangeCategory"));
+
+        horizontalLayout_6->addWidget(pushButtonChangeCategory);
+
+
+        gridLayout->addLayout(horizontalLayout_6, 2, 1, 1, 1);
 
         verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-        gridLayout->addItem(verticalSpacer, 2, 0, 1, 1);
+        gridLayout->addItem(verticalSpacer, 3, 0, 1, 1);
 
         splitter->addWidget(widget);
 
@@ -525,6 +542,7 @@ public:
         label_3->setText(QApplication::translate("CreateTournamentOrdersDialog", "\320\232\320\260\321\202\320\265\320\263\320\276\321\200\320\270\321\217 \321\202\321\203\321\200\320\275\320\270\321\200\320\260", 0));
         changeOrderBtn->setText(QApplication::translate("CreateTournamentOrdersDialog", "\320\237\321\200\320\270\320\274\320\265\320\275\320\270\321\202\321\214 \320\270\320\267\320\274\320\265\320\275\320\265\320\275\320\270\321\217", 0));
         addOrderBtn->setText(QApplication::translate("CreateTournamentOrdersDialog", "\320\224\320\276\320\261\320\260\320\262\320\270\321\202\321\214", 0));
+        pushButtonChangeCategory->setText(QApplication::translate("CreateTournamentOrdersDialog", "\320\241\320\274\320\265\320\275\320\270\321\202\321\214 \320\272\320\260\321\202\320\265\320\263\320\276\321\200\320\270\321\216 \321\203\321\207\320\260\321\201\321\202\320\275\320\270\320\272\320\260....", 0));
         loadBtn->setText(QApplication::translate("CreateTournamentOrdersDialog", "\320\227\320\260\320\263\321\200\321\203\320\267\320\270\321\202\321\214 \320\270\320\267 excel", 0));
         toExcelBtn->setText(QApplication::translate("CreateTournamentOrdersDialog", "\320\222\321\213\320\263\321\200\321\203\320\267\320\270\321\202\321\214 \320\262 Excel", 0));
         btnExit->setText(QApplication::translate("CreateTournamentOrdersDialog", "\320\227\320\260\320\272\321\200\321\213\321\202\321\214", 0));

@@ -16,6 +16,7 @@
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QDoubleSpinBox>
+#include <QtWidgets/QFormLayout>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
@@ -38,13 +39,11 @@ public:
     QSplitter *splitter;
     QTableView *tableView;
     QWidget *widget;
-    QGridLayout *gridLayout;
-    QPushButton *pushButton;
-    QVBoxLayout *verticalLayout_5;
-    QHBoxLayout *horizontalLayout;
+    QFormLayout *formLayout;
     QVBoxLayout *verticalLayout;
     QLabel *label_5;
     QLabel *label_6;
+    QLabel *label_11;
     QLabel *label;
     QLabel *label_2;
     QLabel *label_3;
@@ -56,6 +55,9 @@ public:
     QVBoxLayout *verticalLayout_2;
     QLineEdit *nameLE;
     QComboBox *sexCB;
+    QHBoxLayout *horizontalLayout;
+    QPushButton *buttonAddAgeCat;
+    QComboBox *comboBoxAgeCategory;
     QSpinBox *ageFromSB;
     QSpinBox *ageTillSB;
     QDoubleSpinBox *weightFromDSB;
@@ -66,9 +68,10 @@ public:
     QSpinBox *durationFightingSB;
     QSpinBox *durationBreakSB;
     QSpinBox *roundCountSB;
-    QPushButton *addBtn;
-    QSpacerItem *verticalSpacer;
     QPushButton *applyBtn;
+    QPushButton *addBtn;
+    QPushButton *pushButtonAddGroupOfCaterories;
+    QSpacerItem *verticalSpacer;
 
     void setupUi(QDialog *CreateTournamentCategoriesDialog)
     {
@@ -88,6 +91,7 @@ public:
         tableView->setAlternatingRowColors(true);
         tableView->setSelectionMode(QAbstractItemView::SingleSelection);
         tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+        tableView->setSortingEnabled(true);
         splitter->addWidget(tableView);
         tableView->verticalHeader()->setVisible(false);
         tableView->verticalHeader()->setHighlightSections(false);
@@ -99,17 +103,8 @@ public:
         sizePolicy.setHeightForWidth(widget->sizePolicy().hasHeightForWidth());
         widget->setSizePolicy(sizePolicy);
         widget->setMinimumSize(QSize(300, 0));
-        gridLayout = new QGridLayout(widget);
-        gridLayout->setObjectName(QStringLiteral("gridLayout"));
-        pushButton = new QPushButton(widget);
-        pushButton->setObjectName(QStringLiteral("pushButton"));
-
-        gridLayout->addWidget(pushButton, 5, 0, 1, 1);
-
-        verticalLayout_5 = new QVBoxLayout();
-        verticalLayout_5->setObjectName(QStringLiteral("verticalLayout_5"));
-        horizontalLayout = new QHBoxLayout();
-        horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
+        formLayout = new QFormLayout(widget);
+        formLayout->setObjectName(QStringLiteral("formLayout"));
         verticalLayout = new QVBoxLayout();
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
         label_5 = new QLabel(widget);
@@ -121,6 +116,11 @@ public:
         label_6->setObjectName(QStringLiteral("label_6"));
 
         verticalLayout->addWidget(label_6);
+
+        label_11 = new QLabel(widget);
+        label_11->setObjectName(QStringLiteral("label_11"));
+
+        verticalLayout->addWidget(label_11);
 
         label = new QLabel(widget);
         label->setObjectName(QStringLiteral("label"));
@@ -163,7 +163,7 @@ public:
         verticalLayout->addWidget(label_10);
 
 
-        horizontalLayout->addLayout(verticalLayout);
+        formLayout->setLayout(0, QFormLayout::LabelRole, verticalLayout);
 
         verticalLayout_2 = new QVBoxLayout();
         verticalLayout_2->setObjectName(QStringLiteral("verticalLayout_2"));
@@ -177,6 +177,22 @@ public:
 
         verticalLayout_2->addWidget(sexCB);
 
+        horizontalLayout = new QHBoxLayout();
+        horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
+        buttonAddAgeCat = new QPushButton(widget);
+        buttonAddAgeCat->setObjectName(QStringLiteral("buttonAddAgeCat"));
+        buttonAddAgeCat->setMaximumSize(QSize(24, 16777215));
+
+        horizontalLayout->addWidget(buttonAddAgeCat);
+
+        comboBoxAgeCategory = new QComboBox(widget);
+        comboBoxAgeCategory->setObjectName(QStringLiteral("comboBoxAgeCategory"));
+
+        horizontalLayout->addWidget(comboBoxAgeCategory);
+
+
+        verticalLayout_2->addLayout(horizontalLayout);
+
         ageFromSB = new QSpinBox(widget);
         ageFromSB->setObjectName(QStringLiteral("ageFromSB"));
         ageFromSB->setMaximum(1000);
@@ -185,7 +201,8 @@ public:
 
         ageTillSB = new QSpinBox(widget);
         ageTillSB->setObjectName(QStringLiteral("ageTillSB"));
-        ageTillSB->setMaximum(1000);
+        ageTillSB->setMinimum(1);
+        ageTillSB->setMaximum(99);
 
         verticalLayout_2->addWidget(ageTillSB);
 
@@ -197,6 +214,7 @@ public:
 
         weightTillDSB = new QDoubleSpinBox(widget);
         weightTillDSB->setObjectName(QStringLiteral("weightTillDSB"));
+        weightTillDSB->setMinimum(1);
         weightTillDSB->setMaximum(11200);
 
         verticalLayout_2->addWidget(weightTillDSB);
@@ -241,28 +259,27 @@ public:
         verticalLayout_2->addWidget(roundCountSB);
 
 
-        horizontalLayout->addLayout(verticalLayout_2);
-
-
-        verticalLayout_5->addLayout(horizontalLayout);
-
-
-        gridLayout->addLayout(verticalLayout_5, 0, 0, 1, 1);
-
-        addBtn = new QPushButton(widget);
-        addBtn->setObjectName(QStringLiteral("addBtn"));
-
-        gridLayout->addWidget(addBtn, 3, 0, 1, 1);
-
-        verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-
-        gridLayout->addItem(verticalSpacer, 6, 0, 1, 1);
+        formLayout->setLayout(0, QFormLayout::FieldRole, verticalLayout_2);
 
         applyBtn = new QPushButton(widget);
         applyBtn->setObjectName(QStringLiteral("applyBtn"));
         applyBtn->setEnabled(false);
 
-        gridLayout->addWidget(applyBtn, 2, 0, 1, 1);
+        formLayout->setWidget(1, QFormLayout::SpanningRole, applyBtn);
+
+        addBtn = new QPushButton(widget);
+        addBtn->setObjectName(QStringLiteral("addBtn"));
+
+        formLayout->setWidget(2, QFormLayout::SpanningRole, addBtn);
+
+        pushButtonAddGroupOfCaterories = new QPushButton(widget);
+        pushButtonAddGroupOfCaterories->setObjectName(QStringLiteral("pushButtonAddGroupOfCaterories"));
+
+        formLayout->setWidget(3, QFormLayout::SpanningRole, pushButtonAddGroupOfCaterories);
+
+        verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        formLayout->setItem(4, QFormLayout::LabelRole, verticalSpacer);
 
         splitter->addWidget(widget);
 
@@ -277,9 +294,9 @@ public:
     void retranslateUi(QDialog *CreateTournamentCategoriesDialog)
     {
         CreateTournamentCategoriesDialog->setWindowTitle(QApplication::translate("CreateTournamentCategoriesDialog", "\320\240\320\265\320\264\320\260\320\272\321\202\320\270\321\200\320\276\320\262\320\260\320\275\320\270\320\265 \320\272\320\260\321\202\320\265\320\263\320\276\321\200\320\270\320\271 \320\264\320\273\321\217 \321\202\321\203\321\200\320\275\320\270\321\200\320\260", 0));
-        pushButton->setText(QApplication::translate("CreateTournamentCategoriesDialog", "\320\224\320\276\320\261\320\260\320\262\320\273\320\265\320\275\320\270\320\265 \320\263\321\200\321\203\320\277\320\277\321\213 \320\272\320\260\321\202\320\265\320\263\320\276\321\200\320\270\320\271 \321\202\321\203\321\200\320\275\320\270\321\200\320\260...", 0));
         label_5->setText(QApplication::translate("CreateTournamentCategoriesDialog", "\320\235\320\260\320\270\320\274\320\265\320\275\320\276\320\262\320\260\320\275\320\270\320\265", 0));
         label_6->setText(QApplication::translate("CreateTournamentCategoriesDialog", "\320\237\320\276\320\273", 0));
+        label_11->setText(QApplication::translate("CreateTournamentCategoriesDialog", "\320\222\320\276\320\267\321\200\320\260\321\201\321\202\320\275\320\260\321\217 \320\272\320\260\321\202\320\265\320\263\320\276\321\200\320\270\321\217", 0));
         label->setText(QApplication::translate("CreateTournamentCategoriesDialog", "<html><head/><body><p>\320\222\320\276\320\267\321\200\320\260\321\201\321\202 \320\276\321\202</p></body></html>", 0));
         label_2->setText(QApplication::translate("CreateTournamentCategoriesDialog", "\320\222\320\276\320\267\321\200\320\260\321\201\321\202 \320\264\320\276", 0));
         label_3->setText(QApplication::translate("CreateTournamentCategoriesDialog", "\320\222\320\265\321\201 \321\201\320\262\321\213\321\210\320\265", 0));
@@ -288,9 +305,11 @@ public:
         label_7->setText(QApplication::translate("CreateTournamentCategoriesDialog", "\320\224\320\273\320\270\321\202\320\265\320\273\321\214\320\275\320\276\321\201\321\202\321\214 \320\261\320\276\321\217, \321\201.", 0));
         label_8->setText(QApplication::translate("CreateTournamentCategoriesDialog", "\320\237\320\265\321\200\320\265\321\200\321\213\320\262, \321\201.", 0));
         label_10->setText(QApplication::translate("CreateTournamentCategoriesDialog", "\320\232\320\276\320\273\320\270\321\207\320\265\321\201\321\202\320\262\320\276 \321\200\320\260\321\203\320\275\320\264\320\276\320\262", 0));
+        buttonAddAgeCat->setText(QApplication::translate("CreateTournamentCategoriesDialog", "+", 0));
         addTypeBtn->setText(QApplication::translate("CreateTournamentCategoriesDialog", "+", 0));
-        addBtn->setText(QApplication::translate("CreateTournamentCategoriesDialog", "\320\224\320\276\320\261\320\260\320\262\320\270\321\202\321\214 \320\276\320\264\320\275\321\203 \320\272\320\260\321\202\320\265\320\263\320\276\321\200\320\270\321\216 \320\272\320\260\321\202\320\265\320\263\320\276\321\200\320\270\321\216", 0));
         applyBtn->setText(QApplication::translate("CreateTournamentCategoriesDialog", "\320\237\321\200\320\270\320\274\320\265\320\275\320\270\321\202\321\214 \320\270\320\267\320\274\320\265\320\275\320\265\320\275\320\270\321\217", 0));
+        addBtn->setText(QApplication::translate("CreateTournamentCategoriesDialog", "\320\224\320\276\320\261\320\260\320\262\320\270\321\202\321\214 \320\276\320\264\320\275\321\203 \320\272\320\260\321\202\320\265\320\263\320\276\321\200\320\270\321\216 \320\272\320\260\321\202\320\265\320\263\320\276\321\200\320\270\321\216", 0));
+        pushButtonAddGroupOfCaterories->setText(QApplication::translate("CreateTournamentCategoriesDialog", "\320\224\320\276\320\261\320\260\320\262\320\273\320\265\320\275\320\270\320\265 \320\263\321\200\321\203\320\277\320\277\321\213 \320\272\320\260\321\202\320\265\320\263\320\276\321\200\320\270\320\271 \321\202\321\203\321\200\320\275\320\270\321\200\320\260...", 0));
     } // retranslateUi
 
 };

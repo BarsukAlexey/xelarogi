@@ -12,6 +12,7 @@ namespace Ui {
 class GenerateTournamentCategoriesDialog;
 }
 
+
 class GenerateTournamentCategoriesDialog : public QDialog
 {
     Q_OBJECT
@@ -22,10 +23,13 @@ public:
 
 private slots:
     void on_pushButton_clicked();
+    void on_pushButtonAddAgeCategory_clicked();
+    void fillComboBoxAgeCategory();
 
 private:
     void fillSexCB();
     void fillTypeCB();
+
 
 private:
     Ui::GenerateTournamentCategoriesDialog *ui;

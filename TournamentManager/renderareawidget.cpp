@@ -27,9 +27,8 @@
 #include <QFileDialog>
 
 
-RenderAreaWidget::RenderAreaWidget(QWidget *parent, int widthCell, int heightCell, const QSqlDatabase &_database)
-    : QWidget(parent),
-      database(_database)
+RenderAreaWidget::RenderAreaWidget(QWidget *parent, int widthCell, int heightCell)
+    : QWidget(parent)
 {
     tournamentCategories = -1;
     countRows = 0;
@@ -137,7 +136,7 @@ void RenderAreaWidget::mousePressEvent(QMouseEvent* event)
         {
             if (selectedNode.v == currentNode.v && selectedNode.isFighing)
             {
-                QSqlQuery query("UPDATE GRID SET ORDER_FK = ?, result = ? WHERE TOURNAMENT_CATEGORIES_FK = ? AND VERTEX = ?", database);
+                QSqlQuery query("UPDATE GRID SET ORDER_FK = ?, result = ? WHERE TOURNAMENT_CATEGORIES_FK = ? AND VERTEX = ?");
                 query.bindValue(0, QVariant(QVariant::Int));
                 query.bindValue(1, QVariant(QVariant::String));
                 query.bindValue(2, tournamentCategories);
@@ -171,14 +170,14 @@ void RenderAreaWidget::mousePressEvent(QMouseEvent* event)
 
                 QString orderUID;
                 {
-                    QSqlQuery query("SELECT * FROM GRID WHERE TOURNAMENT_CATEGORIES_FK = ? AND VERTEX = ?", database);
+                    QSqlQuery query("SELECT * FROM GRID WHERE TOURNAMENT_CATEGORIES_FK = ? AND VERTEX = ?");
                     query.bindValue(0, tournamentCategories);
                     query.bindValue(1, node1.v);
                     if (!( query.exec() && query.next()))
                         qDebug() << __PRETTY_FUNCTION__ << " " << query.lastError().text() << "\n" << query.lastQuery();
                     orderUID = query.value("ORDER_FK").toString();
                 }
-                QSqlQuery query("UPDATE GRID SET ORDER_FK = ?, RESULT = ? WHERE TOURNAMENT_CATEGORIES_FK = ? AND VERTEX = ?", database);
+                QSqlQuery query("UPDATE GRID SET ORDER_FK = ?, RESULT = ? WHERE TOURNAMENT_CATEGORIES_FK = ? AND VERTEX = ?");
                 query.bindValue(0, orderUID);
                 query.bindValue(1, node0.result);
                 query.bindValue(2, tournamentCategories);
@@ -262,7 +261,7 @@ void RenderAreaWidget::onSaveInExcel()
     if (directoryPath.isNull()) return;
     //qDebug() << dir;
     int foo = 12;
-    printTableGridInExcel(database, tournamentCategories, false, directoryPath, false, false, foo);
+    printTableGridInExcel(tournamentCategories, false, directoryPath, false, false, foo);
 }
 
 void RenderAreaWidget::clearSelection()
@@ -281,7 +280,7 @@ QPoint RenderAreaWidget::getCell(int v, int countColumns)
     return p;
 }
 
-void RenderAreaWidget::printTableGridInExcel(const QSqlDatabase &database, int tournamentCategory,
+void RenderAreaWidget::printTableGridInExcel(int tournamentCategory,
         bool likePointFighing, QString directoryPath, bool isFirst, bool isLast, int& fightingNumber, QString text, QString prefFileName)
 {
     QVector<DBUtils::NodeOfTournirGrid> nodes = DBUtils::getNodes(tournamentCategory);
@@ -387,7 +386,7 @@ void RenderAreaWidget::printTableGridInExcel(const QSqlDatabase &database, int t
 
     maxColumn = qMax(4, maxColumn);
 
-    ExcelUtils::setTournamentName(sheet, DBUtils::getTournamentNameAsHeadOfDocument(database, tournamentUID), 1, 1, 1, maxColumn);
+    ExcelUtils::setTournamentName(sheet, DBUtils::getTournamentNameAsHeadOfDocument(QSqlDatabase::database(), tournamentUID), 1, 1, 1, maxColumn);
 
     ExcelUtils::uniteRange(sheet, 2, 1, 2, maxColumn);
     ExcelUtils::setValue(sheet, 2, 1, DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", tournamentCategory));
@@ -400,19 +399,19 @@ void RenderAreaWidget::printTableGridInExcel(const QSqlDatabase &database, int t
     ExcelUtils::uniteRange(sheet, maxRow, 1, maxRow, 2);
     ExcelUtils::setRowHeight(sheet, maxRow, 25);
     ExcelUtils::setValue(sheet, maxRow, 1, "Главный судья: ", 0);
-    ExcelUtils::setValue(sheet, maxRow, 3, DBUtils::get_MAIN_JUDGE(database, tournamentUID), 0);
+    ExcelUtils::setValue(sheet, maxRow, 3, DBUtils::get_MAIN_JUDGE(QSqlDatabase::database(), tournamentUID), 0);
     ++maxRow;
 
     ExcelUtils::uniteRange(sheet, maxRow, 1, maxRow, 2);
     ExcelUtils::setRowHeight(sheet, maxRow, 25);
     ExcelUtils::setValue(sheet, maxRow, 1, "Главный секретарь: ", 0);
-    ExcelUtils::setValue(sheet, maxRow, 3, DBUtils::get_MAIN_SECRETARY(database, tournamentUID), 0);
+    ExcelUtils::setValue(sheet, maxRow, 3, DBUtils::get_MAIN_SECRETARY(QSqlDatabase::database(), tournamentUID), 0);
     ++maxRow;
 
     ExcelUtils::uniteRange(sheet, maxRow, 1, maxRow, 2);
     ExcelUtils::setRowHeight(sheet, maxRow, 25);
     ExcelUtils::setValue(sheet, maxRow, 1, "Зам. главного судьи: ", 0);
-    ExcelUtils::setValue(sheet, maxRow, 3, DBUtils::get_ASSOCIATE_MAIN_JUDGE(database, tournamentUID), 0);
+    ExcelUtils::setValue(sheet, maxRow, 3, DBUtils::get_ASSOCIATE_MAIN_JUDGE(QSqlDatabase::database(), tournamentUID), 0);
     ++maxRow;
 
     ExcelUtils::setPageOrientation(sheet, 2);

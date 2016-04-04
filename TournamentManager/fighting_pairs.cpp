@@ -25,7 +25,11 @@
 #include <QSqlQuery>
 #include <QSqlError>
 
+#include <QMessageBox>
+
 #include <algorithm>
+#include <QThread>
+#include "mythread.h"
 
 
 
@@ -41,16 +45,11 @@ FightingPairs::FightingPairs(const QSqlDatabase &_database, long long _tournamen
     globalListsOfPairs = DBUtils::getListsOfPairs(database, tournamentUID);
     for(const QVector<DBUtils::Fighing>& x : globalListsOfPairs)
     {
-        QSqlQuery queryCOUNT("SELECT count() AS COUNT FROM ORDERS WHERE TOURNAMENT_CATEGORY_FK = ? GROUP BY TOURNAMENT_CATEGORY_FK", database);
-        queryCOUNT.bindValue(0, x[0].TOURNAMENT_CATEGORIES_FK);
-        if (!queryCOUNT.exec())
-        {
-            qDebug() << __LINE__ << __PRETTY_FUNCTION__ << queryCOUNT.lastError().text() << " " << queryCOUNT.lastQuery();
-            continue;
-        }
         int count = 0;
-        if (queryCOUNT.next())
-            count = queryCOUNT.value("COUNT").toInt();
+        for (DBUtils::NodeOfTournirGrid f : DBUtils::getNodes(x[0].TOURNAMENT_CATEGORIES_FK))
+            if (!f.isFighing)
+                ++count;
+
         QVector<int> fights;
         for (int fight = 1; ; fight *= 2)
         {
@@ -92,8 +91,12 @@ FightingPairs::FightingPairs(const QSqlDatabase &_database, long long _tournamen
     ringSpinBox = new QSpinBox;
     ringSpinBox->setMaximum(100);
     ringSpinBox->setMinimum(1);
-    ringSpinBox->setValue(1);
+    ringSpinBox->setValue(5);
 
+    spinBoxDelay = new QSpinBox;
+    spinBoxDelay->setMaximum(1000000);
+    spinBoxDelay->setMinimum(1);
+    spinBoxDelay->setValue(60);
 
     qPushButton = new QPushButton("GO!");
 
@@ -106,9 +109,13 @@ FightingPairs::FightingPairs(const QSqlDatabase &_database, long long _tournamen
     qGridLayout->addWidget(new QLabel(QString("Дата + {утро, день, вечер}:")), 2, 0, Qt::AlignRight);
     qGridLayout->addWidget(qLineEdit = new QLineEdit(), 2, 1);
 
-    qGridLayout->addWidget(checkBox = new QCheckBox("Сетка для поинтфайтинга:"), 3, 0, 1, 2, Qt::AlignCenter);
+    qGridLayout->addWidget(new QLabel("Временная задержка при смене пар на ринге (в секундах)"), 3, 0, Qt::AlignRight);
+    qGridLayout->addWidget(spinBoxDelay, 3, 1, Qt::AlignLeft);
 
-    qGridLayout->addWidget(qPushButton, 4, 0, 1, 2);
+    qGridLayout->addWidget(checkBoxPointfighting = new QCheckBox("Сетка для поинтфайтинга:"), 4, 0, 1, 2, Qt::AlignCenter);
+    checkBoxPointfighting->setChecked(true);
+
+    qGridLayout->addWidget(qPushButton, 5, 0, 1, 2);
 
     setLayout(qGridLayout);
 
@@ -243,52 +250,103 @@ void FightingPairs::printInJSON(const QVector<DBUtils::Fighing>& fighting, int r
 
 
 
-void FightingPairs::makeGridsForPointFighting(QString existingDirectory, QVector<QVector<DBUtils::Fighing> > listsOfPairs)
+void FightingPairs::makeGridsForPointFighting(QString existingDirectory, QVector<long long> tournamentCategoryUIDs, const int delay)
 {
     QVector<int> durationOfGrid;
-    for (const auto fighing : listsOfPairs){
-        int time = 0;
-        for (const DBUtils::NodeOfTournirGrid f : DBUtils::getNodes(fighing[0].TOURNAMENT_CATEGORIES_FK))
-        {
+    for (long long tcUID : tournamentCategoryUIDs)
+        durationOfGrid << DBUtils::findDurationOfGrid(tcUID, delay);
 
-            if (!f.isFighing) continue;
-            time += DBUtils::get__DURATION_FIGHING(database, fighing[0].TOURNAMENT_CATEGORIES_FK) *
-                    DBUtils::get__ROUND_COUNT(database, fighing[0].TOURNAMENT_CATEGORIES_FK) +
+    QVector<long long> constTournamentCategoryUIDs = tournamentCategoryUIDs;
+    const std::vector<int> constDurationOfGrid(durationOfGrid.begin(), durationOfGrid.end());
+    QVector<QVector<long long> > ansTournamentCategoryUIDs;
 
-                    DBUtils::get__DURATION_BREAK(database, fighing[0].TOURNAMENT_CATEGORIES_FK) *
-                    (DBUtils::get__ROUND_COUNT(database, fighing[0].TOURNAMENT_CATEGORIES_FK) - 1);
-        }
-        durationOfGrid.push_back(time);
-    }
+    QString message;
+    int maxVal = (int)0;
+    int minVal = (int)1e9;
     for (int ringCount = ringSpinBox->value(), idRing = 1; 1 <= ringCount; --ringCount, ++idRing)
     {
-        int time = std::accumulate(durationOfGrid.begin(), durationOfGrid.end(), 0) / ringCount;
+        const int time = std::accumulate(durationOfGrid.begin(), durationOfGrid.end(), 0) / ringCount;
         int curTime = 0;
-        QVector<QVector<DBUtils::Fighing> > curGrids;
-        while (curTime < time && listsOfPairs.size())
-        {
-            curTime += durationOfGrid.front();
-            durationOfGrid.pop_front();
-
-            curGrids.push_back(listsOfPairs.front());
-            listsOfPairs.pop_front();
+        ansTournamentCategoryUIDs << QVector<long long>();
+        while ( tournamentCategoryUIDs.size() &&
+                (
+                    ringCount == 1 ||
+                    curTime + durationOfGrid.first() <= time ||
+                    curTime < time && ((double)durationOfGrid.first()) / time <= 0.10
+                )
+        ){
+            curTime += durationOfGrid.takeFirst();
+            ansTournamentCategoryUIDs.back() << tournamentCategoryUIDs.takeFirst();
         }
-
-        for (int i = 0, fightingNumber = 1; i < curGrids.size(); ++i)
-        {
-            RenderAreaWidget::printTableGridInExcel(database, curGrids[i].front().TOURNAMENT_CATEGORIES_FK, true,
-                       existingDirectory, i == 0, i + 1 == curGrids.size(), fightingNumber, qLineEdit->text(),
-                            "Татами " +  QString("%1 (%2)").arg(idRing, 2, 10, QChar('0')).arg(i + 1, 2, 10, QChar('0'))
-                                                    );
-            //fightingNumber += curGrids[i].size();
-        }
+        maxVal = qMax(maxVal, curTime);
+        minVal = qMin(minVal, curTime);
+        message += QString::number(curTime/3600) + ":" + QString("%1").arg(curTime/60%60, 2, 10, QChar('0')) + ", ";
     }
 
+
+
+
+    QString messageThread;
+    MyThread *myThread = new MyThread(constDurationOfGrid, ringSpinBox->value(), maxVal, minVal);
+    myThread->start();
+    if (!myThread->wait(60 * 1000))
+    {
+        myThread->setStop();
+        myThread->wait();
+    }
+
+    QString messageDisplay = message;
+    std::vector<int> data = myThread->ans;
+    if (data.size() && (maxVal > myThread->maxSumSeg || maxVal == myThread->maxSumSeg && minVal < myThread->minSumSeg))
+    {
+        qDebug() << "find better";
+        ansTournamentCategoryUIDs.clear();
+        for (int cnt : data)
+        {
+            ansTournamentCategoryUIDs << QVector<long long>();
+            int time = 0;
+            for (int iter = 0; iter < cnt; ++iter)
+            {
+                time += DBUtils::findDurationOfGrid(constTournamentCategoryUIDs.first(), delay);
+                ansTournamentCategoryUIDs.back() << constTournamentCategoryUIDs.takeFirst();
+            }
+            messageThread += QString::number(time/3600) + ":" + QString("%1").arg(time/60%60, 2, 10, QChar('0')) + ", ";
+        }
+        messageDisplay = messageThread;
+    }
+    else
+    {
+        qDebug() << "don't find better";
+    }
+    delete myThread;
+
+
+
+    qDebug() << message;
+    qDebug() << messageThread;
+
+
+    int idRing = 1;
+    for (QVector<long long> uids : ansTournamentCategoryUIDs)
+    {
+        for (int i = 0, fightingNumber = 1; i < uids.size(); ++i)
+        {
+            RenderAreaWidget::printTableGridInExcel(uids[i], true,
+                existingDirectory, i == 0, i + 1 == uids.size(), fightingNumber, qLineEdit->text(),
+                "Татами " +  QString("%1 (%2)").arg(idRing, 2, 10, QChar('0')).arg(i + 1, 2, 10, QChar('0'))
+            );
+        }
+        ++idRing;
+    }
+
+    QMessageBox::information(this, "Расчётное время по рингам", messageDisplay);
 }
 
 void FightingPairs::onGoPress()
 {
     QString existingDirectory = QFileDialog::getExistingDirectory(this);
+    if (existingDirectory.isEmpty()) return;
+
 
     QVector<QVector<DBUtils::Fighing> > listsOfPairs;
     for(QModelIndex index : qTableWidget->selectionModel()->selectedRows())
@@ -301,19 +359,21 @@ void FightingPairs::onGoPress()
     std::random_shuffle(listsOfPairs.begin(), listsOfPairs.end());
     std::sort(listsOfPairs.begin(), listsOfPairs.end(),
         [this] (const QVector<DBUtils::Fighing>& lhs, const QVector<DBUtils::Fighing>& rhs) {
-            for (QString field : {"AGE_FROM", "AGE_TILL", "WEIGHT_FROM", "WEIGHT_TILL"})
+            for (QString field : {"AGE_FROM", "AGE_TILL", "WEIGHT_FROM", "WEIGHT_TILL", "SEX_FK"})
             {
-                int a = DBUtils::getField(field, "TOURNAMENT_CATEGORIES", lhs[0].TOURNAMENT_CATEGORIES_FK).toDouble();
-                int b = DBUtils::getField(field, "TOURNAMENT_CATEGORIES", rhs[0].TOURNAMENT_CATEGORIES_FK).toDouble();
-                if (a != b)
+                double a = DBUtils::getField(field, "TOURNAMENT_CATEGORIES", lhs[0].TOURNAMENT_CATEGORIES_FK).toDouble();
+                double b = DBUtils::getField(field, "TOURNAMENT_CATEGORIES", rhs[0].TOURNAMENT_CATEGORIES_FK).toDouble();
+                if (1e-7 < qAbs(a - b))
                     return a < b;
             }
             return false;
     });
 
-    if (checkBox->isChecked())
+    if (checkBoxPointfighting->isChecked())
     {
-        makeGridsForPointFighting(existingDirectory, listsOfPairs);
+        QVector<long long> tournamentCategoryUIDs;
+        for (QVector<DBUtils::Fighing> x : listsOfPairs) tournamentCategoryUIDs << x[0].TOURNAMENT_CATEGORIES_FK;
+        makeGridsForPointFighting(existingDirectory, tournamentCategoryUIDs, spinBoxDelay->value());
         return;
     }
 
@@ -323,10 +383,10 @@ void FightingPairs::onGoPress()
     for (QVector<DBUtils::Fighing>& a : listsOfPairs)
     {
         std::random_shuffle(a.begin(), a.end());
-        std::sort(std::begin(a), std::end(a), [] (const DBUtils::Fighing& lhs, const DBUtils::Fighing& rhs) {
+        std::sort(a.begin(), a.end(), [] (const DBUtils::Fighing& lhs, const DBUtils::Fighing& rhs) {
             return lhs.VERTEX > rhs.VERTEX;
         });
-        fighing += a;
+        fighing << a;
     }
 
     QAxWidget excel("Excel.Application");
@@ -381,4 +441,5 @@ void FightingPairs::onGoPress()
     delete workbook;
     delete workbooks;
 }
+
 

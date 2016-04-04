@@ -29,12 +29,13 @@ private:
     QPushButton* qPushButton;
     QSpinBox* ringSpinBox;
     QLineEdit *qLineEdit;
-    QCheckBox *checkBox;
+    QCheckBox *checkBoxPointfighting;
+    QSpinBox* spinBoxDelay;
     QVector<QVector<DBUtils::Fighing> > globalListsOfPairs;
     void printInExcel(QAxObject *sheets, const QVector<DBUtils::Fighing>& fighting, int ring);
     void printInJSON(const QVector<DBUtils::Fighing>& fighting, int ring, const QString& path);
 
-    void makeGridsForPointFighting(QString existingDirectory, QVector<QVector<DBUtils::Fighing> > listsOfPairs);
+    void makeGridsForPointFighting(QString existingDirectory, QVector<long long> tournamentCategoryUIDs, int delay);
 signals:
 
 public slots:

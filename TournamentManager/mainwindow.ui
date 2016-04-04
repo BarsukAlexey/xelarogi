@@ -312,6 +312,7 @@
     <addaction name="regionAction"/>
     <addaction name="ateAction"/>
     <addaction name="sexAction"/>
+    <addaction name="actionAgeCategory"/>
     <addaction name="typeAction"/>
     <addaction name="sportCategoryAction"/>
     <addaction name="separator"/>
@@ -388,6 +389,11 @@
   <action name="orderAction">
    <property name="text">
     <string>Заявки</string>
+   </property>
+  </action>
+  <action name="actionAgeCategory">
+   <property name="text">
+    <string>Возрастные категории</string>
    </property>
   </action>
  </widget>

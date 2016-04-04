@@ -133,6 +133,14 @@ MainWindow::MainWindow(QWidget *parent) :
         handbookDlg.exec();
     });
 
+    connect(ui->actionAgeCategory, &QAction::triggered, [this] () {
+        HandbookDialog handbookDlg(QString("AGE_CATEGORIES"), QString("Возрастные категории"), m_database, this,
+        {"UID"});
+        handbookDlg.exec();
+    });
+
+
+
     connectButtons();
     updateTournamentTreeWidget();
 

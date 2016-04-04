@@ -49,8 +49,10 @@ public:
     static QStringList get_DAYS_FROM_TOURNAMENTS(const QSqlDatabase& , long long);
 
     // для таблицы ORDERS
-    static QString getSecondNameAndOneLetterOfName(const QSqlDatabase& database, long long UID);
+    static QString getSecondNameAndOneLetterOfName(long long UID);
     static QString get__REGION(const QSqlDatabase& database, long long UID);
+    static QSet<long long> getSetOfOrdersInTournamentCategory(long long uidTournamentCategory);
+    static int getAge(QDate DATE_WEIGHTING, QDate birthdayDate);
 
     // для таблицы TOURNAMENTS
     static QString get_MAIN_JUDGE(const QSqlDatabase& database, long long tournamentUID);
@@ -66,6 +68,7 @@ public:
     static void insertLeafOfGrid(long long TOURNAMENT_CATEGORIES_FK, long long VERTEX, long long orderUID);
     static bool updateNodeOfGrid(const QSqlDatabase& database, long long TOURNAMENT_CATEGORIES_FK, long long VERTEX, long long orderUID, QString result);
     static void swapNodesOfGrid(long long tournamentCategories, int node0v, int node1v);
+    static int findDurationOfGrid(long long tournamentCategories, int delay = 0);
 
     static int isPow2(int a) {
       return !(a & (a - 1));

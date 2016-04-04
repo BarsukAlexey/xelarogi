@@ -67,7 +67,7 @@ TournamentGridDialog2::TournamentGridDialog2(const QSqlDatabase &_database, long
     groupBox = new QGroupBox(tr("Фильтр категорий"));
     radioButtonAll = new QRadioButton(tr("Все"));
     radioButtonLonly = new QRadioButton(tr("Одиночки"));
-    radioButtonInvalid = new QRadioButton(tr("Не валидные категории"));
+    radioButtonInvalid = new QRadioButton(tr("Невалидные категории"));
     radioButtonAll->setChecked(true);
     QHBoxLayout *hbox = new QHBoxLayout;
     hbox->addWidget(radioButtonAll);
@@ -98,6 +98,7 @@ TournamentGridDialog2::TournamentGridDialog2(const QSqlDatabase &_database, long
 
     QWidget *rightPane = new QWidget;
     QPushButton *buttonSave = new QPushButton("Сохранить в Excel");
+    QPushButton *buttonSaveAll = new QPushButton("Сохранить все сетки в Excel");
     QSpinBox *widthSpinBox = new QSpinBox;
     QSpinBox *heightSpinBox = new QSpinBox;
     widthSpinBox->setMaximum(1000);
@@ -106,7 +107,7 @@ TournamentGridDialog2::TournamentGridDialog2(const QSqlDatabase &_database, long
 
 
     QScrollArea *pQScrollArea = new QScrollArea;
-    pRenderArea = new RenderAreaWidget(pQScrollArea, widthSpinBox->value(), heightSpinBox->value(), database);
+    pRenderArea = new RenderAreaWidget(pQScrollArea, widthSpinBox->value(), heightSpinBox->value());
     pQScrollArea->setWidget(pRenderArea);
     qTabWidget = new QTabWidget();
     qTabWidget->addTab(pQScrollArea, "Сетка");
@@ -127,12 +128,13 @@ TournamentGridDialog2::TournamentGridDialog2(const QSqlDatabase &_database, long
         QGridLayout *mainLayout = new QGridLayout;
 
         mainLayout->addWidget(buttonSave, 0, 0);
-        mainLayout->addWidget(widthQLabel, 0, 1);
-        mainLayout->addWidget(widthSpinBox, 0, 2);
-        mainLayout->addWidget(heightQLabel, 0, 3);
-        mainLayout->addWidget(heightSpinBox, 0, 4);
+        mainLayout->addWidget(buttonSaveAll, 0, 1);
+        mainLayout->addWidget(widthQLabel, 0, 2);
+        mainLayout->addWidget(widthSpinBox, 0, 3);
+        mainLayout->addWidget(heightQLabel, 0, 4);
+        mainLayout->addWidget(heightSpinBox, 0, 5);
 
-        mainLayout->addWidget(qTabWidget, 1, 0, 1, 5);
+        mainLayout->addWidget(qTabWidget, 1, 0, 1, 6);
 
         rightPane->setLayout(mainLayout);
     }
@@ -211,7 +213,24 @@ TournamentGridDialog2::TournamentGridDialog2(const QSqlDatabase &_database, long
     });
 
 
-
+    connect(buttonSaveAll, &QPushButton::clicked, [this]{
+        QString directoryPath = QFileDialog::getExistingDirectory(this, tr("Выберите папку"), NULL, QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
+        if (directoryPath.isNull()) return;
+        //qDebug() << dir;
+        QSqlQuery query("SELECT * FROM TOURNAMENT_CATEGORIES WHERE TOURNAMENT_FK = ? ORDER BY SEX_FK, TYPE_FK, AGE_FROM, AGE_TILL, WEIGHT_FROM, WEIGHT_TILL ");
+        query.bindValue(0, tournamentUID);
+        if (!query.exec())
+        {
+            qDebug() << __LINE__ << __PRETTY_FUNCTION__ << query.lastError() << query.lastQuery();
+            return;
+        }
+        while (query.next())
+        {
+            qlonglong tcUID = query.value("UID").toLongLong();
+            int foo = 12;
+            RenderAreaWidget::printTableGridInExcel(tcUID, false, directoryPath, false, false, foo);
+        }
+    });
 
 
 
@@ -437,6 +456,7 @@ void TournamentGridDialog2::generatGrid(const long long tournamentCaterotyUID, Q
                     vertex.removeOne(v ^ 1);
                     vertex.push_front(v ^ 1);
                 }
+            //qDebug() << vertex;
 
 
             QVector<long long> orderUIDs;
@@ -455,8 +475,6 @@ void TournamentGridDialog2::generatGrid(const long long tournamentCaterotyUID, Q
                     }
                 }
                 for (RegionRandomOrders x : arr) notUsedFighters.insert(x);
-                if (1 <= orderUIDs.size())
-                    std::random_shuffle(orderUIDs.begin(), orderUIDs.end() - 1);
             }
 
 
@@ -605,7 +623,7 @@ void TournamentGridDialog2::generatGrid(const long long tournamentCaterotyUID, Q
 // генерация турнирной сетки
 void TournamentGridDialog2::onButtonGenerateGrid()
 {
-    /*/
+    //
     {
         // проверяем есть ли турнирная сетка, если есть, то задаём вопрос
         QSqlQuery query("SELECT * FROM GRID WHERE TOURNAMENT_CATEGORIES_FK = ? ", database);
@@ -626,7 +644,7 @@ void TournamentGridDialog2::onButtonGenerateGrid()
             return;
         }
     }
-    /**/
+    /* */
 
     selectedRowOfRableGrid = -1;
     selectedColumnOfRableGrid = -1;
@@ -885,7 +903,7 @@ void TournamentGridDialog2::onCellClickedOntableGrid(int row, int column)
 #include <QProgressBar>
 void TournamentGridDialog2::onButtonGenerateAll()
 {
-    for (int sz = 0; sz <= 4; ++sz){ QSqlQuery("DELETE FROM GRID").exec();
+//    for (int sz = 0; sz <= 4; ++sz){ QSqlQuery("DELETE FROM GRID").exec();
 
     QProgressBar progressBar(this);
     progressBar.setMinimum(0);
@@ -912,12 +930,12 @@ void TournamentGridDialog2::onButtonGenerateAll()
         qlonglong tcUID = query.value("UID").toLongLong();
         QVector<long long> bestUID;
 
-        QSqlQuery queryOrder("SELECT * FROM ORDERS WHERE TOURNAMENT_CATEGORIES = ? ");
-        queryOrder.bindValue(0, tcUID);
-        queryOrder.exec();
-        while (queryOrder.next()) bestUID << queryOrder.value("UID").toLongLong();
-        std::random_shuffle(bestUID.begin(), bestUID.end());
-        bestUID.resize(qMin(bestUID.size(), sz));
+//        QSqlQuery queryOrder("SELECT * FROM ORDERS WHERE TOURNAMENT_CATEGORIES = ? ");
+//        queryOrder.bindValue(0, tcUID);
+//        queryOrder.exec();
+//        while (queryOrder.next()) bestUID << queryOrder.value("UID").toLongLong();
+//        std::random_shuffle(bestUID.begin(), bestUID.end());
+//        bestUID.resize(qMin(bestUID.size(), sz));
 
         if (DBUtils::getNodes(tcUID).isEmpty())
             generatGrid(tcUID, bestUID);
@@ -926,7 +944,7 @@ void TournamentGridDialog2::onButtonGenerateAll()
 
     pRenderArea->repaint();
     fillTableGrid();
-    }
+//    }
 }
 
 

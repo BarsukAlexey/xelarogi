@@ -20,7 +20,7 @@ QString DBUtils::getField(const QString& field, const QString& table, const QStr
     }
     else
     {
-        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << PRETTY_FUNCTION << query.lastError()<< query.lastQuery() << "  UID:" << UID;
+        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << PRETTY_FUNCTION << query.lastError()<< query.lastQuery() << "  UID:" << UID << " field:" << field;
     }
     return "";
 }
@@ -35,7 +35,7 @@ QString DBUtils::getField(const QString& field, const QString& table, const long
     }
     else
     {
-        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << PRETTY_FUNCTION << query.lastError()<< query.lastQuery() << "  UID:" << UID;
+        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << PRETTY_FUNCTION << query.lastError()<< query.lastQuery() << "  UID:" << UID << " field:" << field;
     }
     return "";
 }
@@ -139,9 +139,9 @@ QStringList DBUtils::get_DAYS_FROM_TOURNAMENTS(const QSqlDatabase& database, lon
     return res;
 }
 
-QString DBUtils::getSecondNameAndOneLetterOfName(const QSqlDatabase& database, long long UID)
+QString DBUtils::getSecondNameAndOneLetterOfName(long long UID)
 {
-    QSqlQuery query("SELECT * FROM ORDERS WHERE UID = ? ", database);
+    QSqlQuery query("SELECT * FROM ORDERS WHERE UID = ? ");
     query.bindValue(0, UID);
     QString res;
     if (query.exec() && query.next())
@@ -150,6 +150,33 @@ QString DBUtils::getSecondNameAndOneLetterOfName(const QSqlDatabase& database, l
     else
         qDebug() << __LINE__ << __PRETTY_FUNCTION__ << query.lastError().text() << query.lastQuery();
     return res;
+}
+
+QSet<long long> DBUtils::getSetOfOrdersInTournamentCategory(long long uidTournamentCategory)
+{
+    QSet<long long> set;
+    QSqlQuery queryOrder("SELECT * FROM ORDERS WHERE TOURNAMENT_CATEGORY_FK = ? ");
+    queryOrder.addBindValue(uidTournamentCategory);
+    if (!queryOrder.exec())
+    {
+        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << queryOrder.lastError() << queryOrder.lastQuery();
+    }
+    while (queryOrder.next())
+    {
+        set << queryOrder.value("UID").toLongLong();
+    }
+    return set;
+}
+
+int DBUtils::getAge(QDate DATE_WEIGHTING, QDate birthdayDate)
+{
+    int age = DATE_WEIGHTING.year() - birthdayDate.year();
+    if ( DATE_WEIGHTING.month() <  birthdayDate.month() ||
+        (DATE_WEIGHTING.month() == birthdayDate.month() && DATE_WEIGHTING.day() < birthdayDate.day()))
+    {
+        --age;
+    }
+    return age;
 }
 
 
@@ -233,8 +260,8 @@ QVector<DBUtils::NodeOfTournirGrid> DBUtils::getLeafOFTree(const QSqlDatabase& d
 
     std::random_shuffle(res.begin(), res.end());
     std::sort(std::begin(res), std::end(res), [database] (const DBUtils::NodeOfTournirGrid& lhs, const DBUtils::NodeOfTournirGrid& rhs) {
-        return DBUtils::getSecondNameAndOneLetterOfName(database, lhs.UID) <
-                DBUtils::getSecondNameAndOneLetterOfName(database, rhs.UID);
+        return DBUtils::getSecondNameAndOneLetterOfName(lhs.UID) <
+                DBUtils::getSecondNameAndOneLetterOfName(rhs.UID);
     });
     return res;
 }
@@ -335,6 +362,23 @@ void DBUtils::swapNodesOfGrid(long long tournamentCategories, int node0v, int no
         if (!query.exec())
             qDebug() << __PRETTY_FUNCTION__ << " " << query.lastError().text() << "\n" << query.lastQuery();
     }
+}
+
+int DBUtils::findDurationOfGrid(long long tournamentCategories, int delay)
+{
+    int time = 0;
+    for (const DBUtils::NodeOfTournirGrid f : DBUtils::getNodes(tournamentCategories))
+    {
+        if (!f.isFighing) continue;
+        time += DBUtils::get__DURATION_FIGHING(QSqlDatabase::database(), tournamentCategories) *
+                DBUtils::get__ROUND_COUNT(QSqlDatabase::database(), tournamentCategories) +
+
+                DBUtils::get__DURATION_BREAK(QSqlDatabase::database(), tournamentCategories) *
+                (DBUtils::get__ROUND_COUNT(QSqlDatabase::database(), tournamentCategories) - 1) +
+                delay;
+    }
+    if (0 <= time - delay) time -= delay;
+    return time;
 }
 
 QVector<long long> DBUtils::get_UIDs_of_TOURNAMENT_CATEGORIES(const QSqlDatabase& database, long long tournamentUID)

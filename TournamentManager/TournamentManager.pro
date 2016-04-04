@@ -42,7 +42,10 @@ SOURCES += main.cpp\
     trophygeneratorsettingsdialog.cpp \
     report_manda.cpp \
     report_ministr.cpp \
-    dialog_insert_data_in_database.cpp
+    dialog_insert_data_in_database.cpp \
+    dialog_change_category.cpp \
+    dialog_create_age_category.cpp \
+    mythread.cpp
 
 HEADERS  += mainwindow.h \
     handbookdialog.h \
@@ -70,7 +73,10 @@ HEADERS  += mainwindow.h \
     trophygeneratorsettingsdialog.h \
     report_manda.h \
     report_ministr.h \
-    dialog_insert_data_in_database.h
+    dialog_insert_data_in_database.h \
+    dialog_change_category.h \
+    dialog_create_age_category.h \
+    mythread.h
 
 FORMS    += mainwindow.ui \
     handbookdialog.ui \
@@ -84,6 +90,8 @@ FORMS    += mainwindow.ui \
     errormessagesdialog.ui \
     logindialog.ui \
     trophygeneratorsettingsdialog.ui \
-    dialog_insert_data_in_database.ui
+    dialog_insert_data_in_database.ui \
+    dialogchangecategory.ui \
+    dialog_create_age_category.ui
 
 DISTFILES +=

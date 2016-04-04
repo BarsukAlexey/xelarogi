@@ -26,17 +26,18 @@ public:
 private slots:
     void onAddBtn();
     void onChangeBtn(long long categoryUID);
+    void on_pushButtonAddGroupOfCaterories_clicked();
 
-    void on_pushButton_clicked();
-
-    void on_okBtn_clicked();
+    void on_buttonAddAgeCat_clicked();
 
 private:
     void updateTable();
     void updateDataWidget(long long categoryUID);
     void fillSexComboBox();
+    void fillAgeCategory();
     void fillTypeComboBox();
     void selectSexByUID(long long sexUID);
+    void selectAgeCategory(long long ageCategoryUID);
     void selectTypeByUID(long long typeUID);
     void addContextMenu();
 

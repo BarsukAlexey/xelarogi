@@ -4,6 +4,7 @@
 #include "db_utils.h"
 #include <QSortFilterProxyModel>
 #include "dialog_insert_data_in_database.h"
+#include "dialog_change_category.h"
 
 QSqlRecord CreateTournamentOrdersDialog::m_record;
 
@@ -234,6 +235,83 @@ CreateTournamentOrdersDialog::CreateTournamentOrdersDialog(const QSqlDatabase &d
                 QMessageBox::warning(this, "Заполнены не все поля", "Вы не указали: " + error + " - заполните эти поля");
             }
         }
+    });
+
+    connect(ui->pushButtonChangeCategory, &QPushButton::clicked, [this, model, tournamentUID] ()
+    {
+        QModelIndex index = ui->tableView->selectionModel()->currentIndex();
+        if (index == QModelIndex()) return;
+
+        long long uidOrder   = model->index(index.row(), model->fieldIndex("UID")).data().toLongLong();
+        long long uidTC = DBUtils::getField("TOURNAMENT_CATEGORY_FK", "ORDERS", uidOrder).toLongLong();
+        double w0 = DBUtils::getField("WEIGHT_FROM", "TOURNAMENT_CATEGORIES", uidTC).toDouble();
+        double w1 = DBUtils::getField("WEIGHT_TILL", "TOURNAMENT_CATEGORIES", uidTC).toDouble();
+        long long a0 = DBUtils::getField("AGE_FROM", "TOURNAMENT_CATEGORIES", uidTC).toLongLong();
+        long long a1 = DBUtils::getField("AGE_TILL", "TOURNAMENT_CATEGORIES", uidTC).toLongLong();
+        QVector<long long> arr;
+
+        QSqlQuery query(
+            "SELECT * "
+            "FROM "
+                "TOURNAMENT_CATEGORIES "
+            "WHERE "
+                "TOURNAMENT_FK = ? AND "
+                "SEX_FK = ? "
+            "ORDER BY "
+                "AGE_FROM, AGE_TILL, WEIGHT_FROM, WEIGHT_TILL");
+        query.addBindValue(tournamentUID);
+        query.addBindValue(DBUtils::getField("SEX_FK", "ORDERS", uidOrder));
+        if (!query.exec())
+        {
+            qDebug() << __LINE__ << __PRETTY_FUNCTION__ << query.lastError() << query.lastQuery();
+            return;
+        }
+        while (query.next())
+        {
+            long long curUidTC = query.value("UID").toLongLong();
+            if (curUidTC == uidTC) continue;
+            double curw0 = DBUtils::getField("WEIGHT_FROM", "TOURNAMENT_CATEGORIES", curUidTC).toDouble();
+            double curw1 = DBUtils::getField("WEIGHT_TILL", "TOURNAMENT_CATEGORIES", curUidTC).toDouble();
+            long long cura0 = DBUtils::getField("AGE_FROM", "TOURNAMENT_CATEGORIES", curUidTC).toLongLong();
+            long long cura1 = DBUtils::getField("AGE_TILL", "TOURNAMENT_CATEGORIES", curUidTC).toLongLong();
+            double eps = 1e-7;
+
+            QSet<long long > set = DBUtils::getSetOfOrdersInTournamentCategory(curUidTC);
+            if (set.contains(uidOrder)) continue;
+            if (
+                0 < set.size() &&
+                (qMax(w0, curw0) - eps <= qMin(w1, curw1) && qMax(a0, cura0) <= qMin(a1 + 1, cura1 + 1))
+            ){
+                arr << curUidTC;
+            }
+        }
+
+        QDate DATE_WEIGHTING = QDate::fromString(DBUtils::getFieldDate("DATE_WEIGHTING", "TOURNAMENTS", mTournamentUID), "dd.MM.yyyy");
+        QDate BIRTHDATE      = QDate::fromString(DBUtils::getFieldDate("BIRTHDATE", "ORDERS", uidOrder                ), "dd.MM.yyyy");
+        QString title =
+            DBUtils::getSecondNameAndOneLetterOfName(uidOrder) + ", " +
+            DBUtils::getField("WEIGHT", "ORDERS", uidOrder) + " кг, " +
+            QString::number(DBUtils::getAge(DATE_WEIGHTING, BIRTHDATE)) + " age";
+
+        DialogChangeCategory dlg(title, arr, this);
+        if (dlg.exec() == QDialog::Accepted)
+        {
+            QSqlQuery updateQuery(
+                "UPDATE ORDERS "
+                "SET "
+                    "TOURNAMENT_CATEGORY_FK = ?, TYPE_FK = ? "
+                "WHERE UID = ? ");
+            updateQuery.addBindValue(dlg.uidCategory);
+            updateQuery.addBindValue(DBUtils::getField("TYPE_FK", "TOURNAMENT_CATEGORIES", dlg.uidCategory));
+            updateQuery.addBindValue(uidOrder);
+            if (!updateQuery.exec())
+                qDebug() << __LINE__ << __PRETTY_FUNCTION__ << updateQuery.lastError() << updateQuery.lastQuery();
+        }
+
+        model->select();
+        ui->tableView->setCurrentIndex(ui->tableView->model()->index(index.row(), 0));
+        updateFillOrderWidget(uidOrder);
+        qDebug() << "changed category";
     });
 
     connect(ui->toExcelBtn, &QPushButton::clicked, this, &CreateTournamentOrdersDialog::saveToExcel);

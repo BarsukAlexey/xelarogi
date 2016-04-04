@@ -23,7 +23,6 @@ public:
 
 
 private:
-    const QSqlDatabase &database;
     long long tournamentCategories;
     int countRows, countColumns;
     int widthCell, heightCell;
@@ -31,7 +30,7 @@ private:
     DBUtils::NodeOfTournirGrid selectedNode = noNode;
 
 public:
-    explicit RenderAreaWidget(QWidget *parent, int widthCell, int heightCell, const QSqlDatabase &_database);
+    explicit RenderAreaWidget(QWidget *parent, int widthCell, int heightCell);
 
 protected:
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
@@ -64,7 +63,7 @@ private:
 
 public:
     static int log2(int x);
-    static void printTableGridInExcel(const QSqlDatabase &database, int tournamentCategory, bool likePointFighing, QString path, bool isFirst, bool isLast, int& fightingNumber, QString text = "", QString prefFileName = "");
+    static void printTableGridInExcel(int tournamentCategory, bool likePointFighing, QString path, bool isFirst, bool isLast, int& fightingNumber, QString text = "", QString prefFileName = "");
     static QString getNameOfLevel(int vertex);
 };
 #endif // RENDERAREAWIDGET_H

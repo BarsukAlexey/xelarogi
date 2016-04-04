@@ -90,17 +90,13 @@ WinnerReport::WinnerReport(const QSqlDatabase& database, const long long tournam
             for (const long long orderUID : val.second)
             {
                 ExcelUtils::setValue(sheet, currentRow, 1, QString::number(place));
-                if (orderUID != 0)
-                {
-                    ExcelUtils::setValue(sheet, currentRow, 2, DBUtils::getField("SECOND_NAME", "ORDERS", orderUID) + " " + DBUtils::getField("FIRST_NAME", "ORDERS", orderUID));
-                    ExcelUtils::setValue(sheet, currentRow, 3, DBUtils::getField("NAME", "SPORT_CATEGORIES", DBUtils::getField("SPORT_CATEGORY_FK", "ORDERS", orderUID)));
-                    ExcelUtils::setValue(sheet, currentRow, 4, DBUtils::getField("NAME", "REGIONS", DBUtils::getField("REGION_FK", "ORDERS", orderUID)));
-                    ExcelUtils::setValue(sheet, currentRow, 5, DBUtils::getField("NAME", "COACHS", DBUtils::getField("COACH_FK", "ORDERS", orderUID)));
-                }
-                else
-                {
-                    continue;
-                }
+                if (orderUID == 0)
+                    break;
+                ExcelUtils::setValue(sheet, currentRow, 2, DBUtils::getField("SECOND_NAME", "ORDERS", orderUID) + " " + DBUtils::getField("FIRST_NAME", "ORDERS", orderUID));
+                ExcelUtils::setValue(sheet, currentRow, 3, DBUtils::getField("NAME", "SPORT_CATEGORIES", DBUtils::getField("SPORT_CATEGORY_FK", "ORDERS", orderUID)));
+                ExcelUtils::setValue(sheet, currentRow, 4, DBUtils::getField("NAME", "REGIONS", DBUtils::getField("REGION_FK", "ORDERS", orderUID)));
+                ExcelUtils::setValue(sheet, currentRow, 5, DBUtils::getField("NAME", "COACHS", DBUtils::getField("COACH_FK", "ORDERS", orderUID)));
+
                 ExcelUtils::setBorder(sheet, currentRow, 1, currentRow, heads.size());
                 place = qMin(3, place + 1);
                 ++currentRow;

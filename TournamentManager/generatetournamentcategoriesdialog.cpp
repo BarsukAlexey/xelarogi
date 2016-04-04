@@ -2,6 +2,7 @@
 #include "ui_generatetournamentcategoriesdialog.h"
 #include "db_utils.h"
 #include "createtypedialog.h"
+#include "dialog_create_age_category.h"
 
 GenerateTournamentCategoriesDialog::GenerateTournamentCategoriesDialog(long long tournamentUID, QWidget *parent) :
     QDialog(parent),
@@ -11,11 +12,14 @@ GenerateTournamentCategoriesDialog::GenerateTournamentCategoriesDialog(long long
     ui->setupUi(this);
 
     fillSexCB();
+    fillComboBoxAgeCategory();
     fillTypeCB();
+
+    connect(ui->sexCB, &QComboBox::currentTextChanged, this, &GenerateTournamentCategoriesDialog::fillComboBoxAgeCategory);
 
     connect(this, &GenerateTournamentCategoriesDialog::accepted, [this] ()
     {
-        QString name = ui->nameLE->text().trimmed();
+        long long ageCatUID = ui->comboBoxAgeCategory->currentData(Qt::UserRole).toLongLong();
         long long sexUID = ui->sexCB->currentData(Qt::UserRole).toLongLong();
         long long typeUID = ui->typeCB->currentData(Qt::UserRole).toLongLong();
         int ageFrom = ui->ageFromSB->value();
@@ -24,7 +28,7 @@ GenerateTournamentCategoriesDialog::GenerateTournamentCategoriesDialog(long long
         int durationFighting = ui->duratiobFightingSB->value();
         int durationBreak = ui->durationBreakSB->value();
         int roundCount = ui->roundCountSB->value();
-        qDebug() << durationFighting << durationBreak << roundCount;
+        //qDebug() << durationFighting << durationBreak << roundCount;
 
         QString weightCorrect = ui->weightsLE->text().trimmed().replace(",", ".");
         QStringList weights = weightCorrect.split(";", QString::SkipEmptyParts);
@@ -46,29 +50,32 @@ GenerateTournamentCategoriesDialog::GenerateTournamentCategoriesDialog(long long
             else ageStr += QString::number(ageFrom) + "-" + QString::number(ageTill);
 
 
-            QString modifyName = name + ", " +
+            QString modifyName = DBUtils::getField("NAME", "AGE_CATEGORIES", ageCatUID) + ", " +
                 ageStr + " лет, " +
                 ui->typeCB->currentText() + ", " +
                 DBUtils::getNormanWeightRange(weightFrom, weightTill) + ".";
 
             QSqlQuery query;
             if (!query.prepare("INSERT INTO TOURNAMENT_CATEGORIES("
-                               "NAME, AGE_FROM, AGE_TILL, WEIGHT_FROM, WEIGHT_TILL,"
+                               "NAME, AGE_CATEGORY_FK, AGE_FROM, AGE_TILL, WEIGHT_FROM, WEIGHT_TILL,"
                                "SEX_FK, TYPE_FK, TOURNAMENT_FK,"
                                "DURATION_FIGHING, DURATION_BREAK, ROUND_COUNT) "
-                               "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"))
+                               "VALUES (?, ?, ?, ?, ?, ?,    ?, ?, ?,   ?, ?, ?)"))
                 qDebug() << query.lastError().text();
-            query.bindValue(0, modifyName);
-            query.bindValue(1, ageFrom);
-            query.bindValue(2, ageTill);
-            query.bindValue(3, weightFrom);
-            query.bindValue(4, weightTill);
-            query.bindValue(5, sexUID);
-            query.bindValue(6, typeUID);
-            query.bindValue(7, mTournamentUID);
-            query.bindValue(8, durationFighting);
-            query.bindValue(9, durationBreak);
-            query.bindValue(10, roundCount);
+            query.addBindValue(modifyName);
+            query.addBindValue(ageCatUID);
+            query.addBindValue(ageFrom);
+            query.addBindValue(ageTill);
+            query.addBindValue(weightFrom);
+            query.addBindValue(weightTill);
+
+            query.addBindValue(sexUID);
+            query.addBindValue(typeUID);
+            query.addBindValue(mTournamentUID);
+
+            query.addBindValue(durationFighting);
+            query.addBindValue(durationBreak);
+            query.addBindValue(roundCount);
 
             if (!query.exec())
                 qDebug() << query.lastError().text();
@@ -136,6 +143,23 @@ void GenerateTournamentCategoriesDialog::fillTypeCB()
     }
 }
 
+void GenerateTournamentCategoriesDialog::fillComboBoxAgeCategory()
+{
+    ui->comboBoxAgeCategory->clear();
+
+    QSqlQuery query("SELECT * FROM AGE_CATEGORIES WHERE SEX_FK = ?");
+    query.addBindValue(ui->sexCB->currentData(Qt::UserRole).toLongLong());
+    if (!query.exec())
+    {
+        qDebug() << query.lastError();
+        return ;
+    }
+    while (query.next())
+    {
+        ui->comboBoxAgeCategory->addItem(query.value("NAME").toString(), query.value("UID").toLongLong());
+    }
+}
+
 void GenerateTournamentCategoriesDialog::on_pushButton_clicked()
 {
     CreateTypeDialog dlg(this);
@@ -143,4 +167,12 @@ void GenerateTournamentCategoriesDialog::on_pushButton_clicked()
     {
         fillTypeCB();
     }
+}
+
+
+
+void GenerateTournamentCategoriesDialog::on_pushButtonAddAgeCategory_clicked()
+{
+    DialogCreateAgeCategory(this, ui->sexCB->currentData(Qt::UserRole).toLongLong()).exec();
+    fillComboBoxAgeCategory();
 }

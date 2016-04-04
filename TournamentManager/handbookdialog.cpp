@@ -71,7 +71,7 @@ HandbookDialog::HandbookDialog(QString tableName, QString tableRusName,
         this->accept();
     });
 
-    ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeMode::Stretch);
+    ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeMode::ResizeToContents);
 
 
     connect(ui->tableView, &QTableView::customContextMenuRequested, [this, &tableName, model] (const QPoint& pos)
@@ -105,6 +105,10 @@ HandbookDialog::HandbookDialog(QString tableName, QString tableRusName,
 //        WebReportDialog dlg(this->ui->label_2->text(), this);
 //        dlg.exec();
 //    });
+    setWindowFlags(windowFlags() | Qt::WindowMaximizeButtonHint);
+    if (parent == 0)
+        setWindowFlags(windowFlags() | Qt::WindowMinMaxButtonsHint);
+    //ui->tableView->resizeColumnsToContents();
 }
 
 HandbookDialog::~HandbookDialog()
