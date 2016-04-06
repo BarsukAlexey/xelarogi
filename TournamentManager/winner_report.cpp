@@ -5,6 +5,9 @@
 #include <QAxWidget>
 #include <QAxObject>
 #include <QDebug>
+#include <QSqlQuery>
+#include <QSqlError>
+
 
 WinnerReport::WinnerReport(const QSqlDatabase& database, const long long tournamentUID, QObject* parent)
     : QObject(parent)
@@ -21,14 +24,32 @@ WinnerReport::WinnerReport(const QSqlDatabase& database, const long long tournam
 
 
 
+    QSqlQuery query(
+                "SELECT "
+                    "TYPE_FK, AGE_FROM, AGE_TILL, SEX_FK, MAX(AGE_CATEGORY_FK) AS AGE_CAT "
+                "FROM "
+                    "TOURNAMENT_CATEGORIES "
+                "WHERE "
+                    "TOURNAMENT_FK = ? "
+                "GROUP BY "
+                    "TYPE_FK, AGE_FROM, AGE_TILL, SEX_FK "
+                "ORDER BY "
+                    "TYPE_FK, AGE_TILL, SEX_FK");
+    query.addBindValue(tournamentUID);
+    if (!query.exec())
+    {
+        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << query.lastError().text() << query.lastQuery();
+        return ;
+    }
 
-    for(const std::tuple<long long, int, int, long long>& x : DBUtils::get_distinct_TYPE_FK_AgeFrom_AgeTill(tournamentUID))
+    while (query.next())
     {
 
-        const long long type_fk = std::get<0>(x);
-        const int age_from      = std::get<1>(x);
-        const int age_till      = std::get<2>(x);
-        const int sex_fk        = std::get<3>(x);
+        const long long type_fk = query.value("TYPE_FK").toLongLong();
+        const int age_from      = query.value("AGE_FROM").toLongLong();
+        const int age_till      = query.value("AGE_TILL").toLongLong();
+        const int sex_fk        = query.value("SEX_FK").toLongLong();
+        const int ageCatUID     = query.value("AGE_CAT").toLongLong();
 
         std::map<QString, QVector<long long> > stdMap = DBUtils::get_weight_and_orderUIDs(tournamentUID, type_fk, age_from, age_till, sex_fk).toStdMap();
         if (stdMap.empty()) continue;
@@ -46,11 +67,6 @@ WinnerReport::WinnerReport(const QSqlDatabase& database, const long long tournam
 
 
         ExcelUtils::setTournamentName(sheet, DBUtils::getTournamentNameAsHeadOfDocument(database, tournamentUID), currentRow, 1, currentRow, heads.size());
-//        ExcelUtils::setValue     (sheet, currentRow, 1, DBUtils::getField("NAME", "TOURNAMENTS", tournamentUID));
-//        ExcelUtils::setFontBold(sheet, currentRow, 1, true);
-//        ExcelUtils::setWrapText  (sheet, currentRow, 1);
-//        ExcelUtils::uniteRange   (sheet, currentRow, 1, currentRow, heads.size());
-//        ExcelUtils::setRowHeight(sheet, currentRow, 30);
 
         ++currentRow;
 
@@ -62,7 +78,7 @@ WinnerReport::WinnerReport(const QSqlDatabase& database, const long long tournam
         ExcelUtils::uniteRange   (sheet, currentRow, 1, currentRow, heads.size());
         ++currentRow;
 
-        ExcelUtils::setValue     (sheet, currentRow, 1, DBUtils::getField("SHORTNAME", "SEXES", sex_fk) + ", возраст: " + QString::number(age_from) + " - " + QString::number(age_till));
+        ExcelUtils::setValue     (sheet, currentRow, 1, DBUtils::getField("NAME", "AGE_CATEGORIES", ageCatUID) + ", " + DBUtils::getNormanAgeRange(age_from, age_till) + " лет");
         ExcelUtils::uniteRange   (sheet, currentRow, 1, currentRow, heads.size());
         ++currentRow;
 

@@ -9,7 +9,9 @@ public:
 
     static void f(const QSqlDatabase &_database, long long _tournamentUID);
 
-    static void setRandomWinner(const QSqlDatabase &_database, long long _tournamentUID);
+    static void setRandomWinner();
+
+    static void setTournamentCat(long long tournamentUID);
 
 };
 

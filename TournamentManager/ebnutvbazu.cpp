@@ -6,6 +6,8 @@
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QDate>
+#include <utility>
+#include <generatetournamentcategoriesdialog.h>
 
 
 void EbnutVBazu::f(const QSqlDatabase &database, long long )
@@ -106,41 +108,166 @@ void EbnutVBazu::f(const QSqlDatabase &database, long long )
 
 
 
-void EbnutVBazu::setRandomWinner(const QSqlDatabase& , long long )
+void EbnutVBazu::setRandomWinner()
 {
-    QSqlQuery query("SELECT DISTINCT TOURNAMENT_CATEGORIES_FK FROM GRID");
+    QSqlQuery query("SELECT * FROM TOURNAMENT_CATEGORIES ORDER BY UID");
     if (!query.exec())
     {
-        qDebug() << "\n" << __PRETTY_FUNCTION__ << "\n" << query.lastError().text() << "\n" << query.lastQuery() << "\n";
+        qDebug() << __LINE__ << __PRETTY_FUNCTION__  << query.lastError().text() << query.lastQuery();
         return ;
     }
     while (query.next())
     {
-        qlonglong TOURNAMENT_CATEGORIES_FK = query.value("TOURNAMENT_CATEGORIES_FK").toLongLong();
-        qDebug() << "TOURNAMENT_CATEGORIES_FK: " << TOURNAMENT_CATEGORIES_FK;
-        QVector<DBUtils::NodeOfTournirGrid> nodes = DBUtils::getNodes(TOURNAMENT_CATEGORIES_FK);
+        qlonglong tcUID = query.value("UID").toLongLong();
+        qDebug() << "TOURNAMENT_CATEGORIES_FK: " << tcUID;
+        QVector<DBUtils::NodeOfTournirGrid> nodes = DBUtils::getNodes(tcUID);
+        if (tcUID==1225)
+        {
+            tcUID = tcUID;
+        }
         for (int i = nodes.size() - 1; 0 <= i; --i)
         {
             int v = i + 1;
             int child = rand() % 2? 2 * v + 1 : 2 * v;
             if (child <= nodes.size())
             {
-                QSqlQuery q("UPDATE GRID SET ORDER_FK = ?  WHERE TOURNAMENT_CATEGORIES_FK = ? AND VERTEX = ?");
+                QSqlQuery q("UPDATE GRID SET ORDER_FK = ?, result = ?  WHERE TOURNAMENT_CATEGORIES_FK = ? AND VERTEX = ?");
                 if (nodes[child - 1].UID == 0)
                 {
                     qDebug() << "Fuck";
                     return;
                 }
-                q.bindValue(0, nodes[v - 1].UID = nodes[child - 1].UID);
-                q.bindValue(1, TOURNAMENT_CATEGORIES_FK);
-                q.bindValue(2, v);
+                q.addBindValue(nodes[v - 1].UID = nodes[child - 1].UID);
+                int r = rand() % 3; q.addBindValue(QString::number(r) + ":" + QString::number(3 - r));
+                q.addBindValue(tcUID);
+                q.addBindValue(v);
                 if (!q.exec())
                 {
-                    qDebug() << "\n" << __PRETTY_FUNCTION__ << "\n" << q.lastError().text() << "\n" << q.lastQuery() << "\n";
+                    qDebug() << __LINE__ << __PRETTY_FUNCTION__  << q.lastError().text() << q.lastQuery();
                     return ;
                 }
             }
         }
     }
     qDebug() << "DONE setRandomWinner";
+}
+
+void EbnutVBazu::setTournamentCat(long long tournamentUID)
+{
+    QSqlDatabase::database().transaction();
+    QSqlQuery query;
+
+    for(QString s : {
+        "DELETE FROM AGE_CATEGORIES; ",
+        "DELETE FROM CLUBS; ",
+        "DELETE FROM COACHS; ",
+        "DELETE FROM COUNTRIES; ",
+        "DELETE FROM GRID; ",
+        "DELETE FROM ORDERS; ",
+        "DELETE FROM REGION_UNITS; ",
+        "DELETE FROM REGIONS; ",
+        "DELETE FROM SPORT_CATEGORIES; ",
+        "DELETE FROM TOURNAMENT_CATEGORIES; ",
+        "DELETE FROM SPORT_CATEGORIES; ",
+        "DELETE FROM TYPES; "})
+    {
+        query.clear();
+        if(!query.prepare(s))
+        {
+            qDebug() << __LINE__ << __PRETTY_FUNCTION__ << query.lastError() << query.lastQuery();
+            return;
+        }
+        if(!query.exec())
+        {
+            qDebug() << __LINE__ << __PRETTY_FUNCTION__ << query.lastError() << query.lastQuery();
+            return;
+        }
+    }
+
+    QVector<std::pair<int, QString>> types;
+    types
+            << std::make_pair(100, "Лоу-кик")
+            << std::make_pair(101, "Фулл-контакт")
+            << std::make_pair(102, "Лайт-контакт")
+            << std::make_pair(103, "Поинтфайтинг");
+
+    for(std::pair<int, QString> type : types)
+    {
+        query.clear();
+        if(!query.prepare("INSERT INTO TYPES VALUES (?,?)"))
+        {
+            qDebug() << __LINE__ << __PRETTY_FUNCTION__ << query.lastError() << query.lastQuery();
+            return;
+        }
+        query.addBindValue(type.first);
+        query.addBindValue(type.second);
+        if(!query.exec())
+        {
+            qDebug() << __LINE__ << __PRETTY_FUNCTION__ << query.lastError() << query.lastQuery();
+            return;
+        }
+    }
+
+
+
+    for (std::tuple<int, QString, int, int, int> tup : {
+         std::make_tuple(10, QString("Мл. кадеты"), 1, 0, 7),
+
+         std::make_tuple(11, QString("Кадеты"), 1, 8, 9),
+         std::make_tuple(12, QString("Девочки"), 2, 8, 9),
+
+         std::make_tuple(13, QString("Мл. юноши"), 1, 10, 12),
+         std::make_tuple(14, QString("Мл. девушки"), 2, 10, 12),
+
+         std::make_tuple(15, QString("Юноши"), 1, 13, 15),
+         std::make_tuple(16, QString("Девушки"), 2, 13, 15),
+
+         std::make_tuple(17, QString("Юниоры"), 1, 16, 18),
+         std::make_tuple(18, QString("Юниорки"), 2, 16, 18),
+
+         std::make_tuple(19, QString("Мужчины"), 1, 18, 99),
+         std::make_tuple(20, QString("Женщины"), 2, 18, 99),})
+    {
+        query.clear();
+        if(!query.prepare("INSERT INTO AGE_CATEGORIES VALUES (?,?,?)"))
+        {
+            qDebug() << __LINE__ << __PRETTY_FUNCTION__ << query.lastError() << query.lastQuery();
+            return;
+        }
+        query.addBindValue(std::get<0>(tup));
+        query.addBindValue(std::get<1>(tup));
+        query.addBindValue(std::get<2>(tup));
+        if(!query.exec())
+        {
+            qDebug() << __LINE__ << __PRETTY_FUNCTION__ << query.lastError() << query.lastQuery();
+            return;
+        }
+
+        for(std::pair<int, QString> type : types)
+        {
+            QVector<double> weigths;
+            QVector<int> time;
+            weigths << 0;
+            if      (std::get<0>(tup) <= 10) weigths << 20 << 22 << 25 << 28 << 32 << 37;
+            else if (std::get<0>(tup) <= 12) weigths << 20 << 22 << 25 << 28 << 32 << 37 << 42;
+            else if (std::get<0>(tup) <= 14) weigths << 28 << 32 << 37 << 42 << 47;
+            else if (std::get<0>(tup) <= 16) weigths << 42 << 46 << 50 << 55 << 60 << 65;
+            else if (std::get<0>(tup) <= 18) weigths << 50 << 55 << 60 << 65 << 70;
+            else if (std::get<0>(tup) <= 20) weigths << 50 << 55 << 60 << 65 << 70;
+            weigths << 10000;
+
+            if      (std::get<0>(tup) <= 12) time << 60  << 30 << 2;
+            else if (std::get<0>(tup) <= 14) time << 90  << 45 << 2;
+            else if (std::get<0>(tup) <= 20) time << 120 << 60 << 2;
+
+            GenerateTournamentCategoriesDialog::insertInDB(
+                        std::get<0>(tup),
+                        std::get<3>(tup), std::get<4>(tup),
+                        weigths, tournamentUID, type.first, std::get<2>(tup),
+                        time[0], time[1], time[2]
+                );
+        }
+    }
+
+    QSqlDatabase::database().commit();
 }

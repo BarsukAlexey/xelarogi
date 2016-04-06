@@ -120,6 +120,26 @@
             </spacer>
            </item>
            <item>
+            <widget class="QPushButton" name="pushButton">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="text">
+              <string>PushButton</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButton_2">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="text">
+              <string>PushButton</string>
+             </property>
+            </widget>
+           </item>
+           <item>
             <widget class="QPushButton" name="testClearBtn">
              <property name="enabled">
               <bool>false</bool>
@@ -241,7 +261,7 @@
            <item>
             <widget class="QPushButton" name="pushButtonLoadWinner">
              <property name="text">
-              <string>Загрузить результаты</string>
+              <string>Загрузить результаты боёв</string>
              </property>
             </widget>
            </item>

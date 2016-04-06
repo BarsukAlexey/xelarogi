@@ -56,6 +56,8 @@ public:
     QVBoxLayout *verticalLayout_3;
     QLabel *label;
     QSpacerItem *verticalSpacer_3;
+    QPushButton *pushButton;
+    QPushButton *pushButton_2;
     QPushButton *testClearBtn;
     QWidget *ordersPage;
     QGridLayout *gridLayout;
@@ -170,6 +172,18 @@ public:
         verticalSpacer_3 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
         verticalLayout_3->addItem(verticalSpacer_3);
+
+        pushButton = new QPushButton(generalPage);
+        pushButton->setObjectName(QStringLiteral("pushButton"));
+        pushButton->setEnabled(false);
+
+        verticalLayout_3->addWidget(pushButton);
+
+        pushButton_2 = new QPushButton(generalPage);
+        pushButton_2->setObjectName(QStringLiteral("pushButton_2"));
+        pushButton_2->setEnabled(false);
+
+        verticalLayout_3->addWidget(pushButton_2);
 
         testClearBtn = new QPushButton(generalPage);
         testClearBtn->setObjectName(QStringLiteral("testClearBtn"));
@@ -342,6 +356,8 @@ public:
         orderAction->setText(QApplication::translate("MainWindow", "\320\227\320\260\321\217\320\262\320\272\320\270", 0));
         actionAgeCategory->setText(QApplication::translate("MainWindow", "\320\222\320\276\320\267\321\200\320\260\321\201\321\202\320\275\321\213\320\265 \320\272\320\260\321\202\320\265\320\263\320\276\321\200\320\270\320\270", 0));
         label->setText(QApplication::translate("MainWindow", "\320\222\321\213\320\261\320\265\321\200\320\265\321\202\320\265 \321\202\321\203\321\200\320\275\320\270\321\200", 0));
+        pushButton->setText(QApplication::translate("MainWindow", "PushButton", 0));
+        pushButton_2->setText(QApplication::translate("MainWindow", "PushButton", 0));
         testClearBtn->setText(QApplication::translate("MainWindow", "\320\243\320\264\320\260\320\273\320\270\321\202\321\214 \320\276\321\210\320\270\320\261\320\276\321\207\320\275\321\213\320\265 \320\267\320\260\320\277\320\270\321\201\320\270 \320\270\320\267 \320\261\320\260\320\267\321\213 (\321\202\320\265\321\201\321\202\320\276\320\262\320\276\320\265)", 0));
         tournamentLabel->setText(QApplication::translate("MainWindow", "\320\242\321\203\321\200\320\275\320\270\321\200. \320\232\320\260\320\272 \321\203\320\261\321\200\320\260\321\202\321\214 \321\215\321\202\320\276 \320\277\321\200\320\270 \320\267\320\260\320\277\321\203\321\201\320\272\320\265?", 0));
         tournamentUidLabel->setText(QApplication::translate("MainWindow", "TextLabel", 0));
@@ -351,7 +367,7 @@ public:
         pushButtonProtokolVzveshinanya->setText(QApplication::translate("MainWindow", "\320\237\321\200\320\276\321\202\320\276\320\272\320\276\320\273\321\213 \320\262\320\267\320\262\320\265\321\210\320\270\320\262\320\260\320\275\320\270\321\217", 0));
         pushButtonFightinDistribution->setText(QApplication::translate("MainWindow", "\320\223\321\200\320\260\321\204\320\270\320\272 \321\200\320\260\321\201\320\277\320\265\321\200\320\265\320\264\320\265\320\273\320\265\320\275\320\270\321\217 \320\261\320\276\321\221\320\262", 0));
         pushButtonPair->setText(QApplication::translate("MainWindow", "\320\241\320\276\321\201\321\202\320\260\320\262\321\213 \320\277\320\260\321\200", 0));
-        pushButtonLoadWinner->setText(QApplication::translate("MainWindow", "\320\227\320\260\320\263\321\200\321\203\320\267\320\270\321\202\321\214 \321\200\320\265\320\267\321\203\320\273\321\214\321\202\320\260\321\202\321\213", 0));
+        pushButtonLoadWinner->setText(QApplication::translate("MainWindow", "\320\227\320\260\320\263\321\200\321\203\320\267\320\270\321\202\321\214 \321\200\320\265\320\267\321\203\320\273\321\214\321\202\320\260\321\202\321\213 \320\261\320\276\321\221\320\262", 0));
         pushButtonWinnerReport->setText(QApplication::translate("MainWindow", "\320\241\320\277\320\270\321\201\320\276\320\272 \320\277\320\276\320\261\320\265\320\264\320\270\321\202\320\265\320\273\320\265\320\271", 0));
         trophyBtn->setText(QApplication::translate("MainWindow", "\320\241\320\276\320\267\320\264\320\260\321\202\321\214 \320\263\321\200\320\260\320\274\320\276\321\202\321\213", 0));
         manda->setText(QApplication::translate("MainWindow", "\320\237\321\200\320\276\321\202\320\276\320\272\320\276\320\273 \320\274\320\260\320\275\320\264\320\260\321\202\320\275\320\276\320\271 \320\272\320\276\320\274\320\270\321\201\321\201\320\270\320\270", 0));

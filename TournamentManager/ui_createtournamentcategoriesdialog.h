@@ -91,7 +91,7 @@ public:
         tableView->setAlternatingRowColors(true);
         tableView->setSelectionMode(QAbstractItemView::SingleSelection);
         tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
-        tableView->setSortingEnabled(true);
+        tableView->setSortingEnabled(false);
         splitter->addWidget(tableView);
         tableView->verticalHeader()->setVisible(false);
         tableView->verticalHeader()->setHighlightSections(false);

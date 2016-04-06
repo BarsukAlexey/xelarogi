@@ -13,7 +13,7 @@
 ReportManda::ReportManda(const QSqlDatabase& database, const long long tournamentUID)
 {
     QSqlQuery queryCategory(
-                "SELECT SEX_FK, TYPE_FK, AGE_FROM, AGE_TILL "
+                "SELECT SEX_FK, TYPE_FK, AGE_FROM, AGE_TILL, MAX(AGE_CATEGORY_FK) AS AGE_CAT_UID "
                 "FROM TOURNAMENT_CATEGORIES "
                 "WHERE TOURNAMENT_FK = ? "
                 "GROUP BY SEX_FK, TYPE_FK, AGE_FROM, AGE_TILL "
@@ -39,6 +39,7 @@ ReportManda::ReportManda(const QSqlDatabase& database, const long long tournamen
         QString TYPE_FK  = queryCategory.value("TYPE_FK").toString();
         QString AGE_FROM = queryCategory.value("AGE_FROM").toString();
         QString AGE_TILL = queryCategory.value("AGE_TILL").toString();
+        QString ageCatUID = queryCategory.value("AGE_CAT_UID").toString();
 
         QSqlQuery queryClubs(
             "SELECT CLUBS.UID AS clubid12 "
@@ -49,16 +50,18 @@ ReportManda::ReportManda(const QSqlDatabase& database, const long long tournamen
                 "TOURNAMENT_CATEGORIES.SEX_FK   = ? AND "
                 "TOURNAMENT_CATEGORIES.TYPE_FK  = ? AND "
                 "TOURNAMENT_CATEGORIES.AGE_FROM = ? AND "
-                "TOURNAMENT_CATEGORIES.AGE_TILL = ? "
+                "TOURNAMENT_CATEGORIES.AGE_TILL = ? AND "
+                "TOURNAMENT_CATEGORIES.TOURNAMENT_FK = ? "
             "GROUP BY CLUBS.UID"
             ,database);
         queryClubs.bindValue(0, SEX_FK);
         queryClubs.bindValue(1, TYPE_FK);
         queryClubs.bindValue(2, AGE_FROM);
         queryClubs.bindValue(3, AGE_TILL);
+        queryClubs.bindValue(4, tournamentUID);
         if (!queryClubs.exec())
         {
-            qDebug() << "\n" << __PRETTY_FUNCTION__ << "\n" << queryClubs.lastError().text() << "\n" << queryClubs.lastQuery() << "\n";
+            qDebug() << __LINE__ << __PRETTY_FUNCTION__ << queryClubs.lastError() << queryClubs.lastQuery();
             continue;
         }
         QVector<QString> uidsOfClubs;
@@ -91,7 +94,8 @@ ReportManda::ReportManda(const QSqlDatabase& database, const long long tournamen
                 "TOURNAMENT_CATEGORIES.SEX_FK   = ? AND "
                 "TOURNAMENT_CATEGORIES.TYPE_FK  = ? AND "
                 "TOURNAMENT_CATEGORIES.AGE_FROM = ? AND "
-                "TOURNAMENT_CATEGORIES.AGE_TILL = ? "
+                "TOURNAMENT_CATEGORIES.AGE_TILL = ? AND "
+                "TOURNAMENT_CATEGORIES.TOURNAMENT_FK = ? "
             "GROUP BY WEIGHT_FROM, WEIGHT_TILL "
             "ORDER BY WEIGHT_FROM, WEIGHT_TILL "
             ,database);
@@ -100,9 +104,10 @@ ReportManda::ReportManda(const QSqlDatabase& database, const long long tournamen
         queryWEIGHTS.bindValue(1, TYPE_FK);
         queryWEIGHTS.bindValue(2, AGE_FROM);
         queryWEIGHTS.bindValue(3, AGE_TILL);
+        queryWEIGHTS.bindValue(4, tournamentUID);
         if (!queryWEIGHTS.exec())
         {
-            qDebug() << "\n" << __PRETTY_FUNCTION__ << "\n" << queryWEIGHTS.lastError().text() << "\n" << queryWEIGHTS.lastQuery() << "\n";
+            qDebug() << __LINE__ << __PRETTY_FUNCTION__ << queryWEIGHTS.lastError() << queryWEIGHTS.lastQuery();
             continue;
         }
 
@@ -125,8 +130,8 @@ ReportManda::ReportManda(const QSqlDatabase& database, const long long tournamen
                     "TOURNAMENT_CATEGORIES.AGE_FROM    = ? AND "
                     "TOURNAMENT_CATEGORIES.AGE_TILL    = ? AND "
                     "TOURNAMENT_CATEGORIES.WEIGHT_FROM = ? AND "
-                    "TOURNAMENT_CATEGORIES.WEIGHT_TILL = ? "
-                    //"1 <= LENGTH(SPORT_CATEGORIES.NAME)"
+                    "TOURNAMENT_CATEGORIES.WEIGHT_TILL = ? AND "
+                    "TOURNAMENT_CATEGORIES.TOURNAMENT_FK = ? "
                 "GROUP BY "
                     "UID_SC "
                 "ORDER BY "
@@ -138,9 +143,10 @@ ReportManda::ReportManda(const QSqlDatabase& database, const long long tournamen
             querySPORT_CATEGORIES.bindValue(3, AGE_TILL);
             querySPORT_CATEGORIES.bindValue(4, WEIGHT_FROM);
             querySPORT_CATEGORIES.bindValue(5, WEIGHT_TILL);
+            querySPORT_CATEGORIES.bindValue(6, tournamentUID);
             if (!querySPORT_CATEGORIES.exec())
             {
-                qDebug() << "\n" << __PRETTY_FUNCTION__ << "\n" << querySPORT_CATEGORIES.lastError().text() << "\n" << querySPORT_CATEGORIES.lastQuery() << "\n";
+                qDebug() << __LINE__ << __PRETTY_FUNCTION__ << querySPORT_CATEGORIES.lastError() << querySPORT_CATEGORIES.lastQuery();
                 continue;
             }
 
@@ -165,15 +171,15 @@ ReportManda::ReportManda(const QSqlDatabase& database, const long long tournamen
                             "INNER JOIN TOURNAMENT_CATEGORIES ON TOURNAMENT_CATEGORIES.UID = ORDERS.TOURNAMENT_CATEGORY_FK "
                             "INNER JOIN SPORT_CATEGORIES      ON SPORT_CATEGORIES.UID      = ORDERS.SPORT_CATEGORY_FK "
                         "WHERE "
-                            "TOURNAMENT_CATEGORIES.SEX_FK      = ? AND "
-                            "TOURNAMENT_CATEGORIES.TYPE_FK     = ? AND "
-                            "TOURNAMENT_CATEGORIES.AGE_FROM    = ? AND "
-                            "TOURNAMENT_CATEGORIES.AGE_TILL    = ? AND "
-                            "TOURNAMENT_CATEGORIES.WEIGHT_FROM = ? AND "
-                            "TOURNAMENT_CATEGORIES.WEIGHT_TILL = ? AND "
-                            "1 <= LENGTH(SPORT_CATEGORIES.NAME)    AND "
-                            "SPORT_CATEGORIES.UID = ?              AND "
-                            "CLUBS.UID = ? "
+                            "TOURNAMENT_CATEGORIES.SEX_FK        = ? AND "
+                            "TOURNAMENT_CATEGORIES.TYPE_FK       = ? AND "
+                            "TOURNAMENT_CATEGORIES.AGE_FROM      = ? AND "
+                            "TOURNAMENT_CATEGORIES.AGE_TILL      = ? AND "
+                            "TOURNAMENT_CATEGORIES.WEIGHT_FROM   = ? AND "
+                            "TOURNAMENT_CATEGORIES.WEIGHT_TILL   = ? AND "
+                            "SPORT_CATEGORIES.UID                = ? AND "
+                            "CLUBS.UID                           = ? AND "
+                            "TOURNAMENT_CATEGORIES.TOURNAMENT_FK = ?"
                         ,database);
                     query.bindValue(0, SEX_FK);
                     query.bindValue(1, TYPE_FK);
@@ -183,10 +189,11 @@ ReportManda::ReportManda(const QSqlDatabase& database, const long long tournamen
                     query.bindValue(5, WEIGHT_TILL);
                     query.bindValue(6, SPORT_CATEGORY);
                     query.bindValue(7, uidsOfClubs[i]);
+                    query.bindValue(8, tournamentUID);
 
                     if (!query.exec() || !query.next())
                     {
-                        qDebug() << __PRETTY_FUNCTION__ << query.lastError() << query.lastQuery();
+                        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << query.lastError() << query.lastQuery();
                         continue;
                     }
                     if (query.value("CNT").toString() != "0")
@@ -252,8 +259,7 @@ ReportManda::ReportManda(const QSqlDatabase& database, const long long tournamen
 
 
         ExcelUtils::setValue(sheet, startRow - 5, 1, "Раздел: " + DBUtils::getField("NAME", "TYPES", TYPE_FK), 0);
-        ExcelUtils::setValue(sheet, startRow - 4, 1, "Возрастная категория: " + AGE_FROM + " - " + AGE_TILL + " лет", 0);
-        ExcelUtils::setValue(sheet, startRow - 3, 1, "Пол: " + DBUtils::getField("SHORTNAME", "SEXES", SEX_FK), 0);
+        ExcelUtils::setValue(sheet, startRow - 4, 1, DBUtils::getField("NAME", "AGE_CATEGORIES", ageCatUID) + ", " + DBUtils::getNormanAgeRange(AGE_FROM.toInt(), AGE_TILL.toInt()) + " лет", 0);
 
         sheet->setProperty("Name", (DBUtils::getField("SHORTNAME", "SEXES", SEX_FK) + " " + DBUtils::getField("NAME", "TYPES", TYPE_FK) + " " + AGE_FROM + "-" + AGE_TILL + "лет").left(31));
 

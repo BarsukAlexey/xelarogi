@@ -4,6 +4,58 @@
 #include "createtypedialog.h"
 #include "dialog_create_age_category.h"
 
+QString GenerateTournamentCategoriesDialog::insertInDB(long long ageCatUID, int ageFrom, int ageTill,
+                                                QVector<double> weights,
+                                                long long tournamentUID, long long typeUID, long long sexUID,
+                                                int durationFighting, int durationBreak, int roundCount)
+{
+    QString newCategoryMsg = "Добавлены новые категории:\n";
+
+    for (int index = 0; index + 1 < weights.size(); index++)
+    {
+        double weightFrom = weights[index];
+        double weightTill = weights[index + 1];
+
+        QString modifyName = DBUtils::getField("NAME", "AGE_CATEGORIES", ageCatUID) + ", " +
+                             DBUtils::getNormanAgeRange(ageFrom, ageTill) + " лет, " +
+                             DBUtils::getField("NAME", "TYPES", typeUID) + ", " +
+                             DBUtils::getNormanWeightRange(weightFrom, weightTill) + ".";
+
+        QSqlQuery query;
+        if (!query.prepare("INSERT INTO TOURNAMENT_CATEGORIES("
+                           "NAME, AGE_CATEGORY_FK, AGE_FROM, AGE_TILL, WEIGHT_FROM, WEIGHT_TILL,"
+                           "SEX_FK, TYPE_FK, TOURNAMENT_FK,"
+                           "DURATION_FIGHING, DURATION_BREAK, ROUND_COUNT) "
+                           "VALUES (?, ?, ?, ?, ?, ?,    ?, ?, ?,   ?, ?, ?)"))
+            qDebug() << query.lastError().text();
+        query.addBindValue(modifyName);
+        query.addBindValue(ageCatUID);
+        query.addBindValue(ageFrom);
+        query.addBindValue(ageTill);
+        query.addBindValue(weightFrom);
+        query.addBindValue(weightTill);
+
+        query.addBindValue(sexUID);
+        query.addBindValue(typeUID);
+        query.addBindValue(tournamentUID);
+
+        query.addBindValue(durationFighting);
+        query.addBindValue(durationBreak);
+        query.addBindValue(roundCount);
+
+        if (!query.exec())
+            qDebug() << query.lastError().text();
+        else
+        {
+            newCategoryMsg += "\t" + modifyName + "\n";
+        }
+
+        query.clear();
+    }
+
+    return newCategoryMsg;
+}
+
 GenerateTournamentCategoriesDialog::GenerateTournamentCategoriesDialog(long long tournamentUID, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::GenerateTournamentCategoriesDialog),
@@ -17,80 +69,39 @@ GenerateTournamentCategoriesDialog::GenerateTournamentCategoriesDialog(long long
 
     connect(ui->sexCB, &QComboBox::currentTextChanged, this, &GenerateTournamentCategoriesDialog::fillComboBoxAgeCategory);
 
-    connect(this, &GenerateTournamentCategoriesDialog::accepted, [this] ()
+    connect(this, &GenerateTournamentCategoriesDialog::accepted, [this, tournamentUID] ()
     {
-        long long ageCatUID = ui->comboBoxAgeCategory->currentData(Qt::UserRole).toLongLong();
-        long long sexUID = ui->sexCB->currentData(Qt::UserRole).toLongLong();
-        long long typeUID = ui->typeCB->currentData(Qt::UserRole).toLongLong();
-        int ageFrom = ui->ageFromSB->value();
-        int ageTill = ui->ageTillSB->value();
-
-        int durationFighting = ui->duratiobFightingSB->value();
-        int durationBreak = ui->durationBreakSB->value();
-        int roundCount = ui->roundCountSB->value();
-        //qDebug() << durationFighting << durationBreak << roundCount;
 
         QString weightCorrect = ui->weightsLE->text().trimmed().replace(",", ".");
         QStringList weights = weightCorrect.split(";", QString::SkipEmptyParts);
-
         if (weights.size() > 0 && weights.front() != "0")
             weights.push_front("0");
         weights.push_back("100000.0");
+        QVector<double> w;
+        for (QString s : weights) w << s.toDouble();
 
-        QString newCategoryMsg = "Добавлены новые категории:\n";
+       QString newCategoryMsg = insertInDB(
+                                    ui->comboBoxAgeCategory->currentData(Qt::UserRole).toLongLong(),
 
-        for (int index = 0; index + 1 < weights.size(); index++)
-        {
-            double weightFrom = weights[index].toDouble();
-            double weightTill = weights[index + 1].toDouble();
+                                    ui->ageFromSB->value(),
+                                    ui->ageTillSB->value(),
 
-            QString ageStr;
-            if (ageFrom == 0) ageStr = "до " + QString::number(ageTill);
-            else if (ageTill == 99) ageStr = "от " + QString::number(ageFrom);
-            else ageStr += QString::number(ageFrom) + "-" + QString::number(ageTill);
+                                    w,
+                                    tournamentUID,
+                                    ui->typeCB->currentData(Qt::UserRole).toLongLong(),
+                                    ui->sexCB->currentData(Qt::UserRole).toLongLong(),
 
-
-            QString modifyName = DBUtils::getField("NAME", "AGE_CATEGORIES", ageCatUID) + ", " +
-                ageStr + " лет, " +
-                ui->typeCB->currentText() + ", " +
-                DBUtils::getNormanWeightRange(weightFrom, weightTill) + ".";
-
-            QSqlQuery query;
-            if (!query.prepare("INSERT INTO TOURNAMENT_CATEGORIES("
-                               "NAME, AGE_CATEGORY_FK, AGE_FROM, AGE_TILL, WEIGHT_FROM, WEIGHT_TILL,"
-                               "SEX_FK, TYPE_FK, TOURNAMENT_FK,"
-                               "DURATION_FIGHING, DURATION_BREAK, ROUND_COUNT) "
-                               "VALUES (?, ?, ?, ?, ?, ?,    ?, ?, ?,   ?, ?, ?)"))
-                qDebug() << query.lastError().text();
-            query.addBindValue(modifyName);
-            query.addBindValue(ageCatUID);
-            query.addBindValue(ageFrom);
-            query.addBindValue(ageTill);
-            query.addBindValue(weightFrom);
-            query.addBindValue(weightTill);
-
-            query.addBindValue(sexUID);
-            query.addBindValue(typeUID);
-            query.addBindValue(mTournamentUID);
-
-            query.addBindValue(durationFighting);
-            query.addBindValue(durationBreak);
-            query.addBindValue(roundCount);
-
-            if (!query.exec())
-                qDebug() << query.lastError().text();
-            else
-            {
-                newCategoryMsg += "\t" + modifyName + "\n";
-            }
-
-            query.clear();
-        }
+                                    ui->duratiobFightingSB->value(),
+                                    ui->durationBreakSB->value(),
+                                    ui->roundCountSB->value()
+                        );
 
         QMessageBox::information(this, "Добавлены новые категории", newCategoryMsg);
 
     });
 }
+
+
 
 GenerateTournamentCategoriesDialog::~GenerateTournamentCategoriesDialog()
 {

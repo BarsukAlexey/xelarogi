@@ -67,7 +67,7 @@ void CreateTournamentCategoriesDialog::updateTable()
     model->setTable("TOURNAMENT_CATEGORIES");
     //model->setRelation(model->fieldIndex("AGE_CATEGORY_FK"), QSqlRelation("AGE_CATEGORIES", "UID", "NAME"));
     //model->setRelation(model->fieldIndex("SEX_FK"), QSqlRelation("SEXES", "UID", "NAME"));
-    model->setFilter("TOURNAMENT_FK = " + QString::number(mTournamentUID) + " ORDER BY SEX_FK, TYPE_FK, AGE_FROM, AGE_TILL, WEIGHT_FROM, WEIGHT_TILL ");
+    model->setFilter("TOURNAMENT_FK = " + QString::number(mTournamentUID) + " ORDER BY TYPE_FK, SEX_FK, AGE_FROM, AGE_TILL, WEIGHT_FROM, WEIGHT_TILL "); // так писать нельзя из-за этого всё может не работать если юзать setRelation
     //model->setSort(model->fieldIndex("SEX_FK"), Qt::SortOrder::DescendingOrder);
 
     model->setHeaderData(model->fieldIndex("NAME"), Qt::Horizontal, "Название категории");

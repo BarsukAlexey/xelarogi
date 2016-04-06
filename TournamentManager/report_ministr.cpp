@@ -182,15 +182,30 @@ ReporMinistr::ReporMinistr(const long long tournamentUID)
 
 void ReporMinistr::f2(QAxObject *sheet, const long long tournamentUID)
 {
+    QVector<long long> sportCat;
+    {
+        QSqlQuery querySC("SELECT * FROM SPORT_CATEGORIES ORDER BY NAME");
+        if (!querySC.exec())
+        {
+            qDebug() << __PRETTY_FUNCTION__  << querySC.lastError() << querySC.lastQuery();
+            return;
+        }
+        while (querySC.next()) sportCat << querySC.value("UID").toLongLong();
+    }
+    for (int i = 0; i < sportCat.size(); ++i)
+        ExcelUtils::setValue(sheet, i + 1, 1, DBUtils::getField("NAME", "SPORT_CATEGORIES", sportCat[i]));
+
     QSqlQuery queryCat(
         "SELECT "
-            "* "
+            "SEX_FK, AGE_FROM, AGE_TILL, AGE_CATEGORY_FK "
         "FROM "
             "TOURNAMENT_CATEGORIES "
         "WHERE "
-            "TOURNAMENT_CATEGORIES.TOURNAMENT_FK = ? "
+            "TOURNAMENT_FK = ? "
+        "GROUP BY "
+            "SEX_FK, AGE_FROM, AGE_TILL, AGE_CATEGORY_FK "
         "ORDER BY "
-            "SEX_FK, AGE_FROM, AGE_TILL "
+            "SEX_FK, AGE_FROM, AGE_TILL, AGE_CATEGORY_FK "
     );
     queryCat.bindValue(0, tournamentUID);
     if (!queryCat.exec())
@@ -199,71 +214,65 @@ void ReporMinistr::f2(QAxObject *sheet, const long long tournamentUID)
         return;
     }
 
-    QVector<QString> cat;
+    int column = 2;
+    QVector<int> totalCountOfOrders(sportCat.size());
     while (queryCat.next())
     {
-        QStringList localSplit = queryCat.value("NAME").toString().trimmed().split(",", QString::SkipEmptyParts);
-        if (0 < localSplit.size())
+        QString sexUID = queryCat.value("SEX_FK").toString();
+        QString ageFrom = queryCat.value("AGE_FROM").toString();
+        QString ageTill = queryCat.value("AGE_TILL").toString();
+        QString ageCatUID = queryCat.value("AGE_CATEGORY_FK").toString();
+        ExcelUtils::setValue(sheet, 1, column, DBUtils::getField("NAME", "AGE_CATEGORIES", ageCatUID) + "(" + ageFrom + "-" + ageTill + ")");
+
+
+        for (int i = 0; i < sportCat.size(); ++i)
         {
-            QString str = localSplit[0].trimmed();
-            if (!cat.contains(str))
-                cat << str;
-        }
-    }
+            QSqlQuery queryOrder;
+            queryOrder.prepare(
+                "SELECT COUNT(*) AS CNT "
+                "FROM ORDERS "
+                    "INNER JOIN TOURNAMENT_CATEGORIES ON TOURNAMENT_CATEGORIES.UID = ORDERS.TOURNAMENT_CATEGORY_FK "
+                "WHERE "
+                    "TOURNAMENT_CATEGORIES.TOURNAMENT_FK  = ? AND "
 
-    for (int j = 0; j < cat.size(); ++j)
-    {
-        ExcelUtils::setValue(sheet, 1, j + 2, cat[j]);
-    }
-    ExcelUtils::setValue(sheet, 1, cat.size() + 2, "Итого");
+                    "ORDERS.SPORT_CATEGORY_FK = ? AND "
 
-    QSqlQuery querySC("SELECT * FROM SPORT_CATEGORIES ORDER BY NAME");
-    if (!querySC.exec())
-    {
-        qDebug() << __PRETTY_FUNCTION__  << queryCat.lastError() << queryCat.lastQuery();
-        return;
-    }
-    int currentRow = 2;
-    while (querySC.next())
-    {
-        QString uidSportCat = querySC.value("UID").toString();
-        ExcelUtils::setValue(sheet, currentRow, 1, querySC.value("NAME").toString());
+                    "TOURNAMENT_CATEGORIES.SEX_FK   = ? AND "
+                    "TOURNAMENT_CATEGORIES.AGE_FROM = ? AND "
+                    "TOURNAMENT_CATEGORIES.AGE_TILL = ?  AND "
+                    "TOURNAMENT_CATEGORIES.AGE_CATEGORY_FK = ? "
+            );
+            queryOrder.addBindValue(tournamentUID);
+            queryOrder.addBindValue(sportCat[i]);
+            queryOrder.addBindValue(sexUID);
+            queryOrder.addBindValue(ageFrom);
+            queryOrder.addBindValue(ageTill);
+            queryOrder.addBindValue(ageCatUID);
 
-        int totalCountOfOrders = 0;
-        for (int j = 0; j < cat.size(); ++j)
-        {
-            int countOfOrders = 0;
-            QSqlQuery queryOrder("SELECT * FROM ORDERS");
-            queryOrder.exec();
-            while (queryOrder.next())
+            if (!queryOrder.exec())
             {
-                QString orderUID = queryOrder.value("UID").toString();
-                long long TC = queryOrder.value("TOURNAMENT_CATEGORY_FK").toLongLong();
-                if (DBUtils::getField("TOURNAMENT_FK", "TOURNAMENT_CATEGORIES", TC).toLongLong() == tournamentUID &&
-                    DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", TC).trimmed().startsWith(cat[j]) &&
-                    DBUtils::getField("UID", "SPORT_CATEGORIES", DBUtils::getField("SPORT_CATEGORY_FK", "ORDERS", orderUID)) == uidSportCat
-                )
-                {
-                    ++countOfOrders;
-                    ++totalCountOfOrders;
-                }
+                qDebug() << __PRETTY_FUNCTION__  << queryOrder.lastError() << queryOrder.lastQuery();
+                return;
             }
-
+            int countOfOrders = 0;
+            if (queryOrder.next()) countOfOrders = queryOrder.value("CNT").toInt();
             if (0 < countOfOrders)
-                ExcelUtils::setValue(sheet, currentRow, j + 2, QString::number(countOfOrders));
+                ExcelUtils::setValue(sheet, i + 2, column, QString::number(countOfOrders));
+            totalCountOfOrders[i] += countOfOrders;
         }
-        if (0 < totalCountOfOrders)
-            ExcelUtils::setValue(sheet, currentRow, cat.size() + 2, QString::number(totalCountOfOrders));
-        //
-        ++currentRow;
+        ++column;
     }
 
-    for (int j = 1; j <= cat.size() + 2; ++j)
+    for (int i = 0; i < totalCountOfOrders.size(); ++i)
+        ExcelUtils::setValue(sheet, i + 2, column, QString::number(totalCountOfOrders[i]));
+    ++column;
+
+    for (int j = 1; j <= column; ++j)
     {
         ExcelUtils::setColumnAutoFit(sheet, j);
     }
 
-    ExcelUtils::setBorder(sheet, 1, 1, currentRow - 1, cat.size() + 2);
+    ExcelUtils::setBorder(sheet, 1, 1, sportCat.size() + 1, column - 1);
 
 }
 

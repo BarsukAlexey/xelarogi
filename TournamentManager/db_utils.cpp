@@ -1,4 +1,5 @@
 #include "db_utils.h"
+#include "renderareawidget.h"
 #include <QSqlQuery>
 #include <QVariant>
 #include <QDebug>
@@ -247,6 +248,20 @@ QVector<DBUtils::NodeOfTournirGrid> DBUtils::getNodes(long long tournamentCatego
     return arr;
 }
 
+QVector<QVector<DBUtils::NodeOfTournirGrid> > DBUtils::getNodesAsLevelListOfList(long long tournamentCategoryUID)
+{
+    QVector<QVector<DBUtils::NodeOfTournirGrid> > result;
+    for(DBUtils::NodeOfTournirGrid node: DBUtils::getNodes(tournamentCategoryUID))
+    {
+        if (result.size() == 0 || RenderAreaWidget::log2(result.back().last().v) != RenderAreaWidget::log2(node.v))
+        {
+            result << QVector<DBUtils::NodeOfTournirGrid>();
+        }
+        result.back() << node;
+    }
+    return result;
+}
+
 QVector<DBUtils::NodeOfTournirGrid> DBUtils::getLeafOFTree(const QSqlDatabase& database, long long tournamentCategories)
 {
     QVector<DBUtils::NodeOfTournirGrid> res;
@@ -266,12 +281,12 @@ QVector<DBUtils::NodeOfTournirGrid> DBUtils::getLeafOFTree(const QSqlDatabase& d
     return res;
 }
 
-QVector<QVector<DBUtils::Fighing>> DBUtils::getListsOfPairs(const QSqlDatabase& database, long long tournamentUID)
+QVector<QVector<DBUtils::Fighing>> DBUtils::getListsOfPairsForFighting(long long tournamentUID)
 {
-    QVector<QVector<Fighing>> result;
+    QVector<QVector<Fighing> > result;
 
-    QSqlQuery query_TOURNAMENT_CATEGORIES("SELECT * FROM TOURNAMENT_CATEGORIES WHERE TOURNAMENT_FK = ? ORDER BY SEX_FK, TYPE_FK, AGE_FROM, AGE_TILL, WEIGHT_FROM, WEIGHT_TILL", database);
-    query_TOURNAMENT_CATEGORIES.bindValue(0, tournamentUID);
+    QSqlQuery query_TOURNAMENT_CATEGORIES("SELECT * FROM TOURNAMENT_CATEGORIES WHERE TOURNAMENT_FK = ? ORDER BY SEX_FK, TYPE_FK, AGE_FROM, AGE_TILL, WEIGHT_FROM, WEIGHT_TILL");
+    query_TOURNAMENT_CATEGORIES.addBindValue(tournamentUID);
     if (!query_TOURNAMENT_CATEGORIES.exec())
     {
         qDebug() << __PRETTY_FUNCTION__ << query_TOURNAMENT_CATEGORIES.lastError() << query_TOURNAMENT_CATEGORIES.lastQuery();
@@ -282,37 +297,34 @@ QVector<QVector<DBUtils::Fighing>> DBUtils::getListsOfPairs(const QSqlDatabase& 
         long long TOURNAMENT_CATEGORIES_UID = query_TOURNAMENT_CATEGORIES.value("UID").toLongLong();
         //qDebug() << DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", TOURNAMENT_CATEGORIES_UID);
 
-        QVector<Fighing> listOfPairs = getListOfPairs(database, TOURNAMENT_CATEGORIES_UID);
+        QVector<Fighing> listOfPairs = getListOfPairsForFighting(TOURNAMENT_CATEGORIES_UID);
         if (listOfPairs.size())
-            result.push_back(listOfPairs);
+            result << listOfPairs;
     }
     return result;
 }
 
-QVector<DBUtils::Fighing> DBUtils::getListOfPairs(const QSqlDatabase& , long long tournamentCategory)
+QVector<DBUtils::Fighing> DBUtils::getListOfPairsForFighting(long long tournamentCategory)
 {
-    QVector<Fighing> arr;
-    QVector<NodeOfTournirGrid> nodes = getNodes(tournamentCategory);
+    QVector<QVector<NodeOfTournirGrid> > nodes = getNodesAsLevelListOfList(tournamentCategory);
     for (int i = nodes.size() - 1; 0 <= i; --i)
     {
-        NodeOfTournirGrid node = nodes[i];
-        //qDebug() << node.name;
-        if (node.isFighing)
+        QVector<Fighing> ans;
+        for (int j = 0; j < nodes[i].size(); ++j)
         {
-            arr.push_back(Fighing({
-                                      nodes[2 * node.v + 1 - 1].UID,
-                                      nodes[2 * node.v     - 1].UID,
-                                      node.v,
-                                      tournamentCategory,
-                                      0
-                                  }));
-            if (isPow2(node.v))
-                break;
+            if (nodes[i][j].isFighing && nodes[i][j].UID <= 0)
+                ans << Fighing({
+                                   nodes[i + 1][2 * j + 1].UID,
+                                   nodes[i + 1][2 * j    ].UID,
+                                   nodes[i][j].v,
+                                   tournamentCategory,
+                                   0
+                               });
         }
+        if (ans.size())
+            return ans;
     }
-
-    std::reverse(arr.begin(), arr.end());
-    return arr;
+    return QVector<Fighing> ();
 }
 
 void DBUtils::insertLeafOfGrid(long long tournamentCategories, long long vertex, long long orderUID)
@@ -370,15 +382,19 @@ int DBUtils::findDurationOfGrid(long long tournamentCategories, int delay)
     for (const DBUtils::NodeOfTournirGrid f : DBUtils::getNodes(tournamentCategories))
     {
         if (!f.isFighing) continue;
-        time += DBUtils::get__DURATION_FIGHING(QSqlDatabase::database(), tournamentCategories) *
-                DBUtils::get__ROUND_COUNT(QSqlDatabase::database(), tournamentCategories) +
-
-                DBUtils::get__DURATION_BREAK(QSqlDatabase::database(), tournamentCategories) *
-                (DBUtils::get__ROUND_COUNT(QSqlDatabase::database(), tournamentCategories) - 1) +
-                delay;
+        time += DBUtils::findDurationOfFightinPair(tournamentCategories) + delay;
     }
     if (0 <= time - delay) time -= delay;
     return time;
+}
+
+int DBUtils::findDurationOfFightinPair(long long tournamentCategories)
+{
+    int count = DBUtils::getField("ROUND_COUNT", "TOURNAMENT_CATEGORIES", tournamentCategories).toInt();
+    return
+        count * DBUtils::getField("DURATION_FIGHING", "TOURNAMENT_CATEGORIES", tournamentCategories).toInt()
+        +
+        (count - 1) * DBUtils::getField("DURATION_BREAK", "TOURNAMENT_CATEGORIES", tournamentCategories).toInt();
 }
 
 QVector<long long> DBUtils::get_UIDs_of_TOURNAMENT_CATEGORIES(const QSqlDatabase& database, long long tournamentUID)
@@ -446,44 +462,6 @@ QMap<QString, QVector<long long> > DBUtils::get_weight_and_orderUIDs(long long t
     return res;
 }
 
-
-
-int DBUtils::get__DURATION_FIGHING(const QSqlDatabase& database, long long UID)
-{
-    QSqlQuery query("SELECT * FROM TOURNAMENT_CATEGORIES WHERE UID = ? ", database);
-    query.bindValue(0, UID);
-    int res = 0;
-    if (query.exec() && query.next())
-        res = query.value("DURATION_FIGHING").toInt();
-    else
-        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << query.lastError().text() << query.lastQuery();
-    return res;
-}
-
-int DBUtils::get__DURATION_BREAK(const QSqlDatabase& database, long long UID)
-{
-    QSqlQuery query("SELECT * FROM TOURNAMENT_CATEGORIES WHERE UID = ? ", database);
-    query.bindValue(0, UID);
-    int res = 0;
-    if (query.exec() && query.next())
-        res = query.value("DURATION_BREAK").toInt();
-    else
-        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << query.lastError().text() << query.lastQuery();
-    return res;
-}
-
-int DBUtils::get__ROUND_COUNT(const QSqlDatabase& database, long long UID)
-{
-    QSqlQuery query("SELECT * FROM TOURNAMENT_CATEGORIES WHERE UID = ? ", database);
-    query.bindValue(0, UID);
-    int res = 0;
-    if (query.exec() && query.next())
-        res = query.value("ROUND_COUNT").toInt();
-    else
-        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << query.lastError().text() << query.lastQuery();
-    return res;
-}
-
 QString DBUtils::getNormanWeightRangeFromTOURNAMENT_CATEGORIES(long long uidCategory)
 {
     double a = DBUtils::getField("WEIGHT_FROM", "TOURNAMENT_CATEGORIES", uidCategory).toDouble();
@@ -501,6 +479,19 @@ QString DBUtils::getNormanWeightRange(double a, double b)
     if (200 - 1e-7 <= b)
         return "свыше " + aa + " кг";
     return "от " + aa + " до " + bb + " кг";
+}
+
+QString DBUtils::getNormanAgeRange(int ageFrom, int ageTill)
+{
+    if (ageFrom == 0)
+    {
+        return "до " + QString::number(ageTill);
+    }
+    if (ageTill == 99)
+    {
+        return "от " + QString::number(ageFrom);
+    }
+    return  QString::number(ageFrom) + "-" + QString::number(ageTill);
 }
 
 QString DBUtils::roundDouble(double x, int precision)

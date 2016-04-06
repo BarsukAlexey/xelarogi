@@ -533,3 +533,16 @@ void MainWindow::on_btn_report_ministr_clicked()
     ReporMinistr d(routnamentUID);
 }
 
+
+
+void MainWindow::on_pushButton_clicked()
+{
+    EbnutVBazu::setTournamentCat(ui->tournamentUidLabel->text().toLongLong());
+    qDebug() << "DONE";
+}
+
+void MainWindow::on_pushButton_2_clicked()
+{
+    EbnutVBazu::setRandomWinner();
+    qDebug() << "DONE";
+}

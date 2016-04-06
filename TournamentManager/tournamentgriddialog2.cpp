@@ -64,10 +64,10 @@ TournamentGridDialog2::TournamentGridDialog2(const QSqlDatabase &_database, long
     QPushButton *buttonDelete = new QPushButton("Удалить сетку");
     QLineEdit* filterCategoriesLE = new QLineEdit;
 
-    groupBox = new QGroupBox(tr("Фильтр категорий"));
+    groupBox = new QGroupBox(tr("Фильтр сеток"));
     radioButtonAll = new QRadioButton(tr("Все"));
     radioButtonLonly = new QRadioButton(tr("Одиночки"));
-    radioButtonInvalid = new QRadioButton(tr("Невалидные категории"));
+    radioButtonInvalid = new QRadioButton(tr("Невалидные сетки"));
     radioButtonAll->setChecked(true);
     QHBoxLayout *hbox = new QHBoxLayout;
     hbox->addWidget(radioButtonAll);

@@ -21,6 +21,9 @@ public:
     explicit GenerateTournamentCategoriesDialog(long long tournamentUID, QWidget *parent = 0);
     ~GenerateTournamentCategoriesDialog();
 
+    static QString insertInDB(long long ageCatUID, int ageFrom, int ageTill, QVector<double> weights,
+                           long long tournamentUID, long long typeFK, long long sexFK,
+                           int durationFighting, int durationBreak, int roundCount);
 private slots:
     void on_pushButton_clicked();
     void on_pushButtonAddAgeCategory_clicked();

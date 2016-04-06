@@ -61,14 +61,16 @@ public:
 
 
     // для таблицы GRID
-    static QVector<NodeOfTournirGrid> getNodes(long long tournamentCategories);
-    static QVector<NodeOfTournirGrid> getLeafOFTree(const QSqlDatabase& database, long long tournamentCategories);
-    static QVector<QVector<DBUtils::Fighing>> getListsOfPairs(const QSqlDatabase& database, long long tournamentUID);
-    static QVector<Fighing> getListOfPairs(const QSqlDatabase& database, long long TOURNAMENT_CATEGORIES_FK);
+    static QVector<NodeOfTournirGrid> getNodes(long long tournamentCategoryUID);
+    static QVector<QVector<NodeOfTournirGrid>> getNodesAsLevelListOfList(long long tournamentCategoryUID);
+    static QVector<NodeOfTournirGrid> getLeafOFTree(const QSqlDatabase& database, long long tournamentCategoryUID);
+    static QVector<QVector<DBUtils::Fighing>> getListsOfPairsForFighting(long long tournamentUID);
+    static QVector<Fighing> getListOfPairsForFighting(long long TOURNAMENT_CATEGORIES_FK);
     static void insertLeafOfGrid(long long TOURNAMENT_CATEGORIES_FK, long long VERTEX, long long orderUID);
     static bool updateNodeOfGrid(const QSqlDatabase& database, long long TOURNAMENT_CATEGORIES_FK, long long VERTEX, long long orderUID, QString result);
-    static void swapNodesOfGrid(long long tournamentCategories, int node0v, int node1v);
-    static int findDurationOfGrid(long long tournamentCategories, int delay = 0);
+    static void swapNodesOfGrid(long long tournamentCategoryUID, int node0v, int node1v);
+    static int findDurationOfGrid(long long tournamentCategoryUID, int delay = 0);
+    static int findDurationOfFightinPair(long long tournamentCategoryUID);
 
     static int isPow2(int a) {
       return !(a & (a - 1));
@@ -83,11 +85,9 @@ public:
     static int     get__AGE_TILL(const QSqlDatabase& database, long long UID);
     static QString get__WEIGHT_FROM(const QSqlDatabase& database, long long UID);
     static QString get__WEIGHT_TILL(const QSqlDatabase& database, long long UID);
-    static int     get__DURATION_FIGHING(const QSqlDatabase& database, long long UID);
-    static int     get__DURATION_BREAK(const QSqlDatabase& database, long long UID);
-    static int     get__ROUND_COUNT(const QSqlDatabase& database, long long UID);
     static QString getNormanWeightRangeFromTOURNAMENT_CATEGORIES(long long uidCategory);
     static QString getNormanWeightRange(double a, double b);
+    static QString getNormanAgeRange(int a, int b);
 
 
     static QString roundDouble(double x, int precision);

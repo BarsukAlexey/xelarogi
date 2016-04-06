@@ -65,7 +65,7 @@ FitingDistribution::FitingDistribution(const QSqlDatabase &database, const long 
         initTableHeads(sheet, currentRow, days);
 
 
-        QSqlQuery querySEX_FK("SELECT DISTINCT SEX_FK FROM TOURNAMENT_CATEGORIES WHERE TOURNAMENT_FK = ? AND TYPE_FK = ? AND AGE_FROM = ? ORDER BY SEX_FK", database);
+        QSqlQuery querySEX_FK("SELECT AGE_CATEGORY_FK, SEX_FK FROM TOURNAMENT_CATEGORIES WHERE TOURNAMENT_FK = ? AND TYPE_FK = ? AND AGE_FROM = ? GROUP BY AGE_CATEGORY_FK, SEX_FK     ORDER BY SEX_FK", database);
         querySEX_FK.bindValue(0, tournamentUID);
         querySEX_FK.bindValue(1, TYPE_FK);
         querySEX_FK.bindValue(2, AGE_FROM);
@@ -77,16 +77,18 @@ FitingDistribution::FitingDistribution(const QSqlDatabase &database, const long 
         while (querySEX_FK.next())
         {
             long long SEX_FK = querySEX_FK.value("SEX_FK").toLongLong();
+            long long ageCatUID = querySEX_FK.value("AGE_CATEGORY_FK").toLongLong();
 
-            ExcelUtils::setValue  (sheet, currentRow, 1, DBUtils::get_SHORTNAME_FROM_SEXES(database, SEX_FK), 0);
+            ExcelUtils::setValue  (sheet, currentRow, 1, DBUtils::getField("NAME", "AGE_CATEGORIES", ageCatUID), 0);
             ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 2 + 3 * days.size());
             ++currentRow;
 
-            QSqlQuery queryWEIGHT_FROM("SELECT WEIGHT_FROM, WEIGHT_TILL FROM TOURNAMENT_CATEGORIES WHERE TOURNAMENT_FK = ? AND TYPE_FK = ?  AND AGE_FROM = ? AND SEX_FK = ? GROUP BY WEIGHT_FROM, WEIGHT_TILL ORDER BY WEIGHT_FROM", database);
-            queryWEIGHT_FROM.bindValue(0, tournamentUID);
-            queryWEIGHT_FROM.bindValue(1, TYPE_FK);
-            queryWEIGHT_FROM.bindValue(2, AGE_FROM);
-            queryWEIGHT_FROM.bindValue(3, SEX_FK);
+            QSqlQuery queryWEIGHT_FROM("SELECT WEIGHT_FROM, WEIGHT_TILL FROM TOURNAMENT_CATEGORIES WHERE TOURNAMENT_FK = ? AND TYPE_FK = ?  AND AGE_FROM = ? AND SEX_FK = ? AND AGE_CATEGORY_FK = ? GROUP BY WEIGHT_FROM, WEIGHT_TILL ORDER BY WEIGHT_FROM", database);
+            queryWEIGHT_FROM.addBindValue(tournamentUID);
+            queryWEIGHT_FROM.addBindValue(TYPE_FK);
+            queryWEIGHT_FROM.addBindValue(AGE_FROM);
+            queryWEIGHT_FROM.addBindValue(SEX_FK);
+            queryWEIGHT_FROM.addBindValue(ageCatUID);
             if (!queryWEIGHT_FROM.exec())
             {
                 qDebug() << __LINE__ << __PRETTY_FUNCTION__ << queryWEIGHT_FROM.lastError().text() << " " << queryWEIGHT_FROM.lastQuery();
