@@ -11,10 +11,14 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = PointFighting
 TEMPLATE = app
 
+CONFIG += c++11
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    fighting_table.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    fighting_table.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    fighting_table.ui
