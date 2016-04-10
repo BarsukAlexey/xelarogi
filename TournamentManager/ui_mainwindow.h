@@ -175,7 +175,7 @@ public:
 
         pushButton = new QPushButton(generalPage);
         pushButton->setObjectName(QStringLiteral("pushButton"));
-        pushButton->setEnabled(false);
+        pushButton->setEnabled(true);
 
         verticalLayout_3->addWidget(pushButton);
 
@@ -356,7 +356,7 @@ public:
         orderAction->setText(QApplication::translate("MainWindow", "\320\227\320\260\321\217\320\262\320\272\320\270", 0));
         actionAgeCategory->setText(QApplication::translate("MainWindow", "\320\222\320\276\320\267\321\200\320\260\321\201\321\202\320\275\321\213\320\265 \320\272\320\260\321\202\320\265\320\263\320\276\321\200\320\270\320\270", 0));
         label->setText(QApplication::translate("MainWindow", "\320\222\321\213\320\261\320\265\321\200\320\265\321\202\320\265 \321\202\321\203\321\200\320\275\320\270\321\200", 0));
-        pushButton->setText(QApplication::translate("MainWindow", "PushButton", 0));
+        pushButton->setText(QApplication::translate("MainWindow", "\320\224\320\276\320\261\320\260\320\262\321\202\321\214 \320\272\320\260\321\202\320\265\320\263\320\276\321\200\320\270\320\270", 0));
         pushButton_2->setText(QApplication::translate("MainWindow", "PushButton", 0));
         testClearBtn->setText(QApplication::translate("MainWindow", "\320\243\320\264\320\260\320\273\320\270\321\202\321\214 \320\276\321\210\320\270\320\261\320\276\321\207\320\275\321\213\320\265 \320\267\320\260\320\277\320\270\321\201\320\270 \320\270\320\267 \320\261\320\260\320\267\321\213 (\321\202\320\265\321\201\321\202\320\276\320\262\320\276\320\265)", 0));
         tournamentLabel->setText(QApplication::translate("MainWindow", "\320\242\321\203\321\200\320\275\320\270\321\200. \320\232\320\260\320\272 \321\203\320\261\321\200\320\260\321\202\321\214 \321\215\321\202\320\276 \320\277\321\200\320\270 \320\267\320\260\320\277\321\203\321\201\320\272\320\265?", 0));

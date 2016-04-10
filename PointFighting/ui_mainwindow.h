@@ -13,8 +13,10 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QMainWindow>
+#include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QStatusBar>
@@ -27,11 +29,14 @@ QT_BEGIN_NAMESPACE
 class Ui_MainWindow
 {
 public:
+    QAction *actionLoad_data;
+    QAction *actionExport_results;
     QWidget *centralWidget;
+    QGridLayout *gridLayout;
     QTableWidget *tableWidget;
-    QPushButton *pushButton;
-    QPushButton *pushButton_2;
+    QPushButton *pushButtonGo;
     QMenuBar *menuBar;
+    QMenu *menuData;
     QToolBar *mainToolBar;
     QStatusBar *statusBar;
 
@@ -40,21 +45,37 @@ public:
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
         MainWindow->resize(859, 548);
+        actionLoad_data = new QAction(MainWindow);
+        actionLoad_data->setObjectName(QStringLiteral("actionLoad_data"));
+        actionExport_results = new QAction(MainWindow);
+        actionExport_results->setObjectName(QStringLiteral("actionExport_results"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
+        gridLayout = new QGridLayout(centralWidget);
+        gridLayout->setSpacing(6);
+        gridLayout->setContentsMargins(11, 11, 11, 11);
+        gridLayout->setObjectName(QStringLiteral("gridLayout"));
         tableWidget = new QTableWidget(centralWidget);
         tableWidget->setObjectName(QStringLiteral("tableWidget"));
-        tableWidget->setGeometry(QRect(90, 40, 256, 192));
-        pushButton = new QPushButton(centralWidget);
-        pushButton->setObjectName(QStringLiteral("pushButton"));
-        pushButton->setGeometry(QRect(70, 450, 75, 23));
-        pushButton_2 = new QPushButton(centralWidget);
-        pushButton_2->setObjectName(QStringLiteral("pushButton_2"));
-        pushButton_2->setGeometry(QRect(190, 450, 75, 23));
+        tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        tableWidget->setSelectionMode(QAbstractItemView::SingleSelection);
+        tableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
+        tableWidget->setColumnCount(0);
+        tableWidget->verticalHeader()->setVisible(false);
+
+        gridLayout->addWidget(tableWidget, 0, 0, 1, 1);
+
+        pushButtonGo = new QPushButton(centralWidget);
+        pushButtonGo->setObjectName(QStringLiteral("pushButtonGo"));
+
+        gridLayout->addWidget(pushButtonGo, 1, 0, 1, 1);
+
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
         menuBar->setGeometry(QRect(0, 0, 859, 21));
+        menuData = new QMenu(menuBar);
+        menuData->setObjectName(QStringLiteral("menuData"));
         MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QStringLiteral("mainToolBar"));
@@ -62,6 +83,10 @@ public:
         statusBar = new QStatusBar(MainWindow);
         statusBar->setObjectName(QStringLiteral("statusBar"));
         MainWindow->setStatusBar(statusBar);
+
+        menuBar->addAction(menuData->menuAction());
+        menuData->addAction(actionLoad_data);
+        menuData->addAction(actionExport_results);
 
         retranslateUi(MainWindow);
 
@@ -71,8 +96,10 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0));
-        pushButton->setText(QApplication::translate("MainWindow", "PushButton", 0));
-        pushButton_2->setText(QApplication::translate("MainWindow", "PushButton", 0));
+        actionLoad_data->setText(QApplication::translate("MainWindow", "Load data...", 0));
+        actionExport_results->setText(QApplication::translate("MainWindow", "Export results...", 0));
+        pushButtonGo->setText(QApplication::translate("MainWindow", "Go...", 0));
+        menuData->setTitle(QApplication::translate("MainWindow", "Data", 0));
     } // retranslateUi
 
 };

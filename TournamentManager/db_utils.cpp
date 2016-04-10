@@ -243,7 +243,6 @@ QVector<DBUtils::NodeOfTournirGrid> DBUtils::getNodes(long long tournamentCatego
         }
         arr.push_back(NodeOfTournirGrid({query.value("VERTEX").toInt(), name, region, isFighing, orderUID.toLongLong(), query.value("result").toString()}));
     }
-
     qSort(arr);
     return arr;
 }
@@ -278,6 +277,15 @@ QVector<DBUtils::NodeOfTournirGrid> DBUtils::getLeafOFTree(const QSqlDatabase& d
         return DBUtils::getSecondNameAndOneLetterOfName(lhs.UID) <
                 DBUtils::getSecondNameAndOneLetterOfName(rhs.UID);
     });
+    return res;
+}
+
+QVector<DBUtils::NodeOfTournirGrid> DBUtils::getFightingNodes(long long tournamentCategoryUID)
+{
+    QVector<DBUtils::NodeOfTournirGrid> res;
+    for(NodeOfTournirGrid f : getNodes(tournamentCategoryUID))
+        if (f.isFighing)
+            res << f;
     return res;
 }
 
@@ -325,6 +333,27 @@ QVector<DBUtils::Fighing> DBUtils::getListOfPairsForFighting(long long tournamen
             return ans;
     }
     return QVector<Fighing> ();
+}
+
+QVector<DBUtils::Fighing> DBUtils::getListOfPairsForFightingForPointFighting(long long tournamentCategory)
+{
+    QVector<QVector<NodeOfTournirGrid> > nodes = getNodesAsLevelListOfList(tournamentCategory);
+    QVector<Fighing> ans;
+    for (int i = nodes.size() - 1; 0 <= i; --i)
+    {
+        for (int j = 0; j < nodes[i].size(); ++j)
+        {
+            if (nodes[i][j].isFighing)
+                ans << Fighing({
+                                   nodes[i + 1][2 * j + 1].UID,
+                                   nodes[i + 1][2 * j    ].UID,
+                                   nodes[i][j].v,
+                                   tournamentCategory,
+                                   0
+                               });
+        }
+    }
+    return ans;
 }
 
 void DBUtils::insertLeafOfGrid(long long tournamentCategories, long long vertex, long long orderUID)

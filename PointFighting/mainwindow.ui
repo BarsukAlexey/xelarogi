@@ -14,42 +14,34 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <widget class="QTableWidget" name="tableWidget">
-    <property name="geometry">
-     <rect>
-      <x>90</x>
-      <y>40</y>
-      <width>256</width>
-      <height>192</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton">
-    <property name="geometry">
-     <rect>
-      <x>70</x>
-      <y>450</y>
-      <width>75</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>PushButton</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_2">
-    <property name="geometry">
-     <rect>
-      <x>190</x>
-      <y>450</y>
-      <width>75</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>PushButton</string>
-    </property>
-   </widget>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QTableWidget" name="tableWidget">
+      <property name="editTriggers">
+       <set>QAbstractItemView::NoEditTriggers</set>
+      </property>
+      <property name="selectionMode">
+       <enum>QAbstractItemView::SingleSelection</enum>
+      </property>
+      <property name="selectionBehavior">
+       <enum>QAbstractItemView::SelectRows</enum>
+      </property>
+      <property name="columnCount">
+       <number>0</number>
+      </property>
+      <attribute name="verticalHeaderVisible">
+       <bool>false</bool>
+      </attribute>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QPushButton" name="pushButtonGo">
+      <property name="text">
+       <string>Go...</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -60,6 +52,14 @@
      <height>21</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuData">
+    <property name="title">
+     <string>Data</string>
+    </property>
+    <addaction name="actionLoad_data"/>
+    <addaction name="actionExport_results"/>
+   </widget>
+   <addaction name="menuData"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -70,6 +70,16 @@
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionLoad_data">
+   <property name="text">
+    <string>Load data...</string>
+   </property>
+  </action>
+  <action name="actionExport_results">
+   <property name="text">
+    <string>Export results...</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>

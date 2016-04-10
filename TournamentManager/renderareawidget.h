@@ -63,7 +63,7 @@ private:
 
 public:
     static int log2(int x);
-    static void printTableGridInExcel(int tournamentCategory, bool likePointFighing, QString path, bool isFirst, bool isLast, int& fightingNumber, QString text = "", QString prefFileName = "");
+    static void printTableGridInExcel(int tournamentCategory, bool likePointFighing, QString path, bool isFirst, bool isLast, int fightingNumber, QString text = "", QString prefFileName = "");
     static QString getNameOfLevel(int vertex);
 };
 #endif // RENDERAREAWIDGET_H

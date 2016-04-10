@@ -122,10 +122,10 @@
            <item>
             <widget class="QPushButton" name="pushButton">
              <property name="enabled">
-              <bool>false</bool>
+              <bool>true</bool>
              </property>
              <property name="text">
-              <string>PushButton</string>
+              <string>Добавть категории</string>
              </property>
             </widget>
            </item>

@@ -281,7 +281,7 @@ QPoint RenderAreaWidget::getCell(int v, int countColumns)
 }
 
 void RenderAreaWidget::printTableGridInExcel(int tournamentCategory,
-        bool likePointFighing, QString directoryPath, bool isFirst, bool isLast, int& fightingNumber, QString text, QString prefFileName)
+        bool likePointFighing, QString directoryPath, bool isFirst, bool isLast, int fightingNumber, QString text, QString prefFileName)
 {
     QVector<DBUtils::NodeOfTournirGrid> nodes = DBUtils::getNodes(tournamentCategory);
     if (nodes.empty()) return;

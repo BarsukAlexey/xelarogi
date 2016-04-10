@@ -4,13 +4,13 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui sql axcontainer #webkitwidgets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = PointFighting
 TEMPLATE = app
-
+QT += multimedia
 CONFIG += c++11
 
 SOURCES += main.cpp\

@@ -64,8 +64,10 @@ public:
     static QVector<NodeOfTournirGrid> getNodes(long long tournamentCategoryUID);
     static QVector<QVector<NodeOfTournirGrid>> getNodesAsLevelListOfList(long long tournamentCategoryUID);
     static QVector<NodeOfTournirGrid> getLeafOFTree(const QSqlDatabase& database, long long tournamentCategoryUID);
+    static QVector<NodeOfTournirGrid> getFightingNodes(long long tournamentCategoryUID);
     static QVector<QVector<DBUtils::Fighing>> getListsOfPairsForFighting(long long tournamentUID);
     static QVector<Fighing> getListOfPairsForFighting(long long TOURNAMENT_CATEGORIES_FK);
+    static QVector<Fighing> getListOfPairsForFightingForPointFighting(long long TOURNAMENT_CATEGORIES_FK);
     static void insertLeafOfGrid(long long TOURNAMENT_CATEGORIES_FK, long long VERTEX, long long orderUID);
     static bool updateNodeOfGrid(const QSqlDatabase& database, long long TOURNAMENT_CATEGORIES_FK, long long VERTEX, long long orderUID, QString result);
     static void swapNodesOfGrid(long long tournamentCategoryUID, int node0v, int node1v);

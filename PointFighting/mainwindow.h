@@ -2,6 +2,32 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QLabel>
+#include <QGridLayout>
+#include <QListWidget>
+#include <QDebug>
+#include <algorithm>
+#include <QAxWidget>
+#include <QAxObject>
+
+#include <QJsonDocument>
+#include <QJsonParseError>
+#include <QJsonObject>
+#include <QJsonArray>
+#include <QJsonValue>
+#include <QJsonValuePtr>
+#include <QJsonValueRef>
+#include <QJsonValueRefPtr>
+#include <QVariantMap>
+#include <QFileDialog>
+
+#include <QSqlQuery>
+#include <QSqlError>
+
+#include <QMessageBox>
+
+#include <algorithm>
+#include <QThread>
 
 namespace Ui {
 class MainWindow;
@@ -11,12 +37,20 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
+private:
+    Ui::MainWindow *ui;
+    const QString nameSaveFile = "save.json";
+
+
+
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
 private:
-    Ui::MainWindow *ui;
+    QJsonDocument loadJSON();
+    void update();
+
 };
 
 #endif // MAINWINDOW_H

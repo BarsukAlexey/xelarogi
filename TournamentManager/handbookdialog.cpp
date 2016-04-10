@@ -71,7 +71,7 @@ HandbookDialog::HandbookDialog(QString tableName, QString tableRusName,
         this->accept();
     });
 
-    ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeMode::ResizeToContents);
+    //ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeMode::ResizeToContents);
 
 
     connect(ui->tableView, &QTableView::customContextMenuRequested, [this, &tableName, model] (const QPoint& pos)
@@ -108,7 +108,7 @@ HandbookDialog::HandbookDialog(QString tableName, QString tableRusName,
     setWindowFlags(windowFlags() | Qt::WindowMaximizeButtonHint);
     if (parent == 0)
         setWindowFlags(windowFlags() | Qt::WindowMinMaxButtonsHint);
-    //ui->tableView->resizeColumnsToContents();
+    ui->tableView->resizeColumnsToContents();
 }
 
 HandbookDialog::~HandbookDialog()

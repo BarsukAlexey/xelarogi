@@ -31,8 +31,7 @@
 #include <QVariantMap>
 #include <QFileDialog>
 #include <QMessageBox>
-
-//#include <QMouseEvent>
+#include <QBuffer>
 
 
 using namespace std;
@@ -160,69 +159,6 @@ void MainWindow::paintEvent(QPaintEvent *event)
     QMainWindow::paintEvent(event);
 }
 
-/*
-void MainWindow::on_btnExcel_clicked()
-{
-    QAxObject* excel = new QAxObject( "Excel.Application", 0 );
-    QAxObject* workbooks = excel->querySubObject( "Workbooks" );
-    QAxObject* workbook = workbooks->querySubObject( "Open(const QString&)", "C:/Code/TournamentManager/test.xlsx" );
-
-
-    QAxObject* sheets = workbook->querySubObject( "Sheets" );
-    //int sheetCount = sheets->dynamicCall("Count()").toInt();
-    int sheetNumber = 1;
-
-    QAxObject* sheet = sheets->querySubObject( "Item( int )", sheetNumber );
-
-    // Find the cells that actually have content
-    QAxObject* usedrange = sheet->querySubObject( "UsedRange");
-    QAxObject * rows = usedrange->querySubObject("Rows");
-    QAxObject * columns = usedrange->querySubObject("Columns");
-    int intRowStart = usedrange->property("Row").toInt();
-    int intColStart = usedrange->property("Column").toInt();
-    int intCols = columns->property("Count").toInt();
-    int intRows = rows->property("Count").toInt();
-
-    for (int row=intRowStart ; row < intRowStart+intRows ; row++) {
-        QString name = "";
-        QString nameEng = "";
-        QString shortNameEng2 = "";
-        QString shortNameEng3 = "";
-        for (int col=intColStart ; col < intColStart+intCols ; col++) {
-            QAxObject* cell = sheet->querySubObject( "Cells( int, int )", row, col );
-            QVariant value = cell->dynamicCall( "Value()" );
-            if (value.toString().isEmpty())
-                continue;
-
-            switch (col) {
-                case 1:
-                    name = value.toString();
-                    break;
-                case 2:
-                    nameEng = value.toString();
-                    break;
-                case 3:
-                    shortNameEng2 = value.toString();
-                    break;
-                case 4:
-                    shortNameEng3 = value.toString();
-                    break;
-                default:
-                    break;
-            }
-        }
-        QSqlQuery query("INSERT INTO COUNTRIES(NAME, NAME_ENG, SHORTNAME, SHORTNAME_ENG) VALUES('" + name + "','" + nameEng + "','" + shortNameEng2 + "','" + shortNameEng3 + "')", m_database);
-        if (!query.exec())
-            qDebug() << query.lastError().text() << query.lastQuery();
-    }
-
-    // clean up and close up
-    workbook->dynamicCall("Close()");
-    delete workbook;
-    excel->dynamicCall("Quit()");
-    delete excel;
-}
-*/
 
 void MainWindow::updateTournamentTreeWidget()
 {
@@ -537,8 +473,26 @@ void MainWindow::on_btn_report_ministr_clicked()
 
 void MainWindow::on_pushButton_clicked()
 {
-    EbnutVBazu::setTournamentCat(ui->tournamentUidLabel->text().toLongLong());
-    qDebug() << "DONE";
+//    EbnutVBazu::setTournamentCat(ui->tournamentUidLabel->text().toLongLong());
+//    qDebug() << "DONE";
+
+    QString openFileName = QFileDialog::getOpenFileName();
+    QImage image(openFileName);
+//    QLabel label;
+//    label.setPixmap(QPixmap::fromImage(image));
+//    label.show();
+    QByteArray byteArray;
+    QBuffer buffer(&byteArray);
+    image.save(&buffer, "PNG");
+    QString iconBase64 = QString::fromLatin1(byteArray.toBase64().data());
+    qDebug() << "iconBase64.length(): " << iconBase64.length();
+
+    QSqlQuery query("INSERT INTO COUNTRIES(NAME, SHORTNAME, FLAG) VALUES(?,?,?)");
+    query.addBindValue("Олала");
+    query.addBindValue("Ола");
+    query.addBindValue(iconBase64);
+    if(!query.exec())
+        qDebug() << "Fuck!";
 }
 
 void MainWindow::on_pushButton_2_clicked()
@@ -546,3 +500,5 @@ void MainWindow::on_pushButton_2_clicked()
     EbnutVBazu::setRandomWinner();
     qDebug() << "DONE";
 }
+
+

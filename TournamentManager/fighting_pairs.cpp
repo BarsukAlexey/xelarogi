@@ -90,7 +90,7 @@ FightingPairs::FightingPairs(const QSqlDatabase &_database, long long _tournamen
     ringSpinBox = new QSpinBox;
     ringSpinBox->setMaximum(100);
     ringSpinBox->setMinimum(1);
-    ringSpinBox->setValue(5);
+    ringSpinBox->setValue(1);
 
     spinBoxDelay = new QSpinBox;
     spinBoxDelay->setMaximum(1000000);
@@ -215,7 +215,10 @@ void FightingPairs::printInJSON(const QVector<DBUtils::Fighing>& fighting, int r
         a["nameOfRightFighter"] = DBUtils::getField("SECOND_NAME", "ORDERS", f.UID1) + " " + DBUtils::getField("FIRST_NAME", "ORDERS", f.UID1);
 
         a["fightId"] = fightingId;
-        a["categoryOfFighting"] = DBUtils::getField( "WEIGHT_TILL", "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK);
+        //a["categoryOfFighting"] = DBUtils::getField( "WEIGHT_TILL", "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK);
+        a["categoryOfFighting"] = DBUtils::getField("WEIGHT_TILL", "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK);
+        if (200 <= a["categoryOfFighting"].toInt())
+            a["categoryOfFighting"] = "+" + DBUtils::getField("WEIGHT_FROM", "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK);
 
         a["countOfRounds"  ] = DBUtils::getField("ROUND_COUNT"     , "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK);
         a["durationOfRound"] = DBUtils::getField("DURATION_FIGHING", "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK);
@@ -329,13 +332,67 @@ void FightingPairs::makeGridsForPointFighting(QString existingDirectory, QVector
     int idRing = 1;
     for (QVector<long long> uids : ansTournamentCategoryUIDs)
     {
+        QVector<QJsonObject> jsonObjects;
         for (int i = 0, fightingNumber = 1; i < uids.size(); ++i)
         {
             RenderAreaWidget::printTableGridInExcel(uids[i], true,
-                                                    existingDirectory, i == 0, i + 1 == uids.size(), fightingNumber, qLineEdit->text(),
-                                                    "Татами " +  QString("%1 (%2)").arg(idRing, 2, 10, QChar('0')).arg(i + 1, 2, 10, QChar('0'))
-                                                    );
+                existingDirectory, i == 0, i + 1 == uids.size(), fightingNumber, qLineEdit->text(),
+                "Татами " +  QString("%1 (%2)").arg(idRing, 2, 10, QChar('0')).arg(i + 1, 2, 10, QChar('0')));
+
+
+            QVector<DBUtils::Fighing> fightingNodes = DBUtils::getListOfPairsForFightingForPointFighting(uids[i]);
+            for (int j = 0; j < fightingNodes.size(); ++j)
+            {
+                DBUtils::Fighing f = fightingNodes[j];
+                QJsonObject a;
+                a["nameOfLeftFighter" ] = DBUtils::getField("SECOND_NAME", "ORDERS", f.UID0) + " " + DBUtils::getField("FIRST_NAME", "ORDERS", f.UID0);
+                a["nameOfRightFighter"] = DBUtils::getField("SECOND_NAME", "ORDERS", f.UID1) + " " + DBUtils::getField("FIRST_NAME", "ORDERS", f.UID1);
+
+                int curNumb = fightingNumber;
+                if (j     == 0                    && i     != 0          ) --curNumb;
+                if (j + 1 == fightingNodes.size() && i + 1 != uids.size()) ++curNumb;
+                a["fightId"] = curNumb;
+
+                a["categoryOfFighting"] = DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK);
+
+                a["countOfRounds"  ] = DBUtils::getField("ROUND_COUNT"     , "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK);
+                a["durationOfRound"] = DBUtils::getField("DURATION_FIGHING", "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK);
+                a["durationOfBreak"] = DBUtils::getField("DURATION_BREAK"  , "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK);
+
+                a["countryOfLeftFighter" ] = DBUtils::getField("NAME", "COUNTRIES", DBUtils::getField("COUNTRY_FK", "ORDERS", f.UID0));
+                a["countryOfRightFighter"] = DBUtils::getField("NAME", "COUNTRIES", DBUtils::getField("COUNTRY_FK", "ORDERS", f.UID1));
+
+                a["regionOfLeftFighter" ] = DBUtils::getField("NAME", "REGIONS", DBUtils::getField("REGION_FK", "ORDERS", f.UID0));
+                a["regionOfRightFighter"] = DBUtils::getField("NAME", "REGIONS", DBUtils::getField("REGION_FK", "ORDERS", f.UID1));
+
+                a["TOURNAMENT_CATEGORIES_FK"] = f.TOURNAMENT_CATEGORIES_FK;
+                a["VERTEX"] = f.VERTEX;
+                a["orderUID_left"] = f.UID0;
+                a["orderUID_right"] = f.UID1;
+
+                jsonObjects << a;
+                //
+                ++fightingNumber;
+            }
+
+
         }
+
+        qSort(jsonObjects.begin(), jsonObjects.end(), [](const QJsonObject & x, const QJsonObject & y){
+            return x["fightId"].toInt() < y["fightId"].toInt();
+        });
+
+        QJsonArray arr;
+        for(QJsonObject x : jsonObjects) arr << x;
+        const QString path = existingDirectory + QDir::separator() + "ring " + QString::number(idRing) + ".json";
+        QFile saveFile(path);
+        if (!saveFile.open(QIODevice::WriteOnly)) {
+            qWarning("Couldn't open save file.");
+            qDebug() << saveFile.errorString();
+            return;
+        }
+        qDebug() << "writing: " << saveFile.write(QJsonDocument(arr).toJson()) << "БайТ in " << path;
+
         ++idRing;
     }
 
