@@ -120,6 +120,13 @@
             </spacer>
            </item>
            <item>
+            <widget class="QPushButton" name="pushButton_3">
+             <property name="text">
+              <string>Загрузка флага</string>
+             </property>
+            </widget>
+           </item>
+           <item>
             <widget class="QPushButton" name="pushButton">
              <property name="enabled">
               <bool>true</bool>
@@ -132,10 +139,10 @@
            <item>
             <widget class="QPushButton" name="pushButton_2">
              <property name="enabled">
-              <bool>false</bool>
+              <bool>true</bool>
              </property>
              <property name="text">
-              <string>PushButton</string>
+              <string>Рандомные победители</string>
              </property>
             </widget>
            </item>

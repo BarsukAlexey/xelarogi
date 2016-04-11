@@ -30,7 +30,7 @@ MainWindow::MainWindow(QWidget *parent) :
         path = QDir::toNativeSeparators(path);
         if (!path.endsWith(QDir::separator())) path += QDir::separator();
         path = QDir::toNativeSeparators(path);
-        path += "Results " + QDateTime::currentDateTime().toString("hh.ss__dd.MM.yyyy") + ".json";
+        path += "Results " + QDateTime::currentDateTime().toString("hh.mm__dd.MM.yyyy") + ".json";
 
         if (!file.copy(path))
             QMessageBox::warning(this, "", "Can't save file as " + path + "\n\n" + file.errorString());
@@ -53,8 +53,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
                         ui->tableWidget->item(row,  8)->data(Qt::DisplayRole).toInt(),
                         ui->tableWidget->item(row,  9)->data(Qt::DisplayRole).toInt(),
-                        ui->tableWidget->item(row, 10)->data(Qt::DisplayRole).toInt()
-                        );
+                        ui->tableWidget->item(row, 10)->data(Qt::DisplayRole).toInt(),
+
+                        flags[row][0],
+                        flags[row][1] );
         f.exec();
         if (f.status != FightingTable::Status::Finish)
             return;
@@ -77,7 +79,8 @@ MainWindow::MainWindow(QWidget *parent) :
         QJsonArray array = doc.array();
         QJsonObject object = array.at(row).toObject();
         object["winner"] = winner;
-        object["winnerUID"] = winnerUID;
+        object["orderUID"] = winnerUID;
+        object["result"] = f.getResult();
         array.removeAt(row);
         array.insert(row, object);
         int TOURNAMENT_CATEGORIES_FK = object["TOURNAMENT_CATEGORIES_FK"].toInt();
@@ -91,7 +94,8 @@ MainWindow::MainWindow(QWidget *parent) :
                 for (QString key : {VERTEX % 2? "countryOfLeftFighter" : "countryOfRightFighter",
                                     VERTEX % 2? "nameOfLeftFighter"    : "nameOfRightFighter",
                                     VERTEX % 2? "orderUID_left"        : "orderUID_right",
-                                    VERTEX % 2? "regionOfLeftFighter"  : "regionOfRightFighter"})
+                                    VERTEX % 2? "regionOfLeftFighter"  : "regionOfRightFighter",
+                                    VERTEX % 2? "leftFlag"             : "rightFlag"})
                 {
                     currentObject[key] = object[key];
                 }
@@ -145,6 +149,7 @@ void MainWindow::update()
     QStringList heads({"Fight #", "Red conner", "Country/Region", "Blue conner", "Country/Region", "Winner", "Can start?", "Tournament Categoty", "Duration fight", "Duration break", "Count of rounds"});
     ui->tableWidget->setColumnCount(heads.size());
     ui->tableWidget->setHorizontalHeaderLabels(heads);
+    flags.clear();
     for (int i = 0; i < array.size(); ++i)
     {
         QTableWidgetItem *item;
@@ -171,7 +176,7 @@ void MainWindow::update()
         QString winner = object["winner"].toString();
         ui->tableWidget->setItem(i, column++, new QTableWidgetItem(winner));
 
-        bool canStart = 0 < object["orderUID_left"].toInt() && 0 < object["orderUID_right"].toInt() && !object["winnerUID"].toInt(0);
+        bool canStart = 0 < object["orderUID_left"].toInt() && 0 < object["orderUID_right"].toInt() && !object["orderUID"].toInt(0);
         //qDebug() << i << object["orderUID_left"].toInt() << object["orderUID_right"].toInt() << canStart << column;
         item = new QTableWidgetItem(canStart? "Yes" : "No");
         item->setData(Qt::UserRole, QVariant(canStart));
@@ -181,6 +186,18 @@ void MainWindow::update()
         ui->tableWidget->setItem(i, column++, new QTableWidgetItem(object["durationOfRound"].toString()));
         ui->tableWidget->setItem(i, column++, new QTableWidgetItem(object["durationOfBreak"].toString()));
         ui->tableWidget->setItem(i, column++, new QTableWidgetItem(object["countOfRounds"].toString()));
+
+
+        flags << QVector<QImage>();
+        QImage a = QImage::fromData(QByteArray::fromBase64(object["leftFlag" ].toString().toStdString().c_str()));
+        QImage b = QImage::fromData(QByteArray::fromBase64(object["rightFlag"].toString().toStdString().c_str()));
+//        QLabel *aa = new QLabel;
+//        QLabel *bb = new QLabel;
+//        aa->setPixmap(QPixmap::fromImage(a));
+//        bb->setPixmap(QPixmap::fromImage(b));
+//        aa->show();
+//        bb->show();
+        flags.back() << a << b;
     }
     ui->tableWidget->resizeColumnsToContents();
 }

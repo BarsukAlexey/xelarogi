@@ -40,7 +40,7 @@ class MainWindow : public QMainWindow
 private:
     Ui::MainWindow *ui;
     const QString nameSaveFile = "save.json";
-
+    QVector<QVector<QImage>> flags;
 
 
 public:

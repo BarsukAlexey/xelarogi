@@ -32,6 +32,9 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QBuffer>
+#include <iostream>
+#include <fstream>
+
 
 
 using namespace std;
@@ -76,7 +79,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     connect(ui->countryAction, &QAction::triggered, [this] () {
-        HandbookDialog handbookDlg(QString("COUNTRIES"), QString("Страны"), m_database, this, {"UID"});
+        HandbookDialog handbookDlg(QString("COUNTRIES"), QString("Страны"), m_database, this, {"UID", "FLAG"});
         handbookDlg.exec();
     });
 
@@ -473,26 +476,8 @@ void MainWindow::on_btn_report_ministr_clicked()
 
 void MainWindow::on_pushButton_clicked()
 {
-//    EbnutVBazu::setTournamentCat(ui->tournamentUidLabel->text().toLongLong());
-//    qDebug() << "DONE";
-
-    QString openFileName = QFileDialog::getOpenFileName();
-    QImage image(openFileName);
-//    QLabel label;
-//    label.setPixmap(QPixmap::fromImage(image));
-//    label.show();
-    QByteArray byteArray;
-    QBuffer buffer(&byteArray);
-    image.save(&buffer, "PNG");
-    QString iconBase64 = QString::fromLatin1(byteArray.toBase64().data());
-    qDebug() << "iconBase64.length(): " << iconBase64.length();
-
-    QSqlQuery query("INSERT INTO COUNTRIES(NAME, SHORTNAME, FLAG) VALUES(?,?,?)");
-    query.addBindValue("Олала");
-    query.addBindValue("Ола");
-    query.addBindValue(iconBase64);
-    if(!query.exec())
-        qDebug() << "Fuck!";
+    EbnutVBazu::setTournamentCat(ui->tournamentUidLabel->text().toLongLong());
+    qDebug() << "DONE";
 }
 
 void MainWindow::on_pushButton_2_clicked()
@@ -501,4 +486,35 @@ void MainWindow::on_pushButton_2_clicked()
     qDebug() << "DONE";
 }
 
+
+
+void MainWindow::on_pushButton_3_clicked()
+{
+    QString openFileName = QFileDialog::getOpenFileName();
+    QImage image(openFileName);
+    image = image.scaledToHeight(250);
+    QLabel *label = new QLabel();
+    label->setPixmap(QPixmap::fromImage(image));
+    label->show();
+
+    QByteArray byteArray;
+    QBuffer buffer(&byteArray);
+    buffer.open(QIODevice::WriteOnly);
+    image.save(&buffer, "PNG");
+    QString iconBase64 = QString::fromLatin1(byteArray.toBase64().data());
+    qDebug() << "iconBase64.length(): " << iconBase64.length();
+    qDebug() << "iconBase64.length(): " << iconBase64.left(300);
+
+    ofstream out("out.txt");
+    out << iconBase64.toStdString();
+    out.close();
+
+//    QSqlQuery query("UPDATE COUNTRIES SET FLAG = ? WHERE NAME = ? ");
+//    query.addBindValue(iconBase64);
+//    query.addBindValue("Шведция");
+//    if(!query.exec())
+//        qDebug() << "Fuck!";
+//    else
+//        qDebug() << "Done!";
+}
 

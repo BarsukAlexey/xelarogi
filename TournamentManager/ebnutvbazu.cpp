@@ -154,7 +154,7 @@ void EbnutVBazu::setRandomWinner()
 
 void EbnutVBazu::setTournamentCat(long long tournamentUID)
 {
-    QSqlDatabase::database().transaction();
+    //QSqlDatabase::database().transaction();
     QSqlQuery query;
 
     for(QString s : {
@@ -269,5 +269,5 @@ void EbnutVBazu::setTournamentCat(long long tournamentUID)
         }
     }
 
-    QSqlDatabase::database().commit();
+    //QSqlDatabase::database().commit();
 }

@@ -1,12 +1,12 @@
 package net.pskov;
 
 import com.google.gson.*;
-import com.google.gson.internal.bind.JsonTreeWriter;
 import net.java.games.input.Component;
 import net.pskov.controller.KeyboardController;
 import net.pskov.controller.MouseController;
-import net.pskov.someEnum.Player;
-import net.pskov.someEnum.StatusFighting;
+import net.pskov.some_enum.Player;
+import net.pskov.some_enum.StatusFighting;
+import net.pskov.utils.ImageUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,34 +16,38 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Date;
-import java.util.HashSet;
+import java.nio.file.StandardCopyOption;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
-//import java.nio.charset.StandardCharsets;
 
-public class JFrameMainJudge extends JFrame {
+class JFrameMainJudge extends JFrame {
+
+    private final String pathSaveJson = "save.json";
+
 
     private JPanel jPanelStartPage; // панелька, на которой выбирается бой, настраиваются мышки, сохраняются результаты...
     private JPanel jPanelFighting;  // панелька, на которой находится табло боя и подсказки как управлять боем
 
-    private JFrame[] jFrameSpectator; // Окна, которые отображаются на мониторах для зрителей. На каждом мониторе по одному окну
-
     private JPanelScoreTable[] allJPanelScoreTable; // все табло, включая то, что у главного судьи (оно 0ое в массиве)
-
-    final JList<Fighting> jList; // список дерущихся
+    private final JList<String> jList; // список дерущихся
 
     private volatile Fighting activeFighting;
+    private volatile Vector<Fighting> allFighting;
+    private volatile Vector<Boolean> canStartFighting;
 
     private final MouseController[] mouseController;
     private volatile KeyboardController keyboardController;
 
-    public JFrameMainJudge() {
+    JFrameMainJudge() {
         super();
 
         mouseController = new MouseController[3];
         keyboardController = new KeyboardController();
 
-        jList = new JList<Fighting>();
+        jList = new JList<String>();
+        initListOfPlayers(pathSaveJson);
 
         // получаем координаты левого верхнего всех мониторов
         GraphicsDevice[] screenDevices = GraphicsEnvironment.getLocalGraphicsEnvironment().getScreenDevices();
@@ -66,7 +70,7 @@ public class JFrameMainJudge extends JFrame {
 
         allJPanelScoreTable = new JPanelScoreTable[originPoint.length];
         allJPanelScoreTable[0] = new JPanelScoreTable(true);
-        jFrameSpectator = new JFrame[originPoint.length - 1];
+        JFrame[] jFrameSpectator = new JFrame[originPoint.length - 1];
         for (int i = 0; i < jFrameSpectator.length; i++) {
             jFrameSpectator[i] = createFrameAtLocation(originPoint[i + 1], allJPanelScoreTable[i + 1] = new JPanelScoreTable(false));
         }
@@ -101,36 +105,69 @@ public class JFrameMainJudge extends JFrame {
         new PollMiceAndKeyboard().start();
     }
 
+    private void initListOfPlayers(String path) {
+        String JSON_DATA;
+        try {
+            JSON_DATA = new String(Files.readAllBytes(Paths.get(path)), StandardCharsets.UTF_8);
+        } catch (IOException e1) {
+            e1.printStackTrace();
+            return;
+        }
+
+        final DefaultListModel<String> listModel = new DefaultListModel<>();
+
+        allFighting = new Vector<>();
+        canStartFighting = new Vector<>();
+        for (JsonElement jsonElement : new JsonParser().parse(JSON_DATA).getAsJsonArray()) {
+            JsonObject object = jsonElement.getAsJsonObject();
+
+            Fighting f = new Fighting(
+                    object.get("nameOfLeftFighter").getAsString(),
+                    object.get("nameOfRightFighter").getAsString(),
+                    object.get("fightId").getAsInt(),
+                    object.get("categoryOfFighting").getAsString(),
+//                    object.get("countOfRounds").getAsInt(),
+//                    object.get("durationOfRound").getAsInt(),
+//                    object.get("durationOfBreak").getAsInt(),
+                    1,2,2,
+
+                    ImageUtils.decodeToImage(object.get("leftFlag").getAsString()),
+                    ImageUtils.decodeToImage(object.get("rightFlag").getAsString()),
+
+                    object.get("countryOfLeftFighter").getAsString(),
+                    object.get("countryOfRightFighter").getAsString(),
+                    object.get("TOURNAMENT_CATEGORIES_FK").getAsLong(),
+                    object.get("VERTEX").getAsInt()
+            );
+            allFighting.add(f);
+            long winner = 0;
+            if (object.get("orderUID") != null) winner = object.get("orderUID").getAsInt();
+            long left = object.get("orderUID_left").getAsInt();
+            long right = object.get("orderUID_right").getAsInt();
+            String element = object.get("fightId").getAsInt() + "    /    " + object.get("nameOfLeftFighter").getAsString() + " (" + object.get("countryOfLeftFighter").getAsString() + ")    /    " +
+                    object.get("nameOfRightFighter").getAsString() + " (" + object.get("countryOfRightFighter").getAsString() + ")   ";
+            if (0 < winner) {
+                element += "  / WINNER IS ";
+                if (winner == left)
+                    element += object.get("nameOfLeftFighter").getAsString();
+                else if (winner == right)
+                    element += object.get("countryOfRightFighter").getAsString();
+                else
+                    throw new RuntimeException();
+                canStartFighting.add(false);
+            }
+            else{
+                canStartFighting.add(true);
+            }
+            listModel.addElement(element);
+        }
+        jList.setModel(listModel);
+    }
+
     private void initJPanelStartPage() {
-        // создания списка боёв
-//        final JList<Fighting> jList;
-//        Fighting[] fightings;
-//        try {
-//            fightings = new Fighting[]{
-//                    new Fighting("Быстрий Иван", "Быстрый Егор", 4, "FC M-2", 1, 3, 2, ImageIO.read(new File("resources\\images\\rus.png")), ImageIO.read(new File("resources\\images\\Switzerland.png")), "Rus", "Switzerland"),
-//                    new Fighting("Иван  Иванович", "Василий Васильевич", 1, "FC f-52", 2, 30, 20, ImageIO.read(new File("resources\\images\\Canada.png")), ImageIO.read(new File("resources\\images\\Qatar.png")), "Canada", "Qatar"),
-//                    new Fighting("Петров Петрович", "Максим Максимыч", 2, "FC f-2", 3, 20, 13, ImageIO.read(new File("resources\\images\\rus.png")), ImageIO.read(new File("resources\\images\\Switzerland.png")), "Rus", "Switzerland"),
-//                    new Fighting("Петрова Ирина", "Шаманова Виктория", 3, "FC f-2", 3, 20, 13, ImageIO.read(new File("resources\\images\\rus.png")), ImageIO.read(new File("resources\\images\\Switzerland.png")), "Rus", "Switzerland"),
-//            };
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            fightings = new Fighting[0];
-//        }
-//        jList = new JList<>(fightings);
-//        jList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-//        JScrollPane jScrollPane = new JScrollPane(jList);
-//        jScrollPane.setPreferredSize(new Dimension(90, 13));
-//        if (0 < jList.getModel().getSize())
-//            jList.setSelectedIndex(0);
-
-
-        //jList = new JList<>();
         jList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JScrollPane jScrollPane = new JScrollPane(jList);
         jScrollPane.setPreferredSize(new Dimension(90, 13));
-        if (0 < jList.getModel().getSize())
-            jList.setSelectedIndex(0);
 
 
         // создание кнопки начала боя
@@ -142,8 +179,15 @@ public class JFrameMainJudge extends JFrame {
                     JOptionPane.showMessageDialog(JFrameMainJudge.this, "Connect mice and click \"init mice\"");
                     return;
                 }
+                if (jList.getSelectedIndex() < 0)
+                    return;
+                if (!canStartFighting.get(jList.getSelectedIndex())){
+                    JOptionPane.showMessageDialog(JFrameMainJudge.this, "played");
+                    return;
+                }
 
-                Fighting selectedValue = jList.getSelectedValue();
+
+                Fighting selectedValue = allFighting.get(jList.getSelectedIndex());
                 if (selectedValue == null) return;
                 System.err.println("Fight: " + selectedValue); // TODO
 
@@ -165,88 +209,41 @@ public class JFrameMainJudge extends JFrame {
 
 
         // выбор файла с боями
-        JButton jButtonSelectFile = new JButton("Select file");
-        jButtonSelectFile.addActionListener(new ActionListener() {
+        JButton jButtonLoadData = new JButton("Select list of pairs...");
+        jButtonLoadData.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JFileChooser chooser = new JFileChooser();
                 chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-                int returnVal = chooser.showOpenDialog(jPanelStartPage);
-                if (returnVal == JFileChooser.APPROVE_OPTION) {
+                if (chooser.showOpenDialog(jPanelStartPage) == JFileChooser.APPROVE_OPTION) {
                     String path = chooser.getSelectedFile().getAbsolutePath();
                     System.out.println("You chose to open this file: " + path); // TODO
-                    String JSON_DATA;
                     try {
-                        JSON_DATA = new String(Files.readAllBytes(Paths.get(path)), StandardCharsets.UTF_8);
-//                        JSON_DATA = new String(Files.readAllBytes(Paths.get(path)));
+                        Files.copy(Paths.get(path), Paths.get(pathSaveJson), StandardCopyOption.REPLACE_EXISTING);
                     } catch (IOException e1) {
                         e1.printStackTrace();
-                        return;
                     }
-
-                    final DefaultListModel<Fighting> listModel = new DefaultListModel<Fighting>();
-
-                    for (JsonElement jsonElement : new JsonParser().parse(JSON_DATA).getAsJsonArray()) {
-                        Fighting f = new Fighting(
-                                jsonElement.getAsJsonObject().get("nameOfLeftFighter").getAsString(),
-                                jsonElement.getAsJsonObject().get("nameOfRightFighter").getAsString(),
-                                jsonElement.getAsJsonObject().get("fightId").getAsInt(),
-                                jsonElement.getAsJsonObject().get("categoryOfFighting").getAsString(),
-                                jsonElement.getAsJsonObject().get("countOfRounds").getAsInt(),
-                                jsonElement.getAsJsonObject().get("durationOfRound").getAsInt(),
-                                jsonElement.getAsJsonObject().get("durationOfBreak").getAsInt(),
-                                jsonElement.getAsJsonObject().get("countryOfLeftFighter").getAsString(),
-                                jsonElement.getAsJsonObject().get("countryOfRightFighter").getAsString(),
-                                jsonElement.getAsJsonObject().get("TOURNAMENT_CATEGORIES_FK").getAsLong(),
-                                jsonElement.getAsJsonObject().get("VERTEX").getAsInt(),
-                                jsonElement.getAsJsonObject().get("orderUID_left").getAsLong(),
-                                jsonElement.getAsJsonObject().get("orderUID_right").getAsLong()
-                        );
-                        listModel.addElement(f);
-                        com.google.gson.stream.JsonWriter s = new JsonTreeWriter();
-
-                    }
-                    jList.setModel(listModel);
+                    initListOfPlayers(path);
                 }
             }
         });
 
 
         // выбор папки куда сохранять результаты
-        JButton jButtonSaveFile = new JButton("Save results");
+        JButton jButtonSaveFile = new JButton("Save results...");
         jButtonSaveFile.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JFileChooser chooser = new JFileChooser();
-                chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                int returnVal = chooser.showOpenDialog(jPanelStartPage);
-                if (returnVal == JFileChooser.APPROVE_OPTION) {
-                    String choosedPath = chooser.getSelectedFile().getAbsolutePath();
-                    System.out.println("You chose to open this file: " + choosedPath); // TODO
-                    File file = new File(choosedPath, "result" + new Date().getTime() + ".json");
-
-                    JsonArray jsonArray = new JsonArray();
-                    for (int i = 0; i < jList.getModel().getSize(); ++i) {
-                        Fighting f = jList.getModel().getElementAt(i);
-                        if (f.getStatusFighting() == StatusFighting.finishPending || f.getStatusFighting() == StatusFighting.disqualification) {
-                            JsonObject jsonObject = new JsonObject();
-                            jsonObject.addProperty("TOURNAMENT_CATEGORIES_FK", f.TOURNAMENT_CATEGORIES_FK);
-                            jsonObject.addProperty("VERTEX", f.VERTEX);
-                            jsonObject.addProperty("orderUID", f.getLoser(true) == Player.left ? f.orderUID_right : f.orderUID_left);
-                            jsonObject.addProperty("result", f.getResult());
-                            jsonArray.add(jsonObject);
-                        }
-                    }
-
+                chooser.setSelectedFile(new File("Results " + new SimpleDateFormat(" yyyy.MM.dd  HH'h'mm'm'").format(new Date()) + ".json"));
+                if (chooser.showSaveDialog(jPanelStartPage) == JFileChooser.APPROVE_OPTION) {
+                    File selectedFile = chooser.getSelectedFile();
+                    System.out.println("You chose to open this file: " + selectedFile.getAbsolutePath()); // TODO
                     try {
-                        PrintStream out = new PrintStream(file);
-                        out.print(new Gson().toJson(jsonArray));
-                        out.flush();
-                        out.close();
-                    } catch (FileNotFoundException e1) {
+                        Files.copy(Paths.get(pathSaveJson), selectedFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                    } catch (IOException e1) {
                         e1.printStackTrace();
                     }
-
                 }
             }
         });
@@ -264,12 +261,12 @@ public class JFrameMainJudge extends JFrame {
         jPanelStartPage.setLayout(new BoxLayout(jPanelStartPage, BoxLayout.Y_AXIS));
         jPanelStartPage.add(jScrollPane);
         jPanelStartPage.add(jStart);
-        jPanelStartPage.add(jButtonSelectFile);
+        jPanelStartPage.add(jButtonLoadData);
         jPanelStartPage.add(jButtonSaveFile);
         jPanelStartPage.add(jButtonInitMice);
     }
 
-    void initJPanelFighting() {
+    private void initJPanelFighting() {
         jPanelFighting = new JPanel();
         jPanelFighting.setLayout(new GridBagLayout());
 
@@ -448,32 +445,44 @@ public class JFrameMainJudge extends JFrame {
                     panelScoreTable.repaint(); // TODO?
                 }
 
-                JsonArray jsonArray = new JsonArray();
-                for (int i = 0; i < jList.getModel().getSize(); ++i) {
-                    Fighting f = jList.getModel().getElementAt(i);
-                    if (f.getStatusFighting() == StatusFighting.finishPending || f.getStatusFighting() == StatusFighting.disqualification) {
-                        JsonObject jsonObject = new JsonObject();
-                        jsonObject.addProperty("TOURNAMENT_CATEGORIES_FK", f.TOURNAMENT_CATEGORIES_FK);
-                        jsonObject.addProperty("VERTEX", f.VERTEX);
-                        jsonObject.addProperty("orderUID", f.getLoser(true) == Player.left ? f.orderUID_right : f.orderUID_left);
-                        jsonObject.addProperty("result", f.getResult());
-                        jsonArray.add(jsonObject);
-                    }
-                }
 
+                String JSON_DATA;
                 try {
-                    PrintStream out = new PrintStream(new FileOutputStream("результаты боя.json"));
+                    JSON_DATA = new String(Files.readAllBytes(Paths.get(pathSaveJson)), StandardCharsets.UTF_8);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                    return;
+                }
+                JsonArray jsonArray = new JsonArray();
+                for (JsonElement jsonElement : new JsonParser().parse(JSON_DATA).getAsJsonArray()) {
+                    JsonObject object = jsonElement.getAsJsonObject();
+                    for (Fighting f : allFighting) {
+                        if (f.TOURNAMENT_CATEGORIES_FK == object.get("TOURNAMENT_CATEGORIES_FK").getAsLong() &&
+                                f.VERTEX == object.get("VERTEX").getAsLong() &&
+                                (f.getStatusFighting() == StatusFighting.finishPending ||
+                                        f.getStatusFighting() == StatusFighting.disqualification)) {
+                            object.addProperty("orderUID", f.getLoser(true) == Player.left ? object.get("orderUID_right").getAsLong() : object.get("orderUID_left").getAsLong());
+                            object.addProperty("result", f.getResult());
+                        }
+                    }
+                    System.err.println(object.get("fightId"));
+                    jsonArray.add(object);
+                }
+                System.err.println("-----------");
+                try {
+                    PrintStream out = new PrintStream(new FileOutputStream(pathSaveJson));
                     out.print(new Gson().toJson(jsonArray));
                     out.flush();
                     out.close();
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
+                initListOfPlayers(pathSaveJson);
             }
         }
     }
 
-    class PollMiceAndKeyboard extends Thread {
+    private class PollMiceAndKeyboard extends Thread {
         @Override
         public void run() {
             while (true) {

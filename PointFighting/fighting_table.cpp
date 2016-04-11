@@ -5,17 +5,17 @@
 
 using namespace std::chrono;
 
-FightingTable::FightingTable(QWidget *parent, QString nameLeft, QString regionLeft, QString nameRight, QString regionRight, int durationOfRound, int durationOfBreak, int countOfRounds) :
+FightingTable::FightingTable(QWidget *parent, QString nameLeft, QString regionLeft, QString nameRight, QString regionRight, int durationOfRound, int durationOfBreak, int countOfRounds, QImage leftFlag, QImage rightFlag) :
     QDialog(parent),
     ui(new Ui::FightingTable),
 
-//    durationOfRound(durationOfRound),
-//    durationOfBreak(durationOfBreak),
-//    countOfRounds(countOfRounds)
+    durationOfRound(durationOfRound),
+    durationOfBreak(durationOfBreak),
+    countOfRounds(countOfRounds)
 
-    durationOfRound(2),
-    durationOfBreak(2),
-    countOfRounds(3)
+//    durationOfRound(1),
+//    durationOfBreak(2),
+//    countOfRounds(1)
 {
     ui->setupUi(this);
 
@@ -23,6 +23,12 @@ FightingTable::FightingTable(QWidget *parent, QString nameLeft, QString regionLe
     ui->labelFIO_right->setText(nameRight);
     ui->labelRegion_left->setText(regionLeft);
     ui->labelRegion_right->setText(regionRight);
+
+
+    mLeftFlag  = leftFlag .scaledToHeight(250);
+    mRightFlag = rightFlag.scaledToHeight(250);
+    ui->labelLeftFlag ->setPixmap(drawBorder(mLeftFlag ));
+    ui->labelRightFlag->setPixmap(drawBorder(mRightFlag));
 
     status = Status::NotStart;
     ui->labelTime->setText(getTimeMMSS(this->durationOfRound));
@@ -34,6 +40,9 @@ FightingTable::FightingTable(QWidget *parent, QString nameLeft, QString regionLe
     setWindowFlags(windowFlags() | Qt::WindowMaximizeButtonHint);
     resize(800, 600);
 
+//    countPointLeft =  1 + rand()%1000;
+//    countPointRight = 1 + rand()%1000;
+//    status = Status::Finish;
 //    gong->play();
 //    molot->play();
 }
@@ -46,6 +55,31 @@ FightingTable::~FightingTable()
 QString FightingTable::getTimeMMSS(long long time)
 {
     return QString("%1").arg(time/60, 2, 10, QChar('0')) + ":" + QString("%1").arg(time%60, 2, 10, QChar('0'));
+}
+
+QPixmap FightingTable::drawBorder(QImage flag)
+{
+    QPixmap pm = QPixmap::fromImage(flag);
+    QPainter painter(&pm);
+    QPen pen(Qt::white);
+    pen.setWidth(3);
+    painter.setPen(pen);
+    painter.drawRoundedRect(0, 0, flag.width() - 1, flag.height() - 1, 0, 0);
+    return pm;
+}
+
+QImage FightingTable::makeGrey(QImage image)
+{
+    for (int ii = 0; ii < image.height(); ii++) {
+        uchar* scan = image.scanLine(ii);
+        int depth =4;
+        for (int jj = 0; jj < image.width(); jj++) {
+            QRgb* rgbpixel = reinterpret_cast<QRgb*>(scan + jj*depth);
+            int gray = qGray(*rgbpixel);
+            *rgbpixel = QColor(gray, gray, gray).rgba();
+        }
+    }
+    return image;
 }
 
 
@@ -140,9 +174,15 @@ void FightingTable::update()
         ui->labelTime->setText(QString("Winner is ") + (countPointLeft > countPointRight? ui->labelFIO_left->text() : ui->labelFIO_right->text()));
 
         if (countPointLeft > countPointRight)
+        {
             ui->widgetRight->setStyleSheet(QStringLiteral("background-color: rgb(169,169,169);"));
+            ui->labelRightFlag->setPixmap(drawBorder(makeGrey(mRightFlag)));
+        }
         else
+        {
             ui->widgetLeft->setStyleSheet(QStringLiteral("background-color: rgb(169,169,169);"));
+            ui->labelLeftFlag ->setPixmap(drawBorder(makeGrey(mLeftFlag )));
+        }
     }
     ui->labelRightHead->setText(ui->labelLeftHead->text());
 }
@@ -213,4 +253,9 @@ void FightingTable::on_pushButtonDoctor_clicked()
         ui->pushButtonDoctor->setText("Stop doctor");
         update();
     }
+}
+
+QString FightingTable::getResult()
+{
+    return QString::number(countPointLeft) + " : " + QString::number(countPointRight);
 }

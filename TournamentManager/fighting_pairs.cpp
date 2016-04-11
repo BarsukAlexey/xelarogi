@@ -112,7 +112,7 @@ FightingPairs::FightingPairs(const QSqlDatabase &_database, long long _tournamen
     qGridLayout->addWidget(spinBoxDelay, 3, 1, Qt::AlignLeft);
 
     qGridLayout->addWidget(checkBoxPointfighting = new QCheckBox("Сетка для поинтфайтинга:"), 4, 0, 1, 2, Qt::AlignCenter);
-    checkBoxPointfighting->setChecked(true);
+//    checkBoxPointfighting->setChecked(true);
 
     qGridLayout->addWidget(qPushButton, 5, 0, 1, 2);
 
@@ -215,10 +215,16 @@ void FightingPairs::printInJSON(const QVector<DBUtils::Fighing>& fighting, int r
         a["nameOfRightFighter"] = DBUtils::getField("SECOND_NAME", "ORDERS", f.UID1) + " " + DBUtils::getField("FIRST_NAME", "ORDERS", f.UID1);
 
         a["fightId"] = fightingId;
-        //a["categoryOfFighting"] = DBUtils::getField( "WEIGHT_TILL", "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK);
+        double from = DBUtils::getField( "WEIGHT_FROM", "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK).toDouble();
+        double till = DBUtils::getField( "WEIGHT_TILL", "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK).toDouble();
         a["categoryOfFighting"] = DBUtils::getField("WEIGHT_TILL", "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK);
-        if (200 <= a["categoryOfFighting"].toInt())
-            a["categoryOfFighting"] = "+" + DBUtils::getField("WEIGHT_FROM", "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK);
+        if (qAbs(from) < 1e-7)
+            a["categoryOfFighting"] = "-" + DBUtils::roundDouble(till, 2);
+        else if (200 - 1e-7 <= till)
+            a["categoryOfFighting"] = "+" + DBUtils::roundDouble(from, 2);
+        else
+            a["categoryOfFighting"] =       DBUtils::roundDouble(till, 2);
+
 
         a["countOfRounds"  ] = DBUtils::getField("ROUND_COUNT"     , "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK);
         a["durationOfRound"] = DBUtils::getField("DURATION_FIGHING", "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK);
@@ -226,6 +232,9 @@ void FightingPairs::printInJSON(const QVector<DBUtils::Fighing>& fighting, int r
 
         a["countryOfLeftFighter" ] = DBUtils::getField("NAME", "REGIONS", DBUtils::getField("REGION_FK", "ORDERS", f.UID0));
         a["countryOfRightFighter"] = DBUtils::getField("NAME", "REGIONS", DBUtils::getField("REGION_FK", "ORDERS", f.UID1));
+
+        a["leftFlag" ] = DBUtils::getField("FLAG", "COUNTRIES", DBUtils::getField("COUNTRY_FK", "ORDERS", f.UID0));
+        a["rightFlag"] = DBUtils::getField("FLAG", "COUNTRIES", DBUtils::getField("COUNTRY_FK", "ORDERS", f.UID1));
 
         a["TOURNAMENT_CATEGORIES_FK"] = f.TOURNAMENT_CATEGORIES_FK;
         a["VERTEX"] = f.VERTEX;
@@ -369,6 +378,9 @@ void FightingPairs::makeGridsForPointFighting(QString existingDirectory, QVector
                 a["VERTEX"] = f.VERTEX;
                 a["orderUID_left"] = f.UID0;
                 a["orderUID_right"] = f.UID1;
+
+                a["leftFlag" ] = DBUtils::getField("FLAG", "COUNTRIES", DBUtils::getField("COUNTRY_FK", "ORDERS", f.UID0));
+                a["rightFlag"] = DBUtils::getField("FLAG", "COUNTRIES", DBUtils::getField("COUNTRY_FK", "ORDERS", f.UID1));
 
                 jsonObjects << a;
                 //

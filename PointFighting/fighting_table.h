@@ -43,6 +43,8 @@ private:
     const int durationOfRound = 5;
     const int durationOfBreak = 3;
     const int countOfRounds = 2;
+    QImage mLeftFlag;
+    QImage mRightFlag;
 public:
     Status status;
     int countPointLeft;
@@ -54,12 +56,13 @@ private:
     QSound *molot = new QSound("resources\\sounds\\stuk_molotka.wav");
 
 public:
-    explicit FightingTable(QWidget *parent = 0, QString nameLeft = "", QString regionLeft = "", QString nameRight = "", QString regionRight = "", int durationOfRound = 5, int durationOfBreak = 3, int countOfRounds = 2);
+    explicit FightingTable(QWidget *parent, QString nameLeft, QString regionLeft, QString nameRight, QString regionRight, int durationOfRound, int durationOfBreak, int countOfRounds, QImage leftFlag, QImage rightFlag);
     ~FightingTable();
 
 private:
     static QString getTimeMMSS(long long time);
-
+    static QPixmap drawBorder(QImage flag);
+    static QImage makeGrey(QImage flag);
 
 private slots:
     void update();
@@ -67,6 +70,9 @@ private slots:
     void on_pushButtonPointLeft_clicked();
     void on_pushButtonPointRight_clicked();
     void on_pushButtonDoctor_clicked();
+
+public:
+    QString getResult();
 
 protected:
     void closeEvent(QCloseEvent *event) {

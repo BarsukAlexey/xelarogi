@@ -263,6 +263,7 @@ void ReporMinistr::f2(QAxObject *sheet, const long long tournamentUID)
         ++column;
     }
 
+    ExcelUtils::setValue(sheet, 1, column, "Итого");
     for (int i = 0; i < totalCountOfOrders.size(); ++i)
         ExcelUtils::setValue(sheet, i + 2, column, QString::number(totalCountOfOrders[i]));
     ++column;
