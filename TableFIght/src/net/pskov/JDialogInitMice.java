@@ -113,7 +113,7 @@ public class JDialogInitMice extends JDialog {
                                 ex.printStackTrace();
                             }
                         } else {
-                            System.err.println("Не успел: " + (duration - DELAY));
+                            System.err.println("ThreadLOL:: Не успел: " + (duration - DELAY));
                         }
                     }
                 }

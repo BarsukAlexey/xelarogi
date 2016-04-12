@@ -34,8 +34,7 @@ QT_BEGIN_NAMESPACE
 class Ui_CreateTournamentOrdersDialog
 {
 public:
-    QVBoxLayout *verticalLayout_2;
-    QVBoxLayout *verticalLayout;
+    QGridLayout *gridLayout_2;
     QHBoxLayout *horizontalLayout;
     QSpacerItem *horizontalSpacer;
     QLabel *label;
@@ -105,16 +104,15 @@ public:
     QPushButton *toExcelBtn;
     QSpacerItem *horizontalSpacer_5;
     QPushButton *btnExit;
+    QLabel *label_4;
 
     void setupUi(QDialog *CreateTournamentOrdersDialog)
     {
         if (CreateTournamentOrdersDialog->objectName().isEmpty())
             CreateTournamentOrdersDialog->setObjectName(QStringLiteral("CreateTournamentOrdersDialog"));
-        CreateTournamentOrdersDialog->resize(1201, 677);
-        verticalLayout_2 = new QVBoxLayout(CreateTournamentOrdersDialog);
-        verticalLayout_2->setObjectName(QStringLiteral("verticalLayout_2"));
-        verticalLayout = new QVBoxLayout();
-        verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
+        CreateTournamentOrdersDialog->resize(1201, 704);
+        gridLayout_2 = new QGridLayout(CreateTournamentOrdersDialog);
+        gridLayout_2->setObjectName(QStringLiteral("gridLayout_2"));
         horizontalLayout = new QHBoxLayout();
         horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
         horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
@@ -138,7 +136,7 @@ public:
         horizontalLayout->addItem(horizontalSpacer_2);
 
 
-        verticalLayout->addLayout(horizontalLayout);
+        gridLayout_2->addLayout(horizontalLayout, 0, 0, 1, 1);
 
         horizontalLayout_3 = new QHBoxLayout();
         horizontalLayout_3->setObjectName(QStringLiteral("horizontalLayout_3"));
@@ -148,7 +146,7 @@ public:
         horizontalLayout_3->addWidget(label_2);
 
 
-        verticalLayout->addLayout(horizontalLayout_3);
+        gridLayout_2->addLayout(horizontalLayout_3, 1, 0, 1, 1);
 
         verticalLayout_6 = new QVBoxLayout();
         verticalLayout_6->setObjectName(QStringLiteral("verticalLayout_6"));
@@ -218,7 +216,7 @@ public:
         verticalLayout_6->addLayout(horizontalLayout_9);
 
 
-        verticalLayout->addLayout(verticalLayout_6);
+        gridLayout_2->addLayout(verticalLayout_6, 2, 0, 1, 1);
 
         splitter = new QSplitter(CreateTournamentOrdersDialog);
         splitter->setObjectName(QStringLiteral("splitter"));
@@ -473,7 +471,7 @@ public:
 
         splitter->addWidget(widget);
 
-        verticalLayout->addWidget(splitter);
+        gridLayout_2->addWidget(splitter, 3, 0, 1, 1);
 
         horizontalLayout_2 = new QHBoxLayout();
         horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
@@ -501,10 +499,12 @@ public:
         horizontalLayout_2->addWidget(btnExit);
 
 
-        verticalLayout->addLayout(horizontalLayout_2);
+        gridLayout_2->addLayout(horizontalLayout_2, 4, 0, 1, 1);
 
+        label_4 = new QLabel(CreateTournamentOrdersDialog);
+        label_4->setObjectName(QStringLiteral("label_4"));
 
-        verticalLayout_2->addLayout(verticalLayout);
+        gridLayout_2->addWidget(label_4, 5, 0, 1, 1);
 
 
         retranslateUi(CreateTournamentOrdersDialog);
@@ -546,6 +546,7 @@ public:
         loadBtn->setText(QApplication::translate("CreateTournamentOrdersDialog", "\320\227\320\260\320\263\321\200\321\203\320\267\320\270\321\202\321\214 \320\270\320\267 excel", 0));
         toExcelBtn->setText(QApplication::translate("CreateTournamentOrdersDialog", "\320\222\321\213\320\263\321\200\321\203\320\267\320\270\321\202\321\214 \320\262 Excel", 0));
         btnExit->setText(QApplication::translate("CreateTournamentOrdersDialog", "\320\227\320\260\320\272\321\200\321\213\321\202\321\214", 0));
+        label_4->setText(QApplication::translate("CreateTournamentOrdersDialog", "*\320\237\320\265\321\200\320\265\320\264 \320\267\320\260\320\263\321\200\321\203\320\267\320\272\320\276\320\271 \320\267\320\260\321\217\320\262\320\276\320\272 \320\267\320\260\320\272\321\200\321\213\321\202\321\214 Excel \320\270 \320\262\321\201\320\265 \320\265\320\263\320\276 \320\277\321\200\320\276\321\206\320\265\321\201\321\201\321\213 \320\262 \320\264\320\270\321\201\320\277\320\265\321\202\321\207\320\265\321\200\320\265 \320\267\320\260\320\264\320\260\321\207", 0));
     } // retranslateUi
 
 };

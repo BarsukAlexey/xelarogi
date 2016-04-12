@@ -91,8 +91,7 @@ MainWindow::MainWindow(QWidget *parent) :
             if (currentObject["TOURNAMENT_CATEGORIES_FK"].toInt() == TOURNAMENT_CATEGORIES_FK &&
                 currentObject["VERTEX"                  ].toInt() == VERTEX / 2){
 
-                for (QString key : {VERTEX % 2? "countryOfLeftFighter" : "countryOfRightFighter",
-                                    VERTEX % 2? "nameOfLeftFighter"    : "nameOfRightFighter",
+                for (QString key : {VERTEX % 2? "nameOfLeftFighter"    : "nameOfRightFighter",
                                     VERTEX % 2? "orderUID_left"        : "orderUID_right",
                                     VERTEX % 2? "regionOfLeftFighter"  : "regionOfRightFighter",
                                     VERTEX % 2? "leftFlag"             : "rightFlag"})
@@ -163,14 +162,14 @@ void MainWindow::update()
         item->setData(Qt::UserRole, object["orderUID_left"].toInt());
         ui->tableWidget->setItem(i, column++, item);
 
-        item = new QTableWidgetItem(object["countryOfLeftFighter"].toString() + " / " + object["regionOfLeftFighter"].toString());
+        item = new QTableWidgetItem(object["regionOfLeftFighter"].toString());
         ui->tableWidget->setItem(i, column++, item);
 
         item = new QTableWidgetItem(object["nameOfRightFighter"].toString());
         item->setData(Qt::UserRole, object["orderUID_right"].toInt());
         ui->tableWidget->setItem(i, column++, item);
 
-        item = new QTableWidgetItem(object["countryOfRightFighter"].toString() + " / " + object["regionOfRightFighter"].toString());
+        item = new QTableWidgetItem(object["regionOfRightFighter"].toString());
         ui->tableWidget->setItem(i, column++, item);
 
         QString winner = object["winner"].toString();
@@ -191,12 +190,6 @@ void MainWindow::update()
         flags << QVector<QImage>();
         QImage a = QImage::fromData(QByteArray::fromBase64(object["leftFlag" ].toString().toStdString().c_str()));
         QImage b = QImage::fromData(QByteArray::fromBase64(object["rightFlag"].toString().toStdString().c_str()));
-//        QLabel *aa = new QLabel;
-//        QLabel *bb = new QLabel;
-//        aa->setPixmap(QPixmap::fromImage(a));
-//        bb->setPixmap(QPixmap::fromImage(b));
-//        aa->show();
-//        bb->show();
         flags.back() << a << b;
     }
     ui->tableWidget->resizeColumnsToContents();
