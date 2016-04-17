@@ -351,6 +351,8 @@
     <addaction name="separator"/>
     <addaction name="separator"/>
     <addaction name="orderAction"/>
+    <addaction name="separator"/>
+    <addaction name="iconsAction"/>
    </widget>
    <addaction name="handbookMenu"/>
   </widget>
@@ -421,6 +423,11 @@
   <action name="actionAgeCategory">
    <property name="text">
     <string>Возрастные категории</string>
+   </property>
+  </action>
+  <action name="iconsAction">
+   <property name="text">
+    <string>Иконки стран</string>
    </property>
   </action>
  </widget>

@@ -46,6 +46,7 @@ public:
     QAction *coachAction;
     QAction *orderAction;
     QAction *actionAgeCategory;
+    QAction *iconsAction;
     QWidget *centralWidget;
     QVBoxLayout *verticalLayout_2;
     QSplitter *splitter;
@@ -112,6 +113,8 @@ public:
         orderAction->setObjectName(QStringLiteral("orderAction"));
         actionAgeCategory = new QAction(MainWindow);
         actionAgeCategory->setObjectName(QStringLiteral("actionAgeCategory"));
+        iconsAction = new QAction(MainWindow);
+        iconsAction->setObjectName(QStringLiteral("iconsAction"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         verticalLayout_2 = new QVBoxLayout(centralWidget);
@@ -337,6 +340,8 @@ public:
         handbookMenu->addSeparator();
         handbookMenu->addSeparator();
         handbookMenu->addAction(orderAction);
+        handbookMenu->addSeparator();
+        handbookMenu->addAction(iconsAction);
 
         retranslateUi(MainWindow);
 
@@ -361,6 +366,7 @@ public:
         coachAction->setText(QApplication::translate("MainWindow", "\320\242\321\200\320\265\320\275\320\265\321\200\321\201\320\272\320\270\320\271 \321\201\320\276\321\201\321\202\320\260\320\262", 0));
         orderAction->setText(QApplication::translate("MainWindow", "\320\227\320\260\321\217\320\262\320\272\320\270", 0));
         actionAgeCategory->setText(QApplication::translate("MainWindow", "\320\222\320\276\320\267\321\200\320\260\321\201\321\202\320\275\321\213\320\265 \320\272\320\260\321\202\320\265\320\263\320\276\321\200\320\270\320\270", 0));
+        iconsAction->setText(QApplication::translate("MainWindow", "\320\230\320\272\320\276\320\275\320\272\320\270 \321\201\321\202\321\200\320\260\320\275", 0));
         label->setText(QApplication::translate("MainWindow", "\320\222\321\213\320\261\320\265\321\200\320\265\321\202\320\265 \321\202\321\203\321\200\320\275\320\270\321\200", 0));
         pushButton_3->setText(QApplication::translate("MainWindow", "\320\227\320\260\320\263\321\200\321\203\320\267\320\272\320\260 \321\204\320\273\320\260\320\263\320\260", 0));
         pushButton->setText(QApplication::translate("MainWindow", "\320\224\320\276\320\261\320\260\320\262\321\202\321\214 \320\272\320\260\321\202\320\265\320\263\320\276\321\200\320\270\320\270", 0));
