@@ -261,7 +261,7 @@ void FightingPairs::printInJSON(const QVector<DBUtils::Fighing>& fighting, int r
 
 
 
-void FightingPairs::makeGridsForPointFighting(QString existingDirectory, QVector<long long> tournamentCategoryUIDs, const int delay)
+void FightingPairs::makeGridsForPointFighting(QString existingDirectory, QVector<long long> tournamentCategoryUIDs, const int delay, int countOfRings, QString stringDate)
 {
     QVector<int> durationOfGrid;
     for (long long tcUID : tournamentCategoryUIDs)
@@ -274,7 +274,7 @@ void FightingPairs::makeGridsForPointFighting(QString existingDirectory, QVector
     QString message;
     int maxVal = (int)0;
     int minVal = (int)1e9;
-    for (int ringCount = ringSpinBox->value(), idRing = 1; 1 <= ringCount; --ringCount, ++idRing)
+    for (int ringCount = countOfRings, idRing = 1; 1 <= ringCount; --ringCount, ++idRing)
     {
         const int time = std::accumulate(durationOfGrid.begin(), durationOfGrid.end(), 0) / ringCount;
         int curTime = 0;
@@ -298,8 +298,8 @@ void FightingPairs::makeGridsForPointFighting(QString existingDirectory, QVector
 
 
     QString messageThread;
-    //MyThread *myThread = new MyThread(constDurationOfGrid, ringSpinBox->value(), maxVal, minVal);
-    MyThread *myThread = new MyThread(constDurationOfGrid, ringSpinBox->value(), 1e9, 1e9);
+    //MyThread *myThread = new MyThread(constDurationOfGrid, countOfRings, maxVal, minVal);
+    MyThread *myThread = new MyThread(constDurationOfGrid, countOfRings, 1e9, 1e9);
     myThread->start();
     if (!myThread->wait(60 * 1000))
     {
@@ -345,13 +345,15 @@ void FightingPairs::makeGridsForPointFighting(QString existingDirectory, QVector
         for (int i = 0, fightingNumber = 1; i < uids.size(); ++i)
         {
             RenderAreaWidget::printTableGridInExcel(uids[i], true,
-                existingDirectory, i == 0, i + 1 == uids.size(), fightingNumber, qLineEdit->text(),
+                existingDirectory, i == 0, i + 1 == uids.size(), fightingNumber, stringDate,
                 "Татами " +  QString("%1 (%2)").arg(idRing, 2, 10, QChar('0')).arg(i + 1, 2, 10, QChar('0')));
 
 
             QVector<DBUtils::Fighing> fightingNodes = DBUtils::getListOfPairsForFightingForPointFighting(uids[i]);
+            std::reverse(fightingNodes.begin(), fightingNodes.end());
             for (int j = 0; j < fightingNodes.size(); ++j)
             {
+
                 DBUtils::Fighing f = fightingNodes[j];
                 QJsonObject a;
                 a["nameOfLeftFighter" ] = DBUtils::getField("SECOND_NAME", "ORDERS", f.UID0) + " " + DBUtils::getField("FIRST_NAME", "ORDERS", f.UID0);
@@ -385,6 +387,8 @@ void FightingPairs::makeGridsForPointFighting(QString existingDirectory, QVector
                 jsonObjects << a;
                 //
                 ++fightingNumber;
+
+                qDebug() << a["nameOfLeftFighter" ] << a["nameOfRightFighter"];
             }
 
 
@@ -408,7 +412,7 @@ void FightingPairs::makeGridsForPointFighting(QString existingDirectory, QVector
         ++idRing;
     }
 
-    QMessageBox::information(this, "Расчётное время по рингам", messageDisplay);
+    QMessageBox::information(0, "Расчётное время по рингам", messageDisplay);
     /**/
 }
 
@@ -443,7 +447,7 @@ void FightingPairs::onGoPress()
     {
         QVector<long long> tournamentCategoryUIDs;
         for (QVector<DBUtils::Fighing> x : listsOfPairs) tournamentCategoryUIDs << x[0].TOURNAMENT_CATEGORIES_FK;
-        makeGridsForPointFighting(existingDirectory, tournamentCategoryUIDs, delay);
+        makeGridsForPointFighting(existingDirectory, tournamentCategoryUIDs, delay, ringSpinBox->value(), qLineEdit->text());
         return;
     }
 

@@ -509,12 +509,12 @@ void MainWindow::on_pushButton_3_clicked()
     out << iconBase64.toStdString();
     out.close();
 
-//    QSqlQuery query("UPDATE COUNTRIES SET FLAG = ? WHERE NAME = ? ");
-//    query.addBindValue(iconBase64);
-//    query.addBindValue("Шведция");
-//    if(!query.exec())
-//        qDebug() << "Fuck!";
-//    else
-//        qDebug() << "Done!";
+    QSqlQuery query("UPDATE COUNTRIES SET FLAG = ? WHERE NAME = ? ");
+    query.addBindValue(iconBase64);
+    query.addBindValue("ЛНР");
+    if(!query.exec())
+        qDebug() << "Fuck!";
+    else
+        qDebug() << "Done!";
 }
 

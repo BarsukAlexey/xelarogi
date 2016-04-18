@@ -35,7 +35,7 @@ private:
     void printInExcel(QAxObject *sheets, const QVector<DBUtils::Fighing>& fighting, int ring);
     void printInJSON(const QVector<DBUtils::Fighing>& fighting, int ring, const QString& path);
 
-    void makeGridsForPointFighting(QString existingDirectory, QVector<long long> tournamentCategoryUIDs, int delay);
+    static void makeGridsForPointFighting(QString existingDirectory, QVector<long long> tournamentCategoryUIDs, int delay, int countOfRings, QString stringDate);
 signals:
 
 public slots:

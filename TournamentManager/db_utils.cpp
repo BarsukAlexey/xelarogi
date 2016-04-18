@@ -353,6 +353,7 @@ QVector<DBUtils::Fighing> DBUtils::getListOfPairsForFightingForPointFighting(lon
                                });
         }
     }
+    std::sort(ans.begin(), ans.end());
     return ans;
 }
 

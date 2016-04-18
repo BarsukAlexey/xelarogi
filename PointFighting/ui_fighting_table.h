@@ -19,6 +19,7 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QSpacerItem>
+#include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -32,30 +33,34 @@ public:
     QLabel *labelLeftHead;
     QLabel *labelTime;
     QLabel *labelRightHead;
-    QWidget *widgetRight;
-    QGridLayout *gridLayout_3;
-    QLabel *labelRegion_right;
-    QSpacerItem *verticalSpacer_2;
-    QLabel *labelFIO_right;
-    QSpacerItem *verticalSpacer_3;
-    QSpacerItem *verticalSpacer;
-    QPushButton *pushButtonPointRight;
-    QLabel *labelRightFlag;
     QWidget *widgetFooter;
     QHBoxLayout *horizontalLayout;
     QPushButton *pushButtonStart;
     QPushButton *pushButtonDoctor;
     QLabel *labelDoctorTimer;
     QSpacerItem *horizontalSpacer;
+    QWidget *widgetRight;
+    QGridLayout *gridLayout_3;
+    QPushButton *pushButtonPointRight;
+    QSpacerItem *verticalSpacer_3;
+    QSpacerItem *verticalSpacer;
+    QSpacerItem *verticalSpacer_2;
+    QLabel *labelRegion_right;
+    QLabel *labelRightFlag;
+    QLabel *labelFIO_right;
     QWidget *widgetLeft;
-    QGridLayout *gridLayout_4;
-    QLabel *labelLeftFlag;
-    QSpacerItem *verticalSpacer_6;
-    QPushButton *pushButtonPointLeft;
+    QVBoxLayout *verticalLayout;
     QSpacerItem *verticalSpacer_4;
-    QSpacerItem *verticalSpacer_5;
     QLabel *labelFIO_left;
+    QLabel *labelLeftFlag;
     QLabel *labelRegion_left;
+    QPushButton *pushButtonPointLeft;
+    QSpacerItem *verticalSpacer_5;
+    QHBoxLayout *horizontalLayout_2;
+    QLabel *label;
+    QLabel *label_4;
+    QLabel *label_2;
+    QLabel *label_3;
 
     void setupUi(QWidget *FightingTable)
     {
@@ -94,88 +99,6 @@ public:
 
         gridLayout->addWidget(widgetRoof, 0, 0, 1, 2);
 
-        widgetRight = new QWidget(FightingTable);
-        widgetRight->setObjectName(QStringLiteral("widgetRight"));
-        widgetRight->setStyleSheet(QStringLiteral("background-color: rgb(0, 85, 255);"));
-        gridLayout_3 = new QGridLayout(widgetRight);
-        gridLayout_3->setSpacing(0);
-        gridLayout_3->setObjectName(QStringLiteral("gridLayout_3"));
-        gridLayout_3->setContentsMargins(0, 0, 0, 0);
-        labelRegion_right = new QLabel(widgetRight);
-        labelRegion_right->setObjectName(QStringLiteral("labelRegion_right"));
-        QFont font1;
-        font1.setPointSize(15);
-        labelRegion_right->setFont(font1);
-        labelRegion_right->setStyleSheet(QStringLiteral("color: rgb(255, 255, 255);"));
-        labelRegion_right->setAlignment(Qt::AlignCenter);
-
-        gridLayout_3->addWidget(labelRegion_right, 3, 0, 1, 1);
-
-        verticalSpacer_2 = new QSpacerItem(20, 10, QSizePolicy::Minimum, QSizePolicy::Expanding);
-
-        gridLayout_3->addItem(verticalSpacer_2, 0, 0, 1, 1);
-
-        labelFIO_right = new QLabel(widgetRight);
-        labelFIO_right->setObjectName(QStringLiteral("labelFIO_right"));
-        QPalette palette;
-        QBrush brush(QColor(255, 255, 255, 255));
-        brush.setStyle(Qt::SolidPattern);
-        palette.setBrush(QPalette::Active, QPalette::WindowText, brush);
-        QBrush brush1(QColor(0, 85, 255, 255));
-        brush1.setStyle(Qt::SolidPattern);
-        palette.setBrush(QPalette::Active, QPalette::Button, brush1);
-        palette.setBrush(QPalette::Active, QPalette::Text, brush);
-        palette.setBrush(QPalette::Active, QPalette::ButtonText, brush);
-        palette.setBrush(QPalette::Active, QPalette::Base, brush1);
-        palette.setBrush(QPalette::Active, QPalette::Window, brush1);
-        palette.setBrush(QPalette::Inactive, QPalette::WindowText, brush);
-        palette.setBrush(QPalette::Inactive, QPalette::Button, brush1);
-        palette.setBrush(QPalette::Inactive, QPalette::Text, brush);
-        palette.setBrush(QPalette::Inactive, QPalette::ButtonText, brush);
-        palette.setBrush(QPalette::Inactive, QPalette::Base, brush1);
-        palette.setBrush(QPalette::Inactive, QPalette::Window, brush1);
-        palette.setBrush(QPalette::Disabled, QPalette::WindowText, brush);
-        palette.setBrush(QPalette::Disabled, QPalette::Button, brush1);
-        palette.setBrush(QPalette::Disabled, QPalette::Text, brush);
-        palette.setBrush(QPalette::Disabled, QPalette::ButtonText, brush);
-        palette.setBrush(QPalette::Disabled, QPalette::Base, brush1);
-        palette.setBrush(QPalette::Disabled, QPalette::Window, brush1);
-        labelFIO_right->setPalette(palette);
-        QFont font2;
-        font2.setPointSize(25);
-        labelFIO_right->setFont(font2);
-        labelFIO_right->setStyleSheet(QStringLiteral("color: rgb(255, 255, 255);"));
-        labelFIO_right->setAlignment(Qt::AlignCenter);
-
-        gridLayout_3->addWidget(labelFIO_right, 1, 0, 1, 1);
-
-        verticalSpacer_3 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-
-        gridLayout_3->addItem(verticalSpacer_3, 4, 0, 1, 1);
-
-        verticalSpacer = new QSpacerItem(20, 128, QSizePolicy::Minimum, QSizePolicy::Expanding);
-
-        gridLayout_3->addItem(verticalSpacer, 6, 0, 1, 1);
-
-        pushButtonPointRight = new QPushButton(widgetRight);
-        pushButtonPointRight->setObjectName(QStringLiteral("pushButtonPointRight"));
-        pushButtonPointRight->setMinimumSize(QSize(0, 256));
-        QFont font3;
-        font3.setPointSize(26);
-        pushButtonPointRight->setFont(font3);
-        pushButtonPointRight->setCheckable(false);
-
-        gridLayout_3->addWidget(pushButtonPointRight, 5, 0, 1, 1);
-
-        labelRightFlag = new QLabel(widgetRight);
-        labelRightFlag->setObjectName(QStringLiteral("labelRightFlag"));
-        labelRightFlag->setAlignment(Qt::AlignCenter);
-
-        gridLayout_3->addWidget(labelRightFlag, 2, 0, 1, 1);
-
-
-        gridLayout->addWidget(widgetRight, 1, 1, 1, 1);
-
         widgetFooter = new QWidget(FightingTable);
         widgetFooter->setObjectName(QStringLiteral("widgetFooter"));
         widgetFooter->setStyleSheet(QStringLiteral(""));
@@ -194,9 +117,9 @@ public:
 
         labelDoctorTimer = new QLabel(widgetFooter);
         labelDoctorTimer->setObjectName(QStringLiteral("labelDoctorTimer"));
-        QFont font4;
-        font4.setPointSize(14);
-        labelDoctorTimer->setFont(font4);
+        QFont font1;
+        font1.setPointSize(14);
+        labelDoctorTimer->setFont(font1);
 
         horizontalLayout->addWidget(labelDoctorTimer);
 
@@ -207,84 +130,233 @@ public:
 
         gridLayout->addWidget(widgetFooter, 2, 0, 1, 2);
 
+        widgetRight = new QWidget(FightingTable);
+        widgetRight->setObjectName(QStringLiteral("widgetRight"));
+        widgetRight->setStyleSheet(QStringLiteral("background-color: rgb(0, 85, 255);"));
+        gridLayout_3 = new QGridLayout(widgetRight);
+        gridLayout_3->setSpacing(0);
+        gridLayout_3->setObjectName(QStringLiteral("gridLayout_3"));
+        gridLayout_3->setContentsMargins(0, 0, 0, 0);
+        pushButtonPointRight = new QPushButton(widgetRight);
+        pushButtonPointRight->setObjectName(QStringLiteral("pushButtonPointRight"));
+        pushButtonPointRight->setMinimumSize(QSize(0, 256));
+        QPalette palette;
+        QBrush brush(QColor(0, 85, 255, 255));
+        brush.setStyle(Qt::SolidPattern);
+        palette.setBrush(QPalette::Active, QPalette::Button, brush);
+        QBrush brush1(QColor(255, 255, 255, 255));
+        brush1.setStyle(Qt::SolidPattern);
+        palette.setBrush(QPalette::Active, QPalette::Text, brush1);
+        palette.setBrush(QPalette::Active, QPalette::ButtonText, brush1);
+        palette.setBrush(QPalette::Active, QPalette::Base, brush);
+        palette.setBrush(QPalette::Active, QPalette::Window, brush);
+        palette.setBrush(QPalette::Inactive, QPalette::Button, brush);
+        palette.setBrush(QPalette::Inactive, QPalette::Text, brush1);
+        palette.setBrush(QPalette::Inactive, QPalette::ButtonText, brush1);
+        palette.setBrush(QPalette::Inactive, QPalette::Base, brush);
+        palette.setBrush(QPalette::Inactive, QPalette::Window, brush);
+        palette.setBrush(QPalette::Disabled, QPalette::Button, brush);
+        QBrush brush2(QColor(120, 120, 120, 255));
+        brush2.setStyle(Qt::SolidPattern);
+        palette.setBrush(QPalette::Disabled, QPalette::Text, brush2);
+        palette.setBrush(QPalette::Disabled, QPalette::ButtonText, brush2);
+        palette.setBrush(QPalette::Disabled, QPalette::Base, brush);
+        palette.setBrush(QPalette::Disabled, QPalette::Window, brush);
+        pushButtonPointRight->setPalette(palette);
+        QFont font2;
+        font2.setPointSize(99);
+        pushButtonPointRight->setFont(font2);
+        pushButtonPointRight->setCheckable(false);
+
+        gridLayout_3->addWidget(pushButtonPointRight, 5, 0, 1, 1);
+
+        verticalSpacer_3 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        gridLayout_3->addItem(verticalSpacer_3, 4, 0, 1, 1);
+
+        verticalSpacer = new QSpacerItem(20, 128, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        gridLayout_3->addItem(verticalSpacer, 6, 0, 1, 1);
+
+        verticalSpacer_2 = new QSpacerItem(20, 10, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        gridLayout_3->addItem(verticalSpacer_2, 0, 0, 1, 1);
+
+        labelRegion_right = new QLabel(widgetRight);
+        labelRegion_right->setObjectName(QStringLiteral("labelRegion_right"));
+        QFont font3;
+        font3.setPointSize(15);
+        labelRegion_right->setFont(font3);
+        labelRegion_right->setStyleSheet(QStringLiteral("color: rgb(255, 255, 255);"));
+        labelRegion_right->setAlignment(Qt::AlignCenter);
+
+        gridLayout_3->addWidget(labelRegion_right, 3, 0, 1, 1);
+
+        labelRightFlag = new QLabel(widgetRight);
+        labelRightFlag->setObjectName(QStringLiteral("labelRightFlag"));
+        labelRightFlag->setAlignment(Qt::AlignCenter);
+
+        gridLayout_3->addWidget(labelRightFlag, 2, 0, 1, 1);
+
+        labelFIO_right = new QLabel(widgetRight);
+        labelFIO_right->setObjectName(QStringLiteral("labelFIO_right"));
+        QPalette palette1;
+        palette1.setBrush(QPalette::Active, QPalette::WindowText, brush1);
+        palette1.setBrush(QPalette::Active, QPalette::Button, brush);
+        palette1.setBrush(QPalette::Active, QPalette::Text, brush1);
+        palette1.setBrush(QPalette::Active, QPalette::ButtonText, brush1);
+        palette1.setBrush(QPalette::Active, QPalette::Base, brush);
+        palette1.setBrush(QPalette::Active, QPalette::Window, brush);
+        palette1.setBrush(QPalette::Inactive, QPalette::WindowText, brush1);
+        palette1.setBrush(QPalette::Inactive, QPalette::Button, brush);
+        palette1.setBrush(QPalette::Inactive, QPalette::Text, brush1);
+        palette1.setBrush(QPalette::Inactive, QPalette::ButtonText, brush1);
+        palette1.setBrush(QPalette::Inactive, QPalette::Base, brush);
+        palette1.setBrush(QPalette::Inactive, QPalette::Window, brush);
+        palette1.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
+        palette1.setBrush(QPalette::Disabled, QPalette::Button, brush);
+        palette1.setBrush(QPalette::Disabled, QPalette::Text, brush1);
+        palette1.setBrush(QPalette::Disabled, QPalette::ButtonText, brush1);
+        palette1.setBrush(QPalette::Disabled, QPalette::Base, brush);
+        palette1.setBrush(QPalette::Disabled, QPalette::Window, brush);
+        labelFIO_right->setPalette(palette1);
+        QFont font4;
+        font4.setPointSize(25);
+        labelFIO_right->setFont(font4);
+        labelFIO_right->setStyleSheet(QStringLiteral("color: rgb(255, 255, 255);"));
+        labelFIO_right->setAlignment(Qt::AlignCenter);
+
+        gridLayout_3->addWidget(labelFIO_right, 1, 0, 1, 1);
+
+
+        gridLayout->addWidget(widgetRight, 1, 1, 1, 1);
+
         widgetLeft = new QWidget(FightingTable);
         widgetLeft->setObjectName(QStringLiteral("widgetLeft"));
+        QPalette palette2;
+        QBrush brush3(QColor(255, 0, 0, 255));
+        brush3.setStyle(Qt::SolidPattern);
+        palette2.setBrush(QPalette::Active, QPalette::Button, brush3);
+        palette2.setBrush(QPalette::Active, QPalette::Base, brush3);
+        palette2.setBrush(QPalette::Active, QPalette::Window, brush3);
+        palette2.setBrush(QPalette::Inactive, QPalette::Button, brush3);
+        palette2.setBrush(QPalette::Inactive, QPalette::Base, brush3);
+        palette2.setBrush(QPalette::Inactive, QPalette::Window, brush3);
+        palette2.setBrush(QPalette::Disabled, QPalette::Button, brush3);
+        palette2.setBrush(QPalette::Disabled, QPalette::Base, brush3);
+        palette2.setBrush(QPalette::Disabled, QPalette::Window, brush3);
+        widgetLeft->setPalette(palette2);
         widgetLeft->setStyleSheet(QStringLiteral("background-color: rgb(255, 0, 0);"));
-        gridLayout_4 = new QGridLayout(widgetLeft);
-        gridLayout_4->setSpacing(0);
-        gridLayout_4->setObjectName(QStringLiteral("gridLayout_4"));
-        gridLayout_4->setContentsMargins(0, 0, 0, 0);
+        verticalLayout = new QVBoxLayout(widgetLeft);
+        verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
+        verticalSpacer_4 = new QSpacerItem(20, 10, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        verticalLayout->addItem(verticalSpacer_4);
+
+        labelFIO_left = new QLabel(widgetLeft);
+        labelFIO_left->setObjectName(QStringLiteral("labelFIO_left"));
+        QPalette palette3;
+        palette3.setBrush(QPalette::Active, QPalette::WindowText, brush1);
+        palette3.setBrush(QPalette::Active, QPalette::Button, brush3);
+        palette3.setBrush(QPalette::Active, QPalette::Text, brush1);
+        palette3.setBrush(QPalette::Active, QPalette::ButtonText, brush1);
+        palette3.setBrush(QPalette::Active, QPalette::Base, brush3);
+        palette3.setBrush(QPalette::Active, QPalette::Window, brush3);
+        palette3.setBrush(QPalette::Inactive, QPalette::WindowText, brush1);
+        palette3.setBrush(QPalette::Inactive, QPalette::Button, brush3);
+        palette3.setBrush(QPalette::Inactive, QPalette::Text, brush1);
+        palette3.setBrush(QPalette::Inactive, QPalette::ButtonText, brush1);
+        palette3.setBrush(QPalette::Inactive, QPalette::Base, brush3);
+        palette3.setBrush(QPalette::Inactive, QPalette::Window, brush3);
+        palette3.setBrush(QPalette::Disabled, QPalette::WindowText, brush1);
+        palette3.setBrush(QPalette::Disabled, QPalette::Button, brush3);
+        palette3.setBrush(QPalette::Disabled, QPalette::Text, brush1);
+        palette3.setBrush(QPalette::Disabled, QPalette::ButtonText, brush1);
+        palette3.setBrush(QPalette::Disabled, QPalette::Base, brush3);
+        palette3.setBrush(QPalette::Disabled, QPalette::Window, brush3);
+        labelFIO_left->setPalette(palette3);
+        labelFIO_left->setFont(font4);
+        labelFIO_left->setStyleSheet(QStringLiteral("color: rgb(255, 255, 255);"));
+        labelFIO_left->setAlignment(Qt::AlignCenter);
+
+        verticalLayout->addWidget(labelFIO_left);
+
         labelLeftFlag = new QLabel(widgetLeft);
         labelLeftFlag->setObjectName(QStringLiteral("labelLeftFlag"));
         labelLeftFlag->setAlignment(Qt::AlignCenter);
 
-        gridLayout_4->addWidget(labelLeftFlag, 2, 0, 1, 1);
+        verticalLayout->addWidget(labelLeftFlag);
 
-        verticalSpacer_6 = new QSpacerItem(20, 128, QSizePolicy::Minimum, QSizePolicy::Expanding);
+        labelRegion_left = new QLabel(widgetLeft);
+        labelRegion_left->setObjectName(QStringLiteral("labelRegion_left"));
+        labelRegion_left->setFont(font3);
+        labelRegion_left->setStyleSheet(QStringLiteral("color: rgb(255, 255, 255);"));
+        labelRegion_left->setAlignment(Qt::AlignCenter);
 
-        gridLayout_4->addItem(verticalSpacer_6, 6, 0, 1, 1);
+        verticalLayout->addWidget(labelRegion_left);
 
         pushButtonPointLeft = new QPushButton(widgetLeft);
         pushButtonPointLeft->setObjectName(QStringLiteral("pushButtonPointLeft"));
         pushButtonPointLeft->setMinimumSize(QSize(0, 256));
-        pushButtonPointLeft->setFont(font3);
+        QPalette palette4;
+        palette4.setBrush(QPalette::Active, QPalette::Button, brush3);
+        palette4.setBrush(QPalette::Active, QPalette::Base, brush3);
+        palette4.setBrush(QPalette::Active, QPalette::Window, brush3);
+        palette4.setBrush(QPalette::Inactive, QPalette::Button, brush3);
+        palette4.setBrush(QPalette::Inactive, QPalette::Base, brush3);
+        palette4.setBrush(QPalette::Inactive, QPalette::Window, brush3);
+        palette4.setBrush(QPalette::Disabled, QPalette::Button, brush3);
+        palette4.setBrush(QPalette::Disabled, QPalette::Base, brush3);
+        palette4.setBrush(QPalette::Disabled, QPalette::Window, brush3);
+        pushButtonPointLeft->setPalette(palette4);
+        pushButtonPointLeft->setFont(font2);
         pushButtonPointLeft->setAutoDefault(false);
         pushButtonPointLeft->setFlat(false);
 
-        gridLayout_4->addWidget(pushButtonPointLeft, 5, 0, 1, 1);
-
-        verticalSpacer_4 = new QSpacerItem(20, 10, QSizePolicy::Minimum, QSizePolicy::Expanding);
-
-        gridLayout_4->addItem(verticalSpacer_4, 0, 0, 1, 1);
+        verticalLayout->addWidget(pushButtonPointLeft);
 
         verticalSpacer_5 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-        gridLayout_4->addItem(verticalSpacer_5, 4, 0, 1, 1);
+        verticalLayout->addItem(verticalSpacer_5);
 
-        labelFIO_left = new QLabel(widgetLeft);
-        labelFIO_left->setObjectName(QStringLiteral("labelFIO_left"));
-        QPalette palette1;
-        palette1.setBrush(QPalette::Active, QPalette::WindowText, brush);
-        QBrush brush2(QColor(255, 0, 0, 255));
-        brush2.setStyle(Qt::SolidPattern);
-        palette1.setBrush(QPalette::Active, QPalette::Button, brush2);
-        palette1.setBrush(QPalette::Active, QPalette::Text, brush);
-        palette1.setBrush(QPalette::Active, QPalette::ButtonText, brush);
-        palette1.setBrush(QPalette::Active, QPalette::Base, brush2);
-        palette1.setBrush(QPalette::Active, QPalette::Window, brush2);
-        palette1.setBrush(QPalette::Inactive, QPalette::WindowText, brush);
-        palette1.setBrush(QPalette::Inactive, QPalette::Button, brush2);
-        palette1.setBrush(QPalette::Inactive, QPalette::Text, brush);
-        palette1.setBrush(QPalette::Inactive, QPalette::ButtonText, brush);
-        palette1.setBrush(QPalette::Inactive, QPalette::Base, brush2);
-        palette1.setBrush(QPalette::Inactive, QPalette::Window, brush2);
-        palette1.setBrush(QPalette::Disabled, QPalette::WindowText, brush);
-        palette1.setBrush(QPalette::Disabled, QPalette::Button, brush2);
-        palette1.setBrush(QPalette::Disabled, QPalette::Text, brush);
-        palette1.setBrush(QPalette::Disabled, QPalette::ButtonText, brush);
-        palette1.setBrush(QPalette::Disabled, QPalette::Base, brush2);
-        palette1.setBrush(QPalette::Disabled, QPalette::Window, brush2);
-        labelFIO_left->setPalette(palette1);
-        labelFIO_left->setFont(font2);
-        labelFIO_left->setStyleSheet(QStringLiteral("color: rgb(255, 255, 255);"));
-        labelFIO_left->setAlignment(Qt::AlignCenter);
+        horizontalLayout_2 = new QHBoxLayout();
+        horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
+        label = new QLabel(widgetLeft);
+        label->setObjectName(QStringLiteral("label"));
+        label->setFont(font1);
+        label->setStyleSheet(QStringLiteral("color: rgb(255, 255, 255);"));
+        label->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
-        gridLayout_4->addWidget(labelFIO_left, 1, 0, 1, 1);
+        horizontalLayout_2->addWidget(label);
 
-        labelRegion_left = new QLabel(widgetLeft);
-        labelRegion_left->setObjectName(QStringLiteral("labelRegion_left"));
-        labelRegion_left->setFont(font1);
-        labelRegion_left->setStyleSheet(QStringLiteral("color: rgb(255, 255, 255);"));
-        labelRegion_left->setAlignment(Qt::AlignCenter);
+        label_4 = new QLabel(widgetLeft);
+        label_4->setObjectName(QStringLiteral("label_4"));
+        label_4->setFont(font1);
+        label_4->setStyleSheet(QStringLiteral("color: rgb(255, 255, 255);"));
 
-        gridLayout_4->addWidget(labelRegion_left, 3, 0, 1, 1);
+        horizontalLayout_2->addWidget(label_4);
+
+
+        verticalLayout->addLayout(horizontalLayout_2);
+
+        label_2 = new QLabel(widgetLeft);
+        label_2->setObjectName(QStringLiteral("label_2"));
+        label_2->setFont(font1);
+        label_2->setStyleSheet(QStringLiteral("color: rgb(255, 255, 255);"));
+
+        verticalLayout->addWidget(label_2);
+
+        label_3 = new QLabel(widgetLeft);
+        label_3->setObjectName(QStringLiteral("label_3"));
+        label_3->setFont(font1);
+        label_3->setStyleSheet(QStringLiteral("color: rgb(255, 255, 255);"));
+
+        verticalLayout->addWidget(label_3);
 
 
         gridLayout->addWidget(widgetLeft, 1, 0, 1, 1);
 
         gridLayout->setRowStretch(0, 10);
-        gridLayout->setRowStretch(1, 80);
-        gridLayout->setRowStretch(2, 10);
 
         retranslateUi(FightingTable);
 
@@ -300,17 +372,21 @@ public:
         labelLeftHead->setText(QApplication::translate("FightingTable", "\320\233\320\265\320\262\321\213\320\271", 0));
         labelTime->setText(QApplication::translate("FightingTable", "\320\222\321\200\320\265\320\274\321\217", 0));
         labelRightHead->setText(QApplication::translate("FightingTable", "\320\237\321\200\320\260\320\262\321\213\320\271", 0));
-        labelRegion_right->setText(QApplication::translate("FightingTable", "TextLabel", 0));
-        labelFIO_right->setText(QApplication::translate("FightingTable", "TextLabel", 0));
-        pushButtonPointRight->setText(QApplication::translate("FightingTable", "0", 0));
-        labelRightFlag->setText(QApplication::translate("FightingTable", "TextLabel", 0));
         pushButtonStart->setText(QApplication::translate("FightingTable", "Start", 0));
         pushButtonDoctor->setText(QApplication::translate("FightingTable", "Call a doctor!", 0));
         labelDoctorTimer->setText(QString());
-        labelLeftFlag->setText(QApplication::translate("FightingTable", "TextLabel", 0));
-        pushButtonPointLeft->setText(QApplication::translate("FightingTable", "0", 0));
+        pushButtonPointRight->setText(QApplication::translate("FightingTable", "0", 0));
+        labelRegion_right->setText(QApplication::translate("FightingTable", "TextLabel", 0));
+        labelRightFlag->setText(QApplication::translate("FightingTable", "TextLabel", 0));
+        labelFIO_right->setText(QApplication::translate("FightingTable", "TextLabel", 0));
         labelFIO_left->setText(QApplication::translate("FightingTable", "TextLabel", 0));
+        labelLeftFlag->setText(QApplication::translate("FightingTable", "TextLabel", 0));
         labelRegion_left->setText(QApplication::translate("FightingTable", "TextLabel", 0));
+        pushButtonPointLeft->setText(QApplication::translate("FightingTable", "0", 0));
+        label->setText(QApplication::translate("FightingTable", "Minus:", 0));
+        label_4->setText(QApplication::translate("FightingTable", "Minus:", 0));
+        label_2->setText(QApplication::translate("FightingTable", "Fo:", 0));
+        label_3->setText(QApplication::translate("FightingTable", "Ex:", 0));
     } // retranslateUi
 
 };

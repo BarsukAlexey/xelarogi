@@ -35,6 +35,11 @@ public:
         long long VERTEX;
         long long TOURNAMENT_CATEGORIES_FK;
         int winer;
+
+        bool operator < (const Fighing& other) const
+        {
+            return VERTEX < other.VERTEX;
+        }
     };
 
     static QString getField(const QString& field, const QString& table, const QString& UID, QString PRETTY_FUNCTION = __PRETTY_FUNCTION__);

@@ -63,6 +63,7 @@ private:
     static QString getTimeMMSS(long long time);
     static QPixmap drawBorder(QImage flag);
     static QImage makeGrey(QImage flag);
+    static QPixmap drawCubes(int count);
 
 private slots:
     void update();
