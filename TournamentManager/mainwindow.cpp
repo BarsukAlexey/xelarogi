@@ -15,6 +15,7 @@
 #include "ebnutvbazu.h"
 #include "report_manda.h"
 #include "report_ministr.h"
+#include "countryiconsdialog.h"
 
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -141,6 +142,11 @@ MainWindow::MainWindow(QWidget *parent) :
         handbookDlg.exec();
     });
 
+    connect(ui->iconsAction, &QAction::triggered, [this] ()
+    {
+        CountryIconsDialog dlg;
+        dlg.exec();
+    });
 
 
     connectButtons();

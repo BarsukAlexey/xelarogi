@@ -45,7 +45,8 @@ SOURCES += main.cpp\
     dialog_insert_data_in_database.cpp \
     dialog_change_category.cpp \
     dialog_create_age_category.cpp \
-    mythread.cpp
+    mythread.cpp \
+    countryiconsdialog.cpp
 
 HEADERS  += mainwindow.h \
     handbookdialog.h \
@@ -76,7 +77,8 @@ HEADERS  += mainwindow.h \
     dialog_insert_data_in_database.h \
     dialog_change_category.h \
     dialog_create_age_category.h \
-    mythread.h
+    mythread.h \
+    countryiconsdialog.h
 
 FORMS    += mainwindow.ui \
     handbookdialog.ui \
@@ -92,6 +94,7 @@ FORMS    += mainwindow.ui \
     trophygeneratorsettingsdialog.ui \
     dialog_insert_data_in_database.ui \
     dialogchangecategory.ui \
-    dialog_create_age_category.ui
+    dialog_create_age_category.ui \
+    countryiconsdialog.ui
 
 DISTFILES +=
