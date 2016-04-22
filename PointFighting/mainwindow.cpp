@@ -4,7 +4,11 @@
 #include "fighting_table.h"
 
 #include <QHeaderView>
-#include <QDateTime>
+#include <QStringList>
+#include <QDialog>
+#include <QDesktopWidget>
+#include "forma_dvertisement.h"
+#include "form_advertisement_setting.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -15,7 +19,14 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionLoad_data, &QAction::triggered, [this] () {
         QString path = QFileDialog::getOpenFileName(this);
         if (path.isNull()) return;
-
+        {
+            QFileInfo fileInfo(nameSaveFile);
+            if (fileInfo.exists() && fileInfo.isFile() &&
+                QMessageBox::StandardButton::Ok != QMessageBox::warning(this, "", "If you load new data  you lose old data.\nContinue and lose old data?", QMessageBox::StandardButton::Ok, QMessageBox::StandardButton::Abort))
+            {
+                    return;
+            }
+        }
         QFile(nameSaveFile).remove();
         QFile::copy(path, nameSaveFile);
         update();
@@ -36,6 +47,21 @@ MainWindow::MainWindow(QWidget *parent) :
             QMessageBox::warning(this, "", "Can't save file as " + path + "\n\n" + file.errorString());
     });
 
+    connect(ui->actionAdv, &QAction::triggered, [this] () {
+        FormAdvertisementSetting dlg(this);
+        if (dlg.exec() == QDialog::Accepted)
+        {
+            if (advTimer->interval() != 1000 * dlg.getTime())
+                advTimer->setInterval(1000 * dlg.getTime());
+
+            if (showAdvertisement != dlg.showAdvertisement())
+            {
+                showAdvertisement = dlg.showAdvertisement();
+                updateAdvertisement();
+            }
+        }
+    });
+
     connect(ui->pushButtonGo, &QPushButton::clicked, [this]() {
         if (!ui->tableWidget->selectionModel()->selectedRows().size())
             return;
@@ -45,7 +71,7 @@ MainWindow::MainWindow(QWidget *parent) :
         if (!canStart)
             return;
 
-        FightingTable f(this,
+        FightingTable f(0,
                         ui->tableWidget->item(row,  1)->data(Qt::DisplayRole).toString(),
                         ui->tableWidget->item(row,  2)->data(Qt::DisplayRole).toString(),
                         ui->tableWidget->item(row,  3)->data(Qt::DisplayRole).toString(),
@@ -56,25 +82,33 @@ MainWindow::MainWindow(QWidget *parent) :
                         ui->tableWidget->item(row, 10)->data(Qt::DisplayRole).toInt(),
 
                         flags[row][0],
-                        flags[row][1] );
+                        flags[row][1],
+                        true,
+                        showAdvertisement);
+        this->hide();
         f.exec();
-        if (f.status != FightingTable::Status::Finish)
+        this->show();
+        if (f.status == FightingTable::Status::NotStart ||
+            f.status != FightingTable::Status::Finish &&
+            f.status != FightingTable::Status::DisqualificationLeft &&
+            f.status != FightingTable::Status::DisqualificationRight)
             return;
 
         QString winner;
         int winnerUID;
-        if      (f.countPointLeft > f.countPointRight){
+        QStringList winnerKeys;
+        if      (f.getWinner() == FightingTable::Player::LeftPlayer){
             winner    = ui->tableWidget->item(row, 1)->data(Qt::DisplayRole).toString();
             winnerUID = ui->tableWidget->item(row, 1)->data(Qt::UserRole).toLongLong();
+            winnerKeys << "nameOfLeftFighter" << "orderUID_left" << "regionOfLeftFighter" << "leftFlag";
         }
-        else if (f.countPointLeft < f.countPointRight){
+        else if (f.getWinner() == FightingTable::Player::RightPlayer){
             winner    = ui->tableWidget->item(row, 3)->data(Qt::DisplayRole).toString();
             winnerUID = ui->tableWidget->item(row, 3)->data(Qt::UserRole).toLongLong();
+            winnerKeys << "nameOfRightFighter" << "orderUID_right" << "regionOfRightFighter" << "rightFlag";
         }
         else
             return;
-
-
         QJsonDocument doc = loadJSON();
         QJsonArray array = doc.array();
         QJsonObject object = array.at(row).toObject();
@@ -91,12 +125,13 @@ MainWindow::MainWindow(QWidget *parent) :
             if (currentObject["TOURNAMENT_CATEGORIES_FK"].toInt() == TOURNAMENT_CATEGORIES_FK &&
                 currentObject["VERTEX"                  ].toInt() == VERTEX / 2){
 
+                int pos = 0;
                 for (QString key : {VERTEX % 2? "nameOfLeftFighter"    : "nameOfRightFighter",
                                     VERTEX % 2? "orderUID_left"        : "orderUID_right",
                                     VERTEX % 2? "regionOfLeftFighter"  : "regionOfRightFighter",
                                     VERTEX % 2? "leftFlag"             : "rightFlag"})
                 {
-                    currentObject[key] = object[key];
+                    currentObject[key] = object[winnerKeys[pos++]];
                 }
                 array.removeAt(i);
                 array.insert(i, currentObject);
@@ -115,16 +150,37 @@ MainWindow::MainWindow(QWidget *parent) :
 
     });
 
+    for (int i = 0; i < QApplication::desktop()->screenCount(); ++i)
+    {
+        QRect screenres = QApplication::desktop()->screenGeometry(i);
+        if (screenres == QApplication::desktop()->screenGeometry(-1))
+            continue;
+        FormAdvertisement *formAdvertisement = new FormAdvertisement(this);
+        formsForAdvertisement << formAdvertisement;
+        formAdvertisement->move(QPoint(screenres.x(), screenres.y()));
+        formAdvertisement->resize(screenres.width(), screenres.height());
+        formAdvertisement->showFullScreen();
+        formAdvertisement->show();
+    }
 
+    advTimer = new QTimer(this);
+    advTimer->start(1000 * FormAdvertisementSetting().getTime());
+    connect(advTimer, &QTimer::timeout, this, &MainWindow::updateAdvertisement);
+
+    showAdvertisement = FormAdvertisementSetting().showAdvertisement();
+
+    updateAdvertisement();
 
     update();
-    //ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    showMaximized();
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+
 }
+
 
 QJsonDocument MainWindow::loadJSON()
 {
@@ -190,7 +246,57 @@ void MainWindow::update()
         flags << QVector<QImage>();
         QImage a = QImage::fromData(QByteArray::fromBase64(object["leftFlag" ].toString().toStdString().c_str()));
         QImage b = QImage::fromData(QByteArray::fromBase64(object["rightFlag"].toString().toStdString().c_str()));
+        if (!a.isNull()) a = a.scaledToHeight(230);
+        if (!b.isNull()) b = b.scaledToHeight(230);
         flags.back() << a << b;
     }
     ui->tableWidget->resizeColumnsToContents();
+}
+
+
+
+void MainWindow::updateAdvertisement()
+{
+    QImage img;
+    if (!showAdvertisement)
+    {
+        QPixmap pm(1, 1);
+        pm.fill(Qt::transparent);
+        img = pm.toImage();
+    }
+    else
+    {
+        QDir dir(QString(".") + QDir::separator() + "advertisement");
+
+        QVector<QString>::iterator it = images.begin();
+        while (it != images.end())
+        {
+            QFileInfo fileInfo(*it);
+            if (!fileInfo.exists())
+                it = images.erase(it);
+            else
+                ++it;
+        }
+
+        for (QFileInfo fileInfo : dir.entryInfoList())
+        {
+            if (fileInfo.isFile() && !images.contains(fileInfo.absoluteFilePath()))
+            {
+                QImage img(fileInfo.absoluteFilePath());
+                if (!img.isNull())
+                {
+                    images << fileInfo.absoluteFilePath();
+                }
+            }
+        }
+
+        posImage = qMax(0, qMin(posImage, images.size()));
+        if (posImage == images.size()) posImage = 0;
+        img = QImage(images[posImage++]);
+    }
+
+    for (FormAdvertisement *f : formsForAdvertisement)
+    {
+        f->setImage(img);
+    }
 }

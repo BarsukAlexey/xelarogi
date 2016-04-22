@@ -44,24 +44,24 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-//    bool mTryLogin = true;
-//    while (mTryLogin)
-//    {
-//        LoginDialog loginDialog(this);
-//        if (loginDialog.exec() == QDialog::Accepted)
-//        {
-//            break;
-//        }
-//        mTryLogin = LoginDialog::mOkBtnClicked;
-//        if (!mTryLogin)
-//        {
-//            exit(0);
-//        }
-//        else
-//        {
-//            QMessageBox::warning(this, "Неудачная попытка авторизации", "Логи или пароль введены неверно");
-//        }
-//    }
+
+    while (true)
+    {
+        LoginDialog loginDialog(this);
+        if (loginDialog.exec() == QDialog::Accepted)
+        {
+            break;
+        }
+        if (!LoginDialog::mOkBtnClicked)
+        {
+            exit(0);
+        }
+        else
+        {
+            QMessageBox::warning(this, "Неудачная попытка авторизации", "Логи или пароль введены неверно");
+        }
+    }
+
 
     ui->setupUi(this);
 
@@ -368,6 +368,11 @@ void MainWindow::connectButtons()
             qDebug() << query.lastError().text();
         query.clear();
     });
+
+    connect(ui->pushButton_Flag, &QPushButton::clicked, [this] ()
+    {
+        CountryIconsDialog(this).exec();
+    });
 }
 
 
@@ -515,12 +520,12 @@ void MainWindow::on_pushButton_3_clicked()
     out << iconBase64.toStdString();
     out.close();
 
-    QSqlQuery query("UPDATE COUNTRIES SET FLAG = ? WHERE NAME = ? ");
-    query.addBindValue(iconBase64);
-    query.addBindValue("ЛНР");
-    if(!query.exec())
-        qDebug() << "Fuck!";
-    else
-        qDebug() << "Done!";
+//    QSqlQuery query("UPDATE COUNTRIES SET FLAG = ? WHERE NAME = ? ");
+//    query.addBindValue(iconBase64);
+//    query.addBindValue("ЛНР");
+//    if(!query.exec())
+//        qDebug() << "Fuck!";
+//    else
+//        qDebug() << "Done!";
 }
 

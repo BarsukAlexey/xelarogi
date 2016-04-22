@@ -24,6 +24,9 @@ public:
     explicit CountryIconsDialog(QWidget *parent = 0);
     ~CountryIconsDialog();
 
+private slots:
+    void on_labelLink_linkActivated(const QString &link);
+
 private:
     void fillCountries();
 

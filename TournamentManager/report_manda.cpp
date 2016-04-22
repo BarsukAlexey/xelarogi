@@ -85,6 +85,18 @@ ReportManda::ReportManda(const QSqlDatabase& database, const long long tournamen
         ExcelUtils::setBorder (sheet, startRow, 1, startRow + uidsOfClubs.size() - 1, 1, 3, ExcelUtils::Border::xlEdgeLeft);
         ExcelUtils::setBorder (sheet, startRow, 2, startRow + uidsOfClubs.size() - 1, 2, 3, ExcelUtils::Border::xlEdgeLeft);
 
+        ExcelUtils::setValue(sheet, startRow - 1, 1, "#");
+        ExcelUtils::setValue(sheet, startRow - 1, 2, "Команда");
+        ExcelUtils::setBorder (sheet, startRow - 2, 1, startRow - 1, 2, 3);
+        ExcelUtils::uniteRange(sheet, startRow - 2, 1, startRow - 1, 1);
+        ExcelUtils::uniteRange(sheet, startRow - 2, 2, startRow - 1, 2);
+
+        //return;
+
+        ExcelUtils::setBorder (sheet, startRow + uidsOfClubs.size(), 1, startRow + uidsOfClubs.size() + 1, 2, 3);
+        ExcelUtils::uniteRange(sheet, startRow + uidsOfClubs.size(), 1, startRow + uidsOfClubs.size() + 1, 2);
+        ExcelUtils::setValue  (sheet, startRow + uidsOfClubs.size(), 1, "Всего");
+
         QSqlQuery queryWEIGHTS(
             "SELECT WEIGHT_FROM, WEIGHT_TILL "
             "FROM ORDERS "

@@ -54,10 +54,11 @@
    </property>
    <widget class="QMenu" name="menuData">
     <property name="title">
-     <string>Data</string>
+     <string>Settings</string>
     </property>
     <addaction name="actionLoad_data"/>
     <addaction name="actionExport_results"/>
+    <addaction name="actionAdv"/>
    </widget>
    <addaction name="menuData"/>
   </widget>
@@ -78,6 +79,11 @@
   <action name="actionExport_results">
    <property name="text">
     <string>Export results...</string>
+   </property>
+  </action>
+  <action name="actionAdv">
+   <property name="text">
+    <string>Аdvertisement...</string>
    </property>
   </action>
  </widget>

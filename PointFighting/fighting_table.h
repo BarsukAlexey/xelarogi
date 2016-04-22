@@ -17,7 +17,10 @@
 #include <ratio>
 #include <thread>
 #include <QMessageBox>
-
+#include "ui_fighting_table.h"
+#include "ui_form.h"
+#include "formscore.h"
+#include <QtGui>
 
 namespace Ui {
 class FightingTable;
@@ -30,61 +33,109 @@ class FightingTable : public QDialog
 public:
     enum Status
     {
-        NotStart, Fighting, Break, Pause, DoctorOnRing, Tie, Finish
+        NotStart, Fighting, Break, Pause, DoctorOnRing, Tie, Finish, DisqualificationLeft, DisqualificationRight
     };
+
+    enum Player
+    {
+        LeftPlayer, RightPlayer, NoPlayer
+    };
+
 
 
 private:
     Ui::FightingTable *ui;
+    QPushButton *pushButtonStart;
+    QPushButton *pushButtonDoctor;
+
+    const QString nameLeft, nameRight;
     const int poolTime = 200;
-    long long startTime;
-    long long sumOfDelay;
+    long long prevTime;
+    long long spentTime;
+
+    long long spentTimeDoctor;
+    const int durationOfDoctorOnRing = 2 * 60 * 1000;
+
     int currentRound;
-    const int durationOfRound = 5;
-    const int durationOfBreak = 3;
-    const int countOfRounds = 2;
-    QImage mLeftFlag;
-    QImage mRightFlag;
+    const int durationOfRound;
+    const int durationOfBreak;
+    const int countOfRounds;
+    const QImage mLeftFlag;
+    const QImage mRightFlag;
 public:
     Status status;
+private:
+    Status statusBeforDisqualification;
     int countPointLeft;
     int countPointRight;
-private:
-    long long startTimeDoctorOrPause;
-    const int durationOfDoctorOnRing = 2 * 60;
+    int countOfLeftMinus;
+    int countOfRightMinus;
+    int countOfLeftFo;
+    int countOfRightFo;
+    int countOfLeftEx;
+    int countOfRightEx;
+
     QSound *gong = new QSound("resources\\sounds\\gong.wav");
     QSound *molot = new QSound("resources\\sounds\\stuk_molotka.wav");
 
+    QVector<FormScore*> left, right;
+    QVector<FightingTable*> allTables;
+    const bool dialogForJudge;
+    const bool showAdvertisement;
+
 public:
-    explicit FightingTable(QWidget *parent, QString nameLeft, QString regionLeft, QString nameRight, QString regionRight, int durationOfRound, int durationOfBreak, int countOfRounds, QImage leftFlag, QImage rightFlag);
+    explicit FightingTable(QWidget *parent, QString nameLeft, QString regionLeft, QString nameRight, QString regionRight, int durationOfRound, int durationOfBreak, int countOfRounds, QImage leftFlag, QImage rightFlag, bool dialogForJudge, bool showAdvertisement);
     ~FightingTable();
 
 private:
     static QString getTimeMMSS(long long time);
-    static QPixmap drawBorder(QImage flag);
-    static QImage makeGrey(QImage flag);
-    static QPixmap drawCubes(int count);
+
 
 private slots:
     void update();
     void on_pushButtonStart_clicked();
+    void on_pushButtonDoctor_clicked();
+
     void on_pushButtonPointLeft_clicked();
     void on_pushButtonPointRight_clicked();
-    void on_pushButtonDoctor_clicked();
+
+    void on_pushButtonAddMinusLeft_clicked();
+    void on_pushButtonAddMinusRight_clicked();
+
+    void on_pushButtonAbortMinusLeft_clicked();
+    void on_pushButtonAbortMinusRight_clicked();
+
+    void on_pushButtonAddExLeft_clicked();
+    void on_pushButtonAddExRight_clicked();
+    void on_pushButtonAbortExLeft_clicked();
+    void on_pushButtonAbortExRight_clicked();
 
 public:
     QString getResult();
+    Player getWinner();
+
 
 protected:
-    void closeEvent(QCloseEvent *event) {
-        if (status == Status::NotStart || status == Status::Finish)
+    void closeEvent(QCloseEvent *event)
+    {
+        if (dialogForJudge)
         {
-            event->accept(); // close window
-            return;
+            if (status == Status::NotStart || status == Status::Finish || status == Status::DisqualificationLeft || status == Status::DisqualificationRight)
+            {
+                event->accept(); // close window
+                for (FightingTable* f : allTables)
+                    f->hide();
+            }
+            else
+            {
+                event->ignore(); // keep window
+                QMessageBox::warning(this, "", "Contest is not finished.\nDon't close this window!");
+            }
         }
-        event->ignore(); // keep window
-        QMessageBox::warning(this, "", "Contest is not finished.\nDon't close this window!");
-
+        else
+        {
+            event->ignore(); // keep window
+        }
     }
 };
 

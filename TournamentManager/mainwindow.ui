@@ -121,6 +121,9 @@
            </item>
            <item>
             <widget class="QPushButton" name="pushButton_3">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="text">
               <string>Загрузка флага</string>
              </property>
@@ -129,7 +132,7 @@
            <item>
             <widget class="QPushButton" name="pushButton">
              <property name="enabled">
-              <bool>true</bool>
+              <bool>false</bool>
              </property>
              <property name="text">
               <string>Добавть категории</string>
@@ -139,7 +142,7 @@
            <item>
             <widget class="QPushButton" name="pushButton_2">
              <property name="enabled">
-              <bool>true</bool>
+              <bool>false</bool>
              </property>
              <property name="text">
               <string>Рандомные победители</string>
@@ -234,6 +237,13 @@
              </property>
              <property name="text">
               <string>Заявки</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButton_Flag">
+             <property name="text">
+              <string>Флаги стран</string>
              </property>
             </widget>
            </item>
@@ -427,7 +437,7 @@
   </action>
   <action name="iconsAction">
    <property name="text">
-    <string>Иконки стран</string>
+    <string>Флаги стран</string>
    </property>
   </action>
  </widget>

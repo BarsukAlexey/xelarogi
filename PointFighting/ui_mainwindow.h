@@ -31,6 +31,7 @@ class Ui_MainWindow
 public:
     QAction *actionLoad_data;
     QAction *actionExport_results;
+    QAction *actionAdv;
     QWidget *centralWidget;
     QGridLayout *gridLayout;
     QTableWidget *tableWidget;
@@ -49,6 +50,8 @@ public:
         actionLoad_data->setObjectName(QStringLiteral("actionLoad_data"));
         actionExport_results = new QAction(MainWindow);
         actionExport_results->setObjectName(QStringLiteral("actionExport_results"));
+        actionAdv = new QAction(MainWindow);
+        actionAdv->setObjectName(QStringLiteral("actionAdv"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         gridLayout = new QGridLayout(centralWidget);
@@ -87,6 +90,7 @@ public:
         menuBar->addAction(menuData->menuAction());
         menuData->addAction(actionLoad_data);
         menuData->addAction(actionExport_results);
+        menuData->addAction(actionAdv);
 
         retranslateUi(MainWindow);
 
@@ -98,8 +102,9 @@ public:
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0));
         actionLoad_data->setText(QApplication::translate("MainWindow", "Load data...", 0));
         actionExport_results->setText(QApplication::translate("MainWindow", "Export results...", 0));
+        actionAdv->setText(QApplication::translate("MainWindow", "\320\220dvertisement...", 0));
         pushButtonGo->setText(QApplication::translate("MainWindow", "Go...", 0));
-        menuData->setTitle(QApplication::translate("MainWindow", "Data", 0));
+        menuData->setTitle(QApplication::translate("MainWindow", "Settings", 0));
     } // retranslateUi
 
 };

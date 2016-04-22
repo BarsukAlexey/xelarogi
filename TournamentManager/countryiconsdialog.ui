@@ -7,14 +7,14 @@
     <x>0</x>
     <y>0</y>
     <width>612</width>
-    <height>254</height>
+    <height>283</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Выбор иконок для стран</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_3">
-   <item>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QLabel" name="label">
@@ -25,6 +25,20 @@
      </item>
      <item>
       <widget class="QComboBox" name="countryCB"/>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButtonDelete">
+       <property name="text">
+        <string>Удалить текущий флаг</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="loadNewImageBtn">
+       <property name="text">
+        <string>Загрузить изображение</string>
+       </property>
+      </widget>
      </item>
      <item>
       <spacer name="horizontalSpacer">
@@ -41,14 +55,17 @@
      </item>
     </layout>
    </item>
-   <item>
+   <item row="2" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
         <widget class="QLabel" name="label_2">
          <property name="text">
-          <string>текущая иконка</string>
+          <string>Текущий флаг</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
          </property>
         </widget>
        </item>
@@ -84,14 +101,10 @@
          <item>
           <widget class="QLabel" name="label_3">
            <property name="text">
-            <string>новая иконка</string>
+            <string>Новый флаг</string>
            </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="loadNewImageBtn">
-           <property name="text">
-            <string>Загрузить изображение</string>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
            </property>
           </widget>
          </item>
@@ -121,10 +134,17 @@
      </item>
     </layout>
    </item>
-   <item>
+   <item row="3" column="0">
     <widget class="QPushButton" name="saveBtn">
      <property name="text">
-      <string>Сохранить</string>
+      <string>Сохранить новый флаг</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="labelLink">
+     <property name="text">
+      <string>&lt;a href=&quot;1&quot;&gt;Загрузить флаги...&lt;/a&gt;</string>
      </property>
     </widget>
    </item>

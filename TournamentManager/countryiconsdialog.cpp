@@ -1,5 +1,6 @@
 #include "countryiconsdialog.h"
 #include "ui_countryiconsdialog.h"
+#include <QDesktopServices>
 
 CountryIconsDialog::CountryIconsDialog(QWidget *parent) :
     QDialog(parent),
@@ -7,17 +8,18 @@ CountryIconsDialog::CountryIconsDialog(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    fillCountries();
+    //ui->labelLink->setName("myLabel");
+    //ui->labelLink->setText("<a href=\"Загрузить флаги...\">text</a>");
+    ui->labelLink->setTextInteractionFlags(Qt::TextBrowserInteraction);
 
     connect(ui->loadNewImageBtn, &QPushButton::clicked, [this] ()
     {
-        QString pictureName = QFileDialog::getOpenFileName(this, "Выберете иконку для загрузки", QDir::currentPath(), "PNG (*.png);;Icon (*.ico)");
-        QPixmap pixmap(pictureName);
-        ui->newImageL->setScaledContents(true);
-        ui->newImageL->setBackgroundRole(QPalette::Base);
-        ui->newImageL->setPixmap(pixmap);
+        QString openFileName = QFileDialog::getOpenFileName(this, "Выберете флаг для загрузки");
+        QImage image(openFileName);
+        image = image.scaledToHeight(250);
 
-        mPixmap = pixmap;
+        mPixmap = QPixmap::fromImage(image);
+        ui->newImageL->setPixmap(mPixmap);
     });
 
     connect(ui->saveBtn, &QPushButton::clicked, [this] ()
@@ -26,26 +28,69 @@ CountryIconsDialog::CountryIconsDialog(QWidget *parent) :
 
         QByteArray imageBytes;
         QBuffer inBuffer(&imageBytes);
-        inBuffer.open( QIODevice::WriteOnly );
+        inBuffer.open(QIODevice::WriteOnly);
         mPixmap.toImage().save(&inBuffer, "PNG");
-
-        QSqlQuery query("DELETE FROM COUNTRY_ICONS WHERE COUNTRY_FK = " + ui->countryCB->currentData(Qt::UserRole).toString());
-        if (!query.exec())
-            qDebug() << query.lastError().text();
+        QString flagBase64 = QString::fromLatin1(imageBytes.toBase64().data());
 
         long long uid = ui->countryCB->currentData(Qt::UserRole).toLongLong();
         QSqlQuery newCountryIcon;
-        newCountryIcon.prepare("INSERT INTO COUNTRY_ICONS(COUNTRY_FK, ICON) VALUES( ?, ?)");
-        newCountryIcon.bindValue(0, uid);
-        newCountryIcon.bindValue(1, imageBytes);
+        newCountryIcon.prepare("UPDATE COUNTRIES SET FLAG = ? WHERE UID = ?");
+        newCountryIcon.addBindValue(flagBase64);
+        newCountryIcon.addBindValue(uid);
         if (!newCountryIcon.exec())
             qDebug() << newCountryIcon.lastError().text();
 
         ui->oldImageL->setPixmap(mPixmap);
+        ui->newImageL->setPixmap(QPixmap());
+        mPixmap = QPixmap();
     });
 
-    ui->countryCB->addItem("Выберете страну для изменения иконки");
-    ui->countryCB->setCurrentIndex(ui->countryCB->count() - 1);
+    connect(ui->countryCB, &QComboBox::currentTextChanged, [this] (const QString& text)
+    {
+        long long uid = ui->countryCB->currentData(Qt::UserRole).toLongLong();
+        QSqlQuery query;
+        if (!query.prepare("SELECT * FROM COUNTRIES WHERE UID = ?"))
+            qDebug() << query.lastError().text();
+        else
+        {
+            ui->oldImageL->setText("Нет загруженной иконки для страны");
+
+            query.addBindValue(uid);
+            if (query.exec())
+            {
+                if (query.next())
+                {
+                    QByteArray data = QByteArray::fromBase64(query.value("FLAG").toString().toStdString().c_str());
+                    if (data.size() != 0)
+                    {
+                        QImage image = QImage::fromData(data);
+                        image = image.scaledToHeight(250);
+                        ui->oldImageL->setPixmap(QPixmap::fromImage(image));
+                    }
+                }
+            }
+            else
+                qDebug() << query.lastError().text();
+        }
+    });
+
+    connect(ui->pushButtonDelete, &QPushButton::clicked, [this] (){
+        long long uid = ui->countryCB->currentData(Qt::UserRole).toLongLong();
+        QSqlQuery query;
+        if (!query.prepare("UPDATE COUNTRIES SET FLAG = ? WHERE UID = ?"))
+            qDebug() << query.lastError().text();
+        else
+        {
+            ui->oldImageL->setText("Нет загруженной иконки для страны");
+
+            query.addBindValue(QString(""));
+            query.addBindValue(uid);
+            if (!query.exec())
+                qDebug() << query.lastError();
+        }
+    });
+
+    fillCountries();
 }
 
 CountryIconsDialog::~CountryIconsDialog()
@@ -58,55 +103,18 @@ void CountryIconsDialog::fillCountries()
     ui->countryCB->clear();
 
     QSqlQuery query;
-    if (!query.prepare("SELECT * FROM COUNTRIES"))
+    if (!query.prepare("SELECT * FROM COUNTRIES") || !query.exec())
+    {
         qDebug() << query.lastError().text();
-    else
-    {
-        if (query.exec())
-        {
-            int index = 0;
-            while (query.next())
-            {
-                long long uid = query.value("UID").toLongLong();
-                QString name = query.value("NAME").toString();
-
-                ui->countryCB->addItem(name);
-                ui->countryCB->setItemData(index, uid, Qt::UserRole);
-                ++index;
-            }
-        }
-        else
-            qDebug() << query.lastError().text();
+        return;
     }
-
-    connect(ui->countryCB, &QComboBox::currentTextChanged, [this] (const QString& text)
+    while (query.next())
     {
-        long long uid = ui->countryCB->currentData(Qt::UserRole).toLongLong();
-        QSqlQuery query;
-        if (!query.prepare("SELECT * FROM COUNTRY_ICONS WHERE COUNTRY_FK = ?"))
-            qDebug() << query.lastError().text();
-        else
-        {
-            ui->oldImageL->setScaledContents(true);
-            ui->oldImageL->setBackgroundRole(QPalette::Base);
-            ui->oldImageL->setText("Нет загруженной иконки для страны");
+        ui->countryCB->addItem(query.value("NAME").toString(), query.value("UID").toLongLong());
+    }
+}
 
-            query.bindValue(0, uid);
-            if (query.exec())
-            {
-                if (query.next())
-                {
-                    QByteArray data = query.value("ICON").toByteArray();
-                    if (data.size() != 0)
-                    {
-                        QPixmap pixmap;
-                        pixmap.loadFromData(data);
-                        ui->oldImageL->setPixmap(pixmap);
-                    }
-                }
-            }
-            else
-                qDebug() << query.lastError().text();
-        }
-    });
+void CountryIconsDialog::on_labelLink_linkActivated(const QString &link)
+{
+    QDesktopServices::openUrl(QUrl("https://en.wikipedia.org/wiki/Gallery_of_sovereign_state_flags"));
 }

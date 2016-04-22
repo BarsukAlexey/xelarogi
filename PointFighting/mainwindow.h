@@ -28,6 +28,8 @@
 
 #include <algorithm>
 #include <QThread>
+#include "forma_dvertisement.h"
+
 
 namespace Ui {
 class MainWindow;
@@ -41,6 +43,13 @@ private:
     Ui::MainWindow *ui;
     const QString nameSaveFile = "save.json";
     QVector<QVector<QImage>> flags;
+    QTimer *advTimer;
+
+
+    QVector<QString> images;
+    int posImage = 0;
+    QVector<FormAdvertisement*> formsForAdvertisement;
+    bool showAdvertisement = true;
 
 
 public:
@@ -50,6 +59,9 @@ public:
 private:
     QJsonDocument loadJSON();
     void update();
+
+private slots:
+    void updateAdvertisement();
 
 };
 
