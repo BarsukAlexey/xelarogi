@@ -376,7 +376,16 @@ void FightingTable::on_pushButtonAddMinusLeft_clicked()
     if (status == Status::NotStart || status == Status::DisqualificationLeft || status == Status::DisqualificationRight)
         return;
     ++countOfLeftMinus;
-    countPointRight += 3;
+    if (1 <= countPointLeft)
+    {
+        --countPointLeft;
+        stackMinusLeft << true;
+    }
+    else
+    {
+        ++countPointRight;
+        stackMinusLeft << false;
+    }
     if (countOfLeftMinus == 3)
     {
         statusBeforDisqualification = status;
@@ -389,7 +398,16 @@ void FightingTable::on_pushButtonAddMinusRight_clicked()
     if (status == Status::NotStart || status == Status::DisqualificationLeft || status == Status::DisqualificationRight)
         return;
     ++countOfRightMinus;
-    countPointLeft += 3;
+    if (1 <= countPointRight)
+    {
+        --countPointRight;
+        stackMinusRight << true;
+    }
+    else
+    {
+        ++countPointLeft;
+        stackMinusRight << false;
+    }
     if (countOfRightMinus == 3)
     {
         statusBeforDisqualification = status;
@@ -399,10 +417,14 @@ void FightingTable::on_pushButtonAddMinusRight_clicked()
 
 void FightingTable::on_pushButtonAbortMinusLeft_clicked()
 {
-    if (countOfLeftMinus == 0 || countOfLeftMinus == countOfLeftEx - 1)
+    //if (countOfLeftMinus == 0 || countOfLeftMinus == countOfLeftEx - 1)
+    if (stackMinusLeft.empty())
         return;
     --countOfLeftMinus;
-    countPointRight -= 3;
+    if (stackMinusLeft.pop())
+        ++countPointLeft;
+    else
+        --countPointRight;
     if ((status == Status::DisqualificationLeft || status == Status::DisqualificationRight) && countOfLeftMinus <= 3 && countOfRightMinus <= 3)
     {
         status = statusBeforDisqualification;
@@ -416,7 +438,10 @@ void FightingTable::on_pushButtonAbortMinusRight_clicked()
     if (countOfRightMinus == 0 || countOfRightMinus == countOfRightEx - 1)
         return;
     --countOfRightMinus;
-    countPointLeft -= 3;
+    if (stackMinusRight.pop())
+        ++countPointRight;
+    else
+        --countPointLeft;
     if ((status == Status::DisqualificationLeft || status == Status::DisqualificationRight) && countOfLeftMinus <= 3 && countOfRightMinus <= 3)
     {
         status = statusBeforDisqualification;
@@ -430,8 +455,24 @@ void FightingTable::on_pushButtonAddExLeft_clicked()
     if (status == Status::NotStart || status == Status::DisqualificationLeft || status == Status::DisqualificationRight)
         return;
     ++countOfLeftEx;
-    if (2 <=countOfLeftEx)
-        on_pushButtonAddMinusLeft_clicked();
+    if (2 <= countOfLeftEx)
+    {
+        if (1 <= countPointLeft)
+        {
+            --countPointLeft;
+            stackLeftEx << true;
+        }
+        else
+        {
+            ++countPointRight;
+            stackLeftEx << false;
+        }
+    }
+    if (countOfLeftEx == 4)
+    {
+        statusBeforDisqualification = status;
+        status = Status::DisqualificationLeft;
+    }
 }
 
 void FightingTable::on_pushButtonAddExRight_clicked()
@@ -440,7 +481,23 @@ void FightingTable::on_pushButtonAddExRight_clicked()
         return;
     ++countOfRightEx;
     if (2 <= countOfRightEx)
-        on_pushButtonAddMinusRight_clicked();
+    {
+        if (1 <= countPointRight)
+        {
+            --countPointRight;
+            stackRightEx << true;
+        }
+        else
+        {
+            ++countPointLeft;
+            stackRightEx << false;
+        }
+    }
+    if (countOfRightEx == 4)
+    {
+        statusBeforDisqualification = status;
+        status = Status::DisqualificationLeft;
+    }
 }
 
 void FightingTable::on_pushButtonAbortExLeft_clicked()
@@ -449,7 +506,18 @@ void FightingTable::on_pushButtonAbortExLeft_clicked()
         return;
     --countOfLeftEx;
     if (1 <= countOfLeftEx)
-        on_pushButtonAbortMinusLeft_clicked();
+    {
+        if (stackLeftEx.pop())
+            ++countPointLeft;
+        else
+            --countPointRight;
+    }
+    if ((status == Status::DisqualificationLeft || status == Status::DisqualificationRight) && countOfLeftEx <= 3 && countOfRightEx <= 3)
+    {
+        status = statusBeforDisqualification;
+        for (FormScore *f : left ) f->setWinner(true);
+        for (FormScore *f : right) f->setWinner(true);
+    }
 }
 
 void FightingTable::on_pushButtonAbortExRight_clicked()
@@ -458,7 +526,18 @@ void FightingTable::on_pushButtonAbortExRight_clicked()
         return;
     --countOfRightEx;
     if (1 <= countOfRightEx)
-        on_pushButtonAbortMinusRight_clicked();
+    {
+        if (stackRightEx.pop())
+            ++countPointRight;
+        else
+            --countPointLeft;
+    }
+    if ((status == Status::DisqualificationLeft || status == Status::DisqualificationRight) && countOfLeftEx <= 3 && countOfRightEx <= 3)
+    {
+        status = statusBeforDisqualification;
+        for (FormScore *f : left ) f->setWinner(true);
+        for (FormScore *f : right) f->setWinner(true);
+    }
 }
 
 
@@ -476,7 +555,7 @@ void FightingTable::on_pushButtonDoctor_clicked()
     {
         status = Status::DoctorOnRing;
         spentTimeDoctor = 0;
-        pushButtonDoctor->setText("Stop doctor");
+        pushButtonDoctor->setText("Stop a doctor");
         update();
         qDebug() << "Doc on the ring";
     }

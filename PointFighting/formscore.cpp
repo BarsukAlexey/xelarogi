@@ -72,7 +72,8 @@ QImage FormScore::makeGrey(QImage image)
 
 QPixmap FormScore::drawCubes(int count)
 {
-    if (count == 0){
+    if (count == 0)
+    {
         QPixmap pm(1, 1);
         pm.fill(Qt::transparent);
         return pm;

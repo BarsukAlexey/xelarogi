@@ -70,10 +70,14 @@ private:
     int countPointRight;
     int countOfLeftMinus;
     int countOfRightMinus;
+    QStack<bool> stackMinusLeft;
+    QStack<bool> stackMinusRight;
     int countOfLeftFo;
     int countOfRightFo;
     int countOfLeftEx;
     int countOfRightEx;
+    QStack<bool> stackLeftEx;
+    QStack<bool> stackRightEx;
 
     QSound *gong = new QSound("resources\\sounds\\gong.wav");
     QSound *molot = new QSound("resources\\sounds\\stuk_molotka.wav");
