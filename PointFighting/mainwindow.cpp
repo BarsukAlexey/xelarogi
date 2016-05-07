@@ -9,11 +9,32 @@
 #include <QDesktopWidget>
 #include "forma_dvertisement.h"
 #include "form_advertisement_setting.h"
+#include "logindialog.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    //
+    while (true)
+    {
+        LoginDialog loginDialog(this);
+        if (loginDialog.exec() == QDialog::Accepted)
+        {
+            break;
+        }
+        if (!LoginDialog::mOkBtnClicked)
+        {
+            exit(0);
+        }
+        else
+        {
+            QMessageBox::warning(this, "Неудачная попытка авторизации", "Логи или пароль введены неверно");
+        }
+    }
+    /**/
+
+
     ui->setupUi(this);
 
     connect(ui->actionLoad_data, &QAction::triggered, [this] () {
@@ -48,7 +69,7 @@ MainWindow::MainWindow(QWidget *parent) :
     });
 
     connect(ui->actionAdv, &QAction::triggered, [this] () {
-        FormAdvertisementSetting dlg(this);
+        FormAdvertisementSetting dlg(this, advTimer->interval() / 1000, showAdvertisement);
         if (dlg.exec() == QDialog::Accepted)
         {
             if (advTimer->interval() != 1000 * dlg.getTime())
@@ -84,14 +105,13 @@ MainWindow::MainWindow(QWidget *parent) :
                         flags[row][0],
                         flags[row][1],
                         true,
-                        showAdvertisement);
+                        showAdvertisement,
+
+                        extraRound[row]);
         this->hide();
         f.exec();
         this->show();
-        if (f.status == FightingTable::Status::NotStart ||
-            f.status != FightingTable::Status::Finish &&
-            f.status != FightingTable::Status::DisqualificationLeft &&
-            f.status != FightingTable::Status::DisqualificationRight)
+        if (f.status == FightingTable::Status::NotStart)
             return;
 
         QString winner;
@@ -164,10 +184,10 @@ MainWindow::MainWindow(QWidget *parent) :
     }
 
     advTimer = new QTimer(this);
-    advTimer->start(1000 * FormAdvertisementSetting().getTime());
+    advTimer->start(1000 * 15);
     connect(advTimer, &QTimer::timeout, this, &MainWindow::updateAdvertisement);
 
-    showAdvertisement = FormAdvertisementSetting().showAdvertisement();
+    showAdvertisement = true;
 
     updateAdvertisement();
 
@@ -201,10 +221,11 @@ void MainWindow::update()
     QJsonDocument doc = loadJSON();
     QJsonArray array = doc.array();
     ui->tableWidget->setRowCount(array.size());
-    QStringList heads({"Fight #", "Red conner", "Country/Region", "Blue conner", "Country/Region", "Winner", "Can start?", "Tournament Categoty", "Duration fight", "Duration break", "Count of rounds"});
+    QStringList heads({"Fight #", "Red conner", "Country/Region", "Blue conner", "Country/Region", "Winner", "Can start?", "Tournament Categoty", "Duration of fight", "Duration of break", "Count of rounds", "Duration of extra round"});
     ui->tableWidget->setColumnCount(heads.size());
     ui->tableWidget->setHorizontalHeaderLabels(heads);
     flags.clear();
+    extraRound.clear();
     for (int i = 0; i < array.size(); ++i)
     {
         QTableWidgetItem *item;
@@ -246,9 +267,13 @@ void MainWindow::update()
         flags << QVector<QImage>();
         QImage a = QImage::fromData(QByteArray::fromBase64(object["leftFlag" ].toString().toStdString().c_str()));
         QImage b = QImage::fromData(QByteArray::fromBase64(object["rightFlag"].toString().toStdString().c_str()));
-        if (!a.isNull()) a = a.scaledToHeight(230);
-        if (!b.isNull()) b = b.scaledToHeight(230);
+        if (!a.isNull()) a = a.scaledToHeight(200);
+        if (!b.isNull()) b = b.scaledToHeight(200);
         flags.back() << a << b;
+
+        extraRound << object["DURATION_EXTRA_ROUND"].toInt();
+        ui->tableWidget->setItem(i, column++, new QTableWidgetItem(QString::number(extraRound.back())));
+//        qDebug() << i << object["DURATION_EXTRA_ROUND"].toInt() << extraRound.back();
     }
     ui->tableWidget->resizeColumnsToContents();
 }

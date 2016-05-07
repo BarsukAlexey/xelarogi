@@ -52,6 +52,8 @@ public:
     QLabel *label_7;
     QLabel *label_8;
     QLabel *label_10;
+    QLabel *label_12;
+    QLabel *label_13;
     QVBoxLayout *verticalLayout_2;
     QLineEdit *nameLE;
     QComboBox *sexCB;
@@ -68,6 +70,8 @@ public:
     QSpinBox *durationFightingSB;
     QSpinBox *durationBreakSB;
     QSpinBox *roundCountSB;
+    QComboBox *comboBoxTie;
+    QSpinBox *spinBoxExtraRound;
     QPushButton *applyBtn;
     QPushButton *addBtn;
     QPushButton *pushButtonAddGroupOfCaterories;
@@ -109,58 +113,81 @@ public:
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
         label_5 = new QLabel(widget);
         label_5->setObjectName(QStringLiteral("label_5"));
+        label_5->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
         verticalLayout->addWidget(label_5);
 
         label_6 = new QLabel(widget);
         label_6->setObjectName(QStringLiteral("label_6"));
+        label_6->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
         verticalLayout->addWidget(label_6);
 
         label_11 = new QLabel(widget);
         label_11->setObjectName(QStringLiteral("label_11"));
+        label_11->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
         verticalLayout->addWidget(label_11);
 
         label = new QLabel(widget);
         label->setObjectName(QStringLiteral("label"));
+        label->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
         verticalLayout->addWidget(label);
 
         label_2 = new QLabel(widget);
         label_2->setObjectName(QStringLiteral("label_2"));
+        label_2->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
         verticalLayout->addWidget(label_2);
 
         label_3 = new QLabel(widget);
         label_3->setObjectName(QStringLiteral("label_3"));
+        label_3->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
         verticalLayout->addWidget(label_3);
 
         label_4 = new QLabel(widget);
         label_4->setObjectName(QStringLiteral("label_4"));
+        label_4->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
         verticalLayout->addWidget(label_4);
 
         label_9 = new QLabel(widget);
         label_9->setObjectName(QStringLiteral("label_9"));
+        label_9->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
         verticalLayout->addWidget(label_9);
 
         label_7 = new QLabel(widget);
         label_7->setObjectName(QStringLiteral("label_7"));
+        label_7->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
         verticalLayout->addWidget(label_7);
 
         label_8 = new QLabel(widget);
         label_8->setObjectName(QStringLiteral("label_8"));
+        label_8->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
         verticalLayout->addWidget(label_8);
 
         label_10 = new QLabel(widget);
         label_10->setObjectName(QStringLiteral("label_10"));
+        label_10->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
         verticalLayout->addWidget(label_10);
+
+        label_12 = new QLabel(widget);
+        label_12->setObjectName(QStringLiteral("label_12"));
+        label_12->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+
+        verticalLayout->addWidget(label_12);
+
+        label_13 = new QLabel(widget);
+        label_13->setObjectName(QStringLiteral("label_13"));
+        label_13->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+
+        verticalLayout->addWidget(label_13);
 
 
         formLayout->setLayout(0, QFormLayout::LabelRole, verticalLayout);
@@ -254,9 +281,24 @@ public:
 
         roundCountSB = new QSpinBox(widget);
         roundCountSB->setObjectName(QStringLiteral("roundCountSB"));
+        roundCountSB->setEnabled(true);
         roundCountSB->setMinimum(1);
+        roundCountSB->setMaximum(100500);
+        roundCountSB->setValue(1);
 
         verticalLayout_2->addWidget(roundCountSB);
+
+        comboBoxTie = new QComboBox(widget);
+        comboBoxTie->setObjectName(QStringLiteral("comboBoxTie"));
+
+        verticalLayout_2->addWidget(comboBoxTie);
+
+        spinBoxExtraRound = new QSpinBox(widget);
+        spinBoxExtraRound->setObjectName(QStringLiteral("spinBoxExtraRound"));
+        spinBoxExtraRound->setMinimum(5);
+        spinBoxExtraRound->setMaximum(100500);
+
+        verticalLayout_2->addWidget(spinBoxExtraRound);
 
 
         formLayout->setLayout(0, QFormLayout::FieldRole, verticalLayout_2);
@@ -305,6 +347,8 @@ public:
         label_7->setText(QApplication::translate("CreateTournamentCategoriesDialog", "\320\224\320\273\320\270\321\202\320\265\320\273\321\214\320\275\320\276\321\201\321\202\321\214 \320\261\320\276\321\217, \321\201.", 0));
         label_8->setText(QApplication::translate("CreateTournamentCategoriesDialog", "\320\237\320\265\321\200\320\265\321\200\321\213\320\262, \321\201.", 0));
         label_10->setText(QApplication::translate("CreateTournamentCategoriesDialog", "\320\232\320\276\320\273\320\270\321\207\320\265\321\201\321\202\320\262\320\276 \321\200\320\260\321\203\320\275\320\264\320\276\320\262", 0));
+        label_12->setText(QApplication::translate("CreateTournamentCategoriesDialog", "\320\222 \321\201\320\273\321\203\321\207\320\260\320\265 \320\275\320\270\321\207\321\214\320\270", 0));
+        label_13->setText(QApplication::translate("CreateTournamentCategoriesDialog", "\320\222\321\200\320\265\320\274\321\217 \320\264\320\276\320\277\320\276\320\273\320\275\320\270\321\202\320\265\320\273\321\214\320\275\320\276 \321\200\320\260\321\203\320\275\320\264\320\260, c.", 0));
         buttonAddAgeCat->setText(QApplication::translate("CreateTournamentCategoriesDialog", "+", 0));
         addTypeBtn->setText(QApplication::translate("CreateTournamentCategoriesDialog", "+", 0));
         applyBtn->setText(QApplication::translate("CreateTournamentCategoriesDialog", "\320\237\321\200\320\270\320\274\320\265\320\275\320\270\321\202\321\214 \320\270\320\267\320\274\320\265\320\275\320\265\320\275\320\270\321\217", 0));

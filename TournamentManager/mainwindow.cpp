@@ -45,6 +45,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
 
+    /*/
     while (true)
     {
         LoginDialog loginDialog(this);
@@ -61,7 +62,7 @@ MainWindow::MainWindow(QWidget *parent) :
             QMessageBox::warning(this, "Неудачная попытка авторизации", "Логи или пароль введены неверно");
         }
     }
-
+    /**/
 
     ui->setupUi(this);
 

@@ -12,7 +12,7 @@ class FormAdvertisementSetting : public QDialog
     Q_OBJECT
 
 public:
-    explicit FormAdvertisementSetting(QWidget *parent = 0);
+    explicit FormAdvertisementSetting(QWidget *parent, int intervel, bool showAdvertisement);
     ~FormAdvertisementSetting();
 
 private:

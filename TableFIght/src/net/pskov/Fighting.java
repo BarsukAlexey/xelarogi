@@ -45,7 +45,7 @@ public class Fighting {
 
     private volatile Player disqualifiedPlayer;
 
-    private Stack<Pair<Player, Integer>> stackOfMinus;
+    private Stack<Pair<int[][], Pair<Player, Integer>>> stackOfMinus;
     private volatile int countOfMinusToLeft;
     private volatile int countOfMinusToRight;
 
@@ -53,7 +53,7 @@ public class Fighting {
     private volatile int countOfForestallingToLeft; // количесво предупреждений, сделаных левому игроку
     private volatile int countOfForestallingToRight; // количесво предупреждений, сделаных левому игроку
 
-    private Stack<Player> stackOfEx;
+    private Stack<Pair<int[][], Pair<Player, Integer>>> stackOfEx;
     private volatile int countOfExToLeft; // количесво предупреждений, сделаных левому игроку
     private volatile int countOfExToRight; // количесво предупреждений, сделаных левому игроку
 
@@ -127,7 +127,7 @@ public class Fighting {
 
         disqualifiedPlayer = Player.unknown;
 
-        stackOfMinus = new Stack<Pair<Player, Integer>>();
+        stackOfMinus = new Stack<>();
         countOfMinusToLeft = 0;
         countOfMinusToRight = 0;
 
@@ -135,7 +135,7 @@ public class Fighting {
         countOfForestallingToLeft = 0;
         countOfForestallingToRight = 0;
 
-        stackOfEx = new Stack<Player>();
+        stackOfEx = new Stack<>();
         countOfExToLeft = 0;
         countOfExToRight = 0;
     }
@@ -212,8 +212,7 @@ public class Fighting {
                         if (findWinner() != Player.unknown) {
                             statusFighting = StatusFighting.finishPending;
                             result = getCountJudgeForLeftFighter(true) + " : " + getCountJudgeForRightFighter(true);
-                        }
-                        else {
+                        } else {
                             statusFighting = StatusFighting.finishTie;
                             //result = getCountJudgeForLeftFighter(true) + " : " + getCountJudgeForRightFighter(true);
                         }
@@ -332,11 +331,14 @@ public class Fighting {
         }
 
         ++countOfMinusToLeft;
+        int[][] points = new int[3][2];
         for (int i = 0; i < 3; i++) {
-            countOfPointsForTheRightFighter[currentRound][i] += 3;
+            points[i][0] = -Math.min(3, countOfPointsForTheLeftFighter[currentRound][i]);
+            points[i][1] = 3 + points[i][0];
+            countOfPointsForTheLeftFighter[currentRound][i] += points[i][0];
+            countOfPointsForTheRightFighter[currentRound][i] += points[i][1];
         }
-        //stackOfMinus.add(new Pair<>(Player.left, currentRound));
-        stackOfMinus.add(new Pair<Player, Integer>(Player.left, currentRound));
+        stackOfMinus.add(new Pair<>(points, new Pair<>(Player.left, currentRound)));
 
         if (countOfMinusToLeft == 3) {
             disqualify(Player.left);
@@ -353,11 +355,14 @@ public class Fighting {
         }
 
         ++countOfMinusToRight;
+        int[][] points = new int[3][2];
         for (int i = 0; i < 3; i++) {
-            countOfPointsForTheLeftFighter[currentRound][i] += 3;
+            points[i][1] = -Math.min(3, countOfPointsForTheRightFighter[currentRound][i]);
+            points[i][0] = 3 + points[i][1];
+            countOfPointsForTheLeftFighter[currentRound][i] += points[i][0];
+            countOfPointsForTheRightFighter[currentRound][i] += points[i][1];
         }
-        //stackOfMinus.add(new Pair<>(Player.right, currentRound));
-        stackOfMinus.add(new Pair<Player, Integer>(Player.right, currentRound));
+        stackOfMinus.add(new Pair<>(points, new Pair<>(Player.right, currentRound)));
 
         if (countOfMinusToRight == 3) {
             disqualify(Player.right);
@@ -371,19 +376,18 @@ public class Fighting {
         if (stackOfMinus.isEmpty())
             return;
 
-        Player player = stackOfMinus.peek().getKey();
-        int idRound = stackOfMinus.peek().getValue();
+        int[][] points = stackOfMinus.peek().getKey();
+        Player player = stackOfMinus.peek().getValue().getKey();
+        int idRound = stackOfMinus.peek().getValue().getValue();
         stackOfMinus.pop();
         if (player == Player.left) {
             --countOfMinusToLeft;
-            for (int i = 0; i < 3; i++) {
-                countOfPointsForTheRightFighter[idRound][i] -= 3;
-            }
         } else {
             --countOfMinusToRight;
-            for (int i = 0; i < 3; i++) {
-                countOfPointsForTheLeftFighter[idRound][i] -= 3;
-            }
+        }
+        for (int i = 0; i < 3; i++) {
+            countOfPointsForTheLeftFighter[idRound][i] -= points[i][0];
+            countOfPointsForTheRightFighter[idRound][i] -= points[i][1];
         }
         if (statusFighting == StatusFighting.disqualification && countOfMinusToLeft <= 2 && countOfMinusToRight <= 2) {
             rollBackDisqualification();
@@ -447,7 +451,17 @@ public class Fighting {
 
 
         ++countOfExToLeft;
-        stackOfEx.add(Player.left);
+        int[][] points = new int[3][2];
+        if (2 <= countOfExToLeft) {
+            for (int i = 0; i < 3; i++) {
+                points[i][0] = -Math.min(3, countOfPointsForTheLeftFighter[currentRound][i]);
+                points[i][1] = 3 + points[i][0];
+                countOfPointsForTheLeftFighter[currentRound][i] += points[i][0];
+                countOfPointsForTheRightFighter[currentRound][i] += points[i][1];
+            }
+        }
+        stackOfEx.add(new Pair<>(points, new Pair<>(Player.left, currentRound)));
+
         if (4 <= countOfExToLeft) {
             disqualify(Player.left);
         }
@@ -463,7 +477,17 @@ public class Fighting {
         }
 
         ++countOfExToRight;
-        stackOfEx.add(Player.right);
+        int[][] points = new int[3][2];
+        if (2 <= countOfExToRight) {
+            for (int i = 0; i < 3; i++) {
+                points[i][1] = -Math.min(3, countOfPointsForTheRightFighter[currentRound][i]);
+                points[i][0] = 3 + points[i][1];
+                countOfPointsForTheLeftFighter[currentRound][i] += points[i][0];
+                countOfPointsForTheRightFighter[currentRound][i] += points[i][1];
+            }
+        }
+        stackOfEx.add(new Pair<>(points, new Pair<>(Player.right, currentRound)));
+
         if (4 <= countOfExToRight) {
             disqualify(Player.right);
         }
@@ -476,11 +500,20 @@ public class Fighting {
         if (stackOfEx.isEmpty())
             return;
 
-        Player player = stackOfEx.pop();
-        if (player == Player.left)
+        int[][] points = stackOfEx.peek().getKey();
+        Player player = stackOfEx.peek().getValue().getKey();
+        int idRound = stackOfEx.peek().getValue().getValue();
+        stackOfEx.pop();
+        if (player == Player.left) {
             --countOfExToLeft;
-        else
+        } else {
             --countOfExToRight;
+        }
+        for (int i = 0; i < 3; i++) {
+            countOfPointsForTheLeftFighter[idRound][i] -= points[i][0];
+            countOfPointsForTheRightFighter[idRound][i] -= points[i][1];
+        }
+
         if (statusFighting == StatusFighting.disqualification && countOfExToLeft <= 3 && countOfExToRight <= 3) {
             rollBackDisqualification();
         }

@@ -260,8 +260,7 @@ void RenderAreaWidget::onSaveInExcel()
     QString directoryPath = QFileDialog::getExistingDirectory(this, tr("Выберите папку"), NULL, QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
     if (directoryPath.isNull()) return;
     //qDebug() << dir;
-    int foo = 12;
-    printTableGridInExcel(tournamentCategories, false, directoryPath, false, false, foo);
+    printTableGridInExcel(tournamentCategories, false, directoryPath, QVector<int>(), "", "");
 }
 
 void RenderAreaWidget::clearSelection()
@@ -281,7 +280,7 @@ QPoint RenderAreaWidget::getCell(int v, int countColumns)
 }
 
 void RenderAreaWidget::printTableGridInExcel(int tournamentCategory,
-        bool likePointFighing, QString directoryPath, bool isFirst, bool isLast, int fightingNumber, QString text, QString prefFileName)
+        bool likePointFighing, QString directoryPath, QVector<int> fightNumber, QString text, QString prefFileName)
 {
     QVector<DBUtils::NodeOfTournirGrid> nodes = DBUtils::getNodes(tournamentCategory);
     if (nodes.empty()) return;
@@ -361,19 +360,7 @@ void RenderAreaWidget::printTableGridInExcel(int tournamentCategory,
         for (int i = 0; i < nodes.size(); ++i)
         {
             QPoint p = getCell(nodes[i].v, countColumns);
-
-            int curNumb = fightingNumber;
-            if (i == 0 && !isFirst)
-            {
-                --curNumb;
-//                qDebug() << "sdsdd:: --curNumb" << fightingNumber << curNumb;
-            }
-            if (i + 1 == nodes.size() && !isLast)
-                ++curNumb;
-
-            ExcelUtils::setValue(sheet, p.x() + 1 + offset, p.y(), QString::number(curNumb) + " / " + text);
-            //
-            ++fightingNumber;
+            ExcelUtils::setValue(sheet, p.x() + 1 + offset, p.y(), QString::number(fightNumber[nodes[i].v]) + " / " + text);
         }
     }
 

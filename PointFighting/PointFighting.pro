@@ -19,17 +19,23 @@ SOURCES += main.cpp\
     qrightclickbutton.cpp \
     formscore.cpp \
     form_advertisement.cpp \
-    form_advertisement_setting.cpp
+    form_advertisement_setting.cpp \
+    dialogdisq.cpp \
+    logindialog.cpp
 
 HEADERS  += mainwindow.h \
     fighting_table.h \
     qrightclickbutton.h \
     formscore.h \
     forma_dvertisement.h \
-    form_advertisement_setting.h
+    form_advertisement_setting.h \
+    dialogdisq.h \
+    logindialog.h
 
 FORMS    += mainwindow.ui \
     fighting_table.ui \
     form.ui \
     form_advertisement.ui \
-    form_advertisement_setting.ui
+    form_advertisement_setting.ui \
+    dialogdisq.ui \
+    logindialog.ui

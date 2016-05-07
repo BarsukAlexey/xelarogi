@@ -43,6 +43,7 @@ private:
     Ui::MainWindow *ui;
     const QString nameSaveFile = "save.json";
     QVector<QVector<QImage>> flags;
+    QVector<int> extraRound;
     QTimer *advTimer;
 
 

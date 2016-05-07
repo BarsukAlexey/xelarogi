@@ -45,7 +45,7 @@ CountryIconsDialog::CountryIconsDialog(QWidget *parent) :
         mPixmap = QPixmap();
     });
 
-    connect(ui->countryCB, &QComboBox::currentTextChanged, [this] (const QString& text)
+    connect(ui->countryCB, &QComboBox::currentTextChanged, [this] (const QString& )
     {
         long long uid = ui->countryCB->currentData(Qt::UserRole).toLongLong();
         QSqlQuery query;
@@ -114,7 +114,7 @@ void CountryIconsDialog::fillCountries()
     }
 }
 
-void CountryIconsDialog::on_labelLink_linkActivated(const QString &link)
+void CountryIconsDialog::on_labelLink_linkActivated(const QString &)
 {
     QDesktopServices::openUrl(QUrl("https://en.wikipedia.org/wiki/Gallery_of_sovereign_state_flags"));
 }

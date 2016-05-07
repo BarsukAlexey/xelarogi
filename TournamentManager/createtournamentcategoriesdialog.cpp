@@ -29,6 +29,13 @@ CreateTournamentCategoriesDialog::CreateTournamentCategoriesDialog(long long tou
     fillAgeCategory();
     fillTypeComboBox();
 
+
+    void (QComboBox:: *indexChangedSignal)(int) = &QComboBox::currentIndexChanged;
+    connect(ui->comboBoxTie, indexChangedSignal, [this](const int x){
+        ui->spinBoxExtraRound->setEnabled(x == 2);
+    });
+    fillTie();
+
     connect(ui->addBtn, &QPushButton::clicked, this, &CreateTournamentCategoriesDialog::onAddBtn);
     connect(ui->applyBtn, &QPushButton::clicked, [this] ()
     {
@@ -116,6 +123,8 @@ void CreateTournamentCategoriesDialog::updateDataWidget(long long categoryUID)
         long long sexUID = query.value("SEX_FK").toLongLong();
         long long typeUID = query.value("TYPE_FK").toLongLong();
         long long ageCategoryUID = query.value("AGE_CATEGORY_FK").toLongLong();
+        long long IN_CASE_TIE = query.value("IN_CASE_TIE").toLongLong();
+        long long DURATION_EXTRA_ROUND = query.value("DURATION_EXTRA_ROUND").toLongLong();
 
         ui->nameLE->setText(name);
         ui->ageFromSB->setValue(ageFrom);
@@ -125,6 +134,8 @@ void CreateTournamentCategoriesDialog::updateDataWidget(long long categoryUID)
         ui->durationBreakSB->setValue(durationBreak);
         ui->durationFightingSB->setValue(durationFighting);
         ui->roundCountSB->setValue(roundCount);
+        ui->comboBoxTie->setCurrentIndex(IN_CASE_TIE);
+        ui->spinBoxExtraRound->setValue(DURATION_EXTRA_ROUND);
 
         selectSexByUID(sexUID);
         selectTypeByUID(typeUID);
@@ -198,6 +209,13 @@ void CreateTournamentCategoriesDialog::fillTypeComboBox()
     {
         qDebug() << typeQuery.lastError().text();
     }
+}
+
+void CreateTournamentCategoriesDialog::fillTie()
+{
+    ui->comboBoxTie->addItem("Клик мышкой");
+    ui->comboBoxTie->addItem("Европейская система");
+    ui->comboBoxTie->addItem("Дополнительный раунд");
 }
 
 void CreateTournamentCategoriesDialog::selectSexByUID(long long sexUID)
@@ -320,6 +338,10 @@ void CreateTournamentCategoriesDialog::onChangeBtn(long long categoryUID)
     long long sexUID = ui->sexCB->currentData(Qt::UserRole).toLongLong();
     long long typeUID = ui->typeCB->currentData(Qt::UserRole).toLongLong();
     long long ageCatUID = ui->comboBoxAgeCategory->currentData(Qt::UserRole).toLongLong();
+    int IN_CASE_TIE = ui->comboBoxTie->currentIndex();
+    int DURATION_EXTRA_ROUND = ui->spinBoxExtraRound->value();
+    if (IN_CASE_TIE != 2)
+        DURATION_EXTRA_ROUND = 0;
 
     QSqlQuery updateQuery;
     if (!updateQuery.prepare("UPDATE TOURNAMENT_CATEGORIES"
@@ -329,7 +351,8 @@ void CreateTournamentCategoriesDialog::onChangeBtn(long long categoryUID)
                              " WEIGHT_FROM = ?, WEIGHT_TILL = ?,"
                              " TOURNAMENT_FK = ?, SEX_FK = ?,"
                              " TYPE_FK = ?, "
-                             " DURATION_FIGHING = ?, DURATION_BREAK = ?, ROUND_COUNT = ? "
+                             " DURATION_FIGHING = ?, DURATION_BREAK = ?, ROUND_COUNT = ?, "
+                             " IN_CASE_TIE = ?, DURATION_EXTRA_ROUND = ? "
                              " WHERE UID = ?"))
         qDebug() << updateQuery.lastError().text();
     updateQuery.addBindValue(name);
@@ -347,6 +370,9 @@ void CreateTournamentCategoriesDialog::onChangeBtn(long long categoryUID)
     updateQuery.addBindValue(durationFighting);
     updateQuery.addBindValue(durationBreak);
     updateQuery.addBindValue(roundCount);
+
+    updateQuery.addBindValue(IN_CASE_TIE);
+    updateQuery.addBindValue(DURATION_EXTRA_ROUND);
 
     updateQuery.addBindValue(categoryUID);
     if (updateQuery.exec())

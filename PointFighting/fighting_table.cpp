@@ -2,6 +2,7 @@
 #include <QMessageBox>
 #include "ui_fighting_table.h"
 #include "ui_form.h"
+#include "dialogdisq.h"
 #include "formscore.h"
 #include <QtGui>
 #include <QApplication>
@@ -12,19 +13,24 @@
 
 using namespace std::chrono;
 
-FightingTable::FightingTable(QWidget *parent, QString nameLeft, QString regionLeft, QString nameRight, QString regionRight, int durationOfRound, int durationOfBreak, int countOfRounds, QImage leftFlag, QImage rightFlag, bool dialogForJudge, bool showAdvertisement) :
+FightingTable::FightingTable(QWidget *parent, QString nameLeft, QString regionLeft, QString nameRight, QString regionRight, int durationOfRound, int durationOfBreak, int countOfRounds, QImage leftFlag, QImage rightFlag, bool dialogForJudge, bool showAdvertisement, int timeExtraRound) :
     QDialog(parent),
     ui(new Ui::FightingTable),
     nameLeft(nameLeft),
     nameRight(nameRight),
 
+    durationOfDoctorOnRing(2 * 60 * 1000),
     durationOfRound(1000 * durationOfRound),
     durationOfBreak(1000 * durationOfBreak),
     countOfRounds(countOfRounds),
+    durationExtraRound(1000 * timeExtraRound),
 
-//    durationOfRound(1000 * 10),
+//    durationOfDoctorOnRing(5 * 1000),
+//    durationOfRound(1000 * 2),
 //    durationOfBreak(1000 * 15),
-//    countOfRounds(3),
+//    countOfRounds(1),
+//    durationExtraRound(0 * 1000),
+
 
     dialogForJudge(dialogForJudge),
     showAdvertisement(showAdvertisement)
@@ -50,7 +56,7 @@ FightingTable::FightingTable(QWidget *parent, QString nameLeft, QString regionLe
         QRect screenres = QApplication::desktop()->screenGeometry(i);
         if (screenres == QApplication::desktop()->screenGeometry(-1))
             continue;
-        FightingTable *tableForSpectators = new FightingTable(this, nameLeft, regionLeft, nameRight, regionRight, durationOfRound, durationOfBreak, countOfRounds, leftFlag, rightFlag, false, showAdvertisement);
+        FightingTable *tableForSpectators = new FightingTable(this, nameLeft, regionLeft, nameRight, regionRight, durationOfRound, durationOfBreak, countOfRounds, leftFlag, rightFlag, false, showAdvertisement, durationExtraRound);
         tableForSpectators->move(QPoint(screenres.x(), screenres.y()));
         tableForSpectators->resize(screenres.width(), screenres.height());
         tableForSpectators->showFullScreen();
@@ -74,6 +80,10 @@ FightingTable::FightingTable(QWidget *parent, QString nameLeft, QString regionLe
     pushButtonDoctor->setText("Call a doctor");
     ui->widgetFooterHorizontalLayout->insertWidget(1, pushButtonDoctor);
 
+    pushButtonStop = new QPushButton();
+    pushButtonStop->setText("Stop round");
+    ui->widgetFooterHorizontalLayout->insertWidget(2, pushButtonStop);
+
     currentRound = 1;
     countPointLeft = 0;
     countPointRight = 0;
@@ -92,27 +102,30 @@ FightingTable::FightingTable(QWidget *parent, QString nameLeft, QString regionLe
     timer->start(poolTime);
     connect(timer, &QTimer::timeout, this, &FightingTable::update);
 
-
-
-
-    countOfLeftMinus = 0;
-    //connect(left[0]->ui->pushButtonPoint, &QPushButton::clicked, [this]{
-        //ui->labelMinus->setPixmap(drawCubes(++countOfLeftMinus));
-//        FormScore* form = dynamic_cast<FormScore*>(ui->horizontalLayoutMain->itemAt(0)->widget());
-//        qDebug() << form->styleSheet();
-//        if (rand() % 2)
-//            form->setStyleSheet(form->styleSheet() + ";\nText-align:left");
-//        else
-//            form->setStyleSheet(form->styleSheet() + ";\nText-align:right");
-//    });
-
     connect(pushButtonStart, &QPushButton::clicked, this, &FightingTable::on_pushButtonStart_clicked);
     connect(pushButtonDoctor, &QPushButton::clicked, this, &FightingTable::on_pushButtonDoctor_clicked);
+    connect(pushButtonStop, &QPushButton::clicked, [this](){
+        Status statusBefor = status;
+        status = Status::stopedByJudge;
+        DialogDisq dlg;
+        if (dlg.exec() == QDialog::Accepted)
+        {
+            if (dlg.getWinner() == Player::LeftPlayer)
+                status = Status::forceLeftWinner;
+            else
+                status = Status::forceRightWinner;
+            forceResult = dlg.getResult();
+        }
+        else
+        {
+            status = statusBefor;
+        }
+    });
 
     connect(left [0]->ui->pushButtonPoint, &QRightClickButton::clicked, this, &FightingTable::on_pushButtonPointLeft_clicked );
     connect(right[0]->ui->pushButtonPoint, &QRightClickButton::clicked, this, &FightingTable::on_pushButtonPointRight_clicked);
-    connect(left [0]->ui->pushButtonPoint, &QRightClickButton::rightClicked, [this](){if (3 * countOfRightMinus < countPointLeft ) --countPointLeft;});
-    connect(right[0]->ui->pushButtonPoint, &QRightClickButton::rightClicked, [this](){if (3 * countOfLeftMinus  < countPointRight) --countPointRight;});
+    connect(left [0]->ui->pushButtonPoint, &QRightClickButton::rightClicked, this, &FightingTable::on_pushButtonAbortPointLeft_clicked);
+    connect(right[0]->ui->pushButtonPoint, &QRightClickButton::rightClicked, this, &FightingTable::on_pushButtonAbortPointRight_clicked);
 
     connect(left [0]->ui->pushButtonMinus, &QRightClickButton::clicked, this, &FightingTable::on_pushButtonAddMinusLeft_clicked);
     connect(right[0]->ui->pushButtonMinus, &QRightClickButton::clicked, this, &FightingTable::on_pushButtonAddMinusRight_clicked);
@@ -129,11 +142,12 @@ FightingTable::FightingTable(QWidget *parent, QString nameLeft, QString regionLe
     connect(left [0]->ui->pushButtonEx, &QRightClickButton::rightClicked, this, &FightingTable::on_pushButtonAbortExLeft_clicked);
     connect(right[0]->ui->pushButtonEx, &QRightClickButton::rightClicked, this, &FightingTable::on_pushButtonAbortExRight_clicked);
 
+    showMaximized();
+
 
 //    countPointLeft =  1 + rand()%1000;
 //    countPointRight = 1 + rand()%1000;
 //    status = Status::Finish;
-    showMaximized();
 }
 
 FightingTable::~FightingTable()
@@ -156,10 +170,14 @@ QString FightingTable::getTimeMMSS(long long time)
 
 void FightingTable::update()
 {
+    //return;
+    qDebug() << status << Status::ExtraRound << Status::DoctorOnRing;
+
+
     long long curTime = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
     long long quantum = curTime - prevTime;
     prevTime = curTime;
-    //qDebug() << "quantum:" << quantum << status;
+//    qDebug() << "quantum:" << quantum << status;
 
     if (status == Status::NotStart)
     {
@@ -173,7 +191,12 @@ void FightingTable::update()
             if (currentRound == countOfRounds)
             {
                 if (countPointLeft == countPointRight)
-                    status = Status::Tie;
+                {
+                    if (durationExtraRound == 0)
+                        status = Status::Tie;
+                    else
+                        status = Status::PendingExtraRound;
+                }
                 else
                     status = Status::Finish;
             }
@@ -186,6 +209,7 @@ void FightingTable::update()
                         if (f != this)
                             f->hide();
             }
+            gong->play();
             update();
         }
         else
@@ -229,6 +253,35 @@ void FightingTable::update()
         for (FightingTable *f : allTables)
             f->ui->labelLeftHead->setText(QString("Round %1/%2 - Fight! - PAUSE").arg(currentRound).arg(countOfRounds));
     }
+    else if (status == Status::PauseExtraRound)
+    {
+        for (FightingTable *f : allTables)
+            f->ui->labelLeftHead->setText("Extra round - Fight! - PAUSE");
+    }
+    else if (status == Status::PendingExtraRound)
+    {
+        pushButtonStart->setText("Start extra round!");
+        for (FightingTable *f : allTables)
+        {
+            f->ui->labelLeftHead->setText("Extra round - Not start");
+            f->ui->labelTime->setText(getTimeMMSS(durationExtraRound));
+        }
+        spentTime = 0;
+    }
+    else if (status == Status::ExtraRound)
+    {
+        spentTime += quantum;
+        for (FightingTable *f : allTables)
+        {
+            f->ui->labelLeftHead->setText("Extra round - Fight!");
+            f->ui->labelTime->setText(getTimeMMSS(qMax(durationExtraRound - spentTime, 0LL)));
+        }
+        if (durationExtraRound < spentTime && countPointLeft != countPointRight)
+        {
+            status = Status::Finish;
+            gong->play();
+        }
+    }
     else if (status == Status::DoctorOnRing)
     {
         spentTimeDoctor += quantum;
@@ -257,34 +310,20 @@ void FightingTable::update()
                 f->ui->labelLeftHead->setText("Tie...");
                 f->ui->labelTime->setText("00:00");
             }
-            for (FormScore *f : left ) f->setWinner(true);
-            for (FormScore *f : right) f->setWinner(true);
         }
     }
     else if (status == Status::Finish)
     {
-        for (FightingTable *f : allTables)
-        {
-            f->ui->labelLeftHead->setText("");
-
-            QPalette palette = f->ui->labelTime->palette();
-            palette.setColor(f->ui->labelTime->backgroundRole(), QColor(255, 255, 0));
-            palette.setColor(f->ui->labelTime->foregroundRole(), QColor(255, 255, 0));
-            f->ui->labelTime->setPalette(palette);
-            f->ui->labelTime->setText(QString("Winner is ") + (countPointLeft > countPointRight? nameLeft : nameRight));
-        }
-        if (countPointLeft > countPointRight)
-        {
-            for (FormScore *f : left ) f->setWinner(true);
-            for (FormScore *f : right) f->setWinner(false);
-        }
-        else if (countPointLeft < countPointRight)
-        {
-            for (FormScore *f : left ) f->setWinner(false);
-            for (FormScore *f : right) f->setWinner(true);
-        }
-        else
+        if (countPointLeft == countPointRight)
             status = Status::Tie;
+        else
+        {
+            for (FightingTable *f : allTables)
+            {
+                f->ui->labelLeftHead->setText("");
+                f->ui->labelTime->setText(QString("Winner is ") + (countPointLeft > countPointRight? nameLeft : nameRight));
+            }
+        }
     }
     else if (status == Status::DisqualificationLeft)
     {
@@ -293,8 +332,6 @@ void FightingTable::update()
             f->ui->labelLeftHead->setText("");
             f->ui->labelTime->setText("Disqualification");
         }
-        for (FormScore *f : left ) f->setWinner(false);
-        for (FormScore *f : right) f->setWinner(true);
     }
     else if (status == Status::DisqualificationRight)
     {
@@ -303,19 +340,25 @@ void FightingTable::update()
             f->ui->labelLeftHead->setText("");
             f->ui->labelTime->setText("Disqualification");
         }
-        for (FormScore *f : left ) f->setWinner(true);
-        for (FormScore *f : right) f->setWinner(false);
     }
+    else if (status == winnerByPointsLeft)
+    {
+    }
+    else if (status == winnerByPointsRight)
+    {
+    }
+
 
     for (FightingTable *f : allTables)
         f->ui->labelRightHead->setText(ui->labelLeftHead->text());
 
-
-    for (FormScore *f : left ) {
+    for (FormScore *f : left )
+    {
         f->ui->pushButtonPoint->setText(QString::number(countPointLeft ));
         f->setCountMinus(countOfLeftMinus);
         f->setCountFo(countOfLeftFo);
         f->setCountEx(countOfLeftEx);
+        f->setWinner(getWinner() != Player::RightPlayer);  // true if non or left
     }
     for (FormScore *f : right)
     {
@@ -323,6 +366,7 @@ void FightingTable::update()
         f->setCountMinus(countOfRightMinus);
         f->setCountFo(countOfRightFo);
         f->setCountEx(countOfRightEx);
+        f->setWinner(getWinner() != Player::LeftPlayer); // true if non or right
     }
 }
 
@@ -349,42 +393,97 @@ void FightingTable::on_pushButtonStart_clicked()
     else if (status == Status::Pause)
     {
         status = Status::Fighting;
-
         pushButtonStart->setText("Pause");
         update();
+    }
+    else if (status == Status::PendingExtraRound)
+    {
+        status = Status::ExtraRound;
+        pushButtonStart->setText("Pause");
+        gong->play();
+    }
+    else if (status == Status::ExtraRound)
+    {
+        status = Status::PauseExtraRound;
+        pushButtonStart->setText("Continuse");
+    }
+    else if (status == Status::PauseExtraRound)
+    {
+        status = Status::ExtraRound;
+        pushButtonStart->setText("Pause");
     }
 }
 
 void FightingTable::on_pushButtonPointLeft_clicked()
 {
-    if (status != Status::NotStart)
+    if (getWinner() != Player::NoPlayer) return;
+
+    ++countPointLeft;
+    if (countPointRight + 10 <= countPointLeft)
     {
-        ++countPointLeft;
+        statusBeforDisqualification = status;
+        status = Status::winnerByPointsLeft;
     }
 }
 
 void FightingTable::on_pushButtonPointRight_clicked()
 {
-    if (status != Status::NotStart)
+    if (getWinner() != Player::NoPlayer) return;
+
+    ++countPointRight;
+    if (countPointLeft + 10 <= countPointRight)
     {
-        ++countPointRight;
+        statusBeforDisqualification = status;
+        status = Status::winnerByPointsRight;
+    }
+}
+
+void FightingTable::on_pushButtonAbortPointLeft_clicked()
+{
+    int sub = 0;
+    for (std::pair<int, int> p : stackMinusLeft ) sub += p.first;
+    for (std::pair<int, int> p : stackMinusRight) sub += p.first;
+    for (std::pair<int, int> p : stackLeftEx    ) sub += p.first;
+    for (std::pair<int, int> p : stackRightEx   ) sub += p.first;
+
+    if (0 <= countPointLeft - sub - 1)
+    {
+        --countPointLeft;
+        if (status == Status::winnerByPointsLeft)
+            status = statusBeforDisqualification;
+    }
+}
+
+void FightingTable::on_pushButtonAbortPointRight_clicked()
+{
+
+    int sub = 0;
+    for (std::pair<int, int> p : stackMinusLeft ) sub += p.second;
+    for (std::pair<int, int> p : stackMinusRight) sub += p.second;
+    for (std::pair<int, int> p : stackLeftEx    ) sub += p.second;
+    for (std::pair<int, int> p : stackRightEx   ) sub += p.second;
+    if (0 <= countPointRight - sub - 1)
+    {
+        --countPointRight;
+        if (status == Status::winnerByPointsRight)
+            status = statusBeforDisqualification;
     }
 }
 
 void FightingTable::on_pushButtonAddMinusLeft_clicked()
 {
-    if (status == Status::NotStart || status == Status::DisqualificationLeft || status == Status::DisqualificationRight)
-        return;
+    if (getWinner() != Player::NoPlayer) return;
+
     ++countOfLeftMinus;
     if (1 <= countPointLeft)
     {
         --countPointLeft;
-        stackMinusLeft << true;
+        stackMinusLeft << std::make_pair(-1, 0);
     }
     else
     {
         ++countPointRight;
-        stackMinusLeft << false;
+        stackMinusLeft << std::make_pair(0, 1);
     }
     if (countOfLeftMinus == 3)
     {
@@ -395,18 +494,18 @@ void FightingTable::on_pushButtonAddMinusLeft_clicked()
 
 void FightingTable::on_pushButtonAddMinusRight_clicked()
 {
-    if (status == Status::NotStart || status == Status::DisqualificationLeft || status == Status::DisqualificationRight)
-        return;
+    if (getWinner() != Player::NoPlayer) return;
+
     ++countOfRightMinus;
     if (1 <= countPointRight)
     {
         --countPointRight;
-        stackMinusRight << true;
+        stackMinusRight << std::make_pair(0, -1);
     }
     else
     {
         ++countPointLeft;
-        stackMinusRight << false;
+        stackMinusRight << std::make_pair(1, 0);
     }
     if (countOfRightMinus == 3)
     {
@@ -417,55 +516,48 @@ void FightingTable::on_pushButtonAddMinusRight_clicked()
 
 void FightingTable::on_pushButtonAbortMinusLeft_clicked()
 {
-    //if (countOfLeftMinus == 0 || countOfLeftMinus == countOfLeftEx - 1)
     if (stackMinusLeft.empty())
         return;
     --countOfLeftMinus;
-    if (stackMinusLeft.pop())
-        ++countPointLeft;
-    else
-        --countPointRight;
-    if ((status == Status::DisqualificationLeft || status == Status::DisqualificationRight) && countOfLeftMinus <= 3 && countOfRightMinus <= 3)
+    std::pair<int, int> pop = stackMinusLeft.pop();
+    countPointLeft  -= pop.first;
+    countPointRight -= pop.second;
+    if (status == Status::DisqualificationLeft && countOfLeftMinus <= 2)
     {
         status = statusBeforDisqualification;
-        for (FormScore *f : left ) f->setWinner(true);
-        for (FormScore *f : right) f->setWinner(true);
     }
 }
 
 void FightingTable::on_pushButtonAbortMinusRight_clicked()
 {
-    if (countOfRightMinus == 0 || countOfRightMinus == countOfRightEx - 1)
+    if (stackMinusRight.empty())
         return;
     --countOfRightMinus;
-    if (stackMinusRight.pop())
-        ++countPointRight;
-    else
-        --countPointLeft;
-    if ((status == Status::DisqualificationLeft || status == Status::DisqualificationRight) && countOfLeftMinus <= 3 && countOfRightMinus <= 3)
+    std::pair<int, int> pop = stackMinusRight.pop();
+    countPointLeft  -= pop.first;
+    countPointRight -= pop.second;
+    if (status == Status::DisqualificationRight && countOfRightMinus <= 2)
     {
         status = statusBeforDisqualification;
-        for (FormScore *f : left ) f->setWinner(true);
-        for (FormScore *f : right) f->setWinner(true);
     }
 }
 
 void FightingTable::on_pushButtonAddExLeft_clicked()
 {
-    if (status == Status::NotStart || status == Status::DisqualificationLeft || status == Status::DisqualificationRight)
-        return;
+    if (getWinner() != Player::NoPlayer) return;
+
     ++countOfLeftEx;
     if (2 <= countOfLeftEx)
     {
         if (1 <= countPointLeft)
         {
             --countPointLeft;
-            stackLeftEx << true;
+            stackLeftEx << std::make_pair(-1, 0);
         }
         else
         {
             ++countPointRight;
-            stackLeftEx << false;
+            stackLeftEx <<  std::make_pair(0, 1);
         }
     }
     if (countOfLeftEx == 4)
@@ -477,26 +569,26 @@ void FightingTable::on_pushButtonAddExLeft_clicked()
 
 void FightingTable::on_pushButtonAddExRight_clicked()
 {
-    if (status == Status::NotStart || status == Status::DisqualificationLeft || status == Status::DisqualificationRight)
-        return;
+    if (getWinner() != Player::NoPlayer) return;
+
     ++countOfRightEx;
     if (2 <= countOfRightEx)
     {
         if (1 <= countPointRight)
         {
             --countPointRight;
-            stackRightEx << true;
+            stackRightEx <<  std::make_pair(0, -1);
         }
         else
         {
             ++countPointLeft;
-            stackRightEx << false;
+            stackRightEx <<  std::make_pair(1, 0);
         }
     }
     if (countOfRightEx == 4)
     {
         statusBeforDisqualification = status;
-        status = Status::DisqualificationLeft;
+        status = Status::DisqualificationRight;
     }
 }
 
@@ -507,16 +599,13 @@ void FightingTable::on_pushButtonAbortExLeft_clicked()
     --countOfLeftEx;
     if (1 <= countOfLeftEx)
     {
-        if (stackLeftEx.pop())
-            ++countPointLeft;
-        else
-            --countPointRight;
+        std::pair<int, int> pop = stackLeftEx.pop();
+        countPointLeft  -= pop.first;
+        countPointRight -= pop.second;
     }
-    if ((status == Status::DisqualificationLeft || status == Status::DisqualificationRight) && countOfLeftEx <= 3 && countOfRightEx <= 3)
+    if (status == Status::DisqualificationLeft && countOfRightEx <= 3)
     {
         status = statusBeforDisqualification;
-        for (FormScore *f : left ) f->setWinner(true);
-        for (FormScore *f : right) f->setWinner(true);
     }
 }
 
@@ -527,16 +616,13 @@ void FightingTable::on_pushButtonAbortExRight_clicked()
     --countOfRightEx;
     if (1 <= countOfRightEx)
     {
-        if (stackRightEx.pop())
-            ++countPointRight;
-        else
-            --countPointLeft;
+        std::pair<int, int> pop = stackRightEx.pop();
+        countPointLeft  -= pop.first;
+        countPointRight -= pop.second;
     }
-    if ((status == Status::DisqualificationLeft || status == Status::DisqualificationRight) && countOfLeftEx <= 3 && countOfRightEx <= 3)
+    if (status == Status::DisqualificationRight && countOfRightEx <= 3)
     {
         status = statusBeforDisqualification;
-        for (FormScore *f : left ) f->setWinner(true);
-        for (FormScore *f : right) f->setWinner(true);
     }
 }
 
@@ -545,19 +631,17 @@ void FightingTable::on_pushButtonDoctor_clicked()
 {
     if (status == Status::DoctorOnRing)
     {        
-        status = Status::Fighting;
-        update();
+        status = statusBeforDisqualification;
         for (FightingTable *f : allTables)
             f->ui->labelDoctorTimer->setText("");
         pushButtonDoctor->setText("Call a doctor");
     }
-    else if (status == Status::Fighting)
+    else if (status == Status::Fighting || status == Status::ExtraRound)
     {
+        statusBeforDisqualification = status;
         status = Status::DoctorOnRing;
         spentTimeDoctor = 0;
         pushButtonDoctor->setText("Stop a doctor");
-        update();
-        qDebug() << "Doc on the ring";
     }
 }
 
@@ -565,12 +649,15 @@ QString FightingTable::getResult()
 {
     if (status == Status::DisqualificationLeft || status == Status::DisqualificationRight)
         return "DISQ";
+    if (status == Status::forceLeftWinner || status == Status::forceRightWinner)
+        return forceResult;
+
     return QString::number(countPointLeft) + " : " + QString::number(countPointRight);
 }
 
 FightingTable::Player FightingTable::getWinner()
 {
-    if (status == Status::DisqualificationRight || status == Status::Finish && countPointLeft > countPointRight) return Player::LeftPlayer;
-    if (status == Status::DisqualificationLeft  || status == Status::Finish && countPointLeft < countPointRight) return Player::RightPlayer;
+    if (status == Status::forceLeftWinner  || status == Status::winnerByPointsLeft  || status == Status::DisqualificationRight || status == Status::Finish && countPointLeft > countPointRight) return Player::LeftPlayer;
+    if (status == Status::forceRightWinner || status == Status::winnerByPointsRight || status == Status::DisqualificationLeft  || status == Status::Finish && countPointLeft < countPointRight) return Player::RightPlayer;
     return Player::NoPlayer;
 }

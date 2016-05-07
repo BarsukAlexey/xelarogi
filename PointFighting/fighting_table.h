@@ -33,7 +33,10 @@ class FightingTable : public QDialog
 public:
     enum Status
     {
-        NotStart, Fighting, Break, Pause, DoctorOnRing, Tie, Finish, DisqualificationLeft, DisqualificationRight
+        NotStart, Fighting, Break, Pause, DoctorOnRing, Tie, Finish, DisqualificationLeft, DisqualificationRight,
+        winnerByPointsLeft, winnerByPointsRight,
+        stopedByJudge, forceLeftWinner, forceRightWinner,
+        PendingExtraRound, ExtraRound, PauseExtraRound
     };
 
     enum Player
@@ -47,6 +50,7 @@ private:
     Ui::FightingTable *ui;
     QPushButton *pushButtonStart;
     QPushButton *pushButtonDoctor;
+    QPushButton *pushButtonStop;
 
     const QString nameLeft, nameRight;
     const int poolTime = 200;
@@ -54,12 +58,13 @@ private:
     long long spentTime;
 
     long long spentTimeDoctor;
-    const int durationOfDoctorOnRing = 2 * 60 * 1000;
+    const int durationOfDoctorOnRing;
 
     int currentRound;
     const int durationOfRound;
     const int durationOfBreak;
     const int countOfRounds;
+    const int durationExtraRound;
     const QImage mLeftFlag;
     const QImage mRightFlag;
 public:
@@ -70,14 +75,14 @@ private:
     int countPointRight;
     int countOfLeftMinus;
     int countOfRightMinus;
-    QStack<bool> stackMinusLeft;
-    QStack<bool> stackMinusRight;
+    QStack<std::pair<int, int> > stackMinusLeft;
+    QStack<std::pair<int, int> > stackMinusRight;
     int countOfLeftFo;
     int countOfRightFo;
     int countOfLeftEx;
     int countOfRightEx;
-    QStack<bool> stackLeftEx;
-    QStack<bool> stackRightEx;
+    QStack<std::pair<int, int> > stackLeftEx;
+    QStack<std::pair<int, int> > stackRightEx;
 
     QSound *gong = new QSound("resources\\sounds\\gong.wav");
     QSound *molot = new QSound("resources\\sounds\\stuk_molotka.wav");
@@ -87,8 +92,10 @@ private:
     const bool dialogForJudge;
     const bool showAdvertisement;
 
+    QString forceResult;
+
 public:
-    explicit FightingTable(QWidget *parent, QString nameLeft, QString regionLeft, QString nameRight, QString regionRight, int durationOfRound, int durationOfBreak, int countOfRounds, QImage leftFlag, QImage rightFlag, bool dialogForJudge, bool showAdvertisement);
+    explicit FightingTable(QWidget *parent, QString nameLeft, QString regionLeft, QString nameRight, QString regionRight, int durationOfRound, int durationOfBreak, int countOfRounds, QImage leftFlag, QImage rightFlag, bool dialogForJudge, bool showAdvertisement, int durationExtraRound);
     ~FightingTable();
 
 private:
@@ -102,10 +109,11 @@ private slots:
 
     void on_pushButtonPointLeft_clicked();
     void on_pushButtonPointRight_clicked();
+    void on_pushButtonAbortPointLeft_clicked();
+    void on_pushButtonAbortPointRight_clicked();
 
     void on_pushButtonAddMinusLeft_clicked();
     void on_pushButtonAddMinusRight_clicked();
-
     void on_pushButtonAbortMinusLeft_clicked();
     void on_pushButtonAbortMinusRight_clicked();
 
@@ -124,7 +132,7 @@ protected:
     {
         if (dialogForJudge)
         {
-            if (status == Status::NotStart || status == Status::Finish || status == Status::DisqualificationLeft || status == Status::DisqualificationRight)
+            if (status == Status::NotStart || getWinner() != Player::NoPlayer)
             {
                 event->accept(); // close window
                 for (FightingTable* f : allTables)

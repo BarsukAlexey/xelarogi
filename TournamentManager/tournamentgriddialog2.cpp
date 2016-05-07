@@ -227,8 +227,7 @@ TournamentGridDialog2::TournamentGridDialog2(const QSqlDatabase &_database, long
         while (query.next())
         {
             qlonglong tcUID = query.value("UID").toLongLong();
-            int foo = 12;
-            RenderAreaWidget::printTableGridInExcel(tcUID, false, directoryPath, false, false, foo);
+            RenderAreaWidget::printTableGridInExcel(tcUID, false, directoryPath, QVector<int>(), "", "");
         }
     });
 

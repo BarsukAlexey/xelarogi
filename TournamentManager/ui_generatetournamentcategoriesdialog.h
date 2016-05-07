@@ -16,7 +16,6 @@
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QDialogButtonBox>
-#include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
@@ -31,7 +30,7 @@ QT_BEGIN_NAMESPACE
 class Ui_GenerateTournamentCategoriesDialog
 {
 public:
-    QGridLayout *gridLayout;
+    QVBoxLayout *verticalLayout_6;
     QHBoxLayout *horizontalLayout_5;
     QVBoxLayout *verticalLayout;
     QLabel *label_3;
@@ -46,6 +45,7 @@ public:
     QPushButton *pushButton;
     QComboBox *typeCB;
     QHBoxLayout *horizontalLayout;
+    QSpacerItem *horizontalSpacer_2;
     QLabel *label_4;
     QSpinBox *ageFromSB;
     QLabel *label_5;
@@ -57,14 +57,18 @@ public:
     QLineEdit *weightsLE;
     QLabel *label_8;
     QHBoxLayout *horizontalLayout_3;
-    QVBoxLayout *verticalLayout_5;
+    QVBoxLayout *verticalLayout_4;
     QLabel *label_9;
     QLabel *label_10;
     QLabel *label_11;
-    QVBoxLayout *verticalLayout_6;
+    QLabel *label_13;
+    QLabel *label_12;
+    QVBoxLayout *verticalLayout_5;
     QSpinBox *duratiobFightingSB;
     QSpinBox *durationBreakSB;
     QSpinBox *roundCountSB;
+    QComboBox *comboBoxTie;
+    QSpinBox *spinBoxExtraRound;
     QDialogButtonBox *buttonBox;
 
     void setupUi(QDialog *GenerateTournamentCategoriesDialog)
@@ -72,32 +76,34 @@ public:
         if (GenerateTournamentCategoriesDialog->objectName().isEmpty())
             GenerateTournamentCategoriesDialog->setObjectName(QStringLiteral("GenerateTournamentCategoriesDialog"));
         GenerateTournamentCategoriesDialog->setEnabled(true);
-        GenerateTournamentCategoriesDialog->resize(304, 311);
+        GenerateTournamentCategoriesDialog->resize(437, 511);
         QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(GenerateTournamentCategoriesDialog->sizePolicy().hasHeightForWidth());
         GenerateTournamentCategoriesDialog->setSizePolicy(sizePolicy);
         GenerateTournamentCategoriesDialog->setMinimumSize(QSize(304, 311));
-        GenerateTournamentCategoriesDialog->setMaximumSize(QSize(304, 311));
-        gridLayout = new QGridLayout(GenerateTournamentCategoriesDialog);
-        gridLayout->setObjectName(QStringLiteral("gridLayout"));
+        verticalLayout_6 = new QVBoxLayout(GenerateTournamentCategoriesDialog);
+        verticalLayout_6->setObjectName(QStringLiteral("verticalLayout_6"));
         horizontalLayout_5 = new QHBoxLayout();
         horizontalLayout_5->setObjectName(QStringLiteral("horizontalLayout_5"));
         verticalLayout = new QVBoxLayout();
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
         label_3 = new QLabel(GenerateTournamentCategoriesDialog);
         label_3->setObjectName(QStringLiteral("label_3"));
+        label_3->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
         verticalLayout->addWidget(label_3);
 
         label = new QLabel(GenerateTournamentCategoriesDialog);
         label->setObjectName(QStringLiteral("label"));
+        label->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
         verticalLayout->addWidget(label);
 
         label_2 = new QLabel(GenerateTournamentCategoriesDialog);
         label_2->setObjectName(QStringLiteral("label_2"));
+        label_2->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
         verticalLayout->addWidget(label_2);
 
@@ -149,10 +155,14 @@ public:
         horizontalLayout_5->addLayout(verticalLayout_2);
 
 
-        gridLayout->addLayout(horizontalLayout_5, 0, 0, 1, 1);
+        verticalLayout_6->addLayout(horizontalLayout_5);
 
         horizontalLayout = new QHBoxLayout();
         horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
+        horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout->addItem(horizontalSpacer_2);
+
         label_4 = new QLabel(GenerateTournamentCategoriesDialog);
         label_4->setObjectName(QStringLiteral("label_4"));
 
@@ -187,7 +197,7 @@ public:
         horizontalLayout->addItem(horizontalSpacer);
 
 
-        gridLayout->addLayout(horizontalLayout, 1, 0, 1, 1);
+        verticalLayout_6->addLayout(horizontalLayout);
 
         verticalLayout_3 = new QVBoxLayout();
         verticalLayout_3->setObjectName(QStringLiteral("verticalLayout_3"));
@@ -211,39 +221,54 @@ public:
         verticalLayout_3->addWidget(label_8);
 
 
-        gridLayout->addLayout(verticalLayout_3, 2, 0, 1, 1);
+        verticalLayout_6->addLayout(verticalLayout_3);
 
         horizontalLayout_3 = new QHBoxLayout();
         horizontalLayout_3->setObjectName(QStringLiteral("horizontalLayout_3"));
-        verticalLayout_5 = new QVBoxLayout();
-        verticalLayout_5->setObjectName(QStringLiteral("verticalLayout_5"));
+        verticalLayout_4 = new QVBoxLayout();
+        verticalLayout_4->setObjectName(QStringLiteral("verticalLayout_4"));
         label_9 = new QLabel(GenerateTournamentCategoriesDialog);
         label_9->setObjectName(QStringLiteral("label_9"));
+        label_9->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
-        verticalLayout_5->addWidget(label_9);
+        verticalLayout_4->addWidget(label_9);
 
         label_10 = new QLabel(GenerateTournamentCategoriesDialog);
         label_10->setObjectName(QStringLiteral("label_10"));
+        label_10->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
-        verticalLayout_5->addWidget(label_10);
+        verticalLayout_4->addWidget(label_10);
 
         label_11 = new QLabel(GenerateTournamentCategoriesDialog);
         label_11->setObjectName(QStringLiteral("label_11"));
+        label_11->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
-        verticalLayout_5->addWidget(label_11);
+        verticalLayout_4->addWidget(label_11);
+
+        label_13 = new QLabel(GenerateTournamentCategoriesDialog);
+        label_13->setObjectName(QStringLiteral("label_13"));
+        label_13->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+
+        verticalLayout_4->addWidget(label_13);
+
+        label_12 = new QLabel(GenerateTournamentCategoriesDialog);
+        label_12->setObjectName(QStringLiteral("label_12"));
+        label_12->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+
+        verticalLayout_4->addWidget(label_12);
 
 
-        horizontalLayout_3->addLayout(verticalLayout_5);
+        horizontalLayout_3->addLayout(verticalLayout_4);
 
-        verticalLayout_6 = new QVBoxLayout();
-        verticalLayout_6->setObjectName(QStringLiteral("verticalLayout_6"));
+        verticalLayout_5 = new QVBoxLayout();
+        verticalLayout_5->setObjectName(QStringLiteral("verticalLayout_5"));
         duratiobFightingSB = new QSpinBox(GenerateTournamentCategoriesDialog);
         duratiobFightingSB->setObjectName(QStringLiteral("duratiobFightingSB"));
         duratiobFightingSB->setMinimum(15);
         duratiobFightingSB->setMaximum(9999999);
         duratiobFightingSB->setValue(120);
 
-        verticalLayout_6->addWidget(duratiobFightingSB);
+        verticalLayout_5->addWidget(duratiobFightingSB);
 
         durationBreakSB = new QSpinBox(GenerateTournamentCategoriesDialog);
         durationBreakSB->setObjectName(QStringLiteral("durationBreakSB"));
@@ -251,28 +276,51 @@ public:
         durationBreakSB->setMaximum(9999999);
         durationBreakSB->setValue(60);
 
-        verticalLayout_6->addWidget(durationBreakSB);
+        verticalLayout_5->addWidget(durationBreakSB);
 
         roundCountSB = new QSpinBox(GenerateTournamentCategoriesDialog);
         roundCountSB->setObjectName(QStringLiteral("roundCountSB"));
         roundCountSB->setMinimum(1);
         roundCountSB->setValue(3);
 
-        verticalLayout_6->addWidget(roundCountSB);
+        verticalLayout_5->addWidget(roundCountSB);
+
+        comboBoxTie = new QComboBox(GenerateTournamentCategoriesDialog);
+        comboBoxTie->setObjectName(QStringLiteral("comboBoxTie"));
+
+        verticalLayout_5->addWidget(comboBoxTie);
+
+        spinBoxExtraRound = new QSpinBox(GenerateTournamentCategoriesDialog);
+        spinBoxExtraRound->setObjectName(QStringLiteral("spinBoxExtraRound"));
+        spinBoxExtraRound->setMinimum(5);
+        spinBoxExtraRound->setMaximum(100500);
+
+        verticalLayout_5->addWidget(spinBoxExtraRound);
 
 
-        horizontalLayout_3->addLayout(verticalLayout_6);
+        horizontalLayout_3->addLayout(verticalLayout_5);
 
 
-        gridLayout->addLayout(horizontalLayout_3, 3, 0, 1, 1);
+        verticalLayout_6->addLayout(horizontalLayout_3);
 
         buttonBox = new QDialogButtonBox(GenerateTournamentCategoriesDialog);
         buttonBox->setObjectName(QStringLiteral("buttonBox"));
         buttonBox->setOrientation(Qt::Horizontal);
         buttonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
 
-        gridLayout->addWidget(buttonBox, 4, 0, 1, 1);
+        verticalLayout_6->addWidget(buttonBox);
 
+        buttonBox->raise();
+        label_12->raise();
+        label_13->raise();
+        label_9->raise();
+        label_10->raise();
+        label_11->raise();
+        duratiobFightingSB->raise();
+        roundCountSB->raise();
+        durationBreakSB->raise();
+        comboBoxTie->raise();
+        spinBoxExtraRound->raise();
 
         retranslateUi(GenerateTournamentCategoriesDialog);
         QObject::connect(buttonBox, SIGNAL(accepted()), GenerateTournamentCategoriesDialog, SLOT(accept()));
@@ -298,6 +346,8 @@ public:
         label_9->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\237\321\200\320\276\320\264\320\276\320\273\320\266\320\270\321\202\320\265\320\273\321\214\320\275\320\276\321\201\321\202\321\214 \321\200\320\260\321\203\320\275\320\264\320\260 (\320\262 \321\201\320\265\320\272.)", 0));
         label_10->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\237\321\200\320\276\320\264\320\276\320\273\320\266\320\270\321\202\320\265\320\273\321\214\320\275\320\276\321\201\321\202\321\214 \320\277\320\265\321\200\320\265\321\200\321\213\320\262\320\260 (\320\262 \321\201\320\265\320\272.)", 0));
         label_11->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\232\320\276\320\273\320\270\321\207\320\265\321\201\321\202\320\262\320\276 \321\200\320\260\321\203\320\275\320\264\320\276\320\262", 0));
+        label_13->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\222 \321\201\320\273\321\203\321\207\320\260\320\265 \320\275\320\270\321\207\321\214\320\270", 0));
+        label_12->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\222\321\200\320\265\320\274\321\217 \320\264\320\276\320\277\320\276\320\273\320\275\320\270\321\202\320\265\321\214\320\273\320\275\320\276 \321\200\320\260\321\203\320\275\320\264\320\260 (\320\262 \321\201\320\265\320\272\321\203\320\275\320\264\320\260\321\205)", 0));
     } // retranslateUi
 
 };

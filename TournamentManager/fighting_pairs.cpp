@@ -246,7 +246,7 @@ void FightingPairs::printInJSON(const QVector<DBUtils::Fighing>& fighting, int r
         ++fightingId;
     }
 
-    const QString path = existingDirectory + QDir::separator() + "ring " + QString::number(ring) + ".json";
+    const QString path = existingDirectory + QDir::separator() + "ring " + QString::number(ring) + "(kickboxing).json";
     QFile saveFile(path);
     if (!saveFile.open(QIODevice::WriteOnly)) {
         qWarning("Couldn't open save file.");
@@ -337,18 +337,53 @@ void FightingPairs::makeGridsForPointFighting(QString existingDirectory, QVector
     qDebug() << message       << "  delta: " + QString::number((maxVal - minVal)/60);
     qDebug() << messageThread << "  delta: " + QString::number((myThread->maxSumSeg - myThread->minSumSeg)/60);
 
-    //
+
     int idRing = 1;
     for (QVector<long long> uids : ansTournamentCategoryUIDs)
     {
+        QVector<QVector<int> > fightNumber;  // fightNumber[tree][vertex] = orderFightNumber
+        {
+            QVector<std::pair<int, int> > orderOfFights;
+            for (int i = 0; i < uids.size(); ++i)
+            {
+                QVector<DBUtils::NodeOfTournirGrid> nodes = DBUtils::getNodes(uids[i]);
+                std::reverse(nodes.begin(), nodes.end());
+                fightNumber << QVector<int>(nodes.size() + 1);
+                for (DBUtils::NodeOfTournirGrid node : nodes)
+                    if (node.isFighing)
+                    {
+                        orderOfFights << std::make_pair(i, node.v);
+                        qDebug() << "orderOfFights:" << i << node.v;
+                    }
+            }
+            for (int i = 0; i < orderOfFights.size(); ++i)
+            {
+                std::pair<int, int> v = orderOfFights[i];
+                if (fightNumber[v.first][v.second] == 0)
+                {
+                    fightNumber[v.first][v.second] = i + 1;
+                    if (i + 1 != orderOfFights.size() &&
+                        2 * v.second < fightNumber[v.first].size() &&
+                        fightNumber[v.first][2 * v.second] != 0 &&
+                        fightNumber[v.first][v.second] == fightNumber[v.first][2 * v.second] + 1)
+                    {
+                        fightNumber[v.first][v.second] = i + 2;
+                        std::pair<int, int> nextV = orderOfFights[i + 1];
+                        fightNumber[nextV.first][nextV.second] = i + 1;
+                    }
+                }
+            }
+        }
+
+
         QVector<QJsonObject> jsonObjects;
-        for (int i = 0, fightingNumber = 1; i < uids.size(); ++i)
+        for (int i = 0; i < uids.size(); ++i)
         {
             RenderAreaWidget::printTableGridInExcel(uids[i], true,
-                existingDirectory, i == 0, i + 1 == uids.size(), fightingNumber, stringDate,
+                existingDirectory, fightNumber[i], stringDate,
                 "Татами " +  QString("%1 (%2)").arg(idRing, 2, 10, QChar('0')).arg(i + 1, 2, 10, QChar('0')));
 
-
+            //
             QVector<DBUtils::Fighing> fightingNodes = DBUtils::getListOfPairsForFightingForPointFighting(uids[i]);
             std::reverse(fightingNodes.begin(), fightingNodes.end());
             for (int j = 0; j < fightingNodes.size(); ++j)
@@ -359,10 +394,8 @@ void FightingPairs::makeGridsForPointFighting(QString existingDirectory, QVector
                 a["nameOfLeftFighter" ] = DBUtils::getField("SECOND_NAME", "ORDERS", f.UID0) + " " + DBUtils::getField("FIRST_NAME", "ORDERS", f.UID0);
                 a["nameOfRightFighter"] = DBUtils::getField("SECOND_NAME", "ORDERS", f.UID1) + " " + DBUtils::getField("FIRST_NAME", "ORDERS", f.UID1);
 
-                int curNumb = fightingNumber;
-                if (j     == 0                    && i     != 0          ) --curNumb;
-                if (j + 1 == fightingNodes.size() && i + 1 != uids.size()) ++curNumb;
-                a["fightId"] = curNumb;
+
+                a["fightId"] = fightNumber[i][f.VERTEX];
 
                 a["categoryOfFighting"] = DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK);
 
@@ -384,15 +417,15 @@ void FightingPairs::makeGridsForPointFighting(QString existingDirectory, QVector
                 a["leftFlag" ] = DBUtils::getField("FLAG", "COUNTRIES", DBUtils::getField("COUNTRY_FK", "ORDERS", f.UID0));
                 a["rightFlag"] = DBUtils::getField("FLAG", "COUNTRIES", DBUtils::getField("COUNTRY_FK", "ORDERS", f.UID1));
 
+                a["IN_CASE_TIE"         ] = DBUtils::getField("IN_CASE_TIE"         , "TOURNAMENT_CATEGORIES", uids[i]).toInt();
+                a["DURATION_EXTRA_ROUND"] = DBUtils::getField("DURATION_EXTRA_ROUND", "TOURNAMENT_CATEGORIES", uids[i]).toInt();
+
                 jsonObjects << a;
-                //
-                ++fightingNumber;
-
-                qDebug() << a["nameOfLeftFighter" ] << a["nameOfRightFighter"];
+                qDebug() << a["IN_CASE_TIE"         ] << a["DURATION_EXTRA_ROUND"];
             }
-
-
+            /**/
         }
+
 
         qSort(jsonObjects.begin(), jsonObjects.end(), [](const QJsonObject & x, const QJsonObject & y){
             return x["fightId"].toInt() < y["fightId"].toInt();
@@ -400,7 +433,7 @@ void FightingPairs::makeGridsForPointFighting(QString existingDirectory, QVector
 
         QJsonArray arr;
         for(QJsonObject x : jsonObjects) arr << x;
-        const QString path = existingDirectory + QDir::separator() + "ring " + QString::number(idRing) + ".json";
+        const QString path = existingDirectory + QDir::separator() + "ring " + QString::number(idRing) + "(pointfighting).json";
         QFile saveFile(path);
         if (!saveFile.open(QIODevice::WriteOnly)) {
             qWarning("Couldn't open save file.");
@@ -408,9 +441,11 @@ void FightingPairs::makeGridsForPointFighting(QString existingDirectory, QVector
             return;
         }
         qDebug() << "writing: " << saveFile.write(QJsonDocument(arr).toJson()) << "БайТ in " << path;
+        /**/
 
         ++idRing;
     }
+
 
     QMessageBox::information(0, "Расчётное время по рингам", messageDisplay);
     /**/

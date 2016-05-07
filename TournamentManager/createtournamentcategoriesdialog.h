@@ -36,6 +36,7 @@ private:
     void fillSexComboBox();
     void fillAgeCategory();
     void fillTypeComboBox();
+    void fillTie();
     void selectSexByUID(long long sexUID);
     void selectAgeCategory(long long ageCategoryUID);
     void selectTypeByUID(long long typeUID);
