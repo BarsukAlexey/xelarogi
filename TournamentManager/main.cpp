@@ -43,14 +43,14 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
 
-    QFontDialog * dlg = new QFontDialog;
-    dlg->exec();
-    dlg->selectedFont();
+//    QFontDialog * dlg = new QFontDialog;
+//    dlg->exec();
+//    dlg->selectedFont();
 
 
 
-//    MainWindow w;
-//    w.show();
+    MainWindow w;
+    w.show();
 
     return a.exec();
 }

@@ -8,9 +8,6 @@
 #include <QApplication>
 #include <QDesktopWidget>
 #include <qmessagebox.h>
-
-
-
 using namespace std::chrono;
 
 FightingTable::FightingTable(QWidget *parent, QString nameLeft, QString regionLeft, QString nameRight, QString regionRight, int durationOfRound, int durationOfBreak, int countOfRounds, QImage leftFlag, QImage rightFlag, bool dialogForJudge, bool showAdvertisement, int timeExtraRound) :

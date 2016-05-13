@@ -241,6 +241,9 @@ void FightingPairs::printInJSON(const QVector<DBUtils::Fighing>& fighting, int r
         a["orderUID_left"] = f.UID0;
         a["orderUID_right"] = f.UID1;
 
+        a["IN_CASE_TIE"         ] = DBUtils::getField("IN_CASE_TIE"         , "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK).toInt();
+        a["DURATION_EXTRA_ROUND"] = DBUtils::getField("DURATION_EXTRA_ROUND", "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK).toInt();
+
         arr.push_back(a);
         //
         ++fightingId;
