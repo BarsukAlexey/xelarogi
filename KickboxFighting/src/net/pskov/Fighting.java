@@ -4,9 +4,11 @@ import net.pskov.some_enum.FightStatus;
 import net.pskov.some_enum.Penalty;
 import net.pskov.some_enum.Player;
 
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.Arrays;
 import java.util.Stack;
 
 
@@ -41,26 +43,29 @@ class Fighting {
     private final int[][] countOfPointsForTheLeftFighter;
     private final int[][] countOfPointsForTheRightFighter;
 
-    private volatile long prevMomentTime;
-    private volatile long spendTime;
-    private volatile int currentRound; // номер текущего раунда
+    private long prevMomentTime;
+    private long spendTime;
+    private int currentRound; // номер текущего раунда
 
-    private volatile FightStatus fightStatus;
-    private volatile FightStatus statusFightingBeforeDisqualification;
+    private FightStatus fightStatus;
+    private FightStatus statusFightingBeforeDisqualification;
+    private FightStatus fightStatusBeforDialog;
 
-    private volatile int countOfMinusToLeft;
-    private volatile int countOfMinusToRight;
+    private int countOfMinusToLeft;
+    private int countOfMinusToRight;
 
-    private volatile int countOfForestallingToLeft; // количесво предупреждений, сделаных левому игроку
-    private volatile int countOfForestallingToRight; // количесво предупреждений, сделаных левому игроку
+    private int countOfForestallingToLeft; // количесво предупреждений, сделаных левому игроку
+    private int countOfForestallingToRight; // количесво предупреждений, сделаных левому игроку
 
-    private volatile int countOfExToLeft; // количесво предупреждений, сделаных левому игроку
-    private volatile int countOfExToRight; // количесво предупреждений, сделаных левому игроку
+    private int countOfExToLeft; // количесво предупреждений, сделаных левому игроку
+    private int countOfExToRight; // количесво предупреждений, сделаных левому игроку
 
 
-    final long TOURNAMENT_CATEGORIES_FK;
-    final int VERTEX;
+    private final long TOURNAMENT_CATEGORIES_FK;
+    private final int VERTEX;
     private String forceResult;
+    private boolean wasExtraRound;
+
 
     private static class Item {
         Penalty penalty;
@@ -77,6 +82,11 @@ class Fighting {
     }
 
     private Stack<Item> stackPenalty;
+    private Timer timer;
+
+    void dispose() {
+        timer.stop();
+    }
 
     Fighting(
             String nameOfLeftFighter,
@@ -111,6 +121,12 @@ class Fighting {
         this.durationOfExtraRound = durationOfExtraRound;
         this.inCaseOfTie = inCaseOfTie;
 
+//        this.countOfRounds = 1;
+//        this.durationOfRound = 1 * 1000;
+//        this.durationOfBreak = 4 * 1000;
+//        this.durationOfExtraRound = 3 * 1000;
+//        this.inCaseOfTie = 0;
+
         this.imageLeftConnerFlag = imageLeftConnerFlag;
         this.imageRightConnerFlag = imageRightConnerFlag;
 
@@ -120,69 +136,98 @@ class Fighting {
         this.countOfPointsForTheLeftFighter = new int[this.countOfRounds + 1][3];
         this.countOfPointsForTheRightFighter = new int[this.countOfRounds + 1][3];
 
-        init();
+        {
+            spendTime = 0;
+            currentRound = 1;
+
+            fightStatus = FightStatus.NotStart;
+            statusFightingBeforeDisqualification = null;
+
+            countOfMinusToLeft = 0;
+            countOfMinusToRight = 0;
+
+            countOfForestallingToLeft = 0;
+            countOfForestallingToRight = 0;
+
+            countOfExToLeft = 0;
+            countOfExToRight = 0;
+        }
 
 
         this.TOURNAMENT_CATEGORIES_FK = TOURNAMENT_CATEGORIES_FK;
         this.VERTEX = VERTEX;
 
         stackPenalty = new Stack<>();
+
+        timer = new Timer(200, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updateTime();
+            }
+        });
     }
 
-    private synchronized void init() {
-
-        for (int i = 0; i <= countOfRounds; i++) {
-            Arrays.fill(countOfPointsForTheLeftFighter[i], 0);
-            Arrays.fill(countOfPointsForTheRightFighter[i], 0);
+    public void setDialog(boolean dialog) {
+        if (dialog) {
+            fightStatusBeforDialog = fightStatus;
+            fightStatus = FightStatus.stoppedByJudge;
+        } else {
+            fightStatus = fightStatusBeforDialog;
         }
-
-        spendTime = 0;
-        currentRound = 1;
-
-        fightStatus = FightStatus.NotStart;
-        statusFightingBeforeDisqualification = null;
-
-        countOfMinusToLeft = 0;
-        countOfMinusToRight = 0;
-
-        countOfForestallingToLeft = 0;
-        countOfForestallingToRight = 0;
-
-        countOfExToLeft = 0;
-        countOfExToRight = 0;
     }
 
-    synchronized void addOnePointToLeftFighter(int fromJudge) {
-        if (getWinner() == Player.unknown)
+    public void forceStopRound(Player player, String forceResult) {
+        if (player == Player.Left) {
+            fightStatus = FightStatus.forceLeftWinner;
+            this.forceResult = forceResult;
+        } else if (player == Player.Right) {
+            fightStatus = FightStatus.forceRightWinner;
+            this.forceResult = forceResult;
+        }
+    }
+
+
+    private boolean isDisqOrForceWinner() {
+        return fightStatus == FightStatus.DisqualificationLeft || fightStatus == FightStatus.DisqualificationRight ||
+                fightStatus == FightStatus.forceLeftWinner || fightStatus == FightStatus.forceRightWinner ||
+                fightStatus == FightStatus.stoppedByJudge;
+    }
+
+    void addOnePointToLeftFighter(int fromJudge) {
+        if (isDisqOrForceWinner())
             return;
         ++countOfPointsForTheLeftFighter[currentRound][fromJudge];
     }
 
-    synchronized void addOnePointToRightFighter(int fromJudge) {
-        if (getWinner() == Player.unknown)
+    void addOnePointToRightFighter(int fromJudge) {
+        if (isDisqOrForceWinner())
             return;
         ++countOfPointsForTheRightFighter[currentRound][fromJudge];
     }
 
-    synchronized void pressedKeySpace() {
+    void pressedKeySpace() {
         if (fightStatus == FightStatus.NotStart) {
-            init();
+            timer.start();
             fightStatus = FightStatus.Fighting;
             soundGong.play();
-        } else if (fightStatus == FightStatus.Fighting) {
+        } else if (fightStatus == FightStatus.Fighting)
             fightStatus = FightStatus.PauseFight;
-        } else if (fightStatus == FightStatus.PauseFight) {
+        else if (fightStatus == FightStatus.PauseFight)
             fightStatus = FightStatus.Fighting;
-        } else if (fightStatus == FightStatus.ExtraRound) {
-            fightStatus = FightStatus.PauseExtraRound;
-        } else if (fightStatus == FightStatus.PauseExtraRound) {
+        else if (fightStatus == FightStatus.PendingExtraRound) {
             fightStatus = FightStatus.ExtraRound;
-        }
+            soundGong.play();
+        } else if (fightStatus == FightStatus.ExtraRound)
+            fightStatus = FightStatus.PauseExtraRound;
+        else if (fightStatus == FightStatus.PauseExtraRound)
+            fightStatus = FightStatus.ExtraRound;
     }
 
-    synchronized void updateTime() {
+    private void updateTime() {
         long momentTime = System.currentTimeMillis();
+        if (prevMomentTime == 0) prevMomentTime = momentTime;
         long quantum = momentTime - prevMomentTime;
+//        System.err.printf("%d %d %s\n", prevMomentTime, momentTime, fightStatus);
         prevMomentTime = momentTime;
 
 
@@ -192,25 +237,23 @@ class Fighting {
                 spendTime -= durationOfRound; // spendTime = 0;
 
                 if (currentRound == countOfRounds) {
-                    if (getWinner() != Player.unknown) {
+                    int l = getCountJudgeForLeftFighter();
+                    int r = getCountJudgeForRightFighter();
+                    if (l > r)
+                        fightStatus = FightStatus.winnerByPointsLeft;
+                    else if (l < r)
+                        fightStatus = FightStatus.winnerByPointsRight;
+                    else {
                         if (inCaseOfTie == 0) {
                             fightStatus = FightStatus.Tie;
                         } else if (inCaseOfTie == 1) {
                             Player winner = findWinnerInCaseOfTieByEuropeanRules();
-                            if (winner == Player.unknown)
+                            if (winner == Player.Unknown)
                                 fightStatus = FightStatus.Tie;
                             else
-                                fightStatus = winner == Player.left ? FightStatus.winnerByPointsLeft : FightStatus.winnerByPointsRight;
-                        } else {
+                                fightStatus = winner == Player.Left ? FightStatus.winnerByPointsLeft : FightStatus.winnerByPointsRight;
+                        } else
                             fightStatus = FightStatus.PendingExtraRound;
-                        }
-                    } else {
-                        int l = getCountJudgeForLeftFighter();
-                        int r = getCountJudgeForRightFighter();
-                        if (l > r)
-                            fightStatus = FightStatus.winnerByPointsLeft;
-                        else if (l < r)
-                            fightStatus = FightStatus.winnerByPointsRight;
                     }
                 } else {
                     fightStatus = FightStatus.Break;
@@ -234,21 +277,56 @@ class Fighting {
         } else if (fightStatus == FightStatus.Tie) {
             int l = getCountJudgeForLeftFighter();
             int r = getCountJudgeForRightFighter();
-            if (l > r) {
+            if (l > r)
                 fightStatus = FightStatus.winnerByPointsLeft;
-            } else if (l < r) {
+            else if (l < r)
                 fightStatus = FightStatus.winnerByPointsRight;
-            }
+        } else if (fightStatus == FightStatus.PendingExtraRound) {
+            int l = getCountJudgeForLeftFighter();
+            int r = getCountJudgeForRightFighter();
+            if (l > r)
+                fightStatus = FightStatus.winnerByPointsLeft;
+            else if (l < r)
+                fightStatus = FightStatus.winnerByPointsRight;
         } else if (fightStatus == FightStatus.ExtraRound) {
             spendTime += quantum;
+            wasExtraRound = true;
             if (durationOfExtraRound <= spendTime) {
                 int l = getCountJudgeForLeftFighter();
                 int r = getCountJudgeForRightFighter();
                 if (l > r) {
                     fightStatus = FightStatus.winnerByPointsLeft;
+                    soundGong.play();
                 } else if (l < r) {
                     fightStatus = FightStatus.winnerByPointsRight;
+                    soundGong.play();
                 }
+            }
+        } else if (fightStatus == FightStatus.winnerByPointsLeft) {
+            int l = getCountJudgeForLeftFighter();
+            int r = getCountJudgeForRightFighter();
+            if (l > r) {
+                fightStatus = FightStatus.winnerByPointsLeft;
+            } else if (l < r) {
+                fightStatus = FightStatus.winnerByPointsRight;
+            } else {
+                if (inCaseOfTie == 2 && !wasExtraRound)
+                    fightStatus = FightStatus.PendingExtraRound;
+                else
+                    fightStatus = FightStatus.Tie;
+            }
+        } else if (fightStatus == FightStatus.winnerByPointsRight) {
+            int l = getCountJudgeForLeftFighter();
+            int r = getCountJudgeForRightFighter();
+            if (l > r) {
+                fightStatus = FightStatus.winnerByPointsLeft;
+            } else if (l < r) {
+                fightStatus = FightStatus.winnerByPointsRight;
+            } else {
+                if (inCaseOfTie == 2 && !wasExtraRound)
+                    fightStatus = FightStatus.PendingExtraRound;
+                else
+                    fightStatus = FightStatus.Tie;
             }
         }
     }
@@ -268,15 +346,15 @@ class Fighting {
                 if (countOfPointsForTheLeftFighter[round][idJudge] < countOfPointsForTheRightFighter[round][idJudge]) {
                     return Player.Right;
                 } else if (countOfPointsForTheLeftFighter[round][idJudge] > countOfPointsForTheRightFighter[round][idJudge]) {
-                    return Player.left;
+                    return Player.Left;
                 }
             }
         }
-        return Player.unknown;
+        return Player.Unknown;
     }
 
-    private synchronized void disqualify(Player player) {
-        if (player == Player.left) {
+    private void disqualify(Player player) {
+        if (player == Player.Left) {
             statusFightingBeforeDisqualification = fightStatus;
             fightStatus = FightStatus.DisqualificationLeft;
         } else if (player == Player.Right) {
@@ -285,12 +363,12 @@ class Fighting {
         }
     }
 
-    synchronized void addMinusToLeft() {
-        if (getWinner() != Player.unknown)
+    void addMinusToLeft() {
+        if (isDisqOrForceWinner())
             return;
 
         ++countOfMinusToLeft;
-        Item item = new Item(Penalty.Minus, Player.Right);
+        Item item = new Item(Penalty.Minus, Player.Left);
         int[] countOfPointsForTheLeftFighter = getCountOfPointsForTheLeftFighter();
         for (int i = 0; i < 3; i++) {
             item.deltaLeft[i] = -Math.min(3, countOfPointsForTheLeftFighter[i]);
@@ -299,15 +377,15 @@ class Fighting {
         stackPenalty.add(item);
 
         if (countOfMinusToLeft == 3) {
-            disqualify(Player.left);
+            disqualify(Player.Left);
         }
     }
 
     /**
      * Минус бал правому бойцу. 3 очка левому бойцу от каждого судьи.
      */
-    synchronized void addMinusToRight() {
-        if (getWinner() != Player.unknown)
+    void addMinusToRight() {
+        if (isDisqOrForceWinner())
             return;
 
         ++countOfMinusToRight;
@@ -326,13 +404,13 @@ class Fighting {
     /**
      * Одно предупреждение идет левому бойцу. Если их больше 1ого, до дисквалификация
      */
-    synchronized void addForestallingToLeft() {
-        if (getWinner() != Player.unknown)
+    void addForestallingToLeft() {
+        if (isDisqOrForceWinner())
             return;
 
         if (countOfForestallingToLeft == 0) {
             ++countOfForestallingToLeft;
-            Item item = new Item(Penalty.FO, Player.left);
+            Item item = new Item(Penalty.FO, Player.Left);
             stackPenalty.push(item);
         }
     }
@@ -340,8 +418,8 @@ class Fighting {
     /**
      * Одно предупреждение идет правому бойцу. Если их больше 1ого, до дисквалификация
      */
-    synchronized void addForestallingToRight() {
-        if (getWinner() != Player.unknown)
+    void addForestallingToRight() {
+        if (isDisqOrForceWinner())
             return;
 
         if (countOfForestallingToRight == 0) {
@@ -354,12 +432,12 @@ class Fighting {
     /**
      * Левый боец вышел за ринг. Если 4 выхода, то дисквалификация
      */
-    synchronized void addExToLeft() {
-        if (getWinner() != Player.unknown)
+    void addExToLeft() {
+        if (isDisqOrForceWinner())
             return;
 
         ++countOfExToLeft;
-        Item item = new Item(Penalty.Ex, Player.left);
+        Item item = new Item(Penalty.Ex, Player.Left);
         if (2 <= countOfExToLeft) {
             int[] countOfPointsForTheLeftFighter = getCountOfPointsForTheLeftFighter();
             for (int i = 0; i < 3; i++) {
@@ -370,15 +448,15 @@ class Fighting {
         stackPenalty.add(item);
 
         if (4 == countOfExToLeft) {
-            disqualify(Player.left);
+            disqualify(Player.Left);
         }
     }
 
     /**
      * Правый боец вышел за ринг. Если 4 выхода, то дисквалификация
      */
-    synchronized void addExToRight() {
-        if (getWinner() != Player.unknown)
+    void addExToRight() {
+        if (isDisqOrForceWinner())
             return;
 
         ++countOfExToRight;
@@ -398,7 +476,7 @@ class Fighting {
     }
 
 
-    synchronized int[] getCountOfPointsForTheLeftFighter() {
+    int[] getCountOfPointsForTheLeftFighter() {
         int[] count = new int[3];
         for (int round = 1; round <= currentRound; round++) {
             for (int judge = 0; judge < 3; judge++) {
@@ -413,7 +491,7 @@ class Fighting {
         return count;
     }
 
-    synchronized int[] getCountOfPointsForTheRightFighter() {
+    int[] getCountOfPointsForTheRightFighter() {
         int[] count = new int[3];
         for (int round = 1; round <= currentRound; round++) {
             for (int judge = 0; judge < 3; judge++) {
@@ -431,7 +509,7 @@ class Fighting {
     /**
      * @return колическо судей за левого бойца
      */
-    synchronized int getCountJudgeForLeftFighter() {
+    int getCountJudgeForLeftFighter() {
         int countJudgeForLeftFighter = 0;
         int[] countOfPointsForTheLeftFighter = getCountOfPointsForTheLeftFighter();
         int[] countOfPointsForTheRightFighter = getCountOfPointsForTheRightFighter();
@@ -445,7 +523,7 @@ class Fighting {
     /**
      * @return колическо судей за правого бойца
      */
-    synchronized int getCountJudgeForRightFighter() {
+    int getCountJudgeForRightFighter() {
         int countJudgeForRightFighter = 0;
         int[] countOfPointsForTheLeftFighter = getCountOfPointsForTheLeftFighter();
         int[] countOfPointsForTheRightFighter = getCountOfPointsForTheRightFighter();
@@ -456,28 +534,29 @@ class Fighting {
         return countJudgeForRightFighter;
     }
 
-    synchronized String getStringTime() {
+    String getStringTime() {
         if (fightStatus == FightStatus.NotStart) {
-            return String.format("%02d:%02d", durationOfRound / 60, durationOfRound % 60);
+            return String.format("%02d:%02d", durationOfRound / 1000 / 60, durationOfRound / 1000 % 60);
         }
         if (fightStatus == FightStatus.Fighting || fightStatus == FightStatus.PauseFight) {
-            long remainTime = durationOfRound - spendTime;
-            return String.format("%02d:%02d", remainTime / 60, remainTime % 60);
+            long remainTime = Math.max(0, durationOfRound - spendTime);
+            return String.format("%02d:%02d", remainTime / 1000 / 60, remainTime / 1000 % 60);
         }
         if (fightStatus == FightStatus.Break) {
-            long remainTime = durationOfBreak - spendTime;
-            return String.format("%02d:%02d", remainTime / 60, remainTime % 60);
+            long remainTime = Math.max(0, durationOfBreak - spendTime);
+            return String.format("%02d:%02d", remainTime / 1000 / 60, remainTime / 1000 % 60);
         }
         if (fightStatus == FightStatus.PendingExtraRound) {
-            return String.format("%02d:%02d", durationOfExtraRound / 60, durationOfExtraRound % 60);
+            return String.format("%02d:%02d", durationOfExtraRound / 1000 / 60, durationOfExtraRound / 1000 % 60);
         }
         if (fightStatus == FightStatus.ExtraRound || fightStatus == FightStatus.PauseExtraRound) {
-            return String.format("%02d:%02d", durationOfExtraRound / 60, durationOfExtraRound % 60);
+            long remainTime = Math.max(0, durationOfExtraRound - spendTime);
+            return String.format("%02d:%02d", remainTime / 1000 / 60, remainTime / 1000 % 60);
         }
         return "";
     }
 
-    synchronized FightStatus getFightStatus() {
+    FightStatus getFightStatus() {
         return fightStatus;
     }
 
@@ -491,7 +570,7 @@ class Fighting {
 
     //------------------------------------------------------------------------------------------------------------------
 
-    synchronized String getResult() {
+    String getResult() {
         int countPointLeft = getCountJudgeForLeftFighter();
         int countPointRight = getCountJudgeForRightFighter();
         if (fightStatus == FightStatus.DisqualificationLeft || fightStatus == FightStatus.DisqualificationRight)
@@ -502,24 +581,22 @@ class Fighting {
         return countPointLeft + " : " + countPointRight;
     }
 
-    synchronized Player getWinner() {
-        int countPointLeft = getCountJudgeForLeftFighter();
-        int countPointRight = getCountJudgeForRightFighter();
-        if (fightStatus == FightStatus.forceLeftWinner || fightStatus == FightStatus.winnerByPointsLeft || fightStatus == FightStatus.DisqualificationRight || fightStatus == FightStatus.Finish && countPointLeft > countPointRight)
-            return Player.left;
-        if (fightStatus == FightStatus.forceRightWinner || fightStatus == FightStatus.winnerByPointsRight || fightStatus == FightStatus.DisqualificationLeft || fightStatus == FightStatus.Finish && countPointLeft < countPointRight)
+    Player getWinner() {
+        if (fightStatus == FightStatus.forceLeftWinner || fightStatus == FightStatus.winnerByPointsLeft || fightStatus == FightStatus.DisqualificationRight)
+            return Player.Left;
+        if (fightStatus == FightStatus.forceRightWinner || fightStatus == FightStatus.winnerByPointsRight || fightStatus == FightStatus.DisqualificationLeft)
             return Player.Right;
-        return Player.unknown;
+        return Player.Unknown;
     }
 
-    synchronized void cancelLastAction() {
-        if (stackPenalty.isEmpty())
+    void cancelLastAction() {
+        if (stackPenalty.isEmpty() || fightStatus == FightStatus.stoppedByJudge)
             return;
 
         Item item = stackPenalty.pop();
 
         if (item.penalty == Penalty.Minus) {
-            if (item.player == Player.left) {
+            if (item.player == Player.Left) {
                 --countOfMinusToLeft;
                 if (countOfMinusToLeft == 2 && fightStatus == FightStatus.DisqualificationLeft) {
                     fightStatus = statusFightingBeforeDisqualification;
@@ -536,14 +613,14 @@ class Fighting {
         }
 
         if (item.penalty == Penalty.FO) {
-            if (item.player == Player.left)
+            if (item.player == Player.Left)
                 --countOfForestallingToLeft;
             if (item.player == Player.Right)
                 --countOfForestallingToRight;
         }
 
         if (item.penalty == Penalty.Ex) {
-            if (item.player == Player.left) {
+            if (item.player == Player.Left) {
                 --countOfExToLeft;
                 if (countOfExToLeft == 3 && fightStatus == FightStatus.DisqualificationLeft) {
                     fightStatus = statusFightingBeforeDisqualification;
@@ -558,6 +635,79 @@ class Fighting {
                 }
             }
         }
+    }
+
+
+    public int getCountOfExToLeft() {
+        return countOfExToLeft;
+    }
+
+    public String getCategoryOfFighting() {
+        return categoryOfFighting;
+    }
+
+    public int getCountOfExToRight() {
+        return countOfExToRight;
+    }
+
+    public int getCountOfForestallingToLeft() {
+        return countOfForestallingToLeft;
+    }
+
+    public int getCountOfForestallingToRight() {
+        return countOfForestallingToRight;
+    }
+
+    public int getCountOfMinusToLeft() {
+        return countOfMinusToLeft;
+    }
+
+    public int getCountOfMinusToRight() {
+        return countOfMinusToRight;
+    }
+
+    public int getCountOfRounds() {
+        return countOfRounds;
+    }
+
+    public String getCountryOfLeftFighter() {
+        return countryOfLeftFighter;
+    }
+
+    public String getCountryOfRightFighter() {
+        return countryOfRightFighter;
+    }
+
+    public int getCurrentRound() {
+        return currentRound;
+    }
+
+    public int getFightId() {
+        return fightId;
+    }
+
+    public BufferedImage getImageLeftConnerFlag() {
+        return imageLeftConnerFlag;
+    }
+
+    public BufferedImage getImageRightConnerFlag() {
+        return imageRightConnerFlag;
+    }
+
+    public String getNameOfLeftFighter() {
+        return nameOfLeftFighter;
+    }
+
+    public String getNameOfRightFighter() {
+        return nameOfRightFighter;
+    }
+
+    public long getTOURNAMENT_CATEGORIES_FK() {
+        return TOURNAMENT_CATEGORIES_FK;
+    }
+
+    public int getVERTEX() {
+        return VERTEX;
     }
 }
 

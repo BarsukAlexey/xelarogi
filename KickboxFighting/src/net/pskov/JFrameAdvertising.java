@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-public class JFrameAdvertising extends JFrame {
+public class JFrameAdvertising extends JDialog {
 
 
     private JPanel panel1;
@@ -17,7 +17,7 @@ public class JFrameAdvertising extends JFrame {
     private int intervalAdv = 0;
 
     JFrameAdvertising(String title, Rectangle bounds, final ArrayList<BufferedImage> avd, int intervalAdv) {
-        super(title);
+        setTitle(title);
         this.avd = avd;
         this.intervalAdv = intervalAdv;
 
@@ -26,6 +26,7 @@ public class JFrameAdvertising extends JFrame {
         pack();
         setBounds(bounds);
         setVisible(true);
+        setResizable(false);
 
         timer = new Timer(Math.max(1, intervalAdv) * 1000, new ActionListener() {
             @Override
@@ -61,6 +62,7 @@ public class JFrameAdvertising extends JFrame {
         intervalAdv = interval;
         if (0 < interval)
             timer.setDelay(interval * 1000);
+//        System.err.println("interval: " + interval);
         repaint();
     }
 }

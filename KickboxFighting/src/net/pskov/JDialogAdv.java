@@ -14,25 +14,25 @@ public class JDialogAdv extends JDialog {
     private JButton OKButton;
     private boolean pressedOK;
 
-    JDialogAdv(Frame owner, int interaval) {
+    JDialogAdv(Frame owner, boolean showAdv, int interaval) {
         super(owner, "", true);
         pressedOK = false;
 
-        showAdvertisementCheckBox.setSelected(interaval != 0);
+        showAdvertisementCheckBox.setSelected(showAdv);
         showAdvertisementCheckBox.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
                 spinner.setEnabled(showAdvertisementCheckBox.isSelected());
             }
         });
-        spinner.setModel(new SpinnerNumberModel(interaval == 0 ? 15 : interaval, 1, 100500, 1));
+        spinner.setModel(new SpinnerNumberModel(Math.max(1, interaval), 1, 100500, 1));
         spinner.setEnabled(showAdvertisementCheckBox.isSelected());
 
         OKButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 pressedOK = true;
-                JDialogAdv.this.setVisible(false);
+                JDialogAdv.this.dispose();
             }
         });
 
@@ -46,6 +46,10 @@ public class JDialogAdv extends JDialog {
         if (showAdvertisementCheckBox.isSelected())
             return (int) spinner.getValue();
         return 0;
+    }
+
+    boolean getShowAdv() {
+        return showAdvertisementCheckBox.isSelected();
     }
 
     boolean execCode() {

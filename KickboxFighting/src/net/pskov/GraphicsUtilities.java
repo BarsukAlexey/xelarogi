@@ -12,7 +12,7 @@ public class GraphicsUtilities {
      */
     public static int getMaxFittingFontSize(Graphics2D g, Font font, String text, double width, double height) {
         int minSize = 1;
-        int maxSize = 288;
+        int maxSize = 228;
         while (minSize < maxSize) {
             int curSize = (maxSize + minSize + 1) / 2;
             FontMetrics fm = g.getFontMetrics(new Font(font.getName(), font.getStyle(), curSize));

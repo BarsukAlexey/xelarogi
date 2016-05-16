@@ -13,23 +13,20 @@ import net.pskov.utils.ImageUtils;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.Timer;
 import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Vector;
+import java.util.*;
 
-class JFrameMainJudge extends JFrame {
+public class JFrameMainJudge extends JFrame {
 
     private final String pathSaveJson = "save.json";
     private final String pathAdvJson = "adv.json";
@@ -42,22 +39,22 @@ class JFrameMainJudge extends JFrame {
     private volatile Vector<Boolean> canStartFighting;
 
     private final MouseController[] mouseController;
-    private volatile KeyboardController keyboardController;
+    private final KeyboardController keyboardController;
 
+    private boolean showAdv;
     private int intervalAdv;
     ArrayList<JFrameScoreTable> scoreTable;
 
 
     private final ArrayList<JFrameAdvertising> jFrameAdvertisings;
 
-    JFrameMainJudge() {
+    JFrameMainJudge(MouseController[] mouseController, KeyboardController keyboardController) {
         super("Judge");
 
-        intervalAdv = 15;
         scoreTable = new ArrayList<>();
 
-        mouseController = new MouseController[3];
-        keyboardController = new KeyboardController();
+        this.mouseController = mouseController;
+        this.keyboardController = keyboardController;
 
 
         table = new JTable() {
@@ -73,7 +70,7 @@ class JFrameMainJudge extends JFrame {
                 java.awt.Component component = super.prepareRenderer(renderer, row, column);
 
 
-                int width = comp.getPreferredSize().width ;
+                int width = comp.getPreferredSize().width;
                 width = Math.max(width, component.getPreferredSize().width + getIntercellSpacing().width);
                 width = Math.max(width, tableColumn.getPreferredWidth());
                 tableColumn.setPreferredWidth(width);
@@ -82,13 +79,15 @@ class JFrameMainJudge extends JFrame {
         };
 
 
-
         try {
             String JSON_DATA = new String(Files.readAllBytes(Paths.get(pathAdvJson)), StandardCharsets.UTF_8);
-            intervalAdv = new JsonParser().parse(JSON_DATA).getAsJsonObject().get("intervalAdv").getAsInt();
+            JsonObject object = new JsonParser().parse(JSON_DATA).getAsJsonObject();
+            intervalAdv = object.get("intervalAdv").getAsInt();
+            showAdv = object.get("showAdv").getAsBoolean();
         } catch (IOException e1) {
             e1.printStackTrace();
-            intervalAdv = 0;
+            showAdv = true;
+            intervalAdv = 15;
         }
 
         ArrayList<BufferedImage> avd;
@@ -127,9 +126,9 @@ class JFrameMainJudge extends JFrame {
 //        setUndecorated(true);
         pack();
         setBounds(defaultBounds);
-//        setExtendedState(Frame.MAXIMIZED_BOTH);
+        setExtendedState(Frame.MAXIMIZED_BOTH);
         setVisible(true);
-        setSize(1280, 800);
+//        setSize(1280, 800);
 
         new Timer(50, new ActionListener() {
             @Override
@@ -146,11 +145,11 @@ class JFrameMainJudge extends JFrame {
         table.setFillsViewportHeight(true);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
-        JButton jStart = new JButton("Start Fighting");
+        final JButton jStart = new JButton("Start Fighting");
         jStart.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                forceMouseInit();
+//                forceMouseInit();
                 //
                 if (!updateMice()) {
                     JOptionPane.showMessageDialog(JFrameMainJudge.this, "Connect mice and click \"init mice\"");
@@ -182,7 +181,7 @@ class JFrameMainJudge extends JFrame {
                 for (int i = 0; i < screenDevices.length; i++) {
                     scoreTable.add(new JFrameScoreTable(i == 0, bounds[i], finalFighting));
                 }
-                for (int i = 0; i < screenDevices.length; i++) {
+                for (int i = 1; i < screenDevices.length; i++) {
                     final JFrameScoreTable jFrameScoreTable = scoreTable.get(i);
                     SwingUtilities.invokeLater(new Runnable() {
                         @Override
@@ -191,6 +190,9 @@ class JFrameMainJudge extends JFrame {
                         }
                     });
                 }
+                scoreTable.get(0).setVisible(true);
+
+                activeFighting = null;
                 /**/
             }
         });
@@ -203,6 +205,7 @@ class JFrameMainJudge extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 JFileChooser chooser = new JFileChooser();
                 chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                chooser.setPreferredSize(new Dimension(800, 600));
                 if (chooser.showOpenDialog(JFrameMainJudge.this) == JFileChooser.APPROVE_OPTION) {
                     String path = chooser.getSelectedFile().getAbsolutePath();
                     System.out.println("You chose to open this file: " + path); // TODO
@@ -224,6 +227,7 @@ class JFrameMainJudge extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 JFileChooser chooser = new JFileChooser();
                 chooser.setSelectedFile(new File("Results " + new SimpleDateFormat(" yyyy.MM.dd  HH'h'mm'm'").format(new Date()) + ".json"));
+                chooser.setPreferredSize(new Dimension(800, 600));
                 if (chooser.showSaveDialog(JFrameMainJudge.this) == JFileChooser.APPROVE_OPTION) {
                     File selectedFile = chooser.getSelectedFile();
                     System.out.println("You chose to open this file: " + selectedFile.getAbsolutePath()); // TODO
@@ -236,22 +240,15 @@ class JFrameMainJudge extends JFrame {
             }
         });
 
-        JButton jButtonInitMice = new JButton("Init mice...");
-        jButtonInitMice.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new JDialogInitMice(JFrameMainJudge.this, JFrameMainJudge.this.mouseController);
-            }
-        });
-
         JButton jButtonAdv = new JButton("Advertisement...");
         jButtonAdv.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JDialogAdv dlg = new JDialogAdv(JFrameMainJudge.this, intervalAdv);
+                JDialogAdv dlg = new JDialogAdv(JFrameMainJudge.this, showAdv, intervalAdv);
                 dlg.setVisible(true);
                 if (!dlg.execCode())
                     return;
+                showAdv = dlg.getShowAdv();
                 intervalAdv = dlg.getInterval();
 
                 System.err.println("intervalAdv: " + intervalAdv);
@@ -259,12 +256,13 @@ class JFrameMainJudge extends JFrame {
                     adv.setInterval(intervalAdv);
                 }
 
-                JsonObject jsonObject = new JsonObject();
-                jsonObject.addProperty("intervalAdv", intervalAdv);
+                JsonObject object = new JsonObject();
+                object.addProperty("intervalAdv", intervalAdv);
+                object.addProperty("showAdv", showAdv);
 
                 try {
                     PrintStream out = new PrintStream(new FileOutputStream(pathAdvJson));
-                    out.print(new Gson().toJson(jsonObject));
+                    out.print(new Gson().toJson(object));
                     out.flush();
                     out.close();
                 } catch (FileNotFoundException e1) {
@@ -280,25 +278,24 @@ class JFrameMainJudge extends JFrame {
         jPanel.add(jStart);
         jPanel.add(jButtonLoadData);
         jPanel.add(jButtonSaveFile);
-        jPanel.add(jButtonInitMice);
         jPanel.add(jButtonAdv);
 
         return jPanel;
     }
 
-    private void forceMouseInit() {
-        synchronized (mouseController) {
-            int i = 0;
-            for (Controller controller : ControllerEnvironment.getDefaultEnvironment().getControllers()) {
-                if (controller.getType() == Controller.Type.MOUSE) {
-                    Mouse mouse = (Mouse) controller;
-                    if (i < 3) {
-                        mouseController[i++] = new MouseController(mouse);
-                    }
-                }
-            }
-        }
-    }
+//    private void forceMouseInit() {
+//        synchronized (mouseController) {
+//            int i = 0;
+//            for (Controller controller : ControllerEnvironment.getDefaultEnvironment().getControllers()) {
+//                if (controller.getType() == Controller.Type.MOUSE) {
+//                    Mouse mouse = (Mouse) controller;
+//                    if (i < 3) {
+//                        mouseController[i++] = new MouseController(mouse);
+//                    }
+//                }
+//            }
+//        }
+//    }
 
     private void initListOfPlayers(String path) {
         String JSON_DATA;
@@ -308,6 +305,36 @@ class JFrameMainJudge extends JFrame {
             e1.printStackTrace();
             return;
         }
+
+//        String JSON_DATA = "";
+//        Path pat2h = Paths.get(pathSaveJson);
+//        java.util.List<String> strings = null;
+//        try {
+//            strings = Files.readAllLines(pat2h, );
+//            for (String string : strings) {
+//                System.err.println(string);
+//                System.err.flush();
+//                JSON_DATA += string;
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+
+//        String JSON_DATA = "";
+//        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+//            StringBuilder sb = new StringBuilder();
+//            String line = br.readLine();
+//
+//            while (line != null) {
+//                sb.append(line);
+//                sb.append(System.lineSeparator());
+//                line = br.readLine();
+//            }
+//            JSON_DATA = sb.toString();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+
 
         final String[] heads = new String[]{"Fight #", "Red conner", "Country/Region", "Blue conner", "Country/Region",
                 "Winner", "Result", "Tournament Categoty", "Duration of fight", "Duration of break", "Count of rounds",
@@ -352,7 +379,7 @@ class JFrameMainJudge extends JFrame {
                 if (winner == left)
                     winnerStr = object.get("nameOfLeftFighter").getAsString();
                 else if (winner == right)
-                    winnerStr = object.get("countryOfRightFighter").getAsString();
+                    winnerStr = object.get("nameOfRightFighter").getAsString();
                 else
                     throw new RuntimeException();
                 canStartFighting.add(false);
@@ -406,72 +433,6 @@ class JFrameMainJudge extends JFrame {
         });
     }
 
-//    private void initJPanelFighting() {
-//        jPanelFighting = new JPanel();
-//        jPanelFighting.setLayout(new GridBagLayout());
-//
-//
-//        JPanel jPanelRight = new JPanel();
-//        jPanelRight.setLayout(new BoxLayout(jPanelRight, BoxLayout.Y_AXIS));
-//        JLabel[] jLabels = new JLabel[]{
-//                new JLabel("Q - minus кр. углу"),
-//                new JLabel("O - minus син. углу"),
-//                new JLabel("T - отмена последнего minus"),
-//                new JLabel(" "),
-//                new JLabel("A - fo. кр. углу"),
-//                new JLabel("K - fo. син. углу"),
-//                new JLabel("G - отмена последнего fo."),
-//                new JLabel(" "),
-//                new JLabel("Z - ex. кр. углу"),
-//                new JLabel("M - ex. син. углу"),
-//                new JLabel("V - отмена последнего ex."),
-//                new JLabel(" "),
-//                new JLabel("W - нокаут кр. угла"),
-//                new JLabel("I - нокаут син. угла"),
-//                new JLabel(" "),
-//                new JLabel("S - отказ от боя кр. угла"),
-//                new JLabel("J - отказ от боя син. угла"),
-//                new JLabel(" "),
-//                new JLabel("X - дисквалификация кр. угла"),
-//                new JLabel("N - дисквалификация син. угла"),
-//                new JLabel(" "),
-//                new JLabel("E - остановка боя рефери кр. угла"),
-//                new JLabel("U - остановка боя рефери син. угла"),
-//                new JLabel(" "),
-//                new JLabel("D - технический нокаут кр. угла"),
-//                new JLabel("H - технический нокаут син. угла"),
-//                new JLabel(" "),
-//                new JLabel("C - невозможность продолжать бой кр. угла"),
-//                new JLabel("B - невозможность продолжать бой син. угла"),
-//                new JLabel(" "),
-//                new JLabel("R - отказ секунданта кр. угла"),
-//                new JLabel("Y - отказ секунданта син. угла"),
-//                new JLabel(" "),
-//                new JLabel("SPACE - начать бой/пауза/выход"),
-//        };
-//        for (JLabel jLabel : jLabels) {
-//            Font font = jLabel.getFont();
-//            //jLabel.setFont(new Font(font.getName(), Font.PLAIN, 20));
-//            jPanelRight.add(jLabel);
-//        }
-//
-//        GridBagConstraints c = new GridBagConstraints();
-//        c.fill = GridBagConstraints.BOTH;
-//        c.weightx = 0.8;
-//        c.weighty = 1;
-//        c.gridx = 0;
-//        c.gridy = 0;
-//        jPanelFighting.add(allJPanelScoreTable[0], c);
-////        allJPanelScoreTable[0].setFighting(f()); // TODO
-//
-//        c.fill = GridBagConstraints.BOTH;
-//        c.weightx = 0.2;
-//        c.weighty = 1;
-//        c.gridx = 1;
-//        c.gridy = 0;
-//        jPanelFighting.add(jPanelRight, c);
-//    }
-
 
     /**
      * @return true, если мышки покллючены и они не отвалились, иначе false
@@ -485,15 +446,17 @@ class JFrameMainJudge extends JFrame {
                     ok = false;
                     continue;
                 }
-//                System.err.println("JFrameMainJudge::updateMice::" + new Date());
+
                 if (mouse.wasLeftClick()) {
                     if (activeFighting != null) {
                         activeFighting.addOnePointToLeftFighter(i);
+                        System.err.println("mouse click # " + i + "  Left");
                     }
                 }
                 if (mouse.wasRightClick()) {
                     if (activeFighting != null) {
                         activeFighting.addOnePointToRightFighter(i);
+                        System.err.println("mouse click # " + i + "  right");
                     }
                 }
             }
@@ -537,34 +500,30 @@ class JFrameMainJudge extends JFrame {
         }
 
         if (pressedKeys.contains(Component.Identifier.Key.ESCAPE)) {
-            if (activeFighting.getFightStatus() == FightStatus.NotStart || activeFighting.getWinner() != Player.unknown) {
+            if (activeFighting.getFightStatus() == FightStatus.NotStart || activeFighting.getWinner() != Player.Unknown) {
                 for (JFrameScoreTable jFrameScoreTable : scoreTable) {
-                    jFrameScoreTable.setVisible(false);
+                    jFrameScoreTable.dispose();
                 }
             }
 
-            if (activeFighting.getWinner() != Player.unknown) {
+            if (activeFighting.getWinner() != Player.Unknown) {
                 try {
                     String JSON_DATA = new String(Files.readAllBytes(Paths.get(pathSaveJson)), StandardCharsets.UTF_8);
+
                     JsonArray jsonArray = new JsonArray();
                     for (JsonElement jsonElement : new JsonParser().parse(JSON_DATA).getAsJsonArray()) {
                         JsonObject object = jsonElement.getAsJsonObject();
-                        for (Fighting f : allFighting) {
-                            if (f.TOURNAMENT_CATEGORIES_FK == object.get("TOURNAMENT_CATEGORIES_FK").getAsLong() &&
-                                    f.VERTEX == object.get("VERTEX").getAsLong()) {
-                                object.addProperty("orderUID", activeFighting.getWinner() == Player.left ? object.get("orderUID_left").getAsLong() : object.get("orderUID_right").getAsLong());
-                                object.addProperty("result", f.getResult());
-                            }
+                        if (activeFighting.getTOURNAMENT_CATEGORIES_FK() == object.get("TOURNAMENT_CATEGORIES_FK").getAsLong() &&
+                                activeFighting.getVERTEX() == object.get("VERTEX").getAsLong()) {
+                            object.addProperty("orderUID", activeFighting.getWinner() == Player.Left ? object.get("orderUID_left").getAsLong() : object.get("orderUID_right").getAsLong());
+                            object.addProperty("result", activeFighting.getResult());
                         }
-                        System.err.println(object.get("fightId"));
                         jsonArray.add(object);
                     }
-                    System.err.println("-----------");
 
-                    PrintStream out = new PrintStream(new FileOutputStream(pathSaveJson));
-                    out.print(new Gson().toJson(jsonArray));
-                    out.flush();
-                    out.close();
+                    ArrayList<String> arr = new ArrayList<>();
+                    arr.add(new Gson().toJson(jsonArray));
+                    Files.write(Paths.get(pathSaveJson), arr, StandardCharsets.UTF_8);
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
@@ -574,18 +533,5 @@ class JFrameMainJudge extends JFrame {
 
         if (pressedKeys.contains(Component.Identifier.Key.SPACE))
             activeFighting.pressedKeySpace();
-
-
     }
-
-
-//    private static void hideCursor(Container c) {
-//        // create a transparent 16 x 16 pixel cursor image
-//        BufferedImage cursorIm = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
-//        // create a new blank cursor
-//        Cursor blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(cursorIm, new Point(0, 0), "blank cursor");
-//        // assign the blank cursor to the JFrame
-//        c.setCursor(blankCursor);
-//    }
-
 }
