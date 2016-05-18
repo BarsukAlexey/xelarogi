@@ -21,7 +21,11 @@ SOURCES += main.cpp\
     form_advertisement.cpp \
     form_advertisement_setting.cpp \
     dialogdisq.cpp \
-    logindialog.cpp
+    logindialog.cpp \
+    aspect_ratio_pixmap_label.cpp \
+    aspectratiotextlabel.cpp \
+    myqlcdnumber.cpp \
+    fighting.cpp
 
 HEADERS  += mainwindow.h \
     fighting_table.h \
@@ -30,7 +34,11 @@ HEADERS  += mainwindow.h \
     forma_dvertisement.h \
     form_advertisement_setting.h \
     dialogdisq.h \
-    logindialog.h
+    logindialog.h \
+    aspect_ratio_pixmap_label.h \
+    aspectratiotextlabel.h \
+    myqlcdnumber.h \
+    fighting.h
 
 FORMS    += mainwindow.ui \
     fighting_table.ui \
@@ -38,4 +46,5 @@ FORMS    += mainwindow.ui \
     form_advertisement.ui \
     form_advertisement_setting.ui \
     dialogdisq.ui \
-    logindialog.ui
+    logindialog.ui \
+    qwerrrrrrrrrrrrrrrrrrrrrr.ui

@@ -172,17 +172,17 @@ class JFrameScoreTable extends JDialog {
 
         final double wUnit = scrDim.width / (11.5 + 11.5);
         final double hUnit = heightCenter / (10.5);
-        FightStatus status = f.getFightStatus();
+        FightStatus status = f.getStatus();
 
-        Player greyPlayer = Player.Unknown;
-        if (f.getWinner() != Player.Unknown) {
+        Player greyPlayer = Player.NoPlayer;
+        if (f.getWinner() != Player.NoPlayer) {
             if (isThisForJudge && f.getWinner() == Player.Left || !isThisForJudge && f.getWinner() == Player.Right)
                 greyPlayer = Player.Right;
             else
                 greyPlayer = Player.Left;
         }
-        final int[] countOfPointsForTheLeftFighter = isThisForJudge ? f.getCountOfPointsForTheLeftFighter() : f.getCountOfPointsForTheRightFighter();
-        final int[] countOfPointsForTheRightFighter = isThisForJudge ? f.getCountOfPointsForTheRightFighter() : f.getCountOfPointsForTheLeftFighter();
+        final int[] countOfPointsForTheLeftFighter = isThisForJudge ? f.getCountOfPointsForLeftFighter() : f.getCountOfPointsForRightFighter();
+        final int[] countOfPointsForTheRightFighter = isThisForJudge ? f.getCountOfPointsForRightFighter() : f.getCountOfPointsForLeftFighter();
 
 
 //        // начало заполения заголовка ----------------------------------------------------------------------------------
@@ -190,17 +190,17 @@ class JFrameScoreTable extends JDialog {
             g.setColor(Color.LIGHT_GRAY);
             g.fill(new Rectangle.Double(0, 0, scrDim.width, heightRoof));
 
-//            NotStart, Fighting, Break, PauseFight, Tie, Finish, DisqualificationLeft, DisqualificationRight,
+//            NotStart, Fight, Break, PauseFight, Tie, Finish, DisqualificationLeft, DisqualificationRight,
 //            winnerByPointsLeft, winnerByPointsRight,
 //            stoppedByJudge, forceLeftWinner, forceRightWinner,
 //            PendingExtraRound, ExtraRound, PauseExtraRound
-            if (f.getWinner() != Player.Unknown) {
+            if (f.getWinner() != Player.NoPlayer) {
                 GraphicsUtilities.fitAndDrawTextInCenterOfRectangle(g, Color.YELLOW, "Winner is " + (f.getWinner() == Player.Left ? f.getNameOfLeftFighter() : f.getNameOfRightFighter()), 0, 0, scrDim.width, heightRoof);
             } else {
                 String roofInfo = "";
                 if (status == FightStatus.NotStart)
                     roofInfo = String.format("Round %d/%d - Pending", f.getCurrentRound(), f.getCountOfRounds());
-                else if (status == FightStatus.Fighting)
+                else if (status == FightStatus.Fight)
                     roofInfo = String.format("Round %d/%d - Fight!", f.getCurrentRound(), f.getCountOfRounds());
                 else if (status == FightStatus.Break)
                     roofInfo = String.format("Round %d/%d - Break", f.getCurrentRound(), f.getCountOfRounds());

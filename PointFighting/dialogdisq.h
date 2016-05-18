@@ -1,7 +1,7 @@
 #ifndef DIALOGDISQ_H
 #define DIALOGDISQ_H
 
-#include "fighting_table.h"
+#include "fighting.h"
 #include <QDialog>
 
 namespace Ui {
@@ -16,7 +16,7 @@ public:
     explicit DialogDisq(QWidget *parent = 0);
     ~DialogDisq();
 
-    FightingTable::Player getWinner();
+    Fighting::Player getWinner();
     QString getResult();
 private:
     Ui::DialogDisq *ui;

@@ -2,9 +2,6 @@ package net.pskov;
 
 import com.google.gson.*;
 import net.java.games.input.Component;
-import net.java.games.input.Controller;
-import net.java.games.input.ControllerEnvironment;
-import net.java.games.input.Mouse;
 import net.pskov.controller.KeyboardController;
 import net.pskov.controller.MouseController;
 import net.pskov.some_enum.FightStatus;
@@ -20,7 +17,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.text.SimpleDateFormat;
@@ -145,7 +141,7 @@ public class JFrameMainJudge extends JFrame {
         table.setFillsViewportHeight(true);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
-        final JButton jStart = new JButton("Start Fighting");
+        final JButton jStart = new JButton("Start Fight");
         jStart.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -500,13 +496,13 @@ public class JFrameMainJudge extends JFrame {
         }
 
         if (pressedKeys.contains(Component.Identifier.Key.ESCAPE)) {
-            if (activeFighting.getFightStatus() == FightStatus.NotStart || activeFighting.getWinner() != Player.Unknown) {
+            if (activeFighting.getStatus() == FightStatus.NotStart || activeFighting.getWinner() != Player.NoPlayer) {
                 for (JFrameScoreTable jFrameScoreTable : scoreTable) {
                     jFrameScoreTable.dispose();
                 }
             }
 
-            if (activeFighting.getWinner() != Player.Unknown) {
+            if (activeFighting.getWinner() != Player.NoPlayer) {
                 try {
                     String JSON_DATA = new String(Files.readAllBytes(Paths.get(pathSaveJson)), StandardCharsets.UTF_8);
 

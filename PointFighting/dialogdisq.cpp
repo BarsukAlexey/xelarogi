@@ -16,11 +16,11 @@ DialogDisq::~DialogDisq()
     delete ui;
 }
 
-FightingTable::Player DialogDisq::getWinner()
+Fighting::Player DialogDisq::getWinner()
 {
     if (ui->radioButton_Left->isChecked())
-        return FightingTable::Player::LeftPlayer;
-    return FightingTable::Player::RightPlayer;
+        return Fighting::Player::Left;
+    return Fighting::Player::Right;
 }
 
 QString DialogDisq::getResult()

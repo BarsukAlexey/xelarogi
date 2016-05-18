@@ -70,7 +70,7 @@ public class JDialogStopRound extends JDialog {
 
     public Player getWinner(){
         if (!accept)
-            return Player.Unknown;
+            return Player.NoPlayer;
         if (redConnerRadioButton.isSelected())
             return Player.Left;
         if (blueConnerRadioButton.isSelected())

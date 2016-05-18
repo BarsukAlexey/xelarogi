@@ -10,12 +10,14 @@
 #include "forma_dvertisement.h"
 #include "form_advertisement_setting.h"
 #include "logindialog.h"
+#include <QDateTime>
+#include <QTimer>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    //
+    /*/ // TODO
     while (true)
     {
         LoginDialog loginDialog(this);
@@ -45,7 +47,7 @@ MainWindow::MainWindow(QWidget *parent) :
             if (fileInfo.exists() && fileInfo.isFile() &&
                 QMessageBox::StandardButton::Ok != QMessageBox::warning(this, "", "If you load new data  you lose old data.\nContinue and lose old data?", QMessageBox::StandardButton::Ok, QMessageBox::StandardButton::Abort))
             {
-                    return;
+                return;
             }
         }
         QFile(nameSaveFile).remove();
@@ -92,26 +94,45 @@ MainWindow::MainWindow(QWidget *parent) :
         if (!canStart)
             return;
 
-        FightingTable f(0,
-                        ui->tableWidget->item(row,  1)->data(Qt::DisplayRole).toString(),
-                        ui->tableWidget->item(row,  2)->data(Qt::DisplayRole).toString(),
-                        ui->tableWidget->item(row,  3)->data(Qt::DisplayRole).toString(),
-                        ui->tableWidget->item(row,  4)->data(Qt::DisplayRole).toString(),
 
-                        ui->tableWidget->item(row,  8)->data(Qt::DisplayRole).toInt(),
-                        ui->tableWidget->item(row,  9)->data(Qt::DisplayRole).toInt(),
-                        ui->tableWidget->item(row, 10)->data(Qt::DisplayRole).toInt(),
 
-                        flags[row][0],
-                        flags[row][1],
-                        true,
-                        showAdvertisement,
+        Fighting * fighting = new Fighting(
+                    ui->tableWidget->item(row,  8)->data(Qt::DisplayRole).toInt(),
+                    ui->tableWidget->item(row,  9)->data(Qt::DisplayRole).toInt(),
+                    ui->tableWidget->item(row,  10)->data(Qt::DisplayRole).toInt(),
+                    ui->tableWidget->item(row,  11)->data(Qt::DisplayRole).toInt()
+                    );
+        FightingTable fffs(
+                    fighting,
 
-                        extraRound[row]);
+                    ui->tableWidget->item(row,  1)->data(Qt::DisplayRole).toString(),
+                    ui->tableWidget->item(row,  2)->data(Qt::DisplayRole).toString(),
+                    ui->tableWidget->item(row,  3)->data(Qt::DisplayRole).toString(),
+                    ui->tableWidget->item(row,  4)->data(Qt::DisplayRole).toString(),
+
+                    flags[row][0],
+                    flags[row][1],
+                    true,
+                    showAdvertisement
+        );
+        //        FightingTable f(0,
+
+
+        //                        ui->tableWidget->item(row,  8)->data(Qt::DisplayRole).toInt(),
+        //                        ui->tableWidget->item(row,  9)->data(Qt::DisplayRole).toInt(),
+        //                        ui->tableWidget->item(row, 10)->data(Qt::DisplayRole).toInt(),
+
+        //                        flags[row][0],
+        //                        flags[row][1],
+        //                        true,
+        //                        showAdvertisement,
+
+        //                        extraRound[row]);
         this->hide();
-        f.exec();
+        //        f.exec();
         this->show();
-        if (f.status == FightingTable::Status::NotStart)
+        /*/
+        if (f.fightStatus == FightingTable::FightStatus::NotStart)
             return;
 
         QString winner;
@@ -165,6 +186,7 @@ MainWindow::MainWindow(QWidget *parent) :
         }
         saveFile.write(QJsonDocument(array).toJson());
         saveFile.close();
+        /**/
 
         update();
 
@@ -273,7 +295,7 @@ void MainWindow::update()
 
         extraRound << object["DURATION_EXTRA_ROUND"].toInt();
         ui->tableWidget->setItem(i, column++, new QTableWidgetItem(QString::number(extraRound.back())));
-//        qDebug() << i << object["DURATION_EXTRA_ROUND"].toInt() << extraRound.back();
+        //        qDebug() << i << object["DURATION_EXTRA_ROUND"].toInt() << extraRound.back();
     }
     ui->tableWidget->resizeColumnsToContents();
 }
