@@ -1,12 +1,16 @@
 #ifndef FIGHTING_H
 #define FIGHTING_H
 
+#include <chrono>
+
+#include <QDateTime>
+#include <QDebug>
 #include <QObject>
-#include <QSound>
 #include <QImage>
 #include <QStack>
+#include <QSound>
 #include <QTimer>
-#include <chrono>
+
 using namespace std::chrono;
 
 class Fighting : public QObject
@@ -22,6 +26,7 @@ public:
         stoppedByJudge, forceLeftWinner, forceRightWinner,
         PendingExtraRound, ExtraRound, PauseExtraRound
     };
+    QStringList statusName;
 
     enum Player
     {
@@ -54,17 +59,6 @@ private:
             deltaLeft = 0;
             deltaRight = 0;
         }
-
-        //        Item& operator=(const Item& right) {
-        //                if (this == &right) {
-        //                    return *this;
-        //                }
-        //                penalty = right.penalty;
-        //                player = right.player;
-        //                deltaLeft = right.deltaLeft;
-        //                deltaRight = right.deltaRight;
-        //                return *this;
-        //            }
     };
 
     long long prevMomentTime;
@@ -93,20 +87,21 @@ private:
     int countOfExToRight;
     bool wasExtraRound;
 
-    QString forceResult;
+    QString forceResult = "sd";
 
     QStack<Item> stackPenalty;
 
     QSound *soundGong = new QSound("resources\\sounds\\gong.wav");
     QSound *soundHummerBit = new QSound("resources\\sounds\\stuk_molotka.wav");
 
-    QTimer *timer ;
+    QTimer *timer;
 
 public:
     explicit Fighting(int durationOfRound, int durationOfBreak, int countOfRounds, int durationOfExtraRound);
 
 private:
     void updateTime();
+    void updatePointStatus();
 
 public:
     void dispose();
@@ -134,12 +129,13 @@ public:
     void pressedKeySpace();
     void pressDoctor();
 
-    int getCountOfPointsForLeftFighter();
-    int getCountOfPointsForRightFighter();
+    int getCountOfPointsForLeftFighter() const;
+    int getCountOfPointsForRightFighter() const;
 
     static QString getTimeMMSS(long long timeMS);
-    QString getStringTime();
-    QString getStringTimeDoctor();
+    QString getStringTime() const;
+    long long getTimeMS() const;
+    QString getStringTimeDoctor() const;
 
     QString getResult();
     Player getWinner();
@@ -150,6 +146,18 @@ public:
     int getDurationOfRound() const;
     int getCountOfRounds() const;
     int getCurrentRound() const;
+
+    int getCountOfMinusToLeft() const;
+    int getCountOfMinusToRight() const;
+    int getCountOfForestallingToLeft() const;
+    int getCountOfForestallingToRight() const;
+    int getCountOfExToLeft() const;
+    int getCountOfExToRight() const;
+
+
+
+
+
 
 
 

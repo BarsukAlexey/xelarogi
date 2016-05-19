@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+
+#include <QMessageBox>
 #include <QLabel>
 #include <QGridLayout>
 #include <QListWidget>
@@ -43,7 +45,6 @@ private:
     Ui::MainWindow *ui;
     const QString nameSaveFile = "save.json";
     QVector<QVector<QImage>> flags;
-    QVector<int> extraRound;
     QTimer *advTimer;
 
 

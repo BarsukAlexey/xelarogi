@@ -87,9 +87,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->pushButtonGo, &QPushButton::clicked, [this]() {
         if (!ui->tableWidget->selectionModel()->selectedRows().size())
+        {
+            QMessageBox::warning(this, "", "Select pair of fighters");
             return;
+        }
 
-        int row = ui->tableWidget->selectionModel()->selectedRows()[0].row();
+        int row = ui->tableWidget->selectionModel()->selectedRows()[0].row(); // TODO
+//        int row = 4;
         bool canStart = ui->tableWidget->item(row, 6)->data(Qt::UserRole).toBool();
         if (!canStart)
             return;
@@ -115,21 +119,8 @@ MainWindow::MainWindow(QWidget *parent) :
                     true,
                     showAdvertisement
         );
-        //        FightingTable f(0,
-
-
-        //                        ui->tableWidget->item(row,  8)->data(Qt::DisplayRole).toInt(),
-        //                        ui->tableWidget->item(row,  9)->data(Qt::DisplayRole).toInt(),
-        //                        ui->tableWidget->item(row, 10)->data(Qt::DisplayRole).toInt(),
-
-        //                        flags[row][0],
-        //                        flags[row][1],
-        //                        true,
-        //                        showAdvertisement,
-
-        //                        extraRound[row]);
         this->hide();
-        //        f.exec();
+        fffs.exec();
         this->show();
         /*/
         if (f.fightStatus == FightingTable::FightStatus::NotStart)
@@ -214,7 +205,8 @@ MainWindow::MainWindow(QWidget *parent) :
     updateAdvertisement();
 
     update();
-    showMaximized();
+    resize(1700, size().height());
+//    showMaximized();
 }
 
 MainWindow::~MainWindow()
@@ -247,7 +239,6 @@ void MainWindow::update()
     ui->tableWidget->setColumnCount(heads.size());
     ui->tableWidget->setHorizontalHeaderLabels(heads);
     flags.clear();
-    extraRound.clear();
     for (int i = 0; i < array.size(); ++i)
     {
         QTableWidgetItem *item;
@@ -293,9 +284,7 @@ void MainWindow::update()
         if (!b.isNull()) b = b.scaledToHeight(200);
         flags.back() << a << b;
 
-        extraRound << object["DURATION_EXTRA_ROUND"].toInt();
-        ui->tableWidget->setItem(i, column++, new QTableWidgetItem(QString::number(extraRound.back())));
-        //        qDebug() << i << object["DURATION_EXTRA_ROUND"].toInt() << extraRound.back();
+        ui->tableWidget->setItem(i, column++, new QTableWidgetItem(QString::number(object["DURATION_EXTRA_ROUND"].toInt())));
     }
     ui->tableWidget->resizeColumnsToContents();
 }

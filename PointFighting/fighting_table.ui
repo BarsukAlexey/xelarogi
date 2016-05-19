@@ -14,6 +14,9 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout" rowstretch="5,90,5">
+   <property name="sizeConstraint">
+    <enum>QLayout::SetMaximumSize</enum>
+   </property>
    <property name="leftMargin">
     <number>0</number>
    </property>
@@ -41,14 +44,14 @@
      </property>
      <layout class="QHBoxLayout" name="horizontalLayoutWidgetRoof">
       <item>
-       <widget class="QLabel" name="labelLeftHead">
+       <widget class="AspectRatioTextLabel" name="labelLeftHead">
         <property name="text">
          <string>Левый</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="labelTime">
+       <widget class="AspectRatioTextLabel" name="labelTime">
         <property name="text">
          <string>Время</string>
         </property>
@@ -58,7 +61,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="labelRightHead">
+       <widget class="AspectRatioTextLabel" name="labelRightHead">
         <property name="text">
          <string>Правый</string>
         </property>
@@ -113,6 +116,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>AspectRatioTextLabel</class>
+   <extends>QLabel</extends>
+   <header>aspectratiotextlabel.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

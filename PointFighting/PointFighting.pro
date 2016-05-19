@@ -15,7 +15,6 @@ CONFIG += c++11
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    fighting_table.cpp \
     qrightclickbutton.cpp \
     formscore.cpp \
     form_advertisement.cpp \
@@ -25,7 +24,8 @@ SOURCES += main.cpp\
     aspect_ratio_pixmap_label.cpp \
     aspectratiotextlabel.cpp \
     myqlcdnumber.cpp \
-    fighting.cpp
+    fighting.cpp \
+    fighting_table.cpp
 
 HEADERS  += mainwindow.h \
     fighting_table.h \

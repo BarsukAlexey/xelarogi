@@ -19,6 +19,7 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QWidget>
+#include "aspectratiotextlabel.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -28,9 +29,9 @@ public:
     QGridLayout *gridLayout;
     QWidget *widgetRoof;
     QHBoxLayout *horizontalLayoutWidgetRoof;
-    QLabel *labelLeftHead;
-    QLabel *labelTime;
-    QLabel *labelRightHead;
+    AspectRatioTextLabel *labelLeftHead;
+    AspectRatioTextLabel *labelTime;
+    AspectRatioTextLabel *labelRightHead;
     QHBoxLayout *horizontalLayoutMain;
     QWidget *widgetFooter;
     QHBoxLayout *widgetFooterHorizontalLayout;
@@ -45,6 +46,7 @@ public:
         gridLayout = new QGridLayout(FightingTable);
         gridLayout->setSpacing(0);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
+        gridLayout->setSizeConstraint(QLayout::SetMaximumSize);
         gridLayout->setContentsMargins(0, 0, 0, 0);
         widgetRoof = new QWidget(FightingTable);
         widgetRoof->setObjectName(QStringLiteral("widgetRoof"));
@@ -54,18 +56,18 @@ public:
         widgetRoof->setStyleSheet(QStringLiteral("background-color: rgb(192, 192, 192);"));
         horizontalLayoutWidgetRoof = new QHBoxLayout(widgetRoof);
         horizontalLayoutWidgetRoof->setObjectName(QStringLiteral("horizontalLayoutWidgetRoof"));
-        labelLeftHead = new QLabel(widgetRoof);
+        labelLeftHead = new AspectRatioTextLabel(widgetRoof);
         labelLeftHead->setObjectName(QStringLiteral("labelLeftHead"));
 
         horizontalLayoutWidgetRoof->addWidget(labelLeftHead);
 
-        labelTime = new QLabel(widgetRoof);
+        labelTime = new AspectRatioTextLabel(widgetRoof);
         labelTime->setObjectName(QStringLiteral("labelTime"));
         labelTime->setAlignment(Qt::AlignCenter);
 
         horizontalLayoutWidgetRoof->addWidget(labelTime);
 
-        labelRightHead = new QLabel(widgetRoof);
+        labelRightHead = new AspectRatioTextLabel(widgetRoof);
         labelRightHead->setObjectName(QStringLiteral("labelRightHead"));
         labelRightHead->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 

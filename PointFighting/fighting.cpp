@@ -1,18 +1,46 @@
 #include "fighting.h"
 
+
 Fighting::Fighting(int durationOfRound, int durationOfBreak, int countOfRounds, int durationExtraRound) :
 
     durationOfDoctorOnRing(2 * 60 * 1000),
-    durationOfRound(durationOfRound),
-    durationOfBreak(durationOfBreak),
+    durationOfRound(1000 * durationOfRound),
+    durationOfBreak(1000 * durationOfBreak),
     countOfRounds(countOfRounds),
-    durationOfExtraRound(durationExtraRound)
+    durationOfExtraRound(1000 * durationExtraRound)
 {
+
+    statusName.clear();
+    statusName << "NotStart" << "Fight" << "Break" << "PauseFight" << "DoctorOnRing" << "Tie" << "DisqualificationLeft" << "DisqualificationRight" <<
+    "winnerByPointsLeft" << "winnerByPointsRight" <<
+    "winnerByPointsLeft10" << "winnerByPointsRight10" <<
+    "stoppedByJudge" << "forceLeftWinner" << "forceRightWinner" <<
+    "PendingExtraRound" << "ExtraRound" << "PauseExtraRound";
+
+    prevMomentTime = 0;
+    spendTime = 0;
+
     currentRound = 1;
+    spentTimeDoctor = 0;
+
+
+    currentRound = 1;
+
     status = FightStatus::NotStart;
+
+    countPointLeft = 0;
+    countPointRight = 0;
+    countOfMinusToLeft = 0;
+    countOfMinusToRight = 0;
+    countOfForestallingToLeft = 0;
+    countOfForestallingToRight = 0;
+    countOfExToLeft = 0;
+    countOfExToRight = 0;
+    wasExtraRound = false;
 
     timer = new QTimer();
     timer->setInterval(250);
+    connect(timer, &QTimer::timeout, [this](){updateTime();});
 }
 
 
@@ -57,34 +85,45 @@ void Fighting::disqualify(Fighting::Player player){
 }
 
 void Fighting::addOnePointToLeftFighter() {
-    if (isDisqOrPoint10OrForceWinner())
+    if (status == FightStatus::DisqualificationLeft || status == FightStatus::DisqualificationRight ||
+        status == FightStatus::forceLeftWinner || status == FightStatus::forceRightWinner ||
+        status == FightStatus::stoppedByJudge)
         return;
     ++countPointLeft;
-    if (getCountOfPointsForLeftFighter() - getCountOfPointsForRightFighter() == 10) {
-        statusBeforDisqualification = status;
-        statusBeforDisqualification = FightStatus::winnerByPointsLeft10;
-    }
-
+    updatePointStatus();
 }
 
 void Fighting::addOnePointToRightFighter() {
-    if (isDisqOrPoint10OrForceWinner())
+    if (status == FightStatus::DisqualificationLeft || status == FightStatus::DisqualificationRight ||
+        status == FightStatus::forceLeftWinner || status == FightStatus::forceRightWinner ||
+        status == FightStatus::stoppedByJudge)
         return;
     ++countPointRight;
-    if (getCountOfPointsForRightFighter() - getCountOfPointsForLeftFighter() == 10) {
-        statusBeforDisqualification = status;
-        statusBeforDisqualification = FightStatus::winnerByPointsLeft10;
-    }
+    updatePointStatus();
 }
 
 void Fighting::cancelLeftPoint(){
-    if (0 < countPointLeft)
+    if (status == FightStatus::DisqualificationLeft || status == FightStatus::DisqualificationRight ||
+        status == FightStatus::forceLeftWinner || status == FightStatus::forceRightWinner ||
+        status == FightStatus::stoppedByJudge)
+        return;
+
+    if (0 < countPointLeft) {
         --countPointLeft;
+        updatePointStatus();
+    }
 }
 
 void Fighting::cancelRightPoint(){
-    if (0 < countPointRight)
+    if (status == FightStatus::DisqualificationLeft || status == FightStatus::DisqualificationRight ||
+        status == FightStatus::forceLeftWinner || status == FightStatus::forceRightWinner ||
+        status == FightStatus::stoppedByJudge)
+        return;
+
+    if (0 < countPointRight) {
         --countPointRight;
+        updatePointStatus();
+    }
 }
 
 void Fighting::addForestallingToLeft() {
@@ -117,14 +156,15 @@ void Fighting::addExToLeft() {
     Item item(Penalty::Ex, Player::Left);
     if (2 <= countOfExToLeft) {
         int countOfPointsForTheLeftFighter = getCountOfPointsForLeftFighter();
-        item.deltaLeft = -qMin(3, countOfPointsForTheLeftFighter);
-        item.deltaRight = 3 + item.deltaLeft;
+        item.deltaLeft = -qMin(1, countOfPointsForTheLeftFighter);
+        item.deltaRight = 1 + item.deltaLeft;
     }
     stackPenalty.push(item);
 
-    if (4 == countOfExToLeft) {
+    if (4 == countOfExToLeft)
         disqualify(Player::Left);
-    }
+    else
+        updatePointStatus();
 }
 
 void Fighting::addExToRight() {
@@ -135,14 +175,15 @@ void Fighting::addExToRight() {
     Item item(Penalty::Ex, Player::Right);
     if (2 <= countOfExToRight) {
         int countOfPointsForTheRightFighter = getCountOfPointsForRightFighter();
-        item.deltaRight = -qMin(3, countOfPointsForTheRightFighter);
-        item.deltaLeft = 3 + item.deltaRight;
+        item.deltaRight = -qMin(1, countOfPointsForTheRightFighter);
+        item.deltaLeft = 1 + item.deltaRight;
     }
     stackPenalty.push(item);
 
-    if (4 == countOfExToRight) {
+    if (4 == countOfExToRight)
         disqualify(Player::Right);
-    }
+    else
+        updatePointStatus();
 }
 
 void Fighting::addMinusToLeft() {
@@ -152,13 +193,14 @@ void Fighting::addMinusToLeft() {
     ++countOfMinusToLeft;
     Item item(Penalty::Minus, Player::Left);
     int countOfPointsForTheLeftFighter = getCountOfPointsForLeftFighter();
-    item.deltaLeft = -qMin(3, countOfPointsForTheLeftFighter);
-    item.deltaRight = 3 + item.deltaLeft;
+    item.deltaLeft = -qMin(1, countOfPointsForTheLeftFighter);
+    item.deltaRight = 1 + item.deltaLeft;
     stackPenalty.push(item);
 
-    if (countOfMinusToLeft == 3) {
+    if (countOfMinusToLeft == 3)
         disqualify(Player::Left);
-    }
+    else
+        updatePointStatus();
 }
 
 void Fighting::addMinusToRight() {
@@ -168,12 +210,14 @@ void Fighting::addMinusToRight() {
     ++countOfMinusToRight;
     Item item(Penalty::Minus, Player::Right);
     int countOfPointsForRightFighter = getCountOfPointsForRightFighter();
-    item.deltaRight = -qMin(3, countOfPointsForRightFighter);
-    item.deltaLeft = 3 + item.deltaRight;
+    item.deltaRight = -qMin(1, countOfPointsForRightFighter);
+    item.deltaLeft = 1 + item.deltaRight;
     stackPenalty.push(item);
 
     if (countOfMinusToRight == 3)
         disqualify(Player::Right);
+    else
+        updatePointStatus();
 }
 
 void Fighting::pressedKeySpace() {
@@ -205,14 +249,14 @@ void Fighting::pressDoctor()
     }
 }
 
-int Fighting::getCountOfPointsForLeftFighter(){
+int Fighting::getCountOfPointsForLeftFighter() const{
     int count = countPointLeft;
     for (Item item : stackPenalty)
         count += item.deltaLeft;
     return count;
 }
 
-int Fighting::getCountOfPointsForRightFighter(){
+int Fighting::getCountOfPointsForRightFighter() const{
     int count = countPointRight;
     for (Item item : stackPenalty)
         count += item.deltaRight;
@@ -224,6 +268,7 @@ void Fighting::updateTime() {
     if (prevMomentTime == 0) prevMomentTime = momentTime;
     long quantum = momentTime - prevMomentTime;
     prevMomentTime = momentTime;
+//    qDebug() << QDateTime::currentDateTime().toString("hh:mm:ss zzz") << statusName[status] << spendTime;
 
 
     if (status == FightStatus::Fight) {
@@ -234,15 +279,15 @@ void Fighting::updateTime() {
             if (currentRound == countOfRounds) {
                 int l = getCountOfPointsForLeftFighter();
                 int r = getCountOfPointsForRightFighter();
-                if (l > r)
+                if (l > r) {
                     status = FightStatus::winnerByPointsLeft;
-                else if (l < r)
+                } else if (l < r) {
                     status = FightStatus::winnerByPointsRight;
-                else {
-                    if (durationOfExtraRound == 0)
-                        status = FightStatus::Tie;
-                    else
+                } else {
+                    if (0 < durationOfExtraRound && !wasExtraRound)
                         status = FightStatus::PendingExtraRound;
+                    else
+                        status = FightStatus::Tie;
                 }
             } else {
                 status = FightStatus::Break;
@@ -251,8 +296,11 @@ void Fighting::updateTime() {
         }
     } else if (status == FightStatus::Break) {
         spendTime += quantum;
-        if (durationOfBreak - spendTime <= 10 && soundHummerBit->isFinished()) {
+        if (durationOfBreak - spendTime <= 10 * 1000 && soundHummerBit->isFinished()) {
+            soundGong->stop();
             soundHummerBit->play();
+            qDebug() << "soundHummerBit!!";
+
         }
         if (durationOfBreak <= spendTime) {
             spendTime -= durationOfBreak; // spendTime = 0;
@@ -269,19 +317,7 @@ void Fighting::updateTime() {
             status = FightStatus::Fight;
         }
     } else if (status == FightStatus::Tie) {
-        int l = getCountOfPointsForLeftFighter();
-        int r = getCountOfPointsForRightFighter();
-        if (l > r)
-            status = FightStatus::winnerByPointsLeft;
-        else if (l < r)
-            status = FightStatus::winnerByPointsRight;
     } else if (status == FightStatus::PendingExtraRound) {
-        int l = getCountOfPointsForLeftFighter();
-        int r = getCountOfPointsForRightFighter();
-        if (l > r)
-            status = FightStatus::winnerByPointsLeft;
-        else if (l < r)
-            status = FightStatus::winnerByPointsRight;
     } else if (status == FightStatus::ExtraRound) {
         spendTime += quantum;
         wasExtraRound = true;
@@ -297,19 +333,31 @@ void Fighting::updateTime() {
             }
         }
     } else if (status == FightStatus::winnerByPointsLeft) {
-        int l = getCountOfPointsForLeftFighter();
-        int r = getCountOfPointsForRightFighter();
-        if (l > r) {
-            status = FightStatus::winnerByPointsLeft;
-        } else if (l < r) {
-            status = FightStatus::winnerByPointsRight;
-        } else {
-            if (0 < durationOfExtraRound && !wasExtraRound)
-                status = FightStatus::PendingExtraRound;
-            else
-                status = FightStatus::Tie;
-        }
     } else if (status == FightStatus::winnerByPointsRight) {
+    }
+}
+
+void Fighting::updatePointStatus()
+{
+    if (status == FightStatus::DisqualificationLeft || status == FightStatus::DisqualificationRight)
+        return;
+
+    if (status != FightStatus::winnerByPointsLeft10 && 10 <= getCountOfPointsForLeftFighter() - getCountOfPointsForRightFighter()) {
+         statusBeforDisqualification = status;
+         status = FightStatus::winnerByPointsLeft10;
+    } else if (status != FightStatus::winnerByPointsRight10 && 10 <= getCountOfPointsForRightFighter() - getCountOfPointsForLeftFighter()) {
+        statusBeforDisqualification = status;
+        status = FightStatus::winnerByPointsRight10;
+    }
+
+    if (status == FightStatus::winnerByPointsLeft10  && getCountOfPointsForLeftFighter()  - getCountOfPointsForRightFighter() < 10){
+        status = statusBeforDisqualification;
+    } else if (status == FightStatus::winnerByPointsRight10 && getCountOfPointsForRightFighter() - getCountOfPointsForLeftFighter() < 10){
+        status = statusBeforDisqualification;
+    }
+
+    if (status == winnerByPointsRight || status == winnerByPointsLeft || status == Tie ||
+        status == PendingExtraRound){
         int l = getCountOfPointsForLeftFighter();
         int r = getCountOfPointsForRightFighter();
         if (l > r) {
@@ -331,11 +379,11 @@ QString Fighting::getTimeMMSS(long long timeMS)
     return QString("%1").arg(timeMS/60, 2, 10, QChar('0')) + ":" + QString("%1").arg(timeMS%60, 2, 10, QChar('0'));
 }
 
-QString Fighting::getStringTime() {
+QString Fighting::getStringTime() const {
     if (status == FightStatus::NotStart) {
         return getTimeMMSS(durationOfRound);
     }
-    if (status == FightStatus::Fight || status == FightStatus::PauseFight) {
+    if (status == FightStatus::Fight || status == FightStatus::PauseFight || status == FightStatus::DoctorOnRing) {
         long remainTime = qMax(0LL, durationOfRound - spendTime);
         return getTimeMMSS(remainTime);
     }
@@ -353,9 +401,31 @@ QString Fighting::getStringTime() {
     return "";
 }
 
-QString Fighting::getStringTimeDoctor()
+long long Fighting::getTimeMS() const {
+    if (status == FightStatus::NotStart) {
+        return durationOfRound;
+    }
+    if (status == FightStatus::Fight || status == FightStatus::PauseFight) {
+        long remainTime = qMax(0LL, durationOfRound - spendTime);
+        return remainTime;
+    }
+    if (status == FightStatus::Break) {
+        long remainTime = qMax(0LL, durationOfBreak - spendTime);
+        return remainTime;
+    }
+    if (status == FightStatus::PendingExtraRound) {
+        return durationOfExtraRound;
+    }
+    if (status == FightStatus::ExtraRound || status == FightStatus::PauseExtraRound) {
+        long remainTime = qMax(0LL, durationOfExtraRound - spendTime);
+        return remainTime;
+    }
+    return 0;
+}
+
+QString Fighting::getStringTimeDoctor() const
 {
-    return getTimeMMSS(spentTimeDoctor);
+    return getTimeMMSS(qMax(0LL, durationOfDoctorOnRing - spentTimeDoctor));
 }
 
 QString Fighting::getResult() {
@@ -366,19 +436,19 @@ QString Fighting::getResult() {
     if (status == FightStatus::forceLeftWinner || status == FightStatus::forceRightWinner)
         return forceResult;
 
-    return countPointLeft + " : " + countPointRight;
+    return QString::number(countPointLeft) + " : " + QString::number(countPointRight);
 }
 
 Fighting::Player Fighting::getWinner() {
-    if (status == FightStatus::forceLeftWinner || status == FightStatus::winnerByPointsLeft || status == FightStatus::DisqualificationRight)
+    if (status == FightStatus::forceLeftWinner  || status == FightStatus::winnerByPointsLeft  || status == FightStatus::winnerByPointsLeft10  || status == FightStatus::DisqualificationRight)
         return Player::Left;
-    if (status == FightStatus::forceRightWinner || status == FightStatus::winnerByPointsRight || status == FightStatus::DisqualificationLeft)
+    if (status == FightStatus::forceRightWinner || status == FightStatus::winnerByPointsRight || status == FightStatus::winnerByPointsRight10 || status == FightStatus::DisqualificationLeft )
         return Player::Right;
     return Player::NoPlayer;
 }
 
 void Fighting::cancelLastAction() {
-    if (stackPenalty.isEmpty() || status == FightStatus::stoppedByJudge)
+    if (stackPenalty.isEmpty() || status == FightStatus::stoppedByJudge || status == FightStatus::forceLeftWinner || status == FightStatus::forceRightWinner)
         return;
 
 
@@ -420,6 +490,8 @@ void Fighting::cancelLastAction() {
             }
         }
     }
+
+
 }
 
 Fighting::FightStatus Fighting::getStatus() const {
@@ -438,5 +510,29 @@ int Fighting::getCountOfRounds() const
 int Fighting::getCurrentRound() const
 {
     return currentRound;
+}
+
+int Fighting::getCountOfMinusToLeft() const{
+    return countOfMinusToLeft;
+}
+
+int Fighting::getCountOfMinusToRight() const{
+    return countOfMinusToRight;
+}
+
+int Fighting::getCountOfForestallingToLeft() const{
+    return countOfForestallingToLeft;
+}
+
+int Fighting::getCountOfForestallingToRight() const{
+    return countOfForestallingToRight;
+}
+
+int Fighting::getCountOfExToLeft() const{
+    return countOfExToLeft;
+}
+
+int Fighting::getCountOfExToRight() const{
+    return countOfExToRight;
 }
 

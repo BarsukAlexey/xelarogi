@@ -1,37 +1,29 @@
 #ifndef FIGHTING_TABLE_H
 #define FIGHTING_TABLE_H
 
-#include <QWidget>
-#include <QDialog>
-#include <QSound>
-#include <QCloseEvent>
-#include <QTimer>
-#include <QDateTime>
-#include <QDebug>
-#include <chrono>
-#include <iostream>
-#include <chrono>
-#include <ctime>
-#include <iostream>
-#include <chrono>
-#include <ratio>
-#include <thread>
-#include <QMessageBox>
-#include "ui_fighting_table.h"
-#include "ui_form.h"
 #include "formscore.h"
 #include "fighting.h"
-#include <QtGui>
-
-#include <QMessageBox>
-#include "ui_fighting_table.h"
-#include "ui_form.h"
 #include "dialogdisq.h"
 #include "formscore.h"
-#include <QtGui>
+
+#include <chrono>
+#include <ctime>
+#include <chrono>
+#include <iostream>
+#include <ratio>
+#include <thread>
 #include <QApplication>
+#include <QCloseEvent>
+#include <QDateTime>
+#include <QDebug>
 #include <QDesktopWidget>
-#include <qmessagebox.h>
+#include <QDialog>
+#include <QMessageBox>
+#include <QSound>
+#include <QString>
+#include <QtGui>
+#include <QTimer>
+#include <QWidget>
 using namespace std::chrono;
 
 namespace Ui {
@@ -48,8 +40,8 @@ private:
     QPushButton *pushButtonStart;
     QPushButton *pushButtonDoctor;
     QPushButton *pushButtonStop;
+    QPushButton *cancelLastPenalty;
 
-    const int poolTime = 250;
     const QString nameLeft;
     const QString nameRight;
     const QImage mLeftFlag;
@@ -61,6 +53,7 @@ private:
     const bool showAdvertisement;
 
     QString forceResult;
+    QTimer* timer;
 
 public:
 
@@ -69,16 +62,7 @@ public:
                   QImage leftFlag, QImage rightFlag,
                   bool dialogForJudge, bool showAdvertisement);
 
-//    ~FightingTable(){
-//        delete ui;
-//        for (FightingTable* f : allTables)
-//            if (f != this)
-//                delete f;
-//    }
-
-private:
-    static QString getTimeMMSS(long long time);
-
+    ~FightingTable();
 
 private slots:
     void updateInfo();
