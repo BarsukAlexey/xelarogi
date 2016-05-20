@@ -1,16 +1,17 @@
 #include "myqlcdnumber.h"
 #include <QPalette>
 
-MyQLCDNumber::MyQLCDNumber()
+MyQLCDNumber::MyQLCDNumber(QWidget* p) :
+    QLCDNumber(p)
 {
     setDigitCount(1);
     //setPalette(Qt::black);
     setSegmentStyle(Flat);
 
-    QPalette localPalette = palette();
-    localPalette.setColor(QPalette::ColorRole::WindowText, Qt::red);
-    localPalette.setColor(QPalette::ColorRole::Background, Qt::black);
-    setPalette(localPalette);
+//    QPalette localPalette = palette();
+//    localPalette.setColor(QPalette::ColorRole::WindowText, Qt::red);
+//    localPalette.setColor(QPalette::ColorRole::Background, Qt::black);
+//    setPalette(localPalette);
     //setStyleSheet("color:rgb(85, 85, 255)");
 
 }

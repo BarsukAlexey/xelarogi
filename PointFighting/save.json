@@ -14,11 +14,14 @@
         "leftFlag": "iVBORw0KGgoAAAANSUhEUgAAAAkAAAAGCAYAAAARx7TFAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAJElEQVQImWP8////fwYCgImQAgYGBgZGBstlVDLpqrYcdUwCABTqCAE9u0b5AAAAAElFTkSuQmCC",
         "nameOfLeftFighter": "Чирков Владислав",
         "nameOfRightFighter": "Каландар Саймухамад",
+        "orderUID": 10651,
         "orderUID_left": 10651,
         "orderUID_right": 10652,
         "regionOfLeftFighter": "Псковская",
         "regionOfRightFighter": "Псковская",
-        "rightFlag": "iVBORw0KGgoAAAANSUhEUgAAAAkAAAAGCAYAAAARx7TFAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAJElEQVQImWP8////fwYCgImQAgYGBgZGBstlVDLpqrYcdUwCABTqCAE9u0b5AAAAAElFTkSuQmCC"
+        "result": "15 : 0",
+        "rightFlag": "iVBORw0KGgoAAAANSUhEUgAAAAkAAAAGCAYAAAARx7TFAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAJElEQVQImWP8////fwYCgImQAgYGBgZGBstlVDLpqrYcdUwCABTqCAE9u0b5AAAAAElFTkSuQmCC",
+        "winner": "Чирков Владислав"
     },
     {
         "DURATION_EXTRA_ROUND": 0,
@@ -35,11 +38,14 @@
         "leftFlag": "iVBORw0KGgoAAAANSUhEUgAAAAkAAAAGCAYAAAARx7TFAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAJElEQVQImWP8////fwYCgImQAgYGBgZGBstlVDLpqrYcdUwCABTqCAE9u0b5AAAAAElFTkSuQmCC",
         "nameOfLeftFighter": "Генералов Александр",
         "nameOfRightFighter": "Семенов Владислав",
+        "orderUID": 10648,
         "orderUID_left": 10648,
         "orderUID_right": 10650,
         "regionOfLeftFighter": "Псковская",
         "regionOfRightFighter": "Псковская",
-        "rightFlag": "iVBORw0KGgoAAAANSUhEUgAAAAkAAAAGCAYAAAARx7TFAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAJElEQVQImWP8////fwYCgImQAgYGBgZGBstlVDLpqrYcdUwCABTqCAE9u0b5AAAAAElFTkSuQmCC"
+        "result": "1 : 0",
+        "rightFlag": "iVBORw0KGgoAAAANSUhEUgAAAAkAAAAGCAYAAAARx7TFAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAJElEQVQImWP8////fwYCgImQAgYGBgZGBstlVDLpqrYcdUwCABTqCAE9u0b5AAAAAElFTkSuQmCC",
+        "winner": "Генералов Александр"
     },
     {
         "DURATION_EXTRA_ROUND": 15,
@@ -76,12 +82,12 @@
         "fightId": 4,
         "leftFlag": "iVBORw0KGgoAAAANSUhEUgAAAAkAAAAGCAYAAAARx7TFAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAJElEQVQImWP8////fwYCgImQAgYGBgZGBstlVDLpqrYcdUwCABTqCAE9u0b5AAAAAElFTkSuQmCC",
         "nameOfLeftFighter": "Лунев Кирилл",
-        "nameOfRightFighter": " ",
+        "nameOfRightFighter": "Генералов Александр",
         "orderUID_left": 10649,
-        "orderUID_right": 0,
+        "orderUID_right": 10648,
         "regionOfLeftFighter": "Псковская",
-        "regionOfRightFighter": "",
-        "rightFlag": ""
+        "regionOfRightFighter": "Псковская",
+        "rightFlag": "iVBORw0KGgoAAAANSUhEUgAAAAkAAAAGCAYAAAARx7TFAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAJElEQVQImWP8////fwYCgImQAgYGBgZGBstlVDLpqrYcdUwCABTqCAE9u0b5AAAAAElFTkSuQmCC"
     },
     {
         "DURATION_EXTRA_ROUND": 15,

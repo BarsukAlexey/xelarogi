@@ -25,7 +25,8 @@ SOURCES += main.cpp\
     aspectratiotextlabel.cpp \
     myqlcdnumber.cpp \
     fighting.cpp \
-    fighting_table.cpp
+    fighting_table.cpp \
+    fightingtable2.cpp
 
 HEADERS  += mainwindow.h \
     fighting_table.h \
@@ -38,7 +39,8 @@ HEADERS  += mainwindow.h \
     aspect_ratio_pixmap_label.h \
     aspectratiotextlabel.h \
     myqlcdnumber.h \
-    fighting.h
+    fighting.h \
+    fightingtable2.h
 
 FORMS    += mainwindow.ui \
     fighting_table.ui \
@@ -46,4 +48,5 @@ FORMS    += mainwindow.ui \
     form_advertisement.ui \
     form_advertisement_setting.ui \
     dialogdisq.ui \
-    logindialog.ui
+    logindialog.ui \
+    fightingtable2.ui

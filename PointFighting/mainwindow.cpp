@@ -124,31 +124,35 @@ MainWindow::MainWindow(QWidget *parent) :
         this->hide();
         fffs.exec();
         this->show();
-        /*/
-        if (f.fightStatus == FightingTable::FightStatus::NotStart)
-            return;
+        //
+
+
+
 
         QString winner;
         int winnerUID;
         QStringList winnerKeys;
-        if      (f.getWinner() == FightingTable::Player::LeftPlayer){
+        if      (fighting->getWinner() == Fighting::Player::Left){
             winner    = ui->tableWidget->item(row, 1)->data(Qt::DisplayRole).toString();
             winnerUID = ui->tableWidget->item(row, 1)->data(Qt::UserRole).toLongLong();
             winnerKeys << "nameOfLeftFighter" << "orderUID_left" << "regionOfLeftFighter" << "leftFlag";
         }
-        else if (f.getWinner() == FightingTable::Player::RightPlayer){
+        else if (fighting->getWinner() == Fighting::Player::Right){
             winner    = ui->tableWidget->item(row, 3)->data(Qt::DisplayRole).toString();
             winnerUID = ui->tableWidget->item(row, 3)->data(Qt::UserRole).toLongLong();
             winnerKeys << "nameOfRightFighter" << "orderUID_right" << "regionOfRightFighter" << "rightFlag";
         }
         else
+        {
             return;
+        }
+
         QJsonDocument doc = loadJSON();
         QJsonArray array = doc.array();
         QJsonObject object = array.at(row).toObject();
         object["winner"] = winner;
         object["orderUID"] = winnerUID;
-        object["result"] = f.getResult();
+        object["result"] = fighting->getResult();
         array.removeAt(row);
         array.insert(row, object);
         int TOURNAMENT_CATEGORIES_FK = object["TOURNAMENT_CATEGORIES_FK"].toInt();
@@ -265,7 +269,11 @@ void MainWindow::update()
         ui->tableWidget->setItem(i, column++, item);
 
         QString winner = object["winner"].toString();
-        ui->tableWidget->setItem(i, column++, new QTableWidgetItem(winner));
+        QString result = object["result"].toString();
+        if (!result.isEmpty())
+            ui->tableWidget->setItem(i, column++, new QTableWidgetItem(winner + " (" + result + ")"));
+        else
+            ui->tableWidget->setItem(i, column++, new QTableWidgetItem(winner));
 
         bool canStart = 0 < object["orderUID_left"].toInt() && 0 < object["orderUID_right"].toInt() && !object["orderUID"].toInt(0);
         //qDebug() << i << object["orderUID_left"].toInt() << object["orderUID_right"].toInt() << canStart << column;

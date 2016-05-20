@@ -299,7 +299,6 @@ void Fighting::updateTime() {
         if (durationOfBreak - spendTime <= 10 * 1000 && soundHummerBit->isFinished()) {
             soundGong->stop();
             soundHummerBit->play();
-            qDebug() << "soundHummerBit!!";
 
         }
         if (durationOfBreak <= spendTime) {

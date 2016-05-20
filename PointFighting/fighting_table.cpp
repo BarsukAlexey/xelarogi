@@ -18,7 +18,7 @@ FightingTable::FightingTable(Fighting* f, QString nameLeft, QString regionLeft, 
 
     ui->setupUi(this);
 
-    //
+
     if (!dialogForJudge){
         return;
     }
@@ -26,10 +26,12 @@ FightingTable::FightingTable(Fighting* f, QString nameLeft, QString regionLeft, 
     left  << new FormScore(nameLeft , regionLeft , leftFlag , Qt::red );
     right << new FormScore(nameRight, regionRight, rightFlag, Qt::blue);
 
-    ui->horizontalLayoutMain->addWidget(left .back());
-    ui->horizontalLayoutMain->addWidget(right.back());
+    ui->horizontalLayoutMain->addWidget(left .back(), 50);
+    ui->horizontalLayoutMain->addWidget(right.back(), 50);
+
 
     allTables << this;
+    //
 
     for (int i = 0; i < QApplication::desktop()->screenCount(); ++i)
     {

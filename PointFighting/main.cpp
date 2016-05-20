@@ -15,9 +15,14 @@
 #include "myqlcdnumber.h"
 #include "formscore.h"
 #include "qrightclickbutton.h"
+#include "fightingtable2.h"
+
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+
+//    FightingTable2* ft = new FightingTable2();
+//    ft->show();
 
     MainWindow w;
     w.show();
@@ -34,7 +39,7 @@ int main(int argc, char *argv[])
 
 
 
-//    FightingTable* ft = new FightingTable(0, "", "", "", "", QImage(), QImage(), true, true);
+//    FightingTable* ft = new FightingTable(0, "Иван Иванов", "Санкт-Петербург", "Пётр Петров", "Махачкала", QImage(".\\resources\\images\\Canada.png"), QImage(".\\resources\\images\\Switzerland.png"), true, true);
 //    ft->show();
 
 //    tempForm* tf = new tempForm();

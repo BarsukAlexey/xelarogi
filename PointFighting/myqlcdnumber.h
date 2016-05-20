@@ -9,7 +9,7 @@
 class MyQLCDNumber : public QLCDNumber
 {
 public:
-    MyQLCDNumber();
+    MyQLCDNumber(QWidget* p = 0);
 
 protected:
     void mousePressEvent(QMouseEvent *);
