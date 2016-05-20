@@ -14,6 +14,14 @@ FormScore::FormScore(QString name, QString region, QImage flag, QColor backgroun
     ui->labelFIO->setText(name);
     ui->labelRegion->setText(region);
 
+    ui->pushButtonPoint->setAlignmentFlag(Qt::AlignCenter);
+    ui->pushButtonMinus->setAlignmentFlag(Qt::AlignVCenter | Qt::AlignRight);
+    ui->pushButtonFo->setAlignmentFlag(Qt::AlignCenter | Qt::AlignRight);
+    ui->pushButtonEx->setAlignmentFlag(Qt::AlignCenter | Qt::AlignRight);
+
+    int r, g, b;
+    backgroundColor.getRgb(&r, &g, &b);
+    setStyleSheet(styleSheet() + QString(";\nbackground-color: rgb(%1, %2, %3);").arg(r).arg(g).arg(b));
 
     isWinner = false;
     setWinner(true);

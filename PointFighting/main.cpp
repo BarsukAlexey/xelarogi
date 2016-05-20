@@ -11,13 +11,35 @@
 #include "aspectratiotextlabel.h"
 
 #include <QLCDNumber>
+#include <QPixmap>
 #include "myqlcdnumber.h"
-
+#include "formscore.h"
+#include "qrightclickbutton.h"
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+
     MainWindow w;
     w.show();
+
+//    QRightClickButton* b = new QRightClickButton();
+//    b->show();
+//    b->setText("asda");
+
+
+//    FormScore* fc = new FormScore("Vasya", "Russina", QImage(".\\resources\\images\\images.jpg"), QColor(Qt::blue));
+//    fc->show();
+//    Form22* f = new Form22();
+//    f->show();
+
+
+
+//    FightingTable* ft = new FightingTable(0, "", "", "", "", QImage(), QImage(), true, true);
+//    ft->show();
+
+//    tempForm* tf = new tempForm();
+//    tf->show();
+
 
 //    QPixmap map(".\\resources\\images\\images.jpg");
 //    AspectRatioPixmapLabel* lbl = new AspectRatioPixmapLabel();

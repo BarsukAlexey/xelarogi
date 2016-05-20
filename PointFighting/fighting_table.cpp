@@ -18,6 +18,7 @@ FightingTable::FightingTable(Fighting* f, QString nameLeft, QString regionLeft, 
 
     ui->setupUi(this);
 
+    //
     if (!dialogForJudge){
         return;
     }
@@ -107,6 +108,7 @@ FightingTable::FightingTable(Fighting* f, QString nameLeft, QString regionLeft, 
     showMaximized();
 
 
+    /**/
     //    countPointLeft =  1 + rand()%1000;
     //    countPointRight = 1 + rand()%1000;
     //    status = Status::Finish;
@@ -114,14 +116,14 @@ FightingTable::FightingTable(Fighting* f, QString nameLeft, QString regionLeft, 
 
 FightingTable::~FightingTable(){
     delete ui;
-    for (FightingTable* f : allTables)
-        if (f != this)
-            delete f;
-    if (dialogForJudge)
-    {
-        timer->stop();
-        delete timer;
-    }
+//    for (FightingTable* f : allTables)
+//        if (f != this)
+//            delete f;
+//    if (dialogForJudge)
+//    {
+//        timer->stop();
+//        delete timer;
+//    }
 }
 
 

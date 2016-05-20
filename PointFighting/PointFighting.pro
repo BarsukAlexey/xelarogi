@@ -46,5 +46,4 @@ FORMS    += mainwindow.ui \
     form_advertisement.ui \
     form_advertisement_setting.ui \
     dialogdisq.ui \
-    logindialog.ui \
-    qwerrrrrrrrrrrrrrrrrrrrrr.ui
+    logindialog.ui

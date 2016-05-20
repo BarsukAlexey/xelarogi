@@ -16,10 +16,9 @@
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
-#include <QtWidgets/QLabel>
 #include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QWidget>
-#include "aspectratiotextlabel.h"
+#include <aspectratiotextlabel.h>
 
 QT_BEGIN_NAMESPACE
 
@@ -35,7 +34,7 @@ public:
     QHBoxLayout *horizontalLayoutMain;
     QWidget *widgetFooter;
     QHBoxLayout *widgetFooterHorizontalLayout;
-    QLabel *labelDoctorTimer;
+    AspectRatioTextLabel *labelDoctorTimer;
     QSpacerItem *horizontalSpacer;
 
     void setupUi(QWidget *FightingTable)
@@ -73,6 +72,9 @@ public:
 
         horizontalLayoutWidgetRoof->addWidget(labelRightHead);
 
+        horizontalLayoutWidgetRoof->setStretch(0, 1);
+        horizontalLayoutWidgetRoof->setStretch(1, 1);
+        horizontalLayoutWidgetRoof->setStretch(2, 1);
 
         gridLayout->addWidget(widgetRoof, 0, 0, 1, 1);
 
@@ -87,21 +89,21 @@ public:
         widgetFooter->setStyleSheet(QStringLiteral("background-color: rgb(192, 192, 192);"));
         widgetFooterHorizontalLayout = new QHBoxLayout(widgetFooter);
         widgetFooterHorizontalLayout->setObjectName(QStringLiteral("widgetFooterHorizontalLayout"));
-        labelDoctorTimer = new QLabel(widgetFooter);
+        labelDoctorTimer = new AspectRatioTextLabel(widgetFooter);
         labelDoctorTimer->setObjectName(QStringLiteral("labelDoctorTimer"));
         labelDoctorTimer->setFont(font);
 
         widgetFooterHorizontalLayout->addWidget(labelDoctorTimer);
 
-        horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+        horizontalSpacer = new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
         widgetFooterHorizontalLayout->addItem(horizontalSpacer);
 
 
         gridLayout->addWidget(widgetFooter, 2, 0, 1, 1);
 
-        gridLayout->setRowStretch(0, 5);
-        gridLayout->setRowStretch(1, 90);
+        gridLayout->setRowStretch(0, 10);
+        gridLayout->setRowStretch(1, 80);
         gridLayout->setRowStretch(2, 5);
 
         retranslateUi(FightingTable);
@@ -114,7 +116,7 @@ public:
         FightingTable->setWindowTitle(QApplication::translate("FightingTable", "Form", 0));
         labelLeftHead->setText(QApplication::translate("FightingTable", "\320\233\320\265\320\262\321\213\320\271", 0));
         labelTime->setText(QApplication::translate("FightingTable", "\320\222\321\200\320\265\320\274\321\217", 0));
-        labelRightHead->setText(QApplication::translate("FightingTable", "\320\237\321\200\320\260\320\262\321\213\320\271", 0));
+        labelRightHead->setText(QApplication::translate("FightingTable", "asdafsdgsdahfhfdshgfdssdgfdgfsdgfsdgsfdgsfdgsfdgfdgfdgfdgsfdgsfdgfdgfdgdsfgfd", 0));
         labelDoctorTimer->setText(QString());
     } // retranslateUi
 

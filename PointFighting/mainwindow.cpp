@@ -92,11 +92,13 @@ MainWindow::MainWindow(QWidget *parent) :
             return;
         }
 
-        int row = ui->tableWidget->selectionModel()->selectedRows()[0].row(); // TODO
-//        int row = 4;
+        int row = ui->tableWidget->selectionModel()->selectedRows()[0].row();
         bool canStart = ui->tableWidget->item(row, 6)->data(Qt::UserRole).toBool();
         if (!canStart)
+        {
+            QMessageBox::warning(this, "", "Played");
             return;
+        }
 
 
 

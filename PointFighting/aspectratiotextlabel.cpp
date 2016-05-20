@@ -1,15 +1,16 @@
 #include "aspectratiotextlabel.h"
 
 #include <QDebug>
+#include <QDateTime>
+
 
 AspectRatioTextLabel::AspectRatioTextLabel(QWidget *parent) :
     QLabel(parent)
 {
-    //    this->setMinimumSize(1,1);
-    this->setText("QweSo");
+    this->setMinimumSize(1,1);
 }
 
-void AspectRatioTextLabel::resizeEvent(QResizeEvent * )
+void AspectRatioTextLabel::mySetFontSize()
 {
     if (0 < width() && 0 < height())
     {
@@ -28,6 +29,17 @@ void AspectRatioTextLabel::resizeEvent(QResizeEvent * )
         }
         myFont.setPointSize(l);
         setFont(myFont);
-        qDebug() << size() << l;
+        //qDebug() << QDateTime::currentDateTime().toString("hh:mm:ss zzz") << size() << l;
     }
+}
+
+void AspectRatioTextLabel::setText(const QString& str)
+{
+    QLabel::setText(str);
+    mySetFontSize();
+}
+
+void AspectRatioTextLabel::resizeEvent(QResizeEvent * )
+{
+    mySetFontSize();
 }
