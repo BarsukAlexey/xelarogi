@@ -73,6 +73,7 @@ public:
         sizePolicy.setHeightForWidth(pushButtonMinus->sizePolicy().hasHeightForWidth());
         pushButtonMinus->setSizePolicy(sizePolicy);
         pushButtonMinus->setFont(font);
+        pushButtonMinus->setFocusPolicy(Qt::NoFocus);
         pushButtonMinus->setStyleSheet(QStringLiteral(""));
 
         gridLayout_2->addWidget(pushButtonMinus, 4, 0, 1, 1);
@@ -96,6 +97,7 @@ public:
         sizePolicy.setHeightForWidth(pushButtonFo->sizePolicy().hasHeightForWidth());
         pushButtonFo->setSizePolicy(sizePolicy);
         pushButtonFo->setFont(font);
+        pushButtonFo->setFocusPolicy(Qt::NoFocus);
 
         gridLayout_2->addWidget(pushButtonFo, 5, 0, 1, 1);
 
@@ -113,6 +115,7 @@ public:
         sizePolicy.setHeightForWidth(pushButtonEx->sizePolicy().hasHeightForWidth());
         pushButtonEx->setSizePolicy(sizePolicy);
         pushButtonEx->setFont(font);
+        pushButtonEx->setFocusPolicy(Qt::NoFocus);
 
         gridLayout_2->addWidget(pushButtonEx, 6, 0, 1, 1);
 
@@ -164,7 +167,8 @@ public:
         sizePolicy.setHeightForWidth(pushButtonPoint->sizePolicy().hasHeightForWidth());
         pushButtonPoint->setSizePolicy(sizePolicy);
         pushButtonPoint->setFont(font);
-        pushButtonPoint->setStyleSheet(QStringLiteral(""));
+        pushButtonPoint->setFocusPolicy(Qt::NoFocus);
+        pushButtonPoint->setStyleSheet(QStringLiteral("text-align: center;"));
 
         gridLayout_2->addWidget(pushButtonPoint, 3, 0, 1, 2);
 

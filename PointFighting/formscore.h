@@ -24,6 +24,7 @@ public:
     static QPixmap drawCubes(int count);
 
 public:
+    void setCountPoints(int countPoints);
     void setCountMinus(int countCubes);
     void setCountFo(int countCubes);
     void setCountEx(int countCubes);

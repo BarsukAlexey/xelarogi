@@ -5,7 +5,6 @@ MyQLCDNumber::MyQLCDNumber(QWidget* p) :
     QLCDNumber(p)
 {
     setDigitCount(1);
-    //setPalette(Qt::black);
     setSegmentStyle(Flat);
 
 //    QPalette localPalette = palette();

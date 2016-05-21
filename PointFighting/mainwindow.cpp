@@ -108,25 +108,43 @@ MainWindow::MainWindow(QWidget *parent) :
                     ui->tableWidget->item(row,  10)->data(Qt::DisplayRole).toInt(),
                     ui->tableWidget->item(row,  11)->data(Qt::DisplayRole).toInt()
                     );
-        FightingTable fffs(
-                    fighting,
 
-                    ui->tableWidget->item(row,  1)->data(Qt::DisplayRole).toString(),
-                    ui->tableWidget->item(row,  2)->data(Qt::DisplayRole).toString(),
-                    ui->tableWidget->item(row,  3)->data(Qt::DisplayRole).toString(),
-                    ui->tableWidget->item(row,  4)->data(Qt::DisplayRole).toString(),
 
-                    flags[row][0],
-                    flags[row][1],
-                    true,
-                    showAdvertisement
-        );
+        QString nameLeft    = ui->tableWidget->item(row,  1)->data(Qt::DisplayRole).toString();
+        QString regionLeft  = ui->tableWidget->item(row,  2)->data(Qt::DisplayRole).toString();
+        QString nameRight   = ui->tableWidget->item(row,  3)->data(Qt::DisplayRole).toString();
+        QString regionRight = ui->tableWidget->item(row,  4)->data(Qt::DisplayRole).toString();
+        QImage leftFlag  = flags[row][0];
+        QImage rightFlag = flags[row][1];
+
+        FightingTable *tableForJudge = 0;
+        QVector<FightingTable *> tableForSpectators;
+        for (int i = 0; i < QApplication::desktop()->screenCount(); ++i)
+        {
+            QRect screenres = QApplication::desktop()->screenGeometry(i);
+            if (screenres == QApplication::desktop()->screenGeometry(-1))
+            {
+                tableForJudge = new FightingTable(fighting, nameLeft, regionLeft, nameRight, regionRight, leftFlag, rightFlag, true, showAdvertisement);
+                tableForJudge->move(QPoint(screenres.x(), screenres.y()));
+            }
+            else
+            {
+                tableForSpectators << new FightingTable(fighting, nameLeft, regionLeft, nameRight, regionRight, leftFlag, rightFlag, false, showAdvertisement);
+                tableForSpectators.back()->move(QPoint(screenres.x(), screenres.y()));
+                tableForSpectators.back()->resize(screenres.width(), screenres.height());
+                tableForSpectators.back()->showFullScreen();
+
+            }
+        }
+
         this->hide();
-        fffs.exec();
+        for (FightingTable* t : tableForSpectators)
+            t->show();
+        tableForJudge->showMaximized();
+        tableForJudge->exec();
+        for (FightingTable* t : tableForSpectators)
+            t->hide();
         this->show();
-        //
-
-
 
 
         QString winner;
@@ -144,6 +162,10 @@ MainWindow::MainWindow(QWidget *parent) :
         }
         else
         {
+            delete fighting;
+            delete tableForJudge;
+            for (FightingTable* t : tableForSpectators)
+                delete t;
             return;
         }
 
@@ -187,6 +209,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
         update();
 
+        delete fighting;
+        delete tableForJudge;
+        for (FightingTable* t : tableForSpectators)
+            delete t;
+
     });
 
     for (int i = 0; i < QApplication::desktop()->screenCount(); ++i)
@@ -211,8 +238,7 @@ MainWindow::MainWindow(QWidget *parent) :
     updateAdvertisement();
 
     update();
-    resize(1700, size().height());
-//    showMaximized();
+//    showMaximized(); // TODO
 }
 
 MainWindow::~MainWindow()

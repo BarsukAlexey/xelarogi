@@ -16,7 +16,6 @@
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
-#include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QWidget>
 #include <aspectratiotextlabel.h>
 
@@ -35,7 +34,6 @@ public:
     QWidget *widgetFooter;
     QHBoxLayout *widgetFooterHorizontalLayout;
     AspectRatioTextLabel *labelDoctorTimer;
-    QSpacerItem *horizontalSpacer;
 
     void setupUi(QWidget *FightingTable)
     {
@@ -121,10 +119,6 @@ public:
         labelDoctorTimer->setFont(font1);
 
         widgetFooterHorizontalLayout->addWidget(labelDoctorTimer);
-
-        horizontalSpacer = new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        widgetFooterHorizontalLayout->addItem(horizontalSpacer);
 
 
         gridLayout->addWidget(widgetFooter, 2, 0, 1, 1);

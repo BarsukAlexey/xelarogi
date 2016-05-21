@@ -38,15 +38,11 @@ Fighting::Fighting(int durationOfRound, int durationOfBreak, int countOfRounds, 
     countOfExToRight = 0;
     wasExtraRound = false;
 
-    timer = new QTimer();
-    timer->setInterval(250);
-    connect(timer, &QTimer::timeout, [this](){updateTime();});
+    timer.setInterval(250);
+    connect(&timer, &QTimer::timeout, [this](){updateTime();});
+    timer.start();
 }
 
-
-void Fighting::dispose() {
-    timer->stop();
-}
 
 void Fighting::setDialog(bool dialog) {
     if (dialog) {
@@ -222,7 +218,6 @@ void Fighting::addMinusToRight() {
 
 void Fighting::pressedKeySpace() {
     if (status == FightStatus::NotStart) {
-        timer->start();
         status = FightStatus::Fight;
         soundGong->play();
     } else if (status == FightStatus::Fight)

@@ -36,23 +36,26 @@ class FightingTable : public QDialog
 
 private:
     Fighting *f;
+
     Ui::FightingTable *ui;
-    QPushButton *pushButtonStart;
-    QPushButton *pushButtonDoctor;
-    QPushButton *pushButtonStop;
-    QPushButton *cancelLastPenalty;
+    FormScore *left;
+    FormScore *right;
+    QRightClickButton *pushButtonStart;
+    QRightClickButton *pushButtonDoctor;
+    QRightClickButton *pushButtonStop;
+    QRightClickButton *cancelLastPenalty;
 
     const QString nameLeft;
     const QString nameRight;
     const QImage mLeftFlag;
     const QImage mRightFlag;
 
-    QVector<FormScore*> left, right;
-    QVector<FightingTable*> allTables;
     const bool dialogForJudge;
     const bool showAdvertisement;
 
     QString forceResult;
+
+
 
 public:
 
@@ -68,6 +71,7 @@ private slots:
 
 protected:
     void closeEvent(QCloseEvent *event);
+    void keyPressEvent(QKeyEvent * e);
 
 
 };

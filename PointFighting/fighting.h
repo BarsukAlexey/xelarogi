@@ -91,10 +91,10 @@ private:
 
     QStack<Item> stackPenalty;
 
-    QSound *soundGong = new QSound("resources\\sounds\\gong.wav");
-    QSound *soundHummerBit = new QSound("resources\\sounds\\stuk_molotka.wav");
+    QSound *soundGong = new QSound("resources\\sounds\\gong.wav", this);
+    QSound *soundHummerBit = new QSound("resources\\sounds\\stuk_molotka.wav", this);
 
-    QTimer *timer;
+    QTimer timer;
 
 public:
     explicit Fighting(int durationOfRound, int durationOfBreak, int countOfRounds, int durationOfExtraRound);
@@ -104,7 +104,6 @@ private:
     void updatePointStatus();
 
 public:
-    void dispose();
     void setDialog(bool dialog);
     void forceStopRound(Player player, QString forceResult);
 

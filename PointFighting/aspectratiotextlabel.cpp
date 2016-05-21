@@ -35,6 +35,11 @@ void AspectRatioTextLabel::mySetFontSize()
 
 void AspectRatioTextLabel::setText(const QString& str)
 {
+    if (text() == str)
+    {
+        //qDebug() << "AspectRatioTextLabel::setText: " << "YES";
+        return;
+    }
     QLabel::setText(str);
     mySetFontSize();
 }

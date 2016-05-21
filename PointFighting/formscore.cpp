@@ -14,11 +14,6 @@ FormScore::FormScore(QString name, QString region, QImage flag, QColor backgroun
     ui->labelFIO->setText(name);
     ui->labelRegion->setText(region);
 
-    ui->pushButtonPoint->setAlignmentFlag(Qt::AlignCenter);
-    ui->pushButtonMinus->setAlignmentFlag(Qt::AlignVCenter | Qt::AlignRight);
-    ui->pushButtonFo->setAlignmentFlag(Qt::AlignCenter | Qt::AlignRight);
-    ui->pushButtonEx->setAlignmentFlag(Qt::AlignCenter | Qt::AlignRight);
-
     int r, g, b;
     backgroundColor.getRgb(&r, &g, &b);
     setStyleSheet(styleSheet() + QString(";\nbackground-color: rgb(%1, %2, %3);").arg(r).arg(g).arg(b));
@@ -93,6 +88,11 @@ QPixmap FormScore::drawCubes(int count)
     for (int i = 0; i < count; ++i)
         painter.fillRect(i * (sizeOfSideOfCube + sizeOfSideOfCube), 0, sizeOfSideOfCube, sizeOfSideOfCube, Qt::yellow);
     return pm;
+}
+
+void FormScore::setCountPoints(int countPoints)
+{
+    ui->pushButtonPoint->setText(QString::number(countPoints));
 }
 
 void FormScore::setCountMinus(int countCubes)

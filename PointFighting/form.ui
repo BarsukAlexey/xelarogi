@@ -78,6 +78,9 @@ color: rgb(255, 255, 255)</string>
           <bold>true</bold>
          </font>
         </property>
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
         <property name="styleSheet">
          <string notr="true"/>
         </property>
@@ -126,6 +129,9 @@ color: rgb(255, 255, 255)</string>
           <bold>true</bold>
          </font>
         </property>
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
         <property name="text">
          <string>Fo:</string>
         </property>
@@ -167,6 +173,9 @@ color: rgb(255, 255, 255)</string>
           <weight>75</weight>
           <bold>true</bold>
          </font>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
         </property>
         <property name="text">
          <string>Ex:</string>
@@ -283,8 +292,11 @@ color: rgb(255, 255, 255)</string>
           <bold>true</bold>
          </font>
         </property>
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
         <property name="styleSheet">
-         <string notr="true"/>
+         <string notr="true">text-align: center;</string>
         </property>
         <property name="text">
          <string/>
