@@ -42,6 +42,15 @@ public:
         if (FightingTable->objectName().isEmpty())
             FightingTable->setObjectName(QStringLiteral("FightingTable"));
         FightingTable->resize(863, 680);
+        QSizePolicy sizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(FightingTable->sizePolicy().hasHeightForWidth());
+        FightingTable->setSizePolicy(sizePolicy);
+        QFont font;
+        font.setBold(true);
+        font.setWeight(75);
+        FightingTable->setFont(font);
         gridLayout = new QGridLayout(FightingTable);
         gridLayout->setSpacing(0);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
@@ -49,25 +58,38 @@ public:
         gridLayout->setContentsMargins(0, 0, 0, 0);
         widgetRoof = new QWidget(FightingTable);
         widgetRoof->setObjectName(QStringLiteral("widgetRoof"));
-        QFont font;
-        font.setPointSize(22);
-        widgetRoof->setFont(font);
+        sizePolicy.setHeightForWidth(widgetRoof->sizePolicy().hasHeightForWidth());
+        widgetRoof->setSizePolicy(sizePolicy);
+        QFont font1;
+        font1.setPointSize(22);
+        font1.setBold(true);
+        font1.setWeight(75);
+        widgetRoof->setFont(font1);
         widgetRoof->setStyleSheet(QStringLiteral("background-color: rgb(192, 192, 192);"));
         horizontalLayoutWidgetRoof = new QHBoxLayout(widgetRoof);
         horizontalLayoutWidgetRoof->setObjectName(QStringLiteral("horizontalLayoutWidgetRoof"));
         labelLeftHead = new AspectRatioTextLabel(widgetRoof);
         labelLeftHead->setObjectName(QStringLiteral("labelLeftHead"));
+        sizePolicy.setHeightForWidth(labelLeftHead->sizePolicy().hasHeightForWidth());
+        labelLeftHead->setSizePolicy(sizePolicy);
+        labelLeftHead->setFont(font);
 
         horizontalLayoutWidgetRoof->addWidget(labelLeftHead);
 
         labelTime = new AspectRatioTextLabel(widgetRoof);
         labelTime->setObjectName(QStringLiteral("labelTime"));
+        sizePolicy.setHeightForWidth(labelTime->sizePolicy().hasHeightForWidth());
+        labelTime->setSizePolicy(sizePolicy);
+        labelTime->setFont(font);
         labelTime->setAlignment(Qt::AlignCenter);
 
         horizontalLayoutWidgetRoof->addWidget(labelTime);
 
         labelRightHead = new AspectRatioTextLabel(widgetRoof);
         labelRightHead->setObjectName(QStringLiteral("labelRightHead"));
+        sizePolicy.setHeightForWidth(labelRightHead->sizePolicy().hasHeightForWidth());
+        labelRightHead->setSizePolicy(sizePolicy);
+        labelRightHead->setFont(font);
         labelRightHead->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
         horizontalLayoutWidgetRoof->addWidget(labelRightHead);
@@ -86,12 +108,17 @@ public:
 
         widgetFooter = new QWidget(FightingTable);
         widgetFooter->setObjectName(QStringLiteral("widgetFooter"));
+        sizePolicy.setHeightForWidth(widgetFooter->sizePolicy().hasHeightForWidth());
+        widgetFooter->setSizePolicy(sizePolicy);
+        widgetFooter->setFont(font);
         widgetFooter->setStyleSheet(QStringLiteral("background-color: rgb(192, 192, 192);"));
         widgetFooterHorizontalLayout = new QHBoxLayout(widgetFooter);
         widgetFooterHorizontalLayout->setObjectName(QStringLiteral("widgetFooterHorizontalLayout"));
         labelDoctorTimer = new AspectRatioTextLabel(widgetFooter);
         labelDoctorTimer->setObjectName(QStringLiteral("labelDoctorTimer"));
-        labelDoctorTimer->setFont(font);
+        sizePolicy.setHeightForWidth(labelDoctorTimer->sizePolicy().hasHeightForWidth());
+        labelDoctorTimer->setSizePolicy(sizePolicy);
+        labelDoctorTimer->setFont(font1);
 
         widgetFooterHorizontalLayout->addWidget(labelDoctorTimer);
 

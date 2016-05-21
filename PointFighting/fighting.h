@@ -158,11 +158,12 @@ public:
 
 
 
-
-
-
-
 signals:
+   void statusOrPointsChanged();
+
+
+
+
 
 public slots:
 };

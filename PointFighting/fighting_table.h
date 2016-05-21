@@ -53,7 +53,6 @@ private:
     const bool showAdvertisement;
 
     QString forceResult;
-    QTimer* timer;
 
 public:
 

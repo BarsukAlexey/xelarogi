@@ -77,7 +77,7 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_7" rowstretch="10,10,70,10">
+  <layout class="QGridLayout" name="gridLayout_7" rowstretch="5,10,75,10">
    <item row="0" column="0">
     <widget class="AspectRatioTextLabel" name="label">
      <property name="sizePolicy">
@@ -277,9 +277,9 @@
     </widget>
    </item>
    <item row="2" column="0">
-    <layout class="QGridLayout" name="gridLayout_6">
+    <layout class="QGridLayout" name="gridLayout_6" columnstretch="1,1,1">
      <item row="0" column="2">
-      <layout class="QGridLayout" name="gridLayout_5">
+      <layout class="QGridLayout" name="gridLayout_5" rowstretch="23,47,30">
        <item row="0" column="0">
         <widget class="QWidget" name="widget_5" native="true">
          <property name="sizePolicy">
@@ -411,6 +411,9 @@
             </colorrole>
            </disabled>
           </palette>
+         </property>
+         <property name="lineWidth">
+          <number>1</number>
          </property>
         </widget>
        </item>
@@ -663,7 +666,7 @@
       </layout>
      </item>
      <item row="0" column="0">
-      <layout class="QGridLayout" name="gridLayout_2">
+      <layout class="QGridLayout" name="gridLayout_2" rowstretch="23,47,30">
        <item row="0" column="0">
         <widget class="QWidget" name="widget_3" native="true">
          <property name="sizePolicy">
@@ -1084,6 +1087,12 @@
            <weight>50</weight>
            <bold>false</bold>
           </font>
+         </property>
+         <property name="lineWidth">
+          <number>1</number>
+         </property>
+         <property name="smallDecimalPoint">
+          <bool>false</bool>
          </property>
         </widget>
        </item>

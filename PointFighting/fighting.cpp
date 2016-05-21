@@ -334,6 +334,8 @@ void Fighting::updateTime() {
     } else if (status == FightStatus::winnerByPointsLeft) {
     } else if (status == FightStatus::winnerByPointsRight) {
     }
+
+    emit statusOrPointsChanged();
 }
 
 void Fighting::updatePointStatus()

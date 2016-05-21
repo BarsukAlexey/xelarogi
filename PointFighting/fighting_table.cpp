@@ -18,6 +18,7 @@ FightingTable::FightingTable(Fighting* f, QString nameLeft, QString regionLeft, 
 
     ui->setupUi(this);
 
+    connect(f, SIGNAL(statusOrPointsChanged()), this, SLOT(updateInfo()));
 
     if (!dialogForJudge){
         return;
@@ -70,13 +71,6 @@ FightingTable::FightingTable(Fighting* f, QString nameLeft, QString regionLeft, 
     pushButtonStop->setText("Stop round");
     ui->widgetFooterHorizontalLayout->insertWidget(3, pushButtonStop);
 
-
-
-
-    timer = new QTimer(this);
-    timer->start(250);
-    connect(timer, &QTimer::timeout, this, &FightingTable::updateInfo);
-
     connect(pushButtonStart, &QPushButton::clicked, [f](){f->pressedKeySpace();});
     connect(pushButtonDoctor, &QPushButton::clicked, [f](){f->pressDoctor();});
     connect(cancelLastPenalty, &QPushButton::clicked, [f](){f->cancelLastAction();});
@@ -108,24 +102,14 @@ FightingTable::FightingTable(Fighting* f, QString nameLeft, QString regionLeft, 
     connect(right[0]->ui->pushButtonEx, &QRightClickButton::clicked, [f](){f->addExToRight();});
 
     showMaximized();
-
-
-    /**/
-    //    countPointLeft =  1 + rand()%1000;
-    //    countPointRight = 1 + rand()%1000;
-    //    status = Status::Finish;
+    updateInfo();
 }
 
 FightingTable::~FightingTable(){
     delete ui;
-//    for (FightingTable* f : allTables)
-//        if (f != this)
-//            delete f;
-//    if (dialogForJudge)
-//    {
-//        timer->stop();
-//        delete timer;
-//    }
+    for (FightingTable* f : allTables)
+        if (f != this)
+            delete f;
 }
 
 

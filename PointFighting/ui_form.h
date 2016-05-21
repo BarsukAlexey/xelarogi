@@ -44,6 +44,15 @@ public:
         if (Form->objectName().isEmpty())
             Form->setObjectName(QStringLiteral("Form"));
         Form->resize(766, 618);
+        QSizePolicy sizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(Form->sizePolicy().hasHeightForWidth());
+        Form->setSizePolicy(sizePolicy);
+        QFont font;
+        font.setBold(true);
+        font.setWeight(75);
+        Form->setFont(font);
         Form->setStyleSheet(QLatin1String("background-color: rgb(0, 0, 0);\n"
 "Text-align:right;\n"
 "color: rgb(255, 255, 255)"));
@@ -53,25 +62,30 @@ public:
         gridLayout->setContentsMargins(0, 0, 0, 0);
         widget = new QWidget(Form);
         widget->setObjectName(QStringLiteral("widget"));
+        sizePolicy.setHeightForWidth(widget->sizePolicy().hasHeightForWidth());
+        widget->setSizePolicy(sizePolicy);
+        widget->setFont(font);
         widget->setStyleSheet(QStringLiteral(""));
         gridLayout_2 = new QGridLayout(widget);
         gridLayout_2->setObjectName(QStringLiteral("gridLayout_2"));
         pushButtonMinus = new QRightClickButton(widget);
         pushButtonMinus->setObjectName(QStringLiteral("pushButtonMinus"));
-        QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-        sizePolicy.setHorizontalStretch(0);
-        sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(pushButtonMinus->sizePolicy().hasHeightForWidth());
         pushButtonMinus->setSizePolicy(sizePolicy);
+        pushButtonMinus->setFont(font);
         pushButtonMinus->setStyleSheet(QStringLiteral(""));
 
         gridLayout_2->addWidget(pushButtonMinus, 4, 0, 1, 1);
 
         labelMinus = new AspectRatioPixmapLabel(widget);
         labelMinus->setObjectName(QStringLiteral("labelMinus"));
-        QFont font;
-        font.setPointSize(14);
-        labelMinus->setFont(font);
+        sizePolicy.setHeightForWidth(labelMinus->sizePolicy().hasHeightForWidth());
+        labelMinus->setSizePolicy(sizePolicy);
+        QFont font1;
+        font1.setPointSize(14);
+        font1.setBold(true);
+        font1.setWeight(75);
+        labelMinus->setFont(font1);
         labelMinus->setStyleSheet(QStringLiteral("color: rgb(255, 255, 255);"));
         labelMinus->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter);
 
@@ -81,12 +95,15 @@ public:
         pushButtonFo->setObjectName(QStringLiteral("pushButtonFo"));
         sizePolicy.setHeightForWidth(pushButtonFo->sizePolicy().hasHeightForWidth());
         pushButtonFo->setSizePolicy(sizePolicy);
+        pushButtonFo->setFont(font);
 
         gridLayout_2->addWidget(pushButtonFo, 5, 0, 1, 1);
 
         labelFo = new AspectRatioPixmapLabel(widget);
         labelFo->setObjectName(QStringLiteral("labelFo"));
-        labelFo->setFont(font);
+        sizePolicy.setHeightForWidth(labelFo->sizePolicy().hasHeightForWidth());
+        labelFo->setSizePolicy(sizePolicy);
+        labelFo->setFont(font1);
         labelFo->setStyleSheet(QStringLiteral("color: rgb(255, 255, 255);"));
 
         gridLayout_2->addWidget(labelFo, 5, 1, 1, 1);
@@ -95,12 +112,15 @@ public:
         pushButtonEx->setObjectName(QStringLiteral("pushButtonEx"));
         sizePolicy.setHeightForWidth(pushButtonEx->sizePolicy().hasHeightForWidth());
         pushButtonEx->setSizePolicy(sizePolicy);
+        pushButtonEx->setFont(font);
 
         gridLayout_2->addWidget(pushButtonEx, 6, 0, 1, 1);
 
         labelEx = new AspectRatioPixmapLabel(widget);
         labelEx->setObjectName(QStringLiteral("labelEx"));
-        labelEx->setFont(font);
+        sizePolicy.setHeightForWidth(labelEx->sizePolicy().hasHeightForWidth());
+        labelEx->setSizePolicy(sizePolicy);
+        labelEx->setFont(font1);
         labelEx->setStyleSheet(QStringLiteral("color: rgb(255, 255, 255);"));
         labelEx->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter);
 
@@ -108,9 +128,13 @@ public:
 
         labelRegion = new AspectRatioTextLabel(widget);
         labelRegion->setObjectName(QStringLiteral("labelRegion"));
-        QFont font1;
-        font1.setPointSize(15);
-        labelRegion->setFont(font1);
+        sizePolicy.setHeightForWidth(labelRegion->sizePolicy().hasHeightForWidth());
+        labelRegion->setSizePolicy(sizePolicy);
+        QFont font2;
+        font2.setPointSize(15);
+        font2.setBold(true);
+        font2.setWeight(75);
+        labelRegion->setFont(font2);
         labelRegion->setStyleSheet(QStringLiteral("color: rgb(255, 255, 255);"));
         labelRegion->setAlignment(Qt::AlignCenter);
 
@@ -120,12 +144,16 @@ public:
         labelFlag->setObjectName(QStringLiteral("labelFlag"));
         sizePolicy.setHeightForWidth(labelFlag->sizePolicy().hasHeightForWidth());
         labelFlag->setSizePolicy(sizePolicy);
+        labelFlag->setFont(font);
         labelFlag->setAlignment(Qt::AlignCenter);
 
         gridLayout_2->addWidget(labelFlag, 1, 0, 1, 2);
 
         labelFIO = new AspectRatioTextLabel(widget);
         labelFIO->setObjectName(QStringLiteral("labelFIO"));
+        sizePolicy.setHeightForWidth(labelFIO->sizePolicy().hasHeightForWidth());
+        labelFIO->setSizePolicy(sizePolicy);
+        labelFIO->setFont(font);
         labelFIO->setStyleSheet(QStringLiteral("color: rgb(255, 255, 255);"));
         labelFIO->setAlignment(Qt::AlignCenter);
 
@@ -135,6 +163,7 @@ public:
         pushButtonPoint->setObjectName(QStringLiteral("pushButtonPoint"));
         sizePolicy.setHeightForWidth(pushButtonPoint->sizePolicy().hasHeightForWidth());
         pushButtonPoint->setSizePolicy(sizePolicy);
+        pushButtonPoint->setFont(font);
         pushButtonPoint->setStyleSheet(QStringLiteral(""));
 
         gridLayout_2->addWidget(pushButtonPoint, 3, 0, 1, 2);

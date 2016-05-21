@@ -15,14 +15,14 @@ void AspectRatioTextLabel::mySetFontSize()
     if (0 < width() && 0 < height())
     {
         QFont myFont = font();
-        int l = 1, r = qMax(width(), height());
+        int l = 1, r = qMin(width(), height());
         while (l < r)
         {
             int m = (l + r + 1) / 2;
             myFont.setPointSize(m);
             QFontMetrics fm(myFont);
             QRect bound = fm.boundingRect(text());
-            if (bound.width() <= width() && bound.height() <= height())
+            if (bound.width() < width() && bound.height() < height())
                 l = m;
             else
                 r = m - 1;

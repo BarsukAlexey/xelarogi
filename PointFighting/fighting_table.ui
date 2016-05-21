@@ -10,6 +10,18 @@
     <height>680</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="font">
+   <font>
+    <weight>75</weight>
+    <bold>true</bold>
+   </font>
+  </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
@@ -34,9 +46,17 @@
    </property>
    <item row="0" column="0">
     <widget class="QWidget" name="widgetRoof" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="font">
       <font>
        <pointsize>22</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
       </font>
      </property>
      <property name="styleSheet">
@@ -45,6 +65,18 @@
      <layout class="QHBoxLayout" name="horizontalLayoutWidgetRoof" stretch="1,1,1">
       <item>
        <widget class="AspectRatioTextLabel" name="labelLeftHead">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="font">
+         <font>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
         <property name="text">
          <string>Левый</string>
         </property>
@@ -52,6 +84,18 @@
       </item>
       <item>
        <widget class="AspectRatioTextLabel" name="labelTime">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="font">
+         <font>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
         <property name="text">
          <string>Время</string>
         </property>
@@ -62,6 +106,18 @@
       </item>
       <item>
        <widget class="AspectRatioTextLabel" name="labelRightHead">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="font">
+         <font>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
         <property name="text">
          <string>asdafsdgsdahfhfdshgfdssdgfdgfsdgfsdgsfdgsfdgsfdgfdgfdgfdgsfdgsfdgfdgfdgdsfgfd</string>
         </property>
@@ -74,7 +130,7 @@
     </widget>
    </item>
    <item row="1" column="0">
-    <layout class="QHBoxLayout" name="horizontalLayoutMain" stretch="">
+    <layout class="QHBoxLayout" name="horizontalLayoutMain">
      <property name="spacing">
       <number>0</number>
      </property>
@@ -82,15 +138,35 @@
    </item>
    <item row="2" column="0">
     <widget class="QWidget" name="widgetFooter" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
      <property name="styleSheet">
       <string notr="true">background-color: rgb(192, 192, 192);</string>
      </property>
      <layout class="QHBoxLayout" name="widgetFooterHorizontalLayout">
       <item>
        <widget class="AspectRatioTextLabel" name="labelDoctorTimer">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="font">
          <font>
           <pointsize>22</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
          </font>
         </property>
         <property name="text">

@@ -194,6 +194,7 @@ public:
         palette5.setBrush(QPalette::Inactive, QPalette::WindowText, brush4);
         palette5.setBrush(QPalette::Disabled, QPalette::WindowText, brush3);
         lcdNumber_2->setPalette(palette5);
+        lcdNumber_2->setLineWidth(1);
 
         gridLayout_5->addWidget(lcdNumber_2, 1, 0, 1, 1);
 
@@ -275,6 +276,9 @@ public:
 
         gridLayout_5->addWidget(widget_10, 2, 0, 1, 1);
 
+        gridLayout_5->setRowStretch(0, 23);
+        gridLayout_5->setRowStretch(1, 47);
+        gridLayout_5->setRowStretch(2, 30);
 
         gridLayout_6->addLayout(gridLayout_5, 0, 2, 1, 1);
 
@@ -409,9 +413,14 @@ public:
         font1.setBold(false);
         font1.setWeight(50);
         lcdNumber->setFont(font1);
+        lcdNumber->setLineWidth(1);
+        lcdNumber->setSmallDecimalPoint(false);
 
         gridLayout_2->addWidget(lcdNumber, 1, 0, 1, 1);
 
+        gridLayout_2->setRowStretch(0, 23);
+        gridLayout_2->setRowStretch(1, 47);
+        gridLayout_2->setRowStretch(2, 30);
 
         gridLayout_6->addLayout(gridLayout_2, 0, 0, 1, 1);
 
@@ -429,6 +438,9 @@ public:
 
         gridLayout_6->addWidget(label_8, 0, 1, 1, 1);
 
+        gridLayout_6->setColumnStretch(0, 1);
+        gridLayout_6->setColumnStretch(1, 1);
+        gridLayout_6->setColumnStretch(2, 1);
 
         gridLayout_7->addLayout(gridLayout_6, 2, 0, 1, 1);
 
@@ -447,9 +459,9 @@ public:
 
         gridLayout_7->addWidget(label_17, 3, 0, 1, 1);
 
-        gridLayout_7->setRowStretch(0, 10);
+        gridLayout_7->setRowStretch(0, 5);
         gridLayout_7->setRowStretch(1, 10);
-        gridLayout_7->setRowStretch(2, 70);
+        gridLayout_7->setRowStretch(2, 75);
         gridLayout_7->setRowStretch(3, 10);
 
         retranslateUi(FightingTable2);

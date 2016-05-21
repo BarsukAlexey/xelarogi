@@ -62,11 +62,14 @@
         "leftFlag": "iVBORw0KGgoAAAANSUhEUgAAAAkAAAAGCAYAAAARx7TFAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAJElEQVQImWP8////fwYCgImQAgYGBgZGBstlVDLpqrYcdUwCABTqCAE9u0b5AAAAAElFTkSuQmCC",
         "nameOfLeftFighter": "Козлов  Максим",
         "nameOfRightFighter": "Шершнев Максим",
+        "orderUID": 10653,
         "orderUID_left": 10653,
         "orderUID_right": 10655,
         "regionOfLeftFighter": "Псковская",
         "regionOfRightFighter": "Псковская",
-        "rightFlag": "iVBORw0KGgoAAAANSUhEUgAAAAkAAAAGCAYAAAARx7TFAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAJElEQVQImWP8////fwYCgImQAgYGBgZGBstlVDLpqrYcdUwCABTqCAE9u0b5AAAAAElFTkSuQmCC"
+        "result": "22 : 0",
+        "rightFlag": "iVBORw0KGgoAAAANSUhEUgAAAAkAAAAGCAYAAAARx7TFAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAJElEQVQImWP8////fwYCgImQAgYGBgZGBstlVDLpqrYcdUwCABTqCAE9u0b5AAAAAElFTkSuQmCC",
+        "winner": "Козлов  Максим"
     },
     {
         "DURATION_EXTRA_ROUND": 0,
@@ -83,11 +86,14 @@
         "leftFlag": "iVBORw0KGgoAAAANSUhEUgAAAAkAAAAGCAYAAAARx7TFAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAJElEQVQImWP8////fwYCgImQAgYGBgZGBstlVDLpqrYcdUwCABTqCAE9u0b5AAAAAElFTkSuQmCC",
         "nameOfLeftFighter": "Лунев Кирилл",
         "nameOfRightFighter": "Генералов Александр",
+        "orderUID": 10649,
         "orderUID_left": 10649,
         "orderUID_right": 10648,
         "regionOfLeftFighter": "Псковская",
         "regionOfRightFighter": "Псковская",
-        "rightFlag": "iVBORw0KGgoAAAANSUhEUgAAAAkAAAAGCAYAAAARx7TFAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAJElEQVQImWP8////fwYCgImQAgYGBgZGBstlVDLpqrYcdUwCABTqCAE9u0b5AAAAAElFTkSuQmCC"
+        "result": "DISQ",
+        "rightFlag": "iVBORw0KGgoAAAANSUhEUgAAAAkAAAAGCAYAAAARx7TFAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAJElEQVQImWP8////fwYCgImQAgYGBgZGBstlVDLpqrYcdUwCABTqCAE9u0b5AAAAAElFTkSuQmCC",
+        "winner": "Лунев Кирилл"
     },
     {
         "DURATION_EXTRA_ROUND": 15,
@@ -103,11 +109,11 @@
         "fightId": 5,
         "leftFlag": "iVBORw0KGgoAAAANSUhEUgAAAAkAAAAGCAYAAAARx7TFAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAJElEQVQImWP8////fwYCgImQAgYGBgZGBstlVDLpqrYcdUwCABTqCAE9u0b5AAAAAElFTkSuQmCC",
         "nameOfLeftFighter": "Егоров Иван",
-        "nameOfRightFighter": " ",
+        "nameOfRightFighter": "Козлов  Максим",
         "orderUID_left": 10654,
-        "orderUID_right": 0,
+        "orderUID_right": 10653,
         "regionOfLeftFighter": "Псковская",
-        "regionOfRightFighter": "",
-        "rightFlag": ""
+        "regionOfRightFighter": "Псковская",
+        "rightFlag": "iVBORw0KGgoAAAANSUhEUgAAAAkAAAAGCAYAAAARx7TFAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAJElEQVQImWP8////fwYCgImQAgYGBgZGBstlVDLpqrYcdUwCABTqCAE9u0b5AAAAAElFTkSuQmCC"
     }
 ]
