@@ -83,7 +83,7 @@
   </action>
   <action name="actionAdv">
    <property name="text">
-    <string>Аdvertisement...</string>
+    <string>Setting...</string>
    </property>
   </action>
  </widget>

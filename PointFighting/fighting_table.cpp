@@ -11,7 +11,7 @@ FightingTable::FightingTable(Fighting* f, QString nameLeft, QString regionLeft, 
     nameRight(nameRight),
     mLeftFlag(leftFlag),
     mRightFlag(rightFlag),
-    dialogForJudge(dialogForJudge),
+    isForJudge(dialogForJudge),
     showAdvertisement(showAdvertisement)
 {
     setWindowFlags(windowFlags() | Qt::WindowMaximizeButtonHint);
@@ -122,7 +122,7 @@ void FightingTable::updateInfo()
 
 
 
-    if (dialogForJudge)
+    if (isForJudge)
     {
         if (fightStatus == Fighting::PendingExtraRound)
             pushButtonStart->setText("Start extra round! (press SPACE)");
@@ -160,12 +160,12 @@ void FightingTable::updateInfo()
         {
             if (10 * 1000 < f->getTimeMS())
             {
-                if (!dialogForJudge && !isHidden())
+                if (!isForJudge && !isHidden())
                     hide();
             }
             else
             {
-                if (!dialogForJudge  && isHidden())
+                if (!isForJudge  && isHidden())
                     show();
             }
         }
@@ -235,7 +235,7 @@ void FightingTable::updateInfo()
     ui->labelRightHead->setText(ui->labelLeftHead->text());
 
     FormScore *l, *r;
-    if (dialogForJudge)
+    if (isForJudge)
         l = left, r = right;
     else
         r = left, l = right;
@@ -255,7 +255,7 @@ void FightingTable::updateInfo()
 
 void FightingTable::closeEvent(QCloseEvent* event)
 {
-    if (dialogForJudge)
+    if (isForJudge)
     {
         if (f->getStatus() == Fighting::FightStatus::NotStart || f->getWinner() != Fighting::Player::NoPlayer)
         {
@@ -278,7 +278,7 @@ void FightingTable::keyPressEvent(QKeyEvent* e)
     if(e->key() == Qt::Key_Escape);
     else if(e->key() == Qt::Key_Space)
     {
-        if (dialogForJudge)
+        if (isForJudge)
             f->pressedKeySpace();
     }
     else

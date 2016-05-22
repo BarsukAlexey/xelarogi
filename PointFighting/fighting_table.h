@@ -50,7 +50,7 @@ private:
     const QImage mLeftFlag;
     const QImage mRightFlag;
 
-    const bool dialogForJudge;
+    const bool isForJudge;
     const bool showAdvertisement;
 
     QString forceResult;
@@ -62,7 +62,7 @@ public:
     FightingTable(Fighting *f,
                   QString nameLeft, QString regionLeft, QString nameRight, QString regionRight,
                   QImage leftFlag, QImage rightFlag,
-                  bool dialogForJudge, bool showAdvertisement);
+                  bool isForJudge, bool showAdvertisement);
 
     ~FightingTable();
 

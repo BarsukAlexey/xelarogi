@@ -102,7 +102,7 @@ public:
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0));
         actionLoad_data->setText(QApplication::translate("MainWindow", "Load data...", 0));
         actionExport_results->setText(QApplication::translate("MainWindow", "Export results...", 0));
-        actionAdv->setText(QApplication::translate("MainWindow", "\320\220dvertisement...", 0));
+        actionAdv->setText(QApplication::translate("MainWindow", "Setting...", 0));
         pushButtonGo->setText(QApplication::translate("MainWindow", "Go...", 0));
         menuData->setTitle(QApplication::translate("MainWindow", "Settings", 0));
     } // retranslateUi

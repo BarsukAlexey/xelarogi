@@ -12,20 +12,35 @@
 
 #include <QLCDNumber>
 #include <QPixmap>
+#include <QImage>
 #include "myqlcdnumber.h"
 #include "formscore.h"
 #include "qrightclickbutton.h"
 #include "fightingtable2.h"
+#include "fighting.h"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-//    FightingTable2* ft = new FightingTable2();
-//    ft->show();
+    Fighting* f = new Fighting(10, 13, 2, 15);
 
-    MainWindow w;
-    w.show();
+    FightingTable2* ft = new FightingTable2(f,
+                                            "3. ACM ICPC. +50",
+                                            "Петр Митрич", "Псковская",
+                                            "Геннадий Короткевич", "ИТМО",
+                                            QImage(".\\resources\\images\\Canada.png"),
+                                            QImage(".\\resources\\images\\Switzerland.png"),
+                                            1,
+                                            false
+                                            //true,
+                                            //true
+                                            );
+    ft->showMaximized();
+
+//    MainWindow w;
+//    w.show();
+    //w.showMaximized();
 
 //    QRightClickButton* b = new QRightClickButton();
 //    b->show();

@@ -33,6 +33,14 @@ void AspectRatioTextLabel::mySetFontSize()
     }
 }
 
+void AspectRatioTextLabel::mousePressEvent(QMouseEvent* event)
+{
+    if(event->button() == Qt::LeftButton)
+        emit leftButtonClick();
+    else if(event->button() == Qt::RightButton)
+        emit rightButtonClick();
+}
+
 void AspectRatioTextLabel::setText(const QString& str)
 {
     if (text() == str)

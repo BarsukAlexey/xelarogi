@@ -39,6 +39,45 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->setupUi(this);
 
+
+    QJsonDocument JSON = loadJSON(nameSettingFile);
+    if (JSON.isObject())
+    {
+        QJsonObject object = JSON.object();
+        showAdvertisement = object["showAdvertisement"].toBool(showAdvertisement);
+        classicSkin = object["classicSkin"].toBool(classicSkin);
+        int interval = object["interval"].toInt(15);
+        advTimer.setInterval(1000 * interval);
+        advTimer.start();
+    }
+    else
+    {
+        showAdvertisement = true;
+        classicSkin = true;
+        advTimer.setInterval(1000 * 15);
+        advTimer.start();
+    }
+
+    for (int i = 0; i < QApplication::desktop()->screenCount(); ++i)
+    {
+        QRect screenres = QApplication::desktop()->screenGeometry(i);
+        if (screenres == QApplication::desktop()->screenGeometry(-1))
+            continue;
+        FormAdvertisement *formAdvertisement = new FormAdvertisement(this);
+        formsForAdvertisement << formAdvertisement;
+        formAdvertisement->move(QPoint(screenres.x(), screenres.y()));
+        formAdvertisement->resize(screenres.width(), screenres.height());
+        formAdvertisement->showFullScreen();
+        formAdvertisement->show();
+    }
+
+
+    updateAdvertisement();
+
+    update();
+
+    connect(&advTimer, &QTimer::timeout, this, &MainWindow::updateAdvertisement);
+
     connect(ui->actionLoad_data, &QAction::triggered, [this] () {
         QString path = QFileDialog::getOpenFileName(this);
         if (path.isNull()) return;
@@ -71,17 +110,30 @@ MainWindow::MainWindow(QWidget *parent) :
     });
 
     connect(ui->actionAdv, &QAction::triggered, [this] () {
-        FormAdvertisementSetting dlg(this, advTimer->interval() / 1000, showAdvertisement);
+        FormAdvertisementSetting dlg(this, advTimer.interval() / 1000, showAdvertisement, classicSkin);
         if (dlg.exec() == QDialog::Accepted)
         {
-            if (advTimer->interval() != 1000 * dlg.getTime())
-                advTimer->setInterval(1000 * dlg.getTime());
+            if (advTimer.interval() != 1000 * dlg.getTime())
+                advTimer.setInterval(1000 * dlg.getTime());
 
             if (showAdvertisement != dlg.showAdvertisement())
             {
                 showAdvertisement = dlg.showAdvertisement();
                 updateAdvertisement();
             }
+
+            classicSkin = dlg.getClassicSkin();
+
+            QJsonObject object;
+            object["showAdvertisement"] = showAdvertisement;
+            object["classicSkin"] = classicSkin;
+            object["interval"] = advTimer.interval() / 1000;
+
+
+            QFile saveFile(nameSettingFile);
+            saveFile.open(QIODevice::WriteOnly);
+            saveFile.write(QJsonDocument(object).toJson());
+            saveFile.close();
         }
     });
 
@@ -169,7 +221,7 @@ MainWindow::MainWindow(QWidget *parent) :
             return;
         }
 
-        QJsonDocument doc = loadJSON();
+        QJsonDocument doc = loadJSON(nameSaveFile);
         QJsonArray array = doc.array();
         QJsonObject object = array.at(row).toObject();
         object["winner"] = winner;
@@ -199,58 +251,29 @@ MainWindow::MainWindow(QWidget *parent) :
         }
 
         QFile saveFile(nameSaveFile);
-        if (!saveFile.open(QIODevice::WriteOnly)) {
-            qWarning("Couldn't open save file.");
-            return;
-        }
+        saveFile.open(QIODevice::WriteOnly);
         saveFile.write(QJsonDocument(array).toJson());
         saveFile.close();
-        /**/
-
-        update();
 
         delete fighting;
         delete tableForJudge;
         for (FightingTable* t : tableForSpectators)
             delete t;
 
+        update();
     });
 
-    for (int i = 0; i < QApplication::desktop()->screenCount(); ++i)
-    {
-        QRect screenres = QApplication::desktop()->screenGeometry(i);
-        if (screenres == QApplication::desktop()->screenGeometry(-1))
-            continue;
-        FormAdvertisement *formAdvertisement = new FormAdvertisement(this);
-        formsForAdvertisement << formAdvertisement;
-        formAdvertisement->move(QPoint(screenres.x(), screenres.y()));
-        formAdvertisement->resize(screenres.width(), screenres.height());
-        formAdvertisement->showFullScreen();
-        formAdvertisement->show();
-    }
-
-    advTimer = new QTimer(this);
-    advTimer->start(1000 * 15);
-    connect(advTimer, &QTimer::timeout, this, &MainWindow::updateAdvertisement);
-
-    showAdvertisement = true;
-
-    updateAdvertisement();
-
-    update();
-//    showMaximized(); // TODO
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
-
 }
 
 
-QJsonDocument MainWindow::loadJSON()
+QJsonDocument MainWindow::loadJSON(const QString& path)
 {
-    QFile loadFile(nameSaveFile);
+    QFile loadFile(path);
     if (!loadFile.open(QIODevice::ReadOnly))
     {
         qWarning("Couldn't open save file.");
@@ -264,7 +287,7 @@ QJsonDocument MainWindow::loadJSON()
 
 void MainWindow::update()
 {
-    QJsonDocument doc = loadJSON();
+    QJsonDocument doc = loadJSON(nameSaveFile);
     QJsonArray array = doc.array();
     ui->tableWidget->setRowCount(array.size());
     QStringList heads({"Fight #", "Red conner", "Country/Region", "Blue conner", "Country/Region", "Winner", "Can start?", "Tournament Categoty", "Duration of fight", "Duration of break", "Count of rounds", "Duration of extra round"});

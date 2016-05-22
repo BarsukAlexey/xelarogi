@@ -12,7 +12,7 @@ class FormAdvertisementSetting : public QDialog
     Q_OBJECT
 
 public:
-    explicit FormAdvertisementSetting(QWidget *parent, int intervel, bool showAdvertisement);
+    explicit FormAdvertisementSetting(QWidget *parent, int intervel, bool showAdvertisement, bool classicSkin);
     ~FormAdvertisementSetting();
 
 private:
@@ -21,6 +21,7 @@ private:
 public:
     bool showAdvertisement();
     int getTime();
+    bool getClassicSkin();
 };
 
 #endif // FORM_ADVERTISEMENT_SETTING_H

@@ -25,26 +25,26 @@ QT_BEGIN_NAMESPACE
 class Ui_FightingTable2
 {
 public:
-    QGridLayout *gridLayout_7;
-    AspectRatioTextLabel *label;
+    QGridLayout *gridLayoutMain;
+    AspectRatioTextLabel *labelCategory;
     QWidget *widget_2;
     QGridLayout *gridLayout;
-    AspectRatioTextLabel *label_3;
-    AspectRatioTextLabel *label_2;
-    QGridLayout *gridLayout_6;
+    AspectRatioTextLabel *leftName;
+    AspectRatioTextLabel *rightName;
+    QGridLayout *gridLayoutCenter;
     QGridLayout *gridLayout_5;
     QWidget *widget_5;
     QGridLayout *gridLayout_4;
     AspectRatioTextLabel *rightRegion;
     AspectRatioPixmapLabel *rightFlag;
-    MyQLCDNumber *lcdNumber_2;
+    MyQLCDNumber *rightLcdNumber;
     QWidget *widget_10;
     QGridLayout *gridLayout_8;
     AspectRatioTextLabel *label_16;
-    AspectRatioTextLabel *label_11;
+    AspectRatioTextLabel *labelRightMinus;
     AspectRatioTextLabel *label_15;
-    AspectRatioTextLabel *label_12;
-    AspectRatioTextLabel *label_18;
+    AspectRatioTextLabel *labelRightEx;
+    AspectRatioTextLabel *labelRightFo;
     AspectRatioTextLabel *label_19;
     QGridLayout *gridLayout_2;
     QWidget *widget_3;
@@ -53,15 +53,15 @@ public:
     AspectRatioTextLabel *leftRegion;
     QWidget *widget_8;
     QGridLayout *gridLayout_9;
-    AspectRatioTextLabel *label_10;
-    AspectRatioTextLabel *label_13;
-    AspectRatioTextLabel *label_9;
-    AspectRatioTextLabel *label_14;
-    AspectRatioTextLabel *label_20;
-    AspectRatioTextLabel *label_21;
-    MyQLCDNumber *lcdNumber;
+    AspectRatioTextLabel *labelLeftMinus;
+    AspectRatioTextLabel *leftMinus;
+    AspectRatioTextLabel *labelLeftEx;
+    AspectRatioTextLabel *leftEx;
+    AspectRatioTextLabel *labelLeftFo;
+    AspectRatioTextLabel *leftFo;
+    MyQLCDNumber *leftLcdNumber;
     AspectRatioTextLabel *label_8;
-    AspectRatioTextLabel *label_17;
+    AspectRatioTextLabel *labelStatus;
 
     void setupUi(QWidget *FightingTable2)
     {
@@ -80,15 +80,15 @@ public:
         palette.setBrush(QPalette::Disabled, QPalette::Base, brush1);
         palette.setBrush(QPalette::Disabled, QPalette::Window, brush1);
         FightingTable2->setPalette(palette);
-        gridLayout_7 = new QGridLayout(FightingTable2);
-        gridLayout_7->setObjectName(QStringLiteral("gridLayout_7"));
-        label = new AspectRatioTextLabel(FightingTable2);
-        label->setObjectName(QStringLiteral("label"));
+        gridLayoutMain = new QGridLayout(FightingTable2);
+        gridLayoutMain->setObjectName(QStringLiteral("gridLayoutMain"));
+        labelCategory = new AspectRatioTextLabel(FightingTable2);
+        labelCategory->setObjectName(QStringLiteral("labelCategory"));
         QSizePolicy sizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
-        sizePolicy.setHeightForWidth(label->sizePolicy().hasHeightForWidth());
-        label->setSizePolicy(sizePolicy);
+        sizePolicy.setHeightForWidth(labelCategory->sizePolicy().hasHeightForWidth());
+        labelCategory->setSizePolicy(sizePolicy);
         QPalette palette1;
         QBrush brush2(QColor(255, 196, 19, 255));
         brush2.setStyle(Qt::SolidPattern);
@@ -97,15 +97,15 @@ public:
         QBrush brush3(QColor(120, 120, 120, 255));
         brush3.setStyle(Qt::SolidPattern);
         palette1.setBrush(QPalette::Disabled, QPalette::WindowText, brush3);
-        label->setPalette(palette1);
+        labelCategory->setPalette(palette1);
         QFont font;
         font.setBold(true);
         font.setWeight(75);
-        label->setFont(font);
-        label->setScaledContents(true);
-        label->setAlignment(Qt::AlignCenter);
+        labelCategory->setFont(font);
+        labelCategory->setScaledContents(true);
+        labelCategory->setAlignment(Qt::AlignCenter);
 
-        gridLayout_7->addWidget(label, 0, 0, 1, 1);
+        gridLayoutMain->addWidget(labelCategory, 0, 0, 1, 1);
 
         widget_2 = new QWidget(FightingTable2);
         widget_2->setObjectName(QStringLiteral("widget_2"));
@@ -113,43 +113,43 @@ public:
         widget_2->setSizePolicy(sizePolicy);
         gridLayout = new QGridLayout(widget_2);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
-        label_3 = new AspectRatioTextLabel(widget_2);
-        label_3->setObjectName(QStringLiteral("label_3"));
-        sizePolicy.setHeightForWidth(label_3->sizePolicy().hasHeightForWidth());
-        label_3->setSizePolicy(sizePolicy);
+        leftName = new AspectRatioTextLabel(widget_2);
+        leftName->setObjectName(QStringLiteral("leftName"));
+        sizePolicy.setHeightForWidth(leftName->sizePolicy().hasHeightForWidth());
+        leftName->setSizePolicy(sizePolicy);
         QPalette palette2;
         palette2.setBrush(QPalette::Active, QPalette::WindowText, brush);
         palette2.setBrush(QPalette::Inactive, QPalette::WindowText, brush);
         palette2.setBrush(QPalette::Disabled, QPalette::WindowText, brush3);
-        label_3->setPalette(palette2);
-        label_3->setFont(font);
-        label_3->setScaledContents(true);
-        label_3->setAlignment(Qt::AlignCenter);
+        leftName->setPalette(palette2);
+        leftName->setFont(font);
+        leftName->setScaledContents(true);
+        leftName->setAlignment(Qt::AlignCenter);
 
-        gridLayout->addWidget(label_3, 0, 0, 1, 1);
+        gridLayout->addWidget(leftName, 0, 0, 1, 1);
 
-        label_2 = new AspectRatioTextLabel(widget_2);
-        label_2->setObjectName(QStringLiteral("label_2"));
-        sizePolicy.setHeightForWidth(label_2->sizePolicy().hasHeightForWidth());
-        label_2->setSizePolicy(sizePolicy);
+        rightName = new AspectRatioTextLabel(widget_2);
+        rightName->setObjectName(QStringLiteral("rightName"));
+        sizePolicy.setHeightForWidth(rightName->sizePolicy().hasHeightForWidth());
+        rightName->setSizePolicy(sizePolicy);
         QPalette palette3;
         palette3.setBrush(QPalette::Active, QPalette::WindowText, brush);
         palette3.setBrush(QPalette::Inactive, QPalette::WindowText, brush);
         palette3.setBrush(QPalette::Disabled, QPalette::WindowText, brush3);
-        label_2->setPalette(palette3);
-        label_2->setFont(font);
-        label_2->setScaledContents(true);
-        label_2->setAlignment(Qt::AlignCenter);
+        rightName->setPalette(palette3);
+        rightName->setFont(font);
+        rightName->setScaledContents(true);
+        rightName->setAlignment(Qt::AlignCenter);
 
-        gridLayout->addWidget(label_2, 0, 1, 1, 1);
+        gridLayout->addWidget(rightName, 0, 1, 1, 1);
 
         gridLayout->setColumnStretch(0, 1);
         gridLayout->setColumnStretch(1, 1);
 
-        gridLayout_7->addWidget(widget_2, 1, 0, 1, 1);
+        gridLayoutMain->addWidget(widget_2, 1, 0, 1, 1);
 
-        gridLayout_6 = new QGridLayout();
-        gridLayout_6->setObjectName(QStringLiteral("gridLayout_6"));
+        gridLayoutCenter = new QGridLayout();
+        gridLayoutCenter->setObjectName(QStringLiteral("gridLayoutCenter"));
         gridLayout_5 = new QGridLayout();
         gridLayout_5->setObjectName(QStringLiteral("gridLayout_5"));
         widget_5 = new QWidget(FightingTable2);
@@ -179,24 +179,25 @@ public:
         sizePolicy.setHeightForWidth(rightFlag->sizePolicy().hasHeightForWidth());
         rightFlag->setSizePolicy(sizePolicy);
         rightFlag->setScaledContents(false);
+        rightFlag->setAlignment(Qt::AlignCenter);
 
         gridLayout_4->addWidget(rightFlag, 0, 2, 1, 1);
 
 
         gridLayout_5->addWidget(widget_5, 0, 0, 1, 1);
 
-        lcdNumber_2 = new MyQLCDNumber(FightingTable2);
-        lcdNumber_2->setObjectName(QStringLiteral("lcdNumber_2"));
-        sizePolicy.setHeightForWidth(lcdNumber_2->sizePolicy().hasHeightForWidth());
-        lcdNumber_2->setSizePolicy(sizePolicy);
+        rightLcdNumber = new MyQLCDNumber(FightingTable2);
+        rightLcdNumber->setObjectName(QStringLiteral("rightLcdNumber"));
+        sizePolicy.setHeightForWidth(rightLcdNumber->sizePolicy().hasHeightForWidth());
+        rightLcdNumber->setSizePolicy(sizePolicy);
         QPalette palette5;
         palette5.setBrush(QPalette::Active, QPalette::WindowText, brush4);
         palette5.setBrush(QPalette::Inactive, QPalette::WindowText, brush4);
         palette5.setBrush(QPalette::Disabled, QPalette::WindowText, brush3);
-        lcdNumber_2->setPalette(palette5);
-        lcdNumber_2->setLineWidth(1);
+        rightLcdNumber->setPalette(palette5);
+        rightLcdNumber->setLineWidth(1);
 
-        gridLayout_5->addWidget(lcdNumber_2, 1, 0, 1, 1);
+        gridLayout_5->addWidget(rightLcdNumber, 1, 0, 1, 1);
 
         widget_10 = new QWidget(FightingTable2);
         widget_10->setObjectName(QStringLiteral("widget_10"));
@@ -212,20 +213,20 @@ public:
 
         gridLayout_8->addWidget(label_16, 2, 1, 1, 1);
 
-        label_11 = new AspectRatioTextLabel(widget_10);
-        label_11->setObjectName(QStringLiteral("label_11"));
-        sizePolicy.setHeightForWidth(label_11->sizePolicy().hasHeightForWidth());
-        label_11->setSizePolicy(sizePolicy);
+        labelRightMinus = new AspectRatioTextLabel(widget_10);
+        labelRightMinus->setObjectName(QStringLiteral("labelRightMinus"));
+        sizePolicy.setHeightForWidth(labelRightMinus->sizePolicy().hasHeightForWidth());
+        labelRightMinus->setSizePolicy(sizePolicy);
         QPalette palette6;
         palette6.setBrush(QPalette::Active, QPalette::WindowText, brush4);
         palette6.setBrush(QPalette::Inactive, QPalette::WindowText, brush4);
         palette6.setBrush(QPalette::Disabled, QPalette::WindowText, brush3);
-        label_11->setPalette(palette6);
-        label_11->setFont(font);
-        label_11->setScaledContents(true);
-        label_11->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+        labelRightMinus->setPalette(palette6);
+        labelRightMinus->setFont(font);
+        labelRightMinus->setScaledContents(true);
+        labelRightMinus->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
-        gridLayout_8->addWidget(label_11, 0, 0, 1, 1);
+        gridLayout_8->addWidget(labelRightMinus, 0, 0, 1, 1);
 
         label_15 = new AspectRatioTextLabel(widget_10);
         label_15->setObjectName(QStringLiteral("label_15"));
@@ -235,35 +236,35 @@ public:
 
         gridLayout_8->addWidget(label_15, 0, 1, 1, 1);
 
-        label_12 = new AspectRatioTextLabel(widget_10);
-        label_12->setObjectName(QStringLiteral("label_12"));
-        sizePolicy.setHeightForWidth(label_12->sizePolicy().hasHeightForWidth());
-        label_12->setSizePolicy(sizePolicy);
+        labelRightEx = new AspectRatioTextLabel(widget_10);
+        labelRightEx->setObjectName(QStringLiteral("labelRightEx"));
+        sizePolicy.setHeightForWidth(labelRightEx->sizePolicy().hasHeightForWidth());
+        labelRightEx->setSizePolicy(sizePolicy);
         QPalette palette7;
         palette7.setBrush(QPalette::Active, QPalette::WindowText, brush4);
         palette7.setBrush(QPalette::Inactive, QPalette::WindowText, brush4);
         palette7.setBrush(QPalette::Disabled, QPalette::WindowText, brush3);
-        label_12->setPalette(palette7);
-        label_12->setFont(font);
-        label_12->setScaledContents(true);
-        label_12->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+        labelRightEx->setPalette(palette7);
+        labelRightEx->setFont(font);
+        labelRightEx->setScaledContents(true);
+        labelRightEx->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
-        gridLayout_8->addWidget(label_12, 2, 0, 1, 1);
+        gridLayout_8->addWidget(labelRightEx, 2, 0, 1, 1);
 
-        label_18 = new AspectRatioTextLabel(widget_10);
-        label_18->setObjectName(QStringLiteral("label_18"));
-        sizePolicy.setHeightForWidth(label_18->sizePolicy().hasHeightForWidth());
-        label_18->setSizePolicy(sizePolicy);
+        labelRightFo = new AspectRatioTextLabel(widget_10);
+        labelRightFo->setObjectName(QStringLiteral("labelRightFo"));
+        sizePolicy.setHeightForWidth(labelRightFo->sizePolicy().hasHeightForWidth());
+        labelRightFo->setSizePolicy(sizePolicy);
         QPalette palette8;
         palette8.setBrush(QPalette::Active, QPalette::WindowText, brush4);
         palette8.setBrush(QPalette::Inactive, QPalette::WindowText, brush4);
         palette8.setBrush(QPalette::Disabled, QPalette::WindowText, brush3);
-        label_18->setPalette(palette8);
-        label_18->setFont(font);
-        label_18->setScaledContents(true);
-        label_18->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+        labelRightFo->setPalette(palette8);
+        labelRightFo->setFont(font);
+        labelRightFo->setScaledContents(true);
+        labelRightFo->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
-        gridLayout_8->addWidget(label_18, 1, 0, 1, 1);
+        gridLayout_8->addWidget(labelRightFo, 1, 0, 1, 1);
 
         label_19 = new AspectRatioTextLabel(widget_10);
         label_19->setObjectName(QStringLiteral("label_19"));
@@ -280,7 +281,7 @@ public:
         gridLayout_5->setRowStretch(1, 47);
         gridLayout_5->setRowStretch(2, 30);
 
-        gridLayout_6->addLayout(gridLayout_5, 0, 2, 1, 1);
+        gridLayoutCenter->addLayout(gridLayout_5, 0, 2, 1, 1);
 
         gridLayout_2 = new QGridLayout();
         gridLayout_2->setObjectName(QStringLiteral("gridLayout_2"));
@@ -302,6 +303,7 @@ public:
         palette9.setBrush(QPalette::Disabled, QPalette::Text, brush3);
         leftFlag->setPalette(palette9);
         leftFlag->setScaledContents(false);
+        leftFlag->setAlignment(Qt::AlignCenter);
 
         gridLayout_3->addWidget(leftFlag, 0, 0, 1, 1);
 
@@ -328,101 +330,101 @@ public:
         widget_8->setSizePolicy(sizePolicy);
         gridLayout_9 = new QGridLayout(widget_8);
         gridLayout_9->setObjectName(QStringLiteral("gridLayout_9"));
-        label_10 = new AspectRatioTextLabel(widget_8);
-        label_10->setObjectName(QStringLiteral("label_10"));
-        sizePolicy.setHeightForWidth(label_10->sizePolicy().hasHeightForWidth());
-        label_10->setSizePolicy(sizePolicy);
+        labelLeftMinus = new AspectRatioTextLabel(widget_8);
+        labelLeftMinus->setObjectName(QStringLiteral("labelLeftMinus"));
+        sizePolicy.setHeightForWidth(labelLeftMinus->sizePolicy().hasHeightForWidth());
+        labelLeftMinus->setSizePolicy(sizePolicy);
         QPalette palette11;
         palette11.setBrush(QPalette::Active, QPalette::WindowText, brush5);
         palette11.setBrush(QPalette::Inactive, QPalette::WindowText, brush5);
         palette11.setBrush(QPalette::Disabled, QPalette::WindowText, brush3);
-        label_10->setPalette(palette11);
-        label_10->setFont(font);
-        label_10->setScaledContents(true);
-        label_10->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+        labelLeftMinus->setPalette(palette11);
+        labelLeftMinus->setFont(font);
+        labelLeftMinus->setScaledContents(true);
+        labelLeftMinus->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
-        gridLayout_9->addWidget(label_10, 0, 0, 1, 1);
+        gridLayout_9->addWidget(labelLeftMinus, 0, 0, 1, 1);
 
-        label_13 = new AspectRatioTextLabel(widget_8);
-        label_13->setObjectName(QStringLiteral("label_13"));
-        sizePolicy.setHeightForWidth(label_13->sizePolicy().hasHeightForWidth());
-        label_13->setSizePolicy(sizePolicy);
-        label_13->setScaledContents(true);
+        leftMinus = new AspectRatioTextLabel(widget_8);
+        leftMinus->setObjectName(QStringLiteral("leftMinus"));
+        sizePolicy.setHeightForWidth(leftMinus->sizePolicy().hasHeightForWidth());
+        leftMinus->setSizePolicy(sizePolicy);
+        leftMinus->setScaledContents(true);
 
-        gridLayout_9->addWidget(label_13, 0, 1, 1, 1);
+        gridLayout_9->addWidget(leftMinus, 0, 1, 1, 1);
 
-        label_9 = new AspectRatioTextLabel(widget_8);
-        label_9->setObjectName(QStringLiteral("label_9"));
-        sizePolicy.setHeightForWidth(label_9->sizePolicy().hasHeightForWidth());
-        label_9->setSizePolicy(sizePolicy);
+        labelLeftEx = new AspectRatioTextLabel(widget_8);
+        labelLeftEx->setObjectName(QStringLiteral("labelLeftEx"));
+        sizePolicy.setHeightForWidth(labelLeftEx->sizePolicy().hasHeightForWidth());
+        labelLeftEx->setSizePolicy(sizePolicy);
         QPalette palette12;
         palette12.setBrush(QPalette::Active, QPalette::WindowText, brush5);
         palette12.setBrush(QPalette::Inactive, QPalette::WindowText, brush5);
         palette12.setBrush(QPalette::Disabled, QPalette::WindowText, brush3);
-        label_9->setPalette(palette12);
-        label_9->setFont(font);
-        label_9->setScaledContents(true);
-        label_9->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+        labelLeftEx->setPalette(palette12);
+        labelLeftEx->setFont(font);
+        labelLeftEx->setScaledContents(true);
+        labelLeftEx->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
-        gridLayout_9->addWidget(label_9, 2, 0, 1, 1);
+        gridLayout_9->addWidget(labelLeftEx, 2, 0, 1, 1);
 
-        label_14 = new AspectRatioTextLabel(widget_8);
-        label_14->setObjectName(QStringLiteral("label_14"));
-        sizePolicy.setHeightForWidth(label_14->sizePolicy().hasHeightForWidth());
-        label_14->setSizePolicy(sizePolicy);
-        label_14->setScaledContents(true);
+        leftEx = new AspectRatioTextLabel(widget_8);
+        leftEx->setObjectName(QStringLiteral("leftEx"));
+        sizePolicy.setHeightForWidth(leftEx->sizePolicy().hasHeightForWidth());
+        leftEx->setSizePolicy(sizePolicy);
+        leftEx->setScaledContents(true);
 
-        gridLayout_9->addWidget(label_14, 2, 1, 1, 1);
+        gridLayout_9->addWidget(leftEx, 2, 1, 1, 1);
 
-        label_20 = new AspectRatioTextLabel(widget_8);
-        label_20->setObjectName(QStringLiteral("label_20"));
-        sizePolicy.setHeightForWidth(label_20->sizePolicy().hasHeightForWidth());
-        label_20->setSizePolicy(sizePolicy);
+        labelLeftFo = new AspectRatioTextLabel(widget_8);
+        labelLeftFo->setObjectName(QStringLiteral("labelLeftFo"));
+        sizePolicy.setHeightForWidth(labelLeftFo->sizePolicy().hasHeightForWidth());
+        labelLeftFo->setSizePolicy(sizePolicy);
         QPalette palette13;
         palette13.setBrush(QPalette::Active, QPalette::WindowText, brush5);
         palette13.setBrush(QPalette::Inactive, QPalette::WindowText, brush5);
         palette13.setBrush(QPalette::Disabled, QPalette::WindowText, brush3);
-        label_20->setPalette(palette13);
-        label_20->setFont(font);
-        label_20->setScaledContents(true);
-        label_20->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+        labelLeftFo->setPalette(palette13);
+        labelLeftFo->setFont(font);
+        labelLeftFo->setScaledContents(true);
+        labelLeftFo->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
-        gridLayout_9->addWidget(label_20, 1, 0, 1, 1);
+        gridLayout_9->addWidget(labelLeftFo, 1, 0, 1, 1);
 
-        label_21 = new AspectRatioTextLabel(widget_8);
-        label_21->setObjectName(QStringLiteral("label_21"));
-        sizePolicy.setHeightForWidth(label_21->sizePolicy().hasHeightForWidth());
-        label_21->setSizePolicy(sizePolicy);
-        label_21->setScaledContents(true);
+        leftFo = new AspectRatioTextLabel(widget_8);
+        leftFo->setObjectName(QStringLiteral("leftFo"));
+        sizePolicy.setHeightForWidth(leftFo->sizePolicy().hasHeightForWidth());
+        leftFo->setSizePolicy(sizePolicy);
+        leftFo->setScaledContents(true);
 
-        gridLayout_9->addWidget(label_21, 1, 1, 1, 1);
+        gridLayout_9->addWidget(leftFo, 1, 1, 1, 1);
 
 
         gridLayout_2->addWidget(widget_8, 2, 0, 1, 1);
 
-        lcdNumber = new MyQLCDNumber(FightingTable2);
-        lcdNumber->setObjectName(QStringLiteral("lcdNumber"));
-        sizePolicy.setHeightForWidth(lcdNumber->sizePolicy().hasHeightForWidth());
-        lcdNumber->setSizePolicy(sizePolicy);
+        leftLcdNumber = new MyQLCDNumber(FightingTable2);
+        leftLcdNumber->setObjectName(QStringLiteral("leftLcdNumber"));
+        sizePolicy.setHeightForWidth(leftLcdNumber->sizePolicy().hasHeightForWidth());
+        leftLcdNumber->setSizePolicy(sizePolicy);
         QPalette palette14;
         palette14.setBrush(QPalette::Active, QPalette::WindowText, brush5);
         palette14.setBrush(QPalette::Inactive, QPalette::WindowText, brush5);
         palette14.setBrush(QPalette::Disabled, QPalette::WindowText, brush3);
-        lcdNumber->setPalette(palette14);
+        leftLcdNumber->setPalette(palette14);
         QFont font1;
         font1.setBold(false);
         font1.setWeight(50);
-        lcdNumber->setFont(font1);
-        lcdNumber->setLineWidth(1);
-        lcdNumber->setSmallDecimalPoint(false);
+        leftLcdNumber->setFont(font1);
+        leftLcdNumber->setLineWidth(1);
+        leftLcdNumber->setSmallDecimalPoint(false);
 
-        gridLayout_2->addWidget(lcdNumber, 1, 0, 1, 1);
+        gridLayout_2->addWidget(leftLcdNumber, 1, 0, 1, 1);
 
         gridLayout_2->setRowStretch(0, 23);
         gridLayout_2->setRowStretch(1, 47);
         gridLayout_2->setRowStretch(2, 30);
 
-        gridLayout_6->addLayout(gridLayout_2, 0, 0, 1, 1);
+        gridLayoutCenter->addLayout(gridLayout_2, 0, 0, 1, 1);
 
         label_8 = new AspectRatioTextLabel(FightingTable2);
         label_8->setObjectName(QStringLiteral("label_8"));
@@ -436,33 +438,33 @@ public:
         label_8->setScaledContents(true);
         label_8->setAlignment(Qt::AlignCenter);
 
-        gridLayout_6->addWidget(label_8, 0, 1, 1, 1);
+        gridLayoutCenter->addWidget(label_8, 0, 1, 1, 1);
 
-        gridLayout_6->setColumnStretch(0, 1);
-        gridLayout_6->setColumnStretch(1, 1);
-        gridLayout_6->setColumnStretch(2, 1);
+        gridLayoutCenter->setColumnStretch(0, 1);
+        gridLayoutCenter->setColumnStretch(1, 1);
+        gridLayoutCenter->setColumnStretch(2, 1);
 
-        gridLayout_7->addLayout(gridLayout_6, 2, 0, 1, 1);
+        gridLayoutMain->addLayout(gridLayoutCenter, 2, 0, 1, 1);
 
-        label_17 = new AspectRatioTextLabel(FightingTable2);
-        label_17->setObjectName(QStringLiteral("label_17"));
-        sizePolicy.setHeightForWidth(label_17->sizePolicy().hasHeightForWidth());
-        label_17->setSizePolicy(sizePolicy);
+        labelStatus = new AspectRatioTextLabel(FightingTable2);
+        labelStatus->setObjectName(QStringLiteral("labelStatus"));
+        sizePolicy.setHeightForWidth(labelStatus->sizePolicy().hasHeightForWidth());
+        labelStatus->setSizePolicy(sizePolicy);
         QPalette palette16;
         palette16.setBrush(QPalette::Active, QPalette::WindowText, brush);
         palette16.setBrush(QPalette::Inactive, QPalette::WindowText, brush);
         palette16.setBrush(QPalette::Disabled, QPalette::WindowText, brush3);
-        label_17->setPalette(palette16);
-        label_17->setFont(font);
-        label_17->setScaledContents(true);
-        label_17->setAlignment(Qt::AlignCenter);
+        labelStatus->setPalette(palette16);
+        labelStatus->setFont(font);
+        labelStatus->setScaledContents(true);
+        labelStatus->setAlignment(Qt::AlignCenter);
 
-        gridLayout_7->addWidget(label_17, 3, 0, 1, 1);
+        gridLayoutMain->addWidget(labelStatus, 3, 0, 1, 1);
 
-        gridLayout_7->setRowStretch(0, 5);
-        gridLayout_7->setRowStretch(1, 10);
-        gridLayout_7->setRowStretch(2, 75);
-        gridLayout_7->setRowStretch(3, 10);
+        gridLayoutMain->setRowStretch(0, 5);
+        gridLayoutMain->setRowStretch(1, 10);
+        gridLayoutMain->setRowStretch(2, 75);
+        gridLayoutMain->setRowStretch(3, 10);
 
         retranslateUi(FightingTable2);
 
@@ -472,27 +474,27 @@ public:
     void retranslateUi(QWidget *FightingTable2)
     {
         FightingTable2->setWindowTitle(QApplication::translate("FightingTable2", "Form", 0));
-        label->setText(QApplication::translate("FightingTable2", "033. PF Boys -42kg", 0));
-        label_3->setText(QApplication::translate("FightingTable2", "\320\234\320\270\321\202\321\200\320\270\321\207 \320\237\321\221\321\202\321\200", 0));
-        label_2->setText(QApplication::translate("FightingTable2", "\320\223\320\265\320\275\320\260\320\264\320\270\320\271 \320\232\320\276\321\200\320\276\321\202\320\272\320\265\320\262\320\270\321\207", 0));
+        labelCategory->setText(QApplication::translate("FightingTable2", "033. PF Boys -42kg", 0));
+        leftName->setText(QApplication::translate("FightingTable2", "\320\234\320\270\321\202\321\200\320\270\321\207 \320\237\321\221\321\202\321\200", 0));
+        rightName->setText(QApplication::translate("FightingTable2", "\320\223\320\265\320\275\320\260\320\264\320\270\320\271 \320\232\320\276\321\200\320\276\321\202\320\272\320\265\320\262\320\270\321\207", 0));
         rightRegion->setText(QApplication::translate("FightingTable2", "ITA", 0));
         rightFlag->setText(QApplication::translate("FightingTable2", "TextLabel", 0));
         label_16->setText(QApplication::translate("FightingTable2", "TextLabel", 0));
-        label_11->setText(QApplication::translate("FightingTable2", "Minus:", 0));
+        labelRightMinus->setText(QApplication::translate("FightingTable2", "Minus:", 0));
         label_15->setText(QApplication::translate("FightingTable2", "TextLabel", 0));
-        label_12->setText(QApplication::translate("FightingTable2", "Ex:", 0));
-        label_18->setText(QApplication::translate("FightingTable2", "Fo:", 0));
+        labelRightEx->setText(QApplication::translate("FightingTable2", "Ex:", 0));
+        labelRightFo->setText(QApplication::translate("FightingTable2", "Fo:", 0));
         label_19->setText(QApplication::translate("FightingTable2", "TextLabel", 0));
         leftFlag->setText(QApplication::translate("FightingTable2", "TextLabel", 0));
         leftRegion->setText(QApplication::translate("FightingTable2", "RUS", 0));
-        label_10->setText(QApplication::translate("FightingTable2", "Minus:", 0));
-        label_13->setText(QApplication::translate("FightingTable2", "TextLabel", 0));
-        label_9->setText(QApplication::translate("FightingTable2", "Ex:", 0));
-        label_14->setText(QApplication::translate("FightingTable2", "TextLabel", 0));
-        label_20->setText(QApplication::translate("FightingTable2", "Fo:", 0));
-        label_21->setText(QApplication::translate("FightingTable2", "TextLabel", 0));
+        labelLeftMinus->setText(QApplication::translate("FightingTable2", "Minus:", 0));
+        leftMinus->setText(QApplication::translate("FightingTable2", "TextLabel", 0));
+        labelLeftEx->setText(QApplication::translate("FightingTable2", "Ex:", 0));
+        leftEx->setText(QApplication::translate("FightingTable2", "TextLabel", 0));
+        labelLeftFo->setText(QApplication::translate("FightingTable2", "Fo:", 0));
+        leftFo->setText(QApplication::translate("FightingTable2", "TextLabel", 0));
         label_8->setText(QApplication::translate("FightingTable2", "69:69", 0));
-        label_17->setText(QApplication::translate("FightingTable2", "Round 1/2", 0));
+        labelStatus->setText(QApplication::translate("FightingTable2", "Round 1/2", 0));
     } // retranslateUi
 
 };

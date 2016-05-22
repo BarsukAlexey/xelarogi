@@ -77,9 +77,9 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_7" rowstretch="5,10,75,10">
+  <layout class="QGridLayout" name="gridLayoutMain" rowstretch="5,10,75,10">
    <item row="0" column="0">
-    <widget class="AspectRatioTextLabel" name="label">
+    <widget class="AspectRatioTextLabel" name="labelCategory">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
        <horstretch>0</horstretch>
@@ -150,7 +150,7 @@
      </property>
      <layout class="QGridLayout" name="gridLayout" columnstretch="1,1">
       <item row="0" column="0">
-       <widget class="AspectRatioTextLabel" name="label_3">
+       <widget class="AspectRatioTextLabel" name="leftName">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
           <horstretch>0</horstretch>
@@ -212,7 +212,7 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="AspectRatioTextLabel" name="label_2">
+       <widget class="AspectRatioTextLabel" name="rightName">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
           <horstretch>0</horstretch>
@@ -277,7 +277,7 @@
     </widget>
    </item>
    <item row="2" column="0">
-    <layout class="QGridLayout" name="gridLayout_6" columnstretch="1,1,1">
+    <layout class="QGridLayout" name="gridLayoutCenter" columnstretch="1,1,1">
      <item row="0" column="2">
       <layout class="QGridLayout" name="gridLayout_5" rowstretch="23,47,30">
        <item row="0" column="0">
@@ -362,13 +362,16 @@
             <property name="scaledContents">
              <bool>false</bool>
             </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
            </widget>
           </item>
          </layout>
         </widget>
        </item>
        <item row="1" column="0">
-        <widget class="MyQLCDNumber" name="lcdNumber_2">
+        <widget class="MyQLCDNumber" name="rightLcdNumber">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
            <horstretch>0</horstretch>
@@ -443,7 +446,7 @@
            </widget>
           </item>
           <item row="0" column="0">
-           <widget class="AspectRatioTextLabel" name="label_11">
+           <widget class="AspectRatioTextLabel" name="labelRightMinus">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
               <horstretch>0</horstretch>
@@ -521,7 +524,7 @@
            </widget>
           </item>
           <item row="2" column="0">
-           <widget class="AspectRatioTextLabel" name="label_12">
+           <widget class="AspectRatioTextLabel" name="labelRightEx">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
               <horstretch>0</horstretch>
@@ -583,7 +586,7 @@
            </widget>
           </item>
           <item row="1" column="0">
-           <widget class="AspectRatioTextLabel" name="label_18">
+           <widget class="AspectRatioTextLabel" name="labelRightFo">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
               <horstretch>0</horstretch>
@@ -727,6 +730,9 @@
             <property name="scaledContents">
              <bool>false</bool>
             </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
            </widget>
           </item>
           <item row="0" column="1">
@@ -801,7 +807,7 @@
          </property>
          <layout class="QGridLayout" name="gridLayout_9">
           <item row="0" column="0">
-           <widget class="AspectRatioTextLabel" name="label_10">
+           <widget class="AspectRatioTextLabel" name="labelLeftMinus">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
               <horstretch>0</horstretch>
@@ -863,7 +869,7 @@
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="AspectRatioTextLabel" name="label_13">
+           <widget class="AspectRatioTextLabel" name="leftMinus">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
               <horstretch>0</horstretch>
@@ -879,7 +885,7 @@
            </widget>
           </item>
           <item row="2" column="0">
-           <widget class="AspectRatioTextLabel" name="label_9">
+           <widget class="AspectRatioTextLabel" name="labelLeftEx">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
               <horstretch>0</horstretch>
@@ -941,7 +947,7 @@
            </widget>
           </item>
           <item row="2" column="1">
-           <widget class="AspectRatioTextLabel" name="label_14">
+           <widget class="AspectRatioTextLabel" name="leftEx">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
               <horstretch>0</horstretch>
@@ -957,7 +963,7 @@
            </widget>
           </item>
           <item row="1" column="0">
-           <widget class="AspectRatioTextLabel" name="label_20">
+           <widget class="AspectRatioTextLabel" name="labelLeftFo">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
               <horstretch>0</horstretch>
@@ -1019,7 +1025,7 @@
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="AspectRatioTextLabel" name="label_21">
+           <widget class="AspectRatioTextLabel" name="leftFo">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
               <horstretch>0</horstretch>
@@ -1038,7 +1044,7 @@
         </widget>
        </item>
        <item row="1" column="0">
-        <widget class="MyQLCDNumber" name="lcdNumber">
+        <widget class="MyQLCDNumber" name="leftLcdNumber">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
            <horstretch>0</horstretch>
@@ -1157,7 +1163,7 @@
     </layout>
    </item>
    <item row="3" column="0">
-    <widget class="AspectRatioTextLabel" name="label_17">
+    <widget class="AspectRatioTextLabel" name="labelStatus">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
        <horstretch>0</horstretch>

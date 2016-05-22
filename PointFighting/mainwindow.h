@@ -30,6 +30,7 @@
 
 #include <algorithm>
 #include <QThread>
+#include <QTimer>
 #include "forma_dvertisement.h"
 
 
@@ -42,24 +43,27 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 private:
-    Ui::MainWindow *ui;
-    const QString nameSaveFile = "save.json";
-    QVector<QVector<QImage>> flags;
-    QTimer *advTimer;
+    const QString nameSaveFile = ("save.json");
+    //static const QString nameSaveFile;
+    const QString nameSettingFile = ("setting.json");
 
+    Ui::MainWindow *ui;
+    QVector<QVector<QImage>> flags;
+    QTimer advTimer;
 
     QVector<QString> images;
     int posImage = 0;
     QVector<FormAdvertisement*> formsForAdvertisement;
-    bool showAdvertisement = true;
+    bool showAdvertisement;
+    bool classicSkin;
 
 
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    static QJsonDocument loadJSON(const QString& path);
 
 private:
-    QJsonDocument loadJSON();
     void update();
 
 private slots:
