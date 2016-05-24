@@ -1,36 +1,48 @@
 #include "aspectratiotextlabel.h"
 
-#include <QDebug>
-#include <QDateTime>
-
 
 AspectRatioTextLabel::AspectRatioTextLabel(QWidget *parent) :
     QLabel(parent)
 {
+    isTimer = false;
     this->setMinimumSize(1,1);
+}
+
+void AspectRatioTextLabel::setLableAsTimer(bool isTimer)
+{
+    this->isTimer = isTimer;
 }
 
 void AspectRatioTextLabel::mySetFontSize()
 {
-    if (0 < width() && 0 < height())
+    int sz = mySetFontSize(font(), width(), height(), text());
+    if (isTimer)
+        for (int i = 0; i < 10; ++i)
+            sz = qMin(sz, mySetFontSize(font(), width(), height(), QString("%1%1:%1%1").arg(i)));
+    QFont font = this->font();
+    font.setPointSize(sz);
+    setFont(font);
+}
+
+int AspectRatioTextLabel::mySetFontSize(QFont myFont, int width, int height, QString str)
+{
+    if (0 < width && 0 < height)
     {
-        QFont myFont = font();
-        int l = 1, r = qMin(width(), height());
+        int l = 1, r = qMin(width, height);
         while (l < r)
         {
             int m = (l + r + 1) / 2;
             myFont.setPointSize(m);
             QFontMetrics fm(myFont);
-            QRect bound = fm.boundingRect(text());
-            if (bound.width() < width() && bound.height() < height())
+            QRect bound = fm.boundingRect(str);
+            if (bound.width() < width && bound.height() < height)
                 l = m;
             else
                 r = m - 1;
         }
-        myFont.setPointSize(l);
-        setFont(myFont);
-        //qDebug() << QDateTime::currentDateTime().toString("hh:mm:ss zzz") << size() << l;
+        return l;
     }
+    return 1;
 }
 
 void AspectRatioTextLabel::mousePressEvent(QMouseEvent* event)

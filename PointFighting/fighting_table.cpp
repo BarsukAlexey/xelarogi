@@ -281,6 +281,6 @@ void FightingTable::keyPressEvent(QKeyEvent* e)
         if (isForJudge)
             f->pressedKeySpace();
     }
-    else
-        QDialog::keyPressEvent(e);
+//    else
+//        QDialog::keyPressEvent(e);
 }

@@ -1,22 +1,29 @@
 #ifndef MYQLCDNUMBER_H
 #define MYQLCDNUMBER_H
 
-#include <QLCDNumber>
 #include <QDebug>
+#include <QLCDNumber>
 #include <QMouseEvent>
+#include <QPalette>
 
 
 class MyQLCDNumber : public QLCDNumber
 {
+    Q_OBJECT
 public:
-    MyQLCDNumber(QWidget* p = 0);
+    explicit MyQLCDNumber(QWidget* p = 0);
 
-protected:
-    void mousePressEvent(QMouseEvent *);
+
 
 signals:
+    void leftButtonClick();
+    void rightButtonClick();
+
+protected:
+    void mousePressEvent(QMouseEvent *e) Q_DECL_OVERRIDE;
 
 public slots:
+    void display(int num);
 };
 
 #endif // MYQLCDNUMBER_H

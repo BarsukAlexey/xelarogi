@@ -18,26 +18,22 @@ class QRightClickButton : public QPushButton
 private:
     QString str;
     int flag;
+
 public:
     explicit QRightClickButton(QWidget *parent = 0);
+    void setText(const QString &text);
 
 protected:
-    //virtual void paintEvent(QPaintEvent * event);
     void resizeEvent(QResizeEvent* e);
 
 private slots:
     void mousePressEvent(QMouseEvent *e);
 
-//public:
-    //void setText(const QString &text);
-
 signals:
     void rightClicked();
 
-public slots:
-    //void setAlignmentFlag(Qt::AlignmentFlag flag);
-    //void setAlignmentFlag(int flag);
-
+private:
+    void setSizeFont();
 };
 
 #endif // QRIGHTCLICKBUTTON_H

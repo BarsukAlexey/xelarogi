@@ -19,7 +19,7 @@
         "orderUID_right": 10652,
         "regionOfLeftFighter": "Псковская",
         "regionOfRightFighter": "Псковская",
-        "result": "6 : 18",
+        "result": "DISQ",
         "rightFlag": "iVBORw0KGgoAAAANSUhEUgAAAAkAAAAGCAYAAAARx7TFAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAJElEQVQImWP8////fwYCgImQAgYGBgZGBstlVDLpqrYcdUwCABTqCAE9u0b5AAAAAElFTkSuQmCC",
         "winner": "Каландар Саймухамад"
     },
@@ -38,14 +38,11 @@
         "leftFlag": "iVBORw0KGgoAAAANSUhEUgAAAAkAAAAGCAYAAAARx7TFAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAJElEQVQImWP8////fwYCgImQAgYGBgZGBstlVDLpqrYcdUwCABTqCAE9u0b5AAAAAElFTkSuQmCC",
         "nameOfLeftFighter": "Генералов Александр",
         "nameOfRightFighter": "Семенов Владислав",
-        "orderUID": 10650,
         "orderUID_left": 10648,
         "orderUID_right": 10650,
         "regionOfLeftFighter": "Псковская",
         "regionOfRightFighter": "Псковская",
-        "result": "59 : 60",
-        "rightFlag": "iVBORw0KGgoAAAANSUhEUgAAAAkAAAAGCAYAAAARx7TFAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAJElEQVQImWP8////fwYCgImQAgYGBgZGBstlVDLpqrYcdUwCABTqCAE9u0b5AAAAAElFTkSuQmCC",
-        "winner": "Семенов Владислав"
+        "rightFlag": "iVBORw0KGgoAAAANSUhEUgAAAAkAAAAGCAYAAAARx7TFAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAJElEQVQImWP8////fwYCgImQAgYGBgZGBstlVDLpqrYcdUwCABTqCAE9u0b5AAAAAElFTkSuQmCC"
     },
     {
         "DURATION_EXTRA_ROUND": 15,
@@ -62,14 +59,11 @@
         "leftFlag": "iVBORw0KGgoAAAANSUhEUgAAAAkAAAAGCAYAAAARx7TFAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAJElEQVQImWP8////fwYCgImQAgYGBgZGBstlVDLpqrYcdUwCABTqCAE9u0b5AAAAAElFTkSuQmCC",
         "nameOfLeftFighter": "Козлов  Максим",
         "nameOfRightFighter": "Шершнев Максим",
-        "orderUID": 10655,
         "orderUID_left": 10653,
         "orderUID_right": 10655,
         "regionOfLeftFighter": "Псковская",
         "regionOfRightFighter": "Псковская",
-        "result": "5 : 6",
-        "rightFlag": "iVBORw0KGgoAAAANSUhEUgAAAAkAAAAGCAYAAAARx7TFAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAJElEQVQImWP8////fwYCgImQAgYGBgZGBstlVDLpqrYcdUwCABTqCAE9u0b5AAAAAElFTkSuQmCC",
-        "winner": "Шершнев Максим"
+        "rightFlag": "iVBORw0KGgoAAAANSUhEUgAAAAkAAAAGCAYAAAARx7TFAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAJElEQVQImWP8////fwYCgImQAgYGBgZGBstlVDLpqrYcdUwCABTqCAE9u0b5AAAAAElFTkSuQmCC"
     },
     {
         "DURATION_EXTRA_ROUND": 0,
@@ -85,12 +79,12 @@
         "fightId": 4,
         "leftFlag": "iVBORw0KGgoAAAANSUhEUgAAAAkAAAAGCAYAAAARx7TFAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAJElEQVQImWP8////fwYCgImQAgYGBgZGBstlVDLpqrYcdUwCABTqCAE9u0b5AAAAAElFTkSuQmCC",
         "nameOfLeftFighter": "Лунев Кирилл",
-        "nameOfRightFighter": "Семенов Владислав",
+        "nameOfRightFighter": " ",
         "orderUID_left": 10649,
-        "orderUID_right": 10650,
+        "orderUID_right": 0,
         "regionOfLeftFighter": "Псковская",
-        "regionOfRightFighter": "Псковская",
-        "rightFlag": "iVBORw0KGgoAAAANSUhEUgAAAAkAAAAGCAYAAAARx7TFAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAJElEQVQImWP8////fwYCgImQAgYGBgZGBstlVDLpqrYcdUwCABTqCAE9u0b5AAAAAElFTkSuQmCC"
+        "regionOfRightFighter": "",
+        "rightFlag": ""
     },
     {
         "DURATION_EXTRA_ROUND": 15,
@@ -102,15 +96,15 @@
         "countryOfLeftFighter": "Россия",
         "countryOfRightFighter": "",
         "durationOfBreak": "13",
-        "durationOfRound": "5",
+        "durationOfRound": "10",
         "fightId": 5,
         "leftFlag": "iVBORw0KGgoAAAANSUhEUgAAAAkAAAAGCAYAAAARx7TFAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAJElEQVQImWP8////fwYCgImQAgYGBgZGBstlVDLpqrYcdUwCABTqCAE9u0b5AAAAAElFTkSuQmCC",
         "nameOfLeftFighter": "Егоров Иван",
-        "nameOfRightFighter": "Шершнев Максим",
+        "nameOfRightFighter": " ",
         "orderUID_left": 10654,
-        "orderUID_right": 10655,
+        "orderUID_right": 0,
         "regionOfLeftFighter": "Псковская",
-        "regionOfRightFighter": "Псковская",
-        "rightFlag": "iVBORw0KGgoAAAANSUhEUgAAAAkAAAAGCAYAAAARx7TFAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAJElEQVQImWP8////fwYCgImQAgYGBgZGBstlVDLpqrYcdUwCABTqCAE9u0b5AAAAAElFTkSuQmCC"
+        "regionOfRightFighter": "",
+        "rightFlag": ""
     }
 ]

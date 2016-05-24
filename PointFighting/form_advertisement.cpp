@@ -3,9 +3,6 @@
 
 FormAdvertisement::FormAdvertisement(QWidget *parent) :
     QDialog(parent),
-    //QDialog(parent, Qt::Dialog),
-    //QDialog(parent, Qt::WindowStaysOnTopHint),
-
     ui(new Ui::FormAdvertisement)
 {
     ui->setupUi(this);

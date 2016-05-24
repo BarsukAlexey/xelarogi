@@ -33,6 +33,8 @@
 #include <QTimer>
 #include "forma_dvertisement.h"
 
+#include "fightingtable2.h"
+
 
 namespace Ui {
 class MainWindow;
@@ -44,7 +46,6 @@ class MainWindow : public QMainWindow
 
 private:
     const QString nameSaveFile = ("save.json");
-    //static const QString nameSaveFile;
     const QString nameSettingFile = ("setting.json");
 
     Ui::MainWindow *ui;

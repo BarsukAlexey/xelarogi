@@ -61,15 +61,12 @@ QPixmap FormScore::drawBorder(QImage flag)
 
 QImage FormScore::makeGrey(QImage image)
 {
-    for (int ii = 0; ii < image.height(); ii++) {
-        uchar* scan = image.scanLine(ii);
-        int depth =4;
-        for (int jj = 0; jj < image.width(); jj++) {
-            QRgb* rgbpixel = reinterpret_cast<QRgb*>(scan + jj*depth);
-            int gray = qGray(*rgbpixel);
-            *rgbpixel = QColor(gray, gray, gray).rgba();
+    for (int i = 0; i < image.width(); i++)
+        for (int j = 0; j < image.height(); j++)
+        {
+            int gray = qGray(image.pixel(i,j));
+            image.setPixel(i, j, QColor(gray, gray, gray).rgba());
         }
-    }
     return image;
 }
 
@@ -81,8 +78,8 @@ QPixmap FormScore::drawCubes(int count)
         pm.fill(Qt::transparent);
         return pm;
     }
-    const int sizeOfSideOfCube = 18;
-    QPixmap pm(count * sizeOfSideOfCube + (count - 1) * sizeOfSideOfCube, sizeOfSideOfCube);
+    const int sizeOfSideOfCube = 50;
+    QPixmap pm(4 * sizeOfSideOfCube + 3 * sizeOfSideOfCube, sizeOfSideOfCube);
     pm.fill(Qt::transparent);
     QPainter painter(&pm);
     for (int i = 0; i < count; ++i)

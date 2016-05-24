@@ -98,6 +98,7 @@ private:
 
 public:
     explicit Fighting(int durationOfRound, int durationOfBreak, int countOfRounds, int durationOfExtraRound);
+    ~Fighting();
 
 private:
     void updateTime();

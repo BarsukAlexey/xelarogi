@@ -1,5 +1,5 @@
 {
-    "classicSkin": true,
-    "interval": 2,
+    "classicSkin": false,
+    "interval": 1,
     "showAdvertisement": true
 }

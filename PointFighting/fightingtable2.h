@@ -2,14 +2,17 @@
 #define FIGHTINGTABLE2_H
 
 #include "aspectratiotextlabel.h"
+#include "dialogdisq.h"
 #include "fighting.h"
 #include "formscore.h"
 #include "qrightclickbutton.h"
 
-#include <QWidget>
-#include <QPixmap>
 #include <QDebug>
 #include <QLayoutItem>
+#include <QMessageBox>
+#include <QPixmap>
+#include <QWidget>
+
 
 
 
@@ -18,7 +21,7 @@ namespace Ui {
 class FightingTable2;
 }
 
-class FightingTable2 : public QWidget
+class FightingTable2 : public QDialog
 {
     Q_OBJECT
 
@@ -46,7 +49,14 @@ public:
 
 private:
     static void setTextColor(QWidget *label, Qt::GlobalColor color);
+    void setColor();
 
+private slots:
+    void updateInfo();
+
+protected:
+    void closeEvent(QCloseEvent *event);
+    void keyPressEvent(QKeyEvent * e);
 
 };
 

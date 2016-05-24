@@ -12,7 +12,7 @@ void QRightClickButton::mousePressEvent(QMouseEvent *event)
     QPushButton::mousePressEvent(event);
 }
 
-void QRightClickButton::resizeEvent(QResizeEvent* )
+void QRightClickButton::setSizeFont()
 {
     if (0 < width() && 0 < height())
     {
@@ -24,7 +24,7 @@ void QRightClickButton::resizeEvent(QResizeEvent* )
             myFont.setPointSize(m);
             QFontMetrics fm(myFont);
             QRect bound = fm.boundingRect(text());
-            if (bound.width() <= width() && bound.height() <= height())
+            if (bound.width() < 0.90 * width() && bound.height() < 0.90 * height())
                 l = m;
             else
                 r = m - 1;
@@ -33,4 +33,16 @@ void QRightClickButton::resizeEvent(QResizeEvent* )
         setFont(myFont);
         //qDebug() << "QRightClickButton::resizeEvent" << QDateTime::currentDateTime().toString("hh:mm:ss zzz") << size() << l;
     }
+}
+
+void QRightClickButton::setText(const QString& text)
+{
+    QPushButton::setText(text);
+    setSizeFont();
+
+}
+
+void QRightClickButton::resizeEvent(QResizeEvent* )
+{
+    setSizeFont();
 }

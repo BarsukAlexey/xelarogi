@@ -43,6 +43,13 @@ Fighting::Fighting(int durationOfRound, int durationOfBreak, int countOfRounds, 
     timer.start();
 }
 
+Fighting::~Fighting()
+{
+    //QObject::~QObject();
+    delete soundGong;
+    delete soundHummerBit;
+}
+
 
 void Fighting::setDialog(bool dialog) {
     if (dialog) {
