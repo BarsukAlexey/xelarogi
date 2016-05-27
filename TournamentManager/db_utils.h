@@ -79,12 +79,13 @@ public:
     static int findDurationOfGrid(long long tournamentCategoryUID, int delay = 0);
     static int findDurationOfFightinPair(long long tournamentCategoryUID);
 
+    static  QVector<long long> getUidOfWinner(long long UIDtournamentCategory, int countOfWinners);
     static int isPow2(int a) {
       return !(a & (a - 1));
     }
 
     // для таблицы TOURNAMENT_CATEGORIES
-    static QVector<long long> get_UIDs_of_TOURNAMENT_CATEGORIES(const QSqlDatabase& database, long long tournamentUID);
+    static QVector<long long> get_UIDs_of_TOURNAMENT_CATEGORIES(long long tournamentUID);
     //static QString get__NAME_OF_TOURNAMENT_CATEGORIES(const QSqlDatabase& database, long long UID);
     static QVector<std::tuple<long long, int, int, long long> > get_distinct_TYPE_FK_AgeFrom_AgeTill(long long tournamentUID);
     static QMap<QString, QVector<long long> > get_weight_and_orderUIDs(long long tournamentUID, long long type_fk, int age_from, int age_till, int sex_fk);
@@ -94,6 +95,8 @@ public:
     static QString get__WEIGHT_TILL(const QSqlDatabase& database, long long UID);
     static QString getNormanWeightRangeFromTOURNAMENT_CATEGORIES(long long uidCategory);
     static QString getNormanWeightRange(double a, double b);
+    static QString getWeightAsOneNumberPlusMinus(long long uidCategory);
+    static QString getNormanAgeRangeFromTOURNAMENT_CATEGORIES(long long uidCategory);
     static QString getNormanAgeRange(int a, int b);
 
 

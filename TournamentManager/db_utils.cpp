@@ -424,13 +424,30 @@ int DBUtils::findDurationOfFightinPair(long long tournamentCategories)
     return
         count * DBUtils::getField("DURATION_FIGHING", "TOURNAMENT_CATEGORIES", tournamentCategories).toInt()
         +
-        (count - 1) * DBUtils::getField("DURATION_BREAK", "TOURNAMENT_CATEGORIES", tournamentCategories).toInt();
+            (count - 1) * DBUtils::getField("DURATION_BREAK", "TOURNAMENT_CATEGORIES", tournamentCategories).toInt();
 }
 
-QVector<long long> DBUtils::get_UIDs_of_TOURNAMENT_CATEGORIES(const QSqlDatabase& database, long long tournamentUID)
+QVector<long long> DBUtils::getUidOfWinner(long long UIDtournamentCategory, int countOfWinners)
+{
+    QVector<long long> result;
+    QVector<NodeOfTournirGrid> nodes = getNodes(UIDtournamentCategory);
+    while (result.size() < countOfWinners && !nodes.empty())
+    {
+        long long orderUID = nodes[0].UID;
+        if (orderUID <= 0)
+            return QVector<long long>();
+        result << orderUID;
+        for (int i = nodes.size() - 1; 0 <= i; --i)
+            if (nodes[i].UID == orderUID)
+                nodes.remove(i);
+    }
+    return result;
+}
+
+QVector<long long> DBUtils::get_UIDs_of_TOURNAMENT_CATEGORIES(long long tournamentUID)
 {
     QVector<long long> uids;
-    QSqlQuery query("SELECT * FROM TOURNAMENT_CATEGORIES WHERE TOURNAMENT_FK = ? ORDER BY SEX_FK, TYPE_FK, AGE_FROM, AGE_TILL, WEIGHT_FROM, WEIGHT_TILL", database);
+    QSqlQuery query("SELECT * FROM TOURNAMENT_CATEGORIES WHERE TOURNAMENT_FK = ? ORDER BY SEX_FK, TYPE_FK, AGE_FROM, AGE_TILL, WEIGHT_FROM, WEIGHT_TILL");
     query.bindValue(0, tournamentUID);
     if (!query.exec())
         qDebug() << __LINE__ << __PRETTY_FUNCTION__ << query.lastError().text() << query.lastQuery();
@@ -509,6 +526,24 @@ QString DBUtils::getNormanWeightRange(double a, double b)
     if (200 - 1e-7 <= b)
         return "свыше " + aa + " кг";
     return "от " + aa + " до " + bb + " кг";
+}
+
+QString DBUtils::getWeightAsOneNumberPlusMinus(long long uidCategory)
+{
+    double from = DBUtils::getField("WEIGHT_FROM", "TOURNAMENT_CATEGORIES", uidCategory).toDouble();
+    double till = DBUtils::getField("WEIGHT_TILL", "TOURNAMENT_CATEGORIES", uidCategory).toDouble();
+    if (qAbs(from) < 1e-7)
+        return "-" + DBUtils::roundDouble(till, 2);
+    else if (200 - 1e-7 <= till)
+        return "+" + DBUtils::roundDouble(from, 2);
+    return DBUtils::roundDouble(till, 2);
+}
+
+QString DBUtils::getNormanAgeRangeFromTOURNAMENT_CATEGORIES(long long uidCategory)
+{
+    double a = DBUtils::getField("AGE_FROM", "TOURNAMENT_CATEGORIES", uidCategory).toDouble();
+    double b = DBUtils::getField("AGE_TILL", "TOURNAMENT_CATEGORIES", uidCategory).toDouble();
+    return getNormanAgeRange(a, b);
 }
 
 QString DBUtils::getNormanAgeRange(int ageFrom, int ageTill)

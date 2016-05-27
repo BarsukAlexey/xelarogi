@@ -26,7 +26,7 @@ WeighingProtocol::WeighingProtocol(const QSqlDatabase& database, const long long
 
     const int countColumns = 9;
 
-    for (const long long uidCategory : DBUtils::get_UIDs_of_TOURNAMENT_CATEGORIES(database, tournamentUID))
+    for (const long long uidCategory : DBUtils::get_UIDs_of_TOURNAMENT_CATEGORIES(tournamentUID))
     {
         QVector<DBUtils::NodeOfTournirGrid> leafOFTree = DBUtils::getLeafOFTree(database, uidCategory);
         if (leafOFTree.empty()) continue;

@@ -215,16 +215,7 @@ void FightingPairs::printInJSON(const QVector<DBUtils::Fighing>& fighting, int r
         a["nameOfRightFighter"] = DBUtils::getField("SECOND_NAME", "ORDERS", f.UID1) + " " + DBUtils::getField("FIRST_NAME", "ORDERS", f.UID1);
 
         a["fightId"] = fightingId;
-        double from = DBUtils::getField( "WEIGHT_FROM", "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK).toDouble();
-        double till = DBUtils::getField( "WEIGHT_TILL", "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK).toDouble();
-        a["categoryOfFighting"] = DBUtils::getField("WEIGHT_TILL", "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK);
-        if (qAbs(from) < 1e-7)
-            a["categoryOfFighting"] = "-" + DBUtils::roundDouble(till, 2);
-        else if (200 - 1e-7 <= till)
-            a["categoryOfFighting"] = "+" + DBUtils::roundDouble(from, 2);
-        else
-            a["categoryOfFighting"] =       DBUtils::roundDouble(till, 2);
-
+        a["categoryOfFighting"] = DBUtils::getWeightAsOneNumberPlusMinus(f.TOURNAMENT_CATEGORIES_FK);
 
         a["countOfRounds"  ] = DBUtils::getField("ROUND_COUNT"     , "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK);
         a["durationOfRound"] = DBUtils::getField("DURATION_FIGHING", "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK);
