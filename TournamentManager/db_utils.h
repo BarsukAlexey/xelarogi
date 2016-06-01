@@ -79,7 +79,7 @@ public:
     static int findDurationOfGrid(long long tournamentCategoryUID, int delay = 0);
     static int findDurationOfFightinPair(long long tournamentCategoryUID);
 
-    static  QVector<long long> getUidOfWinner(long long UIDtournamentCategory, int countOfWinners);
+    static  QVector<long long> getUidOfWinner(long long UIDtournamentCategory);
     static int isPow2(int a) {
       return !(a & (a - 1));
     }

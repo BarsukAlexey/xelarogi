@@ -15,7 +15,7 @@ class JFrameScoreTable extends JDialog {
     private final Fighting f;
     private Timer timer;
 
-    JFrameScoreTable(boolean isThisForJudge, Rectangle bound, final Fighting f) {
+    JFrameScoreTable(boolean isThisForJudge, final Rectangle bound, final Fighting f) {
         super();
 
         this.isThisForJudge = isThisForJudge;
@@ -43,7 +43,7 @@ class JFrameScoreTable extends JDialog {
                 }
             });
 
-            /*/
+            //
             addMouseMotionListener(new MouseMotionListener() {
                 @Override
                 public void mouseDragged(MouseEvent arg0) {
@@ -65,8 +65,8 @@ class JFrameScoreTable extends JDialog {
                     }
                 }
 
-                private static final int fixX = 500;
-                private static final int fixY = 500;
+                private final int fixX = bound.width / 2;
+                private final int fixY = bound.height / 2;
 
                 private void mymove(MouseEvent arg0) {
                     if (robo == null) return;
@@ -75,19 +75,13 @@ class JFrameScoreTable extends JDialog {
                         return;
                     }
                     robo.mouseMove(fixX + JFrameScoreTable.this.getX(), fixY + JFrameScoreTable.this.getY());
-
-                    // compute and print move position
-                    int moveX = arg0.getX() - fixX;
-                    int moveY = arg0.getY() - fixY;
-//                    System.out.println("moved: " + moveX + " " + moveY);
                 }
             });
-            /**/
         }
 
 
         setModal(true);
-        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE); // TODO
+        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         setUndecorated(true);
         pack();
         setBounds(bound);

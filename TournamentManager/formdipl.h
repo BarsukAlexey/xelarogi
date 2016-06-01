@@ -5,19 +5,20 @@
 #include "dialogselectfieldsfordimloma.h"
 
 #include <QComboBox>
-#include <QDate>
+#include <QDialog>
 #include <QDebug>
 #include <QDir>
+#include <QFileDialog>
 #include <QFont>
 #include <QFontDialog>
 #include <QLabel>
 #include <QHeaderView>
 #include <QPainter>
 #include <QPixmap>
+#include <QPrinter>
 #include <QSpinBox>
 #include <QSqlQuery>
 #include <QWidget>
-
 
 
 

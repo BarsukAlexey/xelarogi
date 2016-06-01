@@ -117,7 +117,7 @@ FightingTable2::~FightingTable2()
     delete ui;
 }
 
-void FightingTable2::setTextColor(QWidget *label, Qt::GlobalColor color)
+void FightingTable2::setTextColor(QWidget *label, QColor color)
 {
     QPalette localPalette = label->palette();
     localPalette.setColor(QPalette::ColorRole::WindowText, color);
@@ -126,6 +126,13 @@ void FightingTable2::setTextColor(QWidget *label, Qt::GlobalColor color)
 
 void FightingTable2::setColor()
 {
+    QColor blue(0,191,255);
+    QColor red(250,128,114);
+    //QColor red(255,50,50);
+
+    //QColor gray(169,169,169);
+    QColor gray(192,192,192);
+
 
     ( isForJudge? ui->leftFlag : ui->rightFlag)->setGray(f->getWinner() == Fighting::Player::Right);
     (!isForJudge? ui->leftFlag : ui->rightFlag)->setGray(f->getWinner() == Fighting::Player::Left );
@@ -133,62 +140,62 @@ void FightingTable2::setColor()
     if (f->getWinner() == Fighting::Player::Left)
     {
 
-        setTextColor(ui->leftRegion     , isForJudge? Qt::red  : Qt::gray);
-        setTextColor(ui->leftLcdNumber  , isForJudge? Qt::red  : Qt::gray);
-        setTextColor(ui->labelLeftMinus , isForJudge? Qt::red  : Qt::gray);
-        setTextColor(ui->labelLeftFo    , isForJudge? Qt::red  : Qt::gray);
-        setTextColor(ui->labelLeftEx    , isForJudge? Qt::red  : Qt::gray);
+        setTextColor(ui->leftRegion     , isForJudge? red  : gray);
+        setTextColor(ui->leftLcdNumber  , isForJudge? red  : gray);
+        setTextColor(ui->labelLeftMinus , isForJudge? red  : gray);
+        setTextColor(ui->labelLeftFo    , isForJudge? red  : gray);
+        setTextColor(ui->labelLeftEx    , isForJudge? red  : gray);
         ui->leftMinus->setGray(isForJudge? false : true);
         ui->leftFo   ->setGray(isForJudge? false : true);
         ui->leftEx   ->setGray(isForJudge? false : true);
 
 
-        setTextColor(ui->rightRegion    , isForJudge? Qt::gray : Qt::red);
-        setTextColor(ui->rightLcdNumber , isForJudge? Qt::gray : Qt::red);
-        setTextColor(ui->labelRightMinus, isForJudge? Qt::gray : Qt::red);
-        setTextColor(ui->labelRightFo   , isForJudge? Qt::gray : Qt::red);
-        setTextColor(ui->labelRightEx   , isForJudge? Qt::gray : Qt::red);
+        setTextColor(ui->rightRegion    , isForJudge? gray : red);
+        setTextColor(ui->rightLcdNumber , isForJudge? gray : red);
+        setTextColor(ui->labelRightMinus, isForJudge? gray : red);
+        setTextColor(ui->labelRightFo   , isForJudge? gray : red);
+        setTextColor(ui->labelRightEx   , isForJudge? gray : red);
         ui->rightMinus->setGray(isForJudge? true : false);
         ui->rightFo   ->setGray(isForJudge? true : false);
         ui->rightEx   ->setGray(isForJudge? true : false);
     }
     else if (f->getWinner() == Fighting::Player::Right)
     {
-        setTextColor(ui->leftRegion     , isForJudge? Qt::gray  : Qt::blue);
-        setTextColor(ui->leftLcdNumber  , isForJudge? Qt::gray  : Qt::blue);
-        setTextColor(ui->labelLeftMinus , isForJudge? Qt::gray  : Qt::blue);
-        setTextColor(ui->labelLeftFo    , isForJudge? Qt::gray  : Qt::blue);
-        setTextColor(ui->labelLeftEx    , isForJudge? Qt::gray  : Qt::blue);
+        setTextColor(ui->leftRegion     , isForJudge? gray  : blue);
+        setTextColor(ui->leftLcdNumber  , isForJudge? gray  : blue);
+        setTextColor(ui->labelLeftMinus , isForJudge? gray  : blue);
+        setTextColor(ui->labelLeftFo    , isForJudge? gray  : blue);
+        setTextColor(ui->labelLeftEx    , isForJudge? gray  : blue);
         ui->leftMinus->setGray(isForJudge? true : false);
         ui->leftFo   ->setGray(isForJudge? true : false);
         ui->leftEx   ->setGray(isForJudge? true : false);
 
 
-        setTextColor(ui->rightRegion    , isForJudge? Qt::blue : Qt::gray);
-        setTextColor(ui->rightLcdNumber , isForJudge? Qt::blue : Qt::gray);
-        setTextColor(ui->labelRightMinus, isForJudge? Qt::blue : Qt::gray);
-        setTextColor(ui->labelRightFo   , isForJudge? Qt::blue : Qt::gray);
-        setTextColor(ui->labelRightEx   , isForJudge? Qt::blue : Qt::gray);
+        setTextColor(ui->rightRegion    , isForJudge? blue : gray);
+        setTextColor(ui->rightLcdNumber , isForJudge? blue : gray);
+        setTextColor(ui->labelRightMinus, isForJudge? blue : gray);
+        setTextColor(ui->labelRightFo   , isForJudge? blue : gray);
+        setTextColor(ui->labelRightEx   , isForJudge? blue : gray);
         ui->rightMinus->setGray(isForJudge? false : true);
         ui->rightFo   ->setGray(isForJudge? false : true);
         ui->rightEx   ->setGray(isForJudge? false : true);
     }
     else
     {
-        setTextColor(ui->leftRegion     , isForJudge? Qt::red : Qt::blue);
-        setTextColor(ui->leftLcdNumber  , isForJudge? Qt::red : Qt::blue);
-        setTextColor(ui->labelLeftMinus , isForJudge? Qt::red : Qt::blue);
-        setTextColor(ui->labelLeftFo    , isForJudge? Qt::red : Qt::blue);
-        setTextColor(ui->labelLeftEx    , isForJudge? Qt::red : Qt::blue);
+        setTextColor(ui->leftRegion     , isForJudge? red : blue);
+        setTextColor(ui->leftLcdNumber  , isForJudge? red : blue);
+        setTextColor(ui->labelLeftMinus , isForJudge? red : blue);
+        setTextColor(ui->labelLeftFo    , isForJudge? red : blue);
+        setTextColor(ui->labelLeftEx    , isForJudge? red : blue);
         ui->leftMinus->setGray(false);
         ui->leftFo   ->setGray(false);
         ui->leftEx   ->setGray(false);
 
-        setTextColor(ui->rightRegion    , isForJudge? Qt::blue : Qt::red);
-        setTextColor(ui->rightLcdNumber , isForJudge? Qt::blue : Qt::red);
-        setTextColor(ui->labelRightMinus, isForJudge? Qt::blue : Qt::red);
-        setTextColor(ui->labelRightFo   , isForJudge? Qt::blue : Qt::red);
-        setTextColor(ui->labelRightEx   , isForJudge? Qt::blue : Qt::red);
+        setTextColor(ui->rightRegion    , isForJudge? blue : red);
+        setTextColor(ui->rightLcdNumber , isForJudge? blue : red);
+        setTextColor(ui->labelRightMinus, isForJudge? blue : red);
+        setTextColor(ui->labelRightFo   , isForJudge? blue : red);
+        setTextColor(ui->labelRightEx   , isForJudge? blue : red);
 
         ui->rightMinus->setGray(false);
         ui->rightFo   ->setGray(false);

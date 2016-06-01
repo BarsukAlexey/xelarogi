@@ -177,19 +177,23 @@ public class JFrameMainJudge extends JFrame {
                 for (int i = 0; i < screenDevices.length; i++) {
                     scoreTable.add(new JFrameScoreTable(i == 0, bounds[i], finalFighting));
                 }
+
+
                 for (int i = 1; i < screenDevices.length; i++) {
-                    final JFrameScoreTable jFrameScoreTable = scoreTable.get(i);
-                    SwingUtilities.invokeLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            jFrameScoreTable.setVisible(true);
-                        }
-                    });
+                    scoreTable.get(i).setModal(false);
+                    scoreTable.get(i).setVisible(true);
+//                    final JFrameScoreTable jFrameScoreTable = scoreTable.get(i);
+//                    SwingUtilities.invokeLater(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            jFrameScoreTable.setVisible(true);
+//                        }
+//                    });
                 }
                 scoreTable.get(0).setVisible(true);
 
+                System.err.println("activeFighting = null;sdsdssds");
                 activeFighting = null;
-                /**/
             }
         });
 
@@ -204,7 +208,6 @@ public class JFrameMainJudge extends JFrame {
                 chooser.setPreferredSize(new Dimension(800, 600));
                 if (chooser.showOpenDialog(JFrameMainJudge.this) == JFileChooser.APPROVE_OPTION) {
                     String path = chooser.getSelectedFile().getAbsolutePath();
-                    System.out.println("You chose to open this file: " + path); // TODO
                     try {
                         Files.copy(Paths.get(path), Paths.get(pathSaveJson), StandardCopyOption.REPLACE_EXISTING);
                     } catch (IOException e1) {
@@ -226,7 +229,6 @@ public class JFrameMainJudge extends JFrame {
                 chooser.setPreferredSize(new Dimension(800, 600));
                 if (chooser.showSaveDialog(JFrameMainJudge.this) == JFileChooser.APPROVE_OPTION) {
                     File selectedFile = chooser.getSelectedFile();
-                    System.out.println("You chose to open this file: " + selectedFile.getAbsolutePath()); // TODO
                     try {
                         Files.copy(Paths.get(pathSaveJson), selectedFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
                     } catch (IOException e1) {

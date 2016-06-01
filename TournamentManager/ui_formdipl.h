@@ -43,7 +43,9 @@ public:
     QLabel *label_2;
     QWidget *widget_3;
     QGridLayout *gridLayout_3;
+    QLabel *label_3;
     QPushButton *pushButtonPrint;
+    QLabel *label_4;
 
     void setupUi(QWidget *FormDipl)
     {
@@ -53,8 +55,8 @@ public:
         gridLayout = new QGridLayout(FormDipl);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
         tableWidget = new QTableWidget(FormDipl);
-        if (tableWidget->columnCount() < 7)
-            tableWidget->setColumnCount(7);
+        if (tableWidget->columnCount() < 6)
+            tableWidget->setColumnCount(6);
         QTableWidgetItem *__qtablewidgetitem = new QTableWidgetItem();
         tableWidget->setHorizontalHeaderItem(0, __qtablewidgetitem);
         QTableWidgetItem *__qtablewidgetitem1 = new QTableWidgetItem();
@@ -67,8 +69,6 @@ public:
         tableWidget->setHorizontalHeaderItem(4, __qtablewidgetitem4);
         QTableWidgetItem *__qtablewidgetitem5 = new QTableWidgetItem();
         tableWidget->setHorizontalHeaderItem(5, __qtablewidgetitem5);
-        QTableWidgetItem *__qtablewidgetitem6 = new QTableWidgetItem();
-        tableWidget->setHorizontalHeaderItem(6, __qtablewidgetitem6);
         tableWidget->setObjectName(QStringLiteral("tableWidget"));
         tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
         tableWidget->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -135,10 +135,21 @@ public:
         widget_3->setObjectName(QStringLiteral("widget_3"));
         gridLayout_3 = new QGridLayout(widget_3);
         gridLayout_3->setObjectName(QStringLiteral("gridLayout_3"));
+        label_3 = new QLabel(widget_3);
+        label_3->setObjectName(QStringLiteral("label_3"));
+
+        gridLayout_3->addWidget(label_3, 1, 0, 1, 1);
+
         pushButtonPrint = new QPushButton(widget_3);
         pushButtonPrint->setObjectName(QStringLiteral("pushButtonPrint"));
 
         gridLayout_3->addWidget(pushButtonPrint, 0, 0, 1, 1);
+
+        label_4 = new QLabel(widget_3);
+        label_4->setObjectName(QStringLiteral("label_4"));
+        label_4->setWordWrap(true);
+
+        gridLayout_3->addWidget(label_4, 2, 0, 1, 1);
 
 
         gridLayout->addWidget(widget_3, 3, 0, 1, 1);
@@ -157,20 +168,20 @@ public:
         QTableWidgetItem *___qtablewidgetitem1 = tableWidget->horizontalHeaderItem(1);
         ___qtablewidgetitem1->setText(QApplication::translate("FormDipl", "\320\222\321\213\321\200\320\260\320\262\320\275\320\270\320\262\320\260\320\275\320\270\320\265", 0));
         QTableWidgetItem *___qtablewidgetitem2 = tableWidget->horizontalHeaderItem(2);
-        ___qtablewidgetitem2->setText(QApplication::translate("FormDipl", "\320\250\321\200\320\270\321\204\321\202 (\320\275\320\265 \320\270\320\267\320\274\320\265\320\275\321\217\321\202\321\214 \321\200\320\260\320\267\320\274\320\265\321\200 \321\210\321\200\320\270\321\204\321\202\320\260)", 0));
+        ___qtablewidgetitem2->setText(QApplication::translate("FormDipl", "\320\250\321\200\320\270\321\204\321\202", 0));
         QTableWidgetItem *___qtablewidgetitem3 = tableWidget->horizontalHeaderItem(3);
-        ___qtablewidgetitem3->setText(QApplication::translate("FormDipl", "\320\240\320\260\320\267\320\274\320\265\321\200 \321\210\321\200\320\270\321\204\321\202\320\260, \320\274\320\274", 0));
+        ___qtablewidgetitem3->setText(QApplication::translate("FormDipl", "\320\240\320\260\321\201\321\202\320\276\321\217\320\275\320\270\320\265 \320\276\321\202 \320\273\320\265\320\262\320\276\320\263\320\276 \320\272\321\200\320\260\321\217, \320\274\320\274", 0));
         QTableWidgetItem *___qtablewidgetitem4 = tableWidget->horizontalHeaderItem(4);
-        ___qtablewidgetitem4->setText(QApplication::translate("FormDipl", "\320\240\320\260\321\201\321\202\320\276\321\217\320\275\320\270\320\265 \320\276\321\202 \320\273\320\265\320\262\320\276\320\263\320\276 \320\272\321\200\320\260\321\217, \320\274\320\274", 0));
+        ___qtablewidgetitem4->setText(QApplication::translate("FormDipl", "\320\240\320\260\321\201\321\202\320\276\320\275\320\270\320\265 \320\276\321\202 \320\262\320\265\321\200\321\205\320\275\320\265\320\263\320\276 \320\272\321\200\320\260\321\217, \320\274\320\274", 0));
         QTableWidgetItem *___qtablewidgetitem5 = tableWidget->horizontalHeaderItem(5);
-        ___qtablewidgetitem5->setText(QApplication::translate("FormDipl", "\320\240\320\260\321\201\321\202\320\276\320\275\320\270\320\265 \320\276\321\202 \320\262\320\265\321\200\321\205\320\275\320\265\320\263\320\276 \320\272\321\200\320\260\321\217, \320\274\320\274", 0));
-        QTableWidgetItem *___qtablewidgetitem6 = tableWidget->horizontalHeaderItem(6);
-        ___qtablewidgetitem6->setText(QApplication::translate("FormDipl", "\320\224\320\273\320\270\320\275\320\260 \321\201\321\202\321\200\320\276\320\272\320\270, \320\274\320\274", 0));
+        ___qtablewidgetitem5->setText(QApplication::translate("FormDipl", "\320\224\320\273\320\270\320\275\320\260 \321\201\321\202\321\200\320\276\320\272\320\270, \320\274\320\274", 0));
         pushButtonAdd->setText(QApplication::translate("FormDipl", "\320\224\320\276\320\261\320\260\320\262\320\270\321\202\321\214 \321\201\321\202\321\200\320\276\320\272\321\203", 0));
         pushButtonDelete->setText(QApplication::translate("FormDipl", "\320\243\320\264\320\260\320\273\320\270\321\202\321\214 \321\201\321\202\321\200\320\276\320\272\321\203", 0));
         label->setText(QApplication::translate("FormDipl", "\320\250\320\270\321\200\320\270\320\275\320\260 \320\273\320\270\321\201\321\202\320\260", 0));
         label_2->setText(QApplication::translate("FormDipl", "\320\222\321\213\321\201\320\276\321\202\320\260 \320\273\320\270\321\201\321\202\320\260", 0));
+        label_3->setText(QApplication::translate("FormDipl", "* \320\237\321\200\320\270 \320\277\320\265\321\207\320\260\321\202\320\270 PDF \321\203\320\272\320\260\320\266\320\270\321\202\320\265 100% \320\274\320\260\321\201\321\210\321\202\320\260\320\261 (\320\261\320\265\320\267 \320\277\320\276\320\273\320\265\320\271, \320\276\321\202\321\201\321\202\321\203\320\277\320\276\320\262 \320\270 \321\202.\320\264.)", 0));
         pushButtonPrint->setText(QApplication::translate("FormDipl", "\320\237\320\265\321\207\320\260\321\202\321\214...", 0));
+        label_4->setText(QApplication::translate("FormDipl", "** \320\225\321\201\320\273\320\270 \321\202\320\265\320\272\321\201\321\202 \320\261\321\203\320\264\320\265\321\202 \320\262\321\213\320\273\320\265\320\267\320\260\321\202\321\214 \320\267\320\260 \321\210\320\270\321\200\320\270\320\275\321\203 \321\201\321\202\321\200\320\276\320\272\320\270, \321\202\320\276 \320\265\320\263\320\276 \321\200\320\260\320\267\320\274\320\265\321\200 \320\260\320\262\321\202\320\276\320\274\320\260\321\202\320\270\321\207\320\265\321\201\320\272\320\270 \321\203\320\274\320\265\320\275\321\214\321\210\320\270\321\202\321\201\321\217, \321\207\321\202\320\276\320\261\321\213 \320\277\320\276\320\273\320\275\320\276\321\201\321\202\321\214\321\216 \320\277\320\276\320\274\320\265\321\201\321\202\320\270\321\202\321\214\321\201\321\217 \320\275\320\260 \321\201\321\202\321\200\320\276\320\272\320\265", 0));
     } // retranslateUi
 
 };

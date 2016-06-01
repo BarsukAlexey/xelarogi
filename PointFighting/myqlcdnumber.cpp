@@ -5,7 +5,7 @@
 MyQLCDNumber::MyQLCDNumber(QWidget* p) : QLCDNumber(p)
 {
     setDigitCount(1);
-    setSegmentStyle(Flat);
+    //setSegmentStyle(Flat);
 }
 
 

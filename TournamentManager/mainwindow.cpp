@@ -6,6 +6,7 @@
 #include <QAxBase>
 #include <vector>
 
+#include "formdipl.h"
 #include "handbookdialog.h"
 #include "tournamentgriddialog2.h"
 #include "fiting_distribution.h"
@@ -45,7 +46,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
 
-    /*/
+    //
     while (true)
     {
         LoginDialog loginDialog(this);
@@ -149,6 +150,12 @@ MainWindow::MainWindow(QWidget *parent) :
         dlg.exec();
     });
 
+
+    connect(ui->trophyBtnImage, &QPushButton::clicked, [this]()
+    {
+        FormDipl * wdg = new FormDipl(ui->tournamentUidLabel->text().toLongLong());
+        wdg->showMaximized();
+    });
 
     connectButtons();
     updateTournamentTreeWidget();

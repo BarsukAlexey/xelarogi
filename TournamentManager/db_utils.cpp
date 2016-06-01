@@ -427,11 +427,11 @@ int DBUtils::findDurationOfFightinPair(long long tournamentCategories)
             (count - 1) * DBUtils::getField("DURATION_BREAK", "TOURNAMENT_CATEGORIES", tournamentCategories).toInt();
 }
 
-QVector<long long> DBUtils::getUidOfWinner(long long UIDtournamentCategory, int countOfWinners)
+QVector<long long> DBUtils::getUidOfWinner(long long UIDtournamentCategory)
 {
     QVector<long long> result;
     QVector<NodeOfTournirGrid> nodes = getNodes(UIDtournamentCategory);
-    while (result.size() < countOfWinners && !nodes.empty())
+    while (result.size() < 4 && !nodes.empty())
     {
         long long orderUID = nodes[0].UID;
         if (orderUID <= 0)

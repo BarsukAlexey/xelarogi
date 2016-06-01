@@ -262,7 +262,7 @@ class Fighting {
             }
         } else if (status == FightStatus.Break) {
             spendTime += quantum;
-            if (durationOfBreak - spendTime <= 10 && !soundHummerBit.isPlaying()) {
+            if (durationOfBreak - spendTime <= 10 * 1000 && !soundHummerBit.isPlaying()) {
                 soundHummerBit.play();
             }
             if (durationOfBreak <= spendTime) {

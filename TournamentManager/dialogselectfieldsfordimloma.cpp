@@ -9,7 +9,6 @@ DialogSelectFieldsForDimloma::DialogSelectFieldsForDimloma(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    int id = 1;
     map["01. Фамилия"] = TypeField::secondName;
     map["02. Имя"] = TypeField::firstName;
     map["03. Отчество"] = TypeField::patromicName;
@@ -24,6 +23,7 @@ DialogSelectFieldsForDimloma::DialogSelectFieldsForDimloma(QWidget *parent) :
     map["09. Занятое место римскими цифрами"] = TypeField::placeRome;
 
     map["10. Юноши, Девушки, Юниоры..."] = TypeField::sexAgeType;
+    map["11. Тип(фулконтакт, лайт, пойнтфайтинг...)"] = TypeField::TYPES;
 
     for (QString key : map.keys())
     {
@@ -35,7 +35,7 @@ DialogSelectFieldsForDimloma::DialogSelectFieldsForDimloma(QWidget *parent) :
         for (QListWidgetItem *item : ui->listWidgetLeft->selectedItems())
         {
             ui->listWidgetRight->addItem(new QListWidgetItem(item->text()));
-            qDebug() << item->text();
+            //qDebug() << item->text();
         }
     });
 

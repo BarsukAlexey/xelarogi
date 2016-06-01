@@ -18,14 +18,14 @@ int main(int argc, char *argv[])
 //    return 0;
 
     MainWindow w;
-    //w.show();
+    w.show();
 
-    FormDipl d(18);
+//    FormDipl d(18); return 0;
     //d.show();
 
 //    DialogSelectFieldsForDimloma dlg;
 //    dlg.exec();
-    return 0;
+
 
 
 

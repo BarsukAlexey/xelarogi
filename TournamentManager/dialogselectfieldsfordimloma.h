@@ -31,6 +31,8 @@ public:
         placeRome,
 
         sexAgeType,
+        TYPES
+
     };
 
 public:

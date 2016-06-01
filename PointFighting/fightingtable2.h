@@ -48,7 +48,7 @@ public:
     ~FightingTable2();
 
 private:
-    static void setTextColor(QWidget *label, Qt::GlobalColor color);
+    static void setTextColor(QWidget *label, QColor color);
     void setColor();
 
 private slots:

@@ -341,9 +341,6 @@
            </disabled>
           </palette>
          </property>
-         <property name="lineWidth">
-          <number>1</number>
-         </property>
         </widget>
        </item>
        <item row="2" column="0">

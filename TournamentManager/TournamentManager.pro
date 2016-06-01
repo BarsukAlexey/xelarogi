@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui sql axcontainer #webkitwidgets
+QT       += core gui sql axcontainer printsupport #webkitwidgets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -104,3 +104,5 @@ FORMS    += mainwindow.ui \
     dialogselectfieldsfordimloma.ui
 
 DISTFILES +=
+
+RESOURCES +=

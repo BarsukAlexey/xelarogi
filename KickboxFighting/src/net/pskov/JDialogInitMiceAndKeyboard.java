@@ -79,7 +79,7 @@ public class JDialogInitMiceAndKeyboard extends JDialog {
 
         setTitle("Mice init");
         setContentPane(contentPane);
-        setModal(true); // TODO
+        setModal(true);
         setResizable(true);
 
 

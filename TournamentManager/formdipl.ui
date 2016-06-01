@@ -40,12 +40,7 @@
      </column>
      <column>
       <property name="text">
-       <string>Шрифт (не изменять размер шрифта)</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>Размер шрифта, мм</string>
+       <string>Шрифт</string>
       </property>
      </column>
      <column>
@@ -147,10 +142,27 @@
    <item row="3" column="0">
     <widget class="QWidget" name="widget_3" native="true">
      <layout class="QGridLayout" name="gridLayout_3">
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>* При печати PDF укажите 100% масштаб (без полей, отступов и т.д.)</string>
+        </property>
+       </widget>
+      </item>
       <item row="0" column="0">
        <widget class="QPushButton" name="pushButtonPrint">
         <property name="text">
          <string>Печать...</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>** Если текст будет вылезать за ширину строки, то его размер автоматически уменьшится, чтобы полностью поместиться на строке</string>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
         </property>
        </widget>
       </item>

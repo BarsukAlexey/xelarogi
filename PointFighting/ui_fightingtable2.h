@@ -169,7 +169,6 @@ public:
         palette4.setBrush(QPalette::Inactive, QPalette::WindowText, brush4);
         palette4.setBrush(QPalette::Disabled, QPalette::WindowText, brush2);
         rightLcdNumber->setPalette(palette4);
-        rightLcdNumber->setLineWidth(1);
 
         gridLayout_5->addWidget(rightLcdNumber, 1, 0, 1, 1);
 
