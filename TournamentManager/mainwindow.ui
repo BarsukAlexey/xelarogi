@@ -80,7 +80,7 @@
         </size>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="generalPage">
         <property name="minimumSize">
@@ -182,7 +182,7 @@
             </font>
            </property>
            <property name="text">
-            <string>Турнир. Как убрать это при запуске?</string>
+            <string>Турнир не выбран</string>
            </property>
            <property name="wordWrap">
             <bool>true</bool>
@@ -201,6 +201,9 @@
          </item>
          <item row="2" column="0">
           <layout class="QVBoxLayout" name="verticalLayout">
+           <property name="spacing">
+            <number>4</number>
+           </property>
            <item>
             <spacer name="verticalSpacer_2">
              <property name="orientation">
@@ -218,6 +221,9 @@
             <widget class="QPushButton" name="createTournamentCategoriesBtn">
              <property name="text">
               <string>Категории турнира</string>
+             </property>
+             <property name="flat">
+              <bool>false</bool>
              </property>
             </widget>
            </item>
@@ -243,7 +249,7 @@
            <item>
             <widget class="QPushButton" name="pushButton_Flag">
              <property name="text">
-              <string>Флаги стран</string>
+              <string>Флаги</string>
              </property>
             </widget>
            </item>
@@ -372,8 +378,6 @@
     <addaction name="separator"/>
     <addaction name="separator"/>
     <addaction name="orderAction"/>
-    <addaction name="separator"/>
-    <addaction name="iconsAction"/>
    </widget>
    <addaction name="handbookMenu"/>
   </widget>

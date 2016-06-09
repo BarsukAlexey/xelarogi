@@ -87,12 +87,12 @@ MainWindow::MainWindow(QWidget *parent) :
     });
 
     connect(ui->regionAction, &QAction::triggered, [this] () {
-        HandbookDialog handbookDlg(QString("REGIONS"), QString("Регионы"), m_database, this, {"UID"});
+        HandbookDialog handbookDlg(QString("REGIONS"), QString("Регионы"), m_database, this, {"UID", "FLAG"});
         handbookDlg.exec();
     });
 
     connect(ui->ateAction, &QAction::triggered, [this] () {
-        HandbookDialog handbookDlg(QString("REGION_UNITS"), QString("АТЕ"), m_database, this, {"UID"});
+        HandbookDialog handbookDlg(QString("REGION_UNITS"), QString("АТЕ"), m_database, this, {"UID", "FLAG"});
         handbookDlg.exec();
     });
 
@@ -123,7 +123,7 @@ MainWindow::MainWindow(QWidget *parent) :
     });
 
     connect(ui->clubAction, &QAction::triggered, [this] () {
-        HandbookDialog handbookDlg(QString("CLUBS"), QString("Клубы"), m_database, this, {"UID"});
+        HandbookDialog handbookDlg(QString("CLUBS"), QString("Клубы"), m_database, this, {"UID", "FLAG"});
         handbookDlg.exec();
     });
 
@@ -142,12 +142,6 @@ MainWindow::MainWindow(QWidget *parent) :
         HandbookDialog handbookDlg(QString("AGE_CATEGORIES"), QString("Возрастные категории"), m_database, this,
         {"UID"});
         handbookDlg.exec();
-    });
-
-    connect(ui->iconsAction, &QAction::triggered, [this] ()
-    {
-        CountryIconsDialog dlg;
-        dlg.exec();
     });
 
 
@@ -376,11 +370,6 @@ void MainWindow::connectButtons()
             qDebug() << query.lastError().text();
         query.clear();
     });
-
-    connect(ui->pushButton_Flag, &QPushButton::clicked, [this] ()
-    {
-        CountryIconsDialog(this).exec();
-    });
 }
 
 
@@ -527,13 +516,16 @@ void MainWindow::on_pushButton_3_clicked()
     ofstream out("out.txt");
     out << iconBase64.toStdString();
     out.close();
-
-//    QSqlQuery query("UPDATE COUNTRIES SET FLAG = ? WHERE NAME = ? ");
-//    query.addBindValue(iconBase64);
-//    query.addBindValue("ЛНР");
-//    if(!query.exec())
-//        qDebug() << "Fuck!";
-//    else
-//        qDebug() << "Done!";
 }
 
+
+void MainWindow::on_pushButton_Flag_clicked()
+{
+    bool ok = false;
+    long long tournamentUID = ui->tournamentUidLabel->text().toLongLong(&ok);
+    if (ok)
+    {
+        CountryIconsDialog dlg(tournamentUID, this);
+        dlg.exec();
+    }
+}

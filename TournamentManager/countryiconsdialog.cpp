@@ -2,15 +2,26 @@
 #include "ui_countryiconsdialog.h"
 #include <QDesktopServices>
 
-CountryIconsDialog::CountryIconsDialog(QWidget *parent) :
+CountryIconsDialog::CountryIconsDialog(long long tournamentUID, QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::CountryIconsDialog)
+    ui(new Ui::CountryIconsDialog),
+    mTournamentUID(tournamentUID)
 {
     ui->setupUi(this);
 
     //ui->labelLink->setName("myLabel");
     //ui->labelLink->setText("<a href=\"Загрузить флаги...\">text</a>");
     ui->labelLink->setTextInteractionFlags(Qt::TextBrowserInteraction);
+
+    QSqlQuery tournamentQuery("SELECT NAME FROM TOURNAMENTS WHERE UID = ?");
+    tournamentQuery.bindValue(0, tournamentUID);
+    if (tournamentQuery.exec())
+    {
+        while (tournamentQuery.next())
+            ui->tournamentL->setText(tournamentQuery.value("NAME").toString());
+    }
+    else
+        qDebug() << tournamentQuery.lastError().text();
 
     connect(ui->loadNewImageBtn, &QPushButton::clicked, [this] ()
     {
@@ -32,9 +43,9 @@ CountryIconsDialog::CountryIconsDialog(QWidget *parent) :
         mPixmap.toImage().save(&inBuffer, "PNG");
         QString flagBase64 = QString::fromLatin1(imageBytes.toBase64().data());
 
-        long long uid = ui->countryCB->currentData(Qt::UserRole).toLongLong();
+        long long uid = ui->entitiesCB->currentData(Qt::UserRole).toLongLong();
         QSqlQuery newCountryIcon;
-        newCountryIcon.prepare("UPDATE COUNTRIES SET FLAG = ? WHERE UID = ?");
+        newCountryIcon.prepare("UPDATE " + mCurrentTableEng + " SET FLAG = ? WHERE UID = ?");
         newCountryIcon.addBindValue(flagBase64);
         newCountryIcon.addBindValue(uid);
         if (!newCountryIcon.exec())
@@ -45,15 +56,15 @@ CountryIconsDialog::CountryIconsDialog(QWidget *parent) :
         mPixmap = QPixmap();
     });
 
-    connect(ui->countryCB, &QComboBox::currentTextChanged, [this] (const QString& )
+    connect(ui->entitiesCB, &QComboBox::currentTextChanged, [this] (const QString& )
     {
-        long long uid = ui->countryCB->currentData(Qt::UserRole).toLongLong();
+        long long uid = ui->entitiesCB->currentData(Qt::UserRole).toLongLong();
         QSqlQuery query;
-        if (!query.prepare("SELECT * FROM COUNTRIES WHERE UID = ?"))
+        if (!query.prepare("SELECT * FROM " + mCurrentTableEng + " WHERE UID = ?"))
             qDebug() << query.lastError().text();
         else
         {
-            ui->oldImageL->setText("Нет загруженной иконки для страны");
+            ui->oldImageL->setText("Иконка не была загружена ранее");
 
             query.addBindValue(uid);
             if (query.exec())
@@ -75,13 +86,13 @@ CountryIconsDialog::CountryIconsDialog(QWidget *parent) :
     });
 
     connect(ui->pushButtonDelete, &QPushButton::clicked, [this] (){
-        long long uid = ui->countryCB->currentData(Qt::UserRole).toLongLong();
+        long long uid = ui->entitiesCB->currentData(Qt::UserRole).toLongLong();
         QSqlQuery query;
-        if (!query.prepare("UPDATE COUNTRIES SET FLAG = ? WHERE UID = ?"))
+        if (!query.prepare("UPDATE " + mCurrentTableEng + " SET FLAG = ? WHERE UID = ?"))
             qDebug() << query.lastError().text();
         else
         {
-            ui->oldImageL->setText("Нет загруженной иконки для страны");
+            ui->oldImageL->setText("Иконка не была загружена ранее");
 
             query.addBindValue(QString(""));
             query.addBindValue(uid);
@@ -90,7 +101,12 @@ CountryIconsDialog::CountryIconsDialog(QWidget *parent) :
         }
     });
 
-    fillCountries();
+    connect(ui->countryRB, &QRadioButton::toggled, this, &CountryIconsDialog::onRadioButtonClick);
+    connect(ui->regionRB, &QRadioButton::toggled, this, &CountryIconsDialog::onRadioButtonClick);
+    connect(ui->regionUnitRB, &QRadioButton::toggled, this, &CountryIconsDialog::onRadioButtonClick);
+    connect(ui->clubRB, &QRadioButton::toggled, this, &CountryIconsDialog::onRadioButtonClick);
+
+    onRadioButtonClick();
 }
 
 CountryIconsDialog::~CountryIconsDialog()
@@ -98,23 +114,74 @@ CountryIconsDialog::~CountryIconsDialog()
     delete ui;
 }
 
-void CountryIconsDialog::fillCountries()
+void CountryIconsDialog::on_labelLink_linkActivated(const QString &)
 {
-    ui->countryCB->clear();
+    QDesktopServices::openUrl(QUrl("https://en.wikipedia.org/wiki/Gallery_of_sovereign_state_flags"));
+}
+
+void CountryIconsDialog::fillEntities()
+{
+    if (mCurrentTableEng.contains("countries", Qt::CaseInsensitive))
+        ui->entitiesL->setText("Выберите страну");
+    else if (mCurrentTableEng.contains("units", Qt::CaseInsensitive))
+        ui->entitiesL->setText("Выберите населенный пункт");
+    else if (mCurrentTableEng.contains("regions", Qt::CaseInsensitive))
+        ui->entitiesL->setText("Выберите регион");
+    else if (mCurrentTableEng.contains("clubs", Qt::CaseInsensitive))
+        ui->entitiesL->setText("Выберите клуб");
+    else
+    {
+        ui->entitiesL->setText("Неизвестно");
+        return;
+    }
+
+    ui->entitiesCB->clear();
+
+    QString foreignKey = mCurrentTableEng.left(mCurrentTableEng.size() - 1) + "_FK";
+    if (mCurrentTableEng.contains("countries", Qt::CaseInsensitive))
+        foreignKey = "COUNTRY_FK";
 
     QSqlQuery query;
-    if (!query.prepare("SELECT * FROM COUNTRIES") || !query.exec())
+    if (!query.prepare("SELECT DISTINCT c.NAME as ff, c.UID as ss "
+                       "FROM ORDERS as a "
+                       "LEFT JOIN TOURNAMENT_CATEGORIES as b ON (a.TOURNAMENT_CATEGORY_FK = b.UID) "
+                       "LEFT JOIN " + mCurrentTableEng + " as c ON (a." + foreignKey + " = c.UID) "
+                       "WHERE b.TOURNAMENT_FK = ? "
+                       "ORDER BY c.NAME"))
+    {
+        qDebug() << query.lastError().text();
+        return;
+    }
+    query.bindValue(0, mTournamentUID);
+    if (!query.exec())
     {
         qDebug() << query.lastError().text();
         return;
     }
     while (query.next())
     {
-        ui->countryCB->addItem(query.value("NAME").toString(), query.value("UID").toLongLong());
+        ui->entitiesCB->addItem(query.value("ff").toString(), query.value("ss").toLongLong());
     }
 }
 
-void CountryIconsDialog::on_labelLink_linkActivated(const QString &)
+void CountryIconsDialog::onRadioButtonClick()
 {
-    QDesktopServices::openUrl(QUrl("https://en.wikipedia.org/wiki/Gallery_of_sovereign_state_flags"));
+    if (ui->countryRB->isChecked())
+    {
+        mCurrentTableEng = "COUNTRIES";
+    }
+    else if (ui->regionRB->isChecked())
+    {
+        mCurrentTableEng = "REGIONS";
+    }
+    else if (ui->regionUnitRB->isChecked())
+    {
+        mCurrentTableEng = "REGION_UNITS";
+    }
+    else if (ui->clubRB->isChecked())
+    {
+        mCurrentTableEng = "CLUBS";
+    }
+
+    fillEntities();
 }

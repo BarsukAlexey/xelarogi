@@ -7,53 +7,139 @@
     <x>0</x>
     <y>0</y>
     <width>612</width>
-    <height>283</height>
+    <height>326</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Выбор иконок для стран</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
+  <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <layout class="QVBoxLayout" name="verticalLayout_3">
      <item>
-      <widget class="QLabel" name="label">
+      <widget class="QLabel" name="tournamentL">
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+         <italic>true</italic>
+        </font>
+       </property>
        <property name="text">
-        <string>Выберете страну</string>
+        <string>Турнир</string>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="countryCB"/>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pushButtonDelete">
-       <property name="text">
-        <string>Удалить текущий флаг</string>
+      <widget class="QGroupBox" name="groupBox">
+       <property name="title">
+        <string/>
        </property>
+       <property name="flat">
+        <bool>false</bool>
+       </property>
+       <layout class="QGridLayout" name="gridLayout">
+        <property name="leftMargin">
+         <number>3</number>
+        </property>
+        <property name="topMargin">
+         <number>3</number>
+        </property>
+        <property name="rightMargin">
+         <number>3</number>
+        </property>
+        <property name="bottomMargin">
+         <number>3</number>
+        </property>
+        <item row="0" column="0">
+         <widget class="QRadioButton" name="countryRB">
+          <property name="text">
+           <string>Страны</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QRadioButton" name="regionRB">
+          <property name="text">
+           <string>Регионы</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QRadioButton" name="regionUnitRB">
+          <property name="text">
+           <string>Населенные пункты</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="3">
+         <widget class="QRadioButton" name="clubRB">
+          <property name="text">
+           <string>Спортивные клубы</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="loadNewImageBtn">
-       <property name="text">
-        <string>Загрузить изображение</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QLabel" name="entitiesL">
+         <property name="text">
+          <string>Выберете страну</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="entitiesCB">
+         <property name="minimumSize">
+          <size>
+           <width>200</width>
+           <height>0</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButtonDelete">
+         <property name="text">
+          <string>Удалить текущий флаг</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="loadNewImageBtn">
+         <property name="text">
+          <string>Загрузить изображение</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
      </item>
     </layout>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="labelLink">
+     <property name="text">
+      <string>&lt;a href=&quot;1&quot;&gt;Загрузить флаги...&lt;/a&gt;</string>
+     </property>
+    </widget>
    </item>
    <item row="2" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -138,13 +224,6 @@
     <widget class="QPushButton" name="saveBtn">
      <property name="text">
       <string>Сохранить новый флаг</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="labelLink">
-     <property name="text">
-      <string>&lt;a href=&quot;1&quot;&gt;Загрузить флаги...&lt;/a&gt;</string>
      </property>
     </widget>
    </item>

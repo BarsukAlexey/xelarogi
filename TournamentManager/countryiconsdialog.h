@@ -21,18 +21,21 @@ class CountryIconsDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit CountryIconsDialog(QWidget *parent = 0);
+    explicit CountryIconsDialog(long long tournamentUID, QWidget *parent = 0);
     ~CountryIconsDialog();
 
 private slots:
     void on_labelLink_linkActivated(const QString &link);
+    void onRadioButtonClick();
 
 private:
-    void fillCountries();
+    void fillEntities();
 
 private:
     Ui::CountryIconsDialog *ui;
     QPixmap mPixmap;
+    const long long mTournamentUID;
+    QString mCurrentTableEng;
 };
 
 #endif // COUNTRYICONSDIALOG_H
