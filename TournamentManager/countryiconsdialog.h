@@ -9,6 +9,9 @@
 #include <QSqlError>
 #include <QFileDialog>
 #include <QBuffer>
+#include <QTableView>
+#include <QAbstractItemModel>
+#include <QPushButton>
 
 #include <QDebug>
 
@@ -33,7 +36,6 @@ private:
 
 private:
     Ui::CountryIconsDialog *ui;
-    QPixmap mPixmap;
     const long long mTournamentUID;
     QString mCurrentTableEng;
 };
