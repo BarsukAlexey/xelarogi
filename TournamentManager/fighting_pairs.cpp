@@ -33,9 +33,8 @@
 
 
 
-FightingPairs::FightingPairs(const QSqlDatabase &_database, long long _tournamentUID, QWidget* parent) :
+FightingPairs::FightingPairs(long long _tournamentUID, QWidget* parent) :
     QDialog(parent),
-    database(_database),
     tournamentUID(_tournamentUID)
 {
     qTableWidget = new QTableWidget();
@@ -97,7 +96,42 @@ FightingPairs::FightingPairs(const QSqlDatabase &_database, long long _tournamen
     spinBoxDelay->setMinimum(1);
     spinBoxDelay->setValue(60);
 
+
+    QGroupBox *groupBoxText = new QGroupBox("Текст");
+    radioTextCountry = new QRadioButton("Страна");
+    radioTextRegion  = new QRadioButton("Регион");
+    radioTextCity    = new QRadioButton("Город");
+    radioTextClub    = new QRadioButton("Клуб");
+    {
+        QHBoxLayout *hbox = new QHBoxLayout;
+        hbox->addWidget(radioTextCountry);
+        hbox->addWidget(radioTextRegion);
+        hbox->addWidget(radioTextCity);
+        hbox->addWidget(radioTextClub);
+        hbox->addStretch(1);
+        groupBoxText->setLayout(hbox);
+    }
+    radioTextRegion->setChecked(true);
+
+
+    QGroupBox *groupBoxFlag = new QGroupBox("Флаг");
+    radioFlagCountry = new QRadioButton("Страна");
+    radioFlagRegion  = new QRadioButton("Регион");
+    radioFlagCity    = new QRadioButton("Город");
+    radioFlagClub    = new QRadioButton("Клуб");
+    QHBoxLayout *hbox = new QHBoxLayout;
+    hbox->addWidget(radioFlagCountry);
+    hbox->addWidget(radioFlagRegion);
+    hbox->addWidget(radioFlagCity);
+    hbox->addWidget(radioFlagClub);
+    hbox->addStretch(1);
+    groupBoxFlag->setLayout(hbox);
+    radioFlagRegion->setChecked(true);
+
+
+
     qPushButton = new QPushButton("GO!");
+
 
     QGridLayout *qGridLayout = new QGridLayout;
     qGridLayout->addWidget(qTableWidget, 0, 0, 1, 2);
@@ -111,10 +145,14 @@ FightingPairs::FightingPairs(const QSqlDatabase &_database, long long _tournamen
     qGridLayout->addWidget(new QLabel("Временная задержка при смене пар на ринге (в секундах)"), 3, 0, Qt::AlignRight);
     qGridLayout->addWidget(spinBoxDelay, 3, 1, Qt::AlignLeft);
 
-    qGridLayout->addWidget(checkBoxPointfighting = new QCheckBox("Сетка для поинтфайтинга:"), 4, 0, 1, 2, Qt::AlignCenter);
+    qGridLayout->addWidget(checkBoxPointfighting = new QCheckBox("Сетки для поинтфайтинга"), 4, 0, 1, 2, Qt::AlignCenter);
 //    checkBoxPointfighting->setChecked(true);
 
-    qGridLayout->addWidget(qPushButton, 5, 0, 1, 2);
+    qGridLayout->addWidget(groupBoxText, 5, 0, 1, 2);
+
+    qGridLayout->addWidget(groupBoxFlag, 6, 0, 1, 2);
+
+    qGridLayout->addWidget(qPushButton, 7, 0, 1, 2);
 
     setLayout(qGridLayout);
 
@@ -183,24 +221,24 @@ void FightingPairs::printInExcel(QAxObject *sheet, const QVector<DBUtils::Fighin
 
 
 
-    ExcelUtils::setTournamentName(sheet, DBUtils::getTournamentNameAsHeadOfDocument(database, tournamentUID), 1, 1, 1, 3);
+    ExcelUtils::setTournamentName(sheet, DBUtils::getTournamentNameAsHeadOfDocument(tournamentUID), 1, 1, 1, 3);
 
     ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 2);
     ExcelUtils::setRowHeight(sheet, currentRow, 25);
     ExcelUtils::setValue(sheet, currentRow, 1, "Главный судья: ", 0);
-    ExcelUtils::setValue(sheet, currentRow, 3, DBUtils::get_MAIN_JUDGE(database, tournamentUID), 0);
+    ExcelUtils::setValue(sheet, currentRow, 3, DBUtils::get_MAIN_JUDGE(QSqlDatabase::database(), tournamentUID), 0);
     ++currentRow;
 
     ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 2);
     ExcelUtils::setRowHeight(sheet, currentRow, 25);
     ExcelUtils::setValue(sheet, currentRow, 1, "Главный секретарь: ", 0);
-    ExcelUtils::setValue(sheet, currentRow, 3, DBUtils::get_MAIN_SECRETARY(database, tournamentUID), 0);
+    ExcelUtils::setValue(sheet, currentRow, 3, DBUtils::get_MAIN_SECRETARY(QSqlDatabase::database(), tournamentUID), 0);
     ++currentRow;
 
     ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 2);
     ExcelUtils::setRowHeight(sheet, currentRow, 25);
     ExcelUtils::setValue(sheet, currentRow, 1, "Зам. главного судьи: ", 0);
-    ExcelUtils::setValue(sheet, currentRow, 3, DBUtils::get_ASSOCIATE_MAIN_JUDGE(database, tournamentUID), 0);
+    ExcelUtils::setValue(sheet, currentRow, 3, DBUtils::get_ASSOCIATE_MAIN_JUDGE(QSqlDatabase::database(), tournamentUID), 0);
     ++currentRow;
 }
 
@@ -221,11 +259,11 @@ void FightingPairs::printInJSON(const QVector<DBUtils::Fighing>& fighting, int r
         a["durationOfRound"] = DBUtils::getField("DURATION_FIGHING", "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK);
         a["durationOfBreak"] = DBUtils::getField("DURATION_BREAK"  , "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK);
 
-        a["countryOfLeftFighter" ] = DBUtils::getField("NAME", "REGIONS", DBUtils::getField("REGION_FK", "ORDERS", f.UID0));
-        a["countryOfRightFighter"] = DBUtils::getField("NAME", "REGIONS", DBUtils::getField("REGION_FK", "ORDERS", f.UID1));
+        a["countryOfLeftFighter" ] = getTextLocal(f.UID0);
+        a["countryOfRightFighter"] = getTextLocal(f.UID1);
 
-        a["leftFlag" ] = DBUtils::getField("FLAG", "COUNTRIES", DBUtils::getField("COUNTRY_FK", "ORDERS", f.UID0));
-        a["rightFlag"] = DBUtils::getField("FLAG", "COUNTRIES", DBUtils::getField("COUNTRY_FK", "ORDERS", f.UID1));
+        a["leftFlag" ] = getFlagImage(f.UID0);
+        a["rightFlag"] = getFlagImage(f.UID1);
 
         a["TOURNAMENT_CATEGORIES_FK"] = f.TOURNAMENT_CATEGORIES_FK;
         a["VERTEX"] = f.VERTEX;
@@ -400,16 +438,16 @@ void FightingPairs::makeGridsForPointFighting(QString existingDirectory, QVector
                 a["countryOfLeftFighter" ] = DBUtils::getField("NAME", "COUNTRIES", DBUtils::getField("COUNTRY_FK", "ORDERS", f.UID0));
                 a["countryOfRightFighter"] = DBUtils::getField("NAME", "COUNTRIES", DBUtils::getField("COUNTRY_FK", "ORDERS", f.UID1));
 
-                a["regionOfLeftFighter" ] = DBUtils::getField("NAME", "REGIONS", DBUtils::getField("REGION_FK", "ORDERS", f.UID0));
-                a["regionOfRightFighter"] = DBUtils::getField("NAME", "REGIONS", DBUtils::getField("REGION_FK", "ORDERS", f.UID1));
+                a["regionOfLeftFighter" ] = getTextLocal(f.UID0);
+                a["regionOfRightFighter"] = getTextLocal(f.UID1);
 
                 a["TOURNAMENT_CATEGORIES_FK"] = f.TOURNAMENT_CATEGORIES_FK;
                 a["VERTEX"] = f.VERTEX;
                 a["orderUID_left"] = f.UID0;
                 a["orderUID_right"] = f.UID1;
 
-                a["leftFlag" ] = DBUtils::getField("FLAG", "COUNTRIES", DBUtils::getField("COUNTRY_FK", "ORDERS", f.UID0));
-                a["rightFlag"] = DBUtils::getField("FLAG", "COUNTRIES", DBUtils::getField("COUNTRY_FK", "ORDERS", f.UID1));
+                a["leftFlag" ] = getFlagImage(f.UID0);
+                a["rightFlag"] = getFlagImage(f.UID1);
 
                 a["IN_CASE_TIE"         ] = DBUtils::getField("IN_CASE_TIE"         , "TOURNAMENT_CATEGORIES", uids[i]).toInt();
                 a["DURATION_EXTRA_ROUND"] = DBUtils::getField("DURATION_EXTRA_ROUND", "TOURNAMENT_CATEGORIES", uids[i]).toInt();
@@ -443,6 +481,24 @@ void FightingPairs::makeGridsForPointFighting(QString existingDirectory, QVector
 
     QMessageBox::information(0, "Расчётное время по рингам", messageDisplay);
     /**/
+}
+
+QString FightingPairs::getTextLocal(long long orderUID)
+{
+    if (radioTextCountry->isChecked()) return DBUtils::getField("NAME", "COUNTRIES"   , DBUtils::getField("COUNTRY_FK"    , "ORDERS", orderUID));
+    if (radioTextRegion ->isChecked()) return DBUtils::getField("NAME", "REGIONS"     , DBUtils::getField("REGION_FK"     , "ORDERS", orderUID));
+    if (radioTextCity   ->isChecked()) return DBUtils::getField("NAME", "REGION_UNITS", DBUtils::getField("REGION_UNIT_FK", "ORDERS", orderUID));
+    if (radioTextClub   ->isChecked()) return DBUtils::getField("NAME", "CLUBS"       , DBUtils::getField("CLUB_FK"       , "ORDERS", orderUID));
+    return "";
+}
+
+QString FightingPairs::getFlagImage(long long orderUID)
+{
+    if (radioFlagCountry->isChecked()) return DBUtils::getField("FLAG", "COUNTRIES"   , DBUtils::getField("COUNTRY_FK"    , "ORDERS", orderUID));
+    if (radioFlagRegion ->isChecked()) return DBUtils::getField("FLAG", "REGIONS"     , DBUtils::getField("REGION_FK"     , "ORDERS", orderUID));
+    if (radioFlagCity   ->isChecked()) return DBUtils::getField("FLAG", "REGION_UNITS", DBUtils::getField("REGION_UNIT_FK", "ORDERS", orderUID));
+    if (radioFlagClub   ->isChecked()) return DBUtils::getField("FLAG", "CLUBS"       , DBUtils::getField("CLUB_FK"       , "ORDERS", orderUID));
+    return "";
 }
 
 void FightingPairs::onGoPress()

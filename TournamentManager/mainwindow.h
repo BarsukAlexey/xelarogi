@@ -52,12 +52,9 @@ private slots:
     void on_btn_report_ministr_clicked();
 
 
-    void on_pushButton_clicked();
-
-    void on_pushButton_2_clicked();
-
-    void on_pushButton_3_clicked();
-
+//    void on_pushButton_clicked();
+//    void on_pushButton_2_clicked();
+//    void on_pushButton_3_clicked();
     void on_pushButton_Flag_clicked();
 
 private:

@@ -52,7 +52,7 @@ FitingDistribution::FitingDistribution(const QSqlDatabase &database, const long 
 //        ExcelUtils::setValue  (sheet, currentRow, 1, DBUtils::getNameTournamentByUID(database, tournamentUID));
 //        ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 2 + 3 * days.size());
 //        ExcelUtils::setFontBold(sheet, currentRow, 1, true);
-        ExcelUtils::setTournamentName(sheet, DBUtils::getTournamentNameAsHeadOfDocument(database, tournamentUID), currentRow, 1, currentRow, 2 + 3 * days.size());
+        ExcelUtils::setTournamentName(sheet, DBUtils::getTournamentNameAsHeadOfDocument(tournamentUID), currentRow, 1, currentRow, 2 + 3 * days.size());
         ++currentRow;
         ExcelUtils::setValue  (sheet, currentRow, 1, "Раздел: " + DBUtils::getTypeNameByUID(database, TYPE_FK));
         ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 2 + 3 * days.size());

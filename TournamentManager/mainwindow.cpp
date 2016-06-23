@@ -46,24 +46,23 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
 
-    //
-    while (true)
-    {
-        LoginDialog loginDialog(this);
-        if (loginDialog.exec() == QDialog::Accepted)
-        {
-            break;
-        }
-        if (!LoginDialog::mOkBtnClicked)
-        {
-            exit(0);
-        }
-        else
-        {
-            QMessageBox::warning(this, "Неудачная попытка авторизации", "Логи или пароль введены неверно");
-        }
-    }
-    /**/
+//    while (true)
+//    {
+//        LoginDialog loginDialog(this);
+//        if (loginDialog.exec() == QDialog::Accepted)
+//        {
+//            break;
+//        }
+//        if (!LoginDialog::mOkBtnClicked)
+//        {
+//            exit(0);
+//        }
+//        else
+//        {
+//            QMessageBox::warning(this, "Неудачная попытка авторизации", "Логи или пароль введены неверно");
+//        }
+//    }
+
 
     ui->setupUi(this);
 
@@ -330,6 +329,7 @@ void MainWindow::connectButtons()
         }
     });
 
+    /*
     connect(ui->testClearBtn, &QPushButton::clicked, [this]()
     {
         QSqlQuery query;
@@ -370,6 +370,7 @@ void MainWindow::connectButtons()
             qDebug() << query.lastError().text();
         query.clear();
     });
+    */
 }
 
 
@@ -395,7 +396,7 @@ void MainWindow::on_pushButtonPair_clicked()
     this->hide();
     long long routnamentUID = ui->tournamentUidLabel->text().toLongLong();
     qDebug() << "routnamentUID: " << routnamentUID;
-    FightingPairs dialog(m_database, routnamentUID, 0);
+    FightingPairs dialog(routnamentUID, 0);
     dialog.exec();
     this->show();
 }
@@ -482,41 +483,41 @@ void MainWindow::on_btn_report_ministr_clicked()
 
 
 
-void MainWindow::on_pushButton_clicked()
-{
-    EbnutVBazu::setTournamentCat(ui->tournamentUidLabel->text().toLongLong());
-    qDebug() << "DONE";
-}
+//void MainWindow::on_pushButton_clicked()
+//{
+//    EbnutVBazu::setTournamentCat(ui->tournamentUidLabel->text().toLongLong());
+//    qDebug() << "DONE";
+//}
 
-void MainWindow::on_pushButton_2_clicked()
-{
-    EbnutVBazu::setRandomWinner();
-    qDebug() << "DONE";
-}
+//void MainWindow::on_pushButton_2_clicked()
+//{
+//    EbnutVBazu::setRandomWinner();
+//    qDebug() << "DONE";
+//}
 
 
 
-void MainWindow::on_pushButton_3_clicked()
-{
-    QString openFileName = QFileDialog::getOpenFileName();
-    QImage image(openFileName);
-    image = image.scaledToHeight(250);
-    QLabel *label = new QLabel();
-    label->setPixmap(QPixmap::fromImage(image));
-    label->show();
+//void MainWindow::on_pushButton_3_clicked()
+//{
+//    QString openFileName = QFileDialog::getOpenFileName();
+//    QImage image(openFileName);
+//    image = image.scaledToHeight(250);
+//    QLabel *label = new QLabel();
+//    label->setPixmap(QPixmap::fromImage(image));
+//    label->show();
 
-    QByteArray byteArray;
-    QBuffer buffer(&byteArray);
-    buffer.open(QIODevice::WriteOnly);
-    image.save(&buffer, "PNG");
-    QString iconBase64 = QString::fromLatin1(byteArray.toBase64().data());
-    qDebug() << "iconBase64.length(): " << iconBase64.length();
-    qDebug() << "iconBase64.length(): " << iconBase64.left(300);
+//    QByteArray byteArray;
+//    QBuffer buffer(&byteArray);
+//    buffer.open(QIODevice::WriteOnly);
+//    image.save(&buffer, "PNG");
+//    QString iconBase64 = QString::fromLatin1(byteArray.toBase64().data());
+//    qDebug() << "iconBase64.length(): " << iconBase64.length();
+//    qDebug() << "iconBase64.length(): " << iconBase64.left(300);
 
-    ofstream out("out.txt");
-    out << iconBase64.toStdString();
-    out.close();
-}
+//    ofstream out("out.txt");
+//    out << iconBase64.toStdString();
+//    out.close();
+//}
 
 
 void MainWindow::on_pushButton_Flag_clicked()

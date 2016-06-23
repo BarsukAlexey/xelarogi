@@ -45,7 +45,7 @@ WeighingProtocol::WeighingProtocol(const QSqlDatabase& database, const long long
 //        ExcelUtils::setValue   (sheet, currentRow, 1, DBUtils::getNameTournamentByUID(database, tournamentUID));
 //        ExcelUtils::uniteRange (sheet, currentRow, 1, currentRow, countColumns);
 //        ExcelUtils::setFontBold(sheet, currentRow, 1, true);
-        ExcelUtils::setTournamentName(sheet, DBUtils::getTournamentNameAsHeadOfDocument(database, tournamentUID), currentRow, 1, currentRow, countColumns);
+        ExcelUtils::setTournamentName(sheet, DBUtils::getTournamentNameAsHeadOfDocument(tournamentUID), currentRow, 1, currentRow, countColumns);
         ++currentRow;
 
         ExcelUtils::setValue  (sheet, currentRow, 1, "Протокол взвешивания");

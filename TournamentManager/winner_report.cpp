@@ -66,7 +66,7 @@ WinnerReport::WinnerReport(const QSqlDatabase& database, const long long tournam
         sheet->setProperty("Name", sheetName.left(31));
 
 
-        ExcelUtils::setTournamentName(sheet, DBUtils::getTournamentNameAsHeadOfDocument(database, tournamentUID), currentRow, 1, currentRow, heads.size());
+        ExcelUtils::setTournamentName(sheet, DBUtils::getTournamentNameAsHeadOfDocument(tournamentUID), currentRow, 1, currentRow, heads.size());
 
         ++currentRow;
 

@@ -373,7 +373,7 @@ void RenderAreaWidget::printTableGridInExcel(int tournamentCategory,
 
     maxColumn = qMax(4, maxColumn);
 
-    ExcelUtils::setTournamentName(sheet, DBUtils::getTournamentNameAsHeadOfDocument(QSqlDatabase::database(), tournamentUID), 1, 1, 1, maxColumn);
+    ExcelUtils::setTournamentName(sheet, DBUtils::getTournamentNameAsHeadOfDocument(tournamentUID), 1, 1, 1, maxColumn);
 
     ExcelUtils::uniteRange(sheet, 2, 1, 2, maxColumn);
     ExcelUtils::setValue(sheet, 2, 1, DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", tournamentCategory));

@@ -45,7 +45,7 @@ public:
     static QString getField(const QString& field, const QString& table, const QString& UID, QString PRETTY_FUNCTION = __PRETTY_FUNCTION__);
     static QString getField(const QString& field, const QString& table, const long long UID, QString PRETTY_FUNCTION = __PRETTY_FUNCTION__);
     static QString getFieldDate(const QString& field, const QString& table, const long long UID, QString PRETTY_FUNCTION = __PRETTY_FUNCTION__);
-    static QDate getFieldDateAsDate(const QSqlDatabase& database, const QString& field, const QString& table, const long long UID);
+    static QDate getFieldDateAsDate(const QString& field, const QString& table, const long long UID);
     static QString getRussianMonth(int m);
 
     static QString getNameTournamentByUID(const QSqlDatabase& , long long);
@@ -102,7 +102,7 @@ public:
 
     static QString roundDouble(double x, int precision);
 
-    static QString getTournamentNameAsHeadOfDocument(const QSqlDatabase& database, long long tournamentUID);
+    static QString getTournamentNameAsHeadOfDocument(long long tournamentUID);
 };
 
 #endif // DBUTILS_H

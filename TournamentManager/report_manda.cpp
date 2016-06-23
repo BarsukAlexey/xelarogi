@@ -264,7 +264,7 @@ ReportManda::ReportManda(const QSqlDatabase& database, const long long tournamen
         for (int i = 1; i <= currentColumns; ++i)
             ExcelUtils::setColumnAutoFit(sheet, i);
 
-        ExcelUtils::setTournamentName(sheet, DBUtils::getTournamentNameAsHeadOfDocument(database, tournamentUID), 1, 1, 1, currentColumns - 1);
+        ExcelUtils::setTournamentName(sheet, DBUtils::getTournamentNameAsHeadOfDocument(tournamentUID), 1, 1, 1, currentColumns - 1);
 
         ExcelUtils::uniteRange(sheet, 2, 1, 2, currentColumns - 1);
         ExcelUtils::setValue(sheet, 2, 1, "Протокол мандатной комиссии");

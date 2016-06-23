@@ -152,7 +152,7 @@
       <item row="0" column="0">
        <widget class="QPushButton" name="pushButtonPrint">
         <property name="text">
-         <string>Печать...</string>
+         <string>Сохранить как PDF...</string>
         </property>
        </widget>
       </item>

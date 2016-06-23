@@ -56,9 +56,9 @@ QString DBUtils::getFieldDate(const QString& field, const QString& table, const 
     return "";
 }
 
-QDate DBUtils::getFieldDateAsDate(const QSqlDatabase& database, const QString& field, const QString& table, const long long UID)
+QDate DBUtils::getFieldDateAsDate(const QString& field, const QString& table, const long long UID)
 {
-    QSqlQuery query("SELECT * FROM " + table + " WHERE UID = ?", database);
+    QSqlQuery query("SELECT * FROM " + table + " WHERE UID = ?");
     query.bindValue(0, UID);
     if (query.exec() && query.next())
     {
@@ -586,10 +586,10 @@ QString DBUtils::getRussianMonth(int m)
     return 1 <= m && m <= 12? month[m - 1] : "";
 }
 
-QString DBUtils::getTournamentNameAsHeadOfDocument(const QSqlDatabase& database, long long tournamentUID)
+QString DBUtils::getTournamentNameAsHeadOfDocument(long long tournamentUID)
 {
-    QDate a = DBUtils::getFieldDateAsDate(database, "DATE_WEIGHTING", "TOURNAMENTS", tournamentUID);
-    QDate b = DBUtils::getFieldDateAsDate(database, "DATE_END", "TOURNAMENTS", tournamentUID);
+    QDate a = DBUtils::getFieldDateAsDate("DATE_WEIGHTING", "TOURNAMENTS", tournamentUID);
+    QDate b = DBUtils::getFieldDateAsDate("DATE_END", "TOURNAMENTS", tournamentUID);
     QString resA;
     QString resB = QString::number(b.day()) + " " + getRussianMonth(b.month()) + " " + QString::number(b.year()) + " г.";
     if (a.year() != b.year())

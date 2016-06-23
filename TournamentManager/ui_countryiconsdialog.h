@@ -132,7 +132,7 @@ public:
 
     void retranslateUi(QDialog *CountryIconsDialog)
     {
-        CountryIconsDialog->setWindowTitle(QApplication::translate("CountryIconsDialog", "\320\222\321\213\320\261\320\276\321\200 \320\270\320\272\320\276\320\275\320\276\320\272 \320\264\320\273\321\217 \321\201\321\202\321\200\320\260\320\275", 0));
+        CountryIconsDialog->setWindowTitle(QApplication::translate("CountryIconsDialog", "\320\244\320\273\320\260\320\263\320\270", 0));
         labelLink->setText(QApplication::translate("CountryIconsDialog", "<a href=\"1\">\320\227\320\260\320\263\321\200\321\203\320\267\320\270\321\202\321\214 \321\204\320\273\320\260\320\263\320\270...</a>", 0));
         tournamentL->setText(QApplication::translate("CountryIconsDialog", "\320\242\321\203\321\200\320\275\320\270\321\200", 0));
         groupBox->setTitle(QString());
