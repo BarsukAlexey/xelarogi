@@ -1,11 +1,16 @@
 #ifndef DBUTILS_H
 #define DBUTILS_H
 
+#include <algorithm>
+
+#include <algorithm>
+
+#include <QDate>
+#include <QDebug>
+#include <QMap>
+#include <QVector>
 #include <QSqlDatabase>
 #include <QStringList>
-#include <QMap>
-#include <QDate>
-#include <algorithm>
 
 
 class DBUtils
@@ -46,7 +51,7 @@ public:
     static QString getField(const QString& field, const QString& table, const long long UID, QString PRETTY_FUNCTION = __PRETTY_FUNCTION__);
     static QString getFieldDate(const QString& field, const QString& table, const long long UID, QString PRETTY_FUNCTION = __PRETTY_FUNCTION__);
     static QDate getFieldDateAsDate(const QString& field, const QString& table, const long long UID);
-    static QString getRussianMonth(int m);
+
 
     static QString getNameTournamentByUID(const QSqlDatabase& , long long);
     static QString getTypeNameByUID(const QSqlDatabase& , long long);
@@ -54,6 +59,7 @@ public:
     static QStringList get_DAYS_FROM_TOURNAMENTS(const QSqlDatabase& , long long);
 
     // для таблицы ORDERS
+    static QString getSecondNameAndFirstName(long long UID);
     static QString getSecondNameAndOneLetterOfName(long long UID);
     static QString get__REGION(const QSqlDatabase& database, long long UID);
     static QSet<long long> getSetOfOrdersInTournamentCategory(long long uidTournamentCategory);
@@ -70,7 +76,7 @@ public:
     static QVector<QVector<NodeOfTournirGrid>> getNodesAsLevelListOfList(long long tournamentCategoryUID);
     static QVector<NodeOfTournirGrid> getLeafOFTree(const QSqlDatabase& database, long long tournamentCategoryUID);
     static QVector<NodeOfTournirGrid> getFightingNodes(long long tournamentCategoryUID);
-    static QVector<QVector<DBUtils::Fighing>> getListsOfPairsForFighting(long long tournamentUID);
+    static QVector<QVector<Fighing>> getListsOfPairsForFighting(long long tournamentUID);
     static QVector<Fighing> getListOfPairsForFighting(long long TOURNAMENT_CATEGORIES_FK);
     static QVector<Fighing> getListOfPairsForFightingForPointFighting(long long TOURNAMENT_CATEGORIES_FK);
     static void insertLeafOfGrid(long long TOURNAMENT_CATEGORIES_FK, long long VERTEX, long long orderUID);
@@ -78,31 +84,167 @@ public:
     static void swapNodesOfGrid(long long tournamentCategoryUID, int node0v, int node1v);
     static int findDurationOfGrid(long long tournamentCategoryUID, int delay = 0);
     static int findDurationOfFightinPair(long long tournamentCategoryUID);
+    static std::pair<int, int> getPlace(long long UIDOrder);
 
-    static  QVector<long long> getUidOfWinner(long long UIDtournamentCategory);
-    static int isPow2(int a) {
-      return !(a & (a - 1));
-    }
+
 
     // для таблицы TOURNAMENT_CATEGORIES
     static QVector<long long> get_UIDs_of_TOURNAMENT_CATEGORIES(long long tournamentUID);
-    //static QString get__NAME_OF_TOURNAMENT_CATEGORIES(const QSqlDatabase& database, long long UID);
+    static QVector<long long> get_UIDOrder_for_TC(long long UIDtournamentCategory);
     static QVector<std::tuple<long long, int, int, long long> > get_distinct_TYPE_FK_AgeFrom_AgeTill(long long tournamentUID);
     static QMap<QString, QVector<long long> > get_weight_and_orderUIDs(long long tournamentUID, long long type_fk, int age_from, int age_till, int sex_fk);
-    static int     get__AGE_FROM(const QSqlDatabase& database, long long UID);
-    static int     get__AGE_TILL(const QSqlDatabase& database, long long UID);
-    static QString get__WEIGHT_FROM(const QSqlDatabase& database, long long UID);
-    static QString get__WEIGHT_TILL(const QSqlDatabase& database, long long UID);
     static QString getNormanWeightRangeFromTOURNAMENT_CATEGORIES(long long uidCategory);
-    static QString getNormanWeightRange(double a, double b);
     static QString getWeightAsOneNumberPlusMinus(long long uidCategory);
     static QString getNormanAgeRangeFromTOURNAMENT_CATEGORIES(long long uidCategory);
+
+
+
+
+    static QString getNormanWeightRange(double a, double b);
     static QString getNormanAgeRange(int a, int b);
-
-
     static QString roundDouble(double x, int precision);
-
     static QString getTournamentNameAsHeadOfDocument(long long tournamentUID);
+    static QString convertToRoman(int val);
+    static int isPow2(int a);
+    static QString getRussianMonth(int m);
+
+
+
+
+    enum TypeField
+    {
+        secondName,
+        firstName,
+        patromicName,
+
+        arabPlace,
+        arabPlaceRange,
+        romePlace,
+        romePlaceRange,
+
+        TC_ageRange,
+        TC_yearRange,
+
+        TC_weightRange,
+        TC_weight,
+
+        TC_sexAgeType,
+        TC_TYPES,
+
+        club,
+        coach,
+
+        PlainText
+    };
+
+
+    static QVector<TypeField> getAllTypeFieldl(){
+        QVector<TypeField> allTypeField({
+                                            secondName,
+                                            firstName,
+                                            patromicName,
+
+                                            arabPlace,
+                                            arabPlaceRange,
+                                            romePlace,
+                                            romePlaceRange,
+
+                                            TC_ageRange,
+                                            TC_yearRange,
+
+                                            TC_weightRange,
+                                            TC_weight,
+
+                                            TC_sexAgeType,
+                                            TC_TYPES,
+
+                                            club,
+                                            coach,
+
+                                            PlainText
+                                        });
+        return allTypeField;
+    }
+
+    static QMap<TypeField, QString> getExplanationOfTypeField()
+    {
+        QMap<TypeField, QString> map;
+        map[TypeField::secondName     ] = "Фамилия";
+        map[TypeField::firstName      ] = "Имя";
+        map[TypeField::patromicName   ] = "Отчество";
+
+        map[TypeField::arabPlace      ] = "Занятое место арабскими цифрами (1, 2, 3, ...)";
+        map[TypeField::arabPlaceRange ] = "Занятое место арабскими цифрами (1, 2, 3-4, ...)";
+        map[TypeField::romePlace      ] = "Занятое место римскими цифрами (1, 2, 3, ...)";
+        map[TypeField::romePlaceRange ] = "Занятое место римскими цифрами (1, 2, 3-4, ...)";
+
+        map[TypeField::TC_ageRange    ] = "ТК: до 7 лет, 12-15 лет, от 35 лет";
+        map[TypeField::TC_yearRange   ] = "ТК: 1997-1999 г.р., 2000-2003 г.р.";
+        map[TypeField::TC_weightRange ] = "ТК: до 40 кг, от 50 до 70 кг, свыше 90 кг";
+        map[TypeField::TC_weight      ] = "ТК: -40 кг, 50 кг, 70 кг, +83 кг";
+        map[TypeField::TC_sexAgeType  ] = "ТК: Юноши, Девушки, Юниоры...";
+        map[TypeField::TC_TYPES       ] = "TК: Фулконтакт, Лайт, Пойнтфайтинг..." ;
+
+        map[TypeField::PlainText      ] = "Произвольный текст";
+
+        map[TypeField::PlainText      ] = "Произвольный текст";
+
+        return map;
+    }
+
+    static QString get(TypeField typeField, long long uidOrder)
+    {
+        QString text;
+        long long uidTC = getField("TOURNAMENT_CATEGORY_FK", "ORDERS", uidOrder).toLongLong();
+
+        if (typeField == secondName)
+        {
+            text = getField("SECOND_NAME", "ORDERS", uidOrder, __PRETTY_FUNCTION__);
+        }
+        else if (typeField == firstName)
+        {
+            text = getField("FIRST_NAME", "ORDERS", uidOrder, __PRETTY_FUNCTION__);
+        }
+        else if (typeField == patromicName)
+        {
+            text = getField("PATRONYMIC", "ORDERS", uidOrder, __PRETTY_FUNCTION__);
+        }
+        else if (typeField == TC_ageRange)
+        {
+            text = getNormanAgeRangeFromTOURNAMENT_CATEGORIES(uidTC);
+        }
+        else if (typeField == TC_weightRange)
+        {
+            text = getNormanWeightRangeFromTOURNAMENT_CATEGORIES(uidTC);
+        }
+        else if (typeField == TC_weight)
+        {
+            text = getWeightAsOneNumberPlusMinus(uidTC);
+        }
+        else if (typeField == arabPlace)
+        {
+            text = QString::number(DBUtils::getPlace(uidOrder).first);
+        }
+        else if (typeField == romePlace)
+        {
+            text = convertToRoman(DBUtils::getPlace(uidOrder).first);
+        }
+        else if (typeField == TC_sexAgeType)
+        {
+            text = getField("NAME", "AGE_CATEGORIES", getField("AGE_CATEGORY_FK", "TOURNAMENT_CATEGORIES", uidTC, __PRETTY_FUNCTION__), __PRETTY_FUNCTION__);
+        }
+        else if (typeField == TC_TYPES)
+        {
+            text = getField("NAME", "TYPES", getField("TYPE_FK", "TOURNAMENT_CATEGORIES", uidTC, __PRETTY_FUNCTION__), __PRETTY_FUNCTION__);
+        }
+        else
+        {
+            qDebug() << "WTF" << __PRETTY_FUNCTION__;
+        }
+        return text;
+    }
+
+
 };
 
 #endif // DBUTILS_H

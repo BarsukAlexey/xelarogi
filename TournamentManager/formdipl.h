@@ -4,6 +4,7 @@
 #include "db_utils.h"
 #include "dialogselectfieldsfordimloma.h"
 
+#include <QColorDialog>
 #include <QComboBox>
 #include <QDialog>
 #include <QDebug>
@@ -34,14 +35,14 @@ public:
 
 
 private:
-    QVector <QVector<QString> > fields;
+    QVector <QVector<std::pair<DBUtils::TypeField, QString> > > fields;
     QVector <QFont> fonts;
+    QVector <QColor> colors;
 
 public:
     explicit FormDipl(long long UID_tournament, QWidget *parent = 0);
     ~FormDipl();
 
-    QString convertToRoman (int val);
 
 private slots:
     void onTableClicked(const QModelIndex & index);

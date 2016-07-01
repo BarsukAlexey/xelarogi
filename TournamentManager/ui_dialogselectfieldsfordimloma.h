@@ -34,8 +34,8 @@ public:
     QGridLayout *gridLayout;
     QWidget *widget_3;
     QHBoxLayout *horizontalLayout;
+    QLabel *label;
     QLineEdit *lineEdit;
-    QPushButton *pushButtonAdd;
     QDialogButtonBox *buttonBox;
     QWidget *widget;
     QGridLayout *gridLayout_2;
@@ -47,28 +47,27 @@ public:
     QPushButton *pushButtonRightLeft;
     QSpacerItem *verticalSpacer_2;
     QListWidget *listWidgetRight;
-    QLabel *label;
 
     void setupUi(QDialog *DialogSelectFieldsForDimloma)
     {
         if (DialogSelectFieldsForDimloma->objectName().isEmpty())
             DialogSelectFieldsForDimloma->setObjectName(QStringLiteral("DialogSelectFieldsForDimloma"));
-        DialogSelectFieldsForDimloma->resize(651, 465);
+        DialogSelectFieldsForDimloma->resize(762, 460);
         gridLayout = new QGridLayout(DialogSelectFieldsForDimloma);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
         widget_3 = new QWidget(DialogSelectFieldsForDimloma);
         widget_3->setObjectName(QStringLiteral("widget_3"));
         horizontalLayout = new QHBoxLayout(widget_3);
         horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
+        label = new QLabel(widget_3);
+        label->setObjectName(QStringLiteral("label"));
+
+        horizontalLayout->addWidget(label);
+
         lineEdit = new QLineEdit(widget_3);
         lineEdit->setObjectName(QStringLiteral("lineEdit"));
 
         horizontalLayout->addWidget(lineEdit);
-
-        pushButtonAdd = new QPushButton(widget_3);
-        pushButtonAdd->setObjectName(QStringLiteral("pushButtonAdd"));
-
-        horizontalLayout->addWidget(pushButtonAdd);
 
 
         gridLayout->addWidget(widget_3, 2, 0, 1, 1);
@@ -125,11 +124,6 @@ public:
 
         gridLayout->addWidget(widget, 0, 0, 1, 1);
 
-        label = new QLabel(DialogSelectFieldsForDimloma);
-        label->setObjectName(QStringLiteral("label"));
-
-        gridLayout->addWidget(label, 1, 0, 1, 1);
-
 
         retranslateUi(DialogSelectFieldsForDimloma);
         QObject::connect(buttonBox, SIGNAL(accepted()), DialogSelectFieldsForDimloma, SLOT(accept()));
@@ -140,11 +134,10 @@ public:
 
     void retranslateUi(QDialog *DialogSelectFieldsForDimloma)
     {
-        DialogSelectFieldsForDimloma->setWindowTitle(QApplication::translate("DialogSelectFieldsForDimloma", "Dialog", 0));
-        pushButtonAdd->setText(QApplication::translate("DialogSelectFieldsForDimloma", "\320\224\320\276\320\261\320\260\320\262\320\270\321\202\321\214", 0));
+        label->setText(QApplication::translate("DialogSelectFieldsForDimloma", "\320\237\321\200\320\276\320\270\320\267\320\262\320\276\320\273\321\214\320\275\321\213\320\271 \321\202\320\265\320\272\321\201\321\202: ", 0));
         pushButtonLeftRight->setText(QApplication::translate("DialogSelectFieldsForDimloma", ">>", 0));
         pushButtonRightLeft->setText(QApplication::translate("DialogSelectFieldsForDimloma", "<<", 0));
-        label->setText(QApplication::translate("DialogSelectFieldsForDimloma", "\320\233\321\216\320\261\320\276\320\271 \321\202\320\265\320\272\321\201\321\202", 0));
+        Q_UNUSED(DialogSelectFieldsForDimloma);
     } // retranslateUi
 
 };

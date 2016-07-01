@@ -9,11 +9,22 @@ FormDipl::FormDipl(long long UID_tournament, QWidget *parent) :
     ui->setupUi(this);
 
     ui->tableWidget->resizeColumnsToContents();
+    ui->tableWidget->setColumnWidth(0,175);
+    ui->tableWidget->setColumnWidth(1,120);
+    ui->tableWidget->setColumnWidth(2,175);
 
     connect(ui->pushButtonAdd, SIGNAL(clicked()), this, SLOT(addRow()));
     connect(ui->pushButtonDelete, SIGNAL(clicked()), this, SLOT(deleteRow()));
     connect(ui->tableWidget, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onTableClicked(const QModelIndex &)));
     connect(ui->pushButtonPrint, &QPushButton::clicked, this, &FormDipl::onPushPrint);
+    connect(ui->radioButtonDiplom, &QRadioButton::clicked, [this](){
+        ui->spinBoxMaxPlace->setEnabled(ui->radioButtonDiplom->isChecked());
+        ui->label_5->setEnabled(ui->radioButtonDiplom->isChecked());
+    });
+    connect(ui->radioButtonBadge, &QRadioButton::clicked, [this](){
+        ui->spinBoxMaxPlace->setEnabled(ui->radioButtonDiplom->isChecked());
+        ui->label_5->setEnabled(ui->radioButtonDiplom->isChecked());
+    });
 }
 
 FormDipl::~FormDipl()
@@ -21,28 +32,7 @@ FormDipl::~FormDipl()
     delete ui;
 }
 
-QString FormDipl::convertToRoman(int val) {
-    QString res;
 
-    QStringList huns({"", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"});
-    QStringList tens({"", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"});
-    QStringList ones({"", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"});
-
-    while (val >= 1000) {
-        res += "M";
-        val -= 1000;
-    }
-
-    res += huns[val / 100];
-    val %= 100;
-
-    res += tens[val / 10];
-    val %= 10;
-
-    res += ones[val];
-
-    return res;
-}
 
 void FormDipl::onTableClicked(const QModelIndex& index)
 {
@@ -51,18 +41,18 @@ void FormDipl::onTableClicked(const QModelIndex& index)
 
     if (index.column() == 0)
     {
-        DialogSelectFieldsForDimloma dlg(this);
+        DialogSelectFieldsForDimloma dlg(this, fields[index.row()]);
         if (dlg.exec() == QDialog::Accepted)
         {
 
             fields[index.row()] = dlg.getFields();
 
             QString str;
-            for (QString s : fields[index.row()])
+            for (std::pair<DBUtils::TypeField, QString> pair : fields[index.row()])
             {
                 if (!str.isEmpty())
                     str += "; ";
-                str += s;
+                str += DBUtils::getExplanationOfTypeField()[pair.first];
             }
             ui->tableWidget->setItem(index.row(), index.column(), new QTableWidgetItem(str));
         }
@@ -73,8 +63,20 @@ void FormDipl::onTableClicked(const QModelIndex& index)
         fonts[index.row()] = font;
         ui->tableWidget->setItem(index.row(), index.column(), new QTableWidgetItem(font.toString()));
     }
+    else if (index.column() == 3)
+    {
+        QColor color = QColorDialog::getColor(colors[index.row()]);
+//        qDebug() << color << colors[index.row()];
+        if (color.isValid())
+        {
+            QTableWidgetItem *item = new QTableWidgetItem();
+            item->setBackgroundColor(color);
+            ui->tableWidget->setItem(index.row(), index.column(), item);
+            colors[index.row()] = color;
+        }
+    }
 
-    ui->tableWidget->resizeColumnsToContents();
+    //ui->tableWidget->resizeColumnsToContents();
 }
 
 void FormDipl::addRow()
@@ -93,6 +95,12 @@ void FormDipl::addRow()
 
     ui->tableWidget->setItem(row, column++, new QTableWidgetItem("Не выбрано (двойной клик)"));
 
+    QColor color(Qt::black);
+    QTableWidgetItem *item = new QTableWidgetItem();
+    item->setBackgroundColor(color);
+    ui->tableWidget->setItem(row, column++, item);
+
+
     for (int i = 0; i < 3; ++i)
     {
         QSpinBox *box = new QSpinBox(ui->tableWidget);
@@ -105,23 +113,22 @@ void FormDipl::addRow()
         ui->tableWidget->setCellWidget(row, column++, box);
     }
 
-    ui->tableWidget->resizeColumnsToContents();
+//    ui->tableWidget->resizeColumnsToContents();
 
     fonts << QFont();
-    fields << QVector<QString>();
+    fields << QVector<std::pair<DBUtils::TypeField, QString> >();
+    colors << color;
 }
 
 void FormDipl::deleteRow()
 {
-    for(QModelIndex index : ui->tableWidget->selectionModel()->selectedRows())
-    {
-        ui->tableWidget->removeRow(index.row());
-        fonts.remove(index.row());
-        fields.remove(index.row());
-        break;
+    int row = ui->tableWidget->currentRow();
+    if (0 <= row && row < ui->tableWidget->rowCount()){
+        ui->tableWidget->removeRow(row);
+        fonts.remove(row);
+        fields.remove(row);
+        colors.remove(row);
     }
-
-    ui->tableWidget->resizeColumnsToContents();
 }
 
 
@@ -129,15 +136,23 @@ void FormDipl::deleteRow()
 
 void FormDipl::onPushPrint()
 {
+
     QString dirPath = QFileDialog::getExistingDirectory(this);
+    //QString dirPath = "C:\\Trash";
     if (dirPath.isEmpty()) return;
 
-    QMap<QString, DialogSelectFieldsForDimloma::TypeField> map = DialogSelectFieldsForDimloma().getMap();
 
     for (long long uidTC : DBUtils::get_UIDs_of_TOURNAMENT_CATEGORIES(UID_tournament))
     {
-        QVector<long long> uidOfWinner = DBUtils::getUidOfWinner(uidTC);
-        if (uidOfWinner.isEmpty())
+        QVector<long long> UIDOrder = DBUtils::get_UIDOrder_for_TC(uidTC);
+        std::sort(UIDOrder.begin(), UIDOrder.end(), [](const long long& UIDOrder0, const long long& UIDOrder1)  -> bool {
+            std::pair<int, int> place0 = DBUtils::getPlace(UIDOrder0);
+            std::pair<int, int> place1 = DBUtils::getPlace(UIDOrder1);
+            QString name0 = UIDOrder0 <= 0? "" : DBUtils::getSecondNameAndFirstName(UIDOrder0);
+            QString name1 = UIDOrder1 <= 0? "" : DBUtils::getSecondNameAndFirstName(UIDOrder1);
+            return  place0 < place1 || (place0 == place1 && name0 < name1);
+        });
+        if (UIDOrder.isEmpty() || (ui->radioButtonDiplom->isChecked() && DBUtils::getPlace(UIDOrder[0]).first == -1))
             continue;
 
         QString fileName = DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", uidTC, __PRETTY_FUNCTION__) + ".pdf";
@@ -157,18 +172,21 @@ void FormDipl::onPushPrint()
         QPainter painter;
         painter.begin(&printer);
 
-
-
-        for (int i = 0; i < uidOfWinner.size(); ++i)
+        bool isThisFirstPage = true;
+        for (int i = 0; i < UIDOrder.size(); ++i)
         {
-            long long uidOrder = uidOfWinner[i];
-            const int place = qMin(i + 1, 3); //
+            const long long uidOrder = UIDOrder[i];
+            std::pair<int, int> place = DBUtils::getPlace(uidOrder);
+            if (ui->radioButtonDiplom->isChecked() && ui->spinBoxMaxPlace->value() < place.first)
+                continue;
 
+            if (isThisFirstPage)
+                isThisFirstPage = false;
+            else
+                printer.newPage();
 
-
-
-//            сетка в 1 см
-//            for (int index = 0; index < 3; ++index)
+            //сетка в 1 см
+//            for (int index = 0; index < 20; ++index)
 //            {
 //                double y = 10.0 * printer.height() / printer.heightMM();
 //                painter.drawLine(QPoint(0, index * y), QPoint(printer.width(), index * y));
@@ -177,73 +195,24 @@ void FormDipl::onPushPrint()
 //                painter.drawLine(QPoint(index * x, 0), QPoint(index * x, printer.height()));
 //            }
 
+
             for (int row = 0; row < fonts.size(); ++row)
             {
                 QString text;
-                for (QString field : fields[row])
+                for (std::pair<DBUtils::TypeField, QString> field : fields[row])
                 {
                     if (!text.isEmpty())
                         text += " ";
-
-                    if (!map.contains(field))
-                    {
-                        text += field;
-                    }
+                    if (field.first == DBUtils::TypeField::PlainText)
+                        text += field.second;
                     else
-                    {
-                        DialogSelectFieldsForDimloma::TypeField typeField = map[field];
-                        if (typeField == DialogSelectFieldsForDimloma::TypeField::secondName)
-                        {
-                            text += DBUtils::getField("SECOND_NAME", "ORDERS", uidOrder, __PRETTY_FUNCTION__);
-                        }
-                        else if (typeField == DialogSelectFieldsForDimloma::TypeField::firstName)
-                        {
-                            text += DBUtils::getField("FIRST_NAME", "ORDERS", uidOrder, __PRETTY_FUNCTION__);
-                        }
-                        else if (typeField == DialogSelectFieldsForDimloma::TypeField::patromicName)
-                        {
-                            text += DBUtils::getField("PATRONYMIC", "ORDERS", uidOrder, __PRETTY_FUNCTION__);
-                        }
-                        else if (typeField == DialogSelectFieldsForDimloma::TypeField::ageRange)
-                        {
-                            text += DBUtils::getNormanAgeRangeFromTOURNAMENT_CATEGORIES(uidTC);
-
-                        }
-                        else if (typeField == DialogSelectFieldsForDimloma::TypeField::weightRange)
-                        {
-                            text += DBUtils::getNormanWeightRangeFromTOURNAMENT_CATEGORIES(uidTC);
-                        }
-                        else if (typeField == DialogSelectFieldsForDimloma::TypeField::weight)
-                        {
-                            text += DBUtils::getWeightAsOneNumberPlusMinus(uidTC);
-                        }
-                        else if (typeField == DialogSelectFieldsForDimloma::TypeField::place)
-                        {
-                            text += QString::number(place);
-                        }
-                        else if (typeField == DialogSelectFieldsForDimloma::TypeField::placeRome)
-                        {
-                            text += convertToRoman(place);
-                        }
-                        else if (typeField == DialogSelectFieldsForDimloma::TypeField::sexAgeType)
-                        {
-                            text += DBUtils::getField("NAME", "AGE_CATEGORIES", DBUtils::getField("AGE_CATEGORY_FK", "TOURNAMENT_CATEGORIES", uidTC, __PRETTY_FUNCTION__), __PRETTY_FUNCTION__);
-                        }
-                        else if (typeField == DialogSelectFieldsForDimloma::TypeField::TYPES)
-                        {
-                            text += DBUtils::getField("NAME", "TYPES", DBUtils::getField("TYPE_FK", "TOURNAMENT_CATEGORIES", uidTC, __PRETTY_FUNCTION__), __PRETTY_FUNCTION__);
-                        }
-                        else
-                        {
-                            qDebug() << "WTF" << __PRETTY_FUNCTION__;
-                        }
-                    }
+                        text += DBUtils::get(field.first, uidOrder);
                 }
 
                 QFont font = fonts[row];
-                int x        = dynamic_cast<QSpinBox* >(ui->tableWidget->cellWidget(row, 3))->value() * printer.width()  / ui->spinBoxWidth ->value();
-                int y        = dynamic_cast<QSpinBox* >(ui->tableWidget->cellWidget(row, 4))->value() * printer.height() / ui->spinBoxHeight->value();
-                int width    = dynamic_cast<QSpinBox* >(ui->tableWidget->cellWidget(row, 5))->value() * printer.width()  / ui->spinBoxWidth ->value();
+                int x        = dynamic_cast<QSpinBox* >(ui->tableWidget->cellWidget(row, 4))->value() * printer.width()  / ui->spinBoxWidth ->value();
+                int y        = dynamic_cast<QSpinBox* >(ui->tableWidget->cellWidget(row, 5))->value() * printer.height() / ui->spinBoxHeight->value();
+                int width    = dynamic_cast<QSpinBox* >(ui->tableWidget->cellWidget(row, 6))->value() * printer.width()  / ui->spinBoxWidth ->value();
 
 //                painter.drawLine(QPoint(x        , 0), QPoint(x        , printer.height()));
 //                painter.drawLine(QPoint(x + width, 0), QPoint(x + width, printer.height()));
@@ -261,6 +230,7 @@ void FormDipl::onPushPrint()
                         else
                             l = m;
                     }
+                    font.setPointSizeF((l + r) / 2);
                 }
 
                 int index = dynamic_cast<QComboBox*>(ui->tableWidget->cellWidget(row, 1))->currentIndex();
@@ -270,14 +240,14 @@ void FormDipl::onPushPrint()
                 else
                     qDebug() << "WTF" << __PRETTY_FUNCTION__;
 
+
+                painter.setPen(colors[row]);
                 painter.setFont(font);
                 painter.drawText(x, y, text);
-
-
             }
-            if (i + 1 != uidOfWinner.size())
-                qDebug() << printer.newPage();
         }
         painter.end();
+
     }
+    /**/
 }

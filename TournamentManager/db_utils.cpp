@@ -140,6 +140,19 @@ QStringList DBUtils::get_DAYS_FROM_TOURNAMENTS(const QSqlDatabase& database, lon
     return res;
 }
 
+QString DBUtils::getSecondNameAndFirstName(long long UID)
+{
+    QSqlQuery query("SELECT * FROM ORDERS WHERE UID = ? ");
+    query.bindValue(0, UID);
+    QString res;
+    if (query.exec() && query.next())
+        res = query.value("SECOND_NAME").toString() + " " +
+              query.value("FIRST_NAME").toString();
+    else
+        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << query.lastError().text() << query.lastQuery() << " UID: " << UID;
+    return res;
+}
+
 QString DBUtils::getSecondNameAndOneLetterOfName(long long UID)
 {
     QSqlQuery query("SELECT * FROM ORDERS WHERE UID = ? ");
@@ -427,20 +440,61 @@ int DBUtils::findDurationOfFightinPair(long long tournamentCategories)
             (count - 1) * DBUtils::getField("DURATION_BREAK", "TOURNAMENT_CATEGORIES", tournamentCategories).toInt();
 }
 
-QVector<long long> DBUtils::getUidOfWinner(long long UIDtournamentCategory)
+std::pair<int, int> DBUtils::getPlace(long long UIDOrder)
 {
-    QVector<long long> result;
-    QVector<NodeOfTournirGrid> nodes = getNodes(UIDtournamentCategory);
-    while (result.size() < 4 && !nodes.empty())
+    long long tournamentCategoryUID = getField("TOURNAMENT_CATEGORY_FK", "ORDERS", UIDOrder).toLongLong();
+    QVector<QVector<NodeOfTournirGrid> > grid = getNodesAsLevelListOfList(tournamentCategoryUID);
+
+    for (int i = 0; i < grid.size(); ++i)
     {
-        long long orderUID = nodes[0].UID;
-        if (orderUID <= 0)
-            return QVector<long long>();
-        result << orderUID;
-        for (int i = nodes.size() - 1; 0 <= i; --i)
-            if (nodes[i].UID == orderUID)
-                nodes.remove(i);
+        for (NodeOfTournirGrid node : grid[i])
+        {
+            if (node.UID <= 0)
+            {
+                return std::make_pair(-1, -1);
+            }
+            for (int j = i + 1; j < grid.size(); ++j)
+            {
+                auto it = grid[j].begin();
+                while (it != grid[j].end())
+                {
+                    if (it->UID == node.UID)
+                    {
+                        it = grid[j].erase(it);
+                    }
+                    else
+                    {
+                        ++it;
+                    }
+                }
+            }
+        }
     }
+
+    int countOffSet = 0;
+    for (QVector<NodeOfTournirGrid> level : grid)
+    {
+        for (NodeOfTournirGrid node : level)
+        {
+            if (node.UID == UIDOrder)
+            {
+                return std::make_pair(countOffSet + 1, countOffSet + level.size());
+            }
+        }
+        ++countOffSet;
+    }
+    return std::make_pair(-1, -1);
+}
+
+QVector<long long> DBUtils::get_UIDOrder_for_TC(long long UIDtournamentCategory)
+{
+    QSet<long long> set;
+    for (auto node : getNodes(UIDtournamentCategory))
+        if (0 < node.UID)
+            set << node.UID;
+    QVector<long long> result;
+    for (long long uid : set)
+        result << uid;
     return result;
 }
 
@@ -614,42 +668,27 @@ QString DBUtils::getTournamentNameAsHeadOfDocument(long long tournamentUID)
 
 }
 
-int DBUtils::get__AGE_FROM(const QSqlDatabase& database, long long UID)
-{
-    QSqlQuery query("SELECT * FROM TOURNAMENT_CATEGORIES WHERE UID = ? ", database);
-    query.bindValue(0, UID);
-    int age = 0;
-    if (query.exec() && query.next())
-        age = query.value("AGE_FROM").toInt();
-    return age;
-}
-
-int DBUtils::get__AGE_TILL(const QSqlDatabase& database, long long UID)
-{
-    QSqlQuery query("SELECT * FROM TOURNAMENT_CATEGORIES WHERE UID = ? ", database);
-    query.bindValue(0, UID);
-    int age = 0;
-    if (query.exec() && query.next())
-        age = query.value("AGE_TILL").toInt();
-    return age;
-}
-
-QString DBUtils::get__WEIGHT_FROM(const QSqlDatabase& database, long long UID)
-{
-    QSqlQuery query("SELECT * FROM TOURNAMENT_CATEGORIES WHERE UID = ? ", database);
-    query.bindValue(0, UID);
+QString DBUtils::convertToRoman(int val) {
     QString res;
-    if (query.exec() && query.next())
-        res = query.value("WEIGHT_FROM").toString();
+
+    QStringList huns({"", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"});
+    QStringList tens({"", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"});
+    QStringList ones({"", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"});
+
+    while (val >= 1000) {
+        res += "M";
+        val -= 1000;
+    }
+
+    res += huns[val / 100];
+    val %= 100;
+
+    res += tens[val / 10];
+    val %= 10;
+
+    res += ones[val];
+
     return res;
 }
 
-QString DBUtils::get__WEIGHT_TILL(const QSqlDatabase& database, long long UID)
-{
-    QSqlQuery query("SELECT * FROM TOURNAMENT_CATEGORIES WHERE UID = ? ", database);
-    query.bindValue(0, UID);
-    QString res;
-    if (query.exec() && query.next())
-        res = query.value("WEIGHT_TILL").toString();
-    return res;
-}
+int DBUtils::isPow2(int a) { return !(a & (a - 1)); }
