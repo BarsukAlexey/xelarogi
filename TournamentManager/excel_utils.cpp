@@ -135,15 +135,10 @@ void ExcelUtils::setFitToPagesWide(QAxObject* sheet, int countPageDown)
     delete pageSetup;
 }
 
-void ExcelUtils::saveAsFile(QAxObject* workbook, QString path, QString fileName)
+void ExcelUtils::saveAsFile(QAxObject* workbook, QString dirPath, QString fileName)
 {
-    path = QDir::toNativeSeparators(path);
-    if (!path.endsWith(QDir::separator())) path += QDir::separator();
-    path = QDir::toNativeSeparators(path);
-
-
     QList<QVariant> lstParam;
-    lstParam.append(path + fileName);
+    lstParam.append(QDir(dirPath).filePath(fileName));
     lstParam.append(-4143);
     lstParam.append("");
     lstParam.append("");

@@ -48,7 +48,8 @@ SOURCES += main.cpp\
     mythread.cpp \
     countryiconsdialog.cpp \
     formdipl.cpp \
-    dialogselectfieldsfordimloma.cpp
+    dialogselectfieldsfordimloma.cpp \
+    dialogchosedata.cpp
 
 HEADERS  += mainwindow.h \
     handbookdialog.h \
@@ -82,7 +83,8 @@ HEADERS  += mainwindow.h \
     mythread.h \
     countryiconsdialog.h \
     formdipl.h \
-    dialogselectfieldsfordimloma.h
+    dialogselectfieldsfordimloma.h \
+    dialogchosedata.h
 
 FORMS    += mainwindow.ui \
     handbookdialog.ui \
@@ -101,7 +103,8 @@ FORMS    += mainwindow.ui \
     dialog_create_age_category.ui \
     countryiconsdialog.ui \
     formdipl.ui \
-    dialogselectfieldsfordimloma.ui
+    dialogselectfieldsfordimloma.ui \
+    dialogchosedata.ui
 
 DISTFILES +=
 

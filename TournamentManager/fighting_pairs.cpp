@@ -278,7 +278,7 @@ void FightingPairs::printInJSON(const QVector<DBUtils::Fighing>& fighting, int r
         ++fightingId;
     }
 
-    const QString path = existingDirectory + QDir::separator() + "ring " + QString::number(ring) + "(kickboxing).json";
+    const QString path = QDir(existingDirectory).filePath("ring " + QString::number(ring) + "(kickboxing).json");
     QFile saveFile(path);
     if (!saveFile.open(QIODevice::WriteOnly)) {
         qWarning("Couldn't open save file.");
@@ -465,7 +465,7 @@ void FightingPairs::makeGridsForPointFighting(QString existingDirectory, QVector
 
         QJsonArray arr;
         for(QJsonObject x : jsonObjects) arr << x;
-        const QString path = existingDirectory + QDir::separator() + "ring " + QString::number(idRing) + "(pointfighting).json";
+        const QString path =  QDir(existingDirectory).filePath("ring " + QString::number(idRing) + "(pointfighting).json");
         QFile saveFile(path);
         if (!saveFile.open(QIODevice::WriteOnly)) {
             qWarning("Couldn't open save file.");

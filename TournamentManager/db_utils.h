@@ -85,6 +85,7 @@ public:
     static int findDurationOfGrid(long long tournamentCategoryUID, int delay = 0);
     static int findDurationOfFightinPair(long long tournamentCategoryUID);
     static std::pair<int, int> getPlace(long long UIDOrder);
+    static int getNumberOfCastingOfLots(long long UIDOrder);
 
 
 
@@ -113,9 +114,20 @@ public:
 
     enum TypeField
     {
+        stringNumber,
+
         secondName,
         firstName,
         patromicName,
+        birthyhdate,
+        sex,
+        weight,
+        sportCategory,
+        country,
+        region,
+        city,
+        club,
+        coach,
 
         arabPlace,
         arabPlaceRange,
@@ -123,16 +135,10 @@ public:
         romePlaceRange,
 
         TC_ageRange,
-        TC_yearRange,
-
         TC_weightRange,
         TC_weight,
-
         TC_sexAgeType,
         TC_TYPES,
-
-        club,
-        coach,
 
         PlainText
     };
@@ -140,9 +146,20 @@ public:
 
     static QVector<TypeField> getAllTypeFieldl(){
         QVector<TypeField> allTypeField({
+                                            stringNumber,
+
                                             secondName,
                                             firstName,
                                             patromicName,
+                                            birthyhdate,
+                                            sex,
+                                            weight,
+                                            sportCategory,
+                                            country,
+                                            region,
+                                            city,
+                                            club,
+                                            coach,
 
                                             arabPlace,
                                             arabPlaceRange,
@@ -150,16 +167,10 @@ public:
                                             romePlaceRange,
 
                                             TC_ageRange,
-                                            TC_yearRange,
-
                                             TC_weightRange,
                                             TC_weight,
-
                                             TC_sexAgeType,
                                             TC_TYPES,
-
-                                            club,
-                                            coach,
 
                                             PlainText
                                         });
@@ -169,23 +180,32 @@ public:
     static QMap<TypeField, QString> getExplanationOfTypeField()
     {
         QMap<TypeField, QString> map;
+        map[TypeField::stringNumber   ] = "# (Порядковый номер строки)";
+
         map[TypeField::secondName     ] = "Фамилия";
         map[TypeField::firstName      ] = "Имя";
         map[TypeField::patromicName   ] = "Отчество";
+        map[TypeField::birthyhdate    ] = "Дата рождения";
+        map[TypeField::sex            ] = "Пол";
+        map[TypeField::weight         ] = "Вес спортсмена";
+        map[TypeField::sportCategory  ] = "Спортивный разряд";
+        map[TypeField::country        ] = "Страна";
+        map[TypeField::region         ] = "Регион";
+        map[TypeField::city           ] = "Город";
+        map[TypeField::club           ] = "Клуб";
+        map[TypeField::coach          ] = "Тренер";
+
 
         map[TypeField::arabPlace      ] = "Занятое место арабскими цифрами (1, 2, 3, ...)";
-        map[TypeField::arabPlaceRange ] = "Занятое место арабскими цифрами (1, 2, 3-4, ...)";
-        map[TypeField::romePlace      ] = "Занятое место римскими цифрами (1, 2, 3, ...)";
-        map[TypeField::romePlaceRange ] = "Занятое место римскими цифрами (1, 2, 3-4, ...)";
+        map[TypeField::arabPlaceRange ] = "Диапазон мест арабскими цифрами (1, 2, 3-4, ...)";
+        map[TypeField::romePlace      ] = "Занятое место римскими цифрами (I, II, III, IV, ...)";
+        map[TypeField::romePlaceRange ] = "Диапазон мест римскими цифрами (I, II, III-IV, ...)";
 
         map[TypeField::TC_ageRange    ] = "ТК: до 7 лет, 12-15 лет, от 35 лет";
-        map[TypeField::TC_yearRange   ] = "ТК: 1997-1999 г.р., 2000-2003 г.р.";
         map[TypeField::TC_weightRange ] = "ТК: до 40 кг, от 50 до 70 кг, свыше 90 кг";
         map[TypeField::TC_weight      ] = "ТК: -40 кг, 50 кг, 70 кг, +83 кг";
         map[TypeField::TC_sexAgeType  ] = "ТК: Юноши, Девушки, Юниоры...";
         map[TypeField::TC_TYPES       ] = "TК: Фулконтакт, Лайт, Пойнтфайтинг..." ;
-
-        map[TypeField::PlainText      ] = "Произвольный текст";
 
         map[TypeField::PlainText      ] = "Произвольный текст";
 
@@ -197,7 +217,12 @@ public:
         QString text;
         long long uidTC = getField("TOURNAMENT_CATEGORY_FK", "ORDERS", uidOrder).toLongLong();
 
-        if (typeField == secondName)
+        if (typeField == stringNumber)
+        {
+            text = "-1";
+        }
+
+        else if (typeField == secondName)
         {
             text = getField("SECOND_NAME", "ORDERS", uidOrder, __PRETTY_FUNCTION__);
         }
@@ -209,6 +234,66 @@ public:
         {
             text = getField("PATRONYMIC", "ORDERS", uidOrder, __PRETTY_FUNCTION__);
         }
+        else if (typeField == birthyhdate)
+        {
+            text = getFieldDate("BIRTHDATE", "ORDERS", uidOrder, __PRETTY_FUNCTION__);
+        }
+        else if (typeField == sex)
+        {
+            text = getField("SHORTNAME", "SEXES", getField("SEX_FK", "ORDERS", uidOrder, __PRETTY_FUNCTION__), __PRETTY_FUNCTION__);
+        }
+        else if (typeField == weight)
+        {
+            text = roundDouble(getField("WEIGHT", "ORDERS", uidOrder, __PRETTY_FUNCTION__).toDouble(), 3);
+        }
+        else if (typeField == sportCategory)
+        {
+            text = getField("NAME", "SPORT_CATEGORIES", getField("SPORT_CATEGORY_FK", "ORDERS", uidOrder, __PRETTY_FUNCTION__), __PRETTY_FUNCTION__);
+        }
+        else if (typeField == country)
+        {
+            text = getField("NAME", "COUNTRIES", getField("COUNTRY_FK", "ORDERS", uidOrder, __PRETTY_FUNCTION__), __PRETTY_FUNCTION__);
+        }
+        else if (typeField == region)
+        {
+            text = getField("NAME", "REGIONS", getField("REGION_FK", "ORDERS", uidOrder, __PRETTY_FUNCTION__), __PRETTY_FUNCTION__);
+        }
+        else if (typeField == city)
+        {
+            text = getField("NAME", "REGION_UNITS", getField("REGION_UNIT_FK", "ORDERS", uidOrder, __PRETTY_FUNCTION__), __PRETTY_FUNCTION__);
+        }
+        else if (typeField == club)
+        {
+            text = getField("NAME", "CLUBS", getField("CLUB_FK", "ORDERS", uidOrder, __PRETTY_FUNCTION__), __PRETTY_FUNCTION__);
+        }
+        else if (typeField == coach)
+        {
+            text = getField("NAME", "COACHS", getField("COACH_FK", "ORDERS", uidOrder, __PRETTY_FUNCTION__), __PRETTY_FUNCTION__);
+        }
+
+
+        else if (typeField == arabPlace)
+        {
+            std::pair<int, int> place = DBUtils::getPlace(uidOrder);
+            text = QString::number(place.first);
+        }
+        else if (typeField == arabPlaceRange)
+        {
+            std::pair<int, int> place = DBUtils::getPlace(uidOrder);
+            text = QString::number(place.first) + '-' + QString::number(place.second);
+        }
+        else if (typeField == romePlace)
+        {
+            std::pair<int, int> place = DBUtils::getPlace(uidOrder);
+            text = convertToRoman(place.first);
+        }
+        else if (typeField == romePlaceRange)
+        {
+            std::pair<int, int> place = DBUtils::getPlace(uidOrder);
+            text = convertToRoman(place.first) + "-" + convertToRoman(place.second);
+        }
+
+
         else if (typeField == TC_ageRange)
         {
             text = getNormanAgeRangeFromTOURNAMENT_CATEGORIES(uidTC);
@@ -221,14 +306,6 @@ public:
         {
             text = getWeightAsOneNumberPlusMinus(uidTC);
         }
-        else if (typeField == arabPlace)
-        {
-            text = QString::number(DBUtils::getPlace(uidOrder).first);
-        }
-        else if (typeField == romePlace)
-        {
-            text = convertToRoman(DBUtils::getPlace(uidOrder).first);
-        }
         else if (typeField == TC_sexAgeType)
         {
             text = getField("NAME", "AGE_CATEGORIES", getField("AGE_CATEGORY_FK", "TOURNAMENT_CATEGORIES", uidTC, __PRETTY_FUNCTION__), __PRETTY_FUNCTION__);
@@ -237,6 +314,11 @@ public:
         {
             text = getField("NAME", "TYPES", getField("TYPE_FK", "TOURNAMENT_CATEGORIES", uidTC, __PRETTY_FUNCTION__), __PRETTY_FUNCTION__);
         }
+
+        else if (typeField == PlainText)
+        {
+            text = "-1";
+        }
         else
         {
             qDebug() << "WTF" << __PRETTY_FUNCTION__;
@@ -244,6 +326,10 @@ public:
         return text;
     }
 
+
+    static QString toString(std::pair<TypeField, QString> pair);
+
+    static QString toString(QVector<std::pair<TypeField, QString>> vector);
 
 };
 

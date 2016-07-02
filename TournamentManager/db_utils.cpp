@@ -486,6 +486,23 @@ std::pair<int, int> DBUtils::getPlace(long long UIDOrder)
     return std::make_pair(-1, -1);
 }
 
+int DBUtils::getNumberOfCastingOfLots(long long uidOrder)
+{
+    long long uidTC = getField("TOURNAMENT_CATEGORY_FK", "ORDERS", uidOrder).toLongLong();
+    QVector<NodeOfTournirGrid> leafOFTree = DBUtils::getLeafOFTree(QSqlDatabase::database(), uidTC);
+    int maxVertex = 1;
+    int v = -1;
+    for(const DBUtils::NodeOfTournirGrid& leaf : leafOFTree)
+    {
+        maxVertex = qMax(maxVertex, leaf.v);
+        if (leaf.UID == uidOrder)
+        {
+            v = leaf.v;
+        }
+    }
+    return maxVertex - v + 1;
+}
+
 QVector<long long> DBUtils::get_UIDOrder_for_TC(long long UIDtournamentCategory)
 {
     QSet<long long> set;
@@ -638,6 +655,24 @@ QString DBUtils::getRussianMonth(int m)
     month << "декабря";
     //qDebug() << month.size();
     return 1 <= m && m <= 12? month[m - 1] : "";
+    }
+
+    QString DBUtils::toString(std::pair<DBUtils::TypeField, QString> pair)
+    {
+    QString res = getExplanationOfTypeField()[pair.first];
+    if (pair.first == TypeField::PlainText)
+        res += " \"" + pair.second + "\"";
+    return res;
+}
+
+QString DBUtils::toString(QVector<std::pair<DBUtils::TypeField, QString> > vector){
+    QString res;
+    for (std::pair<TypeField, QString> pair : vector){
+        if (!res.isEmpty())
+            res += "; ";
+        res += toString(pair);
+    }
+    return res;
 }
 
 QString DBUtils::getTournamentNameAsHeadOfDocument(long long tournamentUID)

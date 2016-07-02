@@ -8,6 +8,7 @@
 #include "formdipl.h"
 #include "dialogselectfieldsfordimloma.h"
 #include "formdipl.h"
+#include "dialogchosedata.h"
 using namespace std;
 
 int main(int argc, char *argv[])
@@ -20,8 +21,14 @@ int main(int argc, char *argv[])
     MainWindow w;
     //w.show();
 
-    FormDipl d(18);
-    d.show();
+    GenerateTournamentCategoriesDialog dkl(18);
+    dkl.show();
+
+//    DialogChoseData dlg(".\\template\\weighing_protocol");
+//    dlg.show();
+
+//    FormDipl d(18);
+//    d.show();
 
 //    FightingPairs p(18, 0);
 //    p.show();

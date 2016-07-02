@@ -8,7 +8,8 @@ QString GenerateTournamentCategoriesDialog::insertInDB(long long ageCatUID, int 
                                                 QVector<double> weights,
                                                 long long tournamentUID, long long typeUID, long long sexUID,
                                                 int durationFighting, int durationBreak, int roundCount,
-                                                int IN_CASE_TIE, int DURATION_EXTRA_ROUND)
+                                                int IN_CASE_TIE, int DURATION_EXTRA_ROUND,
+                                                QString typeAge, QString typeWeight)
 {
     QString newCategoryMsg = "Добавлены новые категории:\n";
 
@@ -21,7 +22,7 @@ QString GenerateTournamentCategoriesDialog::insertInDB(long long ageCatUID, int 
         double weightTill = weights[index + 1];
 
         QString modifyName = DBUtils::getField("NAME", "AGE_CATEGORIES", ageCatUID) + ", " +
-                             DBUtils::getNormanAgeRange(ageFrom, ageTill) + " лет, " +
+                             DBUtils::getNormanAgeRange(ageFrom, ageTill) + " " + typeAge + ", " +
                              DBUtils::getField("NAME", "TYPES", typeUID) + ", " +
                              DBUtils::getNormanWeightRange(weightFrom, weightTill) + ".";
 
@@ -30,8 +31,9 @@ QString GenerateTournamentCategoriesDialog::insertInDB(long long ageCatUID, int 
                            "NAME, AGE_CATEGORY_FK, AGE_FROM, AGE_TILL, WEIGHT_FROM, WEIGHT_TILL, "
                            "SEX_FK, TYPE_FK, TOURNAMENT_FK, "
                            "DURATION_FIGHING, DURATION_BREAK, ROUND_COUNT, "
-                           "IN_CASE_TIE, DURATION_EXTRA_ROUND) "
-                           "VALUES (?, ?, ?, ?, ?, ?,    ?, ?, ?,   ?, ?, ?,   ?, ?)"))
+                           "IN_CASE_TIE, DURATION_EXTRA_ROUND, "
+                           "WEIGHT_TYPE, AGE_TYPE) "
+                           "VALUES (?, ?, ?, ?, ?, ?,    ?, ?, ?,   ?, ?, ?,   ?, ?,     ?, ?)"))
             qDebug() << query.lastError().text();
         query.addBindValue(modifyName);
         query.addBindValue(ageCatUID);
@@ -50,6 +52,9 @@ QString GenerateTournamentCategoriesDialog::insertInDB(long long ageCatUID, int 
 
         query.addBindValue(IN_CASE_TIE);
         query.addBindValue(DURATION_EXTRA_ROUND);
+
+        query.addBindValue(typeAge);
+        query.addBindValue(typeWeight);
 
         if (!query.exec())
             qDebug() << query.lastError().text();
@@ -107,11 +112,24 @@ GenerateTournamentCategoriesDialog::GenerateTournamentCategoriesDialog(long long
                                      ui->roundCountSB->value(),
 
                                      ui->comboBoxTie->currentIndex(),
-                                     ui->spinBoxExtraRound->value()
+                                     ui->spinBoxExtraRound->value(),
+
+                                     ui->lineEditTypeAge->text(),
+                                     ui->lineEditTypeWeight->text()
                                      );
 
         QMessageBox::information(this, "Добавлены новые категории", newCategoryMsg);
 
+    });
+
+    connect(ui->lineEditTypeAge, &QLineEdit::textChanged, [this](QString text){
+        ui->lineEditTypeAge_2->setText(text);
+        ui->lineEditTypeAge_3->setText(text);
+    });
+
+    connect(ui->lineEditTypeWeight, &QLineEdit::textChanged, [this](QString text){
+        ui->lineEditTypeWeight_2->setText(text);
+        ui->lineEditTypeWeight_3->setText(text);
     });
 
 

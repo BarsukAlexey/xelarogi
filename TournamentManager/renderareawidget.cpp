@@ -406,12 +406,6 @@ void RenderAreaWidget::printTableGridInExcel(int tournamentCategory,
     ExcelUtils::setCenterHorizontally(sheet, true);
 
 
-
-
-
-    directoryPath = QDir::toNativeSeparators(directoryPath);
-    if (!directoryPath.endsWith(QDir::separator())) directoryPath += QDir::separator();
-    directoryPath = QDir::toNativeSeparators(directoryPath);
     ExcelUtils::saveAsFile(workbook, directoryPath, prefFileName + ", " + DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", tournamentCategory) + ".xls");
 
     delete sheet;
