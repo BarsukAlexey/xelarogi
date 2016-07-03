@@ -206,7 +206,7 @@ void FormDipl::onPushPrint()
                     if (field.first == DBUtils::TypeField::PlainText)
                         text += field.second;
                     else
-                        text += DBUtils::get(field.first, uidOrder);
+                        text += DBUtils::get(field, uidOrder);
                 }
 
                 QFont font = fonts[row];

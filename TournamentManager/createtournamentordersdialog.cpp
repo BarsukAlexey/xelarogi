@@ -1241,12 +1241,9 @@ long long CreateTournamentOrdersDialog::getGenderUID(QString genderName)
     {
         while (query.next())
         {
-            QString name    = query.value("NAME").toString().trimmed();
-            QString name_eng = query.value("NAME_ENG").toString().trimmed();
+            QString name = query.value("NAME").toString().trimmed();
             genderName = genderName.trimmed();
-            if ((!name    .isEmpty() && !genderName.isEmpty() && name    .left(1).toUpper() == genderName.left(1).toUpper()) ||
-                (!name_eng.isEmpty() && !genderName.isEmpty() && name_eng.left(1).toUpper() == genderName.left(1).toUpper())
-            )
+            if ((!name    .isEmpty() && !genderName.isEmpty() && name    .left(1).toUpper() == genderName.left(1).toUpper()))
                 return query.value("UID").toLongLong();
         }
     }

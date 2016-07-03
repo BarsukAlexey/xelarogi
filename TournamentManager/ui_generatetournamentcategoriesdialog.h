@@ -34,17 +34,18 @@ public:
     QGridLayout *gridLayout_2;
     QGroupBox *groupBox_2;
     QGridLayout *gridLayout_3;
-    QLabel *label_4;
     QSpinBox *ageFromSB;
-    QLineEdit *lineEditAgeFrom;
+    QLineEdit *lineEditAgeTill;
+    QLabel *label_4;
     QLineEdit *lineEditTypeAge;
+    QLabel *label_15;
+    QLineEdit *lineEditAgeFrom;
     QSpinBox *ageTillSB;
     QLabel *label_5;
     QLineEdit *lineEditTypeAge_2;
-    QLabel *label_15;
-    QLineEdit *lineEditAgeTill;
     QLabel *label_16;
     QLineEdit *lineEditTypeAge_3;
+    QLabel *label_17;
     QHBoxLayout *horizontalLayout_5;
     QVBoxLayout *verticalLayout;
     QLabel *label_3;
@@ -76,10 +77,10 @@ public:
     QGridLayout *gridLayout;
     QLabel *label_7;
     QLabel *label_8;
-    QLineEdit *lineEditWeightFrom;
+    QLineEdit *lineEditWeightTill;
     QLabel *label_6;
     QLineEdit *lineEditTypeWeight_2;
-    QLineEdit *lineEditWeightTill;
+    QLineEdit *lineEditWeightFrom;
     QLabel *label_14;
     QLineEdit *lineEditTypeWeight_3;
     QLineEdit *lineEditTypeWeight;
@@ -89,41 +90,44 @@ public:
     {
         if (GenerateTournamentCategoriesDialog->objectName().isEmpty())
             GenerateTournamentCategoriesDialog->setObjectName(QStringLiteral("GenerateTournamentCategoriesDialog"));
-        GenerateTournamentCategoriesDialog->setEnabled(true);
-        GenerateTournamentCategoriesDialog->resize(633, 571);
-        QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        sizePolicy.setHorizontalStretch(0);
-        sizePolicy.setVerticalStretch(0);
-        sizePolicy.setHeightForWidth(GenerateTournamentCategoriesDialog->sizePolicy().hasHeightForWidth());
-        GenerateTournamentCategoriesDialog->setSizePolicy(sizePolicy);
-        GenerateTournamentCategoriesDialog->setMinimumSize(QSize(304, 311));
         gridLayout_2 = new QGridLayout(GenerateTournamentCategoriesDialog);
         gridLayout_2->setObjectName(QStringLiteral("gridLayout_2"));
         groupBox_2 = new QGroupBox(GenerateTournamentCategoriesDialog);
         groupBox_2->setObjectName(QStringLiteral("groupBox_2"));
         gridLayout_3 = new QGridLayout(groupBox_2);
         gridLayout_3->setObjectName(QStringLiteral("gridLayout_3"));
-        label_4 = new QLabel(groupBox_2);
-        label_4->setObjectName(QStringLiteral("label_4"));
-        label_4->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
-
-        gridLayout_3->addWidget(label_4, 0, 0, 1, 1);
-
         ageFromSB = new QSpinBox(groupBox_2);
         ageFromSB->setObjectName(QStringLiteral("ageFromSB"));
         ageFromSB->setMaximum(9999);
 
         gridLayout_3->addWidget(ageFromSB, 0, 1, 1, 1);
 
-        lineEditAgeFrom = new QLineEdit(groupBox_2);
-        lineEditAgeFrom->setObjectName(QStringLiteral("lineEditAgeFrom"));
+        lineEditAgeTill = new QLineEdit(groupBox_2);
+        lineEditAgeTill->setObjectName(QStringLiteral("lineEditAgeTill"));
 
-        gridLayout_3->addWidget(lineEditAgeFrom, 1, 0, 1, 1);
+        gridLayout_3->addWidget(lineEditAgeTill, 1, 0, 1, 1);
+
+        label_4 = new QLabel(groupBox_2);
+        label_4->setObjectName(QStringLiteral("label_4"));
+        label_4->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+
+        gridLayout_3->addWidget(label_4, 0, 0, 1, 1);
 
         lineEditTypeAge = new QLineEdit(groupBox_2);
         lineEditTypeAge->setObjectName(QStringLiteral("lineEditTypeAge"));
 
         gridLayout_3->addWidget(lineEditTypeAge, 0, 4, 1, 1);
+
+        label_15 = new QLabel(groupBox_2);
+        label_15->setObjectName(QStringLiteral("label_15"));
+        label_15->setAlignment(Qt::AlignCenter);
+
+        gridLayout_3->addWidget(label_15, 1, 1, 1, 2);
+
+        lineEditAgeFrom = new QLineEdit(groupBox_2);
+        lineEditAgeFrom->setObjectName(QStringLiteral("lineEditAgeFrom"));
+
+        gridLayout_3->addWidget(lineEditAgeFrom, 2, 0, 1, 1);
 
         ageTillSB = new QSpinBox(groupBox_2);
         ageTillSB->setObjectName(QStringLiteral("ageTillSB"));
@@ -146,17 +150,6 @@ public:
 
         gridLayout_3->addWidget(lineEditTypeAge_2, 1, 4, 1, 1);
 
-        label_15 = new QLabel(groupBox_2);
-        label_15->setObjectName(QStringLiteral("label_15"));
-        label_15->setAlignment(Qt::AlignCenter);
-
-        gridLayout_3->addWidget(label_15, 1, 1, 1, 2);
-
-        lineEditAgeTill = new QLineEdit(groupBox_2);
-        lineEditAgeTill->setObjectName(QStringLiteral("lineEditAgeTill"));
-
-        gridLayout_3->addWidget(lineEditAgeTill, 2, 0, 1, 1);
-
         label_16 = new QLabel(groupBox_2);
         label_16->setObjectName(QStringLiteral("label_16"));
         label_16->setAlignment(Qt::AlignCenter);
@@ -169,6 +162,12 @@ public:
         lineEditTypeAge_3->setReadOnly(true);
 
         gridLayout_3->addWidget(lineEditTypeAge_3, 2, 4, 1, 1);
+
+        label_17 = new QLabel(groupBox_2);
+        label_17->setObjectName(QStringLiteral("label_17"));
+        label_17->setWordWrap(true);
+
+        gridLayout_3->addWidget(label_17, 3, 0, 1, 5);
 
 
         gridLayout_2->addWidget(groupBox_2, 1, 0, 1, 1);
@@ -351,10 +350,10 @@ public:
 
         gridLayout->addWidget(label_8, 2, 0, 1, 1);
 
-        lineEditWeightFrom = new QLineEdit(groupBox);
-        lineEditWeightFrom->setObjectName(QStringLiteral("lineEditWeightFrom"));
+        lineEditWeightTill = new QLineEdit(groupBox);
+        lineEditWeightTill->setObjectName(QStringLiteral("lineEditWeightTill"));
 
-        gridLayout->addWidget(lineEditWeightFrom, 3, 0, 1, 1);
+        gridLayout->addWidget(lineEditWeightTill, 3, 0, 1, 1);
 
         label_6 = new QLabel(groupBox);
         label_6->setObjectName(QStringLiteral("label_6"));
@@ -368,10 +367,10 @@ public:
 
         gridLayout->addWidget(lineEditTypeWeight_2, 3, 2, 1, 1);
 
-        lineEditWeightTill = new QLineEdit(groupBox);
-        lineEditWeightTill->setObjectName(QStringLiteral("lineEditWeightTill"));
+        lineEditWeightFrom = new QLineEdit(groupBox);
+        lineEditWeightFrom->setObjectName(QStringLiteral("lineEditWeightFrom"));
 
-        gridLayout->addWidget(lineEditWeightTill, 4, 0, 1, 1);
+        gridLayout->addWidget(lineEditWeightFrom, 4, 0, 1, 1);
 
         label_14 = new QLabel(groupBox);
         label_14->setObjectName(QStringLiteral("label_14"));
@@ -413,15 +412,16 @@ public:
     {
         GenerateTournamentCategoriesDialog->setWindowTitle(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\224\320\276\320\261\320\260\320\262\320\273\320\265\320\275\320\270\320\265 \320\272\320\260\321\202\320\265\320\263\320\276\321\200\320\270\320\271 \321\202\321\203\321\200\320\275\320\270\321\200\320\260", 0));
         groupBox_2->setTitle(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\222\320\276\320\267\321\200\320\260\321\201\321\202", 0));
+        lineEditAgeTill->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\264\320\276", 0));
         label_4->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\222\320\276\320\267\321\200\320\260\321\201\321\202 \320\276\321\202", 0));
-        lineEditAgeFrom->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\264\320\276", 0));
         lineEditTypeAge->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\273\320\265\321\202", 0));
+        label_15->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "5", 0));
+        lineEditAgeFrom->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\276\321\202", 0));
         label_5->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\273\320\265\321\202 \320\264\320\276", 0));
         lineEditTypeAge_2->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\273\320\265\321\202", 0));
-        label_15->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "7", 0));
-        lineEditAgeTill->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\276\321\202", 0));
         label_16->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "35", 0));
         lineEditTypeAge_3->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\273\320\265\321\202", 0));
+        label_17->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "<html><head/><body><p>\320\225\321\201\320\273\320\270 \321\203\320\272\320\260\320\267\320\260\321\202\321\214, \320\275\320\260\320\277\321\200\320\270\320\274\320\265\321\200, \320\264\320\270\320\260\320\277\320\260\320\267\320\276\320\275 \320\276\321\202 0 \320\264\320\276 5 \320\273\320\265\321\202, \321\202\320\276 \321\202\320\276\320\263\320\264\320\260 \320\261\321\203\320\264\320\265\321\202 \320\276\320\261\320\276\320\261\321\200\320\260\320\266\320\260\321\202\321\214\321\201\321\217 &quot;\320\264\320\276 7 \320\273\320\265\321\202&quot;</p><p>\320\225\321\201\320\273\320\270 \320\276\321\202 35 \320\273\320\265\321\202 \320\264\320\276 99 \320\273\320\265\321\202, \321\202\320\276 &quot;\320\276\321\202 35 \320\273\320\265\321\202&quot;</p><p>\320\225\321\201\320\273\320\270 \320\276\321\202 18 \320\264\320\276 23 \320\273\320\265\321\202, \321\202\320\276 &quot;18-23 \320\273\320\265\321\202&quot;</p></body></html>", 0));
         label_3->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\237\320\276\320\273", 0));
         label->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\222\320\276\320\267\321\200\320\260\321\201\321\202\320\275\320\260\321\217 \320\272\320\260\321\202\320\265\320\263\320\276\321\200\320\270\321\217", 0));
         label_2->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\240\320\260\320\267\320\264\320\265\320\273", 0));
@@ -435,10 +435,10 @@ public:
         groupBox->setTitle(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\222\320\265\321\201", 0));
         label_7->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\223\321\200\320\260\320\275\320\270\321\207\320\275\321\213\320\265 \320\267\320\275\320\260\321\207\320\265\320\275\320\270\321\217 \320\262\320\265\321\201\320\260", 0));
         label_8->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\321\200\320\260\320\267\320\264\320\265\320\273\321\217\320\271\321\202\320\265 \320\262\320\265\320\273\320\270\321\207\320\270\320\275\321\213 \321\201\320\270\320\274\320\262\320\276\320\273\320\276\320\274 \";\" (\321\202\320\276\321\207\320\272\320\260 \321\201 \320\267\320\260\320\277\321\217\321\202\320\276\320\271)", 0));
-        lineEditWeightFrom->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\264\320\276", 0));
+        lineEditWeightTill->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\264\320\276", 0));
         label_6->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "15", 0));
         lineEditTypeWeight_2->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\272\320\263", 0));
-        lineEditWeightTill->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\321\201\320\262\321\213\321\210\320\265", 0));
+        lineEditWeightFrom->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\321\201\320\262\321\213\321\210\320\265", 0));
         label_14->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "80", 0));
         lineEditTypeWeight_3->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\272\320\263", 0));
         lineEditTypeWeight->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\272\320\263", 0));

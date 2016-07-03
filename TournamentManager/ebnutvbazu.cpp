@@ -266,7 +266,8 @@ void EbnutVBazu::setTournamentCat(long long tournamentUID)
                         weigths, tournamentUID, type.first, std::get<2>(tup),
                         time[0], time[1], time[2],
                         2, 30,
-                        "кг", "лет"
+                        "лет", "от", "до",
+                        "кг", "до", "свыше"
                 );
         }
     }

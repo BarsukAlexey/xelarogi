@@ -9,6 +9,8 @@
 #include "dialogselectfieldsfordimloma.h"
 #include "formdipl.h"
 #include "dialogchosedata.h"
+#include "ebnutvbazu.h"
+#include "weighing_protocol.h"
 using namespace std;
 
 int main(int argc, char *argv[])
@@ -19,12 +21,14 @@ int main(int argc, char *argv[])
 //    return 0;
 
     MainWindow w;
-    //w.show();
+    //EbnutVBazu::setRandomWinner();
+//    w.show();
+    WeighingProtocol d(18);
 
-    GenerateTournamentCategoriesDialog dkl(18);
-    dkl.show();
+//    GenerateTournamentCategoriesDialog dkl(18);
+//    dkl.show();
 
-//    DialogChoseData dlg(".\\template\\weighing_protocol");
+//    DialogChoseData dlg(".\\template\\weighing_protocol", true);
 //    dlg.show();
 
 //    FormDipl d(18);

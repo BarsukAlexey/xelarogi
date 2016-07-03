@@ -386,19 +386,19 @@ void RenderAreaWidget::printTableGridInExcel(int tournamentCategory,
     ExcelUtils::uniteRange(sheet, maxRow, 1, maxRow, 2);
     ExcelUtils::setRowHeight(sheet, maxRow, 25);
     ExcelUtils::setValue(sheet, maxRow, 1, "Главный судья: ", 0);
-    ExcelUtils::setValue(sheet, maxRow, 3, DBUtils::get_MAIN_JUDGE(QSqlDatabase::database(), tournamentUID), 0);
+//    ExcelUtils::setValue(sheet, maxRow, 3, DBUtils::get_MAIN_JUDGE(QSqlDatabase::database(), tournamentUID), 0);
     ++maxRow;
 
     ExcelUtils::uniteRange(sheet, maxRow, 1, maxRow, 2);
     ExcelUtils::setRowHeight(sheet, maxRow, 25);
     ExcelUtils::setValue(sheet, maxRow, 1, "Главный секретарь: ", 0);
-    ExcelUtils::setValue(sheet, maxRow, 3, DBUtils::get_MAIN_SECRETARY(QSqlDatabase::database(), tournamentUID), 0);
+//    ExcelUtils::setValue(sheet, maxRow, 3, DBUtils::get_MAIN_SECRETARY(QSqlDatabase::database(), tournamentUID), 0);
     ++maxRow;
 
     ExcelUtils::uniteRange(sheet, maxRow, 1, maxRow, 2);
     ExcelUtils::setRowHeight(sheet, maxRow, 25);
     ExcelUtils::setValue(sheet, maxRow, 1, "Зам. главного судьи: ", 0);
-    ExcelUtils::setValue(sheet, maxRow, 3, DBUtils::get_ASSOCIATE_MAIN_JUDGE(QSqlDatabase::database(), tournamentUID), 0);
+//    ExcelUtils::setValue(sheet, maxRow, 3, DBUtils::get_ASSOCIATE_MAIN_JUDGE(QSqlDatabase::database(), tournamentUID), 0);
     ++maxRow;
 
     ExcelUtils::setPageOrientation(sheet, 2);
@@ -406,7 +406,14 @@ void RenderAreaWidget::printTableGridInExcel(int tournamentCategory,
     ExcelUtils::setCenterHorizontally(sheet, true);
 
 
+    directoryPath = QDir::toNativeSeparators(directoryPath);
+    if (!directoryPath.endsWith(QDir::separator())) directoryPath += QDir::separator();
+    directoryPath = QDir::toNativeSeparators(directoryPath);
     ExcelUtils::saveAsFile(workbook, directoryPath, prefFileName + ", " + DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", tournamentCategory) + ".xls");
+
+
+    //ExcelUtils::saveAsFile(workbook, directoryPath, prefFileName + ", " + DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", tournamentCategory) + ".xls");
+    //ExcelUtils::saveAsFile(workbook, directoryPath, "1.xls");
 
     delete sheet;
     delete sheets;

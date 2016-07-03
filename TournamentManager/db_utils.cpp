@@ -193,41 +193,12 @@ int DBUtils::getAge(QDate DATE_WEIGHTING, QDate birthdayDate)
     return age;
 }
 
-
-QString DBUtils::get_MAIN_JUDGE(const QSqlDatabase& database, long long tournamentUID)
+QVector<QString> DBUtils::getJudges(long long tournamentUID)
 {
-    QSqlQuery query("SELECT * FROM TOURNAMENTS WHERE UID = ? ", database);
-    query.bindValue(0, tournamentUID);
-    QString res;
-    if (query.exec() && query.next())
-        res = query.value("MAIN_JUDGE").toString();
-    else
-        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << query.lastError().text() << query.lastQuery();
-    return res;
-}
-
-QString DBUtils::get_MAIN_SECRETARY(const QSqlDatabase& database, long long tournamentUID)
-{
-    QSqlQuery query("SELECT * FROM TOURNAMENTS WHERE UID = ? ", database);
-    query.bindValue(0, tournamentUID);
-    QString res;
-    if (query.exec() && query.next())
-        res = query.value("MAIN_SECRETARY").toString();
-    else
-        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << query.lastError().text() << query.lastQuery();
-    return res;
-}
-
-QString DBUtils::get_ASSOCIATE_MAIN_JUDGE(const QSqlDatabase& database, long long tournamentUID)
-{
-    QSqlQuery query("SELECT * FROM TOURNAMENTS WHERE UID = ? ", database);
-    query.bindValue(0, tournamentUID);
-    QString res;
-    if (query.exec() && query.next())
-        res = query.value("ASSOCIATE_MAIN_JUDGE").toString();
-    else
-        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << query.lastError().text() << query.lastQuery();
-    return res;
+    return QVector<QString>()
+            << DBUtils::getField("MAIN_JUDGE"          , "TOURNAMENTS", tournamentUID)
+            << DBUtils::getField("MAIN_SECRETARY"      , "TOURNAMENTS", tournamentUID)
+            << DBUtils::getField("ASSOCIATE_MAIN_JUDGE", "TOURNAMENTS", tournamentUID);
 }
 
 
@@ -274,7 +245,7 @@ QVector<QVector<DBUtils::NodeOfTournirGrid> > DBUtils::getNodesAsLevelListOfList
     return result;
 }
 
-QVector<DBUtils::NodeOfTournirGrid> DBUtils::getLeafOFTree(const QSqlDatabase& database, long long tournamentCategories)
+QVector<DBUtils::NodeOfTournirGrid> DBUtils::getLeafOFTree(long long tournamentCategories)
 {
     QVector<DBUtils::NodeOfTournirGrid> res;
     for (DBUtils::NodeOfTournirGrid node : getNodes(tournamentCategories))
@@ -286,7 +257,7 @@ QVector<DBUtils::NodeOfTournirGrid> DBUtils::getLeafOFTree(const QSqlDatabase& d
     }
 
     std::random_shuffle(res.begin(), res.end());
-    std::sort(std::begin(res), std::end(res), [database] (const DBUtils::NodeOfTournirGrid& lhs, const DBUtils::NodeOfTournirGrid& rhs) {
+    std::sort(std::begin(res), std::end(res), [] (const DBUtils::NodeOfTournirGrid& lhs, const DBUtils::NodeOfTournirGrid& rhs) {
         return DBUtils::getSecondNameAndOneLetterOfName(lhs.UID) <
                 DBUtils::getSecondNameAndOneLetterOfName(rhs.UID);
     });
@@ -489,7 +460,7 @@ std::pair<int, int> DBUtils::getPlace(long long UIDOrder)
 int DBUtils::getNumberOfCastingOfLots(long long uidOrder)
 {
     long long uidTC = getField("TOURNAMENT_CATEGORY_FK", "ORDERS", uidOrder).toLongLong();
-    QVector<NodeOfTournirGrid> leafOFTree = DBUtils::getLeafOFTree(QSqlDatabase::database(), uidTC);
+    QVector<NodeOfTournirGrid> leafOFTree = DBUtils::getLeafOFTree(uidTC);
     int maxVertex = 1;
     int v = -1;
     for(const DBUtils::NodeOfTournirGrid& leaf : leafOFTree)
@@ -582,21 +553,7 @@ QMap<QString, QVector<long long> > DBUtils::get_weight_and_orderUIDs(long long t
 
 QString DBUtils::getNormanWeightRangeFromTOURNAMENT_CATEGORIES(long long uidCategory)
 {
-    double a = DBUtils::getField("WEIGHT_FROM", "TOURNAMENT_CATEGORIES", uidCategory).toDouble();
-    double b = DBUtils::getField("WEIGHT_TILL", "TOURNAMENT_CATEGORIES", uidCategory).toDouble();
-    return getNormanWeightRange(a, b);
-}
-
-QString DBUtils::getNormanWeightRange(double a, double b)
-{
-    QString aa = roundDouble(a, 3);
-    QString bb = roundDouble(b, 3);
-
-    if (qAbs(a) < 1e-7)
-        return "до " + bb + " кг";
-    if (200 - 1e-7 <= b)
-        return "свыше " + aa + " кг";
-    return "от " + aa + " до " + bb + " кг";
+    return DBUtils::getField("WEIGHT", "TOURNAMENT_CATEGORIES", uidCategory);
 }
 
 QString DBUtils::getWeightAsOneNumberPlusMinus(long long uidCategory)
@@ -612,22 +569,7 @@ QString DBUtils::getWeightAsOneNumberPlusMinus(long long uidCategory)
 
 QString DBUtils::getNormanAgeRangeFromTOURNAMENT_CATEGORIES(long long uidCategory)
 {
-    double a = DBUtils::getField("AGE_FROM", "TOURNAMENT_CATEGORIES", uidCategory).toDouble();
-    double b = DBUtils::getField("AGE_TILL", "TOURNAMENT_CATEGORIES", uidCategory).toDouble();
-    return getNormanAgeRange(a, b);
-}
-
-QString DBUtils::getNormanAgeRange(int ageFrom, int ageTill)
-{
-    if (ageFrom == 0)
-    {
-        return "до " + QString::number(ageTill);
-    }
-    if (ageTill == 99)
-    {
-        return "от " + QString::number(ageFrom);
-    }
-    return  QString::number(ageFrom) + "-" + QString::number(ageTill);
+    return DBUtils::getField("AGE", "TOURNAMENT_CATEGORIES", uidCategory);
 }
 
 QString DBUtils::roundDouble(double x, int precision)

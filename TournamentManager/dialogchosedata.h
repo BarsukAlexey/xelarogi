@@ -30,15 +30,17 @@ private:
     const QString dirPath;
 
 public:
-    explicit DialogChoseData(QString path, QWidget *parent = 0);
+    explicit DialogChoseData(QString path, bool enableRows, QWidget *parent = 0);
     ~DialogChoseData();
+    QString getTitle();
     QVector<std::pair<QString, QVector<std::pair<DBUtils::TypeField, QString> >>> getData();
+    QVector<std::pair<int, QString>> getJudges();
 
 private:
     void loadTemplate();
 
     void onSave();
-    void onSaveAs();
+    void onAddNew();
     void onDelete();
 
     void onAddRow();

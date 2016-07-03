@@ -65,18 +65,18 @@ public:
     static QSet<long long> getSetOfOrdersInTournamentCategory(long long uidTournamentCategory);
     static int getAge(QDate DATE_WEIGHTING, QDate birthdayDate);
 
+
     // для таблицы TOURNAMENTS
-    static QString get_MAIN_JUDGE(const QSqlDatabase& database, long long tournamentUID);
-    static QString get_MAIN_SECRETARY(const QSqlDatabase& database, long long tournamentUID);
-    static QString get_ASSOCIATE_MAIN_JUDGE(const QSqlDatabase& database, long long tournamentUID);
+    static QVector<QString> getJudges(long long tournamentUID);
+
 
 
     // для таблицы GRID
     static QVector<NodeOfTournirGrid> getNodes(long long tournamentCategoryUID);
-    static QVector<QVector<NodeOfTournirGrid>> getNodesAsLevelListOfList(long long tournamentCategoryUID);
-    static QVector<NodeOfTournirGrid> getLeafOFTree(const QSqlDatabase& database, long long tournamentCategoryUID);
+    static QVector<QVector<NodeOfTournirGrid> > getNodesAsLevelListOfList(long long tournamentCategoryUID);
+    static QVector<NodeOfTournirGrid> getLeafOFTree(long long tournamentCategoryUID);
     static QVector<NodeOfTournirGrid> getFightingNodes(long long tournamentCategoryUID);
-    static QVector<QVector<Fighing>> getListsOfPairsForFighting(long long tournamentUID);
+    static QVector<QVector<Fighing> > getListsOfPairsForFighting(long long tournamentUID);
     static QVector<Fighing> getListOfPairsForFighting(long long TOURNAMENT_CATEGORIES_FK);
     static QVector<Fighing> getListOfPairsForFightingForPointFighting(long long TOURNAMENT_CATEGORIES_FK);
     static void insertLeafOfGrid(long long TOURNAMENT_CATEGORIES_FK, long long VERTEX, long long orderUID);
@@ -100,9 +100,6 @@ public:
 
 
 
-
-    static QString getNormanWeightRange(double a, double b);
-    static QString getNormanAgeRange(int a, int b);
     static QString roundDouble(double x, int precision);
     static QString getTournamentNameAsHeadOfDocument(long long tournamentUID);
     static QString convertToRoman(int val);
@@ -128,6 +125,8 @@ public:
         city,
         club,
         coach,
+
+        NumberOfCastingOfLots,
 
         arabPlace,
         arabPlaceRange,
@@ -160,6 +159,8 @@ public:
                                             city,
                                             club,
                                             coach,
+
+                                            NumberOfCastingOfLots,
 
                                             arabPlace,
                                             arabPlaceRange,
@@ -195,6 +196,9 @@ public:
         map[TypeField::club           ] = "Клуб";
         map[TypeField::coach          ] = "Тренер";
 
+        map[TypeField::NumberOfCastingOfLots] = "Номер жеребьёвки";
+
+
 
         map[TypeField::arabPlace      ] = "Занятое место арабскими цифрами (1, 2, 3, ...)";
         map[TypeField::arabPlaceRange ] = "Диапазон мест арабскими цифрами (1, 2, 3-4, ...)";
@@ -212,14 +216,28 @@ public:
         return map;
     }
 
-    static QString get(TypeField typeField, long long uidOrder)
+    static QString get(QVector<std::pair<DBUtils::TypeField, QString>> arrayData, long long uidOrder, int rowNumber = -1)
+    {
+        QString result;
+        for (int i = 0; i < arrayData.size(); ++i)
+        {
+            if (i != 0)
+                result += " ";
+            result += get(arrayData[i], uidOrder, rowNumber);
+        }
+        return result;
+    }
+
+    static QString get(std::pair<DBUtils::TypeField, QString> data, long long uidOrder, int rowNumber = -1)
     {
         QString text;
         long long uidTC = getField("TOURNAMENT_CATEGORY_FK", "ORDERS", uidOrder).toLongLong();
 
+        TypeField typeField = data.first;
+
         if (typeField == stringNumber)
         {
-            text = "-1";
+            text = QString::number(rowNumber);
         }
 
         else if (typeField == secondName)
@@ -272,6 +290,12 @@ public:
         }
 
 
+        else if (typeField == NumberOfCastingOfLots)
+        {
+            text = QString::number(getNumberOfCastingOfLots(uidOrder));
+        }
+
+
         else if (typeField == arabPlace)
         {
             std::pair<int, int> place = DBUtils::getPlace(uidOrder);
@@ -317,7 +341,7 @@ public:
 
         else if (typeField == PlainText)
         {
-            text = "-1";
+            text = data.second;
         }
         else
         {

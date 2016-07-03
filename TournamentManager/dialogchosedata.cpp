@@ -1,7 +1,7 @@
 #include "dialogchosedata.h"
 #include "ui_dialogchosedata.h"
 
-DialogChoseData::DialogChoseData(QString dirPath, QWidget *parent) :
+DialogChoseData::DialogChoseData(QString dirPath, bool enableRows, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DialogChoseData),
     dirPath(dirPath)
@@ -11,13 +11,8 @@ DialogChoseData::DialogChoseData(QString dirPath, QWidget *parent) :
     ui->tableWidget->setColumnWidth(0,400);
     ui->tableWidget->setColumnWidth(1,200);
 
-    //(QDir::Filter::Files,QDir::SortFlag::NoSort)
-
-    //QDir(dirPath)
-    //QJsonDocument d = QJsonDocument::fromJson(QString(file.readAll()).toUtf8());
-
     connect(ui->pushButtonSave, &QPushButton::clicked, [this](){onSave();});
-    connect(ui->pushButtonSaveAs, &QPushButton::clicked, [this](){onSaveAs();});
+    connect(ui->pushButtonSaveAs, &QPushButton::clicked, [this](){onAddNew();});
     connect(ui->pushButtonDelete, &QPushButton::clicked, [this](){onDelete();});
 
     connect(ui->pushButtonAddRow, &QPushButton::clicked, [this](){onAddRow();} );
@@ -26,6 +21,13 @@ DialogChoseData::DialogChoseData(QString dirPath, QWidget *parent) :
     connect(ui->tableWidget, &QTableWidget::doubleClicked, [this](const QModelIndex &index){onTableClicked(index);});
     connect(ui->comboBox, &QComboBox::currentTextChanged, [this](){loadTemplate();});
 
+    connect(ui->checkBoxMainJudge, &QCheckBox::toggled, [this](){ ui->lineEditTitleMainJudge->setEnabled(ui->checkBoxMainJudge->isChecked()); });
+    connect(ui->checkBoxMainSecretary, &QCheckBox::toggled, [this](){ ui->lineEditTitleMainSecretary->setEnabled(ui->checkBoxMainSecretary->isChecked()); });
+    connect(ui->checkBoxAssociateMainJudge, &QCheckBox::toggled, [this](){ ui->lineEditTitleAssociateMainJudge->setEnabled(ui->checkBoxAssociateMainJudge->isChecked()); });
+
+    connect(this, &DialogChoseData::accepted, [this](){onSave(); /*QDialog::accept();*/});
+
+    ui->groupBox_Rows->setEnabled(enableRows);
 
     QDir recoredDir(dirPath);
     for (QString file : recoredDir.entryList(QDir::Filter::Files))
@@ -40,12 +42,26 @@ DialogChoseData::~DialogChoseData()
     delete ui;
 }
 
+QString DialogChoseData::getTitle()
+{
+    return ui->lineEditTitle->text();
+}
+
 QVector<std::pair<QString, QVector<std::pair<DBUtils::TypeField, QString> > > > DialogChoseData::getData()
 {
     QVector<std::pair<QString, QVector<std::pair<DBUtils::TypeField, QString> >>> res;
     for (int i = 0; i < fields.size(); ++i){
         res << make_pair(headers[i]->toPlainText(), fields[i]);
     }
+    return res;
+}
+
+QVector<std::pair<int, QString> > DialogChoseData::getJudges()
+{
+    QVector<std::pair<int, QString> > res;
+    if (ui->checkBoxMainJudge->isChecked()         ) res << std::make_pair(0, ui->lineEditTitleMainJudge->text());
+    if (ui->checkBoxMainSecretary->isChecked()     ) res << std::make_pair(1, ui->lineEditTitleMainSecretary->text());
+    if (ui->checkBoxAssociateMainJudge->isChecked()) res << std::make_pair(2, ui->lineEditTitleAssociateMainJudge->text());
     return res;
 }
 
@@ -75,7 +91,11 @@ void DialogChoseData::loadTemplate()
     QJsonDocument doc = QJsonDocument::fromJson(QString(file.readAll()).toUtf8());
     file.close();
 
-    QJsonArray arr = doc.array();
+    QJsonObject obj = doc.object();
+
+    ui->lineEditTitle->setText(obj["title"].toString());
+
+    QJsonArray arr = obj["Rows"].toArray();
     fields.resize(arr.size());
     headers.resize(arr.size());
     ui->tableWidget->setRowCount(arr.size());
@@ -106,10 +126,29 @@ void DialogChoseData::loadTemplate()
         }
         ui->tableWidget->setItem(row, 0, new QTableWidgetItem(DBUtils::toString(fields[row])));
     }
+
+    QString string;
+
+    string = obj["MainJudge"].toString();
+    ui->checkBoxMainJudge->setChecked(!string.isEmpty());
+    ui->lineEditTitleMainJudge->setText(string);
+
+    string = obj["MainSecretary"].toString();
+    ui->checkBoxMainSecretary->setChecked(!string.isEmpty());
+    ui->lineEditTitleMainSecretary->setText(string);
+
+    string = obj["AssociateMainJudge"].toString();
+    ui->checkBoxAssociateMainJudge->setChecked(!string.isEmpty());
+    ui->lineEditTitleAssociateMainJudge->setText(string);
 }
 
 void DialogChoseData::onSave()
 {
+
+    QJsonObject obj;
+
+    obj["title"] = ui->lineEditTitle->text();
+
     QJsonArray arr;
     for (int row = 0; row < fields.size(); ++row)
     {
@@ -128,6 +167,11 @@ void DialogChoseData::onSave()
 
         arr.push_back(a);
     }
+    obj["Rows"] = arr;
+
+    obj["MainJudge"]          = ui->checkBoxMainJudge->isChecked()         ? ui->lineEditTitleMainJudge->text()          : "";
+    obj["MainSecretary"]      = ui->checkBoxMainSecretary->isChecked()     ? ui->lineEditTitleMainSecretary->text()      : "";
+    obj["AssociateMainJudge"] = ui->checkBoxAssociateMainJudge->isChecked()? ui->lineEditTitleAssociateMainJudge->text() : "";
 
 
     QString fullPath = QDir(dirPath).filePath(ui->comboBox->currentText());
@@ -136,10 +180,10 @@ void DialogChoseData::onSave()
         qWarning("Couldn't open save file.");
         return;
     }
-    saveFile.write(QJsonDocument(arr).toJson());
+    saveFile.write(QJsonDocument(obj).toJson());
 }
 
-void DialogChoseData::onSaveAs()
+void DialogChoseData::onAddNew()
 {
     bool ok;
     QString fileName = QInputDialog::getText(this, tr(" "),

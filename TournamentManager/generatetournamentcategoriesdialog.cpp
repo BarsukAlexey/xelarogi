@@ -4,71 +4,6 @@
 #include "createtypedialog.h"
 #include "dialog_create_age_category.h"
 
-QString GenerateTournamentCategoriesDialog::insertInDB(long long ageCatUID, int ageFrom, int ageTill,
-                                                QVector<double> weights,
-                                                long long tournamentUID, long long typeUID, long long sexUID,
-                                                int durationFighting, int durationBreak, int roundCount,
-                                                int IN_CASE_TIE, int DURATION_EXTRA_ROUND,
-                                                QString typeAge, QString typeWeight)
-{
-    QString newCategoryMsg = "Добавлены новые категории:\n";
-
-    if (IN_CASE_TIE != 2)
-        DURATION_EXTRA_ROUND = 0;
-
-    for (int index = 0; index + 1 < weights.size(); index++)
-    {
-        double weightFrom = weights[index];
-        double weightTill = weights[index + 1];
-
-        QString modifyName = DBUtils::getField("NAME", "AGE_CATEGORIES", ageCatUID) + ", " +
-                             DBUtils::getNormanAgeRange(ageFrom, ageTill) + " " + typeAge + ", " +
-                             DBUtils::getField("NAME", "TYPES", typeUID) + ", " +
-                             DBUtils::getNormanWeightRange(weightFrom, weightTill) + ".";
-
-        QSqlQuery query;
-        if (!query.prepare("INSERT INTO TOURNAMENT_CATEGORIES( "
-                           "NAME, AGE_CATEGORY_FK, AGE_FROM, AGE_TILL, WEIGHT_FROM, WEIGHT_TILL, "
-                           "SEX_FK, TYPE_FK, TOURNAMENT_FK, "
-                           "DURATION_FIGHING, DURATION_BREAK, ROUND_COUNT, "
-                           "IN_CASE_TIE, DURATION_EXTRA_ROUND, "
-                           "WEIGHT_TYPE, AGE_TYPE) "
-                           "VALUES (?, ?, ?, ?, ?, ?,    ?, ?, ?,   ?, ?, ?,   ?, ?,     ?, ?)"))
-            qDebug() << query.lastError().text();
-        query.addBindValue(modifyName);
-        query.addBindValue(ageCatUID);
-        query.addBindValue(ageFrom);
-        query.addBindValue(ageTill);
-        query.addBindValue(weightFrom);
-        query.addBindValue(weightTill);
-
-        query.addBindValue(sexUID);
-        query.addBindValue(typeUID);
-        query.addBindValue(tournamentUID);
-
-        query.addBindValue(durationFighting);
-        query.addBindValue(durationBreak);
-        query.addBindValue(roundCount);
-
-        query.addBindValue(IN_CASE_TIE);
-        query.addBindValue(DURATION_EXTRA_ROUND);
-
-        query.addBindValue(typeAge);
-        query.addBindValue(typeWeight);
-
-        if (!query.exec())
-            qDebug() << query.lastError().text();
-        else
-        {
-            newCategoryMsg += "\t" + modifyName + "\n";
-        }
-
-        query.clear();
-    }
-
-    return newCategoryMsg;
-}
-
 GenerateTournamentCategoriesDialog::GenerateTournamentCategoriesDialog(long long tournamentUID, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::GenerateTournamentCategoriesDialog),
@@ -114,8 +49,14 @@ GenerateTournamentCategoriesDialog::GenerateTournamentCategoriesDialog(long long
                                      ui->comboBoxTie->currentIndex(),
                                      ui->spinBoxExtraRound->value(),
 
+
                                      ui->lineEditTypeAge->text(),
-                                     ui->lineEditTypeWeight->text()
+                                     ui->lineEditAgeFrom->text(),
+                                     ui->lineEditAgeTill->text(),
+
+                                     ui->lineEditTypeWeight->text(),
+                                     ui->lineEditWeightFrom->text(),
+                                     ui->lineEditWeightTill->text()
                                      );
 
         QMessageBox::information(this, "Добавлены новые категории", newCategoryMsg);
@@ -144,6 +85,87 @@ GenerateTournamentCategoriesDialog::~GenerateTournamentCategoriesDialog()
 {
     delete ui;
 }
+
+QString GenerateTournamentCategoriesDialog::insertInDB(long long ageCatUID, int ageFrom, int ageTill,
+                                                       QVector<double> weights,
+                                                       long long tournamentUID, long long typeUID, long long sexUID,
+                                                       int durationFighting, int durationBreak, int roundCount,
+                                                       int IN_CASE_TIE, int DURATION_EXTRA_ROUND,
+                                                       QString ageUnit, QString wordAgeFrom, QString wordAgeTill,
+                                                       QString weightUnit, QString wordWeightFrom, QString wordWeightTill)
+{
+    QString newCategoryMsg = "Добавлены новые категории:\n";
+
+    if (IN_CASE_TIE != 2)
+        DURATION_EXTRA_ROUND = 0;
+
+    for (int index = 0; index + 1 < weights.size(); index++)
+    {
+        double weightFrom = weights[index];
+        double weightTill = weights[index + 1];
+
+
+        QString age;
+        if      (ageFrom == 0)  age = wordAgeTill + " " + QString::number(ageTill) + " " + ageUnit;
+        else if (99 <= ageTill) age = wordAgeFrom + " " + QString::number(ageFrom) + " " + ageUnit;
+        else                    age = QString::number(ageFrom) + "-" + QString::number(ageTill) + " " + ageUnit;
+
+        QString weight;
+        if      (weightFrom == 0)   weight = wordWeightTill + " " + DBUtils::roundDouble(weightTill, 3) + " " + weightUnit;
+        else if (300 <= weightTill) weight = wordWeightFrom + " " + DBUtils::roundDouble(weightFrom, 3) + " " + weightUnit;
+        else                        weight = DBUtils::roundDouble(weightFrom, 3) + "-" + DBUtils::roundDouble(weightTill, 3) + " " + weightUnit;
+
+
+        QString modifyName =
+                DBUtils::getField("NAME", "TYPES", typeUID) + ", " +
+                DBUtils::getField("NAME", "AGE_CATEGORIES", ageCatUID) + ", " +
+                age + ", " +
+                weight + ".";
+
+        QSqlQuery query;
+        if (!query.prepare("INSERT INTO TOURNAMENT_CATEGORIES( "
+                           "NAME, AGE_CATEGORY_FK, AGE_FROM, AGE_TILL, WEIGHT_FROM, WEIGHT_TILL, "
+                           "SEX_FK, TYPE_FK, TOURNAMENT_FK, "
+                           "DURATION_FIGHING, DURATION_BREAK, ROUND_COUNT, "
+                           "IN_CASE_TIE, DURATION_EXTRA_ROUND, "
+                           "AGE, WEIGHT) "
+                           "VALUES (?, ?, ?, ?, ?, ?,    ?, ?, ?,   ?, ?, ?,   ?, ?,     ?, ?)"))
+            qDebug() << query.lastError().text();
+        query.addBindValue(modifyName);
+        query.addBindValue(ageCatUID);
+        query.addBindValue(ageFrom);
+        query.addBindValue(ageTill);
+        query.addBindValue(weightFrom);
+        query.addBindValue(weightTill);
+
+        query.addBindValue(sexUID);
+        query.addBindValue(typeUID);
+        query.addBindValue(tournamentUID);
+
+        query.addBindValue(durationFighting);
+        query.addBindValue(durationBreak);
+        query.addBindValue(roundCount);
+
+        query.addBindValue(IN_CASE_TIE);
+        query.addBindValue(DURATION_EXTRA_ROUND);
+
+        query.addBindValue(age);
+        query.addBindValue(weight);
+
+        if (!query.exec())
+            qDebug() << query.lastError().text();
+        else
+        {
+            newCategoryMsg += "\t" + modifyName + "\n";
+        }
+
+        query.clear();
+    }
+
+    return newCategoryMsg;
+}
+
+
 
 void GenerateTournamentCategoriesDialog::fillSexCB()
 {
@@ -223,8 +245,6 @@ void GenerateTournamentCategoriesDialog::on_pushButton_clicked()
         fillTypeCB();
     }
 }
-
-
 
 void GenerateTournamentCategoriesDialog::on_pushButtonAddAgeCategory_clicked()
 {

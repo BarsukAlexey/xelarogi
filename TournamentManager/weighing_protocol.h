@@ -1,6 +1,8 @@
 #ifndef WEIGHINGPROTOCOL_H
 #define WEIGHINGPROTOCOL_H
 
+#include "dialogchosedata.h"
+
 #include <QObject>
 #include <QSqlDatabase>
 
@@ -8,7 +10,7 @@ class WeighingProtocol : public QObject
 {
     Q_OBJECT
 public:
-    explicit WeighingProtocol(const QSqlDatabase &database, const long long tournamentUID, QObject *parent = 0);
+    explicit WeighingProtocol(const long long tournamentUID, QObject *parent = 0);
 
 signals:
 

@@ -20,7 +20,7 @@ WinnerReport::WinnerReport(const QSqlDatabase& database, const long long tournam
     QAxObject *sheets = workbook->querySubObject("WorkSheets");
 
     QStringList heads;
-    heads << "Место" << "Фамилия, Имя" << "Разряд" << "Регион" << "Тренер";
+    heads << "1Место" << "Фамилия, Имя" << "Разряд" << "Регион" << "Тренер";
 
 
 
@@ -78,7 +78,8 @@ WinnerReport::WinnerReport(const QSqlDatabase& database, const long long tournam
         ExcelUtils::uniteRange   (sheet, currentRow, 1, currentRow, heads.size());
         ++currentRow;
 
-        ExcelUtils::setValue     (sheet, currentRow, 1, DBUtils::getField("NAME", "AGE_CATEGORIES", ageCatUID) + ", " + DBUtils::getNormanAgeRange(age_from, age_till) + " лет");
+        ExcelUtils::setValue     (sheet, currentRow, 1, DBUtils::getField("NAME", "AGE_CATEGORIES", ageCatUID) + ", " +
+                                  "DOTO Указать тут возраст!");
         ExcelUtils::uniteRange   (sheet, currentRow, 1, currentRow, heads.size());
         ++currentRow;
 
@@ -126,19 +127,19 @@ WinnerReport::WinnerReport(const QSqlDatabase& database, const long long tournam
         ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 2);
         ExcelUtils::setRowHeight(sheet, currentRow, 25);
         ExcelUtils::setValue(sheet, currentRow, 1, "Главный судья: ", 0);
-        ExcelUtils::setValue(sheet, currentRow, 4, DBUtils::get_MAIN_JUDGE(database, tournamentUID), 0);
+//        ExcelUtils::setValue(sheet, currentRow, 4, DBUtils::get_MAIN_JUDGE(database, tournamentUID), 0);
         ++currentRow;
 
         ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 2);
         ExcelUtils::setRowHeight(sheet, currentRow, 25);
         ExcelUtils::setValue(sheet, currentRow, 1, "Главный секретарь: ", 0);
-        ExcelUtils::setValue(sheet, currentRow, 4, DBUtils::get_MAIN_SECRETARY(database, tournamentUID), 0);
+//        ExcelUtils::setValue(sheet, currentRow, 4, DBUtils::get_MAIN_SECRETARY(database, tournamentUID), 0);
         ++currentRow;
 
         ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 2);
         ExcelUtils::setRowHeight(sheet, currentRow, 25);
         ExcelUtils::setValue(sheet, currentRow, 1, "Зам. главного судьи: ", 0);
-        ExcelUtils::setValue(sheet, currentRow, 4, DBUtils::get_ASSOCIATE_MAIN_JUDGE(database, tournamentUID), 0);
+//        ExcelUtils::setValue(sheet, currentRow, 4, DBUtils::get_ASSOCIATE_MAIN_JUDGE(database, tournamentUID), 0);
         ++currentRow;
 
         ExcelUtils::setPageOrientation(sheet, 1);

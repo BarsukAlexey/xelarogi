@@ -137,8 +137,10 @@ void ExcelUtils::setFitToPagesWide(QAxObject* sheet, int countPageDown)
 
 void ExcelUtils::saveAsFile(QAxObject* workbook, QString dirPath, QString fileName)
 {
+    QString localFilePath = QDir::toNativeSeparators(QDir(dirPath).filePath(fileName));
+
     QList<QVariant> lstParam;
-    lstParam.append(QDir(dirPath).filePath(fileName));
+    lstParam.append(localFilePath);
     lstParam.append(-4143);
     lstParam.append("");
     lstParam.append("");
@@ -181,4 +183,14 @@ QString ExcelUtils::getValue(QAxObject* sheet, int row, int column)
         return "";
     }
     return value;
+}
+
+void ExcelUtils::setFooter(QAxObject* sheet, int row, int column0, int column1, int height, QVector<std::pair<int, QString> > what, QVector<QString> names){
+    for (int i = 0; i < what.size(); ++i)
+    {
+        ExcelUtils::setRowHeight(sheet, row, height);
+        ExcelUtils::setValue(sheet, row, column0, what[i].second, 0);
+        ExcelUtils::setValue(sheet, row, column1, names[what[i].first], 0);
+        ++row;
+    }
 }

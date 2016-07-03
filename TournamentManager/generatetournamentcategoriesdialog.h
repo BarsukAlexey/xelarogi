@@ -22,10 +22,11 @@ public:
     ~GenerateTournamentCategoriesDialog();
 
     static QString insertInDB(long long ageCatUID, int ageFrom, int ageTill, QVector<double> weights,
-                           long long tournamentUID, long long typeFK, long long sexFK,
-                           int durationFighting, int durationBreak, int roundCount,
-                           int IN_CASE_TIE, int DURATION_EXTRA_ROUND,
-                           QString typeAge, QString typeWeight);
+                              long long tournamentUID, long long typeFK, long long sexFK,
+                              int durationFighting, int durationBreak, int roundCount,
+                              int IN_CASE_TIE, int DURATION_EXTRA_ROUND,
+                              QString ageUnit, QString wordAgeFrom, QString wordAgeTill,
+                              QString weightUnit, QString wordWeightFrom, QString wordWeightTill);
 private slots:
     void on_pushButton_clicked();
     void on_pushButtonAddAgeCategory_clicked();

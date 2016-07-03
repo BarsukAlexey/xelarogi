@@ -405,7 +405,7 @@ void MainWindow::on_pushButtonProtokolVzveshinanya_clicked()
 {
     long long routnamentUID = ui->tournamentUidLabel->text().toLongLong();
     qDebug() << "routnamentUID: " << routnamentUID;
-    WeighingProtocol(m_database, routnamentUID, this);
+    WeighingProtocol(routnamentUID, this);
 }
 
 void MainWindow::on_pushButtonWinnerReport_clicked()

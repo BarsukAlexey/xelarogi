@@ -224,7 +224,8 @@ ReportManda::ReportManda(const QSqlDatabase& database, const long long tournamen
             if (0 < countSPORT_CATEGORIES)
             {
                 ExcelUtils::uniteRange(sheet, startRow - 2, currentColumns - countSPORT_CATEGORIES, startRow - 2, currentColumns - 1);
-                ExcelUtils::setValue  (sheet, startRow - 2, currentColumns - countSPORT_CATEGORIES, DBUtils::getNormanWeightRange(WEIGHT_FROM.toDouble(), WEIGHT_TILL.toDouble()));
+                //ExcelUtils::setValue  (sheet, startRow - 2, currentColumns - countSPORT_CATEGORIES, DBUtils::getNormanWeightRange(WEIGHT_FROM.toDouble(), WEIGHT_TILL.toDouble()));
+                ExcelUtils::setValue  (sheet, startRow - 2, currentColumns - countSPORT_CATEGORIES, "TODO getNormanWeightRange");
 
                 ExcelUtils::uniteRange(sheet, startRow + uidsOfClubs.size() + 1, currentColumns - countSPORT_CATEGORIES, startRow + uidsOfClubs.size() + 1, currentColumns - 1);
                 ExcelUtils::setValue  (sheet, startRow + uidsOfClubs.size() + 1, currentColumns - countSPORT_CATEGORIES, QString::number(sumOfValuesForWeight));
@@ -271,7 +272,8 @@ ReportManda::ReportManda(const QSqlDatabase& database, const long long tournamen
 
 
         ExcelUtils::setValue(sheet, startRow - 5, 1, "Раздел: " + DBUtils::getField("NAME", "TYPES", TYPE_FK), 0);
-        ExcelUtils::setValue(sheet, startRow - 4, 1, DBUtils::getField("NAME", "AGE_CATEGORIES", ageCatUID) + ", " + DBUtils::getNormanAgeRange(AGE_FROM.toInt(), AGE_TILL.toInt()) + " лет", 0);
+        //ExcelUtils::setValue(sheet, startRow - 4, 1, DBUtils::getField("NAME", "AGE_CATEGORIES", ageCatUID) + ", " + DBUtils::getNormanAgeRange(AGE_FROM.toInt(), AGE_TILL.toInt()) + " лет", 0);
+        ExcelUtils::setValue(sheet, startRow - 4, 1, DBUtils::getField("NAME", "AGE_CATEGORIES", ageCatUID) + ", " + "TODO DBUtils::getNormanAgeRange(AGE_FROM.toInt(), AGE_TILL.toInt())" + " лет", 0);
 
         sheet->setProperty("Name", (DBUtils::getField("SHORTNAME", "SEXES", SEX_FK) + " " + DBUtils::getField("NAME", "TYPES", TYPE_FK) + " " + AGE_FROM + "-" + AGE_TILL + "лет").left(31));
 
@@ -279,19 +281,19 @@ ReportManda::ReportManda(const QSqlDatabase& database, const long long tournamen
         ExcelUtils::uniteRange(sheet, maxRow, 1, maxRow, 2);
         ExcelUtils::setRowHeight(sheet, maxRow, 25);
         ExcelUtils::setValue(sheet, maxRow, 1, "Главный судья: ", 0);
-        ExcelUtils::setValue(sheet, maxRow, 3, DBUtils::get_MAIN_JUDGE(database, tournamentUID), 0);
+//        ExcelUtils::setValue(sheet, maxRow, 3, DBUtils::get_MAIN_JUDGE(database, tournamentUID), 0);
         ++maxRow;
 
         ExcelUtils::uniteRange(sheet, maxRow, 1, maxRow, 2);
         ExcelUtils::setRowHeight(sheet, maxRow, 25);
         ExcelUtils::setValue(sheet, maxRow, 1, "Главный секретарь: ", 0);
-        ExcelUtils::setValue(sheet, maxRow, 3, DBUtils::get_MAIN_SECRETARY(database, tournamentUID), 0);
+//        ExcelUtils::setValue(sheet, maxRow, 3, DBUtils::get_MAIN_SECRETARY(database, tournamentUID), 0);
         ++maxRow;
 
         ExcelUtils::uniteRange(sheet, maxRow, 1, maxRow, 2);
         ExcelUtils::setRowHeight(sheet, maxRow, 25);
         ExcelUtils::setValue(sheet, maxRow, 1, "Зам. главного судьи: ", 0);
-        ExcelUtils::setValue(sheet, maxRow, 3, DBUtils::get_ASSOCIATE_MAIN_JUDGE(database, tournamentUID), 0);
+//        ExcelUtils::setValue(sheet, maxRow, 3, DBUtils::get_ASSOCIATE_MAIN_JUDGE(database, tournamentUID), 0);
         ++maxRow;
 
 
