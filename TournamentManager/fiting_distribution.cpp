@@ -1,23 +1,30 @@
 #include "fiting_distribution.h"
-#include "tournamentgriddialog2.h"
+
 #include "db_utils.h"
+#include "dialogchosedata.h"
 #include "excel_utils.h"
+#include "tournamentgriddialog2.h"
 
 
 #include <QAxObject>
 #include <QAxWidget>
-#include <QSqlDatabase>
-#include <QSqlQuery>
+#include <QDate>
 #include <QDebug>
 #include <QSqlError>
-#include <QDate>
+#include <QSqlDatabase>
+#include <QSqlQuery>
 
 
 
 
 
-FitingDistribution::FitingDistribution(const QSqlDatabase &database, const long long tournamentUID)
+FitingDistribution::FitingDistribution(const long long tournamentUID)
 {
+    DialogChoseData dlg(DialogChoseData::Type::fiting_distribution);
+    if (dlg.exec() != QDialog::Accepted)
+        return;
+    translate = dlg.getTranslations();
+
 
     QAxWidget excel("Excel.Application");
     excel.setProperty("Visible", true);
@@ -26,11 +33,15 @@ FitingDistribution::FitingDistribution(const QSqlDatabase &database, const long 
     QAxObject *workbook = excel.querySubObject("ActiveWorkBook");
     QAxObject *sheets = workbook->querySubObject("WorkSheets");
 
-    QStringList days = DBUtils::get_DAYS_FROM_TOURNAMENTS(database, tournamentUID);
+    QStringList days = DBUtils::get_DAYS_FROM_TOURNAMENTS(tournamentUID);
 
 
-    QSqlQuery queryTYPE_FK_AGE_FROM("SELECT * FROM TOURNAMENT_CATEGORIES WHERE TOURNAMENT_FK = ? GROUP BY TYPE_FK, AGE_FROM, AGE_TILL ORDER BY TYPE_FK, AGE_FROM", database);
-    queryTYPE_FK_AGE_FROM.bindValue(0, tournamentUID);
+    QSqlQuery queryTYPE_FK_AGE_FROM("SELECT MAX(UID) as MAX_UID_TC, TYPE_FK, AGE_FROM, AGE_TILL "
+                                    "FROM TOURNAMENT_CATEGORIES "
+                                    "WHERE TOURNAMENT_FK = ? "
+                                    "GROUP BY TYPE_FK, AGE_FROM, AGE_TILL "
+                                    "ORDER BY TYPE_FK, AGE_FROM, AGE_TILL");
+    queryTYPE_FK_AGE_FROM.addBindValue(tournamentUID);
     if (!queryTYPE_FK_AGE_FROM.exec())
     {
         qDebug() << __LINE__ << __PRETTY_FUNCTION__ << queryTYPE_FK_AGE_FROM.lastError().text() << queryTYPE_FK_AGE_FROM.lastQuery();
@@ -40,40 +51,44 @@ FitingDistribution::FitingDistribution(const QSqlDatabase &database, const long 
     {
         long long TYPE_FK = queryTYPE_FK_AGE_FROM.value("TYPE_FK").toLongLong();
         QString AGE_FROM = queryTYPE_FK_AGE_FROM.value("AGE_FROM").toString();
+        QString AGE_TILL = queryTYPE_FK_AGE_FROM.value("AGE_TILL").toString();
+        long long MAX_UID_TC = queryTYPE_FK_AGE_FROM.value("MAX_UID_TC").toLongLong();
         QVector<int> totalSum(3 * days.size());
         int totalPeople = 0;
 
-        sheets->querySubObject("Add");
-        QAxObject *sheet = sheets->querySubObject( "Item( int )", 1);
-        sheet->setProperty("Name", (DBUtils::getField("NAME", "TYPES", TYPE_FK) + "," + AGE_FROM + "-" + queryTYPE_FK_AGE_FROM.value("AGE_TILL").toString() + "лет").left(31));
-        int currentRow = 2;
+
+        QAxObject* sheet = ExcelUtils::addNewSheet(sheets);
+        sheet->setProperty("Name", (DBUtils::getField("AGE", "TOURNAMENT_CATEGORIES", MAX_UID_TC) + ", " +
+                                    DBUtils::getField("NAME", "TYPES", TYPE_FK)).left(31));
+
+        int currentRow = 1;
 
 
-//        ExcelUtils::setValue  (sheet, currentRow, 1, DBUtils::getNameTournamentByUID(database, tournamentUID));
-//        ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 2 + 3 * days.size());
-//        ExcelUtils::setFontBold(sheet, currentRow, 1, true);
         ExcelUtils::setTournamentName(sheet, DBUtils::getTournamentNameAsHeadOfDocument(tournamentUID), currentRow, 1, currentRow, 2 + 3 * days.size());
         ++currentRow;
-        ExcelUtils::setValue  (sheet, currentRow, 1, "Раздел: " + DBUtils::getTypeNameByUID(database, TYPE_FK));
+        ExcelUtils::setValue  (sheet, currentRow, 1,
+                               DBUtils::getField("NAME", "TYPES", TYPE_FK) + ", " +
+                               DBUtils::getField("AGE", "TOURNAMENT_CATEGORIES", MAX_UID_TC));
         ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 2 + 3 * days.size());
         ++currentRow;
-        ExcelUtils::setValue  (sheet, currentRow, 1, "Возраст от " + AGE_FROM + " до " + queryTYPE_FK_AGE_FROM.value("AGE_TILL").toString());
-        ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 2 + 3 * days.size());
-        ++currentRow;
-
 
         initTableHeads(sheet, currentRow, days);
 
-
-        QSqlQuery querySEX_FK("SELECT AGE_CATEGORY_FK, SEX_FK FROM TOURNAMENT_CATEGORIES WHERE TOURNAMENT_FK = ? AND TYPE_FK = ? AND AGE_FROM = ? GROUP BY AGE_CATEGORY_FK, SEX_FK     ORDER BY SEX_FK", database);
-        querySEX_FK.bindValue(0, tournamentUID);
-        querySEX_FK.bindValue(1, TYPE_FK);
-        querySEX_FK.bindValue(2, AGE_FROM);
+        QSqlQuery querySEX_FK("SELECT AGE_CATEGORY_FK, SEX_FK "
+                              "FROM TOURNAMENT_CATEGORIES "
+                              "WHERE TOURNAMENT_FK = ? AND TYPE_FK = ? AND AGE_FROM = ? AND AGE_TILL = ? "
+                              "GROUP BY AGE_CATEGORY_FK, SEX_FK "
+                              "ORDER BY SEX_FK");
+        querySEX_FK.addBindValue(tournamentUID);
+        querySEX_FK.addBindValue(TYPE_FK);
+        querySEX_FK.addBindValue(AGE_FROM);
+        querySEX_FK.addBindValue(AGE_TILL);
         if (!querySEX_FK.exec())
         {
             qDebug() << __LINE__ << __PRETTY_FUNCTION__ << querySEX_FK.lastError().text() << " " << querySEX_FK.lastQuery();
             return;
         }
+
         while (querySEX_FK.next())
         {
             long long SEX_FK = querySEX_FK.value("SEX_FK").toLongLong();
@@ -83,7 +98,11 @@ FitingDistribution::FitingDistribution(const QSqlDatabase &database, const long 
             ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 2 + 3 * days.size());
             ++currentRow;
 
-            QSqlQuery queryWEIGHT_FROM("SELECT WEIGHT_FROM, WEIGHT_TILL FROM TOURNAMENT_CATEGORIES WHERE TOURNAMENT_FK = ? AND TYPE_FK = ?  AND AGE_FROM = ? AND SEX_FK = ? AND AGE_CATEGORY_FK = ? GROUP BY WEIGHT_FROM, WEIGHT_TILL ORDER BY WEIGHT_FROM", database);
+            QSqlQuery queryWEIGHT_FROM("SELECT UID AS UID_TC, WEIGHT_FROM, WEIGHT_TILL "
+                                       "FROM TOURNAMENT_CATEGORIES "
+                                       "WHERE TOURNAMENT_FK = ? AND TYPE_FK = ?  AND AGE_FROM = ? AND SEX_FK = ? AND AGE_CATEGORY_FK = ? "
+                                       "GROUP BY WEIGHT_FROM, WEIGHT_TILL "
+                                       "ORDER BY WEIGHT_FROM, WEIGHT_TILL");
             queryWEIGHT_FROM.addBindValue(tournamentUID);
             queryWEIGHT_FROM.addBindValue(TYPE_FK);
             queryWEIGHT_FROM.addBindValue(AGE_FROM);
@@ -95,19 +114,18 @@ FitingDistribution::FitingDistribution(const QSqlDatabase &database, const long 
                 return;
             }
 
-
-
             while (queryWEIGHT_FROM.next())
             {
+                QString UID_TC = queryWEIGHT_FROM.value("UID_TC").toString();
                 QString WEIGHT_FROM = queryWEIGHT_FROM.value("WEIGHT_FROM").toString();
                 QString WEIGHT_TILL = queryWEIGHT_FROM.value("WEIGHT_TILL").toString();
 
 
-                //ExcelUtils::setValue(sheet, currentRow, 1, WEIGHT_FROM + " - " + WEIGHT_TILL + " кг");
+                ExcelUtils::setValue(sheet, currentRow, 1, DBUtils::getField("WEIGHT", "TOURNAMENT_CATEGORIES", UID_TC));
                 ExcelUtils::setBorder(sheet, currentRow, 1, currentRow, 2 + 3 * days.size());
 
 
-                QSqlQuery queryTOURNAMENT_CATEGORIES_UID("SELECT * FROM TOURNAMENT_CATEGORIES WHERE TOURNAMENT_FK = ? AND TYPE_FK = ? AND SEX_FK = ? AND AGE_FROM = ? AND WEIGHT_FROM = ?", database);
+                QSqlQuery queryTOURNAMENT_CATEGORIES_UID("SELECT * FROM TOURNAMENT_CATEGORIES WHERE TOURNAMENT_FK = ? AND TYPE_FK = ? AND SEX_FK = ? AND AGE_FROM = ? AND WEIGHT_FROM = ?");
                 queryTOURNAMENT_CATEGORIES_UID.bindValue(0, tournamentUID);
                 queryTOURNAMENT_CATEGORIES_UID.bindValue(1, TYPE_FK);
                 queryTOURNAMENT_CATEGORIES_UID.bindValue(2, SEX_FK);
@@ -122,7 +140,7 @@ FitingDistribution::FitingDistribution(const QSqlDatabase &database, const long 
 
                 ExcelUtils::setValue(sheet, currentRow, 1, DBUtils::getNormanWeightRangeFromTOURNAMENT_CATEGORIES(UID_TOURNAMENT_CATEGORY));
 
-                QSqlQuery queryCOUNT("SELECT count() AS COUNT FROM ORDERS WHERE TOURNAMENT_CATEGORY_FK = ? GROUP BY TOURNAMENT_CATEGORY_FK", database);
+                QSqlQuery queryCOUNT("SELECT count() AS COUNT FROM ORDERS WHERE TOURNAMENT_CATEGORY_FK = ? GROUP BY TOURNAMENT_CATEGORY_FK");
                 queryCOUNT.bindValue(0, UID_TOURNAMENT_CATEGORY);
                 if (!queryCOUNT.exec())
                 {
@@ -152,7 +170,11 @@ FitingDistribution::FitingDistribution(const QSqlDatabase &database, const long 
                             fights.push_back(fight);
                     }
 
-                    if (fights.size() <= 3 * fights.size() )
+                    if (3 * days.size() < fights.size())
+                    {
+                        QMessageBox::warning(0, QString("Проблема"), QString("Для сетки \"%1\" необходимо %2 боя (боёв), но имеется только %3 день (дня, дней)").arg(DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", UID_TOURNAMENT_CATEGORY)).arg(fights.size()).arg(days.size()));
+                    }
+                    else if (fights.size() <= 3 * fights.size() )
                     {
                         const int onOneDay = fights.size() / days.size();
                         int rest = fights.size() % days.size();
@@ -175,7 +197,7 @@ FitingDistribution::FitingDistribution(const QSqlDatabase &database, const long 
             }
         }
 
-        ExcelUtils::setValue(sheet, currentRow, 1, "Всего:");
+        ExcelUtils::setValue(sheet, currentRow, 1, translate["Всего:"]);
         ExcelUtils::setValue(sheet, currentRow, 2, QString::number(totalPeople));
         ExcelUtils::setBorder(sheet, currentRow, 1, currentRow, 2 + 3 * days.size());
 
@@ -186,24 +208,7 @@ FitingDistribution::FitingDistribution(const QSqlDatabase &database, const long 
         ++currentRow;
         ++currentRow;
 
-        ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 2);
-        ExcelUtils::setRowHeight(sheet, currentRow, 25);
-        ExcelUtils::setValue(sheet, currentRow, 1, "Главный судья: ", 0);
-//        ExcelUtils::setValue(sheet, currentRow, 4, DBUtils::get_MAIN_JUDGE(database, tournamentUID), 0);
-        ++currentRow;
-
-        ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 2);
-        ExcelUtils::setRowHeight(sheet, currentRow, 25);
-        ExcelUtils::setValue(sheet, currentRow, 1, "Главный секретарь: ", 0);
-//        ExcelUtils::setValue(sheet, currentRow, 4, DBUtils::get_MAIN_SECRETARY(database, tournamentUID), 0);
-        ++currentRow;
-
-        ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 2);
-        ExcelUtils::setRowHeight(sheet, currentRow, 25);
-        ExcelUtils::setValue(sheet, currentRow, 1, "Зам. главного судьи: ", 0);
-//        ExcelUtils::setValue(sheet, currentRow, 4, DBUtils::get_ASSOCIATE_MAIN_JUDGE(database, tournamentUID), 0);
-        ++currentRow;
-
+        ExcelUtils::setFooter(sheet, currentRow, 1, 3, 25, dlg.getJudges(), DBUtils::getJudges(tournamentUID));
 
         ExcelUtils::setColumnAutoFit(sheet, 1);
 
@@ -225,8 +230,8 @@ void FitingDistribution::initTableHeads(QAxObject* sheet, int& currentRow, const
 
     ExcelUtils::setBorder(sheet, currentRow, 1, currentRow + 1, 2 + 3 * days.size());
 
-    ExcelUtils::setValue(sheet, currentRow, 1, "Вес");
-    ExcelUtils::setValue(sheet, currentRow, 2, "Кол-во\nчеловек");
+    ExcelUtils::setValue(sheet, currentRow, 1, translate["Вес"]);
+    ExcelUtils::setValue(sheet, currentRow, 2, translate["Кол-во\nчеловек"]);
     ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow + 1, 1);
     ExcelUtils::uniteRange(sheet, currentRow, 2, currentRow + 1, 2);
 
@@ -236,7 +241,7 @@ void FitingDistribution::initTableHeads(QAxObject* sheet, int& currentRow, const
         ExcelUtils::setValue(sheet, currentRow, column, days[i]);
 
         int shift = 0;
-        for(const QString& s : {"Утро", "День", "Вечер"})
+        for(const QString& s : {translate["Утро"], translate["День"], translate["Вечер"]})
         {
             ExcelUtils::setValue(sheet, currentRow + 1, column + shift, s);
             ++shift;

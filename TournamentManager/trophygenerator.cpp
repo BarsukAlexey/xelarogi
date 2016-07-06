@@ -24,7 +24,7 @@ TrophyGenerator::TrophyGenerator(const long long tournamentUID, QObject *parent)
             const int age_till      = std::get<2>(x);
             const int sex_fk        = std::get<3>(x);
 
-            std::map<QString, QVector<long long> > stdMap = DBUtils::get_weight_and_orderUIDs(tournamentUID, type_fk, age_from, age_till, sex_fk).toStdMap();
+            std::map<QString, QVector<long long> > stdMap = DBUtils::get_weight_and_orderUIDs(tournamentUID, type_fk, age_from, age_till, sex_fk, 3).toStdMap();
             if (stdMap.empty()) continue;
 
             QString tournamentName = DBUtils::getField("NAME", "TOURNAMENTS", tournamentUID);

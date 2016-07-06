@@ -14,7 +14,7 @@
 WeighingProtocol::WeighingProtocol(const long long tournamentUID, QObject* parent)
     : QObject(parent)
 {
-    DialogChoseData dlg(".\\template\\weighing_protocol", true);
+    DialogChoseData dlg(DialogChoseData::Type::weight_report);
     if (dlg.exec() != QDialog::Accepted)
         return;
 
@@ -43,18 +43,9 @@ WeighingProtocol::WeighingProtocol(const long long tournamentUID, QObject* paren
 
         if (leafOFTree.empty()) continue;
 
-        sheets->querySubObject("Add");
-        QAxObject *sheet = sheets->querySubObject( "Item( int )", 1);
-        QString sheetName = DBUtils::getField("SHORTNAME", "SEXES", DBUtils::getField("SEX_FK", "TOURNAMENT_CATEGORIES", uidTC)) +
-                            "," +
-                            DBUtils::getField("AGE", "TOURNAMENT_CATEGORIES", uidTC) +
-                            "," +
-                            DBUtils::getField("WEIGHT", "TOURNAMENT_CATEGORIES", uidTC) +
-                            "," +
-                            DBUtils::getField("NAME", "TYPES", DBUtils::getField("TYPE_FK", "TOURNAMENT_CATEGORIES", uidTC));
 
-
-        sheet->setProperty("Name", sheetName.left(31));
+        QAxObject *sheet = ExcelUtils::addNewSheet(sheets);
+        sheet->setProperty("Name", DBUtils::getNameForExcelSheet(uidTC));
 
 
 

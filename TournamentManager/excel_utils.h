@@ -6,7 +6,7 @@
 #include <QVector>
 
 // http://www.wiki.crossplatform.ru/index.php/%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0_%D1%81_MS_Office_%D1%81_%D0%BF%D0%BE%D0%BC%D0%BE%D1%89%D1%8C%D1%8E_ActiveQt
-
+// http://www.forum.crossplatform.ru/lofiversion/index.php/t2450.html
 class ExcelUtils
 {
 
@@ -58,6 +58,8 @@ public:
     static QString getValue(QAxObject* sheet, int row, int column);
 
     static void setFooter(QAxObject* sheet, int row, int column0, int column1, int height, QVector<std::pair<int, QString>> what, QVector<QString> namsses);
+
+    static QAxObject* addNewSheet(QAxObject* sheets);
 };
 
 #endif // EXCELUTILS_H

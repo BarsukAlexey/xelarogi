@@ -1,15 +1,77 @@
 #include "dialogchosedata.h"
 #include "ui_dialogchosedata.h"
 
-DialogChoseData::DialogChoseData(QString dirPath, bool enableRows, QWidget *parent) :
+
+
+DialogChoseData::DialogChoseData(DialogChoseData::Type type, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DialogChoseData),
-    dirPath(dirPath)
+    type(type)
 {
+    //qDebug() << "DialogChoseData " << this->type << type;
+
+
+    if (type == DialogChoseData::Type::fiting_distribution)
+    {
+        translation
+                << std::make_pair(new QLabel("Всего:"), new QPlainTextEdit())
+                << std::make_pair(new QLabel("Кол-во\nчеловек"), new QPlainTextEdit())
+                << std::make_pair(new QLabel("Вес"), new QPlainTextEdit())
+                << std::make_pair(new QLabel("Утро"), new QPlainTextEdit())
+                << std::make_pair(new QLabel("День"), new QPlainTextEdit())
+                << std::make_pair(new QLabel("Вечер"), new QPlainTextEdit());
+    }
+    else if (type == DialogChoseData::Type::makeGridsForPointFighting)
+    {
+        translation
+                << std::make_pair(new QLabel("Татами"), new QPlainTextEdit());
+    }
+    else if (type == DialogChoseData::Type::fighting_pair)
+    {
+        translation
+                << std::make_pair(new QLabel("Ринг"), new QPlainTextEdit())
+                << std::make_pair(new QLabel("Финал"), new QPlainTextEdit())
+                << std::make_pair(new QLabel("Полуфинал"), new QPlainTextEdit());
+    }
+
+
+
+    setWindowFlags(windowFlags() | Qt::WindowMaximizeButtonHint);
+
     ui->setupUi(this);
     ui->tableWidget->resizeColumnsToContents();
     ui->tableWidget->setColumnWidth(0,400);
     ui->tableWidget->setColumnWidth(1,200);
+
+    ui->groupBoxTitle->setEnabled(enableTitle());
+    ui->groupBox_Rows->setEnabled(enableRows());
+    ui->comboBoxMaxPlace->setEnabled(enableMaxPlace());
+
+    //qDebug() << "DialogChoseData " << this->type << type;
+    QDir recoredDir(getDirPath());
+    for (QString file : recoredDir.entryList(QDir::Filter::Files))
+    {
+        ui->comboBox->addItem(file);
+    }
+
+    QGridLayout* layout = new QGridLayout();
+    {
+        int i = 0;
+        for (std::pair<QLabel*, QPlainTextEdit*>& pair : translation)
+        {
+            layout->addWidget(pair.first , i, 0);
+            layout->addWidget(pair.second, i, 1);
+            ++i;
+        }
+    }
+    QWidget* w = new QWidget();
+    w->setLayout(layout);
+    ui->scrollArea->setWidget(w);
+
+    for (int i = 0; i < 16; ++i)
+        ui->comboBoxMaxPlace->addItem(QString::number(1 << i));
+
+    loadTemplate();
 
     connect(ui->pushButtonSave, &QPushButton::clicked, [this](){onSave();});
     connect(ui->pushButtonSaveAs, &QPushButton::clicked, [this](){onAddNew();});
@@ -25,16 +87,9 @@ DialogChoseData::DialogChoseData(QString dirPath, bool enableRows, QWidget *pare
     connect(ui->checkBoxMainSecretary, &QCheckBox::toggled, [this](){ ui->lineEditTitleMainSecretary->setEnabled(ui->checkBoxMainSecretary->isChecked()); });
     connect(ui->checkBoxAssociateMainJudge, &QCheckBox::toggled, [this](){ ui->lineEditTitleAssociateMainJudge->setEnabled(ui->checkBoxAssociateMainJudge->isChecked()); });
 
-    connect(this, &DialogChoseData::accepted, [this](){onSave(); /*QDialog::accept();*/});
-
-    ui->groupBox_Rows->setEnabled(enableRows);
-
-    QDir recoredDir(dirPath);
-    for (QString file : recoredDir.entryList(QDir::Filter::Files))
-    {
-        ui->comboBox->addItem(file);
-    }
-
+    connect(this, &DialogChoseData::accepted, [this](){
+        onSave();
+    });
 }
 
 DialogChoseData::~DialogChoseData()
@@ -65,6 +120,56 @@ QVector<std::pair<int, QString> > DialogChoseData::getJudges()
     return res;
 }
 
+QMap<QString, QString> DialogChoseData::getTranslations()
+{
+    QMap<QString, QString> res;
+    for (std::pair<QLabel*, QPlainTextEdit*>& pair : translation)
+    {
+        res[pair.first->text()] = pair.second->toPlainText();
+    }
+    return res;
+}
+
+int DialogChoseData::getMaxPlace()
+{
+    return ui->comboBoxMaxPlace->currentText().toInt();
+}
+
+QString DialogChoseData::getDirPath()
+{
+    if (type == DialogChoseData::Type::grids                    ) return ".\\template\\grids";
+    if (type == DialogChoseData::Type::fiting_distribution      ) return ".\\template\\fiting_distribution";
+    if (type == DialogChoseData::Type::weight_report            ) return ".\\template\\weighing_protocol";
+    if (type == DialogChoseData::Type::WinnerReport             ) return ".\\template\\WinnerReport";
+    if (type == DialogChoseData::Type::makeGridsForPointFighting) return ".\\template\\makeGridsForPointFighting";
+    if (type == DialogChoseData::Type::fighting_pair            ) return ".\\template\\fighting_pair";
+    if (type == DialogChoseData::Type::lol                      ) return ".\\template\\lol";
+    return ".\\template";
+}
+
+bool DialogChoseData::enableTitle()
+{
+    if (type == DialogChoseData::Type::weight_report      ) return true;
+    if (type == DialogChoseData::Type::WinnerReport       ) return true;
+    if (type == DialogChoseData::Type::fighting_pair      ) return true;
+    if (type == DialogChoseData::Type::lol                ) return true;
+    return false;
+}
+
+bool DialogChoseData::enableRows()
+{
+    if (type == DialogChoseData::Type::weight_report      ) return true;
+    if (type == DialogChoseData::Type::WinnerReport       ) return true;
+    if (type == DialogChoseData::Type::lol                ) return true;
+    return false;
+}
+
+bool DialogChoseData::enableMaxPlace()
+{
+    if (type == DialogChoseData::Type::WinnerReport) return true;
+    return false;
+}
+
 void DialogChoseData::loadTemplate()
 {
     //qDebug() << "loadTemplate";
@@ -72,11 +177,16 @@ void DialogChoseData::loadTemplate()
     fields.resize(0);
     headers.resize(0);
     ui->tableWidget->setRowCount(0);
+    for (std::pair<QLabel*, QPlainTextEdit*>& pair : translation)
+    {
+        pair.second->setPlainText("");
+    }
+    ui->lineEditTitle->setText("");
 
     if (ui->comboBox->currentIndex() == -1)
         return;
 
-    QString openFileName = QDir(dirPath).filePath(ui->comboBox->currentText());
+    QString openFileName = QDir(getDirPath()).filePath(ui->comboBox->currentText());
 
     QFile jSonFile(openFileName);
     if (!jSonFile.open(QIODevice::ReadOnly))
@@ -140,6 +250,24 @@ void DialogChoseData::loadTemplate()
     string = obj["AssociateMainJudge"].toString();
     ui->checkBoxAssociateMainJudge->setChecked(!string.isEmpty());
     ui->lineEditTitleAssociateMainJudge->setText(string);
+
+
+    QJsonObject object = obj["translation"].toObject();
+    for (QJsonObject::const_iterator it = object.begin(); it != object.end(); ++it)
+    {
+        QString key = it.key();
+        QString value = it.value().toString();
+        for (std::pair<QLabel*, QPlainTextEdit*>& pair : translation)
+        {
+            if (pair.first->text() == key)
+            {
+                pair.second->setPlainText(value);
+            }
+        }
+    }
+
+
+    ui->comboBoxMaxPlace->setCurrentText(QString::number(obj["maxPlace"].toInt()));
 }
 
 void DialogChoseData::onSave()
@@ -173,8 +301,18 @@ void DialogChoseData::onSave()
     obj["MainSecretary"]      = ui->checkBoxMainSecretary->isChecked()     ? ui->lineEditTitleMainSecretary->text()      : "";
     obj["AssociateMainJudge"] = ui->checkBoxAssociateMainJudge->isChecked()? ui->lineEditTitleAssociateMainJudge->text() : "";
 
+    QJsonObject trans;
+    for (std::pair<QLabel*, QPlainTextEdit*>& pair : translation)
+    {
+      trans[pair.first->text()] = pair.second->toPlainText();
+    }
 
-    QString fullPath = QDir(dirPath).filePath(ui->comboBox->currentText());
+    obj["translation"] = trans;
+
+    obj["maxPlace"] = ui->comboBoxMaxPlace->currentText().toInt();
+
+
+    QString fullPath = QDir(getDirPath()).filePath(ui->comboBox->currentText());
     QFile saveFile(fullPath);
     if (!saveFile.open(QIODevice::WriteOnly)) {
         qWarning("Couldn't open save file.");
@@ -216,7 +354,7 @@ void DialogChoseData::onDelete()
 {
     if (ui->comboBox->currentIndex() == -1)
         return;
-    QDir(dirPath).remove(ui->comboBox->currentText());
+    QDir(getDirPath()).remove(ui->comboBox->currentText());
     ui->comboBox->removeItem(ui->comboBox->currentIndex());
 }
 
@@ -258,4 +396,10 @@ void DialogChoseData::onTableClicked(const QModelIndex &index)
             ui->tableWidget->setItem(index.row(), index.column(), new QTableWidgetItem(DBUtils::toString(fields[index.row()])));
         }
     }
+}
+
+void DialogChoseData::accept()
+{
+    if (ui->comboBox->currentIndex() != -1)
+        QDialog::accept();
 }

@@ -1,18 +1,19 @@
 #ifndef RENDERAREAWIDGET_H
 #define RENDERAREAWIDGET_H
 
-#include <db_utils.h>
-
-#include <QWidget>
-#include <QVector>
-#include <QRect>
-#include <QPainter>
-#include <QSet>
-#include <QPoint>
-#include <QSqlDatabase>
-#include "renderarearesultdialog.h"
 #include "db_utils.h"
+#include "dialogchosedata.h"
 #include "excel_utils.h"
+#include "renderarearesultdialog.h"
+
+#include <QPainter>
+#include <QPoint>
+#include <QRect>
+#include <QSet>
+#include <QVector>
+#include <QSqlDatabase>
+#include <QWidget>
+
 
 
 class RenderAreaWidget : public QWidget
@@ -63,7 +64,7 @@ private:
 
 public:
     static int log2(int x);
-    static void printTableGridInExcel(int tournamentCategory, bool likePointFighing, QString path, QVector<int> fightNumber, QString text = "", QString prefFileName = "");
+    static void printTableGridInExcel(DialogChoseData& dlg, int tournamentCategory, bool likePointFighing, QString path, QVector<int> fightNumber, QString text = "", QString prefFileName = "");
     static QString getNameOfLevel(int vertex);
 };
 #endif // RENDERAREAWIDGET_H

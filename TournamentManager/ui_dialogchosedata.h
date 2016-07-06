@@ -24,6 +24,7 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QScrollArea>
 #include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QTableWidget>
 #include <QtWidgets/QWidget>
@@ -49,11 +50,14 @@ public:
     QPushButton *pushButtonDelete;
     QPushButton *pushButtonSaveAs;
     QSpacerItem *horizontalSpacer;
-    QDialogButtonBox *buttonBox;
-    QGroupBox *groupBox_3;
+    QGroupBox *groupBoxTitle;
     QGridLayout *gridLayout_4;
     QLabel *label;
     QLineEdit *lineEditTitle;
+    QGroupBox *groupBox_2;
+    QGridLayout *gridLayout_6;
+    QScrollArea *scrollArea;
+    QWidget *scrollAreaWidgetContents;
     QGroupBox *groupBox_4;
     QGridLayout *gridLayout_5;
     QCheckBox *checkBoxMainSecretary;
@@ -62,11 +66,17 @@ public:
     QLineEdit *lineEditTitleAssociateMainJudge;
     QLineEdit *lineEditTitleMainSecretary;
     QLineEdit *lineEditTitleMainJudge;
+    QDialogButtonBox *buttonBox;
+    QGroupBox *groupBox_3;
+    QGridLayout *gridLayout_7;
+    QSpacerItem *horizontalSpacer_3;
+    QComboBox *comboBoxMaxPlace;
 
     void setupUi(QDialog *DialogChoseData)
     {
         if (DialogChoseData->objectName().isEmpty())
             DialogChoseData->setObjectName(QStringLiteral("DialogChoseData"));
+        DialogChoseData->resize(987, 853);
         gridLayout = new QGridLayout(DialogChoseData);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
         groupBox_Rows = new QGroupBox(DialogChoseData);
@@ -151,29 +161,39 @@ public:
 
         gridLayout->addWidget(widget, 0, 0, 1, 1);
 
-        buttonBox = new QDialogButtonBox(DialogChoseData);
-        buttonBox->setObjectName(QStringLiteral("buttonBox"));
-        buttonBox->setOrientation(Qt::Horizontal);
-        buttonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
-
-        gridLayout->addWidget(buttonBox, 4, 0, 1, 1);
-
-        groupBox_3 = new QGroupBox(DialogChoseData);
-        groupBox_3->setObjectName(QStringLiteral("groupBox_3"));
-        gridLayout_4 = new QGridLayout(groupBox_3);
+        groupBoxTitle = new QGroupBox(DialogChoseData);
+        groupBoxTitle->setObjectName(QStringLiteral("groupBoxTitle"));
+        gridLayout_4 = new QGridLayout(groupBoxTitle);
         gridLayout_4->setObjectName(QStringLiteral("gridLayout_4"));
-        label = new QLabel(groupBox_3);
+        label = new QLabel(groupBoxTitle);
         label->setObjectName(QStringLiteral("label"));
 
         gridLayout_4->addWidget(label, 0, 0, 1, 1);
 
-        lineEditTitle = new QLineEdit(groupBox_3);
+        lineEditTitle = new QLineEdit(groupBoxTitle);
         lineEditTitle->setObjectName(QStringLiteral("lineEditTitle"));
 
         gridLayout_4->addWidget(lineEditTitle, 0, 1, 1, 1);
 
 
-        gridLayout->addWidget(groupBox_3, 1, 0, 1, 1);
+        gridLayout->addWidget(groupBoxTitle, 1, 0, 1, 1);
+
+        groupBox_2 = new QGroupBox(DialogChoseData);
+        groupBox_2->setObjectName(QStringLiteral("groupBox_2"));
+        gridLayout_6 = new QGridLayout(groupBox_2);
+        gridLayout_6->setObjectName(QStringLiteral("gridLayout_6"));
+        scrollArea = new QScrollArea(groupBox_2);
+        scrollArea->setObjectName(QStringLiteral("scrollArea"));
+        scrollArea->setWidgetResizable(true);
+        scrollAreaWidgetContents = new QWidget();
+        scrollAreaWidgetContents->setObjectName(QStringLiteral("scrollAreaWidgetContents"));
+        scrollAreaWidgetContents->setGeometry(QRect(0, 0, 947, 202));
+        scrollArea->setWidget(scrollAreaWidgetContents);
+
+        gridLayout_6->addWidget(scrollArea, 0, 0, 1, 1);
+
+
+        gridLayout->addWidget(groupBox_2, 5, 0, 1, 1);
 
         groupBox_4 = new QGroupBox(DialogChoseData);
         groupBox_4->setObjectName(QStringLiteral("groupBox_4"));
@@ -213,7 +233,30 @@ public:
         gridLayout_5->addWidget(lineEditTitleMainJudge, 0, 1, 1, 1);
 
 
-        gridLayout->addWidget(groupBox_4, 3, 0, 1, 1);
+        gridLayout->addWidget(groupBox_4, 4, 0, 1, 1);
+
+        buttonBox = new QDialogButtonBox(DialogChoseData);
+        buttonBox->setObjectName(QStringLiteral("buttonBox"));
+        buttonBox->setOrientation(Qt::Horizontal);
+        buttonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
+
+        gridLayout->addWidget(buttonBox, 6, 0, 1, 1);
+
+        groupBox_3 = new QGroupBox(DialogChoseData);
+        groupBox_3->setObjectName(QStringLiteral("groupBox_3"));
+        gridLayout_7 = new QGridLayout(groupBox_3);
+        gridLayout_7->setObjectName(QStringLiteral("gridLayout_7"));
+        horizontalSpacer_3 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        gridLayout_7->addItem(horizontalSpacer_3, 0, 1, 1, 1);
+
+        comboBoxMaxPlace = new QComboBox(groupBox_3);
+        comboBoxMaxPlace->setObjectName(QStringLiteral("comboBoxMaxPlace"));
+
+        gridLayout_7->addWidget(comboBoxMaxPlace, 0, 0, 1, 1);
+
+
+        gridLayout->addWidget(groupBox_3, 3, 0, 1, 1);
 
         QWidget::setTabOrder(comboBox, pushButtonSaveAs);
         QWidget::setTabOrder(pushButtonSaveAs, pushButtonSave);
@@ -250,8 +293,9 @@ public:
         pushButtonSave->setText(QApplication::translate("DialogChoseData", "\320\241\320\276\321\205\321\200\320\260\320\275\320\270\321\202\321\214 \320\270\320\267\320\274\320\265\320\275\320\265\320\275\320\270\321\217 \320\262 \321\210\320\260\320\261\320\273\320\276\320\275\320\265", 0));
         pushButtonDelete->setText(QApplication::translate("DialogChoseData", "\320\243\320\264\320\260\320\273\320\270\321\202\321\214 \321\210\320\260\320\261\320\273\320\276\320\275", 0));
         pushButtonSaveAs->setText(QApplication::translate("DialogChoseData", "\320\224\320\276\320\261\320\260\320\262\320\270\321\202\321\214 \320\275\320\276\320\262\321\213\320\271 \321\210\320\260\320\261\320\273\320\276\320\275", 0));
-        groupBox_3->setTitle(QApplication::translate("DialogChoseData", "\320\227\320\260\320\263\320\276\320\273\320\276\320\262\320\276\320\272", 0));
+        groupBoxTitle->setTitle(QApplication::translate("DialogChoseData", "\320\227\320\260\320\263\320\276\320\273\320\276\320\262\320\276\320\272", 0));
         label->setText(QApplication::translate("DialogChoseData", "\320\227\320\260\320\263\320\276\320\273\320\276\320\262\320\276\320\272 (\320\277\321\200\320\276\321\202\320\276\320\272 \320\262\320\267\320\262\320\265\321\210\320\270\320\262\320\260\320\275\320\270\321\217, \321\201\320\276\321\201\321\202\320\260\320\262 \320\277\320\260\321\200, ...)", 0));
+        groupBox_2->setTitle(QApplication::translate("DialogChoseData", "\320\237\320\265\321\200\320\265\320\262\320\276\320\264 \321\201\320\273\320\276\320\262", 0));
         groupBox_4->setTitle(QApplication::translate("DialogChoseData", "\320\237\320\276\320\264\320\277\320\270\321\201\320\270", 0));
         checkBoxMainSecretary->setText(QApplication::translate("DialogChoseData", "\320\223\320\273\320\260\320\262\320\275\321\213\320\271 \321\201\320\265\320\272\321\200\320\265\321\202\320\260\321\202\321\214:", 0));
         checkBoxAssociateMainJudge->setText(QApplication::translate("DialogChoseData", "\320\227\320\260\320\274. \320\263\320\273\320\260\320\262\320\275\320\276\320\263\320\276 \321\201\321\203\320\264\321\214\320\270:", 0));
@@ -259,6 +303,7 @@ public:
         lineEditTitleAssociateMainJudge->setText(QApplication::translate("DialogChoseData", "\320\227\320\260\320\274. \320\263\320\273\320\260\320\262\320\275\320\276\320\263\320\276 \321\201\321\203\320\264\321\214\320\270:", 0));
         lineEditTitleMainSecretary->setText(QApplication::translate("DialogChoseData", "\320\223\320\273\320\260\320\262\320\275\321\213\320\271 \321\201\320\265\320\272\321\200\320\265\321\202\320\260\321\200\321\214:", 0));
         lineEditTitleMainJudge->setText(QApplication::translate("DialogChoseData", "\320\223\320\273\320\260\320\262\320\275\321\213\320\271 \321\201\321\203\320\264\321\214\321\217:", 0));
+        groupBox_3->setTitle(QApplication::translate("DialogChoseData", "\320\234\320\260\320\272\321\201. \320\267\320\260\320\275\321\217\321\202\320\276\320\265 \320\274\320\265\321\201\321\202\320\276 (\320\262\320\272\320\273\321\216\321\207\320\270\321\202\320\265\320\273\321\214\320\275\320\276) \320\262 \321\202\321\203\321\200\320\275\320\270\321\200\320\275\320\276\320\271 \321\201\320\265\321\202\320\272\320\265 (\320\264\320\273\321\217 \321\201\320\277\320\270\321\201\320\272\320\260 \320\277\321\200\320\270\320\267\321\221\321\200\320\276\320\262)", 0));
     } // retranslateUi
 
 };

@@ -1,17 +1,26 @@
 #include "winner_report.h"
-#include "db_utils.h"
-#include "excel_utils.h"
-
-#include <QAxWidget>
-#include <QAxObject>
-#include <QDebug>
-#include <QSqlQuery>
-#include <QSqlError>
 
 
-WinnerReport::WinnerReport(const QSqlDatabase& database, const long long tournamentUID, QObject* parent)
+
+
+
+WinnerReport::WinnerReport(const long long tournamentUID, QObject* parent)
     : QObject(parent)
 {
+    DialogChoseData dlg(DialogChoseData::Type::WinnerReport);
+    if (dlg.exec() != QDialog::Accepted)
+        return;
+
+    QStringList heads;
+    QVector<std::pair<QString, QVector<std::pair<DBUtils::TypeField, QString> > > > data = dlg.getData();
+    for (std::pair<QString, QVector<std::pair<DBUtils::TypeField, QString> > > pair : data)
+    {
+        heads << pair.first;
+    }
+    if (heads.isEmpty())
+        return;
+
+
     QAxWidget excel("Excel.Application");
     excel.setProperty("Visible", true);
     QAxObject *workbooks = excel.querySubObject("WorkBooks");
@@ -19,22 +28,19 @@ WinnerReport::WinnerReport(const QSqlDatabase& database, const long long tournam
     QAxObject *workbook = excel.querySubObject("ActiveWorkBook");
     QAxObject *sheets = workbook->querySubObject("WorkSheets");
 
-    QStringList heads;
-    heads << "1Место" << "Фамилия, Имя" << "Разряд" << "Регион" << "Тренер";
-
-
 
     QSqlQuery query(
                 "SELECT "
-                    "TYPE_FK, AGE_FROM, AGE_TILL, SEX_FK, MAX(AGE_CATEGORY_FK) AS AGE_CAT "
+                    "TYPE_FK, AGE_FROM, AGE_TILL, SEX_FK, AGE_CATEGORY_FK, MAX(UID) AS MAX_UID_TC "
                 "FROM "
                     "TOURNAMENT_CATEGORIES "
                 "WHERE "
                     "TOURNAMENT_FK = ? "
                 "GROUP BY "
-                    "TYPE_FK, AGE_FROM, AGE_TILL, SEX_FK "
+                    "TYPE_FK, AGE_FROM, AGE_TILL, SEX_FK, AGE_CATEGORY_FK "
                 "ORDER BY "
                     "TYPE_FK, AGE_TILL, SEX_FK");
+
     query.addBindValue(tournamentUID);
     if (!query.exec())
     {
@@ -45,41 +51,43 @@ WinnerReport::WinnerReport(const QSqlDatabase& database, const long long tournam
     while (query.next())
     {
 
-        const long long type_fk = query.value("TYPE_FK").toLongLong();
-        const int age_from      = query.value("AGE_FROM").toLongLong();
-        const int age_till      = query.value("AGE_TILL").toLongLong();
-        const int sex_fk        = query.value("SEX_FK").toLongLong();
-        const int ageCatUID     = query.value("AGE_CAT").toLongLong();
+        const long long type_fk    = query.value("TYPE_FK").toLongLong();
+        const long long age_from   = query.value("AGE_FROM").toLongLong();
+        const long long age_till   = query.value("AGE_TILL").toLongLong();
+        const long long sex_fk     = query.value("SEX_FK").toLongLong();
+        const long long ageCatUID  = query.value("AGE_CATEGORY_FK").toLongLong();
+        const long long MAX_UID_TC = query.value("MAX_UID_TC").toLongLong();
 
-        std::map<QString, QVector<long long> > stdMap = DBUtils::get_weight_and_orderUIDs(tournamentUID, type_fk, age_from, age_till, sex_fk).toStdMap();
+        qDebug() << DBUtils::getField("NAME", "SEXES", sex_fk) << DBUtils::getField("NAME", "TYPES", type_fk) << age_from << age_till;
+
+
+        std::map<QString, QVector<long long> > stdMap = DBUtils::get_weight_and_orderUIDs(tournamentUID, type_fk, age_from, age_till, sex_fk, dlg.getMaxPlace()).toStdMap();
         if (stdMap.empty()) continue;
-        //qDebug() << type_fk << age_from << age_till << sex_fk;
+//        continue;
+
 
         int currentRow = 1;
 
-        sheets->querySubObject("Add");
-        QAxObject *sheet = sheets->querySubObject( "Item( int )", 1);
+        QAxObject *sheet = ExcelUtils::addNewSheet(sheets);
 
-        QString sheetName = DBUtils::getField("SHORTNAME", "SEXES", sex_fk);
-        sheetName += "," + DBUtils::getField("NAME", "TYPES", type_fk);
-        sheetName += "," + QString::number(age_from) + "-" + QString::number(age_till) + "лет";
+        QString sheetName =
+                DBUtils::getField("SHORTNAME", "SEXES", sex_fk) + ", " +
+                DBUtils::getField("AGE", "TOURNAMENT_CATEGORIES", MAX_UID_TC) + ", " +
+                DBUtils::getField("NAME", "TYPES", type_fk);
         sheet->setProperty("Name", sheetName.left(31));
-
 
         ExcelUtils::setTournamentName(sheet, DBUtils::getTournamentNameAsHeadOfDocument(tournamentUID), currentRow, 1, currentRow, heads.size());
 
         ++currentRow;
 
-        ExcelUtils::setValue     (sheet, currentRow, 1, "Список призёров");
+        ExcelUtils::setValue     (sheet, currentRow, 1, dlg.getTitle());
         ExcelUtils::uniteRange   (sheet, currentRow, 1, currentRow, heads.size());
         ++currentRow;
 
-        ExcelUtils::setValue     (sheet, currentRow, 1, DBUtils::getField("NAME", "TYPES", type_fk));
-        ExcelUtils::uniteRange   (sheet, currentRow, 1, currentRow, heads.size());
-        ++currentRow;
-
-        ExcelUtils::setValue     (sheet, currentRow, 1, DBUtils::getField("NAME", "AGE_CATEGORIES", ageCatUID) + ", " +
-                                  "DOTO Указать тут возраст!");
+        ExcelUtils::setValue     (sheet, currentRow, 1,
+                                  DBUtils::getField("NAME", "TYPES", type_fk) + ", " +
+                                  DBUtils::getField("NAME", "AGE_CATEGORIES", ageCatUID) + ", " +
+                                  DBUtils::getField("AGE", "TOURNAMENT_CATEGORIES", MAX_UID_TC));
         ExcelUtils::uniteRange   (sheet, currentRow, 1, currentRow, heads.size());
         ++currentRow;
 
@@ -103,19 +111,19 @@ WinnerReport::WinnerReport(const QSqlDatabase& database, const long long tournam
             ++currentRow;
             //qDebug() << "\t" << weight;
 
-            int place = 1;
+
+            int number = 1;
             for (const long long orderUID : val.second)
             {
-                ExcelUtils::setValue(sheet, currentRow, 1, QString::number(place));
                 if (orderUID == 0)
                     break;
-                ExcelUtils::setValue(sheet, currentRow, 2, DBUtils::getField("SECOND_NAME", "ORDERS", orderUID) + " " + DBUtils::getField("FIRST_NAME", "ORDERS", orderUID));
-                ExcelUtils::setValue(sheet, currentRow, 3, DBUtils::getField("NAME", "SPORT_CATEGORIES", DBUtils::getField("SPORT_CATEGORY_FK", "ORDERS", orderUID)));
-                ExcelUtils::setValue(sheet, currentRow, 4, DBUtils::getField("NAME", "REGIONS", DBUtils::getField("REGION_FK", "ORDERS", orderUID)));
-                ExcelUtils::setValue(sheet, currentRow, 5, DBUtils::getField("NAME", "COACHS", DBUtils::getField("COACH_FK", "ORDERS", orderUID)));
+                for (int column = 0; column < data.size(); ++column)
+                {
+                    QString string = DBUtils::get(data[column].second, orderUID, number);
+                    ExcelUtils::setValue(sheet, currentRow, column + 1, string);
+                }
 
                 ExcelUtils::setBorder(sheet, currentRow, 1, currentRow, heads.size());
-                place = qMin(3, place + 1);
                 ++currentRow;
             }
         }
@@ -124,23 +132,7 @@ WinnerReport::WinnerReport(const QSqlDatabase& database, const long long tournam
             ExcelUtils::setColumnAutoFit(sheet, column);
 
 
-        ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 2);
-        ExcelUtils::setRowHeight(sheet, currentRow, 25);
-        ExcelUtils::setValue(sheet, currentRow, 1, "Главный судья: ", 0);
-//        ExcelUtils::setValue(sheet, currentRow, 4, DBUtils::get_MAIN_JUDGE(database, tournamentUID), 0);
-        ++currentRow;
-
-        ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 2);
-        ExcelUtils::setRowHeight(sheet, currentRow, 25);
-        ExcelUtils::setValue(sheet, currentRow, 1, "Главный секретарь: ", 0);
-//        ExcelUtils::setValue(sheet, currentRow, 4, DBUtils::get_MAIN_SECRETARY(database, tournamentUID), 0);
-        ++currentRow;
-
-        ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 2);
-        ExcelUtils::setRowHeight(sheet, currentRow, 25);
-        ExcelUtils::setValue(sheet, currentRow, 1, "Зам. главного судьи: ", 0);
-//        ExcelUtils::setValue(sheet, currentRow, 4, DBUtils::get_ASSOCIATE_MAIN_JUDGE(database, tournamentUID), 0);
-        ++currentRow;
+        ExcelUtils::setFooter(sheet, currentRow, 1, 3, 25, dlg.getJudges(), DBUtils::getJudges(tournamentUID));
 
         ExcelUtils::setPageOrientation(sheet, 1);
         ExcelUtils::setCenterHorizontally(sheet, true);

@@ -39,9 +39,8 @@
 #include <QHeaderView>
 
 
-TournamentGridDialog2::TournamentGridDialog2(const QSqlDatabase &_database, long long _tournamentUID, QWidget *_parent)
+TournamentGridDialog2::TournamentGridDialog2(long long _tournamentUID, QWidget *_parent)
     : QDialog(_parent),
-      database(_database),
       tournamentUID(_tournamentUID)
 {
     tournamentCategories = -1;
@@ -213,7 +212,12 @@ TournamentGridDialog2::TournamentGridDialog2(const QSqlDatabase &_database, long
     });
 
 
-    connect(buttonSaveAll, &QPushButton::clicked, [this]{
+    connect(buttonSaveAll, &QPushButton::clicked, [this]
+    {
+        DialogChoseData dlg(DialogChoseData::Type::grids);
+        if (dlg.exec() != QDialog::Accepted)
+            return;
+
         QString directoryPath = QFileDialog::getExistingDirectory(this, tr("Выберите папку"), NULL, QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
         if (directoryPath.isNull()) return;
         //qDebug() << dir;
@@ -227,7 +231,7 @@ TournamentGridDialog2::TournamentGridDialog2(const QSqlDatabase &_database, long
         while (query.next())
         {
             qlonglong tcUID = query.value("UID").toLongLong();
-            RenderAreaWidget::printTableGridInExcel(tcUID, false, directoryPath, QVector<int>(), "", "");
+            RenderAreaWidget::printTableGridInExcel(dlg, tcUID, false, directoryPath, QVector<int>(), "", "");
         }
     });
 
@@ -256,7 +260,7 @@ void TournamentGridDialog2::onActivatedCategory(int id)
     pRenderArea->slotSetTournamentCategories(tournamentCategories);
     //qDebug() << __LINE__ << __PRETTY_FUNCTION__ << "tournamentCategories: " << tournamentCategories;
 
-    QSqlQuery query("SELECT * FROM ORDERS WHERE TOURNAMENT_CATEGORY_FK = ? ORDER BY SECOND_NAME, FIRST_NAME", database);
+    QSqlQuery query("SELECT * FROM ORDERS WHERE TOURNAMENT_CATEGORY_FK = ? ORDER BY SECOND_NAME, FIRST_NAME");
     query.bindValue(0, tournamentCategories);
 
     //qDebug() << "\n" << __PRETTY_FUNCTION__  << "\n" << "tournamentCategories: " << tournamentCategories << "\n";
@@ -625,7 +629,7 @@ void TournamentGridDialog2::onButtonGenerateGrid()
     //
     {
         // проверяем есть ли турнирная сетка, если есть, то задаём вопрос
-        QSqlQuery query("SELECT * FROM GRID WHERE TOURNAMENT_CATEGORIES_FK = ? ", database);
+        QSqlQuery query("SELECT * FROM GRID WHERE TOURNAMENT_CATEGORIES_FK = ? ");
         query.bindValue(0, tournamentCategories);
         if (query.exec())
         {
@@ -681,7 +685,7 @@ void TournamentGridDialog2::onButtonDelete()
 {
     {
         // проверяем есть ли турнирная сетка, если есть, то задаём вопрос
-        QSqlQuery query("SELECT * FROM GRID WHERE TOURNAMENT_CATEGORIES_FK = ? ", database);
+        QSqlQuery query("SELECT * FROM GRID WHERE TOURNAMENT_CATEGORIES_FK = ? ");
         query.bindValue(0, tournamentCategories);
         if (query.exec())
         {
@@ -699,7 +703,7 @@ void TournamentGridDialog2::onButtonDelete()
             return;
         }
     }
-    QSqlQuery query("DELETE FROM GRID WHERE TOURNAMENT_CATEGORIES_FK = ?", database);
+    QSqlQuery query("DELETE FROM GRID WHERE TOURNAMENT_CATEGORIES_FK = ?");
     query.bindValue(0, tournamentCategories);
     if (!query.exec())
         qDebug() << __PRETTY_FUNCTION__ << " " << query.lastError().text() << " " << query.lastQuery();
@@ -843,9 +847,9 @@ void TournamentGridDialog2::fillCategoryCombobox(QString filterStr)
 
 
             if (
-                radioButtonAll->isChecked() && haveSomeGridOrSomeOrders ||
-                radioButtonLonly->isChecked() && mansFromOrder.size() == 1 ||
-                radioButtonInvalid->isChecked() && std::vector<int>(mansFromOrder.begin(), mansFromOrder.end()) != std::vector<int>(mansFromGrig.begin(), mansFromGrig.end())
+                (radioButtonAll->isChecked() && haveSomeGridOrSomeOrders) ||
+                (radioButtonLonly->isChecked() && mansFromOrder.size() == 1) ||
+                (radioButtonInvalid->isChecked() && std::vector<int>(mansFromOrder.begin(), mansFromOrder.end()) != std::vector<int>(mansFromGrig.begin(), mansFromGrig.end()))
             ){
                 QListWidgetItem* item = new QListWidgetItem();
                 item->setData(Qt::DisplayRole, categoryName);

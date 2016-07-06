@@ -2,6 +2,8 @@
 #define TOURNAMENTGRIDDIALOG2_H
 
 #include "renderareawidget.h"
+#include "dialogchosedata.h"
+
 #include <QDialog>
 #include <QSqlDatabase>
 #include <QComboBox>
@@ -65,7 +67,6 @@ private:
     };
 
 private:
-    const QSqlDatabase& database;
     long long tournamentUID; // id турнира
     long long tournamentCategories;   // id категории
     RenderAreaWidget *pRenderArea;
@@ -86,7 +87,7 @@ private:
     int selectedColumnOfRableGrid;
 
 public:
-    TournamentGridDialog2(const QSqlDatabase &database, long long tournamentUID, QWidget *parent = 0);
+    TournamentGridDialog2(long long tournamentUID, QWidget *parent = 0);
     ~TournamentGridDialog2();
 
 private:

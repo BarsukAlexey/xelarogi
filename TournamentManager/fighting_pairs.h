@@ -2,6 +2,7 @@
 #define FIGHTINGPAIRS_H
 
 #include "db_utils.h"
+#include "dialogchosedata.h"
 
 #include <QGroupBox>
 #include <QRadioButton>
@@ -21,7 +22,7 @@ class FightingPairs : public QDialog
     Q_OBJECT
 
 public:
-    explicit FightingPairs(long long _tournamentUID, QWidget* parent);
+    explicit FightingPairs(long long _tournamentUID, QWidget* parent = 0);
     ~FightingPairs();
 
 private:
@@ -32,8 +33,7 @@ private:
     QLineEdit *qLineEdit;
     QCheckBox *checkBoxPointfighting;
     QSpinBox* spinBoxDelay;
-    void printInExcel(QAxObject *sheets, const QVector<DBUtils::Fighing>& fighting, int ring);
-    void printInJSON(const QVector<DBUtils::Fighing>& fighting, int ring, const QString& path);
+
     QRadioButton * radioFlagCountry;
     QRadioButton * radioFlagRegion;
     QRadioButton * radioFlagCity;
@@ -44,6 +44,8 @@ private:
     QRadioButton * radioTextCity;
     QRadioButton * radioTextClub;
 
+    void printInExcel(DialogChoseData& dlg, QAxObject *sheets, const QVector<DBUtils::Fighing>& fighting, int ring);
+    void printInJSON(const QVector<DBUtils::Fighing>& fighting, int ring, const QString& path);
     void makeGridsForPointFighting(QString existingDirectory, QVector<long long> tournamentCategoryUIDs, int delay, int countOfRings, QString stringDate);
     QString getTextLocal(long long orderUID);
     QString getFlagImage(long long orderUID);

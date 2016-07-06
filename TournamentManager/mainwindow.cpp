@@ -379,7 +379,7 @@ void MainWindow::on_pushButtonGrid_clicked()
     this->hide();
     long long routnamentUID = ui->tournamentUidLabel->text().toLongLong();
     qDebug() << "routnamentUID: " << routnamentUID;
-    TournamentGridDialog2 dialog(m_database, routnamentUID, 0);
+    TournamentGridDialog2 dialog(routnamentUID, 0);
     dialog.exec();
     this->show();
 }
@@ -388,7 +388,7 @@ void MainWindow::on_pushButtonFightinDistribution_clicked()
 {
     long long routnamentUID = ui->tournamentUidLabel->text().toLongLong();
     qDebug() << "routnamentUID: " << routnamentUID;
-    FitingDistribution(m_database, routnamentUID);
+    FitingDistribution dlg(routnamentUID);
 }
 
 void MainWindow::on_pushButtonPair_clicked()
@@ -412,7 +412,7 @@ void MainWindow::on_pushButtonWinnerReport_clicked()
 {
     long long routnamentUID = ui->tournamentUidLabel->text().toLongLong();
     qDebug() << "routnamentUID: " << routnamentUID;
-    WinnerReport(m_database, routnamentUID, this);
+    WinnerReport(routnamentUID, this);
 }
 
 void MainWindow::on_pushButtonLoadWinner_clicked()

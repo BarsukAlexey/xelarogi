@@ -2,6 +2,7 @@
 #include "db_utils.h"
 #include "excel_utils.h"
 #include "renderareawidget.h"
+#include "dialogchosedata.h"
 
 #include <QLabel>
 #include <QGridLayout>
@@ -97,11 +98,11 @@ FightingPairs::FightingPairs(long long _tournamentUID, QWidget* parent) :
     spinBoxDelay->setValue(60);
 
 
-    QGroupBox *groupBoxText = new QGroupBox("Текст");
-    radioTextCountry = new QRadioButton("Страна");
-    radioTextRegion  = new QRadioButton("Регион");
-    radioTextCity    = new QRadioButton("Город");
-    radioTextClub    = new QRadioButton("Клуб");
+    QGroupBox *groupBoxText = new QGroupBox("Текст (для табло и Excel-файла)");
+    radioTextCountry        = new QRadioButton("Страна");
+    radioTextRegion         = new QRadioButton("Регион");
+    radioTextCity           = new QRadioButton("Город");
+    radioTextClub           = new QRadioButton("Клуб");
     {
         QHBoxLayout *hbox = new QHBoxLayout;
         hbox->addWidget(radioTextCountry);
@@ -114,11 +115,11 @@ FightingPairs::FightingPairs(long long _tournamentUID, QWidget* parent) :
     radioTextRegion->setChecked(true);
 
 
-    QGroupBox *groupBoxFlag = new QGroupBox("Флаг");
-    radioFlagCountry = new QRadioButton("Страна");
-    radioFlagRegion  = new QRadioButton("Регион");
-    radioFlagCity    = new QRadioButton("Город");
-    radioFlagClub    = new QRadioButton("Клуб");
+    QGroupBox *groupBoxFlag = new QGroupBox("Флаг (для табло)");
+    radioFlagCountry        = new QRadioButton("Страна");
+    radioFlagRegion         = new QRadioButton("Регион");
+    radioFlagCity           = new QRadioButton("Город");
+    radioFlagClub           = new QRadioButton("Клуб");
     QHBoxLayout *hbox = new QHBoxLayout;
     hbox->addWidget(radioFlagCountry);
     hbox->addWidget(radioFlagRegion);
@@ -167,14 +168,14 @@ FightingPairs::~FightingPairs()
 
 }
 
-void FightingPairs::printInExcel(QAxObject *sheet, const QVector<DBUtils::Fighing>& fighting, int ring)
+void FightingPairs::printInExcel(DialogChoseData& dlg, QAxObject *sheet, const QVector<DBUtils::Fighing>& fighting, int ring)
 {
-
 
     int currentRow = 2;
 
+    QMap<QString, QString> translations = dlg.getTranslations();
 
-    ExcelUtils::setValue(sheet, currentRow, 1, "Состав пар");
+    ExcelUtils::setValue(sheet, currentRow, 1, dlg.getTitle());
     ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 3);
     ++currentRow;
 
@@ -182,7 +183,7 @@ void FightingPairs::printInExcel(QAxObject *sheet, const QVector<DBUtils::Fighin
     ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 3);
     ++currentRow;
 
-    ExcelUtils::setValue(sheet, currentRow, 1, "Ринг #" + QString::number(ring));
+    ExcelUtils::setValue(sheet, currentRow, 1, translations["Ринг"] + " #" + QString::number(ring));
     ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 3);
     ++currentRow;
 
@@ -193,24 +194,29 @@ void FightingPairs::printInExcel(QAxObject *sheet, const QVector<DBUtils::Fighin
         {
             ++currentRow;
 
-            ExcelUtils::setValue(sheet, currentRow, 1, RenderAreaWidget::getNameOfLevel(f.VERTEX));
+            QString nameOfLevel = RenderAreaWidget::getNameOfLevel(f.VERTEX);
+            if (translations.contains(nameOfLevel)) nameOfLevel = translations[nameOfLevel];
+
+            ExcelUtils::setValue(sheet, currentRow, 1, nameOfLevel);
             ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 3);
             ExcelUtils::setFontBold(sheet, currentRow, 1, true);
             ++currentRow;
 
-            ExcelUtils::setValue(sheet, currentRow, 1, DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK)
-                                 // + " " + DBUtils::getField("AGE_FROM", "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK) + "-" + DBUtils::getField("AGE_TILL", "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK)
-                                 );
+            ExcelUtils::setValue(sheet, currentRow, 1,
+                                 DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK));
             ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 3);
             ++currentRow;
         }
 
         ExcelUtils::setValue(sheet, currentRow, 1, QString::number(pair));
-        ExcelUtils::setValue(sheet, currentRow, 2, DBUtils::getField("SECOND_NAME", "ORDERS", f.UID0) + " " + DBUtils::getField("FIRST_NAME", "ORDERS", f.UID0) + " (" +
-                             DBUtils::getField("NAME", "REGIONS", DBUtils::getField("REGION_FK", "ORDERS", f.UID0)) +
+        ExcelUtils::setValue(sheet, currentRow, 2,
+                             DBUtils::getField("SECOND_NAME", "ORDERS", f.UID0) + " " +
+                             DBUtils::getField("FIRST_NAME", "ORDERS", f.UID0) + " (" +
+                             getTextLocal(f.UID0) +
                              ")");
-        ExcelUtils::setValue(sheet, currentRow, 3, DBUtils::getField( "SECOND_NAME", "ORDERS", f.UID1) + " " + DBUtils::getField("FIRST_NAME", "ORDERS", f.UID1) + " (" +
-                             DBUtils::getField("NAME", "REGIONS", DBUtils::getField("REGION_FK", "ORDERS", f.UID1)) +
+        ExcelUtils::setValue(sheet, currentRow, 3, DBUtils::getField( "SECOND_NAME", "ORDERS", f.UID1) + " " +
+                             DBUtils::getField("FIRST_NAME", "ORDERS", f.UID1) + " (" +
+                             getTextLocal(f.UID1) +
                              ")");
         ExcelUtils::setBorder(sheet, currentRow, 1, currentRow, 3);
         ++currentRow;
@@ -223,23 +229,7 @@ void FightingPairs::printInExcel(QAxObject *sheet, const QVector<DBUtils::Fighin
 
     ExcelUtils::setTournamentName(sheet, DBUtils::getTournamentNameAsHeadOfDocument(tournamentUID), 1, 1, 1, 3);
 
-    ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 2);
-    ExcelUtils::setRowHeight(sheet, currentRow, 25);
-    ExcelUtils::setValue(sheet, currentRow, 1, "Главный судья: ", 0);
-//    ExcelUtils::setValue(sheet, currentRow, 3, DBUtils::get_MAIN_JUDGE(QSqlDatabase::database(), tournamentUID), 0);
-    ++currentRow;
-
-    ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 2);
-    ExcelUtils::setRowHeight(sheet, currentRow, 25);
-    ExcelUtils::setValue(sheet, currentRow, 1, "Главный секретарь: ", 0);
-//    ExcelUtils::setValue(sheet, currentRow, 3, DBUtils::get_MAIN_SECRETARY(QSqlDatabase::database(), tournamentUID), 0);
-    ++currentRow;
-
-    ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 2);
-    ExcelUtils::setRowHeight(sheet, currentRow, 25);
-    ExcelUtils::setValue(sheet, currentRow, 1, "Зам. главного судьи: ", 0);
-//    ExcelUtils::setValue(sheet, currentRow, 3, DBUtils::get_ASSOCIATE_MAIN_JUDGE(QSqlDatabase::database(), tournamentUID), 0);
-    ++currentRow;
+    ExcelUtils::setFooter(sheet, currentRow, 1, 3, 25, dlg.getJudges(), DBUtils::getJudges(tournamentUID));
 }
 
 void FightingPairs::printInJSON(const QVector<DBUtils::Fighing>& fighting, int ring, const QString& existingDirectory)
@@ -295,6 +285,11 @@ void FightingPairs::printInJSON(const QVector<DBUtils::Fighing>& fighting, int r
 
 void FightingPairs::makeGridsForPointFighting(QString existingDirectory, QVector<long long> tournamentCategoryUIDs, const int delay, int countOfRings, QString stringDate)
 {
+    DialogChoseData dlg(DialogChoseData::Type::makeGridsForPointFighting);
+    if (dlg.exec() != QDialog::Accepted)
+        return;
+
+
     QVector<int> durationOfGrid;
     for (long long tcUID : tournamentCategoryUIDs)
         durationOfGrid << DBUtils::findDurationOfGrid(tcUID, delay);
@@ -315,7 +310,7 @@ void FightingPairs::makeGridsForPointFighting(QString existingDirectory, QVector
                 (
                     ringCount == 1 ||
                     curTime + durationOfGrid.first() <= time ||
-                    curTime < time && ((double)durationOfGrid.first()) / time <= 0.10
+                    (curTime < time && ((double)durationOfGrid.first()) / time <= 0.10)
                     )
                 ){
             curTime += durationOfGrid.takeFirst();
@@ -341,7 +336,7 @@ void FightingPairs::makeGridsForPointFighting(QString existingDirectory, QVector
 
     QString messageDisplay = message;
     std::vector<int> data = myThread->ans;
-    if (data.size() && (maxVal > myThread->maxSumSeg || maxVal == myThread->maxSumSeg && minVal < myThread->minSumSeg))
+    if (data.size() && (maxVal > myThread->maxSumSeg || (maxVal == myThread->maxSumSeg && minVal < myThread->minSumSeg)))
     {
         qDebug() << "find better";
         ansTournamentCategoryUIDs.clear();
@@ -411,11 +406,11 @@ void FightingPairs::makeGridsForPointFighting(QString existingDirectory, QVector
         QVector<QJsonObject> jsonObjects;
         for (int i = 0; i < uids.size(); ++i)
         {
-            RenderAreaWidget::printTableGridInExcel(uids[i], true,
-                existingDirectory, fightNumber[i], stringDate,
-                "Татами " +  QString("%1 (%2)").arg(idRing, 2, 10, QChar('0')).arg(i + 1, 2, 10, QChar('0')));
 
-            //
+            RenderAreaWidget::printTableGridInExcel(dlg, uids[i], true,
+                existingDirectory, fightNumber[i], stringDate,
+                dlg.getTranslations()["Татами"] + " " +  QString("%1 (%2)").arg(idRing, 2, 10, QChar('0')).arg(i + 1, 2, 10, QChar('0')));
+
             QVector<DBUtils::Fighing> fightingNodes = DBUtils::getListOfPairsForFightingForPointFighting(uids[i]);
             std::reverse(fightingNodes.begin(), fightingNodes.end());
             for (int j = 0; j < fightingNodes.size(); ++j)
@@ -537,6 +532,10 @@ void FightingPairs::onGoPress()
     }
 
 
+    DialogChoseData dlg(DialogChoseData::Type::fighting_pair);
+    if (dlg.exec() != QDialog::Accepted)
+        return;
+
 
     QVector<DBUtils::Fighing> fighing;
     QVector<DBUtils::Fighing> fighing2;
@@ -597,7 +596,7 @@ void FightingPairs::onGoPress()
 
 
     std::vector<int> data = myThread->ans;
-    if (data.size() && (maxVal > myThread->maxSumSeg || maxVal == myThread->maxSumSeg && minVal < myThread->minSumSeg))
+    if (data.size() && (maxVal > myThread->maxSumSeg || (maxVal == myThread->maxSumSeg && minVal < myThread->minSumSeg)))
     {
         qDebug() << "find better";
         ansFightings.clear();
@@ -634,10 +633,9 @@ void FightingPairs::onGoPress()
         int idRing = 1;
         for (QVector<DBUtils::Fighing> curFighing : ansFightings)
         {
-            sheets->querySubObject("Add");
-            QAxObject *sheet = sheets->querySubObject( "Item( int )", 1);
-            sheet->setProperty("Name", "Ринг " + QString::number(idRing));
-            printInExcel(sheet, curFighing, idRing);
+            QAxObject *sheet = ExcelUtils::addNewSheet(sheets);
+            sheet->setProperty("Name", dlg.getTranslations()["Ринг"] + " " + QString::number(idRing));
+            printInExcel(dlg,  sheet, curFighing, idRing);
             printInJSON(curFighing, idRing, existingDirectory);
 
             ExcelUtils::setPageOrientation(sheet, 1);

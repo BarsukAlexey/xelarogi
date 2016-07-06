@@ -56,7 +56,7 @@ public:
     static QString getNameTournamentByUID(const QSqlDatabase& , long long);
     static QString getTypeNameByUID(const QSqlDatabase& , long long);
     static QString get_SHORTNAME_FROM_SEXES(const QSqlDatabase& , long long);
-    static QStringList get_DAYS_FROM_TOURNAMENTS(const QSqlDatabase& , long long);
+    static QStringList get_DAYS_FROM_TOURNAMENTS(long long);
 
     // для таблицы ORDERS
     static QString getSecondNameAndFirstName(long long UID);
@@ -68,6 +68,7 @@ public:
 
     // для таблицы TOURNAMENTS
     static QVector<QString> getJudges(long long tournamentUID);
+
 
 
 
@@ -93,10 +94,11 @@ public:
     static QVector<long long> get_UIDs_of_TOURNAMENT_CATEGORIES(long long tournamentUID);
     static QVector<long long> get_UIDOrder_for_TC(long long UIDtournamentCategory);
     static QVector<std::tuple<long long, int, int, long long> > get_distinct_TYPE_FK_AgeFrom_AgeTill(long long tournamentUID);
-    static QMap<QString, QVector<long long> > get_weight_and_orderUIDs(long long tournamentUID, long long type_fk, int age_from, int age_till, int sex_fk);
+    static QMap<QString, QVector<long long> > get_weight_and_orderUIDs(long long tournamentUID, long long type_fk, int age_from, int age_till, int sex_fk, int maxPlace);
     static QString getNormanWeightRangeFromTOURNAMENT_CATEGORIES(long long uidCategory);
     static QString getWeightAsOneNumberPlusMinus(long long uidCategory);
     static QString getNormanAgeRangeFromTOURNAMENT_CATEGORIES(long long uidCategory);
+    static QString getNameForExcelSheet(long long uidTC);
 
 
 
@@ -304,7 +306,10 @@ public:
         else if (typeField == arabPlaceRange)
         {
             std::pair<int, int> place = DBUtils::getPlace(uidOrder);
-            text = QString::number(place.first) + '-' + QString::number(place.second);
+            if (place.first == place.second)
+                text = QString::number(place.first);
+            else
+                text = QString::number(place.first) + '-' + QString::number(place.second);
         }
         else if (typeField == romePlace)
         {
@@ -314,7 +319,10 @@ public:
         else if (typeField == romePlaceRange)
         {
             std::pair<int, int> place = DBUtils::getPlace(uidOrder);
-            text = convertToRoman(place.first) + "-" + convertToRoman(place.second);
+            if (place.first == place.second)
+                text = convertToRoman(place.first);
+            else
+                text = convertToRoman(place.first) + "-" + convertToRoman(place.second);
         }
 
 

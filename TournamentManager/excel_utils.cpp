@@ -194,3 +194,14 @@ void ExcelUtils::setFooter(QAxObject* sheet, int row, int column0, int column1, 
         ++row;
     }
 }
+
+QAxObject*ExcelUtils::addNewSheet(QAxObject* sheets)
+{
+    int intCount = sheets->property("Count").toInt();
+    // Capture last sheet and add new sheet
+    QAxObject* lastSheet = sheets->querySubObject("Item(int)", intCount);
+    sheets->dynamicCall("Add(QVariant)", lastSheet->asVariant());
+    // Capture the new sheet and move to after last sheet
+    QAxObject* sheet = sheets->querySubObject("Item(int)", intCount);
+    return sheet;
+}
