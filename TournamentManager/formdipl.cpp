@@ -8,28 +8,159 @@ FormDipl::FormDipl(long long UID_tournament, QWidget *parent) :
 {
     ui->setupUi(this);
 
+    for (int i = 0; i < 16; ++i)
+       ui->comboBoxMaxPlace->addItem(QString::number(1 << i));
+
     ui->tableWidget->resizeColumnsToContents();
     ui->tableWidget->setColumnWidth(0,175);
     ui->tableWidget->setColumnWidth(1,120);
     ui->tableWidget->setColumnWidth(2,175);
+
+
+    connect(ui->pushButtonNew, &QPushButton::clicked, [this](){onNewTemplate();});
+    connect(ui->pushButtonSave, &QPushButton::clicked, [this](){onSaveData();});
 
     connect(ui->pushButtonAdd, SIGNAL(clicked()), this, SLOT(addRow()));
     connect(ui->pushButtonDelete, SIGNAL(clicked()), this, SLOT(deleteRow()));
     connect(ui->tableWidget, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onTableClicked(const QModelIndex &)));
     connect(ui->pushButtonPrint, &QPushButton::clicked, this, &FormDipl::onPushPrint);
     connect(ui->radioButtonDiplom, &QRadioButton::clicked, [this](){
-        ui->spinBoxMaxPlace->setEnabled(ui->radioButtonDiplom->isChecked());
+        ui->comboBoxMaxPlace->setEnabled(ui->radioButtonDiplom->isChecked());
         ui->label_5->setEnabled(ui->radioButtonDiplom->isChecked());
     });
     connect(ui->radioButtonBadge, &QRadioButton::clicked, [this](){
-        ui->spinBoxMaxPlace->setEnabled(ui->radioButtonDiplom->isChecked());
+        ui->comboBoxMaxPlace->setEnabled(ui->radioButtonDiplom->isChecked());
         ui->label_5->setEnabled(ui->radioButtonDiplom->isChecked());
     });
+    connect(ui->comboBox, &QComboBox::currentTextChanged, [this](){
+        loadData();
+    });
+
+
+    QDir recoredDir(dirPath);
+    for (QString file : recoredDir.entryList(QDir::Filter::Files))
+    {
+        ui->comboBox->addItem(file);
+    }
 }
 
 FormDipl::~FormDipl()
 {
     delete ui;
+}
+
+void FormDipl::onSaveData()
+{
+    QJsonObject obj;
+
+    obj["width"] = ui->spinBoxWidth->value();
+    obj["height"] = ui->spinBoxHeight->value();
+    obj["badge"] = ui->radioButtonBadge->isChecked();
+    obj["maxPlace"] = ui->comboBoxMaxPlace->currentText();
+
+    QJsonArray arr;
+    for (int row = 0; row < fields.size(); ++row)
+    {
+        QJsonObject a;
+
+        QJsonArray data;
+        for (std::pair<DBUtils::TypeField, QString> pair : fields[row])
+        {
+            QJsonObject obj;
+            obj["id"] = pair.first;
+            obj["text"] = pair.second;
+            data << obj;
+        }
+        a["data"] = data;
+        a["font"] = fonts[row].toString();
+        a["color"] = colors[row].name();
+
+        int x        = dynamic_cast<QSpinBox* >(ui->tableWidget->cellWidget(row, 4))->value();
+        int y        = dynamic_cast<QSpinBox* >(ui->tableWidget->cellWidget(row, 5))->value();
+        int width    = dynamic_cast<QSpinBox* >(ui->tableWidget->cellWidget(row, 6))->value();
+        int aligment = dynamic_cast<QComboBox*>(ui->tableWidget->cellWidget(row, 1))->currentIndex();
+        a["x"] = x;
+        a["y"] = y;
+        a["width"] = width;
+        a["aligment"] = aligment;
+
+        arr.push_back(a);
+    }
+    obj["arr"] = arr;
+
+    QFile saveFile(QDir(dirPath).filePath(ui->comboBox->currentText()));
+    if (!saveFile.open(QIODevice::WriteOnly)) {
+        qWarning("Couldn't open save file.");
+        return;
+    }
+    qDebug() << "Записано " << saveFile.write(QJsonDocument(obj).toJson());
+}
+
+void FormDipl::loadData()
+{
+    fields.resize(0);
+    fonts.resize(0);
+    colors.resize(0);
+    ui->tableWidget->setRowCount(0);
+
+
+    QFile file(QDir(dirPath).filePath(ui->comboBox->currentText()));
+    file.open(QIODevice::ReadOnly | QIODevice::Text);
+    QJsonDocument doc = QJsonDocument::fromJson(QString(file.readAll()).toUtf8());
+    file.close();
+
+    QJsonObject obj = doc.object();
+
+    ui->spinBoxWidth->setValue(obj["width"].toInt());
+    ui->spinBoxHeight->setValue(obj["height"].toInt());
+    ui->radioButtonBadge ->setChecked( obj["badge"].toBool());
+    ui->radioButtonDiplom->setChecked(!obj["badge"].toBool());
+    ui->comboBoxMaxPlace->setCurrentText(obj["maxPlace"].toString());
+
+
+    QJsonArray arr = obj["arr"].toArray();
+    for (int i = 0; i < arr.size(); ++i)
+        addRow();
+
+
+    QVector<DBUtils::TypeField> allTypeFields = DBUtils::getAllTypeFieldl();
+
+    for (int row = 0; row < arr.size(); ++row)
+    {
+        QJsonObject a = arr.at(row).toObject();
+
+        for (QJsonValue val : a["data"].toArray())
+        {
+            QJsonObject obj = val.toObject();
+            int typeField = obj["id"].toInt();
+
+            for (DBUtils::TypeField field : allTypeFields)
+            {
+                if (typeField == field)
+                {
+                    fields[row] << std::make_pair(field, obj["text"].toString());
+                    break;
+                }
+            }
+        }
+        ui->tableWidget->setItem(row, 0, new QTableWidgetItem(DBUtils::toString(fields[row])));
+
+        dynamic_cast<QComboBox*>(ui->tableWidget->cellWidget(row, 1))->setCurrentIndex(a["aligment"].toInt());
+
+        fonts[row] = QFont(a["font"].toString());
+        ui->tableWidget->setItem(row, 2, new QTableWidgetItem(fonts[row].toString()));
+
+        colors[row] = QColor(a["color"].toString());
+        QTableWidgetItem *item = new QTableWidgetItem();
+        item->setBackgroundColor(colors[row]);
+        ui->tableWidget->setItem(row, 3, item);
+
+
+        dynamic_cast<QSpinBox* >(ui->tableWidget->cellWidget(row, 4))->setValue(a["x"].toInt());
+        dynamic_cast<QSpinBox* >(ui->tableWidget->cellWidget(row, 5))->setValue(a["y"].toInt());
+        dynamic_cast<QSpinBox* >(ui->tableWidget->cellWidget(row, 6))->setValue(a["width"].toInt());
+
+    }
 }
 
 
@@ -136,24 +267,41 @@ void FormDipl::deleteRow()
 
 void FormDipl::onPushPrint()
 {
+    onSaveData();
 
     QString dirPath = QFileDialog::getExistingDirectory(this);
     //QString dirPath = "C:\\Trash";
     if (dirPath.isEmpty()) return;
 
+    QVector<long long> localGet_UIDs_of_TOURNAMENT_CATEGORIES = DBUtils::get_UIDs_of_TOURNAMENT_CATEGORIES(UID_tournament);
 
-    for (long long uidTC : DBUtils::get_UIDs_of_TOURNAMENT_CATEGORIES(UID_tournament))
+    QProgressDialog progress("Working...", "Don't push", 0, localGet_UIDs_of_TOURNAMENT_CATEGORIES.size(), this);
+    progress.setWindowModality(Qt::WindowModal);
+    //progress.setAutoReset(false);
+    progress.setMinimumDuration(500);
+
+    for (long long uidTC : localGet_UIDs_of_TOURNAMENT_CATEGORIES)
     {
-        QVector<long long> UIDOrder = DBUtils::get_UIDOrder_for_TC(uidTC);
-        std::sort(UIDOrder.begin(), UIDOrder.end(), [](const long long& UIDOrder0, const long long& UIDOrder1)  -> bool {
-            std::pair<int, int> place0 = DBUtils::getPlace(UIDOrder0);
-            std::pair<int, int> place1 = DBUtils::getPlace(UIDOrder1);
-            QString name0 = UIDOrder0 <= 0? "" : DBUtils::getSecondNameAndFirstName(UIDOrder0);
-            QString name1 = UIDOrder1 <= 0? "" : DBUtils::getSecondNameAndFirstName(UIDOrder1);
+        //QVector<long long> UIDOrder = DBUtils::get_UIDOrder_for_TC(uidTC);
+        //qDebug() << uidTC << UIDOrder.size();
+
+        progress.setValue(progress.value() + 1);
+
+        QVector<std::pair<long long, std::pair<int, int>>> UIDOrder = DBUtils::getUidAndPlace(uidTC);
+        if (UIDOrder.isEmpty())
+            continue;
+        qDebug() << uidTC << UIDOrder.size();
+
+
+        std::sort(UIDOrder.begin(), UIDOrder.end(), [](
+                  const std::pair<long long, std::pair<int, int>>& UIDOrder0,
+                  const std::pair<long long, std::pair<int, int>>& UIDOrder1)  -> bool {
+            std::pair<int, int> place0 = UIDOrder0.second;
+            std::pair<int, int> place1 = UIDOrder1.second;
+            QString name0 = DBUtils::getSecondNameAndFirstName(UIDOrder0.first);
+            QString name1 = DBUtils::getSecondNameAndFirstName(UIDOrder1.first);
             return  place0 < place1 || (place0 == place1 && name0 < name1);
         });
-        if (UIDOrder.isEmpty() || (ui->radioButtonDiplom->isChecked() && DBUtils::getPlace(UIDOrder[0]).first == -1))
-            continue;
 
         QString fileName = DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", uidTC, __PRETTY_FUNCTION__) + ".pdf";
         QString fullpath = QDir(dirPath).filePath(fileName);
@@ -175,9 +323,11 @@ void FormDipl::onPushPrint()
         bool isThisFirstPage = true;
         for (int i = 0; i < UIDOrder.size(); ++i)
         {
-            const long long uidOrder = UIDOrder[i];
-            std::pair<int, int> place = DBUtils::getPlace(uidOrder);
-            if (ui->radioButtonDiplom->isChecked() && ui->spinBoxMaxPlace->value() < place.first)
+            const long long uidOrder = UIDOrder[i].first;
+            std::pair<int, int> place = UIDOrder[i].second;
+            //qDebug() << uidTC << uidOrder << "  (" << place.first << ", " << place.second << ")" << DBUtils::getSecondNameAndFirstName(uidOrder);
+
+            if (ui->radioButtonDiplom->isChecked() && ui->comboBoxMaxPlace->currentText().toInt() < place.first)
                 continue;
 
             if (isThisFirstPage)
@@ -247,7 +397,36 @@ void FormDipl::onPushPrint()
             }
         }
         painter.end();
-
+        /**/
     }
-    /**/
+    qDebug() << "DONE!";
+}
+
+void FormDipl::onNewTemplate()
+{
+    bool ok;
+    QString fileName = QInputDialog::getText(this, tr(" "),
+                                         tr("Введите назание шаблона:"),
+                                         QLineEdit::Normal,
+                                         "", &ok);
+    if (!ok || fileName.isEmpty())
+        return;
+
+    fileName += ".json";
+
+
+    bool done = false;
+    for (int i = 0; i < ui->comboBox->count(); ++i)
+    {
+        if (ui->comboBox->itemText(i) == fileName)
+        {
+            ui->comboBox->setCurrentIndex(i);
+            done = true;
+        }
+    }
+    if (!done)
+    {
+        ui->comboBox->addItem(fileName);
+        ui->comboBox->setCurrentIndex(ui->comboBox->count() - 1);
+    }
 }

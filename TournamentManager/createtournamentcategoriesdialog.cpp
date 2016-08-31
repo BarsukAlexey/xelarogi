@@ -43,7 +43,7 @@ CreateTournamentCategoriesDialog::CreateTournamentCategoriesDialog(long long tou
         if (index != QModelIndex())
         {
             QModelIndex ind = index.model()->index(index.row(), 0);
-            onChangeBtn(ind.data().toLongLong());
+            on_pushButtonSaveChanges(ind.data().toLongLong());
         }
     });
 
@@ -82,8 +82,12 @@ void CreateTournamentCategoriesDialog::updateTable()
     model->setHeaderData(model->fieldIndex("DURATION_BREAK"), Qt::Horizontal, "Перерыв");
     model->setHeaderData(model->fieldIndex("ROUND_COUNT"), Qt::Horizontal, "Кол-во раундов");
     model->setHeaderData(model->fieldIndex("AGE_CATEGORY_FK"), Qt::Horizontal, "Возраст. кат.");
+    model->setHeaderData(model->fieldIndex("IN_CASE_TIE"), Qt::Horizontal, "В случае ничьи");
+    model->setHeaderData(model->fieldIndex("DURATION_EXTRA_ROUND"), Qt::Horizontal, "Длительность доп. раунда");
+    model->setHeaderData(model->fieldIndex("AGE"), Qt::Horizontal, "Возраст");
+    model->setHeaderData(model->fieldIndex("WEIGHT"), Qt::Horizontal, "Вес");
+
     model->select();
-    //qDebug() << __PRETTY_FUNCTION__ << model->();
 
     ui->tableView->setModel(model);
     ui->tableView->setColumnHidden(model->fieldIndex("UID"), true);
@@ -107,44 +111,48 @@ void CreateTournamentCategoriesDialog::updateDataWidget(long long categoryUID)
 {
     QSqlQuery query;
     if (!query.prepare("SELECT * FROM TOURNAMENT_CATEGORIES WHERE UID = ?"))
-        qDebug() << query.lastError().text();
-    query.bindValue(0, categoryUID);
-
-    if (query.exec() && query.next())
     {
-        QString name = query.value("NAME").toString();
-        double ageFrom = query.value("AGE_FROM").toDouble();
-        double ageTill = query.value("AGE_TILL").toDouble();
-        double weightFrom = query.value("WEIGHT_FROM").toDouble();
-        double weightTill = query.value("WEIGHT_TILL").toDouble();
-        int durationFighting = query.value("DURATION_FIGHING").toInt();
-        int durationBreak = query.value("DURATION_BREAK").toInt();
-        int roundCount = query.value("ROUND_COUNT").toInt();
-        long long sexUID = query.value("SEX_FK").toLongLong();
-        long long typeUID = query.value("TYPE_FK").toLongLong();
-        long long ageCategoryUID = query.value("AGE_CATEGORY_FK").toLongLong();
-        long long IN_CASE_TIE = query.value("IN_CASE_TIE").toLongLong();
-        long long DURATION_EXTRA_ROUND = query.value("DURATION_EXTRA_ROUND").toLongLong();
-
-        ui->nameLE->setText(name);
-        ui->ageFromSB->setValue(ageFrom);
-        ui->ageTillSB->setValue(ageTill);
-        ui->weightFromDSB->setValue(weightFrom);
-        ui->weightTillDSB->setValue(weightTill);
-        ui->durationBreakSB->setValue(durationBreak);
-        ui->durationFightingSB->setValue(durationFighting);
-        ui->roundCountSB->setValue(roundCount);
-        ui->comboBoxTie->setCurrentIndex(IN_CASE_TIE);
-        ui->spinBoxExtraRound->setValue(DURATION_EXTRA_ROUND);
-
-        selectSexByUID(sexUID);
-        selectTypeByUID(typeUID);
-        selectAgeCategory(ageCategoryUID);
+        qDebug() << query.lastError();
+        return;
     }
-    else
+    query.addBindValue(categoryUID);
+
+    if (!(query.exec() && query.next()))
     {
-        qDebug() << query.lastError().text();
+        qDebug() << query.lastError();
+        return;
     }
+    QString name = query.value("NAME").toString();
+    double ageFrom = query.value("AGE_FROM").toDouble();
+    double ageTill = query.value("AGE_TILL").toDouble();
+    double weightFrom = query.value("WEIGHT_FROM").toDouble();
+    double weightTill = query.value("WEIGHT_TILL").toDouble();
+    int durationFighting = query.value("DURATION_FIGHING").toInt();
+    int durationBreak = query.value("DURATION_BREAK").toInt();
+    int roundCount = query.value("ROUND_COUNT").toInt();
+    long long sexUID = query.value("SEX_FK").toLongLong();
+    long long typeUID = query.value("TYPE_FK").toLongLong();
+    long long ageCategoryUID = query.value("AGE_CATEGORY_FK").toLongLong();
+    long long IN_CASE_TIE = query.value("IN_CASE_TIE").toLongLong();
+    long long DURATION_EXTRA_ROUND = query.value("DURATION_EXTRA_ROUND").toLongLong();
+
+    ui->nameLE->setText(name);
+    ui->ageFromSB->setValue(ageFrom);
+    ui->ageTillSB->setValue(ageTill);
+    ui->weightFromDSB->setValue(weightFrom);
+    ui->weightTillDSB->setValue(weightTill);
+    ui->durationBreakSB->setValue(durationBreak);
+    ui->durationFightingSB->setValue(durationFighting);
+    ui->roundCountSB->setValue(roundCount);
+    ui->comboBoxTie->setCurrentIndex(IN_CASE_TIE);
+    ui->spinBoxExtraRound->setValue(DURATION_EXTRA_ROUND);
+
+    ui->lineEditAge->setText(query.value("AGE").toString());
+    ui->lineEditWeight->setText(query.value("WEIGHT").toString());
+
+    selectSexByUID(sexUID);
+    selectTypeByUID(typeUID);
+    selectAgeCategory(ageCategoryUID);
 }
 
 void CreateTournamentCategoriesDialog::fillSexComboBox()
@@ -323,9 +331,11 @@ void CreateTournamentCategoriesDialog::onAddBtn()
     }
 }
 
-void CreateTournamentCategoriesDialog::onChangeBtn(long long categoryUID)
+void CreateTournamentCategoriesDialog::on_pushButtonSaveChanges(long long categoryUID)
 {
     QModelIndex selectedIndex = ui->tableView->currentIndex();
+    if (!selectedIndex.isValid())
+        return;
 
     QString name = ui->nameLE->text();
     double ageFrom = ui->ageFromSB->value();
@@ -344,21 +354,32 @@ void CreateTournamentCategoriesDialog::onChangeBtn(long long categoryUID)
         DURATION_EXTRA_ROUND = 0;
 
     QSqlQuery updateQuery;
-    if (!updateQuery.prepare("UPDATE TOURNAMENT_CATEGORIES"
-                             " SET NAME = ?,"
-                             " AGE_CATEGORY_FK = ?, "
-                             " AGE_FROM = ?, AGE_TILL = ?,"
-                             " WEIGHT_FROM = ?, WEIGHT_TILL = ?,"
-                             " TOURNAMENT_FK = ?, SEX_FK = ?,"
-                             " TYPE_FK = ?, "
-                             " DURATION_FIGHING = ?, DURATION_BREAK = ?, ROUND_COUNT = ?, "
-                             " IN_CASE_TIE = ?, DURATION_EXTRA_ROUND = ? "
-                             " WHERE UID = ?"))
-        qDebug() << updateQuery.lastError().text();
+    if (!updateQuery.prepare("UPDATE TOURNAMENT_CATEGORIES "
+                             "SET "
+                                "NAME = ?, "
+                                "AGE = ?, WEIGHT = ?, "
+                                "AGE_CATEGORY_FK = ?, "
+                                "AGE_FROM = ?, AGE_TILL = ?, "
+                                "WEIGHT_FROM = ?, WEIGHT_TILL = ?, "
+                                "TOURNAMENT_FK = ?, SEX_FK = ?, "
+                                "TYPE_FK = ?, "
+                                "DURATION_FIGHING = ?, DURATION_BREAK = ?, ROUND_COUNT = ?, "
+                                "IN_CASE_TIE = ?, DURATION_EXTRA_ROUND = ? "
+                             "WHERE UID = ?"))
+    {
+        qDebug() << updateQuery.lastError();
+        return ;
+    }
     updateQuery.addBindValue(name);
+
+    updateQuery.addBindValue(ui->lineEditAge->text());
+    updateQuery.addBindValue(ui->lineEditWeight->text());
+
     updateQuery.addBindValue(ageCatUID);
+
     updateQuery.addBindValue(ageFrom);
     updateQuery.addBindValue(ageTill);
+
     updateQuery.addBindValue(weightFrom);
     updateQuery.addBindValue(weightTill);
 

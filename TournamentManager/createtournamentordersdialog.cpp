@@ -56,11 +56,6 @@ CreateTournamentOrdersDialog::CreateTournamentOrdersDialog(const QSqlDatabase &d
     }
     model->select();
 
-    connect(ui->btnExit, &QPushButton::clicked, [this]()
-    {
-        this->accept();
-    });
-
     ui->tableView->resizeColumnsToContents();
 
     addContextMenu();

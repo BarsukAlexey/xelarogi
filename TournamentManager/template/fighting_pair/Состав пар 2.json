@@ -1,0 +1,14 @@
+{
+    "AssociateMainJudge": "Helper:",
+    "MainJudge": "Main jusge:",
+    "MainSecretary": "Main sercetary:",
+    "Rows": [
+    ],
+    "maxPlace": 1,
+    "title": "List of pairs",
+    "translation": {
+        "Полуфинал": "Semi-final",
+        "Ринг": "Ring",
+        "Финал": "Final"
+    }
+}

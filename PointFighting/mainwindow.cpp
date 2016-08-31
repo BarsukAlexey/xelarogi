@@ -17,22 +17,22 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    while (true)
-    {
-        LoginDialog loginDialog(this);
-        if (loginDialog.exec() == QDialog::Accepted)
-        {
-            break;
-        }
-        if (!LoginDialog::mOkBtnClicked)
-        {
-            exit(0);
-        }
-        else
-        {
-            QMessageBox::warning(this, "Неудачная попытка авторизации", "Логи или пароль введены неверно");
-        }
-    }
+//    while (true)
+//    {
+//        LoginDialog loginDialog(this);
+//        if (loginDialog.exec() == QDialog::Accepted)
+//        {
+//            break;
+//        }
+//        if (!LoginDialog::mOkBtnClicked)
+//        {
+//            exit(0);
+//        }
+//        else
+//        {
+//            QMessageBox::warning(this, "Неудачная попытка авторизации", "Логи или пароль введены неверно");
+//        }
+//    }
 
 
     ui->setupUi(this);

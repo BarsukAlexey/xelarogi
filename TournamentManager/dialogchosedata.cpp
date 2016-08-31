@@ -33,6 +33,13 @@ DialogChoseData::DialogChoseData(DialogChoseData::Type type, QWidget *parent) :
                 << std::make_pair(new QLabel("Финал"), new QPlainTextEdit())
                 << std::make_pair(new QLabel("Полуфинал"), new QPlainTextEdit());
     }
+    else if (type == DialogChoseData::Type::ReportManda)
+    {
+        translation
+                << std::make_pair(new QLabel("#"), new QPlainTextEdit())
+                << std::make_pair(new QLabel("Команда"), new QPlainTextEdit())
+                << std::make_pair(new QLabel("Всего"), new QPlainTextEdit());
+    }
 
 
 
@@ -144,6 +151,7 @@ QString DialogChoseData::getDirPath()
     if (type == DialogChoseData::Type::makeGridsForPointFighting) return ".\\template\\makeGridsForPointFighting";
     if (type == DialogChoseData::Type::fighting_pair            ) return ".\\template\\fighting_pair";
     if (type == DialogChoseData::Type::lol                      ) return ".\\template\\lol";
+    if (type == DialogChoseData::Type::ReportManda              ) return ".\\template\\ReportMandat";
     return ".\\template";
 }
 
@@ -153,6 +161,7 @@ bool DialogChoseData::enableTitle()
     if (type == DialogChoseData::Type::WinnerReport       ) return true;
     if (type == DialogChoseData::Type::fighting_pair      ) return true;
     if (type == DialogChoseData::Type::lol                ) return true;
+    if (type == DialogChoseData::Type::ReportManda        ) return true;
     return false;
 }
 
@@ -354,8 +363,12 @@ void DialogChoseData::onDelete()
 {
     if (ui->comboBox->currentIndex() == -1)
         return;
-    QDir(getDirPath()).remove(ui->comboBox->currentText());
-    ui->comboBox->removeItem(ui->comboBox->currentIndex());
+    QMessageBox::StandardButton localQuestion = QMessageBox::question(0, "", "Удалить шаблон?");
+    if (localQuestion == QMessageBox::StandardButton::Yes)
+    {
+        QDir(getDirPath()).remove(ui->comboBox->currentText());
+        ui->comboBox->removeItem(ui->comboBox->currentIndex());
+    }
 }
 
 void DialogChoseData::onAddRow()

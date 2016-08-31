@@ -28,13 +28,6 @@
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="label_2">
-           <property name="text">
-            <string>Краткое обозначение</string>
-           </property>
-          </widget>
-         </item>
-         <item>
           <widget class="QLabel" name="label_6">
            <property name="text">
             <string>Главный судья</string>
@@ -62,15 +55,19 @@
            </property>
           </widget>
          </item>
+         <item>
+          <widget class="QLabel" name="label_11">
+           <property name="text">
+            <string>Время проведения (напр, 24-25 мая 2016 года)</string>
+           </property>
+          </widget>
+         </item>
         </layout>
        </item>
        <item>
         <layout class="QVBoxLayout" name="verticalLayout_3">
          <item>
           <widget class="QLineEdit" name="nameLE"/>
-         </item>
-         <item>
-          <widget class="QLineEdit" name="shortNameLE"/>
          </item>
          <item>
           <widget class="QLineEdit" name="mainJudgeLE"/>
@@ -83,6 +80,9 @@
          </item>
          <item>
           <widget class="QLineEdit" name="lineEditHost"/>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="lineEdit_TextDataRange"/>
          </item>
         </layout>
        </item>
@@ -182,38 +182,5 @@
   </layout>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>accepted()</signal>
-   <receiver>CreateTournamentDialog</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>157</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>rejected()</signal>
-   <receiver>CreateTournamentDialog</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>286</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

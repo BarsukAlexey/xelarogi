@@ -95,6 +95,26 @@
           </widget>
          </item>
          <item>
+          <widget class="QLabel" name="label_14">
+           <property name="text">
+            <string>Возраст (будет отображаться в отчётах)</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_15">
+           <property name="text">
+            <string>Вес (будет отображаться в отчётах)</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QLabel" name="label">
            <property name="text">
             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Возраст от&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -117,7 +137,7 @@
          <item>
           <widget class="QLabel" name="label_3">
            <property name="text">
-            <string>Вес свыше</string>
+            <string>Вес от</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -223,6 +243,12 @@
             <widget class="QComboBox" name="comboBoxAgeCategory"/>
            </item>
           </layout>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="lineEditAge"/>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="lineEditWeight"/>
          </item>
          <item>
           <widget class="QSpinBox" name="ageFromSB">
@@ -342,7 +368,7 @@
        <item row="1" column="0" colspan="2">
         <widget class="QPushButton" name="applyBtn">
          <property name="enabled">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
          <property name="text">
           <string>Применить изменения</string>

@@ -1,16 +1,16 @@
 {
-    "AssociateMainJudge": "Зам. главного судьи:",
-    "MainJudge": "Главный судья:",
-    "MainSecretary": "Главный секретарь:",
+    "AssociateMainJudge": "Helper:",
+    "MainJudge": "Main judge:",
+    "MainSecretary": "Main secretary:",
     "Rows": [
         {
             "data": [
                 {
-                    "id": 0,
+                    "id": 17,
                     "text": ""
                 }
             ],
-            "header": "№"
+            "header": "Place"
         },
         {
             "data": [
@@ -21,31 +21,18 @@
                 {
                     "id": 2,
                     "text": ""
-                },
-                {
-                    "id": 3,
-                    "text": ""
                 }
             ],
-            "header": "ФИО"
+            "header": "Name"
         },
         {
             "data": [
                 {
-                    "id": 6,
+                    "id": 7,
                     "text": ""
                 }
             ],
-            "header": "Вес"
-        },
-        {
-            "data": [
-                {
-                    "id": 13,
-                    "text": ""
-                }
-            ],
-            "header": "Жребий"
+            "header": "Sport\nCategory"
         },
         {
             "data": [
@@ -54,10 +41,20 @@
                     "text": ""
                 }
             ],
-            "header": "Страна"
+            "header": "Country"
+        },
+        {
+            "data": [
+                {
+                    "id": 12,
+                    "text": ""
+                }
+            ],
+            "header": "Сoach"
         }
     ],
-    "title": "Протокол взвешивания!!!",
+    "maxPlace": 4,
+    "title": "Winners!",
     "translation": {
     }
 }

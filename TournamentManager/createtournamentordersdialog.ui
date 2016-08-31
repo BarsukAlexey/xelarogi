@@ -579,13 +579,6 @@
        </property>
       </spacer>
      </item>
-     <item>
-      <widget class="QPushButton" name="btnExit">
-       <property name="text">
-        <string>Закрыть</string>
-       </property>
-      </widget>
-     </item>
     </layout>
    </item>
    <item row="5" column="0">
@@ -597,6 +590,35 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>filterSecondNameLE</tabstop>
+  <tabstop>filterFirstNameLE</tabstop>
+  <tabstop>filterSexLE</tabstop>
+  <tabstop>filterCountryLE</tabstop>
+  <tabstop>filterRegionLE</tabstop>
+  <tabstop>filterRegionUintLE</tabstop>
+  <tabstop>filterTournamentCategoriesLE</tabstop>
+  <tabstop>filterCoachLE</tabstop>
+  <tabstop>secondNameLE</tabstop>
+  <tabstop>firstNameLE</tabstop>
+  <tabstop>patronymicLE</tabstop>
+  <tabstop>birthdayDE</tabstop>
+  <tabstop>weightDSB</tabstop>
+  <tabstop>countriesCB</tabstop>
+  <tabstop>regionsCB</tabstop>
+  <tabstop>regionUnitsCB</tabstop>
+  <tabstop>gendersCB</tabstop>
+  <tabstop>sportCategoriesCB</tabstop>
+  <tabstop>typesCB</tabstop>
+  <tabstop>clubsCB</tabstop>
+  <tabstop>coachsCB</tabstop>
+  <tabstop>tournamentCategoriesCB</tabstop>
+  <tabstop>changeOrderBtn</tabstop>
+  <tabstop>addOrderBtn</tabstop>
+  <tabstop>pushButtonChangeCategory</tabstop>
+  <tabstop>loadBtn</tabstop>
+  <tabstop>toExcelBtn</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

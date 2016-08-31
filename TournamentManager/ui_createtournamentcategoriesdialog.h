@@ -44,6 +44,8 @@ public:
     QLabel *label_5;
     QLabel *label_6;
     QLabel *label_11;
+    QLabel *label_14;
+    QLabel *label_15;
     QLabel *label;
     QLabel *label_2;
     QLabel *label_3;
@@ -60,6 +62,8 @@ public:
     QHBoxLayout *horizontalLayout;
     QPushButton *buttonAddAgeCat;
     QComboBox *comboBoxAgeCategory;
+    QLineEdit *lineEditAge;
+    QLineEdit *lineEditWeight;
     QSpinBox *ageFromSB;
     QSpinBox *ageTillSB;
     QDoubleSpinBox *weightFromDSB;
@@ -128,6 +132,18 @@ public:
         label_11->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
         verticalLayout->addWidget(label_11);
+
+        label_14 = new QLabel(widget);
+        label_14->setObjectName(QStringLiteral("label_14"));
+        label_14->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+
+        verticalLayout->addWidget(label_14);
+
+        label_15 = new QLabel(widget);
+        label_15->setObjectName(QStringLiteral("label_15"));
+        label_15->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+
+        verticalLayout->addWidget(label_15);
 
         label = new QLabel(widget);
         label->setObjectName(QStringLiteral("label"));
@@ -220,6 +236,16 @@ public:
 
         verticalLayout_2->addLayout(horizontalLayout);
 
+        lineEditAge = new QLineEdit(widget);
+        lineEditAge->setObjectName(QStringLiteral("lineEditAge"));
+
+        verticalLayout_2->addWidget(lineEditAge);
+
+        lineEditWeight = new QLineEdit(widget);
+        lineEditWeight->setObjectName(QStringLiteral("lineEditWeight"));
+
+        verticalLayout_2->addWidget(lineEditWeight);
+
         ageFromSB = new QSpinBox(widget);
         ageFromSB->setObjectName(QStringLiteral("ageFromSB"));
         ageFromSB->setMaximum(1000);
@@ -305,7 +331,7 @@ public:
 
         applyBtn = new QPushButton(widget);
         applyBtn->setObjectName(QStringLiteral("applyBtn"));
-        applyBtn->setEnabled(false);
+        applyBtn->setEnabled(true);
 
         formLayout->setWidget(1, QFormLayout::SpanningRole, applyBtn);
 
@@ -339,9 +365,11 @@ public:
         label_5->setText(QApplication::translate("CreateTournamentCategoriesDialog", "\320\235\320\260\320\270\320\274\320\265\320\275\320\276\320\262\320\260\320\275\320\270\320\265", 0));
         label_6->setText(QApplication::translate("CreateTournamentCategoriesDialog", "\320\237\320\276\320\273", 0));
         label_11->setText(QApplication::translate("CreateTournamentCategoriesDialog", "\320\222\320\276\320\267\321\200\320\260\321\201\321\202\320\275\320\260\321\217 \320\272\320\260\321\202\320\265\320\263\320\276\321\200\320\270\321\217", 0));
+        label_14->setText(QApplication::translate("CreateTournamentCategoriesDialog", "\320\222\320\276\320\267\321\200\320\260\321\201\321\202 (\320\261\321\203\320\264\320\265\321\202 \320\276\321\202\320\276\320\261\321\200\320\260\320\266\320\260\321\202\321\214\321\201\321\217 \320\262 \320\276\321\202\321\207\321\221\321\202\320\260\321\205)", 0));
+        label_15->setText(QApplication::translate("CreateTournamentCategoriesDialog", "\320\222\320\265\321\201 (\320\261\321\203\320\264\320\265\321\202 \320\276\321\202\320\276\320\261\321\200\320\260\320\266\320\260\321\202\321\214\321\201\321\217 \320\262 \320\276\321\202\321\207\321\221\321\202\320\260\321\205)", 0));
         label->setText(QApplication::translate("CreateTournamentCategoriesDialog", "<html><head/><body><p>\320\222\320\276\320\267\321\200\320\260\321\201\321\202 \320\276\321\202</p></body></html>", 0));
         label_2->setText(QApplication::translate("CreateTournamentCategoriesDialog", "\320\222\320\276\320\267\321\200\320\260\321\201\321\202 \320\264\320\276", 0));
-        label_3->setText(QApplication::translate("CreateTournamentCategoriesDialog", "\320\222\320\265\321\201 \321\201\320\262\321\213\321\210\320\265", 0));
+        label_3->setText(QApplication::translate("CreateTournamentCategoriesDialog", "\320\222\320\265\321\201 \320\276\321\202", 0));
         label_4->setText(QApplication::translate("CreateTournamentCategoriesDialog", "\320\222\320\265\321\201 \320\264\320\276", 0));
         label_9->setText(QApplication::translate("CreateTournamentCategoriesDialog", "\320\240\320\260\320\267\320\264\320\265\320\273", 0));
         label_7->setText(QApplication::translate("CreateTournamentCategoriesDialog", "\320\224\320\273\320\270\321\202\320\265\320\273\321\214\320\275\320\276\321\201\321\202\321\214 \320\261\320\276\321\217, \321\201.", 0));

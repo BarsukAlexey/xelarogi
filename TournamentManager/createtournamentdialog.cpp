@@ -11,40 +11,36 @@ CreateTournamentDialog::CreateTournamentDialog(QWidget *parent) :
     ui->endDate->setDate(QDate::currentDate());
     ui->weightDate->setDate(QDate::currentDate());
 
+    connect(ui->buttonBox, SIGNAL(clicked(QAbstractButton*)), this, SLOT(checkValues(QAbstractButton*)));
+
     connect(this, &CreateTournamentDialog::accepted, [this] ()
     {
-        QString name = ui->nameLE->text();
-        QString shortName = ui->shortNameLE->text();
-        QDate startDate = ui->startDate->date();
-        QDate endDate = ui->endDate->date();
-
         QSqlQuery query;
         if (!query.prepare("INSERT INTO TOURNAMENTS("
-                      "NAME, SHORTNAME, "
-                      "DATE_BEGIN, DATE_END, "
-                      "MAIN_JUDGE, MAIN_SECRETARY, ASSOCIATE_MAIN_JUDGE, "
-                      "HOST, DATE_WEIGHTING"
-                      ") "
-                      "VALUES(?, ?, ?,    ?, ?, ?,   ?, ?, ?)"))
-            qDebug() << query.lastError().text();
-//        query.bindValue(0, name);
-//        query.bindValue(1, shortName);
-//        query.bindValue(2, startDate.toString("yyyy-MM-dd"));
-//        query.bindValue(3, endDate.toString("yyyy-MM-dd"));
-//        query.bindValue(4, ui->mainJudgeLE->text());
-//        query.bindValue(5, ui->mainSecretaryLE->text());
-//        query.bindValue(6, ui->mainJudgeHelperLE->text());
-//        query.bindValue(7, ui->lineEditHost->text());
-//        query.bindValue(8, ui->weightDate->date().toString("yyyy-MM-dd"));
-        query.addBindValue(name);
-        query.addBindValue(shortName);
-        query.addBindValue(startDate.toString("yyyy-MM-dd"));
-        query.addBindValue(endDate.toString("yyyy-MM-dd"));
+                               "NAME, "
+                               "DATE_BEGIN, DATE_END, DATE_WEIGHTING, "
+                               "TEXT_DAT_RANGE, HOST, "
+                               "MAIN_JUDGE, MAIN_SECRETARY, ASSOCIATE_MAIN_JUDGE "
+                           ") "
+                           "VALUES(?,   ?,?,?,   ?,?,   ?,?,?)"))
+        {
+            qDebug() << query.lastError();
+            return;
+        }
+        query.addBindValue(ui->nameLE->text());
+
+        query.addBindValue(ui->startDate->date().toString("yyyy-MM-dd"));
+        query.addBindValue(ui->endDate->date().toString("yyyy-MM-dd"));
+        query.addBindValue(ui->weightDate->date().toString("yyyy-MM-dd"));
+
+        query.addBindValue(ui->lineEdit_TextDataRange->text());
+        query.addBindValue(ui->lineEditHost->text());
+
+
         query.addBindValue(ui->mainJudgeLE->text());
         query.addBindValue(ui->mainSecretaryLE->text());
         query.addBindValue(ui->mainJudgeHelperLE->text());
-        query.addBindValue(ui->lineEditHost->text());
-        query.addBindValue(ui->weightDate->date().toString("yyyy-MM-dd"));
+
 
         if (!query.exec())
             qDebug() << query.lastError();
@@ -55,4 +51,29 @@ CreateTournamentDialog::~CreateTournamentDialog()
 {
     delete ui;
 }
+
+void CreateTournamentDialog::checkValues(QAbstractButton* b)
+{
+    if (ui->buttonBox->buttonRole(b) == QDialogButtonBox::AcceptRole)
+    {
+        QDate dataWeight = ui->weightDate->date();
+        QDate beg = ui->startDate->date();
+        QDate end = ui->endDate->date();
+        if (dataWeight <= beg && beg <= end)
+        {
+            accept();
+        }
+        else
+        {
+            QMessageBox::warning(this, "", "Не выполняется условие: дата_взвешивания <= дата_начала <= дата_окончания");
+        }
+    }
+    else
+    {
+        reject();
+    }
+    qDebug() << "checkValues";
+}
+
+
 

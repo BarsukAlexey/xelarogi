@@ -4,6 +4,7 @@
     "MainSecretary": "Главный секретарь:",
     "Rows": [
     ],
+    "maxPlace": 1,
     "title": "",
     "translation": {
         "Вес": "Вес",

@@ -113,6 +113,7 @@ public:
         entitiesTW->setHorizontalHeaderItem(2, __qtablewidgetitem2);
         entitiesTW->setObjectName(QStringLiteral("entitiesTW"));
         entitiesTW->setFocusPolicy(Qt::NoFocus);
+        entitiesTW->setStyleSheet(QStringLiteral("background-color: rgb(255, 230, 246);"));
         entitiesTW->setEditTriggers(QAbstractItemView::NoEditTriggers);
         entitiesTW->setSelectionMode(QAbstractItemView::NoSelection);
         entitiesTW->horizontalHeader()->setHighlightSections(false);

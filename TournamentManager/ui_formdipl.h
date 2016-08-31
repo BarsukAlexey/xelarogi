@@ -13,6 +13,7 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QComboBox>
 #include <QtWidgets/QFormLayout>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QGroupBox>
@@ -46,12 +47,7 @@ public:
     QTableWidget *tableWidget;
     QWidget *widget_2;
     QGridLayout *gridLayout_2;
-    QWidget *widget_6;
-    QFormLayout *formLayout;
-    QLabel *label;
-    QSpinBox *spinBoxWidth;
-    QLabel *label_2;
-    QSpinBox *spinBoxHeight;
+    QSpacerItem *horizontalSpacer_2;
     QWidget *widget_4;
     QHBoxLayout *horizontalLayout_2;
     QGroupBox *groupBox;
@@ -61,8 +57,21 @@ public:
     QWidget *widget_5;
     QGridLayout *gridLayout_4;
     QLabel *label_5;
-    QSpinBox *spinBoxMaxPlace;
-    QSpacerItem *horizontalSpacer_2;
+    QComboBox *comboBoxMaxPlace;
+    QWidget *widget_6;
+    QFormLayout *formLayout;
+    QGroupBox *groupBox_2;
+    QGridLayout *gridLayout_5;
+    QLabel *label;
+    QSpinBox *spinBoxWidth;
+    QLabel *label_2;
+    QSpinBox *spinBoxHeight;
+    QGroupBox *groupBox_3;
+    QGridLayout *gridLayout_6;
+    QPushButton *pushButtonNew;
+    QPushButton *pushButtonSave;
+    QPushButton *pushButton_3;
+    QComboBox *comboBox;
 
     void setupUi(QWidget *FormDipl)
     {
@@ -148,38 +157,9 @@ public:
         widget_2->setObjectName(QStringLiteral("widget_2"));
         gridLayout_2 = new QGridLayout(widget_2);
         gridLayout_2->setObjectName(QStringLiteral("gridLayout_2"));
-        widget_6 = new QWidget(widget_2);
-        widget_6->setObjectName(QStringLiteral("widget_6"));
-        formLayout = new QFormLayout(widget_6);
-        formLayout->setObjectName(QStringLiteral("formLayout"));
-        label = new QLabel(widget_6);
-        label->setObjectName(QStringLiteral("label"));
+        horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-        formLayout->setWidget(0, QFormLayout::LabelRole, label);
-
-        spinBoxWidth = new QSpinBox(widget_6);
-        spinBoxWidth->setObjectName(QStringLiteral("spinBoxWidth"));
-        spinBoxWidth->setMinimum(1);
-        spinBoxWidth->setMaximum(100500);
-        spinBoxWidth->setValue(210);
-
-        formLayout->setWidget(0, QFormLayout::FieldRole, spinBoxWidth);
-
-        label_2 = new QLabel(widget_6);
-        label_2->setObjectName(QStringLiteral("label_2"));
-
-        formLayout->setWidget(1, QFormLayout::LabelRole, label_2);
-
-        spinBoxHeight = new QSpinBox(widget_6);
-        spinBoxHeight->setObjectName(QStringLiteral("spinBoxHeight"));
-        spinBoxHeight->setMinimum(1);
-        spinBoxHeight->setMaximum(100500);
-        spinBoxHeight->setValue(297);
-
-        formLayout->setWidget(1, QFormLayout::FieldRole, spinBoxHeight);
-
-
-        gridLayout_2->addWidget(widget_6, 0, 0, 1, 1);
+        gridLayout_2->addItem(horizontalSpacer_2, 0, 4, 1, 1);
 
         widget_4 = new QWidget(widget_2);
         widget_4->setObjectName(QStringLiteral("widget_4"));
@@ -213,24 +193,93 @@ public:
 
         gridLayout_4->addWidget(label_5, 0, 0, 1, 1);
 
-        spinBoxMaxPlace = new QSpinBox(widget_5);
-        spinBoxMaxPlace->setObjectName(QStringLiteral("spinBoxMaxPlace"));
-        spinBoxMaxPlace->setEnabled(false);
-        spinBoxMaxPlace->setMinimum(1);
-        spinBoxMaxPlace->setMaximum(100500);
-        spinBoxMaxPlace->setValue(3);
+        comboBoxMaxPlace = new QComboBox(widget_5);
+        comboBoxMaxPlace->setObjectName(QStringLiteral("comboBoxMaxPlace"));
+        comboBoxMaxPlace->setEnabled(false);
 
-        gridLayout_4->addWidget(spinBoxMaxPlace, 0, 1, 1, 1);
+        gridLayout_4->addWidget(comboBoxMaxPlace, 0, 1, 1, 1);
 
 
         horizontalLayout_2->addWidget(widget_5);
 
 
-        gridLayout_2->addWidget(widget_4, 0, 1, 1, 1);
+        gridLayout_2->addWidget(widget_4, 0, 3, 1, 1);
 
-        horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+        widget_6 = new QWidget(widget_2);
+        widget_6->setObjectName(QStringLiteral("widget_6"));
+        formLayout = new QFormLayout(widget_6);
+        formLayout->setObjectName(QStringLiteral("formLayout"));
 
-        gridLayout_2->addItem(horizontalSpacer_2, 0, 2, 1, 1);
+        gridLayout_2->addWidget(widget_6, 0, 2, 1, 1);
+
+        groupBox_2 = new QGroupBox(widget_2);
+        groupBox_2->setObjectName(QStringLiteral("groupBox_2"));
+        gridLayout_5 = new QGridLayout(groupBox_2);
+        gridLayout_5->setObjectName(QStringLiteral("gridLayout_5"));
+        label = new QLabel(groupBox_2);
+        label->setObjectName(QStringLiteral("label"));
+
+        gridLayout_5->addWidget(label, 0, 0, 1, 1);
+
+        spinBoxWidth = new QSpinBox(groupBox_2);
+        spinBoxWidth->setObjectName(QStringLiteral("spinBoxWidth"));
+        spinBoxWidth->setMinimum(1);
+        spinBoxWidth->setMaximum(100500);
+        spinBoxWidth->setValue(210);
+
+        gridLayout_5->addWidget(spinBoxWidth, 0, 1, 1, 1);
+
+        label_2 = new QLabel(groupBox_2);
+        label_2->setObjectName(QStringLiteral("label_2"));
+
+        gridLayout_5->addWidget(label_2, 1, 0, 1, 1);
+
+        spinBoxHeight = new QSpinBox(groupBox_2);
+        spinBoxHeight->setObjectName(QStringLiteral("spinBoxHeight"));
+        spinBoxHeight->setMinimum(1);
+        spinBoxHeight->setMaximum(100500);
+        spinBoxHeight->setValue(297);
+
+        gridLayout_5->addWidget(spinBoxHeight, 1, 1, 1, 1);
+
+
+        gridLayout_2->addWidget(groupBox_2, 0, 1, 1, 1);
+
+        groupBox_3 = new QGroupBox(widget_2);
+        groupBox_3->setObjectName(QStringLiteral("groupBox_3"));
+        gridLayout_6 = new QGridLayout(groupBox_3);
+        gridLayout_6->setObjectName(QStringLiteral("gridLayout_6"));
+        pushButtonNew = new QPushButton(groupBox_3);
+        pushButtonNew->setObjectName(QStringLiteral("pushButtonNew"));
+
+        gridLayout_6->addWidget(pushButtonNew, 1, 0, 1, 1);
+
+        pushButtonSave = new QPushButton(groupBox_3);
+        pushButtonSave->setObjectName(QStringLiteral("pushButtonSave"));
+        QPalette palette;
+        QBrush brush(QColor(1, 115, 0, 255));
+        brush.setStyle(Qt::SolidPattern);
+        palette.setBrush(QPalette::Active, QPalette::ButtonText, brush);
+        palette.setBrush(QPalette::Inactive, QPalette::ButtonText, brush);
+        QBrush brush1(QColor(120, 120, 120, 255));
+        brush1.setStyle(Qt::SolidPattern);
+        palette.setBrush(QPalette::Disabled, QPalette::ButtonText, brush1);
+        pushButtonSave->setPalette(palette);
+
+        gridLayout_6->addWidget(pushButtonSave, 1, 1, 1, 1);
+
+        pushButton_3 = new QPushButton(groupBox_3);
+        pushButton_3->setObjectName(QStringLiteral("pushButton_3"));
+
+        gridLayout_6->addWidget(pushButton_3, 1, 2, 1, 1);
+
+        comboBox = new QComboBox(groupBox_3);
+        comboBox->setObjectName(QStringLiteral("comboBox"));
+
+        gridLayout_6->addWidget(comboBox, 0, 0, 1, 3);
+
+
+        gridLayout_2->addWidget(groupBox_3, 0, 0, 1, 1);
 
 
         gridLayout->addWidget(widget_2, 0, 0, 1, 1);
@@ -265,12 +314,17 @@ public:
         ___qtablewidgetitem5->setText(QApplication::translate("FormDipl", "\320\240\320\260\321\201\321\202\320\276\320\275\320\270\320\265 \320\276\321\202 \320\262\320\265\321\200\321\205\320\275\320\265\320\263\320\276 \320\272\321\200\320\260\321\217, \320\274\320\274", 0));
         QTableWidgetItem *___qtablewidgetitem6 = tableWidget->horizontalHeaderItem(6);
         ___qtablewidgetitem6->setText(QApplication::translate("FormDipl", "\320\224\320\273\320\270\320\275\320\260 \321\201\321\202\321\200\320\276\320\272\320\270, \320\274\320\274", 0));
-        label->setText(QApplication::translate("FormDipl", "\320\250\320\270\321\200\320\270\320\275\320\260 \320\273\320\270\321\201\321\202\320\260 (\320\274\320\274)", 0));
-        label_2->setText(QApplication::translate("FormDipl", "\320\222\321\213\321\201\320\276\321\202\320\260 \320\273\320\270\321\201\321\202\320\260 (\320\274\320\274)", 0));
         groupBox->setTitle(QApplication::translate("FormDipl", "\320\242\320\270\320\277", 0));
         radioButtonBadge->setText(QApplication::translate("FormDipl", "\320\221\320\265\320\271\320\264\320\266\320\270\320\272\320\270", 0));
         radioButtonDiplom->setText(QApplication::translate("FormDipl", "\320\223\321\200\320\260\320\274\320\276\321\202\321\213", 0));
         label_5->setText(QApplication::translate("FormDipl", "\320\234\320\260\320\272\321\201. \320\274\320\265\321\201\321\202\320\276:", 0));
+        groupBox_2->setTitle(QApplication::translate("FormDipl", "\320\233\320\270\321\201\321\202", 0));
+        label->setText(QApplication::translate("FormDipl", "\320\250\320\270\321\200\320\270\320\275\320\260 \320\273\320\270\321\201\321\202\320\260 (\320\274\320\274)", 0));
+        label_2->setText(QApplication::translate("FormDipl", "\320\222\321\213\321\201\320\276\321\202\320\260 \320\273\320\270\321\201\321\202\320\260 (\320\274\320\274)", 0));
+        groupBox_3->setTitle(QApplication::translate("FormDipl", "\320\250\320\260\320\261\320\273\320\276\320\275", 0));
+        pushButtonNew->setText(QApplication::translate("FormDipl", "\320\235\320\276\320\262\321\213\320\271", 0));
+        pushButtonSave->setText(QApplication::translate("FormDipl", "\320\241\320\276\321\205\321\200\320\260\320\275\320\270\321\202\321\214", 0));
+        pushButton_3->setText(QApplication::translate("FormDipl", "\320\243\320\264\320\260\320\273\320\270\321\202\321\214", 0));
     } // retranslateUi
 
 };

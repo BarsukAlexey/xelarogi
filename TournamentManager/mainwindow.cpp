@@ -14,7 +14,7 @@
 #include "weighing_protocol.h"
 #include "winner_report.h"
 #include "ebnutvbazu.h"
-#include "report_manda.h"
+
 #include "report_ministr.h"
 #include "countryiconsdialog.h"
 
@@ -46,22 +46,22 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
 
-//    while (true)
-//    {
-//        LoginDialog loginDialog(this);
-//        if (loginDialog.exec() == QDialog::Accepted)
-//        {
-//            break;
-//        }
-//        if (!LoginDialog::mOkBtnClicked)
-//        {
-//            exit(0);
-//        }
-//        else
-//        {
-//            QMessageBox::warning(this, "Неудачная попытка авторизации", "Логи или пароль введены неверно");
-//        }
-//    }
+    while (true)
+    {
+        LoginDialog loginDialog(this);
+        if (loginDialog.exec() == QDialog::Accepted)
+        {
+            break;
+        }
+        if (!LoginDialog::mOkBtnClicked)
+        {
+            exit(0);
+        }
+        else
+        {
+            QMessageBox::warning(this, "Неудачная попытка авторизации", "Логи или пароль введены неверно");
+        }
+    }
 
 
     ui->setupUi(this);
@@ -154,6 +154,42 @@ MainWindow::MainWindow(QWidget *parent) :
     updateTournamentTreeWidget();
 
     ui->tournamentUidLabel->setVisible(false);
+
+    //
+
+//    QVector<std::pair<long long, QString>> vect;
+//    {
+//        QSqlQuery query("SELECT * FROM TOURNAMENT_CATEGORIES WHERE TOURNAMENT_FK = ?");
+//        query.addBindValue(21);
+//        if (query.exec())
+//        {
+//            while (query.next())
+//            {
+//                qlonglong uid = query.value("UID").toLongLong();
+//                QString str = query.value("NAME").toString()
+//                              .replace("кг.", "kg.")
+//                              .replace("лет", "years")
+//                              .replace("свыше ", "+")
+//                              .replace("+ ", "+")
+//                              .replace("до", "-")
+//                              .replace("- ", "-")
+//                              ;
+//                qDebug() << uid << str;
+//                vect << std::make_pair(uid, str);
+//            }
+//        }
+//    }
+//    {
+//        for (std::pair<long long, QString> p : vect)
+//        {
+//            QSqlQuery query("UPDATE TOURNAMENT_CATEGORIES "
+//                            "SET NAME = ? "
+//                            "WHERE UID = ?");
+//            query.addBindValue(p.second);
+//            query.addBindValue(p.first);
+//            query.exec();
+//        }
+//    }
 }
 
 MainWindow::~MainWindow()
@@ -173,8 +209,8 @@ void MainWindow::paintEvent(QPaintEvent *event)
 void MainWindow::updateTournamentTreeWidget()
 {
     ui->tournamentTreeWidget->clear();
-    ui->tournamentTreeWidget->setColumnCount(2);
-    ui->tournamentTreeWidget->setHeaderLabels({"Турнир", "Дата проведения"});
+    ui->tournamentTreeWidget->setColumnCount(1);
+    ui->tournamentTreeWidget->setHeaderLabels({"Турнир"});
 
     ui->tournamentTreeWidget->setColumnWidth(0, 200);
 
@@ -189,9 +225,7 @@ void MainWindow::updateTournamentTreeWidget()
         {
             QString uid = query.value("UID").toString();
             QString name = query.value("NAME").toString();
-            QString shortName = query.value("SHORTNAME").toString();
             QDate beginDate = QDate::fromString(query.value("DATE_BEGIN").toString(),"yyyy-MM-dd");
-            QDate endDate = QDate::fromString(query.value("DATE_END").toString(),"yyyy-MM-dd");
 
             int year = beginDate.year();
             if (year != currentYear)
@@ -199,10 +233,7 @@ void MainWindow::updateTournamentTreeWidget()
                 currentYear = year;
             }
 
-            QTreeWidgetItem* item = new QTreeWidgetItem({name + " (" + shortName + ")",
-                                                         QString::number(beginDate.day()) + "." + QString::number(beginDate.month()) + " - " +
-                                                         QString::number(endDate.day()) + "." + QString::number(endDate.month())
-                                                        });
+            QTreeWidgetItem* item = new QTreeWidgetItem({name});
             item->setData(0, Qt::UserRole, uid);
             item->setData(1, Qt::UserRole, uid);
 
@@ -305,6 +336,7 @@ void MainWindow::connectButtons()
         this->hide();
         long long tournamentUID = ui->tournamentUidLabel->text().toLongLong();
         CreateTournamentOrdersDialog dlg(m_database, tournamentUID, 0);
+        dlg.showMaximized();
         dlg.exec();
         this->show();
     });
@@ -314,6 +346,7 @@ void MainWindow::connectButtons()
         this->hide();
         long long tournamentUID = ui->tournamentUidLabel->text().toLongLong();
         CreateTournamentCategoriesDialog dlg(tournamentUID, 0);
+        dlg.showMaximized();
         dlg.exec();
         this->show();
     });
@@ -327,6 +360,12 @@ void MainWindow::connectButtons()
             long long tournamentUID = ui->tournamentUidLabel->text().toLongLong();
             TrophyGenerator trophyGenerator(tournamentUID);
         }
+    });
+
+    connect(ui->pushButton_Flag, &QPushButton::clicked, [this] (){
+        long long tournamentUID = ui->tournamentUidLabel->text().toLongLong();
+        CountryIconsDialog dlg (tournamentUID);
+        dlg.exec();
     });
 
     /*
@@ -380,6 +419,7 @@ void MainWindow::on_pushButtonGrid_clicked()
     long long routnamentUID = ui->tournamentUidLabel->text().toLongLong();
     qDebug() << "routnamentUID: " << routnamentUID;
     TournamentGridDialog2 dialog(routnamentUID, 0);
+    dialog.showMaximized();
     dialog.exec();
     this->show();
 }
@@ -445,7 +485,7 @@ void MainWindow::on_pushButtonLoadWinner_clicked()
         int orderUID = object["orderUID"].toInt();
         QString result = object["result"].toString();
         qDebug() << TOURNAMENT_CATEGORIES_FK << VERTEX << orderUID;
-        if (DBUtils::updateNodeOfGrid(m_database, TOURNAMENT_CATEGORIES_FK, VERTEX, orderUID, result))
+        if (DBUtils::updateNodeOfGrid(TOURNAMENT_CATEGORIES_FK, VERTEX, orderUID, result))
         {
             okCount++;
         }
@@ -462,15 +502,11 @@ void MainWindow::on_pushButtonLoadWinner_clicked()
 }
 
 
-
-
-
-
 void MainWindow::on_manda_clicked()
 {
     long long routnamentUID = ui->tournamentUidLabel->text().toLongLong();
     qDebug() << "routnamentUID: " << routnamentUID;
-    ReportManda(m_database, routnamentUID);
+    ReportManda d(routnamentUID);
 }
 
 
@@ -483,50 +519,9 @@ void MainWindow::on_btn_report_ministr_clicked()
 
 
 
-//void MainWindow::on_pushButton_clicked()
-//{
-//    EbnutVBazu::setTournamentCat(ui->tournamentUidLabel->text().toLongLong());
-//    qDebug() << "DONE";
-//}
-
-//void MainWindow::on_pushButton_2_clicked()
-//{
-//    EbnutVBazu::setRandomWinner();
-//    qDebug() << "DONE";
-//}
-
-
-
-//void MainWindow::on_pushButton_3_clicked()
-//{
-//    QString openFileName = QFileDialog::getOpenFileName();
-//    QImage image(openFileName);
-//    image = image.scaledToHeight(250);
-//    QLabel *label = new QLabel();
-//    label->setPixmap(QPixmap::fromImage(image));
-//    label->show();
-
-//    QByteArray byteArray;
-//    QBuffer buffer(&byteArray);
-//    buffer.open(QIODevice::WriteOnly);
-//    image.save(&buffer, "PNG");
-//    QString iconBase64 = QString::fromLatin1(byteArray.toBase64().data());
-//    qDebug() << "iconBase64.length(): " << iconBase64.length();
-//    qDebug() << "iconBase64.length(): " << iconBase64.left(300);
-
-//    ofstream out("out.txt");
-//    out << iconBase64.toStdString();
-//    out.close();
-//}
-
-
-void MainWindow::on_pushButton_Flag_clicked()
+void MainWindow::on_pushButtonAddContest_clicked()
 {
-    bool ok = false;
-    long long tournamentUID = ui->tournamentUidLabel->text().toLongLong(&ok);
-    if (ok)
-    {
-        CountryIconsDialog dlg(tournamentUID, this);
-        dlg.exec();
-    }
+    CreateTournamentDialog dlg(this);
+    dlg.exec();
+    updateTournamentTreeWidget();
 }

@@ -17,7 +17,6 @@
 #include <QTreeWidgetItem>
 
 #include "tournamentmanager.h"
-//#include "tournamentgriddialog.h"
 #include "createtournamentdialog.h"
 #include "createtournamentordersdialog.h"
 #include "createtournamentcategoriesdialog.h"
@@ -25,6 +24,8 @@
 #include "logindialog.h"
 #include "trophygeneratorsettingsdialog.h"
 #include "trophygenerator.h"
+
+#include "report_manda.h"
 
 namespace Ui {
 class MainWindow;
@@ -51,11 +52,7 @@ private slots:
     void on_manda_clicked();
     void on_btn_report_ministr_clicked();
 
-
-//    void on_pushButton_clicked();
-//    void on_pushButton_2_clicked();
-//    void on_pushButton_3_clicked();
-    void on_pushButton_Flag_clicked();
+    void on_pushButtonAddContest_clicked();
 
 private:
     void updateTournamentTreeWidget();

@@ -3,14 +3,12 @@
 
 #include <algorithm>
 
-#include <algorithm>
-
 #include <QDate>
 #include <QDebug>
 #include <QMap>
-#include <QVector>
 #include <QSqlDatabase>
 #include <QStringList>
+#include <QVector>
 
 
 class DBUtils
@@ -53,23 +51,16 @@ public:
     static QDate getFieldDateAsDate(const QString& field, const QString& table, const long long UID);
 
 
-    static QString getNameTournamentByUID(const QSqlDatabase& , long long);
-    static QString getTypeNameByUID(const QSqlDatabase& , long long);
-    static QString get_SHORTNAME_FROM_SEXES(const QSqlDatabase& , long long);
-    static QStringList get_DAYS_FROM_TOURNAMENTS(long long);
-
     // для таблицы ORDERS
     static QString getSecondNameAndFirstName(long long UID);
     static QString getSecondNameAndOneLetterOfName(long long UID);
-    static QString get__REGION(const QSqlDatabase& database, long long UID);
     static QSet<long long> getSetOfOrdersInTournamentCategory(long long uidTournamentCategory);
-    static int getAge(QDate DATE_WEIGHTING, QDate birthdayDate);
 
 
     // для таблицы TOURNAMENTS
+    static QString getTournamentNameAsHeadOfDocument(long long tournamentUID);
+    static QStringList get_DAYS_FROM_TOURNAMENTS(long long);
     static QVector<QString> getJudges(long long tournamentUID);
-
-
 
 
     // для таблицы GRID
@@ -81,11 +72,12 @@ public:
     static QVector<Fighing> getListOfPairsForFighting(long long TOURNAMENT_CATEGORIES_FK);
     static QVector<Fighing> getListOfPairsForFightingForPointFighting(long long TOURNAMENT_CATEGORIES_FK);
     static void insertLeafOfGrid(long long TOURNAMENT_CATEGORIES_FK, long long VERTEX, long long orderUID);
-    static bool updateNodeOfGrid(const QSqlDatabase& database, long long TOURNAMENT_CATEGORIES_FK, long long VERTEX, long long orderUID, QString result);
+    static bool updateNodeOfGrid(long long TOURNAMENT_CATEGORIES_FK, long long VERTEX, long long orderUID, QString result);
     static void swapNodesOfGrid(long long tournamentCategoryUID, int node0v, int node1v);
     static int findDurationOfGrid(long long tournamentCategoryUID, int delay = 0);
     static int findDurationOfFightinPair(long long tournamentCategoryUID);
     static std::pair<int, int> getPlace(long long UIDOrder);
+    static QVector<std::pair<long long, std::pair<int, int>>> getUidAndPlace(long long tournamentCategoryUID);
     static int getNumberOfCastingOfLots(long long UIDOrder);
 
 
@@ -95,15 +87,15 @@ public:
     static QVector<long long> get_UIDOrder_for_TC(long long UIDtournamentCategory);
     static QVector<std::tuple<long long, int, int, long long> > get_distinct_TYPE_FK_AgeFrom_AgeTill(long long tournamentUID);
     static QMap<QString, QVector<long long> > get_weight_and_orderUIDs(long long tournamentUID, long long type_fk, int age_from, int age_till, int sex_fk, int maxPlace);
-    static QString getNormanWeightRangeFromTOURNAMENT_CATEGORIES(long long uidCategory);
+    //static QString getNormanWeightRangeFromTOURNAMENT_CATEGORIES(long long uidCategory);
     static QString getWeightAsOneNumberPlusMinus(long long uidCategory);
     static QString getNormanAgeRangeFromTOURNAMENT_CATEGORIES(long long uidCategory);
     static QString getNameForExcelSheet(long long uidTC);
 
 
 
+    static int getAge(QDate DATE_WEIGHTING, QDate birthdayDate);
     static QString roundDouble(double x, int precision);
-    static QString getTournamentNameAsHeadOfDocument(long long tournamentUID);
     static QString convertToRoman(int val);
     static int isPow2(int a);
     static QString getRussianMonth(int m);
@@ -328,11 +320,11 @@ public:
 
         else if (typeField == TC_ageRange)
         {
-            text = getNormanAgeRangeFromTOURNAMENT_CATEGORIES(uidTC);
+            text = DBUtils::getField("AGE", "TOURNAMENT_CATEGORIES", uidTC);
         }
         else if (typeField == TC_weightRange)
         {
-            text = getNormanWeightRangeFromTOURNAMENT_CATEGORIES(uidTC);
+            text = DBUtils::getField("WEIGHT", "TOURNAMENT_CATEGORIES", uidTC);
         }
         else if (typeField == TC_weight)
         {

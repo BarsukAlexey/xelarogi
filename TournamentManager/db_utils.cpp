@@ -71,50 +71,6 @@ QDate DBUtils::getFieldDateAsDate(const QString& field, const QString& table, co
     return QDate();
 }
 
-QString DBUtils::getNameTournamentByUID(const QSqlDatabase& database, const long long UID)
-{
-    QSqlQuery query("SELECT NAME FROM TOURNAMENTS WHERE UID = ? ", database);
-    query.bindValue(0, UID);
-    if (query.exec() && query.next())
-    {
-        return query.value("NAME").toString();
-    }
-    else
-    {
-        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << query.lastError().text() << query.lastQuery();
-    }
-    return "";
-}
-
-QString DBUtils::getTypeNameByUID(const QSqlDatabase& database, long long UID)
-{
-    QSqlQuery query("SELECT NAME FROM TYPES WHERE UID = ? ", database);
-    query.bindValue(0, UID);
-    if (query.exec() && query.next())
-    {
-        return query.value("NAME").toString();
-    }
-    else
-    {
-        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << query.lastError().text() << query.lastQuery();
-    }
-    return "";
-}
-
-QString DBUtils::get_SHORTNAME_FROM_SEXES(const QSqlDatabase& database, long long UID)
-{
-    QSqlQuery query("SELECT SHORTNAME FROM SEXES WHERE UID = ? ", database);
-    query.bindValue(0, UID);
-    if (query.exec() && query.next())
-    {
-        return query.value("SHORTNAME").toString();
-    }
-    else
-    {
-        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << query.lastError().text() << query.lastQuery();
-    }
-    return "";
-}
 
 QStringList DBUtils::get_DAYS_FROM_TOURNAMENTS(long long UID)
 {
@@ -352,13 +308,15 @@ void DBUtils::insertLeafOfGrid(long long tournamentCategories, long long vertex,
         qDebug() << __PRETTY_FUNCTION__ << query.lastError() << query.lastQuery();
 }
 
-bool DBUtils::updateNodeOfGrid(const QSqlDatabase& database, long long TOURNAMENT_CATEGORIES_FK, long long VERTEX, long long orderUID, QString result)
+bool DBUtils::updateNodeOfGrid(long long TOURNAMENT_CATEGORIES_FK, long long VERTEX, long long orderUID, QString result)
 {
-    QSqlQuery query("UPDATE GRID     SET ORDER_FK = ? , result = ?     WHERE TOURNAMENT_CATEGORIES_FK = ? AND VERTEX = ?", database);
-    query.bindValue(0, orderUID);
-    query.bindValue(1, result);
-    query.bindValue(2, TOURNAMENT_CATEGORIES_FK);
-    query.bindValue(3, VERTEX);
+    QSqlQuery query("UPDATE GRID "
+                    "SET ORDER_FK = ? , result = ? "
+                    "WHERE TOURNAMENT_CATEGORIES_FK = ? AND VERTEX = ?");
+    query.addBindValue( orderUID);
+    query.addBindValue(result);
+    query.addBindValue(TOURNAMENT_CATEGORIES_FK);
+    query.addBindValue(VERTEX);
     return query.exec();
 }
 
@@ -415,40 +373,46 @@ std::pair<int, int> DBUtils::getPlace(long long UIDOrder)
 {
     long long tournamentCategoryUID = getField("TOURNAMENT_CATEGORY_FK", "ORDERS", UIDOrder).toLongLong();
     QVector<QVector<NodeOfTournirGrid> > grid = getNodesAsLevelListOfList(tournamentCategoryUID);
-    QSet<long long> used;
 
-    for (int i = 0; i < grid.size(); ++i)
+    for (int i = 0, r = 1; i < grid.size(); ++i, r *= 2)
     {
-        QVector<NodeOfTournirGrid> newNode;
         for (NodeOfTournirGrid node : grid[i])
         {
             if (node.UID <= 0)
             {
                 return std::make_pair(-1, -1);
             }
+            if (node.UID == UIDOrder)
+            {
+                return std::make_pair(r / 2 + 1, r);
+            }
+        }
+    }
+    return std::make_pair(-1, -1);
+}
+
+QVector<std::pair<long long, std::pair<int, int>>> DBUtils::getUidAndPlace(long long tournamentCategoryUID)
+{
+    QVector<QVector<NodeOfTournirGrid> > grid = getNodesAsLevelListOfList(tournamentCategoryUID);
+    QVector<std::pair<long long, std::pair<int, int>>> result;
+    QSet<long long> used;
+    for (int i = 0, r = 1; i < grid.size(); ++i, r *= 2)
+    {
+        for (NodeOfTournirGrid node : grid[i])
+        {
+            if (node.UID <= 0)
+            {
+                result.clear();
+                return result;
+            }
             if (!used.contains(node.UID))
             {
                 used << node.UID;
-                newNode << node;
+                result << std::make_pair( node.UID, std::make_pair(r / 2 + 1, r));
             }
         }
-        grid[i] = newNode;
     }
-
-    int countOffSet = 0;
-    for (QVector<NodeOfTournirGrid> level : grid)
-    {
-        for (NodeOfTournirGrid node : level)
-        {
-            //qDebug() << node.UID << countOffSet + 1 << countOffSet + level.size();
-            if (node.UID == UIDOrder)
-            {
-                return std::make_pair(countOffSet + 1, countOffSet + level.size());
-            }
-        }
-        countOffSet += level.size();
-    }
-    return std::make_pair(-1, -1);
+    return result;
 }
 
 int DBUtils::getNumberOfCastingOfLots(long long uidOrder)
@@ -567,7 +531,7 @@ QMap<QString, QVector<long long> > DBUtils::get_weight_and_orderUIDs(long long t
     {
 
         long long uidCategory = query.value("UID").toLongLong();
-        QString weight = DBUtils::getNormanWeightRangeFromTOURNAMENT_CATEGORIES(uidCategory);
+        QString weight = DBUtils::getField("WEIGHT", "TOURNAMENT_CATEGORIES", uidCategory);
 
         QVector<NodeOfTournirGrid> nodes = getNodes(uidCategory);
         QSet<long long> used;
@@ -591,10 +555,7 @@ QMap<QString, QVector<long long> > DBUtils::get_weight_and_orderUIDs(long long t
     return res;
 }
 
-QString DBUtils::getNormanWeightRangeFromTOURNAMENT_CATEGORIES(long long uidCategory)
-{
-    return DBUtils::getField("WEIGHT", "TOURNAMENT_CATEGORIES", uidCategory);
-}
+
 
 QString DBUtils::getWeightAsOneNumberPlusMinus(long long uidCategory)
 {
@@ -671,33 +632,35 @@ QString DBUtils::toString(QVector<std::pair<DBUtils::TypeField, QString> > vecto
 
 QString DBUtils::getTournamentNameAsHeadOfDocument(long long tournamentUID)
 {
-    QDate a = DBUtils::getFieldDateAsDate("DATE_WEIGHTING", "TOURNAMENTS", tournamentUID);
-    QDate b = DBUtils::getFieldDateAsDate("DATE_END", "TOURNAMENTS", tournamentUID);
-    QString resA;
-    QString resB = QString::number(b.day()) + " " + getRussianMonth(b.month()) + " " + QString::number(b.year()) + " г.";
-    if (a.year() != b.year())
-    {
-        resA = QString::number(a.day()) + " " + getRussianMonth(a.month()) + " " + QString::number(a.year()) + " - ";
-    }
-    else if (a.month() != b.month())
-    {
-        resA = QString::number(a.day()) + " " + getRussianMonth(a.month()) + " - ";
-    }
-    else if (a.day() != b.day())
-    {
-        resA = QString::number(a.day()) + "-";
-    }
-    else
-    {
-        resA = "";
-    }
-    return DBUtils::getField("NAME", "TOURNAMENTS", tournamentUID) + "\n" +
-           DBUtils::getField("HOST", "TOURNAMENTS", tournamentUID) + ", " +
-           resA + resB;
+//    QDate a = DBUtils::getFieldDateAsDate("DATE_WEIGHTING", "TOURNAMENTS", tournamentUID);
+//    QDate b = DBUtils::getFieldDateAsDate("DATE_END", "TOURNAMENTS", tournamentUID);
+//    QString resA;
+//    QString resB = QString::number(b.day()) + " " + getRussianMonth(b.month()) + " " + QString::number(b.year()) + " г.";
+//    if (a.year() != b.year())
+//    {
+//        resA = QString::number(a.day()) + " " + getRussianMonth(a.month()) + " " + QString::number(a.year()) + " - ";
+//    }
+//    else if (a.month() != b.month())
+//    {
+//        resA = QString::number(a.day()) + " " + getRussianMonth(a.month()) + " - ";
+//    }
+//    else if (a.day() != b.day())
+//    {
+//        resA = QString::number(a.day()) + "-";
+//    }
+//    else
+//    {
+//        resA = "";
+//    }
+    return DBUtils::getField("NAME"          , "TOURNAMENTS", tournamentUID) + "\n" +
+           DBUtils::getField("HOST"          , "TOURNAMENTS", tournamentUID) + ", " +
+           DBUtils::getField("TEXT_DAT_RANGE", "TOURNAMENTS", tournamentUID);
 
 }
 
 QString DBUtils::convertToRoman(int val) {
+    if (val <= 0) return QString::number(val);
+
     QString res;
 
     QStringList huns({"", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"});

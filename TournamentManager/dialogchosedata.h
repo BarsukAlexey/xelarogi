@@ -34,7 +34,8 @@ public:
         WinnerReport,
         makeGridsForPointFighting,
         fighting_pair,
-        lol
+        lol,
+        ReportManda
     };
 
 private:

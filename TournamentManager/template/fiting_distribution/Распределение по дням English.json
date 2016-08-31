@@ -1,0 +1,17 @@
+{
+    "AssociateMainJudge": "Helper:",
+    "MainJudge": "Main judge:",
+    "MainSecretary": "Main secretaty:",
+    "Rows": [
+    ],
+    "maxPlace": 1,
+    "title": "",
+    "translation": {
+        "Вес": "Weight",
+        "Вечер": "Evening",
+        "Всего:": "Total:",
+        "День": "Day",
+        "Кол-во\nчеловек": "Count of\npeople",
+        "Утро": "Morning"
+    }
+}

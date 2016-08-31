@@ -1,7 +1,7 @@
 {
-    "AssociateMainJudge": "Зам. главного судьи:",
-    "MainJudge": "Главный судья:",
-    "MainSecretary": "Главный секретарь:",
+    "AssociateMainJudge": "Hepler of judge:",
+    "MainJudge": "Main judge:",
+    "MainSecretary": "Main secretary:",
     "Rows": [
         {
             "data": [
@@ -10,7 +10,7 @@
                     "text": ""
                 }
             ],
-            "header": "№"
+            "header": "#"
         },
         {
             "data": [
@@ -21,31 +21,18 @@
                 {
                     "id": 2,
                     "text": ""
-                },
-                {
-                    "id": 3,
-                    "text": ""
                 }
             ],
-            "header": "ФИО"
+            "header": "NAME"
         },
         {
             "data": [
                 {
-                    "id": 6,
+                    "id": 4,
                     "text": ""
                 }
             ],
-            "header": "Вес"
-        },
-        {
-            "data": [
-                {
-                    "id": 13,
-                    "text": ""
-                }
-            ],
-            "header": "Жребий"
+            "header": "Birthday"
         },
         {
             "data": [
@@ -54,8 +41,38 @@
                     "text": ""
                 }
             ],
-            "header": "Страна"
+            "header": "Country"
+        },
+        {
+            "data": [
+                {
+                    "id": 11,
+                    "text": ""
+                }
+            ],
+            "header": "Club"
+        },
+        {
+            "data": [
+                {
+                    "id": 7,
+                    "text": ""
+                }
+            ],
+            "header": "Sports\nClassification"
+        },
+        {
+            "data": [
+                {
+                    "id": 13,
+                    "text": ""
+                }
+            ],
+            "header": "Casting of lots"
         }
     ],
-    "title": "Протокол взвешивания"
+    "maxPlace": 1,
+    "title": "Minutes of weighing-in",
+    "translation": {
+    }
 }

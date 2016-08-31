@@ -22,7 +22,6 @@
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QSpacerItem>
-#include <QtWidgets/QSplitter>
 #include <QtWidgets/QStackedWidget>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QToolBar>
@@ -49,9 +48,11 @@ public:
     QAction *actionAgeCategory;
     QAction *iconsAction;
     QWidget *centralWidget;
-    QVBoxLayout *verticalLayout_2;
-    QSplitter *splitter;
+    QHBoxLayout *horizontalLayout_2;
+    QWidget *widget;
+    QGridLayout *gridLayout_3;
     QTreeWidget *tournamentTreeWidget;
+    QPushButton *pushButtonAddContest;
     QStackedWidget *stackedWidget;
     QWidget *generalPage;
     QGridLayout *gridLayout_2;
@@ -88,7 +89,6 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(798, 504);
         countryAction = new QAction(MainWindow);
         countryAction->setObjectName(QStringLiteral("countryAction"));
         regionAction = new QAction(MainWindow);
@@ -117,40 +117,44 @@ public:
         iconsAction->setObjectName(QStringLiteral("iconsAction"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
-        verticalLayout_2 = new QVBoxLayout(centralWidget);
-        verticalLayout_2->setSpacing(6);
-        verticalLayout_2->setContentsMargins(11, 11, 11, 11);
-        verticalLayout_2->setObjectName(QStringLiteral("verticalLayout_2"));
-        splitter = new QSplitter(centralWidget);
-        splitter->setObjectName(QStringLiteral("splitter"));
-        QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        sizePolicy.setHorizontalStretch(0);
-        sizePolicy.setVerticalStretch(0);
-        sizePolicy.setHeightForWidth(splitter->sizePolicy().hasHeightForWidth());
-        splitter->setSizePolicy(sizePolicy);
-        splitter->setLineWidth(1);
-        splitter->setMidLineWidth(1);
-        splitter->setOrientation(Qt::Horizontal);
-        splitter->setOpaqueResize(true);
-        splitter->setHandleWidth(10);
-        tournamentTreeWidget = new QTreeWidget(splitter);
+        horizontalLayout_2 = new QHBoxLayout(centralWidget);
+        horizontalLayout_2->setSpacing(6);
+        horizontalLayout_2->setContentsMargins(11, 11, 11, 11);
+        horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
+        widget = new QWidget(centralWidget);
+        widget->setObjectName(QStringLiteral("widget"));
+        gridLayout_3 = new QGridLayout(widget);
+        gridLayout_3->setSpacing(6);
+        gridLayout_3->setContentsMargins(11, 11, 11, 11);
+        gridLayout_3->setObjectName(QStringLiteral("gridLayout_3"));
+        tournamentTreeWidget = new QTreeWidget(widget);
         QTreeWidgetItem *__qtreewidgetitem = new QTreeWidgetItem();
         __qtreewidgetitem->setText(0, QStringLiteral("1"));
         tournamentTreeWidget->setHeaderItem(__qtreewidgetitem);
         tournamentTreeWidget->setObjectName(QStringLiteral("tournamentTreeWidget"));
-        QSizePolicy sizePolicy1(QSizePolicy::Preferred, QSizePolicy::Expanding);
-        sizePolicy1.setHorizontalStretch(0);
-        sizePolicy1.setVerticalStretch(0);
-        sizePolicy1.setHeightForWidth(tournamentTreeWidget->sizePolicy().hasHeightForWidth());
-        tournamentTreeWidget->setSizePolicy(sizePolicy1);
+        QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(tournamentTreeWidget->sizePolicy().hasHeightForWidth());
+        tournamentTreeWidget->setSizePolicy(sizePolicy);
         tournamentTreeWidget->setMaximumSize(QSize(400, 16777215));
         tournamentTreeWidget->setAlternatingRowColors(false);
         tournamentTreeWidget->setIndentation(10);
         tournamentTreeWidget->setAnimated(true);
-        splitter->addWidget(tournamentTreeWidget);
         tournamentTreeWidget->header()->setCascadingSectionResizes(true);
         tournamentTreeWidget->header()->setStretchLastSection(true);
-        stackedWidget = new QStackedWidget(splitter);
+
+        gridLayout_3->addWidget(tournamentTreeWidget, 0, 0, 1, 1);
+
+        pushButtonAddContest = new QPushButton(widget);
+        pushButtonAddContest->setObjectName(QStringLiteral("pushButtonAddContest"));
+
+        gridLayout_3->addWidget(pushButtonAddContest, 1, 0, 1, 1);
+
+
+        horizontalLayout_2->addWidget(widget);
+
+        stackedWidget = new QStackedWidget(centralWidget);
         stackedWidget->setObjectName(QStringLiteral("stackedWidget"));
         stackedWidget->setMinimumSize(QSize(0, 0));
         generalPage = new QWidget();
@@ -221,11 +225,11 @@ public:
 
         createOrdersBtn = new QPushButton(ordersPage);
         createOrdersBtn->setObjectName(QStringLiteral("createOrdersBtn"));
-        QSizePolicy sizePolicy2(QSizePolicy::Minimum, QSizePolicy::Fixed);
-        sizePolicy2.setHorizontalStretch(0);
-        sizePolicy2.setVerticalStretch(0);
-        sizePolicy2.setHeightForWidth(createOrdersBtn->sizePolicy().hasHeightForWidth());
-        createOrdersBtn->setSizePolicy(sizePolicy2);
+        QSizePolicy sizePolicy1(QSizePolicy::Minimum, QSizePolicy::Fixed);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(0);
+        sizePolicy1.setHeightForWidth(createOrdersBtn->sizePolicy().hasHeightForWidth());
+        createOrdersBtn->setSizePolicy(sizePolicy1);
         createOrdersBtn->setMinimumSize(QSize(0, 0));
 
         verticalLayout->addWidget(createOrdersBtn);
@@ -299,14 +303,13 @@ public:
         gridLayout->addLayout(verticalLayout, 2, 0, 1, 1);
 
         stackedWidget->addWidget(ordersPage);
-        splitter->addWidget(stackedWidget);
 
-        verticalLayout_2->addWidget(splitter);
+        horizontalLayout_2->addWidget(stackedWidget);
 
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 798, 21));
+        menuBar->setGeometry(QRect(0, 0, 657, 21));
         handbookMenu = new QMenu(menuBar);
         handbookMenu->setObjectName(QStringLiteral("handbookMenu"));
         MainWindow->setMenuBar(menuBar);
@@ -359,6 +362,7 @@ public:
         orderAction->setText(QApplication::translate("MainWindow", "\320\227\320\260\321\217\320\262\320\272\320\270", 0));
         actionAgeCategory->setText(QApplication::translate("MainWindow", "\320\222\320\276\320\267\321\200\320\260\321\201\321\202\320\275\321\213\320\265 \320\272\320\260\321\202\320\265\320\263\320\276\321\200\320\270\320\270", 0));
         iconsAction->setText(QApplication::translate("MainWindow", "\320\244\320\273\320\260\320\263\320\270 \321\201\321\202\321\200\320\260\320\275", 0));
+        pushButtonAddContest->setText(QApplication::translate("MainWindow", "\320\224\320\276\320\261\320\260\320\262\320\270\321\202\321\214 \321\201\320\276\321\200\320\265\320\262\320\275\320\276\320\262\320\260\320\275\320\270\320\265", 0));
         label->setText(QApplication::translate("MainWindow", "\320\222\321\213\320\261\320\265\321\200\320\265\321\202\320\265 \321\202\321\203\321\200\320\275\320\270\321\200", 0));
         tournamentLabel->setText(QApplication::translate("MainWindow", "\320\242\321\203\321\200\320\275\320\270\321\200 \320\275\320\265 \320\262\321\213\320\261\321\200\320\260\320\275", 0));
         tournamentUidLabel->setText(QApplication::translate("MainWindow", "TextLabel", 0));
@@ -372,7 +376,7 @@ public:
         pushButtonLoadWinner->setText(QApplication::translate("MainWindow", "\320\227\320\260\320\263\321\200\321\203\320\267\320\270\321\202\321\214 \321\200\320\265\320\267\321\203\320\273\321\214\321\202\320\260\321\202\321\213 \320\261\320\276\321\221\320\262", 0));
         pushButtonWinnerReport->setText(QApplication::translate("MainWindow", "\320\241\320\277\320\270\321\201\320\276\320\272 \320\277\320\276\320\261\320\265\320\264\320\270\321\202\320\265\320\273\320\265\320\271", 0));
         trophyBtn->setText(QApplication::translate("MainWindow", "\320\241\320\276\320\267\320\264\320\260\321\202\321\214 \320\263\321\200\320\260\320\274\320\276\321\202\321\213 (Excel)", 0));
-        trophyBtnImage->setText(QApplication::translate("MainWindow", "\320\241\320\276\320\267\320\264\320\260\321\202\321\214 \320\263\321\200\320\260\320\274\320\276\321\202\321\213 (PDF)", 0));
+        trophyBtnImage->setText(QApplication::translate("MainWindow", "\320\241\320\276\320\267\320\264\320\260\321\202\321\214 \320\261\320\265\320\271\320\264\320\266\320\270/\320\263\321\200\320\260\320\274\320\276\321\202\321\213 (PDF)", 0));
         manda->setText(QApplication::translate("MainWindow", "\320\237\321\200\320\276\321\202\320\276\320\272\320\276\320\273 \320\274\320\260\320\275\320\264\320\260\321\202\320\275\320\276\320\271 \320\272\320\276\320\274\320\270\321\201\321\201\320\270\320\270", 0));
         btn_report_ministr->setText(QApplication::translate("MainWindow", "\320\236\321\202\321\207\321\221\321\202 \320\274\320\270\320\275\320\270\321\201\321\202\320\265\321\200\321\201\321\202\320\262\320\260", 0));
         handbookMenu->setTitle(QApplication::translate("MainWindow", "\320\241\320\277\321\200\320\260\320\262\320\276\321\207\320\275\320\270\320\272\320\270", 0));

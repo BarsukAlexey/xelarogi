@@ -25,9 +25,8 @@ public:
 
 private slots:
     void onAddBtn();
-    void onChangeBtn(long long categoryUID);
+    void on_pushButtonSaveChanges(long long categoryUID);
     void on_pushButtonAddGroupOfCaterories_clicked();
-
     void on_buttonAddAgeCat_clicked();
 
 private:

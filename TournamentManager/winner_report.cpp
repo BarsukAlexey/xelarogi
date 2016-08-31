@@ -18,7 +18,10 @@ WinnerReport::WinnerReport(const long long tournamentUID, QObject* parent)
         heads << pair.first;
     }
     if (heads.isEmpty())
+    {
+        QMessageBox::warning(0, "", "Добавьте хотя бы одну колонку в таблицу");
         return;
+    }
 
 
     QAxWidget excel("Excel.Application");

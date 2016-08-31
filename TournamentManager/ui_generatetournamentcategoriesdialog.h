@@ -90,6 +90,7 @@ public:
     {
         if (GenerateTournamentCategoriesDialog->objectName().isEmpty())
             GenerateTournamentCategoriesDialog->setObjectName(QStringLiteral("GenerateTournamentCategoriesDialog"));
+        GenerateTournamentCategoriesDialog->resize(448, 607);
         gridLayout_2 = new QGridLayout(GenerateTournamentCategoriesDialog);
         gridLayout_2->setObjectName(QStringLiteral("gridLayout_2"));
         groupBox_2 = new QGroupBox(GenerateTournamentCategoriesDialog);
@@ -145,7 +146,7 @@ public:
 
         lineEditTypeAge_2 = new QLineEdit(groupBox_2);
         lineEditTypeAge_2->setObjectName(QStringLiteral("lineEditTypeAge_2"));
-        lineEditTypeAge_2->setEnabled(true);
+        lineEditTypeAge_2->setEnabled(false);
         lineEditTypeAge_2->setReadOnly(true);
 
         gridLayout_3->addWidget(lineEditTypeAge_2, 1, 4, 1, 1);
@@ -158,7 +159,7 @@ public:
 
         lineEditTypeAge_3 = new QLineEdit(groupBox_2);
         lineEditTypeAge_3->setObjectName(QStringLiteral("lineEditTypeAge_3"));
-        lineEditTypeAge_3->setEnabled(true);
+        lineEditTypeAge_3->setEnabled(false);
         lineEditTypeAge_3->setReadOnly(true);
 
         gridLayout_3->addWidget(lineEditTypeAge_3, 2, 4, 1, 1);
@@ -362,7 +363,7 @@ public:
 
         lineEditTypeWeight_2 = new QLineEdit(groupBox);
         lineEditTypeWeight_2->setObjectName(QStringLiteral("lineEditTypeWeight_2"));
-        lineEditTypeWeight_2->setEnabled(true);
+        lineEditTypeWeight_2->setEnabled(false);
         lineEditTypeWeight_2->setReadOnly(true);
 
         gridLayout->addWidget(lineEditTypeWeight_2, 3, 2, 1, 1);
@@ -379,7 +380,7 @@ public:
 
         lineEditTypeWeight_3 = new QLineEdit(groupBox);
         lineEditTypeWeight_3->setObjectName(QStringLiteral("lineEditTypeWeight_3"));
-        lineEditTypeWeight_3->setEnabled(true);
+        lineEditTypeWeight_3->setEnabled(false);
         lineEditTypeWeight_3->setReadOnly(true);
 
         gridLayout->addWidget(lineEditTypeWeight_3, 4, 2, 1, 1);
@@ -400,6 +401,28 @@ public:
         buttonBox->raise();
         groupBox->raise();
         groupBox_2->raise();
+        QWidget::setTabOrder(sexCB, pushButtonAddAgeCategory);
+        QWidget::setTabOrder(pushButtonAddAgeCategory, comboBoxAgeCategory);
+        QWidget::setTabOrder(comboBoxAgeCategory, pushButton);
+        QWidget::setTabOrder(pushButton, typeCB);
+        QWidget::setTabOrder(typeCB, ageFromSB);
+        QWidget::setTabOrder(ageFromSB, ageTillSB);
+        QWidget::setTabOrder(ageTillSB, lineEditTypeAge);
+        QWidget::setTabOrder(lineEditTypeAge, lineEditAgeTill);
+        QWidget::setTabOrder(lineEditAgeTill, lineEditTypeAge_2);
+        QWidget::setTabOrder(lineEditTypeAge_2, lineEditAgeFrom);
+        QWidget::setTabOrder(lineEditAgeFrom, lineEditTypeAge_3);
+        QWidget::setTabOrder(lineEditTypeAge_3, weightsLE);
+        QWidget::setTabOrder(weightsLE, lineEditTypeWeight);
+        QWidget::setTabOrder(lineEditTypeWeight, lineEditWeightTill);
+        QWidget::setTabOrder(lineEditWeightTill, lineEditTypeWeight_2);
+        QWidget::setTabOrder(lineEditTypeWeight_2, lineEditWeightFrom);
+        QWidget::setTabOrder(lineEditWeightFrom, lineEditTypeWeight_3);
+        QWidget::setTabOrder(lineEditTypeWeight_3, duratiobFightingSB);
+        QWidget::setTabOrder(duratiobFightingSB, durationBreakSB);
+        QWidget::setTabOrder(durationBreakSB, roundCountSB);
+        QWidget::setTabOrder(roundCountSB, comboBoxTie);
+        QWidget::setTabOrder(comboBoxTie, spinBoxExtraRound);
 
         retranslateUi(GenerateTournamentCategoriesDialog);
         QObject::connect(buttonBox, SIGNAL(accepted()), GenerateTournamentCategoriesDialog, SLOT(accept()));

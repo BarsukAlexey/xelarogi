@@ -2,6 +2,14 @@
 <ui version="4.0">
  <class>GenerateTournamentCategoriesDialog</class>
  <widget class="QDialog" name="GenerateTournamentCategoriesDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>448</width>
+    <height>607</height>
+   </rect>
+  </property>
   <property name="windowTitle">
    <string>Добавление категорий турнира</string>
   </property>
@@ -86,7 +94,7 @@
       <item row="1" column="4">
        <widget class="QLineEdit" name="lineEditTypeAge_2">
         <property name="enabled">
-         <bool>true</bool>
+         <bool>false</bool>
         </property>
         <property name="text">
          <string>лет</string>
@@ -109,7 +117,7 @@
       <item row="2" column="4">
        <widget class="QLineEdit" name="lineEditTypeAge_3">
         <property name="enabled">
-         <bool>true</bool>
+         <bool>false</bool>
         </property>
         <property name="text">
          <string>лет</string>
@@ -392,7 +400,7 @@
       <item row="3" column="2">
        <widget class="QLineEdit" name="lineEditTypeWeight_2">
         <property name="enabled">
-         <bool>true</bool>
+         <bool>false</bool>
         </property>
         <property name="text">
          <string>кг</string>
@@ -419,7 +427,7 @@
       <item row="4" column="2">
        <widget class="QLineEdit" name="lineEditTypeWeight_3">
         <property name="enabled">
-         <bool>true</bool>
+         <bool>false</bool>
         </property>
         <property name="text">
          <string>кг</string>
@@ -451,6 +459,31 @@
   <zorder>groupBox</zorder>
   <zorder>groupBox_2</zorder>
  </widget>
+ <tabstops>
+  <tabstop>sexCB</tabstop>
+  <tabstop>pushButtonAddAgeCategory</tabstop>
+  <tabstop>comboBoxAgeCategory</tabstop>
+  <tabstop>pushButton</tabstop>
+  <tabstop>typeCB</tabstop>
+  <tabstop>ageFromSB</tabstop>
+  <tabstop>ageTillSB</tabstop>
+  <tabstop>lineEditTypeAge</tabstop>
+  <tabstop>lineEditAgeTill</tabstop>
+  <tabstop>lineEditTypeAge_2</tabstop>
+  <tabstop>lineEditAgeFrom</tabstop>
+  <tabstop>lineEditTypeAge_3</tabstop>
+  <tabstop>weightsLE</tabstop>
+  <tabstop>lineEditTypeWeight</tabstop>
+  <tabstop>lineEditWeightTill</tabstop>
+  <tabstop>lineEditTypeWeight_2</tabstop>
+  <tabstop>lineEditWeightFrom</tabstop>
+  <tabstop>lineEditTypeWeight_3</tabstop>
+  <tabstop>duratiobFightingSB</tabstop>
+  <tabstop>durationBreakSB</tabstop>
+  <tabstop>roundCountSB</tabstop>
+  <tabstop>comboBoxTie</tabstop>
+  <tabstop>spinBoxExtraRound</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

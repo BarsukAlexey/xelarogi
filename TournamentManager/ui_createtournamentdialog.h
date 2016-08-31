@@ -34,18 +34,18 @@ public:
     QHBoxLayout *horizontalLayout;
     QVBoxLayout *verticalLayout_2;
     QLabel *label;
-    QLabel *label_2;
     QLabel *label_6;
     QLabel *label_7;
     QLabel *label_8;
     QLabel *label_9;
+    QLabel *label_11;
     QVBoxLayout *verticalLayout_3;
     QLineEdit *nameLE;
-    QLineEdit *shortNameLE;
     QLineEdit *mainJudgeLE;
     QLineEdit *mainSecretaryLE;
     QLineEdit *mainJudgeHelperLE;
     QLineEdit *lineEditHost;
+    QLineEdit *lineEdit_TextDataRange;
     QHBoxLayout *horizontalLayout_3;
     QLabel *label_3;
     QLabel *label_4;
@@ -76,11 +76,6 @@ public:
 
         verticalLayout_2->addWidget(label);
 
-        label_2 = new QLabel(CreateTournamentDialog);
-        label_2->setObjectName(QStringLiteral("label_2"));
-
-        verticalLayout_2->addWidget(label_2);
-
         label_6 = new QLabel(CreateTournamentDialog);
         label_6->setObjectName(QStringLiteral("label_6"));
 
@@ -101,6 +96,11 @@ public:
 
         verticalLayout_2->addWidget(label_9);
 
+        label_11 = new QLabel(CreateTournamentDialog);
+        label_11->setObjectName(QStringLiteral("label_11"));
+
+        verticalLayout_2->addWidget(label_11);
+
 
         horizontalLayout->addLayout(verticalLayout_2);
 
@@ -110,11 +110,6 @@ public:
         nameLE->setObjectName(QStringLiteral("nameLE"));
 
         verticalLayout_3->addWidget(nameLE);
-
-        shortNameLE = new QLineEdit(CreateTournamentDialog);
-        shortNameLE->setObjectName(QStringLiteral("shortNameLE"));
-
-        verticalLayout_3->addWidget(shortNameLE);
 
         mainJudgeLE = new QLineEdit(CreateTournamentDialog);
         mainJudgeLE->setObjectName(QStringLiteral("mainJudgeLE"));
@@ -135,6 +130,11 @@ public:
         lineEditHost->setObjectName(QStringLiteral("lineEditHost"));
 
         verticalLayout_3->addWidget(lineEditHost);
+
+        lineEdit_TextDataRange = new QLineEdit(CreateTournamentDialog);
+        lineEdit_TextDataRange->setObjectName(QStringLiteral("lineEdit_TextDataRange"));
+
+        verticalLayout_3->addWidget(lineEdit_TextDataRange);
 
 
         horizontalLayout->addLayout(verticalLayout_3);
@@ -205,8 +205,6 @@ public:
 
 
         retranslateUi(CreateTournamentDialog);
-        QObject::connect(buttonBox, SIGNAL(accepted()), CreateTournamentDialog, SLOT(accept()));
-        QObject::connect(buttonBox, SIGNAL(rejected()), CreateTournamentDialog, SLOT(reject()));
 
         QMetaObject::connectSlotsByName(CreateTournamentDialog);
     } // setupUi
@@ -215,11 +213,11 @@ public:
     {
         CreateTournamentDialog->setWindowTitle(QApplication::translate("CreateTournamentDialog", "\320\241\320\276\320\267\320\264\320\260\320\275\320\270\320\265 \321\202\321\203\321\200\320\275\320\270\321\200\320\260", 0));
         label->setText(QApplication::translate("CreateTournamentDialog", "\320\235\320\260\320\267\320\262\320\260\320\275\320\270\320\265  \321\202\321\203\321\200\320\275\320\270\321\200\320\260", 0));
-        label_2->setText(QApplication::translate("CreateTournamentDialog", "\320\232\321\200\320\260\321\202\320\272\320\276\320\265 \320\276\320\261\320\276\320\267\320\275\320\260\321\207\320\265\320\275\320\270\320\265", 0));
         label_6->setText(QApplication::translate("CreateTournamentDialog", "\320\223\320\273\320\260\320\262\320\275\321\213\320\271 \321\201\321\203\320\264\321\214\321\217", 0));
         label_7->setText(QApplication::translate("CreateTournamentDialog", "\320\223\320\273\320\260\320\262\320\275\321\213\320\271 \321\201\320\265\320\272\321\200\320\265\321\202\320\260\321\200\321\214", 0));
         label_8->setText(QApplication::translate("CreateTournamentDialog", "\320\227\320\260\320\274. \320\263\320\273\320\260\320\262\320\275\320\276\320\263\320\276 \321\201\321\203\320\264\321\214\320\270", 0));
         label_9->setText(QApplication::translate("CreateTournamentDialog", "\320\234\320\265\321\201\321\202\320\276 \320\277\321\200\320\276\320\262\320\265\320\264\320\265\320\275\320\270\321\217", 0));
+        label_11->setText(QApplication::translate("CreateTournamentDialog", "\320\222\321\200\320\265\320\274\321\217 \320\277\321\200\320\276\320\262\320\265\320\264\320\265\320\275\320\270\321\217 (\320\275\320\260\320\277\321\200, 24-25 \320\274\320\260\321\217 2016 \320\263\320\276\320\264\320\260)", 0));
         label_3->setText(QApplication::translate("CreateTournamentDialog", "\320\242\321\203\321\200\320\275\320\270\321\200 \320\261\321\203\320\264\320\265\321\202 \320\277\321\200\320\276\321\205\320\276\320\264\320\270\321\202\321\214", 0));
         label_4->setText(QApplication::translate("CreateTournamentDialog", "\321\201", 0));
         label_5->setText(QApplication::translate("CreateTournamentDialog", "\320\277\320\276", 0));

@@ -1,28 +1,28 @@
 #include "report_manda.h"
-#include "excel_utils.h"
-#include "db_utils.h"
 
-#include <QSqlDatabase>
-#include <QSqlQuery>
-#include <QDebug>
-#include <QSqlError>
 
-#include <QAxWidget>
-#include <QAxObject>
-
-ReportManda::ReportManda(const QSqlDatabase& database, const long long tournamentUID)
+ReportManda::ReportManda(const long long tournamentUID)
 {
-    QSqlQuery queryCategory(
-                "SELECT SEX_FK, TYPE_FK, AGE_FROM, AGE_TILL, MAX(AGE_CATEGORY_FK) AS AGE_CAT_UID "
+    DialogChoseData dlg(DialogChoseData::Type::ReportManda);
+    if (dlg.exec() != QDialog::Accepted)
+        return;
+    QMap<QString, QString> translations = dlg.getTranslations();
+
+    QSqlQuery queryCategory;
+    if (!queryCategory.prepare(
+                "SELECT SEX_FK, AGE_CATEGORY_FK, TYPE_FK, AGE_FROM, AGE_TILL, MAX(AGE) AS AGE "
                 "FROM TOURNAMENT_CATEGORIES "
                 "WHERE TOURNAMENT_FK = ? "
-                "GROUP BY SEX_FK, TYPE_FK, AGE_FROM, AGE_TILL "
-                "ORDER BY SEX_FK, TYPE_FK, AGE_FROM, AGE_TILL "
-        ,database);
-    queryCategory.bindValue(0, tournamentUID);
+                "GROUP BY SEX_FK, AGE_CATEGORY_FK, TYPE_FK, AGE_FROM, AGE_TILL "
+                "ORDER BY SEX_FK, AGE_CATEGORY_FK, TYPE_FK, AGE_FROM, AGE_TILL "))
+    {
+        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << queryCategory.lastError() << queryCategory.lastQuery();
+        return;
+    }
+    queryCategory.addBindValue(tournamentUID);
     if (!queryCategory.exec())
     {
-        qDebug() << "\n" << __PRETTY_FUNCTION__ << "\n" << queryCategory.lastError().text() << "\n" << queryCategory.lastQuery() << "\n";
+        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << queryCategory.lastError() << queryCategory.lastQuery();
         return;
     }
 
@@ -35,11 +35,12 @@ ReportManda::ReportManda(const QSqlDatabase& database, const long long tournamen
 
     while (queryCategory.next())
     {
-        QString SEX_FK  = queryCategory.value("SEX_FK").toString();
-        QString TYPE_FK  = queryCategory.value("TYPE_FK").toString();
-        QString AGE_FROM = queryCategory.value("AGE_FROM").toString();
-        QString AGE_TILL = queryCategory.value("AGE_TILL").toString();
-        QString ageCatUID = queryCategory.value("AGE_CAT_UID").toString();
+        QString SEX_FK    = queryCategory.value("SEX_FK").toString();
+        QString TYPE_FK   = queryCategory.value("TYPE_FK").toString();
+        QString AGE_FROM  = queryCategory.value("AGE_FROM").toString();
+        QString AGE_TILL  = queryCategory.value("AGE_TILL").toString();
+        QString ageCatUID = queryCategory.value("AGE_CATEGORY_FK").toString();
+        QString age       = queryCategory.value("AGE").toString();
 
         QSqlQuery queryClubs(
             "SELECT CLUBS.UID AS clubid12 "
@@ -52,8 +53,7 @@ ReportManda::ReportManda(const QSqlDatabase& database, const long long tournamen
                 "TOURNAMENT_CATEGORIES.AGE_FROM = ? AND "
                 "TOURNAMENT_CATEGORIES.AGE_TILL = ? AND "
                 "TOURNAMENT_CATEGORIES.TOURNAMENT_FK = ? "
-            "GROUP BY CLUBS.UID"
-            ,database);
+            "GROUP BY CLUBS.UID");
         queryClubs.bindValue(0, SEX_FK);
         queryClubs.bindValue(1, TYPE_FK);
         queryClubs.bindValue(2, AGE_FROM);
@@ -71,8 +71,8 @@ ReportManda::ReportManda(const QSqlDatabase& database, const long long tournamen
 
         if (uidsOfClubs.isEmpty()) continue;
 
-        sheets->querySubObject("Add");
-        QAxObject *sheet = sheets->querySubObject( "Item( int )", 1);
+
+        QAxObject *sheet = ExcelUtils::addNewSheet(sheets);
         const int startRow = 7;
         for (int i = 0; i < uidsOfClubs.size(); ++i)
         {
@@ -85,8 +85,8 @@ ReportManda::ReportManda(const QSqlDatabase& database, const long long tournamen
         ExcelUtils::setBorder (sheet, startRow, 1, startRow + uidsOfClubs.size() - 1, 1, 3, ExcelUtils::Border::xlEdgeLeft);
         ExcelUtils::setBorder (sheet, startRow, 2, startRow + uidsOfClubs.size() - 1, 2, 3, ExcelUtils::Border::xlEdgeLeft);
 
-        ExcelUtils::setValue(sheet, startRow - 1, 1, "#");
-        ExcelUtils::setValue(sheet, startRow - 1, 2, "Команда");
+        ExcelUtils::setValue(sheet, startRow - 1, 1, translations["#"]);
+        ExcelUtils::setValue(sheet, startRow - 1, 2, translations["Команда"]);
         ExcelUtils::setBorder (sheet, startRow - 2, 1, startRow - 1, 2, 3);
         ExcelUtils::uniteRange(sheet, startRow - 2, 1, startRow - 1, 1);
         ExcelUtils::uniteRange(sheet, startRow - 2, 2, startRow - 1, 2);
@@ -95,10 +95,10 @@ ReportManda::ReportManda(const QSqlDatabase& database, const long long tournamen
 
         ExcelUtils::setBorder (sheet, startRow + uidsOfClubs.size(), 1, startRow + uidsOfClubs.size() + 1, 2, 3);
         ExcelUtils::uniteRange(sheet, startRow + uidsOfClubs.size(), 1, startRow + uidsOfClubs.size() + 1, 2);
-        ExcelUtils::setValue  (sheet, startRow + uidsOfClubs.size(), 1, "Всего");
+        ExcelUtils::setValue  (sheet, startRow + uidsOfClubs.size(), 1, translations["Всего"]);
 
         QSqlQuery queryWEIGHTS(
-            "SELECT WEIGHT_FROM, WEIGHT_TILL "
+            "SELECT WEIGHT_FROM, WEIGHT_TILL, MAX(TOURNAMENT_CATEGORIES.WEIGHT) AS WEIGHT "
             "FROM ORDERS "
                 "INNER JOIN CLUBS ON CLUBS.UID = ORDERS.CLUB_FK "
                 "INNER JOIN TOURNAMENT_CATEGORIES ON TOURNAMENT_CATEGORIES.UID = ORDERS.TOURNAMENT_CATEGORY_FK "
@@ -109,8 +109,7 @@ ReportManda::ReportManda(const QSqlDatabase& database, const long long tournamen
                 "TOURNAMENT_CATEGORIES.AGE_TILL = ? AND "
                 "TOURNAMENT_CATEGORIES.TOURNAMENT_FK = ? "
             "GROUP BY WEIGHT_FROM, WEIGHT_TILL "
-            "ORDER BY WEIGHT_FROM, WEIGHT_TILL "
-            ,database);
+            "ORDER BY WEIGHT_FROM, WEIGHT_TILL ");
 
         queryWEIGHTS.bindValue(0, SEX_FK);
         queryWEIGHTS.bindValue(1, TYPE_FK);
@@ -128,9 +127,11 @@ ReportManda::ReportManda(const QSqlDatabase& database, const long long tournamen
         {
             QString WEIGHT_FROM = queryWEIGHTS.value("WEIGHT_FROM").toString();
             QString WEIGHT_TILL = queryWEIGHTS.value("WEIGHT_TILL").toString();
+            QString weight      = queryWEIGHTS.value("WEIGHT").toString();
             //qDebug() << "\t" << WEIGHT_FROM << WEIGHT_TILL;
 
-            QSqlQuery querySPORT_CATEGORIES(
+            QSqlQuery querySPORT_CATEGORIES;
+            if (!querySPORT_CATEGORIES.prepare(
                 "SELECT SPORT_CATEGORIES.UID AS UID_SC "
                 "FROM ORDERS "
                     "INNER JOIN CLUBS                 ON CLUBS.UID                 = ORDERS.CLUB_FK "
@@ -146,20 +147,24 @@ ReportManda::ReportManda(const QSqlDatabase& database, const long long tournamen
                     "TOURNAMENT_CATEGORIES.TOURNAMENT_FK = ? "
                 "GROUP BY "
                     "UID_SC "
-                "ORDER BY "
-                    "max(SPORT_CATEGORIES.PRIORITY) "
-                ,database);
-            querySPORT_CATEGORIES.bindValue(0, SEX_FK);
-            querySPORT_CATEGORIES.bindValue(1, TYPE_FK);
-            querySPORT_CATEGORIES.bindValue(2, AGE_FROM);
-            querySPORT_CATEGORIES.bindValue(3, AGE_TILL);
-            querySPORT_CATEGORIES.bindValue(4, WEIGHT_FROM);
-            querySPORT_CATEGORIES.bindValue(5, WEIGHT_TILL);
-            querySPORT_CATEGORIES.bindValue(6, tournamentUID);
+//                "ORDER BY "
+//                    "max(SPORT_CATEGORIES.PRIORITY) "
+                    ))
+            {
+                qDebug() << __LINE__ << __PRETTY_FUNCTION__ << querySPORT_CATEGORIES.lastError() << querySPORT_CATEGORIES.lastQuery();
+                return;
+            }
+            querySPORT_CATEGORIES.addBindValue(SEX_FK);
+            querySPORT_CATEGORIES.addBindValue(TYPE_FK);
+            querySPORT_CATEGORIES.addBindValue(AGE_FROM);
+            querySPORT_CATEGORIES.addBindValue(AGE_TILL);
+            querySPORT_CATEGORIES.addBindValue(WEIGHT_FROM);
+            querySPORT_CATEGORIES.addBindValue(WEIGHT_TILL);
+            querySPORT_CATEGORIES.addBindValue(tournamentUID);
             if (!querySPORT_CATEGORIES.exec())
             {
                 qDebug() << __LINE__ << __PRETTY_FUNCTION__ << querySPORT_CATEGORIES.lastError() << querySPORT_CATEGORIES.lastQuery();
-                continue;
+                return;
             }
 
 
@@ -191,8 +196,7 @@ ReportManda::ReportManda(const QSqlDatabase& database, const long long tournamen
                             "TOURNAMENT_CATEGORIES.WEIGHT_TILL   = ? AND "
                             "SPORT_CATEGORIES.UID                = ? AND "
                             "CLUBS.UID                           = ? AND "
-                            "TOURNAMENT_CATEGORIES.TOURNAMENT_FK = ?"
-                        ,database);
+                            "TOURNAMENT_CATEGORIES.TOURNAMENT_FK = ?");
                     query.bindValue(0, SEX_FK);
                     query.bindValue(1, TYPE_FK);
                     query.bindValue(2, AGE_FROM);
@@ -224,8 +228,7 @@ ReportManda::ReportManda(const QSqlDatabase& database, const long long tournamen
             if (0 < countSPORT_CATEGORIES)
             {
                 ExcelUtils::uniteRange(sheet, startRow - 2, currentColumns - countSPORT_CATEGORIES, startRow - 2, currentColumns - 1);
-                //ExcelUtils::setValue  (sheet, startRow - 2, currentColumns - countSPORT_CATEGORIES, DBUtils::getNormanWeightRange(WEIGHT_FROM.toDouble(), WEIGHT_TILL.toDouble()));
-                ExcelUtils::setValue  (sheet, startRow - 2, currentColumns - countSPORT_CATEGORIES, "TODO getNormanWeightRange");
+                ExcelUtils::setValue  (sheet, startRow - 2, currentColumns - countSPORT_CATEGORIES, weight);
 
                 ExcelUtils::uniteRange(sheet, startRow + uidsOfClubs.size() + 1, currentColumns - countSPORT_CATEGORIES, startRow + uidsOfClubs.size() + 1, currentColumns - 1);
                 ExcelUtils::setValue  (sheet, startRow + uidsOfClubs.size() + 1, currentColumns - countSPORT_CATEGORIES, QString::number(sumOfValuesForWeight));
@@ -244,7 +247,7 @@ ReportManda::ReportManda(const QSqlDatabase& database, const long long tournamen
         }
 
         ExcelUtils::uniteRange(sheet, startRow - 2, currentColumns, startRow - 1, currentColumns);
-        ExcelUtils::setValue(sheet, startRow - 2, currentColumns, "Всего");
+        ExcelUtils::setValue(sheet, startRow - 2, currentColumns, translations["Всего"]);
         for (int i = 0; i < uidsOfClubs.size(); ++i)
             ExcelUtils::setValue(sheet, startRow + i, currentColumns, QString::number(sumOfRow[i]));
         ExcelUtils::uniteRange(sheet, startRow + uidsOfClubs.size(), currentColumns, startRow + uidsOfClubs.size() + 1, currentColumns);
@@ -268,33 +271,19 @@ ReportManda::ReportManda(const QSqlDatabase& database, const long long tournamen
         ExcelUtils::setTournamentName(sheet, DBUtils::getTournamentNameAsHeadOfDocument(tournamentUID), 1, 1, 1, currentColumns - 1);
 
         ExcelUtils::uniteRange(sheet, 2, 1, 2, currentColumns - 1);
-        ExcelUtils::setValue(sheet, 2, 1, "Протокол мандатной комиссии");
+        ExcelUtils::setValue  (sheet, 2, 1, dlg.getTitle());
+
+        ExcelUtils::setValue  (sheet, 4, 1, DBUtils::getField("NAME", "TYPES", TYPE_FK) + ", " + DBUtils::getField("NAME", "AGE_CATEGORIES", ageCatUID) + ", " + age, 0);
+
+        sheet->setProperty("Name", (DBUtils::getField("SHORTNAME", "SEXES", SEX_FK) + ", " +
+                                    age + ", " +
+                                    DBUtils::getField("NAME", "TYPES", TYPE_FK)
+                                    ).left(31));
 
 
-        ExcelUtils::setValue(sheet, startRow - 5, 1, "Раздел: " + DBUtils::getField("NAME", "TYPES", TYPE_FK), 0);
-        //ExcelUtils::setValue(sheet, startRow - 4, 1, DBUtils::getField("NAME", "AGE_CATEGORIES", ageCatUID) + ", " + DBUtils::getNormanAgeRange(AGE_FROM.toInt(), AGE_TILL.toInt()) + " лет", 0);
-        ExcelUtils::setValue(sheet, startRow - 4, 1, DBUtils::getField("NAME", "AGE_CATEGORIES", ageCatUID) + ", " + "TODO DBUtils::getNormanAgeRange(AGE_FROM.toInt(), AGE_TILL.toInt())" + " лет", 0);
+        int maxRow = startRow + uidsOfClubs.size() + 2;
 
-        sheet->setProperty("Name", (DBUtils::getField("SHORTNAME", "SEXES", SEX_FK) + " " + DBUtils::getField("NAME", "TYPES", TYPE_FK) + " " + AGE_FROM + "-" + AGE_TILL + "лет").left(31));
-
-        int maxRow = startRow + uidsOfClubs.size() + 3;
-        ExcelUtils::uniteRange(sheet, maxRow, 1, maxRow, 2);
-        ExcelUtils::setRowHeight(sheet, maxRow, 25);
-        ExcelUtils::setValue(sheet, maxRow, 1, "Главный судья: ", 0);
-//        ExcelUtils::setValue(sheet, maxRow, 3, DBUtils::get_MAIN_JUDGE(database, tournamentUID), 0);
-        ++maxRow;
-
-        ExcelUtils::uniteRange(sheet, maxRow, 1, maxRow, 2);
-        ExcelUtils::setRowHeight(sheet, maxRow, 25);
-        ExcelUtils::setValue(sheet, maxRow, 1, "Главный секретарь: ", 0);
-//        ExcelUtils::setValue(sheet, maxRow, 3, DBUtils::get_MAIN_SECRETARY(database, tournamentUID), 0);
-        ++maxRow;
-
-        ExcelUtils::uniteRange(sheet, maxRow, 1, maxRow, 2);
-        ExcelUtils::setRowHeight(sheet, maxRow, 25);
-        ExcelUtils::setValue(sheet, maxRow, 1, "Зам. главного судьи: ", 0);
-//        ExcelUtils::setValue(sheet, maxRow, 3, DBUtils::get_ASSOCIATE_MAIN_JUDGE(database, tournamentUID), 0);
-        ++maxRow;
+        ExcelUtils::setFooter(sheet, maxRow, 1, 3, 25, dlg.getJudges(), DBUtils::getJudges(tournamentUID));
 
 
         ExcelUtils::setPageOrientation(sheet, 2);
