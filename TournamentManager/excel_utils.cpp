@@ -174,12 +174,10 @@ void ExcelUtils::setTournamentName(QAxObject* sheet, QString text, int row0, int
 QString ExcelUtils::getValue(QAxObject* sheet, int row, int column)
 {
     QAxObject* cell = sheet->querySubObject("Cells( int, int )", row, column);
-    //QString value = cell->dynamicCall("Value()").toString().simplified();
-    QString value = cell->dynamicCall("Value()").toString();
+    QString value = cell->dynamicCall("Value()").toString().simplified();
     delete cell;
     if (value.isNull())
     {
-        //qDebug() << __LINE__ << __PRETTY_FUNCTION__ << "isNull";
         return "";
     }
     return value;

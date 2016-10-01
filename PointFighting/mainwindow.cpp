@@ -17,22 +17,22 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-//    while (true)
-//    {
-//        LoginDialog loginDialog(this);
-//        if (loginDialog.exec() == QDialog::Accepted)
-//        {
-//            break;
-//        }
-//        if (!LoginDialog::mOkBtnClicked)
-//        {
-//            exit(0);
-//        }
-//        else
-//        {
-//            QMessageBox::warning(this, "Неудачная попытка авторизации", "Логи или пароль введены неверно");
-//        }
-//    }
+    while (true)
+    {
+        LoginDialog loginDialog(this);
+        if (loginDialog.exec() == QDialog::Accepted)
+        {
+            break;
+        }
+        if (!LoginDialog::mOkBtnClicked)
+        {
+            exit(0);
+        }
+        else
+        {
+            QMessageBox::warning(this, "Неудачная попытка авторизации", "Логи или пароль введены неверно");
+        }
+    }
 
 
     ui->setupUi(this);
@@ -167,42 +167,42 @@ MainWindow::MainWindow(QWidget *parent) :
         QImage leftFlag  = flags[row][0];
         QImage rightFlag = flags[row][1];
 
-        if (classicSkin)
-        {
-            FightingTable *tableForJudge = 0;
-            QVector<FightingTable *> tableForSpectators;
-            for (int i = 0; i < QApplication::desktop()->screenCount(); ++i)
-            {
-                QRect screenres = QApplication::desktop()->screenGeometry(i);
-                if (screenres == QApplication::desktop()->screenGeometry(-1))
-                {
-                    tableForJudge = new FightingTable(fighting, nameLeft, regionLeft, nameRight, regionRight, leftFlag, rightFlag, true, showAdvertisement);
-                    tableForJudge->move(QPoint(screenres.x(), screenres.y()));
-                }
-                else
-                {
-                    tableForSpectators << new FightingTable(fighting, nameLeft, regionLeft, nameRight, regionRight, leftFlag, rightFlag, false, showAdvertisement);
-                    tableForSpectators.back()->move(QPoint(screenres.x(), screenres.y()));
-                    tableForSpectators.back()->resize(screenres.width(), screenres.height());
-                    tableForSpectators.back()->showFullScreen();
+//        if (classicSkin)
+//        {
+//            FightingTable *tableForJudge = 0;
+//            QVector<FightingTable *> tableForSpectators;
+//            for (int i = 0; i < QApplication::desktop()->screenCount(); ++i)
+//            {
+//                QRect screenres = QApplication::desktop()->screenGeometry(i);
+//                if (screenres == QApplication::desktop()->screenGeometry(-1))
+//                {
+//                    tableForJudge = new FightingTable(fighting, nameLeft, regionLeft, nameRight, regionRight, leftFlag, rightFlag, true, showAdvertisement);
+//                    tableForJudge->move(QPoint(screenres.x(), screenres.y()));
+//                }
+//                else
+//                {
+//                    tableForSpectators << new FightingTable(fighting, nameLeft, regionLeft, nameRight, regionRight, leftFlag, rightFlag, false, showAdvertisement);
+//                    tableForSpectators.back()->move(QPoint(screenres.x(), screenres.y()));
+//                    tableForSpectators.back()->resize(screenres.width(), screenres.height());
+//                    tableForSpectators.back()->showFullScreen();
 
-                }
-            }
-            this->hide();
-            for (FightingTable* t : tableForSpectators)
-                t->show();
-            tableForJudge->showMaximized();
-            tableForJudge->exec();
-            for (FightingTable* t : tableForSpectators)
-                t->hide();
-            this->show();
+//                }
+//            }
+//            this->hide();
+//            for (FightingTable* t : tableForSpectators)
+//                t->show();
+//            tableForJudge->showMaximized();
+//            tableForJudge->exec();
+//            for (FightingTable* t : tableForSpectators)
+//                t->hide();
+//            this->show();
 
-            delete tableForJudge;
-            for (FightingTable* t : tableForSpectators)
-                delete t;
-        }
-        else
-        {
+//            delete tableForJudge;
+//            for (FightingTable* t : tableForSpectators)
+//                delete t;
+//        }
+//        else
+//        {
             QString category = ui->tableWidget->item(row,  0)->data(Qt::DisplayRole).toString() + ". " + ui->tableWidget->item(row,  7)->data(Qt::DisplayRole).toString();
             FightingTable2 *tableForJudge = 0;
             QVector<FightingTable2 *> tableForSpectators;
@@ -235,7 +235,7 @@ MainWindow::MainWindow(QWidget *parent) :
             delete tableForJudge;
             for (FightingTable2* t : tableForSpectators)
                 delete t;
-        }
+//        }
 
 
 

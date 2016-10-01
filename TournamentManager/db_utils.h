@@ -77,7 +77,7 @@ public:
     static int findDurationOfGrid(long long tournamentCategoryUID, int delay = 0);
     static int findDurationOfFightinPair(long long tournamentCategoryUID);
     static std::pair<int, int> getPlace(long long UIDOrder);
-    static QVector<std::pair<long long, std::pair<int, int>>> getUidAndPlace(long long tournamentCategoryUID);
+    static QVector<std::pair<long long, std::pair<int, int>>> getUIDsAndPlaces(long long tournamentCategoryUID, int maxPlace, bool skeepEmptyGrids);
     static int getNumberOfCastingOfLots(long long UIDOrder);
 
 
@@ -215,8 +215,6 @@ public:
         QString result;
         for (int i = 0; i < arrayData.size(); ++i)
         {
-            if (i != 0)
-                result += " ";
             result += get(arrayData[i], uidOrder, rowNumber);
         }
         return result;
@@ -293,28 +291,38 @@ public:
         else if (typeField == arabPlace)
         {
             std::pair<int, int> place = DBUtils::getPlace(uidOrder);
-            text = QString::number(place.first);
+            if (1 <= place.first)
+                text = QString::number(place.first);
         }
         else if (typeField == arabPlaceRange)
         {
             std::pair<int, int> place = DBUtils::getPlace(uidOrder);
-            if (place.first == place.second)
-                text = QString::number(place.first);
-            else
-                text = QString::number(place.first) + '-' + QString::number(place.second);
+            if (1 <= place.first)
+            {
+                if (place.first == place.second)
+                    text = QString::number(place.first);
+                else
+                    text = QString::number(place.first) + '-' + QString::number(place.second);
+            }
         }
         else if (typeField == romePlace)
         {
             std::pair<int, int> place = DBUtils::getPlace(uidOrder);
-            text = convertToRoman(place.first);
+            if (1 <= place.first)
+            {
+                text = convertToRoman(place.first);
+            }
         }
         else if (typeField == romePlaceRange)
         {
             std::pair<int, int> place = DBUtils::getPlace(uidOrder);
-            if (place.first == place.second)
-                text = convertToRoman(place.first);
-            else
-                text = convertToRoman(place.first) + "-" + convertToRoman(place.second);
+            if (1 <= place.first)
+            {
+                if (place.first == place.second)
+                    text = convertToRoman(place.first);
+                else
+                    text = convertToRoman(place.first) + "-" + convertToRoman(place.second);
+            }
         }
 
 

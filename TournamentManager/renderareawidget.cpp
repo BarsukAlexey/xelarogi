@@ -188,8 +188,27 @@ void RenderAreaWidget::mousePressEvent(QMouseEvent* event)
         }
     }
     repaint();
-    emit
-        iChangeToutGrid();
+    emit iChangeToutGrid();
+}
+
+void RenderAreaWidget::getAppropriateFontSize(QPainter& painter, const QRect& rect, const QString& text, int flags)
+{
+    QFont font = painter.font();
+    int l = 1, r = 228;
+    const qreal coef = 0.9;
+    while (l < r)
+    {
+        qreal m = (l + r + 1) / 2;
+        font.setPointSizeF(m);
+        QRect boundingRect = QFontMetrics(font).boundingRect(text);
+        if (boundingRect.width() <= coef * rect.width() && boundingRect.height() <= coef * rect.height())
+            l = m;
+        else
+            r = m - 1;
+    }
+    font.setPointSizeF(l);
+    painter.setFont(font);
+    painter.drawText(rect, flags, text);
 }
 
 
@@ -206,11 +225,11 @@ void RenderAreaWidget::paintRect(int i, int j, QPainter& painter, const DBUtils:
     QRect rectName(rect.topLeft(), QSize(rect.width(), rect.height() / 2));
     QRect rectRegion(QPoint(rect.topLeft().x(), rect.topLeft().y() + rect.height() / 2), QSize(rect.width(), rect.height() / 2));
 
-    painter.drawText(rectName  , Qt::AlignHCenter | Qt::AlignVCenter, node.name);
+    getAppropriateFontSize(painter, rectName, node.name, Qt::AlignHCenter | Qt::AlignVCenter);
     if (node.isFighing)
-        painter.drawText(rectRegion, Qt::AlignHCenter | Qt::AlignVCenter, node.result);
+        getAppropriateFontSize(painter, rectRegion, node.result, Qt::AlignHCenter | Qt::AlignVCenter);
     else
-        painter.drawText(rectRegion, Qt::AlignHCenter | Qt::AlignVCenter, node.region);
+        getAppropriateFontSize(painter, rectRegion, node.region, Qt::AlignHCenter | Qt::AlignVCenter);
 }
 
 void RenderAreaWidget::paintLine(QPoint aa, QPoint bb, QPainter& painter)
@@ -264,7 +283,20 @@ void RenderAreaWidget::onSaveInExcel()
     QString directoryPath = QFileDialog::getExistingDirectory(this, tr("Выберите папку"), NULL, QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
     if (directoryPath.isNull()) return;
     //qDebug() << dir;
-    printTableGridInExcel(dlg, tournamentCategories, false, directoryPath, QVector<int>(), "", "");
+
+
+
+    QAxWidget excel("Excel.Application");
+    QAxObject *workbooks = excel.querySubObject("WorkBooks");
+    workbooks->dynamicCall("Add");
+    QAxObject *workbook = excel.querySubObject("ActiveWorkBook");
+
+    printTableGridInExcel(workbook, dlg, tournamentCategories, false, directoryPath, QVector<int>(), "", "");
+
+    workbook->dynamicCall("Close()");
+    delete workbook;
+    delete workbooks;
+    excel.dynamicCall("Quit()");
 }
 
 void RenderAreaWidget::clearSelection()
@@ -283,9 +315,12 @@ QPoint RenderAreaWidget::getCell(int v, int countColumns)
     return p;
 }
 
-void RenderAreaWidget::printTableGridInExcel(DialogChoseData& dlg, int tournamentCategory,
+void RenderAreaWidget::printTableGridInExcel(QAxObject* workbook, DialogChoseData& dlg, int tournamentCategory,
         bool likePointFighing, QString directoryPath, QVector<int> fightNumber, QString text, QString prefFileName)
 {
+    QAxObject *sheets   = workbook->querySubObject("WorkSheets");
+    QAxObject *sheet    = sheets->querySubObject( "Item( int )", 1);
+
     QVector<DBUtils::NodeOfTournirGrid> nodes = DBUtils::getNodes(tournamentCategory);
     if (nodes.empty()) return;
     qSort(nodes);
@@ -294,19 +329,10 @@ void RenderAreaWidget::printTableGridInExcel(DialogChoseData& dlg, int tournamen
     int countPlayers = 0;
     for (const DBUtils::NodeOfTournirGrid& node : nodes) if (!node.isFighing) ++countPlayers;
 
-    QAxWidget excel("Excel.Application");
-    excel.setProperty("Visible", true);
-    QAxObject *workbooks = excel.querySubObject("WorkBooks");
-    workbooks->dynamicCall("Add");
-    QAxObject *workbook = excel.querySubObject("ActiveWorkBook");
-    QAxObject *sheets = workbook->querySubObject("WorkSheets");
-    QAxObject* sheet = sheets->querySubObject( "Item( int )", 1);
-
     int offset = 3;
-
-
     int maxRow = offset;
     int maxColumn = 1;
+    QVector<std::pair<QString, QVector<std::pair<DBUtils::TypeField, QString> > > > data = dlg.getData();
 
     for (const DBUtils::NodeOfTournirGrid& node : nodes)
     {
@@ -319,7 +345,15 @@ void RenderAreaWidget::printTableGridInExcel(DialogChoseData& dlg, int tournamen
         if (node.isFighing)
             ExcelUtils::setValue(sheet, p.x() + 1 + offset, p.y() + 1, node.name + "\n" + node.result);
         else
-            ExcelUtils::setValue(sheet, p.x() + 1 + offset, p.y() + 1, node.name + "\n" + node.region);
+        {
+            QString message;
+            for (int i = 0; i < data.size(); ++i)
+            {
+                message += DBUtils::get(data[i].second, node.UID) + (i + 1 == data.size()? "" : " ");
+            }
+            //ExcelUtils::setValue(sheet, p.x() + 1 + offset, p.y() + 1, node.name + "\n" + node.region);
+            ExcelUtils::setValue(sheet, p.x() + 1 + offset, p.y() + 1, node.name + "\n" + message);
+        }
 
         ExcelUtils::setBorder(sheet, p.x() + 1 + offset, p.y() + 1, p.x() + 1 + offset, p.y() + 1, 3);
 
@@ -392,20 +426,14 @@ void RenderAreaWidget::printTableGridInExcel(DialogChoseData& dlg, int tournamen
     ExcelUtils::setCenterHorizontally(sheet, true);
 
 
-    directoryPath = QDir::toNativeSeparators(directoryPath);
-    if (!directoryPath.endsWith(QDir::separator())) directoryPath += QDir::separator();
-    directoryPath = QDir::toNativeSeparators(directoryPath);
     ExcelUtils::saveAsFile(workbook, directoryPath, prefFileName + ", " + DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", tournamentCategory) + ".xls");
 
     delete sheet;
     delete sheets;
-    delete workbook;
-    delete workbooks;
-    excel.dynamicCall("Quit()");
 }
 
 QString RenderAreaWidget::getNameOfLevel(int vertex)
 {
     int level = RenderAreaWidget::log2(vertex) + 1;
-    return level == 1? "Финал" : level == 2? "Полуфинал" : "1 / " + QString::number(1 << level);
+    return level == 1? "Финал" : level == 2? "Полуфинал" : "1 / " + QString::number(1 << (level - 1));
 }

@@ -35,7 +35,9 @@ public class GraphicsUtilities {
 
     public static void drawTextInCenterOfRectangle(Graphics2D g, Color color, String text, double x, double y, double width, double height, int maxFittingFontSize) {
         Font font = g.getFont();
+
         g.setFont(new Font(font.getName(), font.getStyle(), maxFittingFontSize));
+//        g.setFont(new Font(font.getName(), font.getStyle(), maxFittingFontSize));
         g.setColor(color);
 
         FontMetrics fm = g.getFontMetrics();
@@ -68,7 +70,7 @@ public class GraphicsUtilities {
         g.drawString(text, (float) (x + XX), (float) (y + YY));
     }
 
-    public static Dimension getScaledDimension(double imageSizeWidth, double imageSizeHeight, double boundaryWidth, double boundaryHeight) {
+    public static Dimension getScaledDimension(int imageSizeWidth, int imageSizeHeight, double boundaryWidth, double boundaryHeight) {
         boundaryWidth = 0.95 * boundaryWidth;
         boundaryHeight = 0.95 * boundaryHeight;
 

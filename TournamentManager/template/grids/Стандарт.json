@@ -3,6 +3,23 @@
     "MainJudge": "Главный судья:",
     "MainSecretary": "Гланый секретарь:",
     "Rows": [
+        {
+            "data": [
+                {
+                    "id": 8,
+                    "text": ""
+                },
+                {
+                    "id": 23,
+                    "text": "-"
+                },
+                {
+                    "id": 9,
+                    "text": ""
+                }
+            ],
+            "header": ""
+        }
     ],
     "maxPlace": 1,
     "title": "",

@@ -12,16 +12,16 @@ import java.util.ArrayList;
 public class ThisIsMainClass {
 
     public static void main(String[] args) {
-        for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-            if ("Nimbus".equals(info.getName())) {
-                try {
-                    UIManager.setLookAndFeel(info.getClassName());
-                } catch (ClassNotFoundException | InstantiationException | UnsupportedLookAndFeelException | IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-                break;
-            }
-        }
+//        for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+//            if ("Nimbus".equals(info.getName())) {
+//                try {
+//                    UIManager.setLookAndFeel(info.getClassName());
+//                } catch (ClassNotFoundException | InstantiationException | UnsupportedLookAndFeelException | IllegalAccessException e) {
+//                    e.printStackTrace();
+//                }
+//                break;
+//            }
+//        }
 
         final JDialogInitMiceAndKeyboard dlg = new JDialogInitMiceAndKeyboard();
         dlg.pack();

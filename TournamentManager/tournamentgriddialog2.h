@@ -12,8 +12,9 @@
 #include <QCheckBox>
 #include <QStyledItemDelegate>
 #include <QGroupBox>
+#include <QProgressDialog>
 #include <QRadioButton>
-
+#include <QSpinBox>
 
 
 class DrawBorderDelegate : public QStyledItemDelegate
@@ -33,24 +34,6 @@ class TournamentGridDialog2 : public QDialog
     Q_OBJECT
 
 private:
-//    struct BestFigher
-//    {
-//        int orderUID;
-//        int priority;
-//        int region;
-
-//        BestFigher()
-//        {
-//        }
-
-//        BestFigher(int orderUID, int priority, int region) : orderUID(orderUID), priority(priority), region(region)
-//        {
-//        }
-
-//        bool operator < (const BestFigher& b) const {
-//            return priority < b.priority;
-//        }
-//    };
 
     struct RegionRandomOrders
     {
@@ -72,7 +55,7 @@ private:
     RenderAreaWidget *pRenderArea;
     QComboBox *qComboBoxSelectCategory;
     QTableWidget *qTableWidget;
-    QTableWidget *tableGrid;
+    QTableWidget *tableWidgeRight;
     QString no_special_group = "нет";
     QVector<int> specialGroup;
 
@@ -82,6 +65,14 @@ private:
     QRadioButton *radioButtonAll;
     QRadioButton *radioButtonLonly;
     QRadioButton *radioButtonInvalid;
+    QRadioButton *radioButtonInvalidTurn;
+
+    QLabel *widthQLabel;
+    QLabel *heightQLabel;
+    QSpinBox *widthSpinBox;
+    QSpinBox *heightSpinBox;
+
+    QGroupBox *groupBoxScaleRight;
 
     int selectedRowOfRableGrid;
     int selectedColumnOfRableGrid;
@@ -93,18 +84,23 @@ public:
 private:
 
     static void generatGrid(const long long tournamentCaterotyUID, QVector<long long> bestFighters);
+    static bool deleteGrid (const long long uidTC);
 
 private slots:
     void onActivatedCategory(int id);
     void onCellCLickedForChangePrioritet(int, int);
     void onButtonGenerateGrid();
-    void onButtonDelete();
+
 
     void fillCategoryCombobox(QString filterStr = "");
     void onCellClickedOntableGrid(int row, int column);
 
     void onButtonGenerateAll();
     void fillTableGrid();
+
+    void onSpinBoxFontSizeChanged(int sizeFont);
+    void onSpinBoxFontSizeChangedOfRightTable(int sizeFont);
+    void onTabSwitch(int idTab);
 };
 
 

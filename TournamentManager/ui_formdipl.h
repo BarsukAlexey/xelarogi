@@ -13,8 +13,8 @@
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
+#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QComboBox>
-#include <QtWidgets/QFormLayout>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QHBoxLayout>
@@ -47,19 +47,6 @@ public:
     QTableWidget *tableWidget;
     QWidget *widget_2;
     QGridLayout *gridLayout_2;
-    QSpacerItem *horizontalSpacer_2;
-    QWidget *widget_4;
-    QHBoxLayout *horizontalLayout_2;
-    QGroupBox *groupBox;
-    QHBoxLayout *horizontalLayout_3;
-    QRadioButton *radioButtonBadge;
-    QRadioButton *radioButtonDiplom;
-    QWidget *widget_5;
-    QGridLayout *gridLayout_4;
-    QLabel *label_5;
-    QComboBox *comboBoxMaxPlace;
-    QWidget *widget_6;
-    QFormLayout *formLayout;
     QGroupBox *groupBox_2;
     QGridLayout *gridLayout_5;
     QLabel *label;
@@ -72,6 +59,16 @@ public:
     QPushButton *pushButtonSave;
     QPushButton *pushButton_3;
     QComboBox *comboBox;
+    QSpacerItem *horizontalSpacer_2;
+    QGroupBox *groupBoxPlace;
+    QGridLayout *gridLayout_7;
+    QLabel *label_5;
+    QComboBox *comboBoxMaxPlace;
+    QCheckBox *checkBoxAllGrids;
+    QGroupBox *groupBox;
+    QHBoxLayout *horizontalLayout_3;
+    QRadioButton *radioButtonBadge;
+    QRadioButton *radioButtonDiplom;
 
     void setupUi(QWidget *FormDipl)
     {
@@ -157,61 +154,6 @@ public:
         widget_2->setObjectName(QStringLiteral("widget_2"));
         gridLayout_2 = new QGridLayout(widget_2);
         gridLayout_2->setObjectName(QStringLiteral("gridLayout_2"));
-        horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        gridLayout_2->addItem(horizontalSpacer_2, 0, 4, 1, 1);
-
-        widget_4 = new QWidget(widget_2);
-        widget_4->setObjectName(QStringLiteral("widget_4"));
-        horizontalLayout_2 = new QHBoxLayout(widget_4);
-        horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
-        groupBox = new QGroupBox(widget_4);
-        groupBox->setObjectName(QStringLiteral("groupBox"));
-        horizontalLayout_3 = new QHBoxLayout(groupBox);
-        horizontalLayout_3->setObjectName(QStringLiteral("horizontalLayout_3"));
-        radioButtonBadge = new QRadioButton(groupBox);
-        radioButtonBadge->setObjectName(QStringLiteral("radioButtonBadge"));
-        radioButtonBadge->setChecked(true);
-
-        horizontalLayout_3->addWidget(radioButtonBadge);
-
-        radioButtonDiplom = new QRadioButton(groupBox);
-        radioButtonDiplom->setObjectName(QStringLiteral("radioButtonDiplom"));
-
-        horizontalLayout_3->addWidget(radioButtonDiplom);
-
-
-        horizontalLayout_2->addWidget(groupBox);
-
-        widget_5 = new QWidget(widget_4);
-        widget_5->setObjectName(QStringLiteral("widget_5"));
-        gridLayout_4 = new QGridLayout(widget_5);
-        gridLayout_4->setObjectName(QStringLiteral("gridLayout_4"));
-        label_5 = new QLabel(widget_5);
-        label_5->setObjectName(QStringLiteral("label_5"));
-        label_5->setEnabled(false);
-
-        gridLayout_4->addWidget(label_5, 0, 0, 1, 1);
-
-        comboBoxMaxPlace = new QComboBox(widget_5);
-        comboBoxMaxPlace->setObjectName(QStringLiteral("comboBoxMaxPlace"));
-        comboBoxMaxPlace->setEnabled(false);
-
-        gridLayout_4->addWidget(comboBoxMaxPlace, 0, 1, 1, 1);
-
-
-        horizontalLayout_2->addWidget(widget_5);
-
-
-        gridLayout_2->addWidget(widget_4, 0, 3, 1, 1);
-
-        widget_6 = new QWidget(widget_2);
-        widget_6->setObjectName(QStringLiteral("widget_6"));
-        formLayout = new QFormLayout(widget_6);
-        formLayout->setObjectName(QStringLiteral("formLayout"));
-
-        gridLayout_2->addWidget(widget_6, 0, 2, 1, 1);
-
         groupBox_2 = new QGroupBox(widget_2);
         groupBox_2->setObjectName(QStringLiteral("groupBox_2"));
         gridLayout_5 = new QGridLayout(groupBox_2);
@@ -281,6 +223,51 @@ public:
 
         gridLayout_2->addWidget(groupBox_3, 0, 0, 1, 1);
 
+        horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        gridLayout_2->addItem(horizontalSpacer_2, 0, 4, 1, 1);
+
+        groupBoxPlace = new QGroupBox(widget_2);
+        groupBoxPlace->setObjectName(QStringLiteral("groupBoxPlace"));
+        gridLayout_7 = new QGridLayout(groupBoxPlace);
+        gridLayout_7->setObjectName(QStringLiteral("gridLayout_7"));
+        label_5 = new QLabel(groupBoxPlace);
+        label_5->setObjectName(QStringLiteral("label_5"));
+        label_5->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+
+        gridLayout_7->addWidget(label_5, 0, 0, 1, 1);
+
+        comboBoxMaxPlace = new QComboBox(groupBoxPlace);
+        comboBoxMaxPlace->setObjectName(QStringLiteral("comboBoxMaxPlace"));
+
+        gridLayout_7->addWidget(comboBoxMaxPlace, 0, 1, 1, 1);
+
+        checkBoxAllGrids = new QCheckBox(groupBoxPlace);
+        checkBoxAllGrids->setObjectName(QStringLiteral("checkBoxAllGrids"));
+
+        gridLayout_7->addWidget(checkBoxAllGrids, 1, 0, 1, 2);
+
+
+        gridLayout_2->addWidget(groupBoxPlace, 0, 3, 1, 1);
+
+        groupBox = new QGroupBox(widget_2);
+        groupBox->setObjectName(QStringLiteral("groupBox"));
+        horizontalLayout_3 = new QHBoxLayout(groupBox);
+        horizontalLayout_3->setObjectName(QStringLiteral("horizontalLayout_3"));
+        radioButtonBadge = new QRadioButton(groupBox);
+        radioButtonBadge->setObjectName(QStringLiteral("radioButtonBadge"));
+        radioButtonBadge->setChecked(true);
+
+        horizontalLayout_3->addWidget(radioButtonBadge);
+
+        radioButtonDiplom = new QRadioButton(groupBox);
+        radioButtonDiplom->setObjectName(QStringLiteral("radioButtonDiplom"));
+
+        horizontalLayout_3->addWidget(radioButtonDiplom);
+
+
+        gridLayout_2->addWidget(groupBox, 0, 2, 1, 1);
+
 
         gridLayout->addWidget(widget_2, 0, 0, 1, 1);
 
@@ -299,7 +286,7 @@ public:
         pushButtonPrint->setText(QApplication::translate("FormDipl", "\320\241\320\276\321\205\321\200\320\260\320\275\320\270\321\202\321\214 \320\272\320\260\320\272 PDF...", 0));
         label_4->setText(QApplication::translate("FormDipl", "<html><head/><body><p>** \320\225\321\201\320\273\320\270 \321\202\320\265\320\272\321\201\321\202 \320\261\321\203\320\264\320\265\321\202 \320\262\321\213\320\273\320\265\320\267\320\260\321\202\321\214 \320\267\320\260 \321\210\320\270\321\200\320\270\320\275\321\203 \320\276\321\202\320\262\320\265\320\264\321\221\320\275\320\275\320\276\320\271 \320\265\320\271 \321\201\321\202\321\200\320\276\320\272\320\270, \321\202\320\276 \321\200\320\260\320\267\320\274\320\265\321\200 \321\210\321\200\320\270\321\204\321\202\320\260 \320\264\320\273\321\217 \321\215\321\202\320\276\320\263\320\276 \321\202\320\265\320\272\321\201\321\202\320\260 \320\260\320\262\321\202\320\276\320\274\320\260\321\202\320\270\321\207\320\265\321\201\320\272\320\270 \321\203\320\274\320\265\320\275\321\214\321\210\320\270\321\202\321\201\321\217 \321\202\320\260\320\272, \321\207\321\202\320\276\320\261\321\213 \320\277\320\276\320\273\320\275\320\276\321\201\321\202\321\214\321\216 \320\277\320\276\320\274\320\265\321\201\321\202\320"
                         "\270\321\202\321\214\321\201\321\217 \320\275\320\260 \321\201\321\202\321\200\320\276\320\272\320\265</p></body></html>", 0));
-        label_6->setText(QApplication::translate("FormDipl", "***\320\237\320\265\321\200\320\265\320\264 \320\277\320\265\321\207\320\260\321\202\321\214\321\216 \320\261\320\265\320\271\320\264\320\266\320\270\320\272\320\276\320\262 \320\275\320\265\320\276\320\261\321\205\320\276\320\264\320\270\320\274\320\276 \321\201\320\263\320\265\320\275\320\265\321\200\320\270\321\200\320\276\320\262\320\260\321\202\321\214 \321\202\321\203\321\200\320\275\320\270\321\200\320\275\321\213\320\265 \321\201\320\265\321\202\320\272\320\270", 0));
+        label_6->setText(QApplication::translate("FormDipl", "*** \320\237\320\265\321\200\320\265\320\264 \320\277\320\265\321\207\320\260\321\202\321\214\321\216 \320\261\320\265\320\271\320\264\320\266\320\270\320\272\320\276\320\262 \320\275\320\265\320\276\320\261\321\205\320\276\320\264\320\270\320\274\320\276 \321\201\320\263\320\265\320\275\320\265\321\200\320\270\321\200\320\276\320\262\320\260\321\202\321\214 \321\202\321\203\321\200\320\275\320\270\321\200\320\275\321\213\320\265 \321\201\320\265\321\202\320\272\320\270", 0));
         QTableWidgetItem *___qtablewidgetitem = tableWidget->horizontalHeaderItem(0);
         ___qtablewidgetitem->setText(QApplication::translate("FormDipl", "\320\247\321\202\320\276 \320\277\320\270\321\201\320\260\321\202\321\214?", 0));
         QTableWidgetItem *___qtablewidgetitem1 = tableWidget->horizontalHeaderItem(1);
@@ -314,10 +301,6 @@ public:
         ___qtablewidgetitem5->setText(QApplication::translate("FormDipl", "\320\240\320\260\321\201\321\202\320\276\320\275\320\270\320\265 \320\276\321\202 \320\262\320\265\321\200\321\205\320\275\320\265\320\263\320\276 \320\272\321\200\320\260\321\217, \320\274\320\274", 0));
         QTableWidgetItem *___qtablewidgetitem6 = tableWidget->horizontalHeaderItem(6);
         ___qtablewidgetitem6->setText(QApplication::translate("FormDipl", "\320\224\320\273\320\270\320\275\320\260 \321\201\321\202\321\200\320\276\320\272\320\270, \320\274\320\274", 0));
-        groupBox->setTitle(QApplication::translate("FormDipl", "\320\242\320\270\320\277", 0));
-        radioButtonBadge->setText(QApplication::translate("FormDipl", "\320\221\320\265\320\271\320\264\320\266\320\270\320\272\320\270", 0));
-        radioButtonDiplom->setText(QApplication::translate("FormDipl", "\320\223\321\200\320\260\320\274\320\276\321\202\321\213", 0));
-        label_5->setText(QApplication::translate("FormDipl", "\320\234\320\260\320\272\321\201. \320\274\320\265\321\201\321\202\320\276:", 0));
         groupBox_2->setTitle(QApplication::translate("FormDipl", "\320\233\320\270\321\201\321\202", 0));
         label->setText(QApplication::translate("FormDipl", "\320\250\320\270\321\200\320\270\320\275\320\260 \320\273\320\270\321\201\321\202\320\260 (\320\274\320\274)", 0));
         label_2->setText(QApplication::translate("FormDipl", "\320\222\321\213\321\201\320\276\321\202\320\260 \320\273\320\270\321\201\321\202\320\260 (\320\274\320\274)", 0));
@@ -325,6 +308,13 @@ public:
         pushButtonNew->setText(QApplication::translate("FormDipl", "\320\235\320\276\320\262\321\213\320\271", 0));
         pushButtonSave->setText(QApplication::translate("FormDipl", "\320\241\320\276\321\205\321\200\320\260\320\275\320\270\321\202\321\214", 0));
         pushButton_3->setText(QApplication::translate("FormDipl", "\320\243\320\264\320\260\320\273\320\270\321\202\321\214", 0));
+        groupBoxPlace->setTitle(QApplication::translate("FormDipl", "\320\234\320\265\321\201\321\202\320\276", 0));
+        label_5->setText(QApplication::translate("FormDipl", "\320\234\320\260\320\272\321\201. \320\274\320\265\321\201\321\202\320\276:", 0));
+        checkBoxAllGrids->setText(QApplication::translate("FormDipl", "\320\237\320\265\321\207\320\260\321\202\320\260\321\202\321\214 \320\275\320\265 \320\264\320\276 \320\272\320\276\320\275\321\206\320\260 \320\267\320\260\320\277\320\276\320\273\320\275\320\265\320\275\320\275\321\213\320\265 \321\201\320\265\321\202\320\272\320\270", 0));
+        groupBox->setTitle(QApplication::translate("FormDipl", "\320\242\320\270\320\277", 0));
+        radioButtonBadge->setText(QApplication::translate("FormDipl", "\320\221\320\265\320\271\320\264\320\266\320\270\320\272\320\270\n"
+"(\320\262\321\201\320\265 \321\201\320\277\320\276\321\200\321\202\321\201\320\274\320\265\320\275\321\213)", 0));
+        radioButtonDiplom->setText(QApplication::translate("FormDipl", "\320\223\321\200\320\260\320\274\320\276\321\202\321\213", 0));
     } // retranslateUi
 
 };

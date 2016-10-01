@@ -46,22 +46,22 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
 
-    while (true)
-    {
-        LoginDialog loginDialog(this);
-        if (loginDialog.exec() == QDialog::Accepted)
-        {
-            break;
-        }
-        if (!LoginDialog::mOkBtnClicked)
-        {
-            exit(0);
-        }
-        else
-        {
-            QMessageBox::warning(this, "Неудачная попытка авторизации", "Логи или пароль введены неверно");
-        }
-    }
+//    while (true)
+//    {
+//        LoginDialog loginDialog(this);
+//        if (loginDialog.exec() == QDialog::Accepted)
+//        {
+//            break;
+//        }
+//        if (!LoginDialog::mOkBtnClicked)
+//        {
+//            exit(0);
+//        }
+//        else
+//        {
+//            QMessageBox::warning(this, "Неудачная попытка авторизации", "Логи или пароль введены неверно");
+//        }
+//    }
 
 
     ui->setupUi(this);
@@ -458,47 +458,100 @@ void MainWindow::on_pushButtonWinnerReport_clicked()
 void MainWindow::on_pushButtonLoadWinner_clicked()
 {
     QString openFileName = QFileDialog::getOpenFileName(this);
-    if (openFileName.size() == 0) return;
-    //qDebug() << "openFileName: " << openFileName;
+    if (openFileName.isEmpty())
+        return;
 
-    QFile jSonFile(openFileName);
-    if (!jSonFile.open(QIODevice::ReadOnly))
+    QFile file(openFileName);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
         QMessageBox::information(this, ". . .", "Не возможно откыть файл", QMessageBox::Yes);
         return;
     }
-
-    QFile file;
-    file.setFileName(openFileName);
-    file.open(QIODevice::ReadOnly | QIODevice::Text);
     QJsonDocument d = QJsonDocument::fromJson(QString(file.readAll()).toUtf8());
     file.close();
 
+
     int okCount = 0;
-    int errorCount = 0;
+    int countSame = 0;
+    QStringList errorMessage;
     QJsonArray array = d.array();
     for (int i = 0; i < array.size(); ++i)
     {
         QJsonObject object = array[i].toObject();
         int TOURNAMENT_CATEGORIES_FK = object["TOURNAMENT_CATEGORIES_FK"].toInt();
-        int VERTEX = object["VERTEX"].toInt();
-        int orderUID = object["orderUID"].toInt();
+        int VERTEX         = object["VERTEX"].toInt();
+        int orderUID       = object["orderUID"].toInt();
+        int orderUID_left  = object["orderUID_left"].toInt();
+        int orderUID_right = object["orderUID_right"].toInt();
+
         QString result = object["result"].toString();
-        qDebug() << TOURNAMENT_CATEGORIES_FK << VERTEX << orderUID;
-        if (DBUtils::updateNodeOfGrid(TOURNAMENT_CATEGORIES_FK, VERTEX, orderUID, result))
+
+
+        //qDebug() << TOURNAMENT_CATEGORIES_FK << VERTEX << orderUID;
+
+        QVector<DBUtils::NodeOfTournirGrid> nodes = DBUtils::getNodes(TOURNAMENT_CATEGORIES_FK);
+
+
+        if (nodes.size() <= 2 * VERTEX + 1 - 1)
         {
-            okCount++;
+            errorMessage +=
+                    "Не возможно загрузть результаты для " + DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", TOURNAMENT_CATEGORIES_FK) + "\n"
+                    "Пара: " + DBUtils::getSecondNameAndFirstName(orderUID_left) + " VS " + DBUtils::getSecondNameAndFirstName(orderUID_right) + "\n"
+                    "Так как сетка была изменена или удалена\n";
+            continue;
+        }
+
+        if (orderUID_left != nodes[2 * VERTEX + 1 - 1].UID && orderUID_right != nodes[2 * VERTEX - 1].UID){
+            errorMessage +=
+                    "Не возможно загрузть результаты для " + DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", TOURNAMENT_CATEGORIES_FK) + "\n"
+                    "Пара: " + DBUtils::getSecondNameAndFirstName(orderUID_left) + " VS " + DBUtils::getSecondNameAndFirstName(orderUID_right) + "\n"
+                    "Так как сетка изменилась\n";
+            continue;
+        }
+
+        if (0 < nodes[VERTEX - 1].UID)
+        {
+            if (0 < orderUID && orderUID != nodes[VERTEX - 1].UID)
+                errorMessage +=
+                        "Не возможно загрузть результаты для " + DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", TOURNAMENT_CATEGORIES_FK) + "\n"
+                        "Пара: " + DBUtils::getSecondNameAndFirstName(orderUID_left) + " VS " + DBUtils::getSecondNameAndFirstName(orderUID_right) + "\n"
+                        "Так как победитель уже занесен в турнирную сетку\n" +
+                        "В программе победитель: " + DBUtils::getSecondNameAndFirstName(nodes[VERTEX - 1].UID) + "\n"
+                        "A Вы пытаетесь загрузить: " + DBUtils::getSecondNameAndFirstName(orderUID) + "\n";
+            else if (orderUID == nodes[VERTEX - 1].UID)
+                ++countSame;
+        }
+        else if (0 < orderUID)
+        {
+            if (DBUtils::updateNodeOfGrid(TOURNAMENT_CATEGORIES_FK, VERTEX, orderUID, result))
+                ++okCount;
+            else
+                errorMessage +=
+                    "Не возможно загрузть результаты для " + DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", TOURNAMENT_CATEGORIES_FK) + "\n"
+                    "Пара: " + DBUtils::getSecondNameAndFirstName(orderUID_left) + " VS " + DBUtils::getSecondNameAndFirstName(orderUID_right) + "\n"
+                    "Неизвестная ошибка\n";
+        }
+        else if (orderUID <= 0)
+        {
+            errorMessage +=
+                "Не возможно загрузть результаты для " + DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", TOURNAMENT_CATEGORIES_FK) + "\n"
+                "Пара: " + DBUtils::getSecondNameAndFirstName(orderUID_left) + " VS " + DBUtils::getSecondNameAndFirstName(orderUID_right) + "\n"
+                "Жюри не запускала эту пару на ринг\n";
         }
         else
         {
-            ++errorCount;
+            qDebug() << "wtf";
         }
     }
 
-    QMessageBox::information(this, "Результаты загрузки", "Успешно загруженно " +
-                             QString::number(okCount) + " результатов боев из " +
-                             QString::number(okCount + errorCount)
-                             );
+    QMessageBox dlg(this);
+    dlg.setText("Успешно загруженно: " + QString::number(okCount) + "\n" +
+                "Уже в БД есть: " + QString::number(countSame) + "\n" +
+                "Ошибок: " + QString::number(array.size() - okCount - countSame));
+    dlg.exec();
+
+    ErrorMessagesDialog dlg2(errorMessage, this);
+    dlg2.exec();
 }
 
 

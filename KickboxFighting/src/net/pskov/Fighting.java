@@ -302,7 +302,7 @@ class Fighting {
                     soundGong.play();
                 }
             }
-        } else if (status == FightStatus.winnerByPointsLeft) {
+        } else if (status == FightStatus.winnerByPointsLeft || status == FightStatus.winnerByPointsRight) {
             int l = getCountJudgeForLeftFighter();
             int r = getCountJudgeForRightFighter();
             if (l > r) {
@@ -312,21 +312,16 @@ class Fighting {
             } else {
                 if (inCaseOfTie == 2 && !wasExtraRound)
                     status = FightStatus.PendingExtraRound;
-                else
+                else if (inCaseOfTie == 1) {
+                    Player winner = findWinnerInCaseOfTieByEuropeanRules();
+                    if (winner == Player.NoPlayer) {
+                        status = FightStatus.Tie;
+                    } else {
+                        status = winner == Player.Left ? FightStatus.winnerByPointsLeft : FightStatus.winnerByPointsRight;
+                    }
+                } else {
                     status = FightStatus.Tie;
-            }
-        } else if (status == FightStatus.winnerByPointsRight) {
-            int l = getCountJudgeForLeftFighter();
-            int r = getCountJudgeForRightFighter();
-            if (l > r) {
-                status = FightStatus.winnerByPointsLeft;
-            } else if (l < r) {
-                status = FightStatus.winnerByPointsRight;
-            } else {
-                if (inCaseOfTie == 2 && !wasExtraRound)
-                    status = FightStatus.PendingExtraRound;
-                else
-                    status = FightStatus.Tie;
+                }
             }
         }
     }
@@ -342,7 +337,7 @@ class Fighting {
             }
             if (countPointLeft != countPointRight)
                 continue;
-            for (int round = countOfRounds - 1; round >= 1; round--) {
+            for (int round = countOfRounds; round >= 1; round--) {
                 if (countOfPointsForTheLeftFighter[round][idJudge] < countOfPointsForTheRightFighter[round][idJudge]) {
                     return Player.Right;
                 } else if (countOfPointsForTheLeftFighter[round][idJudge] > countOfPointsForTheRightFighter[round][idJudge]) {

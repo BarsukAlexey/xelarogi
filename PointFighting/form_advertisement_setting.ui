@@ -74,6 +74,9 @@
    </item>
    <item row="0" column="0">
     <widget class="QGroupBox" name="groupBox">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="title">
       <string>Select skin</string>
      </property>
@@ -84,7 +87,7 @@
          <string>Classic</string>
         </property>
         <property name="checked">
-         <bool>true</bool>
+         <bool>false</bool>
         </property>
        </widget>
       </item>
@@ -92,6 +95,9 @@
        <widget class="QRadioButton" name="radioButton_2">
         <property name="text">
          <string>Big timer</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
         </property>
        </widget>
       </item>

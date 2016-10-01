@@ -21,7 +21,7 @@ QString DBUtils::getField(const QString& field, const QString& table, const QStr
     }
     else
     {
-        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << PRETTY_FUNCTION << query.lastError()<< query.lastQuery() << "  UID:" << UID << " field:" << field;
+        //qDebug() << __LINE__ << __PRETTY_FUNCTION__ << PRETTY_FUNCTION << query.lastError()<< query.lastQuery() << "  UID:" << UID << " field:" << field;
     }
     return "";
 }
@@ -36,7 +36,7 @@ QString DBUtils::getField(const QString& field, const QString& table, const long
     }
     else
     {
-        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << PRETTY_FUNCTION << query.lastError()<< query.lastQuery() << "  UID:" << UID << " field:" << field;
+        //qDebug() << __LINE__ << __PRETTY_FUNCTION__ << PRETTY_FUNCTION << query.lastError()<< query.lastQuery() << "  UID:" << UID << " field:" << field;
     }
     return "";
 }
@@ -51,7 +51,7 @@ QString DBUtils::getFieldDate(const QString& field, const QString& table, const 
     }
     else
     {
-        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << PRETTY_FUNCTION << query.lastError()<< query.lastQuery() << "  UID:" << UID;
+        //qDebug() << __LINE__ << __PRETTY_FUNCTION__ << PRETTY_FUNCTION << query.lastError()<< query.lastQuery() << "  UID:" << UID;
     }
     return "";
 }
@@ -66,7 +66,7 @@ QDate DBUtils::getFieldDateAsDate(const QString& field, const QString& table, co
     }
     else
     {
-        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << query.lastError().text() << query.lastQuery();
+        //qDebug() << __LINE__ << __PRETTY_FUNCTION__ << query.lastError().text() << query.lastQuery();
     }
     return QDate();
 }
@@ -175,11 +175,14 @@ QVector<DBUtils::NodeOfTournirGrid> DBUtils::getNodes(long long tournamentCatego
         QString name = "_________";
         QString region = "";
         bool isFighing = query.value("IS_FIGHTING").toBool();
-        if (orderUID.size() != 0)
+        if (!orderUID.isEmpty())
         {
             name   = DBUtils::getField("SECOND_NAME", "ORDERS", orderUID, __PRETTY_FUNCTION__) +  " " +
                      DBUtils::getField("FIRST_NAME" , "ORDERS", orderUID, __PRETTY_FUNCTION__);
-            region = DBUtils::getField("NAME", "REGIONS", DBUtils::getField("REGION_FK", "ORDERS", orderUID, __PRETTY_FUNCTION__), __PRETTY_FUNCTION__);
+            region =
+                    DBUtils::getField("NAME", "COUNTRIES", DBUtils::getField("COUNTRY_FK", "ORDERS", orderUID, __PRETTY_FUNCTION__), __PRETTY_FUNCTION__) +
+                    " / " +
+                    DBUtils::getField("NAME", "REGIONS"  , DBUtils::getField("REGION_FK" , "ORDERS", orderUID, __PRETTY_FUNCTION__), __PRETTY_FUNCTION__);
         }
         arr.push_back(NodeOfTournirGrid({query.value("VERTEX").toInt(), name, region, isFighing, orderUID.toLongLong(), query.value("result").toString()}));
     }
@@ -313,7 +316,7 @@ bool DBUtils::updateNodeOfGrid(long long TOURNAMENT_CATEGORIES_FK, long long VER
     QSqlQuery query("UPDATE GRID "
                     "SET ORDER_FK = ? , result = ? "
                     "WHERE TOURNAMENT_CATEGORIES_FK = ? AND VERTEX = ?");
-    query.addBindValue( orderUID);
+    query.addBindValue(orderUID);
     query.addBindValue(result);
     query.addBindValue(TOURNAMENT_CATEGORIES_FK);
     query.addBindValue(VERTEX);
@@ -374,41 +377,65 @@ std::pair<int, int> DBUtils::getPlace(long long UIDOrder)
     long long tournamentCategoryUID = getField("TOURNAMENT_CATEGORY_FK", "ORDERS", UIDOrder).toLongLong();
     QVector<QVector<NodeOfTournirGrid> > grid = getNodesAsLevelListOfList(tournamentCategoryUID);
 
+//    qDebug() << "DBUtils::getPlace";
+//    for (int i = 0; i < grid.size(); ++i)
+//    {
+//        QString str;
+//        for (int j = 0; j < grid[i].size(); ++j)
+//        {
+//            str += (j == 0 ? "" : " ") + QString::number(grid[i][j].v);
+//        }
+//        qDebug() << str;
+//    }
+//    qDebug() << "=================";
+
+    int countPlayers = 0;
     for (int i = 0, r = 1; i < grid.size(); ++i, r *= 2)
     {
-        for (NodeOfTournirGrid node : grid[i])
+        countPlayers += grid[i].size();
+        for (int j = 0; j < grid[i].size(); ++j)
         {
-            if (node.UID <= 0)
-            {
-                return std::make_pair(-1, -1);
-            }
+            NodeOfTournirGrid node = grid[i][j];
             if (node.UID == UIDOrder)
             {
-                return std::make_pair(r / 2 + 1, r);
+                return 0 <= i - 1 && grid[i - 1][j / 2].UID <= 0?
+                        std::make_pair(-1, -1) :
+                        std::make_pair(r / 2 + 1, std::min(r, countPlayers));
             }
         }
     }
     return std::make_pair(-1, -1);
 }
 
-QVector<std::pair<long long, std::pair<int, int>>> DBUtils::getUidAndPlace(long long tournamentCategoryUID)
+QVector<std::pair<long long, std::pair<int, int>>> DBUtils::getUIDsAndPlaces(long long tournamentCategoryUID, int maxPlace, bool skeepEmptyGrids)
 {
     QVector<QVector<NodeOfTournirGrid> > grid = getNodesAsLevelListOfList(tournamentCategoryUID);
     QVector<std::pair<long long, std::pair<int, int>>> result;
     QSet<long long> used;
     for (int i = 0, r = 1; i < grid.size(); ++i, r *= 2)
     {
-        for (NodeOfTournirGrid node : grid[i])
+        if (maxPlace < r)
+            break;
+        for (int j = 0; j < grid[i].size(); ++j)
         {
+            NodeOfTournirGrid node = grid[i][j];
             if (node.UID <= 0)
             {
-                result.clear();
-                return result;
+                if (skeepEmptyGrids)
+                {
+                    result.clear();
+                    return result;
+                }
             }
-            if (!used.contains(node.UID))
+            else if (!used.contains(node.UID))
             {
-                used << node.UID;
-                result << std::make_pair( node.UID, std::make_pair(r / 2 + 1, r));
+                used  << node.UID;
+                result << std::make_pair(
+                              node.UID,
+                              0 <= i - 1 && grid[i - 1][j / 2].UID <= 0?
+                              std::make_pair(-1, -1) :
+                              std::make_pair(r / 2 + 1, r)
+                              );
             }
         }
     }

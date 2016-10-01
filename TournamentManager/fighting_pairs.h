@@ -16,6 +16,12 @@
 #include <QLineEdit>
 #include <QCheckBox>
 #include <QTableWidget>
+#include <QProgressDialog>
+
+
+namespace Ui {
+class FightingPairs;
+}
 
 class FightingPairs : public QDialog
 {
@@ -27,28 +33,15 @@ public:
 
 private:
     long long tournamentUID;
-    QTableWidget * qTableWidget;
-    QPushButton* qPushButton;
-    QSpinBox* ringSpinBox;
-    QLineEdit *qLineEdit;
-    QCheckBox *checkBoxPointfighting;
-    QSpinBox* spinBoxDelay;
-
-    QRadioButton * radioFlagCountry;
-    QRadioButton * radioFlagRegion;
-    QRadioButton * radioFlagCity;
-    QRadioButton * radioFlagClub;
-
-    QRadioButton * radioTextCountry;
-    QRadioButton * radioTextRegion;
-    QRadioButton * radioTextCity;
-    QRadioButton * radioTextClub;
+    Ui::FightingPairs* ui;
 
     void printInExcel(DialogChoseData& dlg, QAxObject *sheets, const QVector<DBUtils::Fighing>& fighting, int ring);
     void printInJSON(const QVector<DBUtils::Fighing>& fighting, int ring, const QString& path);
     void makeGridsForPointFighting(QString existingDirectory, QVector<long long> tournamentCategoryUIDs, int delay, int countOfRings, QString stringDate);
     QString getTextLocal(long long orderUID);
     QString getFlagImage(long long orderUID);
+    QJsonObject getQJsonObject(const DBUtils::Fighing& f, const int fightingId);
+
 signals:
 
 public slots:

@@ -104,7 +104,8 @@ FORMS    += mainwindow.ui \
     countryiconsdialog.ui \
     formdipl.ui \
     dialogselectfieldsfordimloma.ui \
-    dialogchosedata.ui
+    dialogchosedata.ui \
+    fighting_pairs.ui
 
 DISTFILES +=
 

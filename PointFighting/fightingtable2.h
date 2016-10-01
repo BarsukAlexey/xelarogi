@@ -28,7 +28,8 @@ class FightingTable2 : public QDialog
 private:
     Ui::FightingTable2 *ui;
     QRightClickButton *pushButtonStart;
-    QRightClickButton *pushButtonDoctor;
+    QRightClickButton *pushButtonDoctorRed;
+    QRightClickButton *pushButtonDoctorBlue;
     QRightClickButton *pushButtonStop;
     QRightClickButton *cancelLastPenalty;
 

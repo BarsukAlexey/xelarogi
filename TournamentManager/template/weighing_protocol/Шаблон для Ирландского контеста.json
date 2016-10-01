@@ -51,24 +51,6 @@
                 }
             ],
             "header": "Club"
-        },
-        {
-            "data": [
-                {
-                    "id": 7,
-                    "text": ""
-                }
-            ],
-            "header": "Sports\nClassification"
-        },
-        {
-            "data": [
-                {
-                    "id": 13,
-                    "text": ""
-                }
-            ],
-            "header": "Casting of lots"
         }
     ],
     "maxPlace": 1,

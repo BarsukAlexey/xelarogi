@@ -25,12 +25,10 @@ FormDipl::FormDipl(long long UID_tournament, QWidget *parent) :
     connect(ui->tableWidget, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onTableClicked(const QModelIndex &)));
     connect(ui->pushButtonPrint, &QPushButton::clicked, this, &FormDipl::onPushPrint);
     connect(ui->radioButtonDiplom, &QRadioButton::clicked, [this](){
-        ui->comboBoxMaxPlace->setEnabled(ui->radioButtonDiplom->isChecked());
-        ui->label_5->setEnabled(ui->radioButtonDiplom->isChecked());
+        ui->groupBoxPlace->setEnabled(true);
     });
     connect(ui->radioButtonBadge, &QRadioButton::clicked, [this](){
-        ui->comboBoxMaxPlace->setEnabled(ui->radioButtonDiplom->isChecked());
-        ui->label_5->setEnabled(ui->radioButtonDiplom->isChecked());
+        ui->groupBoxPlace->setEnabled(false);
     });
     connect(ui->comboBox, &QComboBox::currentTextChanged, [this](){
         loadData();
@@ -57,6 +55,7 @@ void FormDipl::onSaveData()
     obj["height"] = ui->spinBoxHeight->value();
     obj["badge"] = ui->radioButtonBadge->isChecked();
     obj["maxPlace"] = ui->comboBoxMaxPlace->currentText();
+    obj["checkBoxAllGrids"] = ui->checkBoxAllGrids->isChecked();
 
     QJsonArray arr;
     for (int row = 0; row < fields.size(); ++row)
@@ -73,6 +72,7 @@ void FormDipl::onSaveData()
         }
         a["data"] = data;
         a["font"] = fonts[row].toString();
+        // DOTO CHECK HERE
         a["color"] = colors[row].name();
 
         int x        = dynamic_cast<QSpinBox* >(ui->tableWidget->cellWidget(row, 4))->value();
@@ -116,6 +116,9 @@ void FormDipl::loadData()
     ui->radioButtonBadge ->setChecked( obj["badge"].toBool());
     ui->radioButtonDiplom->setChecked(!obj["badge"].toBool());
     ui->comboBoxMaxPlace->setCurrentText(obj["maxPlace"].toString());
+    ui->checkBoxAllGrids->setChecked(obj["checkBoxAllGrids"].toBool());
+
+    ui->groupBoxPlace->setEnabled(!obj["badge"].toBool());
 
 
     QJsonArray arr = obj["arr"].toArray();
@@ -147,7 +150,8 @@ void FormDipl::loadData()
 
         dynamic_cast<QComboBox*>(ui->tableWidget->cellWidget(row, 1))->setCurrentIndex(a["aligment"].toInt());
 
-        fonts[row] = QFont(a["font"].toString());
+        fonts[row].fromString(a["font"].toString());
+        //qDebug() << "Load: " << fonts[row].pointSize();
         ui->tableWidget->setItem(row, 2, new QTableWidgetItem(fonts[row].toString()));
 
         colors[row] = QColor(a["color"].toString());
@@ -192,7 +196,7 @@ void FormDipl::onTableClicked(const QModelIndex& index)
     {
         QFont font = QFontDialog::getFont(0, fonts[index.row()], this);
         fonts[index.row()] = font;
-        ui->tableWidget->setItem(index.row(), index.column(), new QTableWidgetItem(font.toString()));
+        ui->tableWidget->setItem(index.row(), index.column(), new QTableWidgetItem(fonts[index.row()].toString()));
     }
     else if (index.column() == 3)
     {
@@ -275,22 +279,25 @@ void FormDipl::onPushPrint()
 
     QVector<long long> localGet_UIDs_of_TOURNAMENT_CATEGORIES = DBUtils::get_UIDs_of_TOURNAMENT_CATEGORIES(UID_tournament);
 
-    QProgressDialog progress("Working...", "Don't push", 0, localGet_UIDs_of_TOURNAMENT_CATEGORIES.size(), this);
+    //QProgressDialog progress("Working...", "Don't push", 0, localGet_UIDs_of_TOURNAMENT_CATEGORIES.size(), this);
+    QProgressDialog progress(this);
+    progress.setMaximum(localGet_UIDs_of_TOURNAMENT_CATEGORIES.size());
     progress.setWindowModality(Qt::WindowModal);
-    //progress.setAutoReset(false);
     progress.setMinimumDuration(500);
 
-    for (long long uidTC : localGet_UIDs_of_TOURNAMENT_CATEGORIES)
+    for (const long long uidTC : localGet_UIDs_of_TOURNAMENT_CATEGORIES)
     {
         //QVector<long long> UIDOrder = DBUtils::get_UIDOrder_for_TC(uidTC);
         //qDebug() << uidTC << UIDOrder.size();
 
-        progress.setValue(progress.value() + 1);
-
-        QVector<std::pair<long long, std::pair<int, int>>> UIDOrder = DBUtils::getUidAndPlace(uidTC);
+        QVector<std::pair<long long, std::pair<int, int>>> UIDOrder =
+                DBUtils::getUIDsAndPlaces(
+                    uidTC,
+                    ui->radioButtonBadge->isChecked()? (int)1e9 : ui->comboBoxMaxPlace->currentText().toInt(),
+                    ui->radioButtonDiplom->isChecked() && !ui->checkBoxAllGrids->isChecked());
         if (UIDOrder.isEmpty())
             continue;
-        qDebug() << uidTC << UIDOrder.size();
+        //qDebug() << uidTC << UIDOrder.size();
 
 
         std::sort(UIDOrder.begin(), UIDOrder.end(), [](
@@ -300,7 +307,8 @@ void FormDipl::onPushPrint()
             std::pair<int, int> place1 = UIDOrder1.second;
             QString name0 = DBUtils::getSecondNameAndFirstName(UIDOrder0.first);
             QString name1 = DBUtils::getSecondNameAndFirstName(UIDOrder1.first);
-            return  place0 < place1 || (place0 == place1 && name0 < name1);
+            return  place0 <  place1 ||
+                   (place0 == place1 && name0 < name1);
         });
 
         QString fileName = DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", uidTC, __PRETTY_FUNCTION__) + ".pdf";
@@ -324,11 +332,6 @@ void FormDipl::onPushPrint()
         for (int i = 0; i < UIDOrder.size(); ++i)
         {
             const long long uidOrder = UIDOrder[i].first;
-            std::pair<int, int> place = UIDOrder[i].second;
-            //qDebug() << uidTC << uidOrder << "  (" << place.first << ", " << place.second << ")" << DBUtils::getSecondNameAndFirstName(uidOrder);
-
-            if (ui->radioButtonDiplom->isChecked() && ui->comboBoxMaxPlace->currentText().toInt() < place.first)
-                continue;
 
             if (isThisFirstPage)
                 isThisFirstPage = false;
@@ -348,21 +351,12 @@ void FormDipl::onPushPrint()
 
             for (int row = 0; row < fonts.size(); ++row)
             {
-                QString text;
-                for (std::pair<DBUtils::TypeField, QString> field : fields[row])
-                {
-                    if (!text.isEmpty())
-                        text += " ";
-                    if (field.first == DBUtils::TypeField::PlainText)
-                        text += field.second;
-                    else
-                        text += DBUtils::get(field, uidOrder);
-                }
+                QString text = DBUtils::get(fields[row], uidOrder);
 
                 QFont font = fonts[row];
-                int x        = dynamic_cast<QSpinBox* >(ui->tableWidget->cellWidget(row, 4))->value() * printer.width()  / ui->spinBoxWidth ->value();
-                int y        = dynamic_cast<QSpinBox* >(ui->tableWidget->cellWidget(row, 5))->value() * printer.height() / ui->spinBoxHeight->value();
-                int width    = dynamic_cast<QSpinBox* >(ui->tableWidget->cellWidget(row, 6))->value() * printer.width()  / ui->spinBoxWidth ->value();
+                int x        = dynamic_cast<QSpinBox*>(ui->tableWidget->cellWidget(row, 4))->value() * printer.width()  / ui->spinBoxWidth ->value();
+                int y        = dynamic_cast<QSpinBox*>(ui->tableWidget->cellWidget(row, 5))->value() * printer.height() / ui->spinBoxHeight->value();
+                int width    = dynamic_cast<QSpinBox*>(ui->tableWidget->cellWidget(row, 6))->value() * printer.width()  / ui->spinBoxWidth ->value();
 
 //                painter.drawLine(QPoint(x        , 0), QPoint(x        , printer.height()));
 //                painter.drawLine(QPoint(x + width, 0), QPoint(x + width, printer.height()));
@@ -393,11 +387,15 @@ void FormDipl::onPushPrint()
 
                 painter.setPen(colors[row]);
                 painter.setFont(font);
+                //qDebug() << "print:" << font.pointSize();
                 painter.drawText(x, y, text);
             }
         }
         painter.end();
-        /**/
+
+        progress.setValue(progress.value() + 1);
+        if (progress.wasCanceled())
+            break;
     }
     qDebug() << "DONE!";
 }

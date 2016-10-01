@@ -6,6 +6,7 @@
 #include "excel_utils.h"
 #include "renderarearesultdialog.h"
 
+#include <QAxWidget>
 #include <QPainter>
 #include <QPoint>
 #include <QRect>
@@ -13,8 +14,6 @@
 #include <QVector>
 #include <QSqlDatabase>
 #include <QWidget>
-
-
 
 class RenderAreaWidget : public QWidget
 {
@@ -32,6 +31,7 @@ private:
 
 public:
     explicit RenderAreaWidget(QWidget *parent, int widthCell, int heightCell);
+    static void getAppropriateFontSize(QPainter& painter, const QRect& rect, const QString& text, int flags);
 
 protected:
     void paintEvent(QPaintEvent *event) Q_DECL_OVERRIDE;
@@ -64,7 +64,7 @@ private:
 
 public:
     static int log2(int x);
-    static void printTableGridInExcel(DialogChoseData& dlg, int tournamentCategory, bool likePointFighing, QString path, QVector<int> fightNumber, QString text = "", QString prefFileName = "");
+    static void printTableGridInExcel(QAxObject* workbook, DialogChoseData& dlg, int tournamentCategory, bool likePointFighing, QString path, QVector<int> fightNumber, QString text = "", QString prefFileName = "");
     static QString getNameOfLevel(int vertex);
 };
 #endif // RENDERAREAWIDGET_H

@@ -11,6 +11,7 @@ import net.pskov.utils.ImageUtils;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.Timer;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -97,8 +98,11 @@ public class JFrameMainJudge extends JFrame {
                             BufferedImage image = ImageIO.read(file);
                             if (image != null && 0 < image.getWidth() && 0 < image.getHeight())
                                 avd.add(image);
-                        } catch (IOException e) {
+                            else
+                                System.err.println("Can't read adv file: " + file.getAbsolutePath());
+                        } catch (Throwable e) {
                             e.printStackTrace();
+                            System.err.println("Can't read adv file: " + file.getAbsolutePath());
                         }
                     }
                 }
@@ -156,7 +160,7 @@ public class JFrameMainJudge extends JFrame {
                     return;
                 }
                 if (!canStartFighting.get(table.getSelectedRow())) {
-                    JOptionPane.showMessageDialog(JFrameMainJudge.this, "played");
+                    JOptionPane.showMessageDialog(JFrameMainJudge.this, "It can not be started");
                     return;
                 }
                 activeFighting = allFighting.get(table.getSelectedRow());
@@ -191,8 +195,6 @@ public class JFrameMainJudge extends JFrame {
 //                    });
                 }
                 scoreTable.get(0).setVisible(true);
-
-                System.err.println("activeFighting = null;sdsdssds");
                 activeFighting = null;
             }
         });
@@ -204,6 +206,7 @@ public class JFrameMainJudge extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JFileChooser chooser = new JFileChooser();
+                chooser.setFileFilter(new FileNameExtensionFilter("json", "json"));
                 chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
                 chooser.setPreferredSize(new Dimension(800, 600));
                 if (chooser.showOpenDialog(JFrameMainJudge.this) == JFileChooser.APPROVE_OPTION) {
@@ -334,7 +337,7 @@ public class JFrameMainJudge extends JFrame {
 //        }
 
 
-        final String[] heads = new String[]{"Fight #", "Red conner", "Country/Region", "Blue conner", "Country/Region",
+        final String[] heads = new String[]{"Fight #", "Can start?", "Red conner", "Country/Region", "Blue conner", "Country/Region",
                 "Winner", "Result", "Tournament Categoty", "Duration of fight", "Duration of break", "Count of rounds",
                 "In case of tie",
                 "Duration of extra round"};
@@ -350,50 +353,52 @@ public class JFrameMainJudge extends JFrame {
                     object.get("nameOfLeftFighter").getAsString(),
                     object.get("nameOfRightFighter").getAsString(),
                     object.get("fightId").getAsInt(),
-                    object.get("categoryOfFighting").getAsString(),
+                    object.get("categoryOfFightingShort").getAsString(),
 
                     object.get("countOfRounds").getAsInt(),
                     object.get("durationOfRound").getAsInt() * 1000,
                     object.get("durationOfBreak").getAsInt() * 1000,
                     object.get("DURATION_EXTRA_ROUND").getAsInt() * 1000,
                     object.get("IN_CASE_TIE").getAsInt(),
-                    //1,1,1,  0, 0
+//                    2, 10 * 1000, 3 * 1000, 0 * 1000, 1,
 
                     ImageUtils.decodeToImage(object.get("leftFlag").getAsString(), Color.red),
                     ImageUtils.decodeToImage(object.get("rightFlag").getAsString(), Color.blue),
 
-                    object.get("countryOfLeftFighter").getAsString(),
-                    object.get("countryOfRightFighter").getAsString(),
+                    object.get("regionOfLeftFighter").getAsString(),
+                    object.get("regionOfRightFighter").getAsString(),
                     object.get("TOURNAMENT_CATEGORIES_FK").getAsLong(),
                     object.get("VERTEX").getAsInt()
             );
             allFighting.add(f);
-            long winner = 0;
-            if (object.get("orderUID") != null) winner = object.get("orderUID").getAsInt();
-            long left = object.get("orderUID_left").getAsInt();
-            long right = object.get("orderUID_right").getAsInt();
+            long winner = object.get("orderUID") == null ? -1 : object.get("orderUID").getAsLong();
+            long left = object.get("orderUID_left") == null ? -1 : object.get("orderUID_left").getAsLong();
+            long right = object.get("orderUID_right") == null ? -1 : object.get("orderUID_right").getAsLong();
             String winnerStr = "";
             if (0 < winner) {
                 if (winner == left)
                     winnerStr = object.get("nameOfLeftFighter").getAsString();
                 else if (winner == right)
                     winnerStr = object.get("nameOfRightFighter").getAsString();
-                else
-                    throw new RuntimeException();
-                canStartFighting.add(false);
-            } else {
-                canStartFighting.add(true);
+//                else TODO
+//                    throw new RuntimeException();
             }
-            String result = winner == 0 ? "" : object.get("result").getAsString();
+            String result = winner == -1 ? "" : object.get("result").getAsString();
             int in_case_tie = object.get("IN_CASE_TIE").getAsInt();
+            boolean canStart =
+                    object.get("orderUID_left") != null && 0 < object.get("orderUID_left").getAsLong() &&
+                            object.get("orderUID_right") != null && 0 < object.get("orderUID_right").getAsLong() &&
+                            object.get("orderUID") == null;
+            canStartFighting.add(canStart);
             data.add(new Object[]{
                     object.get("fightId").getAsInt(),
+                    canStart ? "Yes" : "No",
 
                     object.get("nameOfLeftFighter").getAsString(),
-                    object.get("countryOfLeftFighter").getAsString(),
+                    object.get("regionOfLeftFighter").getAsString(),
 
                     object.get("nameOfRightFighter").getAsString(),
-                    object.get("countryOfRightFighter").getAsString(),
+                    object.get("regionOfRightFighter").getAsString(),
 
                     winnerStr,
                     result,
@@ -508,20 +513,65 @@ public class JFrameMainJudge extends JFrame {
                 try {
                     String JSON_DATA = new String(Files.readAllBytes(Paths.get(pathSaveJson)), StandardCharsets.UTF_8);
 
-                    JsonArray jsonArray = new JsonArray();
-                    for (JsonElement jsonElement : new JsonParser().parse(JSON_DATA).getAsJsonArray()) {
+                    JsonArray jsonArray = new JsonParser().parse(JSON_DATA).getAsJsonArray();
+                    JsonObject object1 = null;
+                    for (JsonElement jsonElement : jsonArray) {
                         JsonObject object = jsonElement.getAsJsonObject();
                         if (activeFighting.getTOURNAMENT_CATEGORIES_FK() == object.get("TOURNAMENT_CATEGORIES_FK").getAsLong() &&
                                 activeFighting.getVERTEX() == object.get("VERTEX").getAsLong()) {
                             object.addProperty("orderUID", activeFighting.getWinner() == Player.Left ? object.get("orderUID_left").getAsLong() : object.get("orderUID_right").getAsLong());
                             object.addProperty("result", activeFighting.getResult());
+                            object1 = object;
+                            break;
                         }
-                        jsonArray.add(object);
                     }
+
+                    // code с проги от пойнтфатинга
+
+                    String[] winnerKeys;
+                    if (activeFighting.getWinner() == Player.Left) {
+                        winnerKeys = new String[]{"nameOfLeftFighter", "orderUID_left", "regionOfLeftFighter", "leftFlag"};
+                    } else {
+                        winnerKeys = new String[]{"nameOfRightFighter", "orderUID_right", "regionOfRightFighter", "rightFlag"};
+                    }
+
+                    long TOURNAMENT_CATEGORIES_FK = activeFighting.getTOURNAMENT_CATEGORIES_FK();
+                    int VERTEX = activeFighting.getVERTEX();
+                    for (int i = 0; i < jsonArray.size(); ++i) {
+                        JsonObject currentObject = jsonArray.get(i).getAsJsonObject();
+                        if (currentObject.get("TOURNAMENT_CATEGORIES_FK").getAsLong() == TOURNAMENT_CATEGORIES_FK &&
+                                currentObject.get("VERTEX").getAsLong() == VERTEX / 2) {
+
+                            int pos = 0;
+                            for (String key : new String[]{VERTEX % 2 == 1 ? "nameOfLeftFighter" : "nameOfRightFighter",
+                                    VERTEX % 2 == 1 ? "orderUID_left" : "orderUID_right",
+                                    VERTEX % 2 == 1 ? "regionOfLeftFighter" : "regionOfRightFighter",
+                                    VERTEX % 2 == 1 ? "leftFlag" : "rightFlag"}) {
+                                currentObject.add(key, object1.get(winnerKeys[pos++]));
+                            }
+                        }
+                    }
+                    // конец этого кода из пойнтфатинга
 
                     ArrayList<String> arr = new ArrayList<>();
                     arr.add(new Gson().toJson(jsonArray));
                     Files.write(Paths.get(pathSaveJson), arr, StandardCharsets.UTF_8);
+//                    String JSON_DATA = new String(Files.readAllBytes(Paths.get(pathSaveJson)), StandardCharsets.UTF_8);
+//
+//                    JsonArray jsonArray = new JsonArray();
+//                    for (JsonElement jsonElement : new JsonParser().parse(JSON_DATA).getAsJsonArray()) {
+//                        JsonObject object = jsonElement.getAsJsonObject();
+//                        if (activeFighting.getTOURNAMENT_CATEGORIES_FK() == object.get("TOURNAMENT_CATEGORIES_FK").getAsLong() &&
+//                                activeFighting.getVERTEX() == object.get("VERTEX").getAsLong()) {
+//                            object.addProperty("orderUID", activeFighting.getWinner() == Player.Left ? object.get("orderUID_left").getAsLong() : object.get("orderUID_right").getAsLong());
+//                            object.addProperty("result", activeFighting.getResult());
+//                        }
+//                        jsonArray.add(object);
+//                    }
+//
+//                    ArrayList<String> arr = new ArrayList<>();
+//                    arr.add(new Gson().toJson(jsonArray));
+//                    Files.write(Paths.get(pathSaveJson), arr, StandardCharsets.UTF_8);
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }

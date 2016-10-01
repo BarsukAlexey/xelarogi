@@ -167,9 +167,11 @@ bool DialogChoseData::enableTitle()
 
 bool DialogChoseData::enableRows()
 {
-    if (type == DialogChoseData::Type::weight_report      ) return true;
-    if (type == DialogChoseData::Type::WinnerReport       ) return true;
-    if (type == DialogChoseData::Type::lol                ) return true;
+    if (type == DialogChoseData::Type::weight_report            ) return true;
+    if (type == DialogChoseData::Type::WinnerReport             ) return true;
+    if (type == DialogChoseData::Type::lol                      ) return true;
+    if (type == DialogChoseData::Type::grids                    ) return true;
+    if (type == DialogChoseData::Type::makeGridsForPointFighting) return true;
     return false;
 }
 
@@ -393,6 +395,7 @@ void DialogChoseData::onDeleteRow()
 
     fields.remove(row);
     headers.remove(row);
+    ui->tableWidget->removeRow(row);
 }
 
 void DialogChoseData::onTableClicked(const QModelIndex &index)

@@ -42,7 +42,7 @@ public class JDialogInitMiceAndKeyboard extends JDialog {
         if (allMouseController.size() < 3){
             JOptionPane.showMessageDialog(null,
                     "You have only " + allMouseController.size() + " mice.\n" +
-                    "Connect a mouse (mice) and restart a program.",
+                    "Connect a mouse (mice) and restart the program.",
                     "Error",
                     JOptionPane.ERROR_MESSAGE);
             System.exit(0);

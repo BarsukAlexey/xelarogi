@@ -21,13 +21,6 @@ public class ImageUtils {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        if (image == null) {
-            image = new BufferedImage(1, 1, BufferedImage.TYPE_INT_BGR);
-            Graphics2D graphics = image.createGraphics();
-            graphics.setColor(defaultColor);
-            graphics.fillRect(0, 0, 1, 1);
-        }
         return image;
     }
 

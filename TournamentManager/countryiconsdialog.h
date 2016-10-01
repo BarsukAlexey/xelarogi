@@ -1,6 +1,7 @@
 #ifndef COUNTRYICONSDIALOG_H
 #define COUNTRYICONSDIALOG_H
 
+#include <QDebug>
 #include <QDialog>
 #include <QPixmap>
 #include <QImage>
@@ -12,8 +13,6 @@
 #include <QTableView>
 #include <QAbstractItemModel>
 #include <QPushButton>
-
-#include <QDebug>
 
 namespace Ui {
 class CountryIconsDialog;

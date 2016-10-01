@@ -92,16 +92,18 @@ public:
 
         groupBox = new QGroupBox(FormAdvertisementSetting);
         groupBox->setObjectName(QStringLiteral("groupBox"));
+        groupBox->setEnabled(false);
         gridLayout_2 = new QGridLayout(groupBox);
         gridLayout_2->setObjectName(QStringLiteral("gridLayout_2"));
         radioButtonClassic = new QRadioButton(groupBox);
         radioButtonClassic->setObjectName(QStringLiteral("radioButtonClassic"));
-        radioButtonClassic->setChecked(true);
+        radioButtonClassic->setChecked(false);
 
         gridLayout_2->addWidget(radioButtonClassic, 0, 0, 1, 1);
 
         radioButton_2 = new QRadioButton(groupBox);
         radioButton_2->setObjectName(QStringLiteral("radioButton_2"));
+        radioButton_2->setChecked(true);
 
         gridLayout_2->addWidget(radioButton_2, 0, 1, 1, 1);
 

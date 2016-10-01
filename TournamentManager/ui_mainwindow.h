@@ -89,6 +89,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
+        MainWindow->resize(629, 489);
         countryAction = new QAction(MainWindow);
         countryAction->setObjectName(QStringLiteral("countryAction"));
         regionAction = new QAction(MainWindow);
@@ -309,7 +310,7 @@ public:
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 657, 21));
+        menuBar->setGeometry(QRect(0, 0, 629, 21));
         handbookMenu = new QMenu(menuBar);
         handbookMenu->setObjectName(QStringLiteral("handbookMenu"));
         MainWindow->setMenuBar(menuBar);

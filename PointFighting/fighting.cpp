@@ -10,18 +10,19 @@ Fighting::Fighting(int durationOfRound, int durationOfBreak, int countOfRounds, 
     durationOfExtraRound(1000 * durationExtraRound)
 {
 
-    statusName.clear();
-    statusName << "NotStart" << "Fight" << "Break" << "PauseFight" << "DoctorOnRing" << "Tie" << "DisqualificationLeft" << "DisqualificationRight" <<
-    "winnerByPointsLeft" << "winnerByPointsRight" <<
-    "winnerByPointsLeft10" << "winnerByPointsRight10" <<
-    "stoppedByJudge" << "forceLeftWinner" << "forceRightWinner" <<
-    "PendingExtraRound" << "ExtraRound" << "PauseExtraRound";
+//    statusName.clear();
+//    statusName << "NotStart" << "Fight" << "Break" << "PauseFight" << "DoctorOnRing" << "Tie" << "DisqualificationLeft" << "DisqualificationRight" <<
+//    "winnerByPointsLeft" << "winnerByPointsRight" <<
+//    "winnerByPointsLeft10" << "winnerByPointsRight10" <<
+//    "stoppedByJudge" << "forceLeftWinner" << "forceRightWinner" <<
+//    "PendingExtraRound" << "ExtraRound" << "PauseExtraRound";
 
     prevMomentTime = 0;
     spendTime = 0;
 
     currentRound = 1;
-    spentTimeDoctor = 0;
+    spentTimeRedDoctor = 0;
+    spentTimeBlueDoctor = 0;
 
 
     currentRound = 1;
@@ -240,13 +241,24 @@ void Fighting::pressedKeySpace() {
         status = FightStatus::ExtraRound;
 }
 
-void Fighting::pressDoctor()
+void Fighting::pressRedDoctor()
 {
     if (status == FightStatus::Fight){
-        spentTimeDoctor = 0;
-        status = FightStatus::DoctorOnRing;
+        //spentTimeRedDoctor = 0; время на врача не возобновляется, а продолжается.
+        status = FightStatus::RedDoctorOnRing;
     }
-    else if (status == FightStatus::DoctorOnRing){
+    else if (status == FightStatus::RedDoctorOnRing){
+        status = FightStatus::Fight;
+    }
+}
+
+void Fighting::pressBlueDoctor()
+{
+    if (status == FightStatus::Fight){
+        //spentTimeBlueDoctor = 0; время на врача не возобновляется, а продолжается.
+        status = FightStatus::BlueDoctorOnRing;
+    }
+    else if (status == FightStatus::BlueDoctorOnRing){
         status = FightStatus::Fight;
     }
 }
@@ -312,9 +324,14 @@ void Fighting::updateTime() {
             soundHummerBit->stop();
             soundGong->play();
         }
-    } else if (status == FightStatus::DoctorOnRing) {
-        spentTimeDoctor += quantum;
-        if (durationOfDoctorOnRing <= spentTimeDoctor) {
+    } else if (status == FightStatus::RedDoctorOnRing) {
+        spentTimeRedDoctor += quantum;
+        if (durationOfDoctorOnRing <= spentTimeRedDoctor) {
+            status = FightStatus::Fight;
+        }
+    } else if (status == FightStatus::BlueDoctorOnRing) {
+        spentTimeBlueDoctor += quantum;
+        if (durationOfDoctorOnRing <= spentTimeBlueDoctor) {
             status = FightStatus::Fight;
         }
     } else if (status == FightStatus::Tie) {
@@ -386,7 +403,7 @@ QString Fighting::getStringTime() const {
     if (status == FightStatus::NotStart) {
         return getTimeMMSS(durationOfRound);
     }
-    if (status == FightStatus::Fight || status == FightStatus::PauseFight || status == FightStatus::DoctorOnRing) {
+    if (status == FightStatus::Fight || status == FightStatus::PauseFight || status == FightStatus::RedDoctorOnRing || status == FightStatus::BlueDoctorOnRing) {
         long remainTime = qMax(0LL, durationOfRound - spendTime);
         return getTimeMMSS(remainTime);
     }
@@ -426,9 +443,14 @@ long long Fighting::getTimeMS() const {
     return 0;
 }
 
-QString Fighting::getStringTimeDoctor() const
+QString Fighting::getStringTimeRedDoctor() const
 {
-    return getTimeMMSS(qMax(0LL, durationOfDoctorOnRing - spentTimeDoctor));
+    return getTimeMMSS(qMax(0LL, durationOfDoctorOnRing - spentTimeRedDoctor));
+}
+
+QString Fighting::getStringTimeBlueDoctor() const
+{
+    return getTimeMMSS(qMax(0LL, durationOfDoctorOnRing - spentTimeBlueDoctor));
 }
 
 QString Fighting::getResult() {

@@ -56,7 +56,7 @@
             <properties>
               <enabled value="true"/>
               <font size="18"/>
-              <text value="Click mouse of Judge #1"/>
+              <text value="Click any button of the mouse of Judge #1"/>
             </properties>
           </component>
           <component id="bd1a8" class="javax.swing.JLabel" binding="label1">
@@ -65,7 +65,7 @@
             </constraints>
             <properties>
               <font size="18"/>
-              <text value="Click mouse of Judge #2"/>
+              <text value="Click any button of the mouse of Judge #2"/>
             </properties>
           </component>
           <component id="ea9bc" class="javax.swing.JLabel" binding="label2">
@@ -74,7 +74,7 @@
             </constraints>
             <properties>
               <font size="18"/>
-              <text value="Click mouse of Judge #3"/>
+              <text value="Click any button of the mouse of Judge #3"/>
             </properties>
           </component>
         </children>

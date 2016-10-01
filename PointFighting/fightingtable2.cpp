@@ -36,10 +36,15 @@ FightingTable2::FightingTable2(Fighting* f, QString categoty, QString nameLeft, 
         pushButtonStart->setSizePolicy(QSizePolicy(QSizePolicy::Policy::Ignored, QSizePolicy::Policy::Ignored));
         pushButtonStart->setFocusPolicy(Qt::FocusPolicy::NoFocus);
 
-        pushButtonDoctor = new QRightClickButton();
-        pushButtonDoctor->setText("Call a doctor");
-        pushButtonDoctor->setSizePolicy(QSizePolicy(QSizePolicy::Policy::Ignored, QSizePolicy::Policy::Ignored));
-        pushButtonDoctor->setFocusPolicy(Qt::FocusPolicy::NoFocus);
+        pushButtonDoctorRed = new QRightClickButton();
+        pushButtonDoctorRed->setText("Call a doctor (red)");
+        pushButtonDoctorRed->setSizePolicy(QSizePolicy(QSizePolicy::Policy::Ignored, QSizePolicy::Policy::Ignored));
+        pushButtonDoctorRed->setFocusPolicy(Qt::FocusPolicy::NoFocus);
+
+        pushButtonDoctorBlue = new QRightClickButton();
+        pushButtonDoctorBlue->setText("Call a doctor (blue)");
+        pushButtonDoctorBlue->setSizePolicy(QSizePolicy(QSizePolicy::Policy::Ignored, QSizePolicy::Policy::Ignored));
+        pushButtonDoctorBlue->setFocusPolicy(Qt::FocusPolicy::NoFocus);
 
         cancelLastPenalty = new QRightClickButton();
         cancelLastPenalty->setText("Cancel last penalty (Minus, Fo, Ex)");
@@ -55,18 +60,20 @@ FightingTable2::FightingTable2(Fighting* f, QString categoty, QString nameLeft, 
         QWidget * w = new QWidget();
         QGridLayout * l = new QGridLayout();
         w->setLayout(l);
-        l->addWidget(pushButtonStart,   0, 0);
-        l->addWidget(pushButtonDoctor,  0, 1);
-        l->addWidget(cancelLastPenalty, 0, 2);
-        l->addWidget(pushButtonStop,    0, 3);
+        l->addWidget(pushButtonStart     , 0, 0);
+        l->addWidget(pushButtonDoctorRed , 0, 1);
+        l->addWidget(pushButtonDoctorBlue, 0, 2);
+        l->addWidget(cancelLastPenalty   , 0, 3);
+        l->addWidget(pushButtonStop      , 0, 4);
         ui->gridLayoutMain->addWidget(w, 4, 0, 1, ui->gridLayoutMain->columnCount());
         ui->gridLayoutMain->setRowStretch(4, 8);
 
 
-        connect(pushButtonStart, &QPushButton::clicked, [f](){f->pressedKeySpace();});
-        connect(pushButtonDoctor, &QPushButton::clicked, [f](){f->pressDoctor();});
-        connect(cancelLastPenalty, &QPushButton::clicked, [f](){f->cancelLastAction();});
-        connect(pushButtonStop, &QPushButton::clicked, [this, f](){
+        connect(pushButtonStart     , &QPushButton::clicked, [f](){f->pressedKeySpace(); });
+        connect(pushButtonDoctorRed , &QPushButton::clicked, [f](){f->pressRedDoctor();  });
+        connect(pushButtonDoctorBlue, &QPushButton::clicked, [f](){f->pressBlueDoctor(); });
+        connect(cancelLastPenalty   , &QPushButton::clicked, [f](){f->cancelLastAction();});
+        connect(pushButtonStop      , &QPushButton::clicked, [this, f](){
             f->setDialog(true);
             DialogDisq dlg;
             if (dlg.exec() == QDialog::Accepted)
@@ -227,10 +234,15 @@ void FightingTable2::updateInfo()
 
 
 
-        if (fightStatus == Fighting::DoctorOnRing)
-            pushButtonDoctor->setText("Stop a doctor");
+        if (fightStatus == Fighting::RedDoctorOnRing)
+            pushButtonDoctorRed->setText("Stop a doctor (RED)");
         else
-            pushButtonDoctor->setText("Call a doctor");
+            pushButtonDoctorRed->setText("Call a doctor (RED)");
+
+        if (fightStatus == Fighting::BlueDoctorOnRing)
+            pushButtonDoctorBlue->setText("Stop a doctor (BLUE)");
+        else
+            pushButtonDoctorBlue->setText("Call a doctor (BLUE)");
     }
 
 
@@ -266,9 +278,13 @@ void FightingTable2::updateInfo()
     {
         ui->labelLeftHead->setText(QString("Round %1/%2 - Fight! - PAUSE").arg(f->getCurrentRound()).arg(f->getCountOfRounds()));
     }
-    else if (fightStatus == Fighting::DoctorOnRing)
+    else if (fightStatus == Fighting::RedDoctorOnRing)
     {
-        ui->labelLeftHead->setText("Doctor: " + f->getStringTimeDoctor());
+        ui->labelLeftHead->setText("Doctor (red): " + f->getStringTimeRedDoctor());
+    }
+    else if (fightStatus == Fighting::BlueDoctorOnRing)
+    {
+        ui->labelLeftHead->setText("Doctor (blue): " + f->getStringTimeBlueDoctor());
     }
     else if (fightStatus == Fighting::Tie)
     {

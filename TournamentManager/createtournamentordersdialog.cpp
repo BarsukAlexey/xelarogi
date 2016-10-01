@@ -253,7 +253,7 @@ CreateTournamentOrdersDialog::CreateTournamentOrdersDialog(const QSqlDatabase &d
                 "TOURNAMENT_FK = ? AND "
                 "SEX_FK = ? "
             "ORDER BY "
-                "TYPE_FK, AGE_FROM, AGE_TILL, WEIGHT_FROM, WEIGHT_TILL");
+                "AGE_FROM, AGE_TILL, WEIGHT_FROM, WEIGHT_TILL, TYPE_FK ");
         query.addBindValue(tournamentUID);
         query.addBindValue(DBUtils::getField("SEX_FK", "ORDERS", uidOrder));
         if (!query.exec())

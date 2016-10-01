@@ -1,4 +1,7 @@
 #include "fighting_pairs.h"
+#include "ui_fighting_pairs.h"
+
+
 #include "db_utils.h"
 #include "excel_utils.h"
 #include "renderareawidget.h"
@@ -36,11 +39,13 @@
 
 FightingPairs::FightingPairs(long long _tournamentUID, QWidget* parent) :
     QDialog(parent),
-    tournamentUID(_tournamentUID)
+    tournamentUID(_tournamentUID),
+    ui(new Ui::FightingPairs)
 {
-    qTableWidget = new QTableWidget();
-    qTableWidget->setColumnCount(4);
-    qTableWidget->setHorizontalHeaderLabels(QStringList({"Категория", "Кол-во пар", "Уровень", "Бои"}));
+    ui->setupUi(this);
+
+    ui->qTableWidget->setColumnCount(4);
+    ui->qTableWidget->setHorizontalHeaderLabels(QStringList({"Категория", "Кол-во пар", "Уровень", "Бои"}));
 
     for(const QVector<DBUtils::Fighing>& x : DBUtils::getListsOfPairsForFighting(tournamentUID))
     {
@@ -66,106 +71,32 @@ FightingPairs::FightingPairs(long long _tournamentUID, QWidget* parent) :
             fightingDistib = fightingDistib + " " + QString::number(x);
 
 
-        qTableWidget->setRowCount(qTableWidget->rowCount() + 1);
+        ui->qTableWidget->setRowCount(ui->qTableWidget->rowCount() + 1);
         QTableWidgetItem *item;
 
         item = new QTableWidgetItem(DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", x[0].TOURNAMENT_CATEGORIES_FK));
         item->setData(Qt::UserRole, x[0].TOURNAMENT_CATEGORIES_FK);
-        qTableWidget->setItem(qTableWidget->rowCount() - 1, 0, item);
+        ui->qTableWidget->setItem(ui->qTableWidget->rowCount() - 1, 0, item);
 
-        qTableWidget->setItem(qTableWidget->rowCount() - 1, 1, new QTableWidgetItem(QString::number(x.size())));
-        qTableWidget->setItem(qTableWidget->rowCount() - 1, 2, new QTableWidgetItem(RenderAreaWidget::getNameOfLevel(x[0].VERTEX)));
-        qTableWidget->setItem(qTableWidget->rowCount() - 1, 3, new QTableWidgetItem(fightingDistib));
+        ui->qTableWidget->setItem(ui->qTableWidget->rowCount() - 1, 1, new QTableWidgetItem(QString::number(x.size())));
+        ui->qTableWidget->setItem(ui->qTableWidget->rowCount() - 1, 2, new QTableWidgetItem(RenderAreaWidget::getNameOfLevel(x[0].VERTEX)));
+        ui->qTableWidget->setItem(ui->qTableWidget->rowCount() - 1, 3, new QTableWidgetItem(fightingDistib));
     }
 
-    qTableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    qTableWidget->setSelectionMode(QAbstractItemView::SelectionMode::MultiSelection);
-    qTableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
-    qTableWidget->resizeColumnsToContents();
+    ui->qTableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    ui->qTableWidget->setSelectionMode(QAbstractItemView::SelectionMode::MultiSelection);
+    ui->qTableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui->qTableWidget->resizeColumnsToContents();
 
 
 
-
-
-    ringSpinBox = new QSpinBox;
-    ringSpinBox->setMaximum(100);
-    ringSpinBox->setMinimum(1);
-    ringSpinBox->setValue(1);
-
-    spinBoxDelay = new QSpinBox;
-    spinBoxDelay->setMaximum(1000000);
-    spinBoxDelay->setMinimum(1);
-    spinBoxDelay->setValue(60);
-
-
-    QGroupBox *groupBoxText = new QGroupBox("Текст (для табло и Excel-файла)");
-    radioTextCountry        = new QRadioButton("Страна");
-    radioTextRegion         = new QRadioButton("Регион");
-    radioTextCity           = new QRadioButton("Город");
-    radioTextClub           = new QRadioButton("Клуб");
-    {
-        QHBoxLayout *hbox = new QHBoxLayout;
-        hbox->addWidget(radioTextCountry);
-        hbox->addWidget(radioTextRegion);
-        hbox->addWidget(radioTextCity);
-        hbox->addWidget(radioTextClub);
-        hbox->addStretch(1);
-        groupBoxText->setLayout(hbox);
-    }
-    radioTextRegion->setChecked(true);
-
-
-    QGroupBox *groupBoxFlag = new QGroupBox("Флаг (для табло)");
-    radioFlagCountry        = new QRadioButton("Страна");
-    radioFlagRegion         = new QRadioButton("Регион");
-    radioFlagCity           = new QRadioButton("Город");
-    radioFlagClub           = new QRadioButton("Клуб");
-    QHBoxLayout *hbox = new QHBoxLayout;
-    hbox->addWidget(radioFlagCountry);
-    hbox->addWidget(radioFlagRegion);
-    hbox->addWidget(radioFlagCity);
-    hbox->addWidget(radioFlagClub);
-    hbox->addStretch(1);
-    groupBoxFlag->setLayout(hbox);
-    radioFlagRegion->setChecked(true);
-
-
-
-    qPushButton = new QPushButton("GO!");
-
-
-    QGridLayout *qGridLayout = new QGridLayout;
-    qGridLayout->addWidget(qTableWidget, 0, 0, 1, 2);
-
-    qGridLayout->addWidget(new QLabel(QString("Кол-во рингов:")), 1, 0, Qt::AlignRight);
-    qGridLayout->addWidget(ringSpinBox, 1, 1);
-
-    qGridLayout->addWidget(new QLabel(QString("Дата + {утро, день, вечер}:")), 2, 0, Qt::AlignRight);
-    qGridLayout->addWidget(qLineEdit = new QLineEdit(), 2, 1);
-
-    qGridLayout->addWidget(new QLabel("Временная задержка при смене пар на ринге (в секундах)"), 3, 0, Qt::AlignRight);
-    qGridLayout->addWidget(spinBoxDelay, 3, 1, Qt::AlignLeft);
-
-    qGridLayout->addWidget(checkBoxPointfighting = new QCheckBox("Сетки для поинтфайтинга"), 4, 0, 1, 2, Qt::AlignCenter);
-//    checkBoxPointfighting->setChecked(true);
-
-    qGridLayout->addWidget(groupBoxText, 5, 0, 1, 2);
-
-    qGridLayout->addWidget(groupBoxFlag, 6, 0, 1, 2);
-
-    qGridLayout->addWidget(qPushButton, 7, 0, 1, 2);
-
-    setLayout(qGridLayout);
-
-    resize(800, 600);
     setWindowFlags(windowFlags() | Qt::WindowMinMaxButtonsHint);
 
-    connect(qPushButton, SIGNAL(clicked()), SLOT(onGoPress()));
+    connect(ui->qPushButton, SIGNAL(clicked()), SLOT(onGoPress()));
 }
 
 FightingPairs::~FightingPairs()
 {
-
 }
 
 void FightingPairs::printInExcel(DialogChoseData& dlg, QAxObject *sheet, const QVector<DBUtils::Fighing>& fighting, int ring)
@@ -179,7 +110,7 @@ void FightingPairs::printInExcel(DialogChoseData& dlg, QAxObject *sheet, const Q
     ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 3);
     ++currentRow;
 
-    ExcelUtils::setValue(sheet, currentRow, 1, qLineEdit->text());
+    ExcelUtils::setValue(sheet, currentRow, 1, ui->qLineEdit->text());
     ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 3);
     ++currentRow;
 
@@ -238,37 +169,13 @@ void FightingPairs::printInJSON(const QVector<DBUtils::Fighing>& fighting, int r
     int fightingId = 1;
     for (const DBUtils::Fighing& f : fighting)
     {
-        QJsonObject a;
-        a["nameOfLeftFighter" ] = DBUtils::getField("SECOND_NAME", "ORDERS", f.UID0) + " " + DBUtils::getField("FIRST_NAME", "ORDERS", f.UID0);
-        a["nameOfRightFighter"] = DBUtils::getField("SECOND_NAME", "ORDERS", f.UID1) + " " + DBUtils::getField("FIRST_NAME", "ORDERS", f.UID1);
-
-        a["fightId"] = fightingId;
-        a["categoryOfFighting"] = DBUtils::getWeightAsOneNumberPlusMinus(f.TOURNAMENT_CATEGORIES_FK);
-
-        a["countOfRounds"  ] = DBUtils::getField("ROUND_COUNT"     , "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK);
-        a["durationOfRound"] = DBUtils::getField("DURATION_FIGHING", "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK);
-        a["durationOfBreak"] = DBUtils::getField("DURATION_BREAK"  , "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK);
-
-        a["countryOfLeftFighter" ] = getTextLocal(f.UID0);
-        a["countryOfRightFighter"] = getTextLocal(f.UID1);
-
-        a["leftFlag" ] = getFlagImage(f.UID0);
-        a["rightFlag"] = getFlagImage(f.UID1);
-
-        a["TOURNAMENT_CATEGORIES_FK"] = f.TOURNAMENT_CATEGORIES_FK;
-        a["VERTEX"] = f.VERTEX;
-        a["orderUID_left"] = f.UID0;
-        a["orderUID_right"] = f.UID1;
-
-        a["IN_CASE_TIE"         ] = DBUtils::getField("IN_CASE_TIE"         , "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK).toInt();
-        a["DURATION_EXTRA_ROUND"] = DBUtils::getField("DURATION_EXTRA_ROUND", "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK).toInt();
-
+        QJsonObject a = getQJsonObject(f, fightingId);
         arr.push_back(a);
         //
         ++fightingId;
     }
 
-    const QString path = QDir(existingDirectory).filePath("ring " + QString::number(ring) + "(kickboxing).json");
+    const QString path = QDir(existingDirectory).filePath("ring " + QString::number(ring) + ".json");
     QFile saveFile(path);
     if (!saveFile.open(QIODevice::WriteOnly)) {
         qWarning("Couldn't open save file.");
@@ -297,6 +204,12 @@ void FightingPairs::makeGridsForPointFighting(QString existingDirectory, QVector
     QVector<long long> constTournamentCategoryUIDs = tournamentCategoryUIDs;
     const std::vector<int> constDurationOfGrid(durationOfGrid.begin(), durationOfGrid.end());
     QVector<QVector<long long> > ansTournamentCategoryUIDs;
+
+
+    QProgressDialog progress(this);
+    progress.setWindowModality(Qt::WindowModal);
+    progress.setMinimumDuration(500);
+    progress.setMaximum(tournamentCategoryUIDs.size());
 
     QString message;
     int maxVal = (int)0;
@@ -365,6 +278,9 @@ void FightingPairs::makeGridsForPointFighting(QString existingDirectory, QVector
     qDebug() << messageThread << "  delta: " + QString::number((myThread->maxSumSeg - myThread->minSumSeg)/60);
 
 
+    QAxWidget excel("Excel.Application");
+    QAxObject *workbooks = excel.querySubObject("WorkBooks");
+
     int idRing = 1;
     for (QVector<long long> uids : ansTournamentCategoryUIDs)
     {
@@ -380,7 +296,7 @@ void FightingPairs::makeGridsForPointFighting(QString existingDirectory, QVector
                     if (node.isFighing)
                     {
                         orderOfFights << std::make_pair(i, node.v);
-                        qDebug() << "orderOfFights:" << i << node.v;
+                        //qDebug() << "orderOfFights:" << i << node.v;
                     }
             }
             for (int i = 0; i < orderOfFights.size(); ++i)
@@ -406,10 +322,16 @@ void FightingPairs::makeGridsForPointFighting(QString existingDirectory, QVector
         QVector<QJsonObject> jsonObjects;
         for (int i = 0; i < uids.size(); ++i)
         {
+            workbooks->dynamicCall("Add");
+            QAxObject *workbook = excel.querySubObject("ActiveWorkBook");
+            RenderAreaWidget::printTableGridInExcel(
+                        workbook, dlg, uids[i], true,
+                        existingDirectory, fightNumber[i], stringDate,
+                        dlg.getTranslations()["Татами"] + " " +  QString("%1 (%2)").arg(idRing, 2, 10, QChar('0')).arg(i + 1, 2, 10, QChar('0')));
+            workbook->dynamicCall("Close()");
+            delete workbook;
 
-            RenderAreaWidget::printTableGridInExcel(dlg, uids[i], true,
-                existingDirectory, fightNumber[i], stringDate,
-                dlg.getTranslations()["Татами"] + " " +  QString("%1 (%2)").arg(idRing, 2, 10, QChar('0')).arg(i + 1, 2, 10, QChar('0')));
+            progress.setValue(progress.value() + 1);
 
             QVector<DBUtils::Fighing> fightingNodes = DBUtils::getListOfPairsForFightingForPointFighting(uids[i]);
             std::reverse(fightingNodes.begin(), fightingNodes.end());
@@ -417,38 +339,8 @@ void FightingPairs::makeGridsForPointFighting(QString existingDirectory, QVector
             {
 
                 DBUtils::Fighing f = fightingNodes[j];
-                QJsonObject a;
-                a["nameOfLeftFighter" ] = DBUtils::getField("SECOND_NAME", "ORDERS", f.UID0) + " " + DBUtils::getField("FIRST_NAME", "ORDERS", f.UID0);
-                a["nameOfRightFighter"] = DBUtils::getField("SECOND_NAME", "ORDERS", f.UID1) + " " + DBUtils::getField("FIRST_NAME", "ORDERS", f.UID1);
-
-
-                a["fightId"] = fightNumber[i][f.VERTEX];
-
-                a["categoryOfFighting"] = DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK);
-
-                a["countOfRounds"  ] = DBUtils::getField("ROUND_COUNT"     , "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK);
-                a["durationOfRound"] = DBUtils::getField("DURATION_FIGHING", "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK);
-                a["durationOfBreak"] = DBUtils::getField("DURATION_BREAK"  , "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK);
-
-                a["countryOfLeftFighter" ] = DBUtils::getField("NAME", "COUNTRIES", DBUtils::getField("COUNTRY_FK", "ORDERS", f.UID0));
-                a["countryOfRightFighter"] = DBUtils::getField("NAME", "COUNTRIES", DBUtils::getField("COUNTRY_FK", "ORDERS", f.UID1));
-
-                a["regionOfLeftFighter" ] = getTextLocal(f.UID0);
-                a["regionOfRightFighter"] = getTextLocal(f.UID1);
-
-                a["TOURNAMENT_CATEGORIES_FK"] = f.TOURNAMENT_CATEGORIES_FK;
-                a["VERTEX"] = f.VERTEX;
-                a["orderUID_left"] = f.UID0;
-                a["orderUID_right"] = f.UID1;
-
-                a["leftFlag" ] = getFlagImage(f.UID0);
-                a["rightFlag"] = getFlagImage(f.UID1);
-
-                a["IN_CASE_TIE"         ] = DBUtils::getField("IN_CASE_TIE"         , "TOURNAMENT_CATEGORIES", uids[i]).toInt();
-                a["DURATION_EXTRA_ROUND"] = DBUtils::getField("DURATION_EXTRA_ROUND", "TOURNAMENT_CATEGORIES", uids[i]).toInt();
-
+                QJsonObject a = getQJsonObject(f, fightNumber[i][f.VERTEX]);
                 jsonObjects << a;
-                qDebug() << a["IN_CASE_TIE"         ] << a["DURATION_EXTRA_ROUND"];
             }
             /**/
         }
@@ -460,7 +352,7 @@ void FightingPairs::makeGridsForPointFighting(QString existingDirectory, QVector
 
         QJsonArray arr;
         for(QJsonObject x : jsonObjects) arr << x;
-        const QString path =  QDir(existingDirectory).filePath("ring " + QString::number(idRing) + "(pointfighting).json");
+        const QString path =  QDir(existingDirectory).filePath("ring " + QString::number(idRing) + ".json");
         QFile saveFile(path);
         if (!saveFile.open(QIODevice::WriteOnly)) {
             qWarning("Couldn't open save file.");
@@ -472,7 +364,8 @@ void FightingPairs::makeGridsForPointFighting(QString existingDirectory, QVector
 
         ++idRing;
     }
-
+    delete workbooks;
+    excel.dynamicCall("Quit()");
 
     QMessageBox::information(0, "Расчётное время по рингам", messageDisplay);
     /**/
@@ -480,32 +373,64 @@ void FightingPairs::makeGridsForPointFighting(QString existingDirectory, QVector
 
 QString FightingPairs::getTextLocal(long long orderUID)
 {
-    if (radioTextCountry->isChecked()) return DBUtils::getField("NAME", "COUNTRIES"   , DBUtils::getField("COUNTRY_FK"    , "ORDERS", orderUID));
-    if (radioTextRegion ->isChecked()) return DBUtils::getField("NAME", "REGIONS"     , DBUtils::getField("REGION_FK"     , "ORDERS", orderUID));
-    if (radioTextCity   ->isChecked()) return DBUtils::getField("NAME", "REGION_UNITS", DBUtils::getField("REGION_UNIT_FK", "ORDERS", orderUID));
-    if (radioTextClub   ->isChecked()) return DBUtils::getField("NAME", "CLUBS"       , DBUtils::getField("CLUB_FK"       , "ORDERS", orderUID));
+    if (ui->radioTextCountry->isChecked()) return DBUtils::getField("NAME", "COUNTRIES"   , DBUtils::getField("COUNTRY_FK"    , "ORDERS", orderUID));
+    if (ui->radioTextRegion ->isChecked()) return DBUtils::getField("NAME", "REGIONS"     , DBUtils::getField("REGION_FK"     , "ORDERS", orderUID));
+    if (ui->radioTextCity   ->isChecked()) return DBUtils::getField("NAME", "REGION_UNITS", DBUtils::getField("REGION_UNIT_FK", "ORDERS", orderUID));
+    if (ui->radioTextClub   ->isChecked()) return DBUtils::getField("NAME", "CLUBS"       , DBUtils::getField("CLUB_FK"       , "ORDERS", orderUID));
     return "";
 }
 
 QString FightingPairs::getFlagImage(long long orderUID)
 {
-    if (radioFlagCountry->isChecked()) return DBUtils::getField("FLAG", "COUNTRIES"   , DBUtils::getField("COUNTRY_FK"    , "ORDERS", orderUID));
-    if (radioFlagRegion ->isChecked()) return DBUtils::getField("FLAG", "REGIONS"     , DBUtils::getField("REGION_FK"     , "ORDERS", orderUID));
-    if (radioFlagCity   ->isChecked()) return DBUtils::getField("FLAG", "REGION_UNITS", DBUtils::getField("REGION_UNIT_FK", "ORDERS", orderUID));
-    if (radioFlagClub   ->isChecked()) return DBUtils::getField("FLAG", "CLUBS"       , DBUtils::getField("CLUB_FK"       , "ORDERS", orderUID));
+    if (ui->radioFlagCountry->isChecked()) return DBUtils::getField("FLAG", "COUNTRIES"   , DBUtils::getField("COUNTRY_FK"    , "ORDERS", orderUID));
+    if (ui->radioFlagRegion ->isChecked()) return DBUtils::getField("FLAG", "REGIONS"     , DBUtils::getField("REGION_FK"     , "ORDERS", orderUID));
+    if (ui->radioFlagCity   ->isChecked()) return DBUtils::getField("FLAG", "REGION_UNITS", DBUtils::getField("REGION_UNIT_FK", "ORDERS", orderUID));
+    if (ui->radioFlagClub   ->isChecked()) return DBUtils::getField("FLAG", "CLUBS"       , DBUtils::getField("CLUB_FK"       , "ORDERS", orderUID));
     return "";
+}
+
+QJsonObject FightingPairs::getQJsonObject(const DBUtils::Fighing& f, const int fightingId)
+{
+    QJsonObject a;
+    a["nameOfLeftFighter" ] = DBUtils::getField("SECOND_NAME", "ORDERS", f.UID0) + " " + DBUtils::getField("FIRST_NAME", "ORDERS", f.UID0);
+    a["nameOfRightFighter"] = DBUtils::getField("SECOND_NAME", "ORDERS", f.UID1) + " " + DBUtils::getField("FIRST_NAME", "ORDERS", f.UID1);
+
+    a["fightId"] = fightingId;
+
+    a["categoryOfFighting"]      = DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK);
+    a["categoryOfFightingShort"] = DBUtils::getWeightAsOneNumberPlusMinus(f.TOURNAMENT_CATEGORIES_FK);
+
+    a["countOfRounds"  ] = DBUtils::getField("ROUND_COUNT"     , "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK);
+    a["durationOfRound"] = DBUtils::getField("DURATION_FIGHING", "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK);
+    a["durationOfBreak"] = DBUtils::getField("DURATION_BREAK"  , "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK);
+
+    a["regionOfLeftFighter" ] = getTextLocal(f.UID0);
+    a["regionOfRightFighter"] = getTextLocal(f.UID1);
+
+    a["leftFlag" ] = getFlagImage(f.UID0);
+    a["rightFlag"] = getFlagImage(f.UID1);
+
+    a["TOURNAMENT_CATEGORIES_FK"] = f.TOURNAMENT_CATEGORIES_FK;
+    a["VERTEX"] = f.VERTEX;
+    a["orderUID_left"] = f.UID0;
+    a["orderUID_right"] = f.UID1;
+
+    a["IN_CASE_TIE"         ] = DBUtils::getField("IN_CASE_TIE"         , "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK).toInt();
+    a["DURATION_EXTRA_ROUND"] = DBUtils::getField("DURATION_EXTRA_ROUND", "TOURNAMENT_CATEGORIES", f.TOURNAMENT_CATEGORIES_FK).toInt();
+    return a;
 }
 
 void FightingPairs::onGoPress()
 {
+    //
     QString existingDirectory = QFileDialog::getExistingDirectory(this);
     if (existingDirectory.isEmpty()) return;
-    const int delay = spinBoxDelay->value();
+    const int delay = ui->spinBoxDelay->value();
 
     QVector<QVector<DBUtils::Fighing> > listsOfPairs;
-    for(QModelIndex index : qTableWidget->selectionModel()->selectedRows())
+    for(QModelIndex index : ui->qTableWidget->selectionModel()->selectedRows())
     {
-        long long tourCatUID = qTableWidget->item(index.row(), 0)->data(Qt::UserRole).toLongLong();
+        long long tourCatUID = ui->qTableWidget->item(index.row(), 0)->data(Qt::UserRole).toLongLong();
         //qDebug() << "row: " << row;
         listsOfPairs << DBUtils::getListOfPairsForFighting(tourCatUID);
     }
@@ -513,7 +438,7 @@ void FightingPairs::onGoPress()
     std::random_shuffle(listsOfPairs.begin(), listsOfPairs.end());
     std::sort(listsOfPairs.begin(), listsOfPairs.end(),
               [this] (const QVector<DBUtils::Fighing>& lhs, const QVector<DBUtils::Fighing>& rhs) {
-        for (QString field : {"AGE_FROM", "AGE_TILL", "WEIGHT_FROM", "WEIGHT_TILL", "SEX_FK"})
+        for (QString field : {"AGE_FROM", "AGE_TILL", "TYPE_FK", "SEX_FK", "WEIGHT_FROM", "WEIGHT_TILL"})
         {
             double a = DBUtils::getField(field, "TOURNAMENT_CATEGORIES", lhs[0].TOURNAMENT_CATEGORIES_FK).toDouble();
             double b = DBUtils::getField(field, "TOURNAMENT_CATEGORIES", rhs[0].TOURNAMENT_CATEGORIES_FK).toDouble();
@@ -523,11 +448,11 @@ void FightingPairs::onGoPress()
         return false;
     });
 
-    if (checkBoxPointfighting->isChecked())
+    if (ui->radioButtonCube->isChecked())
     {
         QVector<long long> tournamentCategoryUIDs;
         for (QVector<DBUtils::Fighing> x : listsOfPairs) tournamentCategoryUIDs << x[0].TOURNAMENT_CATEGORIES_FK;
-        makeGridsForPointFighting(existingDirectory, tournamentCategoryUIDs, delay, ringSpinBox->value(), qLineEdit->text());
+        makeGridsForPointFighting(existingDirectory, tournamentCategoryUIDs, delay, ui->ringSpinBox->value(), ui->qLineEdit->text());
         return;
     }
 
@@ -556,7 +481,7 @@ void FightingPairs::onGoPress()
     int maxVal = 0;
 
     QVector<QVector<DBUtils::Fighing> > ansFightings;
-    for (int ringCount = ringSpinBox->value(), idRing = 1; 1 <= ringCount; --ringCount, ++idRing)
+    for (int ringCount = ui->ringSpinBox->value(), idRing = 1; 1 <= ringCount; --ringCount, ++idRing)
     {
         int time = 0;
         for (const DBUtils::Fighing& f : fighing)
@@ -586,7 +511,7 @@ void FightingPairs::onGoPress()
 
     QString messageThread;
     QString messageDisplay = message;
-    MyThread *myThread = new MyThread(durationsOfPairs, ringSpinBox->value(), maxVal, minVal);
+    MyThread *myThread = new MyThread(durationsOfPairs, ui->ringSpinBox->value(), maxVal, minVal);
     myThread->start();
     if (!myThread->wait(60 * 1000))
     {
@@ -646,9 +571,11 @@ void FightingPairs::onGoPress()
         }
     }
 
+    ExcelUtils::saveAsFile(workbook, existingDirectory, "Состав пар");
     delete sheets;
     delete workbook;
     delete workbooks;
+    excel.dynamicCall("Quit()");
 
     QMessageBox::information(this, "Расчётное время по рингам", messageDisplay);
 }

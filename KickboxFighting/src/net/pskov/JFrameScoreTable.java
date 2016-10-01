@@ -114,6 +114,11 @@ class JFrameScoreTable extends JDialog {
 
         final Graphics2D g = (Graphics2D) gg; // гарантируется что всегда будет корректное проебразование
 
+        g.setRenderingHint(
+                RenderingHints.KEY_TEXT_ANTIALIASING,
+                RenderingHints.VALUE_TEXT_ANTIALIAS_GASP);
+        g.setFont(new Font(g.getFont().getFontName(), Font.BOLD, g.getFont().getSize()));
+
         g.setColor(Color.YELLOW);
         g.fillRect(0, 0, g.getClipBounds().width, g.getClipBounds().height);
 
@@ -270,7 +275,6 @@ class JFrameScoreTable extends JDialog {
             g.fill(new Rectangle.Double(scrDim.width / 2.0, 0, scrDim.width / 2.0, heightCenter));
 
 
-
 //            {
 //                int widthTime = scrDim.width;
 //                int heightTime = (int) ((6.4 - 1 - 2.5 - 1) * hUnit);
@@ -351,23 +355,25 @@ class JFrameScoreTable extends JDialog {
 //            // флаг левого бойца
             {
                 BufferedImage flag = isThisForJudge ? f.getImageLeftConnerFlag() : f.getImageRightConnerFlag();
-                Dimension scaledDimension = GraphicsUtilities.getScaledDimension(flag.getWidth(), flag.getHeight(), (3.5 + 3.5 + 3.5) * wUnit, 2.5 * hUnit);
-                g.drawImage(
-                        greyPlayer == Player.Left ? GraphicsUtilities.getGrayImage(flag) : flag,
-                        (int) ((10.5 * wUnit - scaledDimension.width) / 2),
-                        (int) hUnit,
-                        scaledDimension.width,
-                        scaledDimension.height,
-                        null
-                );
+                if (flag != null) {
+                    Dimension scaledDimension = GraphicsUtilities.getScaledDimension(flag.getWidth(), flag.getHeight(), (3.5 + 3.5 + 3.5) * wUnit, 2.5 * hUnit);
+                    g.drawImage(
+                            greyPlayer == Player.Left ? GraphicsUtilities.getGrayImage(flag) : flag,
+                            (int) ((10.5 * wUnit - scaledDimension.width) / 2),
+                            (int) hUnit,
+                            scaledDimension.width,
+                            scaledDimension.height,
+                            null
+                    );
 
-                g.setColor(Color.WHITE);
-                g.drawRect(
-                        (int) ((10.5 * wUnit - scaledDimension.width) / 2),
-                        (int) hUnit,
-                        scaledDimension.width,
-                        scaledDimension.height
-                );
+                    g.setColor(Color.WHITE);
+                    g.drawRect(
+                            (int) ((10.5 * wUnit - scaledDimension.width) / 2),
+                            (int) hUnit,
+                            scaledDimension.width,
+                            scaledDimension.height
+                    );
+                }
             }
 
             // название страны левого бойца
@@ -399,30 +405,32 @@ class JFrameScoreTable extends JDialog {
             // флаг правого бойца
             {
                 BufferedImage flag = isThisForJudge ? f.getImageRightConnerFlag() : f.getImageLeftConnerFlag();
-                Dimension scaledDimension = GraphicsUtilities.getScaledDimension(flag.getWidth(), flag.getHeight(), (3.5 + 3.5 + 3.5) * wUnit, 2.5 * hUnit);
-                g.drawImage(
-                        greyPlayer == Player.Right ? GraphicsUtilities.getGrayImage(flag) : flag,
-                        (int) (scrDim.width / 2 + wUnit + (10.5 * wUnit - scaledDimension.width) / 2),
-                        (int) hUnit,
-                        scaledDimension.width,
-                        scaledDimension.height,
-                        null
-                );
+                if (flag != null) {
+                    Dimension scaledDimension = GraphicsUtilities.getScaledDimension(flag.getWidth(), flag.getHeight(), (3.5 + 3.5 + 3.5) * wUnit, 2.5 * hUnit);
+                    g.drawImage(
+                            greyPlayer == Player.Right ? GraphicsUtilities.getGrayImage(flag) : flag,
+                            (int) (scrDim.width / 2 + wUnit + (10.5 * wUnit - scaledDimension.width) / 2),
+                            (int) hUnit,
+                            scaledDimension.width,
+                            scaledDimension.height,
+                            null
+                    );
 
-                g.setColor(Color.WHITE);
-                g.drawRect(
-                        (int) (scrDim.width / 2 + wUnit + (10.5 * wUnit - scaledDimension.width) / 2),
-                        (int) hUnit,
-                        scaledDimension.width,
-                        scaledDimension.height
-                );
+                    g.setColor(Color.WHITE);
+                    g.drawRect(
+                            (int) (scrDim.width / 2 + wUnit + (10.5 * wUnit - scaledDimension.width) / 2),
+                            (int) hUnit,
+                            scaledDimension.width,
+                            scaledDimension.height
+                    );
+                }
             }
 
             // название страны правого бойца
             GraphicsUtilities.drawTextInCenterOfRectangle(
                     g,
                     Color.WHITE,
-                    isThisForJudge ? f.getCountryOfRightFighter() : f.getCountryOfRightFighter(),
+                    isThisForJudge ? f.getCountryOfRightFighter() : f.getCountryOfLeftFighter(),
                     scrDim.width / 2 + wUnit,
                     (1 + 2.5) * hUnit,
                     (3.5 + 3.5 + 3.5) * wUnit,

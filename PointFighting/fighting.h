@@ -20,13 +20,15 @@ class Fighting : public QObject
 public:
     enum FightStatus
     {
-        NotStart, Fight, Break, PauseFight, DoctorOnRing, Tie, DisqualificationLeft, DisqualificationRight,
+        NotStart, Fight, Break, PauseFight,
+        RedDoctorOnRing, BlueDoctorOnRing,
+        Tie, DisqualificationLeft, DisqualificationRight,
         winnerByPointsLeft, winnerByPointsRight,
         winnerByPointsLeft10, winnerByPointsRight10,
         stoppedByJudge, forceLeftWinner, forceRightWinner,
         PendingExtraRound, ExtraRound, PauseExtraRound
     };
-    QStringList statusName;
+    //QStringList statusName;
 
     enum Player
     {
@@ -64,7 +66,8 @@ private:
     long long prevMomentTime;
     long long spendTime;
 
-    long long spentTimeDoctor;
+    long long spentTimeRedDoctor;
+    long long spentTimeBlueDoctor;
     const int durationOfDoctorOnRing;
 
     int currentRound;
@@ -87,7 +90,7 @@ private:
     int countOfExToRight;
     bool wasExtraRound;
 
-    QString forceResult = "sd";
+    QString forceResult;
 
     QStack<Item> stackPenalty;
 
@@ -127,7 +130,8 @@ public:
 
 
     void pressedKeySpace();
-    void pressDoctor();
+    void pressRedDoctor();
+    void pressBlueDoctor();
 
     int getCountOfPointsForLeftFighter() const;
     int getCountOfPointsForRightFighter() const;
@@ -135,7 +139,8 @@ public:
     static QString getTimeMMSS(long long timeMS);
     QString getStringTime() const;
     long long getTimeMS() const;
-    QString getStringTimeDoctor() const;
+    QString getStringTimeRedDoctor() const;
+    QString getStringTimeBlueDoctor() const;
 
     QString getResult();
     Player getWinner();
