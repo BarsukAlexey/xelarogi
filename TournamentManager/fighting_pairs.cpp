@@ -45,7 +45,7 @@ FightingPairs::FightingPairs(long long _tournamentUID, QWidget* parent) :
     ui->setupUi(this);
 
     ui->qTableWidget->setColumnCount(4);
-    ui->qTableWidget->setHorizontalHeaderLabels(QStringList({"Категория", "Кол-во пар", "Уровень", "Бои"}));
+    ui->qTableWidget->setHorizontalHeaderLabels(QStringList({"", ""}));
 
     for(const QVector<DBUtils::Fighing>& x : DBUtils::getListsOfPairsForFighting(tournamentUID))
     {

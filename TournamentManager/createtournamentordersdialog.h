@@ -31,6 +31,7 @@
 #include "databaseexpert.h"
 #include "webreportdialog.h"
 #include "errormessagesdialog.h"
+#include "tournamentgriddialog2.h"
 
 
 namespace Ui {
@@ -88,9 +89,11 @@ private:
     void updateTypeComboBox(long long currentUID);
     void updateClubComboBox(long long clubUID, long long regionUID);
     void updateCoachComboBox(long long coachUID, long long clubUID);
-    void updateTournamentCategoriesComboBox(long long currentUID, long long sexUID, long long typeUID);
+    void findTournamentCategoryForLabel();
 
     void fillNullString(QString& s);
+
+    static int getAge(QDate birthdayDate, QDate DATE_WEIGHTING);
 
 private:
     Ui::CreateTournamentOrdersDialog *ui;

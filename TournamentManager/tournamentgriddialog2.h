@@ -78,7 +78,7 @@ private:
     int selectedColumnOfRableGrid;
 
 public:
-    TournamentGridDialog2(long long tournamentUID, QWidget *parent = 0);
+    TournamentGridDialog2(QString filter, long long tournamentUID, QWidget *parent = 0);
     ~TournamentGridDialog2();
 
 private:

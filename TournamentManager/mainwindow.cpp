@@ -418,7 +418,7 @@ void MainWindow::on_pushButtonGrid_clicked()
     this->hide();
     long long routnamentUID = ui->tournamentUidLabel->text().toLongLong();
     qDebug() << "routnamentUID: " << routnamentUID;
-    TournamentGridDialog2 dialog(routnamentUID, 0);
+    TournamentGridDialog2 dialog("full", routnamentUID, 0);
     dialog.showMaximized();
     dialog.exec();
     this->show();

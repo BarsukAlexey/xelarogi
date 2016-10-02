@@ -156,6 +156,14 @@ public:
         gridLayout->addWidget(groupBox_3, 2, 0, 1, 1);
 
         qTableWidget = new QTableWidget(FightingPairs);
+        if (qTableWidget->columnCount() < 3)
+            qTableWidget->setColumnCount(3);
+        QTableWidgetItem *__qtablewidgetitem = new QTableWidgetItem();
+        qTableWidget->setHorizontalHeaderItem(0, __qtablewidgetitem);
+        QTableWidgetItem *__qtablewidgetitem1 = new QTableWidgetItem();
+        qTableWidget->setHorizontalHeaderItem(1, __qtablewidgetitem1);
+        QTableWidgetItem *__qtablewidgetitem2 = new QTableWidgetItem();
+        qTableWidget->setHorizontalHeaderItem(2, __qtablewidgetitem2);
         qTableWidget->setObjectName(QStringLiteral("qTableWidget"));
 
         gridLayout->addWidget(qTableWidget, 0, 0, 1, 1);
@@ -225,6 +233,12 @@ public:
         groupBox_3->setTitle(QApplication::translate("FightingPairs", "\320\242\320\270\320\277", 0));
         radioButtonChampionship->setText(QApplication::translate("FightingPairs", "\320\247\320\265\320\274\320\277\320\270\320\276\320\275\320\260\321\202", 0));
         radioButtonCube->setText(QApplication::translate("FightingPairs", "\320\232\321\203\320\261\320\276\320\272", 0));
+        QTableWidgetItem *___qtablewidgetitem = qTableWidget->horizontalHeaderItem(0);
+        ___qtablewidgetitem->setText(QApplication::translate("FightingPairs", "\320\232\320\260\321\202\320\265\320\263\320\276\321\200\320\270\321\217", 0));
+        QTableWidgetItem *___qtablewidgetitem1 = qTableWidget->horizontalHeaderItem(1);
+        ___qtablewidgetitem1->setText(QApplication::translate("FightingPairs", "\320\221\320\276\320\270", 0));
+        QTableWidgetItem *___qtablewidgetitem2 = qTableWidget->horizontalHeaderItem(2);
+        ___qtablewidgetitem2->setText(QApplication::translate("FightingPairs", "\320\232\320\276\320\273-\320\262\320\276 \320\272\321\200\321\203\320\263\320\276\320\262", 0));
         label->setText(QApplication::translate("FightingPairs", "\320\232\320\276\320\273\320\270\321\207\320\265\321\201\321\202\320\262\320\276 \321\200\320\270\320\275\320\263\320\276\320\262", 0));
         label_2->setText(QApplication::translate("FightingPairs", "\320\224\320\260\321\202\320\260 + {\321\203\321\202\321\200\320\276, \320\264\320\265\320\275\321\214, \320\262\320\265\321\207\320\265\321\200}", 0));
         label_3->setText(QApplication::translate("FightingPairs", "\320\241\321\200\320\265\320\264\320\275\321\217\321\217 \320\267\320\260\320\264\320\265\321\200\320\266\320\272\320\260 \320\277\321\200\320\270 \321\201\320\274\320\265\320\275\320\265 \320\277\320\260\321\200 \320\275\320\260 \321\200\320\270\320\275\320\263\320\265 (\320\262 \321\201\320\265\320\272\321\203\320\275\320\264\320\260\321\205)", 0));

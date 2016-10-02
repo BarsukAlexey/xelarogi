@@ -11,7 +11,7 @@
 
 
 
-QString DBUtils::getField(const QString& field, const QString& table, const QString& UID, QString PRETTY_FUNCTION)
+QString DBUtils::getField(const QString& field, const QString& table, const QString& UID, QString )
 {
     QSqlQuery query("SELECT * FROM " + table + " WHERE UID = ?");
     query.bindValue(0, UID);
@@ -26,7 +26,7 @@ QString DBUtils::getField(const QString& field, const QString& table, const QStr
     return "";
 }
 
-QString DBUtils::getField(const QString& field, const QString& table, const long long UID, QString PRETTY_FUNCTION)
+QString DBUtils::getField(const QString& field, const QString& table, const long long UID, QString )
 {
     QSqlQuery query("SELECT * FROM " + table + " WHERE UID = ?");
     query.bindValue(0, UID);
@@ -41,7 +41,7 @@ QString DBUtils::getField(const QString& field, const QString& table, const long
     return "";
 }
 
-QString DBUtils::getFieldDate(const QString& field, const QString& table, const long long UID, QString PRETTY_FUNCTION)
+QString DBUtils::getFieldDate(const QString& field, const QString& table, const long long UID, QString )
 {
     QSqlQuery query("SELECT * FROM " + table + " WHERE UID = ?");
     query.bindValue(0, UID);

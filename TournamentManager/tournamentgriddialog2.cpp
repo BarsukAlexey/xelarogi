@@ -39,7 +39,7 @@
 #include <QHeaderView>
 
 
-TournamentGridDialog2::TournamentGridDialog2(long long _tournamentUID, QWidget *_parent)
+TournamentGridDialog2::TournamentGridDialog2(QString filter, long long _tournamentUID, QWidget *_parent)
     : QDialog(_parent),
       tournamentUID(_tournamentUID)
 {
@@ -214,6 +214,7 @@ TournamentGridDialog2::TournamentGridDialog2(long long _tournamentUID, QWidget *
     connect(buttonGenerateAll, &QPushButton::clicked, this, &TournamentGridDialog2::onButtonGenerateAll);
     connect(pRenderArea, &RenderAreaWidget::iChangeToutGrid, this, &TournamentGridDialog2::fillTableGrid);
 
+
     fillCategoryCombobox();
     connect(qComboBoxSelectCategory, SIGNAL(activated(int)), this, SLOT(onActivatedCategory(int)));
     if (0 < qComboBoxSelectCategory->count())
@@ -324,6 +325,8 @@ TournamentGridDialog2::TournamentGridDialog2(long long _tournamentUID, QWidget *
     connect(spinBoxFontSize, SIGNAL(valueChanged(int)), this, SLOT(onSpinBoxFontSizeChanged(int)));
     connect(spinBoxFontSizeRight, SIGNAL(valueChanged(int)), this, SLOT(onSpinBoxFontSizeChangedOfRightTable(int)));
     connect(qTabWidget, SIGNAL(currentChanged(int)), this, SLOT(onTabSwitch(int)));
+
+    filterCategoriesLE->setText(filter);
 
     setWindowFlags(windowFlags() | Qt::WindowMinMaxButtonsHint);
     resize(1000, 700);

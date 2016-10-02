@@ -89,15 +89,16 @@ public:
     QComboBox *typesCB;
     QComboBox *clubsCB;
     QComboBox *coachsCB;
-    QComboBox *tournamentCategoriesCB;
+    QLabel *labelTournamentCategories;
     QHBoxLayout *horizontalLayout_5;
     QSpacerItem *horizontalSpacer_4;
     QPushButton *changeOrderBtn;
     QPushButton *addOrderBtn;
     QHBoxLayout *horizontalLayout_6;
-    QSpacerItem *horizontalSpacer_6;
     QPushButton *pushButtonChangeCategory;
     QSpacerItem *verticalSpacer;
+    QPushButton *pushButtonShowGrid;
+    QSpacerItem *horizontalSpacer_6;
     QHBoxLayout *horizontalLayout_2;
     QPushButton *loadBtn;
     QSpacerItem *horizontalSpacer_3;
@@ -418,11 +419,10 @@ public:
 
         verticalLayout_7->addWidget(coachsCB);
 
-        tournamentCategoriesCB = new QComboBox(widget);
-        tournamentCategoriesCB->setObjectName(QStringLiteral("tournamentCategoriesCB"));
-        tournamentCategoriesCB->setMaxVisibleItems(69);
+        labelTournamentCategories = new QLabel(widget);
+        labelTournamentCategories->setObjectName(QStringLiteral("labelTournamentCategories"));
 
-        verticalLayout_7->addWidget(tournamentCategoriesCB);
+        verticalLayout_7->addWidget(labelTournamentCategories);
 
 
         horizontalLayout_4->addLayout(verticalLayout_7);
@@ -452,10 +452,6 @@ public:
 
         horizontalLayout_6 = new QHBoxLayout();
         horizontalLayout_6->setObjectName(QStringLiteral("horizontalLayout_6"));
-        horizontalSpacer_6 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        horizontalLayout_6->addItem(horizontalSpacer_6);
-
         pushButtonChangeCategory = new QPushButton(widget);
         pushButtonChangeCategory->setObjectName(QStringLiteral("pushButtonChangeCategory"));
 
@@ -466,7 +462,16 @@ public:
 
         verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-        gridLayout->addItem(verticalSpacer, 3, 0, 1, 1);
+        gridLayout->addItem(verticalSpacer, 4, 0, 1, 1);
+
+        pushButtonShowGrid = new QPushButton(widget);
+        pushButtonShowGrid->setObjectName(QStringLiteral("pushButtonShowGrid"));
+
+        gridLayout->addWidget(pushButtonShowGrid, 3, 0, 1, 2);
+
+        horizontalSpacer_6 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        gridLayout->addItem(horizontalSpacer_6, 2, 0, 1, 1);
 
         splitter->addWidget(widget);
 
@@ -520,8 +525,7 @@ public:
         QWidget::setTabOrder(sportCategoriesCB, typesCB);
         QWidget::setTabOrder(typesCB, clubsCB);
         QWidget::setTabOrder(clubsCB, coachsCB);
-        QWidget::setTabOrder(coachsCB, tournamentCategoriesCB);
-        QWidget::setTabOrder(tournamentCategoriesCB, changeOrderBtn);
+        QWidget::setTabOrder(coachsCB, changeOrderBtn);
         QWidget::setTabOrder(changeOrderBtn, addOrderBtn);
         QWidget::setTabOrder(addOrderBtn, pushButtonChangeCategory);
         QWidget::setTabOrder(pushButtonChangeCategory, loadBtn);
@@ -560,9 +564,11 @@ public:
         label_28->setText(QApplication::translate("CreateTournamentOrdersDialog", "\320\232\320\273\321\203\320\261", 0));
         label_29->setText(QApplication::translate("CreateTournamentOrdersDialog", "\320\242\321\200\320\265\320\275\320\265\321\200", 0));
         label_3->setText(QApplication::translate("CreateTournamentOrdersDialog", "\320\232\320\260\321\202\320\265\320\263\320\276\321\200\320\270\321\217 \321\202\321\203\321\200\320\275\320\270\321\200\320\260", 0));
+        labelTournamentCategories->setText(QApplication::translate("CreateTournamentOrdersDialog", "TextLabel", 0));
         changeOrderBtn->setText(QApplication::translate("CreateTournamentOrdersDialog", "\320\237\321\200\320\270\320\274\320\265\320\275\320\270\321\202\321\214 \320\270\320\267\320\274\320\265\320\275\320\265\320\275\320\270\321\217", 0));
-        addOrderBtn->setText(QApplication::translate("CreateTournamentOrdersDialog", "\320\224\320\276\320\261\320\260\320\262\320\270\321\202\321\214", 0));
+        addOrderBtn->setText(QApplication::translate("CreateTournamentOrdersDialog", "\320\224\320\276\320\261\320\260\320\262\320\270\321\202\321\214 \320\275\320\276\320\262\320\276\320\263\320\276 \321\203\321\207\320\260\321\201\321\202\320\275\320\270\320\272\320\260", 0));
         pushButtonChangeCategory->setText(QApplication::translate("CreateTournamentOrdersDialog", "\320\241\320\274\320\265\320\275\320\270\321\202\321\214 \320\272\320\260\321\202\320\265\320\263\320\276\321\200\320\270\321\216 \321\203\321\207\320\260\321\201\321\202\320\275\320\270\320\272\320\260....", 0));
+        pushButtonShowGrid->setText(QApplication::translate("CreateTournamentOrdersDialog", "\320\237\320\276\320\272\320\260\320\267\320\260\321\202\321\214 \321\201\320\265\321\202\320\272\321\203", 0));
         loadBtn->setText(QApplication::translate("CreateTournamentOrdersDialog", "\320\227\320\260\320\263\321\200\321\203\320\267\320\270\321\202\321\214 \320\270\320\267 excel", 0));
         toExcelBtn->setText(QApplication::translate("CreateTournamentOrdersDialog", "\320\222\321\213\320\263\321\200\321\203\320\267\320\270\321\202\321\214 \320\262 Excel", 0));
         label_4->setText(QApplication::translate("CreateTournamentOrdersDialog", "*\320\237\320\265\321\200\320\265\320\264 \320\267\320\260\320\263\321\200\321\203\320\267\320\272\320\276\320\271 \320\267\320\260\321\217\320\262\320\276\320\272 \320\267\320\260\320\272\321\200\321\213\321\202\321\214 Excel \320\270 \320\262\321\201\320\265 \320\265\320\263\320\276 \320\277\321\200\320\276\321\206\320\265\321\201\321\201\321\213 \320\262 \320\264\320\270\321\201\320\277\320\265\321\202\321\207\320\265\321\200\320\265 \320\267\320\260\320\264\320\260\321\207", 0));

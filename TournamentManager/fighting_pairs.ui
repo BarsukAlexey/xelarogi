@@ -157,7 +157,23 @@
     </widget>
    </item>
    <item row="0" column="0">
-    <widget class="QTableWidget" name="qTableWidget"/>
+    <widget class="QTableWidget" name="qTableWidget">
+     <column>
+      <property name="text">
+       <string>Категория</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Бои</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Кол-во кругов</string>
+      </property>
+     </column>
+    </widget>
    </item>
    <item row="1" column="0">
     <layout class="QFormLayout" name="formLayout">

@@ -88,6 +88,8 @@ CreateTournamentOrdersDialog::CreateTournamentOrdersDialog(const QSqlDatabase &d
         QDate birthdate = ui->birthdayDE->date();
         double weight = ui->weightDSB->value();
 
+        QDate dateWeight = QDate::fromString(DBUtils::getFieldDate("DATE_WEIGHTING", "TOURNAMENTS", mTournamentUID), "dd.MM.yyyy");
+
         long long sexUID = ui->gendersCB->currentData(Qt::UserRole).toLongLong();
         long long sportCategoryUID = ui->sportCategoriesCB->currentData(Qt::UserRole).toLongLong();
         long long typeUID = ui->typesCB->currentData(Qt::UserRole).toLongLong();
@@ -96,7 +98,8 @@ CreateTournamentOrdersDialog::CreateTournamentOrdersDialog(const QSqlDatabase &d
         long long countryUID = ui->countriesCB->currentData(Qt::UserRole).toLongLong();
         long long regionUID = ui->regionsCB->currentData(Qt::UserRole).toLongLong();
         long long regionUnitUID = ui->regionUnitsCB->currentData(Qt::UserRole).toLongLong();
-        long long tournamentCategoryUID = ui->tournamentCategoriesCB->currentData(Qt::UserRole).toLongLong();
+        long long tournamentCategoryUID = getTournamentCategoryUID(sexUID, getAge(birthdate, dateWeight), weight, typeUID, "#", "#");
+
 
         QString error = "";
         if (sexUID < 0 || ui->gendersCB->currentData(Qt::DisplayRole).toString().isEmpty())                     error += "пол, ";
@@ -107,7 +110,7 @@ CreateTournamentOrdersDialog::CreateTournamentOrdersDialog(const QSqlDatabase &d
         if (countryUID < 0 || ui->countriesCB->currentData(Qt::DisplayRole).toString().isEmpty())               error += "страна, ";
         if (regionUID < 0 || ui->regionsCB->currentData(Qt::DisplayRole).toString().isEmpty())                  error += "регион, ";
         if (regionUnitUID < 0 || ui->regionUnitsCB->currentData(Qt::DisplayRole).toString().isEmpty())          error += "населенный пункт, ";
-        if (tournamentCategoryUID < 0 || ui->tournamentCategoriesCB->currentData(Qt::DisplayRole).toString().isEmpty()) error += "категория турнира, ";
+        if (tournamentCategoryUID < 0)                                                                          error += "категория турнира, ";
 
         if (error.isEmpty())
         {
@@ -165,6 +168,8 @@ CreateTournamentOrdersDialog::CreateTournamentOrdersDialog(const QSqlDatabase &d
             QDate birthdate = ui->birthdayDE->date();
             double weight = ui->weightDSB->value();
 
+            QDate dateWeight = QDate::fromString(DBUtils::getFieldDate("DATE_WEIGHTING", "TOURNAMENTS", mTournamentUID), "dd.MM.yyyy");
+
             long long sexUID = ui->gendersCB->currentData(Qt::UserRole).toLongLong();
             long long sportCategoryUID = ui->sportCategoriesCB->currentData(Qt::UserRole).toLongLong();
             long long typeUID = ui->typesCB->currentData(Qt::UserRole).toLongLong();
@@ -173,7 +178,7 @@ CreateTournamentOrdersDialog::CreateTournamentOrdersDialog(const QSqlDatabase &d
             long long countryUID = ui->countriesCB->currentData(Qt::UserRole).toLongLong();
             long long regionUID = ui->regionsCB->currentData(Qt::UserRole).toLongLong();
             long long regionUnitUID = ui->regionUnitsCB->currentData(Qt::UserRole).toLongLong();
-            long long tournamentCategoryUID = ui->tournamentCategoriesCB->currentData(Qt::UserRole).toLongLong();
+            long long tournamentCategoryUID = getTournamentCategoryUID(sexUID, getAge(birthdate, dateWeight), weight, typeUID, "#", "#");
 
             QString error = "";
             if (sexUID < 0 || ui->gendersCB->currentData(Qt::DisplayRole).toString().isEmpty())                     error += "пол, ";
@@ -184,7 +189,7 @@ CreateTournamentOrdersDialog::CreateTournamentOrdersDialog(const QSqlDatabase &d
             if (countryUID < 0 || ui->countriesCB->currentData(Qt::DisplayRole).toString().isEmpty())               error += "страна, ";
             if (regionUID < 0 || ui->regionsCB->currentData(Qt::DisplayRole).toString().isEmpty())                  error += "регион, ";
             if (regionUnitUID < 0 || ui->regionUnitsCB->currentData(Qt::DisplayRole).toString().isEmpty())          error += "населенный пункт, ";
-            if (tournamentCategoryUID < 0 || ui->tournamentCategoriesCB->currentData(Qt::DisplayRole).toString().isEmpty()) error += "категория турнира, ";
+            if (tournamentCategoryUID < 0 )                                                                         error += "категория турнира, ";
 
             if (error.isEmpty())
             {
@@ -311,6 +316,25 @@ CreateTournamentOrdersDialog::CreateTournamentOrdersDialog(const QSqlDatabase &d
 
     connect(ui->toExcelBtn, &QPushButton::clicked, this, &CreateTournamentOrdersDialog::saveToExcel);
 
+    connect(ui->pushButtonShowGrid, &QPushButton::clicked, [this, tournamentUID, model](){
+
+        long long orderUID = -1;
+        for(QModelIndex index : ui->tableView->selectionModel()->selectedRows())
+        {
+            orderUID = index.data().toLongLong();
+            break;
+        }
+
+        QString uidTC = DBUtils::getField("TOURNAMENT_CATEGORY_FK", "ORDERS", orderUID);
+        QString filter = DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", uidTC);
+        TournamentGridDialog2 dlg(filter, tournamentUID, this);
+        dlg.exec();
+
+        model->submitAll();
+        model->select();
+    });
+
+
     //
     ui->filterSecondNameLE->setText(filterSecondName);
     ui->filterFirstNameLE->setText(filterFirstName);
@@ -378,12 +402,13 @@ void CreateTournamentOrdersDialog::loadFromExcel()
             {
                 birthday = birthdayDate.toString("dd.MM.yyyy");
                 QDate DATE_WEIGHTING = QDate::fromString(DBUtils::getFieldDate("DATE_WEIGHTING", "TOURNAMENTS", mTournamentUID), "dd.MM.yyyy");
-                age = DATE_WEIGHTING.year() - birthdayDate.year();
-                if ( DATE_WEIGHTING.month() <  birthdayDate.month() ||
-                    (DATE_WEIGHTING.month() == birthdayDate.month() && DATE_WEIGHTING.day() < birthdayDate.day()))
-                {
-                    --age;
-                }
+                age = getAge(birthdayDate, DATE_WEIGHTING);
+//                age = DATE_WEIGHTING.year() - birthdayDate.year();
+//                if ( DATE_WEIGHTING.month() <  birthdayDate.month() ||
+//                    (DATE_WEIGHTING.month() == birthdayDate.month() && DATE_WEIGHTING.day() < birthdayDate.day()))
+//                {
+//                    --age;
+//                }
                 //qDebug() << "I read from excel birthdate as " << birthday << " age: " << age;
             }
             else
@@ -578,7 +603,7 @@ void CreateTournamentOrdersDialog::updateFillOrderWidget(long long orderUID)
     long long sportCategoryUID = -1;
     long long typeUID = -1;
     long long clubUID = -1, coachUID = -1;
-    long long tournamentCategoryUID = -1;
+    //long long tournamentCategoryUID = -1;
 
     if (orderUID >= 0)
     {
@@ -599,7 +624,7 @@ void CreateTournamentOrdersDialog::updateFillOrderWidget(long long orderUID)
             typeUID = query.value("TYPE_FK").toLongLong();
             clubUID = query.value("CLUB_FK").toLongLong();
             coachUID = query.value("COACH_FK").toLongLong();
-            tournamentCategoryUID = query.value("TOURNAMENT_CATEGORY_FK").toLongLong();
+            //tournamentCategoryUID = query.value("TOURNAMENT_CATEGORY_FK").toLongLong();
 
 
             ui->firstNameLE->setText(query.value("FIRST_NAME").toString());
@@ -622,7 +647,8 @@ void CreateTournamentOrdersDialog::updateFillOrderWidget(long long orderUID)
     updateTypeComboBox(typeUID);
     updateClubComboBox(clubUID, regionUID);
     updateCoachComboBox(coachUID, clubUID);
-    updateTournamentCategoriesComboBox(tournamentCategoryUID, sexUID, typeUID);
+    //findTournamentCategoryForLabel(tournamentCategoryUID, sexUID, typeUID);
+    findTournamentCategoryForLabel();
 }
 
 void CreateTournamentOrdersDialog::addContextMenu()
@@ -887,15 +913,17 @@ void CreateTournamentOrdersDialog::setComboBoxDependencies()
     });
     connect(ui->gendersCB, &QComboBox::currentTextChanged, [this] (const QString&)
     {
-        long long sexUID = ui->gendersCB->currentData(Qt::UserRole).toLongLong();
-        long long typeUID = ui->typesCB->currentData(Qt::UserRole).toLongLong();
-        updateTournamentCategoriesComboBox(-1, sexUID, typeUID);
+        findTournamentCategoryForLabel();
     });
     connect(ui->typesCB, &QComboBox::currentTextChanged, [this] (const QString&)
     {
-        long long sexUID = ui->gendersCB->currentData(Qt::UserRole).toLongLong();
-        long long typeUID = ui->typesCB->currentData(Qt::UserRole).toLongLong();
-        updateTournamentCategoriesComboBox(-1, sexUID, typeUID);
+        findTournamentCategoryForLabel();
+    });
+    connect(ui->birthdayDE, &QDateEdit::dateChanged, [this](){
+        findTournamentCategoryForLabel();
+    });
+    connect(ui->weightDSB, static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged), [this](){
+        findTournamentCategoryForLabel();
     });
 }
 
@@ -1715,41 +1743,65 @@ void CreateTournamentOrdersDialog::updateCoachComboBox(long long coachUID, long 
     query.clear();
 }
 
-void CreateTournamentOrdersDialog::updateTournamentCategoriesComboBox(long long currentUID, long long sexUID, long long typeUID)
+void CreateTournamentOrdersDialog::findTournamentCategoryForLabel()
 {
-    ui->tournamentCategoriesCB->clear();
+    long long sexUID  = ui->gendersCB->currentData(Qt::UserRole).toLongLong();
+    long long typeUID = ui->typesCB->currentData(Qt::UserRole).toLongLong();
 
-    QSqlQuery query;
-    if (!query.prepare("SELECT * FROM TOURNAMENT_CATEGORIES WHERE TOURNAMENT_FK = ? AND SEX_FK = ? AND TYPE_FK = ? ORDER BY SEX_FK, TYPE_FK, AGE_FROM, AGE_TILL, WEIGHT_FROM, WEIGHT_TILL"))
-        qDebug() << query.lastError().text();
-    query.bindValue(0, mTournamentUID);
-    query.bindValue(1, sexUID);
-    query.bindValue(2, typeUID);
+    QDate birthdate   = ui->birthdayDE->date();
+    double weight     = ui->weightDSB->value();
 
-    if (query.exec())
-    {
-       int index = 0;
-       while (query.next())
-       {
-           ui->tournamentCategoriesCB->addItem(query.value("NAME").toString(), Qt::DisplayRole);
-           ui->tournamentCategoriesCB->setItemData(index, query.value("UID"), Qt::UserRole);
+    QDate dateWeight  = QDate::fromString(DBUtils::getFieldDate("DATE_WEIGHTING", "TOURNAMENTS", mTournamentUID), "dd.MM.yyyy");
 
-           if (query.value("UID").toLongLong() == currentUID)
-               ui->tournamentCategoriesCB->setCurrentIndex(index);
+    long long tournamentCategoryUID = getTournamentCategoryUID(sexUID, getAge(birthdate, dateWeight), weight, typeUID, "#", "#");
+    QString tournamentCategory = DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", tournamentCategoryUID);
+    if (tournamentCategory.isEmpty()) tournamentCategory = "#";
+    ui->labelTournamentCategories->setText(tournamentCategory);
 
-           ++index;
-       }
-    }
-    else
-    {
-       qDebug() << query.lastError().text();
-    }
+//    ui->tournamentCategoriesCB->clear();
 
-    query.clear();
+//    QSqlQuery query;
+//    if (!query.prepare("SELECT * FROM TOURNAMENT_CATEGORIES WHERE TOURNAMENT_FK = ? AND SEX_FK = ? AND TYPE_FK = ? ORDER BY SEX_FK, TYPE_FK, AGE_FROM, AGE_TILL, WEIGHT_FROM, WEIGHT_TILL"))
+//        qDebug() << query.lastError().text();
+//    query.bindValue(0, mTournamentUID);
+//    query.bindValue(1, sexUID);
+//    query.bindValue(2, typeUID);
+
+//    if (query.exec())
+//    {
+//       int index = 0;
+//       while (query.next())
+//       {
+//           ui->tournamentCategoriesCB->addItem(query.value("NAME").toString(), Qt::DisplayRole);
+//           ui->tournamentCategoriesCB->setItemData(index, query.value("UID"), Qt::UserRole);
+
+//           if (query.value("UID").toLongLong() == currentUID)
+//               ui->tournamentCategoriesCB->setCurrentIndex(index);
+
+//           ++index;
+//       }
+//    }
+//    else
+//    {
+//       qDebug() << query.lastError().text();
+//    }
+
+//    query.clear();
 }
 
 void CreateTournamentOrdersDialog::fillNullString(QString& s)
 {
-    if (s.isEmpty() || s.isNull())
+    if (s.isEmpty())
         s = " ";
+}
+
+int CreateTournamentOrdersDialog::getAge(QDate birthdayDate, QDate DATE_WEIGHTING)
+{
+    int age = DATE_WEIGHTING.year() - birthdayDate.year();
+    if ( DATE_WEIGHTING.month() <  birthdayDate.month() ||
+        (DATE_WEIGHTING.month() == birthdayDate.month() && DATE_WEIGHTING.day() < birthdayDate.day()))
+    {
+        --age;
+    }
+    return age;
 }
