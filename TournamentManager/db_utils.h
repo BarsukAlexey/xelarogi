@@ -16,14 +16,32 @@ class DBUtils
 
 public:
 
-    struct NodeOfTournirGrid
+    class NodeOfTournirGrid
     {
+    public:
+        long long tournamentCategory;
         int v; // id вершины; вершины нумируются как в дереве отрезков (только зеркально)
-        QString name;
-        QString region;
         bool isFighing;
         long long UID;
         QString result;
+
+        QString name;
+        QString region;
+
+        long long leftUID;
+        long long rightUID;
+        QString leftName;
+        QString rightName;
+
+        explicit NodeOfTournirGrid(long long tournamentCategory = -1, int v = -1, bool isFighing = false, long long UID = -1, QString result = "") :
+            tournamentCategory(tournamentCategory),
+            v(v),
+            isFighing(isFighing),
+            UID(UID),
+            result(result)
+        {
+
+        }
 
         bool operator < (const NodeOfTournirGrid& other) const
         {
@@ -31,19 +49,19 @@ public:
         }
     };
 
-    struct Fighing
-    {
-        long long UID0;
-        long long UID1;
-        long long VERTEX;
-        long long TOURNAMENT_CATEGORIES_FK;
-        int winer;
+//    struct Fighing
+//    {
+//        long long UID0;
+//        long long UID1;
+//        long long VERTEX;
+//        long long TOURNAMENT_CATEGORIES_FK;
+//        int winer;
 
-        bool operator < (const Fighing& other) const
-        {
-            return VERTEX < other.VERTEX;
-        }
-    };
+//        bool operator < (const Fighing& other) const
+//        {
+//            return VERTEX < other.VERTEX;
+//        }
+//    };
 
     static QString getField(const QString& field, const QString& table, const QString& UID, QString PRETTY_FUNCTION = __PRETTY_FUNCTION__);
     static QString getField(const QString& field, const QString& table, const long long UID, QString PRETTY_FUNCTION = __PRETTY_FUNCTION__);
@@ -68,9 +86,9 @@ public:
     static QVector<QVector<NodeOfTournirGrid> > getNodesAsLevelListOfList(long long tournamentCategoryUID);
     static QVector<NodeOfTournirGrid> getLeafOFTree(long long tournamentCategoryUID);
     static QVector<NodeOfTournirGrid> getFightingNodes(long long tournamentCategoryUID);
-    static QVector<QVector<Fighing> > getListsOfPairsForFighting(long long tournamentUID);
-    static QVector<Fighing> getListOfPairsForFighting(long long TOURNAMENT_CATEGORIES_FK);
-    static QVector<Fighing> getListOfPairsForFightingForPointFighting(long long TOURNAMENT_CATEGORIES_FK);
+    //static QVector<QVector<Fighing> > getListsOfPairsForFighting(long long tournamentUID);
+    //static QVector<Fighing> getListOfPairsForFighting(long long TOURNAMENT_CATEGORIES_FK);
+    //static QVector<Fighing> getListOfPairsForFightingForPointFighting(long long TOURNAMENT_CATEGORIES_FK);
     static void insertLeafOfGrid(long long TOURNAMENT_CATEGORIES_FK, long long VERTEX, long long orderUID);
     static bool updateNodeOfGrid(long long TOURNAMENT_CATEGORIES_FK, long long VERTEX, long long orderUID, QString result);
     static void swapNodesOfGrid(long long tournamentCategoryUID, int node0v, int node1v);

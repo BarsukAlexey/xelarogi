@@ -26,7 +26,7 @@ private:
     long long tournamentCategories;
     int countRows, countColumns;
     int widthCell, heightCell;
-    const DBUtils::NodeOfTournirGrid noNode = DBUtils::NodeOfTournirGrid({-1, "", "", false, -1, ""});
+    const DBUtils::NodeOfTournirGrid noNode = DBUtils::NodeOfTournirGrid();
     DBUtils::NodeOfTournirGrid selectedNode = noNode;
 
 public:

@@ -7,6 +7,8 @@ import net.pskov.controller.MouseController;
 import net.pskov.some_enum.FightStatus;
 import net.pskov.some_enum.Player;
 import net.pskov.utils.ImageUtils;
+import net.pskov.utils.ReportUtis;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -33,7 +35,8 @@ public class JFrameMainJudge extends JFrame {
 
     private volatile Fighting activeFighting;
     private volatile Vector<Fighting> allFighting;
-    private volatile Vector<Boolean> canStartFighting;
+    private volatile Vector<Boolean> canStartFight;
+    private volatile Vector<String> stringOpenSystem;
 
     private final MouseController[] mouseController;
     private final KeyboardController keyboardController;
@@ -130,7 +133,8 @@ public class JFrameMainJudge extends JFrame {
         setVisible(true);
 //        setSize(1280, 800);
 
-        new Timer(50, new ActionListener() {
+        new Timer(20, new ActionListener() { //
+        //new Timer(50, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 updateMice();
@@ -152,14 +156,14 @@ public class JFrameMainJudge extends JFrame {
 //                forceMouseInit();
                 //
                 if (!updateMice()) {
-                    JOptionPane.showMessageDialog(JFrameMainJudge.this, "Connect mice and click \"init mice\"");
+                    JOptionPane.showMessageDialog(JFrameMainJudge.this, "Close this program, connect mice and start this program");
                     return;
                 }
                 if (table.getSelectedRow() < 0) {
                     JOptionPane.showMessageDialog(JFrameMainJudge.this, "Select fight #");
                     return;
                 }
-                if (!canStartFighting.get(table.getSelectedRow())) {
+                if (!canStartFight.get(table.getSelectedRow())) {
                     JOptionPane.showMessageDialog(JFrameMainJudge.this, "It can not be started");
                     return;
                 }
@@ -196,6 +200,36 @@ public class JFrameMainJudge extends JFrame {
                 }
                 scoreTable.get(0).setVisible(true);
                 activeFighting = null;
+            }
+        });
+
+
+        final JButton buttonOpeningSystem = new JButton("Show detail report");
+        buttonOpeningSystem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int row = table.getSelectedRow();
+                if (row < 0) return;
+
+                JDialog dlg = new JDialog(JFrameMainJudge.this, "", true);
+
+                JScrollPane jsp;
+                JTextPane jta;
+
+                jta = new JTextPane();
+                jta.setEditable(false);
+                jta.setContentType("text/html");
+                jta.setText(stringOpenSystem.get(row));
+
+                jsp = new JScrollPane(jta);
+                //jsp.setPreferredSize(new Dimension(250, 450));
+
+                dlg.setLayout(new BorderLayout());
+                dlg.add(jsp, BorderLayout.CENTER);
+                dlg.pack();
+                dlg.setLocationRelativeTo(null);
+                dlg.setVisible(true);
+
             }
         });
 
@@ -277,6 +311,7 @@ public class JFrameMainJudge extends JFrame {
         jPanel.setLayout(new BoxLayout(jPanel, BoxLayout.Y_AXIS));
         jPanel.add(jScrollPane);
         jPanel.add(jStart);
+        jPanel.add(buttonOpeningSystem);
         jPanel.add(jButtonLoadData);
         jPanel.add(jButtonSaveFile);
         jPanel.add(jButtonAdv);
@@ -345,7 +380,8 @@ public class JFrameMainJudge extends JFrame {
 
 
         allFighting = new Vector<>();
-        canStartFighting = new Vector<>();
+        canStartFight = new Vector<>();
+        stringOpenSystem = new Vector<>();
         for (JsonElement jsonElement : new JsonParser().parse(JSON_DATA).getAsJsonArray()) {
             JsonObject object = jsonElement.getAsJsonObject();
 
@@ -385,11 +421,20 @@ public class JFrameMainJudge extends JFrame {
             }
             String result = winner == -1 ? "" : object.get("result").getAsString();
             int in_case_tie = object.get("IN_CASE_TIE").getAsInt();
+
             boolean canStart =
                     object.get("orderUID_left") != null && 0 < object.get("orderUID_left").getAsLong() &&
                             object.get("orderUID_right") != null && 0 < object.get("orderUID_right").getAsLong() &&
                             object.get("orderUID") == null;
-            canStartFighting.add(canStart);
+            canStartFight.add(canStart);
+
+            String report;
+            if (object.get("report") != null)
+                report = object.get("report").getAsString();
+            else
+                report = "#";
+            stringOpenSystem.add(report);
+
             data.add(new Object[]{
                     object.get("fightId").getAsInt(),
                     canStart ? "Yes" : "No",
@@ -521,12 +566,11 @@ public class JFrameMainJudge extends JFrame {
                                 activeFighting.getVERTEX() == object.get("VERTEX").getAsLong()) {
                             object.addProperty("orderUID", activeFighting.getWinner() == Player.Left ? object.get("orderUID_left").getAsLong() : object.get("orderUID_right").getAsLong());
                             object.addProperty("result", activeFighting.getResult());
+                            object.addProperty("report", ReportUtis.getOpeningSystem(activeFighting));
                             object1 = object;
                             break;
                         }
                     }
-
-                    // code с проги от пойнтфатинга
 
                     String[] winnerKeys;
                     if (activeFighting.getWinner() == Player.Left) {

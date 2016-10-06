@@ -121,11 +121,16 @@ TournamentGridDialog2::TournamentGridDialog2(QString filter, long long _tourname
     widthSpinBox = new QSpinBox;
     heightSpinBox = new QSpinBox;
     widthSpinBox->setMaximum(1000);
-    widthSpinBox->setValue(128);
+    widthSpinBox->setValue(300);
     heightSpinBox->setValue(30);
 
 
     QScrollArea *pQScrollArea = new QScrollArea;
+    {
+        QPalette localPalette = pQScrollArea->palette();
+        localPalette.setColor(QPalette::Background, Qt::white);
+        pQScrollArea->setPalette(localPalette);
+    }
     pRenderArea = new RenderAreaWidget(pQScrollArea, widthSpinBox->value(), heightSpinBox->value());
     pQScrollArea->setWidget(pRenderArea);
     qTabWidget = new QTabWidget();

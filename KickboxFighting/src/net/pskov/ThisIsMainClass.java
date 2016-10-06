@@ -1,17 +1,49 @@
 package net.pskov;
 
-import net.java.games.input.Controller;
-import net.java.games.input.ControllerEnvironment;
-import net.java.games.input.Mouse;
-import net.pskov.controller.KeyboardController;
-import net.pskov.controller.MouseController;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import net.pskov.some_enum.Player;
+import net.pskov.utils.ReportUtis;
 
 import javax.swing.*;
-import java.util.ArrayList;
+import java.awt.*;
 
 public class ThisIsMainClass {
 
     public static void main(String[] args) {
+        /*/
+        {
+            Fighting fighting = new Fighting("nameL", "nameR", 3, "category",
+                    3,
+                    3 * 1000,
+                    3 * 1000,
+                    30 * 1000, 2,
+                    null, null, "cL", "cR", -1, -1);
+
+            JDialog dlg = new JDialog();
+            dlg.setModal(true);
+
+            JScrollPane jsp;
+            JTextPane jta;
+
+            jta = new JTextPane();
+            jta.setEditable(false);
+            jta.setContentType("text/html");
+            jta.setText(ReportUtis.getOpeningSystem(fighting));
+
+            jsp = new JScrollPane(jta);
+            jsp.setPreferredSize(new Dimension(800, 600));
+
+            dlg.setLayout(new BorderLayout());
+            dlg.add(jsp, BorderLayout.CENTER);
+            dlg.pack();
+            dlg.setLocationRelativeTo(null);
+            dlg.setVisible(true);
+        }
+        System.exit(0);
+        /*/
+
+        //
 //        for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
 //            if ("Nimbus".equals(info.getName())) {
 //                try {
@@ -25,7 +57,7 @@ public class ThisIsMainClass {
 
         final JDialogInitMiceAndKeyboard dlg = new JDialogInitMiceAndKeyboard();
         dlg.pack();
-        dlg.setLocationRelativeTo(null);
+        dlg.setBounds(GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds());
         dlg.setVisible(true);
         if (!dlg.isInitMice())
             System.exit(0);
@@ -46,6 +78,8 @@ public class ThisIsMainClass {
                 new JFrameMainJudge(dlg.getMouseControllers(), dlg.getKeyboardController());
             }
         });
+
+        /**/
     }
 }
 

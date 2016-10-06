@@ -1,5 +1,5 @@
 package net.pskov.some_enum;
 
-public enum Penalty {
+public enum TypePenalty {
     Minus, Ex, FO
 }

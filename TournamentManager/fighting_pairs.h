@@ -17,6 +17,8 @@
 #include <QCheckBox>
 #include <QTableWidget>
 #include <QProgressDialog>
+#include <QTimer>
+
 
 
 namespace Ui {
@@ -33,19 +35,25 @@ public:
 
 private:
     long long tournamentUID;
+    QVector<long long> tournamentCategoryUIDs;
+    QVector<QVector<QVector<DBUtils::NodeOfTournirGrid>>> grids;
+    QVector<QSpinBox*> spinBoxes;
     Ui::FightingPairs* ui;
 
-    void printInExcel(DialogChoseData& dlg, QAxObject *sheets, const QVector<DBUtils::Fighing>& fighting, int ring);
-    void printInJSON(const QVector<DBUtils::Fighing>& fighting, int ring, const QString& path);
-    void makeGridsForPointFighting(QString existingDirectory, QVector<long long> tournamentCategoryUIDs, int delay, int countOfRings, QString stringDate);
+    void printListOfPairsInExcel(DialogChoseData& dlg, QAxObject *sheets, const QVector<DBUtils::NodeOfTournirGrid>& pairs, int ring);
+    void printListOfPairsInJSON(const QVector<DBUtils::NodeOfTournirGrid>& pairs, int ring, const QString& existingDirectory);
+    void makeGridsForPointFighting(QString existingDirectory, QVector<long long> tournamentCategoryUIDs);
     QString getTextLocal(long long orderUID);
     QString getFlagImage(long long orderUID);
-    QJsonObject getQJsonObject(const DBUtils::Fighing& f, const int fightingId);
+    QJsonObject getQJsonObject(const DBUtils::NodeOfTournirGrid& f, const int fightingId);
+
+    std::vector<int> getDurationsOfFightsForChampionship(const QVector<int>& selectedRows);
 
 signals:
 
 public slots:
     void onGoPress();
+    void onItemSelectionChanged();
 };
 
 #endif // FIGHTINGPAIRS_H

@@ -98,27 +98,34 @@ void RenderAreaWidget::paintEvent(QPaintEvent* )
 
     QPainter painter(this);
 
+    painter.fillRect(painter.viewport(), Qt::white);
+
     QVector<DBUtils::NodeOfTournirGrid> nodes = DBUtils::getNodes(tournamentCategories);
     if (nodes.empty()) return;
-    qSort(nodes);
+
+    for (const DBUtils::NodeOfTournirGrid& node : nodes)
+    {
+        for (int child : {2 * node.v, 2 * node.v + 1})
+        {
+            if (qBinaryFind(nodes, DBUtils::NodeOfTournirGrid(-1, child)) != nodes.end() )
+            {
+                paintLine(getCell(node.v), getCell(child), painter);
+            }
+        }
+    }
+
+    for (const DBUtils::NodeOfTournirGrid& node : nodes)
+    {
+        QPoint cell = getCell(node.v);
+        paintRect(cell.x(), cell.y(), painter, node);
+    }
 
     //countColumns = qMax(countColumns, log2(nodes.last().v) + 1);
     countColumns = log2(nodes.last().v) + 1;
     countRows = 2 * (1 << (countColumns - 1)) - 1;
     setNormalSize();
 
-    for (const DBUtils::NodeOfTournirGrid& node : nodes)
-    {
-        QPoint cell = getCell(node.v);
-        paintRect(cell.x(), cell.y(), painter, node);
-        for (int child : {2 * node.v, 2 * node.v + 1})
-        {
-            if (qBinaryFind(nodes, DBUtils::NodeOfTournirGrid({child, "", "", false, -1, ""})) != nodes.end() )
-            {
-                paintLine(getCell(node.v), getCell(child), painter);
-            }
-        }
-    }
+
 }
 
 void RenderAreaWidget::mousePressEvent(QMouseEvent* event)
@@ -217,19 +224,42 @@ void RenderAreaWidget::paintRect(int i, int j, QPainter& painter, const DBUtils:
 {
     QRect rect(j * widthCell, i * heightCell, widthCell, heightCell);
     if (node.v == selectedNode.v)
+    {
         painter.fillRect(rect, QBrush(Qt::green));
-    //else
-        //painter.fillRect(rect, QBrush(Qt::gray));
-        //painter.fillRect(rect, QBrush(Qt::lightGray));
-    painter.drawRect(rect);
-    QRect rectName(rect.topLeft(), QSize(rect.width(), rect.height() / 2));
-    QRect rectRegion(QPoint(rect.topLeft().x(), rect.topLeft().y() + rect.height() / 2), QSize(rect.width(), rect.height() / 2));
+        painter.setPen(Qt::black);
+        painter.drawRect(rect);
+    }
+    else if (node.v & 1)
+    {
+        QLinearGradient gradient(rect.topLeft(), rect.bottomRight()); // diagonal gradient from top-left to bottom-right
+        gradient.setColorAt(1, Qt::white);
+        gradient.setColorAt(0, QColor("#ffbfc0"));
+        painter.fillRect(rect, gradient);
 
-    getAppropriateFontSize(painter, rectName, node.name, Qt::AlignHCenter | Qt::AlignVCenter);
-    if (node.isFighing)
-        getAppropriateFontSize(painter, rectRegion, node.result, Qt::AlignHCenter | Qt::AlignVCenter);
+        painter.setPen(QColor("#ff0001"));
+        painter.drawRect(rect);
+    }
     else
-        getAppropriateFontSize(painter, rectRegion, node.region, Qt::AlignHCenter | Qt::AlignVCenter);
+    {
+        QLinearGradient gradient(rect.topLeft(), rect.bottomRight()); // diagonal gradient from top-left to bottom-right
+        gradient.setColorAt(1, Qt::white);
+        gradient.setColorAt(0, QColor("#c7c6ff"));
+        painter.fillRect(rect, gradient);
+
+        painter.setPen(QColor("#0301fb"));
+        painter.drawRect(rect);
+    }
+
+    QString text(node.name == "_________"? "" : node.name);
+    if (node.isFighing)
+    {
+        if (0 < node.UID && !node.result.isEmpty())
+            text += " (" + node.result + ")";
+    }
+    else
+        text += " (" + node.region + ")";
+    painter.setPen(Qt::black);
+    getAppropriateFontSize(painter, rect, text, Qt::AlignHCenter | Qt::AlignVCenter);
 }
 
 void RenderAreaWidget::paintLine(QPoint aa, QPoint bb, QPainter& painter)
@@ -359,7 +389,7 @@ void RenderAreaWidget::printTableGridInExcel(QAxObject* workbook, DialogChoseDat
 
         for (int child : {2 * node.v, 2 * node.v + 1})
         {
-            if (qBinaryFind(nodes, DBUtils::NodeOfTournirGrid({child, "", "", false, -1, ""})) != nodes.end() )
+            if (qBinaryFind(nodes, DBUtils::NodeOfTournirGrid(-1, child)) != nodes.end() )
             {
                 QPoint aa = getCell(node.v, countColumns);
                 QPoint bb = getCell(child, countColumns);

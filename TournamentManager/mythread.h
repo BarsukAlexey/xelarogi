@@ -22,16 +22,18 @@ public:
     int maxSumSeg;
     int minSumSeg;
     std::vector<int> ans;
+    QString reportMessage;
 
 
 public:
-    MyThread( const std::vector<int> time, const int countRings, const int maxSumSeg, const int minSumSeg) :
-        time(time), countRings(countRings), maxSumSeg(maxSumSeg), minSumSeg(minSumSeg)
+    MyThread( const std::vector<int> time, const int countRings) : time(time), countRings(countRings)
     {
         mStop = false;
+        maxSumSeg = (int)1e9;
+        minSumSeg = 0;
     }
 
-    inline void setStop( void )
+    void setStop()
     {
         mStop = true;
     }
@@ -47,30 +49,32 @@ private:
 
         if (pos == (int)time.size())
         {
-            curMinSumSeg = qMin(sumLastSegment, curMinSumSeg);
+            //curMaxSumSeg = qMax(curMaxSumSeg, sumLastSegment); // Нет нужды
+            curMinSumSeg = qMin(curMinSumSeg, sumLastSegment);
             if (maxSumSeg > curMaxSumSeg || (maxSumSeg == curMaxSumSeg && minSumSeg < curMinSumSeg))
             {
                 maxSumSeg = curMaxSumSeg;
                 minSumSeg = curMinSumSeg;
                 ans = count;
-                //qDebug() << "delta: " << count.size() << maxSumSeg << minSumSeg;
             }
         }
         else
         {
             if (count.size())
             {
-                ++count[count.size() - 1];
+                ++count.back();
                 sumLastSegment += time[pos];
                 f(pos + 1, sumLastSegment, qMax(curMaxSumSeg, sumLastSegment), curMinSumSeg);
                 sumLastSegment -= time[pos];
-                --count[count.size() - 1];
+                --count.back();
             }
 
             if ((int)count.size() < countRings)
             {
                 count.push_back(1);
-                f(pos + 1, time[pos], qMax(curMaxSumSeg, sumLastSegment), sumLastSegment? qMin(curMinSumSeg, sumLastSegment) : (int)1e9);
+                int nextMaxSumSeg = qMax(curMaxSumSeg, qMax(sumLastSegment, time[pos]));
+                f(pos + 1, time[pos], nextMaxSumSeg,
+                  sumLastSegment == 0? curMinSumSeg : qMin(curMinSumSeg, sumLastSegment));
                 count.pop_back();
             }
 
@@ -83,14 +87,19 @@ protected:
     void run()
     {
         f(0, 0, 0, (int)1e9);
-        QString message;
+        reportMessage = "Расчётное время";
+        QString message2;
         int pos = 0;
-        for (int cnt : ans) {
+        for (const int cnt : ans) {
             int curTime = 0;
-            while(cnt-->0) curTime += time[pos++];
-            message += QString::number(curTime/3600) + ":" + QString("%1").arg(curTime/60%60, 2, 10, QChar('0')) + ", ";
+            for (int i = 0; i < cnt; ++i)
+                curTime += time[pos++];
+            reportMessage += "\n" +
+                             QString::number(curTime / 3600) + " ч. " +
+                             QString("%1").arg(curTime / 60%60, 2, 10, QChar('0')) + " м.";
+            message2 +=  QString::number(cnt) + ", ";
         }
-        qDebug() << "Поток: " << message;
+        qDebug() << "time.size()" << time.size() << "min,max:" << minSumSeg << maxSumSeg << "Delta: " << (maxSumSeg - minSumSeg) / 60 << "In my thread: " << reportMessage << " count in rings:" << message2;
     }
 };
 
