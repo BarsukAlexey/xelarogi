@@ -52,7 +52,7 @@ FightingPairs::FightingPairs(long long _tournamentUID, QWidget* parent) :
              for (int j = 0; j < grid[i].size(); ++j)
              {
                  const DBUtils::NodeOfTournirGrid& node = grid[i][j];
-                 if (node.isFighing)
+                 if (node.isFight)
                  {
                      ++countOfFights;
                      if (0 < node.UID)
@@ -226,7 +226,7 @@ void FightingPairs::makeGridsForPointFighting(QString existingDirectory, QVector
 
     QVector<int> durationOfGrid;
     for (const long long tcUID : tournamentCategoryUIDs)
-        durationOfGrid << DBUtils::findDurationOfGrid(tcUID, ui->spinBoxDelay->value());
+        durationOfGrid << DBUtils::getDurationOfGrid(tcUID, ui->spinBoxDelay->value());
 
     QVector<long long> constTournamentCategoryUIDs = tournamentCategoryUIDs;
     const std::vector<int> constDurationOfGrid(durationOfGrid.begin(), durationOfGrid.end());
@@ -278,7 +278,7 @@ void FightingPairs::makeGridsForPointFighting(QString existingDirectory, QVector
                 std::reverse(nodes.begin(), nodes.end());
                 fightNumber << QVector<int>(nodes.size() + 1);
                 for (DBUtils::NodeOfTournirGrid node : nodes)
-                    if (node.isFighing)
+                    if (node.isFight)
                     {
                         orderOfFights << std::make_pair(i, node.v);
                         //qDebug() << "orderOfFights:" << i << node.v;
@@ -321,7 +321,7 @@ void FightingPairs::makeGridsForPointFighting(QString existingDirectory, QVector
 
             QVector<DBUtils::NodeOfTournirGrid> fightingNodes;
             for (DBUtils::NodeOfTournirGrid node : DBUtils::getNodes(uids[i]))
-                if (node.isFighing)
+                if (node.isFight)
                     fightingNodes << node;
             std::reverse(fightingNodes.begin(), fightingNodes.end());
             for (int j = 0; j < fightingNodes.size(); ++j)
@@ -424,9 +424,9 @@ std::vector<int> FightingPairs::getDurationsOfFightsForChampionship(const QVecto
             for (int j = grid[turn].size() - 1; 0 <= j; --j)
             {
                 const DBUtils::NodeOfTournirGrid& node = grid[turn][j];
-                if (node.isFighing && node.UID <= 0)
+                if (node.isFight && node.UID <= 0)
                 {
-                    currentDuration += DBUtils::findDurationOfFightinPair(tournamentCategoryUIDs[selectedRow]) +
+                    currentDuration += DBUtils::getDurationOfFightinPair(tournamentCategoryUIDs[selectedRow]) +
                                        ui->spinBoxDelay->value();
                     //qDebug() << "Befor: " << node.v << node.tournamentCategory
                     //         << DBUtils::findDurationOfFightinPair(tournamentCategoryUIDs[selectedRow]) + ui->spinBoxDelay->value()
@@ -524,7 +524,7 @@ void FightingPairs::onGoPress()
                     for (int j = grid[turn].size() - 1; 0 <= j; --j)
                     {
                         DBUtils::NodeOfTournirGrid& node = grid[turn][j];
-                        if (node.isFighing && node.UID <= 0)
+                        if (node.isFight && node.UID <= 0)
                         {
                             node.name      = "Winner # " + QString::number(pairs.size() + 1);
                             node.leftUID   = grid[turn + 1][2 * j + 1].UID;
@@ -532,7 +532,7 @@ void FightingPairs::onGoPress()
                             node.rightUID  = grid[turn + 1][2 * j    ].UID;
                             node.rightName = grid[turn + 1][2 * j    ].name;
 
-                            time += DBUtils::findDurationOfFightinPair(node.tournamentCategory) +
+                            time += DBUtils::getDurationOfFightinPair(node.tournamentCategory) +
                                     ui->spinBoxDelay->value();
                             //qDebug() << "After: " << node.v << node.tournamentCategory
                             //         << DBUtils::findDurationOfFightinPair(node.tournamentCategory) + ui->spinBoxDelay->value();
@@ -598,7 +598,7 @@ void FightingPairs::onItemSelectionChanged()
         for (const int selectedRow : selectedRows)
         {
             long long tournamentCategoryUID = grids[selectedRow][0][0].tournamentCategory;
-            sum += DBUtils::findDurationOfGrid(tournamentCategoryUID, ui->spinBoxDelay->value());
+            sum += DBUtils::getDurationOfGrid(tournamentCategoryUID, ui->spinBoxDelay->value());
         }
     }
     sum = (sum + ui->ringSpinBox->value() - 1) / ui->ringSpinBox->value();

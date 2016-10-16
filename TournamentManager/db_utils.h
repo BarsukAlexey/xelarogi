@@ -9,6 +9,7 @@
 #include <QSqlDatabase>
 #include <QStringList>
 #include <QVector>
+#include <QSqlQueryModel>
 
 
 class DBUtils
@@ -21,9 +22,11 @@ public:
     public:
         long long tournamentCategory;
         int v; // id вершины; вершины нумируются как в дереве отрезков (только зеркально)
-        bool isFighing;
+        bool isFight;
         long long UID;
         QString result;
+        int DAY_FIGHT;
+        int TIME_FIGHT;
 
         QString name;
         QString region;
@@ -33,12 +36,20 @@ public:
         QString leftName;
         QString rightName;
 
-        explicit NodeOfTournirGrid(long long tournamentCategory = -1, int v = -1, bool isFighing = false, long long UID = -1, QString result = "") :
+        explicit NodeOfTournirGrid(long long tournamentCategory = -1,
+                                   int v = -1,
+                                   bool isFighing = false,
+                                   long long UID = -1,
+                                   QString result = "",
+                                   int DAY_FIGHT = -1,
+                                   int TIME_FIGHT = -1) :
             tournamentCategory(tournamentCategory),
             v(v),
-            isFighing(isFighing),
+            isFight(isFighing),
             UID(UID),
-            result(result)
+            result(result),
+            DAY_FIGHT(DAY_FIGHT),
+            TIME_FIGHT(TIME_FIGHT)
         {
 
         }
@@ -48,20 +59,6 @@ public:
             return v < other.v;
         }
     };
-
-//    struct Fighing
-//    {
-//        long long UID0;
-//        long long UID1;
-//        long long VERTEX;
-//        long long TOURNAMENT_CATEGORIES_FK;
-//        int winer;
-
-//        bool operator < (const Fighing& other) const
-//        {
-//            return VERTEX < other.VERTEX;
-//        }
-//    };
 
     static QString getField(const QString& field, const QString& table, const QString& UID, QString PRETTY_FUNCTION = __PRETTY_FUNCTION__);
     static QString getField(const QString& field, const QString& table, const long long UID, QString PRETTY_FUNCTION = __PRETTY_FUNCTION__);
@@ -79,24 +76,30 @@ public:
     static QString getTournamentNameAsHeadOfDocument(long long tournamentUID);
     static QStringList get_DAYS_FROM_TOURNAMENTS(long long);
     static QVector<QString> getJudges(long long tournamentUID);
+    static QVector<std::tuple<int, int, int, int>> get_MAX_UID_TC___TYPE_FK___AGE_FROM___AGE_TILL(const int tournamentUID);
+    static QSqlQuery *get___AGE_CATEGORY_FK___SEX_FK                                        (int tournamentUID, int TYPE_FK, int AGE_FROM, int AGE_TILL);
+    static QSqlQuery *get___WEIGHT_FROM___WEIGHT_TILL                                       (int tournamentUID, int TYPE_FK, int AGE_FROM, int AGE_TILL, int SEX_FK, int ageCatUID);
+    static QSqlQuery *get___TC_UIDS                                                         (int tournamentUID, int TYPE_FK, int AGE_FROM, int AGE_TILL, int SEX_FK, int ageCatUID, int WEIGHT_FROM, int WEIGHT_TILL);
 
 
     // для таблицы GRID
     static QVector<NodeOfTournirGrid> getNodes(long long tournamentCategoryUID);
+    static QSqlQuery* getFightNodes(int tournamentCategoryUID);
+    //static int f(int tournamentCategoryUID, int day, int time);
+    //static QSqlQuery * ff(int tournamentCategoryUID);
     static QVector<QVector<NodeOfTournirGrid> > getNodesAsLevelListOfList(long long tournamentCategoryUID);
     static QVector<NodeOfTournirGrid> getLeafOFTree(long long tournamentCategoryUID);
     static QVector<NodeOfTournirGrid> getFightingNodes(long long tournamentCategoryUID);
-    //static QVector<QVector<Fighing> > getListsOfPairsForFighting(long long tournamentUID);
-    //static QVector<Fighing> getListOfPairsForFighting(long long TOURNAMENT_CATEGORIES_FK);
-    //static QVector<Fighing> getListOfPairsForFightingForPointFighting(long long TOURNAMENT_CATEGORIES_FK);
     static void insertLeafOfGrid(long long TOURNAMENT_CATEGORIES_FK, long long VERTEX, long long orderUID);
-    static bool updateNodeOfGrid(long long TOURNAMENT_CATEGORIES_FK, long long VERTEX, long long orderUID, QString result);
+    static bool insertResultOfFightForNodeOfGrid(long long TOURNAMENT_CATEGORIES_FK, long long VERTEX, long long orderUID, QString result);
     static void swapNodesOfGrid(long long tournamentCategoryUID, int node0v, int node1v);
-    static int findDurationOfGrid(long long tournamentCategoryUID, int delay = 0);
-    static int findDurationOfFightinPair(long long tournamentCategoryUID);
+    static int getDurationOfGrid(long long tournamentCategoryUID, int delay = 0);
+    static int getDurationOfFightinPair(long long tournamentCategoryUID);
     static std::pair<int, int> getPlace(long long UIDOrder);
     static QVector<std::pair<long long, std::pair<int, int>>> getUIDsAndPlaces(long long tournamentCategoryUID, int maxPlace, bool skeepEmptyGrids);
     static int getNumberOfCastingOfLots(long long UIDOrder);
+    static bool updateLevelOfNodeOfGrid(int TOURNAMENT_CATEGORIES_FK, int VERTEX, int DAY_FIGHT, int TIME_FIGHT);
+
 
 
 
@@ -105,10 +108,14 @@ public:
     static QVector<long long> get_UIDOrder_for_TC(long long UIDtournamentCategory);
     static QVector<std::tuple<long long, int, int, long long> > get_distinct_TYPE_FK_AgeFrom_AgeTill(long long tournamentUID);
     static QMap<QString, QVector<long long> > get_weight_and_orderUIDs(long long tournamentUID, long long type_fk, int age_from, int age_till, int sex_fk, int maxPlace);
-    //static QString getNormanWeightRangeFromTOURNAMENT_CATEGORIES(long long uidCategory);
     static QString getWeightAsOneNumberPlusMinus(long long uidCategory);
     static QString getNormanAgeRangeFromTOURNAMENT_CATEGORIES(long long uidCategory);
     static QString getNameForExcelSheet(long long uidTC);
+    static int getMaxDayFromGrids(long long tournamentUID);
+
+
+    // для таблицы RING_TATAMI_LISTS_DATA
+    static QSqlQuery *get___TYPE_FK___AGE_FROM___AGE_TILL(const int RING_TATAMI_LIST_FK);
 
 
 
@@ -116,7 +123,6 @@ public:
     static QString roundDouble(double x, int precision);
     static QString convertToRoman(int val);
     static int isPow2(int a);
-    static QString getRussianMonth(int m);
 
 
 
@@ -382,5 +388,6 @@ public:
     static QString toString(QVector<std::pair<TypeField, QString>> vector);
 
 };
+
 
 #endif // DBUTILS_H

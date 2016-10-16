@@ -70,7 +70,9 @@ public:
     QPushButton *pushButton_Flag;
     QPushButton *pushButtonGrid;
     QPushButton *pushButtonProtokolVzveshinanya;
-    QPushButton *pushButtonFightinDistribution;
+    QHBoxLayout *horizontalLayout_3;
+    QPushButton *pushButton;
+    QPushButton *pushButtonTimeScheduling;
     QPushButton *pushButtonPair;
     QPushButton *pushButtonLoadWinner;
     QPushButton *pushButtonWinnerReport;
@@ -89,7 +91,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(629, 489);
+        MainWindow->resize(629, 490);
         countryAction = new QAction(MainWindow);
         countryAction->setObjectName(QStringLiteral("countryAction"));
         regionAction = new QAction(MainWindow);
@@ -250,10 +252,21 @@ public:
 
         verticalLayout->addWidget(pushButtonProtokolVzveshinanya);
 
-        pushButtonFightinDistribution = new QPushButton(ordersPage);
-        pushButtonFightinDistribution->setObjectName(QStringLiteral("pushButtonFightinDistribution"));
+        horizontalLayout_3 = new QHBoxLayout();
+        horizontalLayout_3->setSpacing(6);
+        horizontalLayout_3->setObjectName(QStringLiteral("horizontalLayout_3"));
+        pushButton = new QPushButton(ordersPage);
+        pushButton->setObjectName(QStringLiteral("pushButton"));
 
-        verticalLayout->addWidget(pushButtonFightinDistribution);
+        horizontalLayout_3->addWidget(pushButton);
+
+        pushButtonTimeScheduling = new QPushButton(ordersPage);
+        pushButtonTimeScheduling->setObjectName(QStringLiteral("pushButtonTimeScheduling"));
+
+        horizontalLayout_3->addWidget(pushButtonTimeScheduling);
+
+
+        verticalLayout->addLayout(horizontalLayout_3);
 
         pushButtonPair = new QPushButton(ordersPage);
         pushButtonPair->setObjectName(QStringLiteral("pushButtonPair"));
@@ -372,7 +385,8 @@ public:
         pushButton_Flag->setText(QApplication::translate("MainWindow", "\320\244\320\273\320\260\320\263\320\270", 0));
         pushButtonGrid->setText(QApplication::translate("MainWindow", "\320\242\321\203\321\200\320\275\320\270\321\200\320\275\321\213\320\265 \321\201\320\265\321\202\320\272\320\270", 0));
         pushButtonProtokolVzveshinanya->setText(QApplication::translate("MainWindow", "\320\237\321\200\320\276\321\202\320\276\320\272\320\276\320\273\321\213 \320\262\320\267\320\262\320\265\321\210\320\270\320\262\320\260\320\275\320\270\321\217", 0));
-        pushButtonFightinDistribution->setText(QApplication::translate("MainWindow", "\320\223\321\200\320\260\321\204\320\270\320\272 \321\200\320\260\321\201\320\277\320\265\321\200\320\265\320\264\320\265\320\273\320\265\320\275\320\270\321\217 \320\261\320\276\321\221\320\262", 0));
+        pushButton->setText(QApplication::translate("MainWindow", "\320\223\321\200\320\260\321\204\320\270\320\272 \321\200\320\260\321\201\320\277\320\265\321\200\320\265\320\264\320\265\320\273\320\265\320\275\320\270\321\217 \320\261\320\276\321\221\320\262", 0));
+        pushButtonTimeScheduling->setText(QApplication::translate("MainWindow", "\320\240\320\260\321\201\320\277\320\270\321\201\320\260\320\275\320\270\320\265", 0));
         pushButtonPair->setText(QApplication::translate("MainWindow", "\320\241\320\276\321\201\321\202\320\260\320\262\321\213 \320\277\320\260\321\200", 0));
         pushButtonLoadWinner->setText(QApplication::translate("MainWindow", "\320\227\320\260\320\263\321\200\321\203\320\267\320\270\321\202\321\214 \321\200\320\265\320\267\321\203\320\273\321\214\321\202\320\260\321\202\321\213 \320\261\320\276\321\221\320\262", 0));
         pushButtonWinnerReport->setText(QApplication::translate("MainWindow", "\320\241\320\277\320\270\321\201\320\276\320\272 \320\277\320\276\320\261\320\265\320\264\320\270\321\202\320\265\320\273\320\265\320\271", 0));

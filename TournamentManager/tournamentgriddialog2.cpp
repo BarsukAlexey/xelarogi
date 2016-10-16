@@ -54,7 +54,6 @@ TournamentGridDialog2::TournamentGridDialog2(QString filter, long long _tourname
     qTableWidget->setColumnCount(4);
     qTableWidget->setHorizontalHeaderLabels(QStringList({"Спортсмен", "Страна / Регион", "Приоритет", "Разряд"}));
     qTableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    qTableWidget->setSelectionMode(QAbstractItemView::SingleSelection);
     qTableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
     qTableWidget->setSelectionMode(QAbstractItemView::NoSelection);
     qTableWidget->setFocusPolicy(Qt::NoFocus);
@@ -424,16 +423,83 @@ void TournamentGridDialog2::onCellCLickedForChangePrioritet(int row, int )
 }
 
 
-void TournamentGridDialog2::generatGrid(const long long tournamentCaterotyUID, QVector<long long> bestUID)
+void TournamentGridDialog2::generatGrid(const long long tournamentUID, const long long tournamentCaterotyUID, QVector<long long> bestUID)
 {
     {
         // удалим старую сетку
         QSqlQuery query("DELETE FROM GRID WHERE TOURNAMENT_CATEGORIES_FK = ? ");
-        query.bindValue(0, tournamentCaterotyUID);
+        query.addBindValue(tournamentCaterotyUID);
         if (!query.exec())
         {
             qDebug() << __PRETTY_FUNCTION__ << query.lastError() << query.lastQuery();
             return;
+        }
+    }
+
+    QVector<int> dayFight; // dayFight[levelGrid]
+    QVector<int> timeFight; // dayFight[levelGrid]
+    {
+        QSqlQuery queryCOUNT("SELECT count() AS COUNT "
+                             "FROM ORDERS "
+                             "WHERE TOURNAMENT_CATEGORY_FK = ? "
+                             "GROUP BY TOURNAMENT_CATEGORY_FK");
+        queryCOUNT.addBindValue(tournamentCaterotyUID);
+        if (!queryCOUNT.exec())
+        {
+            qDebug() << __PRETTY_FUNCTION__ << queryCOUNT.lastError();
+            return;
+        }
+        int count = 0;
+        if (queryCOUNT.next())
+            count = queryCOUNT.value("COUNT").toInt();
+
+        const QStringList days = DBUtils::get_DAYS_FROM_TOURNAMENTS(tournamentUID);
+        int countTurns = 0;
+        for (int fight = 1; ; fight *= 2)
+        {
+            if (count < 2 * fight)
+            {
+                if (0 < count - fight) ++countTurns;
+                break;
+            }
+            else
+                ++countTurns;
+        }
+
+        if (3 * days.size() < countTurns)
+        {
+            QMessageBox::warning(0, QString("Проблема"),
+                                 QString("Для сетки \"%1\" необходимо %2 круга (кругов), "
+                                         "но имеется только %3 день (дня, дней)")
+                                 .arg(DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", tournamentCaterotyUID))
+                                 .arg(countTurns)
+                                 .arg(days.size()));
+            for (int day = 0, turn = 0; turn < countTurns; ++day)
+            {
+                for (int time = 0; time < 3 && turn < countTurns; ++time, ++turn)
+                {
+                    dayFight .push_front(day);
+                    timeFight.push_front(time);
+                }
+            }
+        }
+        else
+        {
+            const int onOneDay = countTurns / days.size();
+            int rest = countTurns % days.size();
+            for (int d = qMax(0, days.size() - countTurns); d < days.size(); ++d)
+            {
+                for (int f = 0; f < onOneDay + (0 < rest? 1 : 0); ++f)
+                {
+                    if (countTurns)
+                    {
+                        dayFight .push_front(d);
+                        timeFight.push_front(f);
+                        --countTurns;
+                    }
+                }
+                if (0 < rest) --rest;
+            }
         }
     }
 
@@ -493,12 +559,18 @@ void TournamentGridDialog2::generatGrid(const long long tournamentCaterotyUID, Q
     {
         if (isLeaf[v]) continue;
 
-        QSqlQuery query("INSERT INTO GRID VALUES (?, ?, ?, null, null)");
-        query.bindValue(0, tournamentCaterotyUID);
-        query.bindValue(1, v);
-        query.bindValue(2, "true");
+        QSqlQuery query("INSERT INTO GRID VALUES (?,?,?,   ?,?,   ?,?)");
+        query.addBindValue(tournamentCaterotyUID);
+        query.addBindValue(v);
+        query.addBindValue(1);
+
+        query.addBindValue(0);
+        query.addBindValue("");
+
+        query.addBindValue(dayFight[RenderAreaWidget::log2(v)]);
+        query.addBindValue(timeFight[RenderAreaWidget::log2(v)]);
         if (!query.exec())
-            qDebug() << __PRETTY_FUNCTION__ << query.lastError() << query.lastQuery();
+            qDebug() << __LINE__ << __PRETTY_FUNCTION__ << query.lastError() << query.lastQuery();
     }
 
 
@@ -521,19 +593,9 @@ void TournamentGridDialog2::generatGrid(const long long tournamentCaterotyUID, Q
             isUsedLeaf[v] = true;
             regionLeaf[v] = DBUtils::getField("REGION_FK", "ORDERS", bestUID[i]).toLongLong();
 
-            QSqlQuery query("INSERT INTO GRID VALUES (?, ?, ?, ?, null)");
-            query.bindValue(0, tournamentCaterotyUID);
-            query.bindValue(1, v);
-            query.bindValue(2, "false");
-            query.bindValue(3, bestUID[i]);
-            if (!query.exec())
-                qDebug() << __PRETTY_FUNCTION__ << query.lastError() << query.lastQuery();
+            DBUtils::insertLeafOfGrid(tournamentCaterotyUID, v, bestUID[i]);
         }
     }
-
-
-
-
 
 
     if (2 <= n)
@@ -805,7 +867,7 @@ void TournamentGridDialog2::onButtonGenerateGrid()
     for (std::pair<int, long long> f : bestFighters)
         bestUID << f.second;
 
-    TournamentGridDialog2::generatGrid(tournamentCategories, bestUID);
+    TournamentGridDialog2::generatGrid(tournamentUID, tournamentCategories, bestUID);
 
     pRenderArea->repaint();
     fillTableGrid();
@@ -826,7 +888,7 @@ void TournamentGridDialog2::fillTableGrid()
     {
         QVector<DBUtils::NodeOfTournirGrid> leafs;
         for (DBUtils::NodeOfTournirGrid node : nodes)
-            if (!node.isFighing)
+            if (!node.isFight)
             {
                 leafs << node;
             }
@@ -1000,7 +1062,7 @@ void TournamentGridDialog2::fillCategoryCombobox(QString filterStr)
                     for (int j = 0; j < grid[i].size(); ++j)
                     {
                         DBUtils::NodeOfTournirGrid node = grid[i][j];
-                        if (node.isFighing)
+                        if (node.isFight)
                         {
                             ++countOfFights;
                             if (0 < node.UID)
@@ -1117,7 +1179,7 @@ void TournamentGridDialog2::onButtonGenerateAll()
 //        bestUID.resize(qMin(bestUID.size(), sz));
 
         if (DBUtils::getNodes(tcUID).isEmpty())
-            generatGrid(tcUID, bestUID);
+            generatGrid(tournamentUID, tcUID, bestUID);
 
         progress.setValue(progress.value() + 1);
         if (progress.wasCanceled())

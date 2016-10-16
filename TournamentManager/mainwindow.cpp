@@ -1,44 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include <QDebug>
-#include <QAxObject>
-#include <QAxBase>
-#include <vector>
-
-#include "formdipl.h"
-#include "handbookdialog.h"
-#include "tournamentgriddialog2.h"
-#include "fiting_distribution.h"
-#include "fighting_pairs.h"
-#include "weighing_protocol.h"
-#include "winner_report.h"
-#include "ebnutvbazu.h"
-
-#include "report_ministr.h"
-#include "countryiconsdialog.h"
-
-#include <QJsonArray>
-#include <QJsonDocument>
-#include <QJsonObject>
-
-#include <QJsonDocument>
-#include <QJsonParseError>
-#include <QJsonObject>
-#include <QJsonArray>
-#include <QJsonValue>
-#include <QJsonValuePtr>
-#include <QJsonValueRef>
-#include <QJsonValueRefPtr>
-#include <QVariantMap>
-#include <QFileDialog>
-#include <QMessageBox>
-#include <QBuffer>
-#include <iostream>
-#include <fstream>
-
-
-
 using namespace std;
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -368,48 +330,18 @@ void MainWindow::connectButtons()
         dlg.exec();
     });
 
-    /*
-    connect(ui->testClearBtn, &QPushButton::clicked, [this]()
-    {
-        QSqlQuery query;
 
-        if (!query.prepare("DELETE FROM SEXES WHERE NAME IS NULL OR NAME LIKE ''"))
-            qDebug() << query.lastError().text();
-        if (!query.exec())
-            qDebug() << query.lastError().text();
-        query.clear();
-
-        if (!query.prepare("DELETE FROM TYPES WHERE NAME IS NULL OR NAME LIKE ''"))
-            qDebug() << query.lastError().text();
-        if (!query.exec())
-            qDebug() << query.lastError().text();
-        query.clear();
-
-        if (!query.prepare("DELETE FROM SPORT_CATEGORIES WHERE NAME IS NULL OR NAME LIKE ''"))
-            qDebug() << query.lastError().text();
-        if (!query.exec())
-            qDebug() << query.lastError().text();
-        query.clear();
-
-        if (!query.prepare("DELETE FROM TOURNAMENT_CATEGORIES WHERE NAME IS NULL OR NAME LIKE ''"))
-            qDebug() << query.lastError().text();
-        if (!query.exec())
-            qDebug() << query.lastError().text();
-        query.clear();
-
-        if (!query.prepare("DELETE FROM TOURNAMENTS WHERE NAME IS NULL OR NAME LIKE ''"))
-            qDebug() << query.lastError().text();
-        if (!query.exec())
-            qDebug() << query.lastError().text();
-        query.clear();
-
-        if (!query.prepare("DELETE FROM ORDERS WHERE REGION_FK IS NULL OR COUNTRY_FK IS NULL OR REGION_UNIT_FK IS NULL OR TYPE_FK IS NULL OR SEX_FK IS NULL OR TOURNAMENT_CATEGORY_FK IS NULL"))
-            qDebug() << query.lastError().text();
-        if (!query.exec()) // лучше
-            qDebug() << query.lastError().text();
-        query.clear();
+    connect(ui->pushButton, &QPushButton::clicked, [this](){
+        long long tournamentUID = ui->tournamentUidLabel->text().toLongLong();
+        DialogSchedule dlg (this, tournamentUID);
+        dlg.exec();
     });
-    */
+
+    connect(ui->pushButtonTimeScheduling, &QPushButton::clicked, [this](){
+        long long tournamentUID = ui->tournamentUidLabel->text().toLongLong();
+        Dialogschedule2 dlg (tournamentUID, this);
+        dlg.exec();
+    });
 }
 
 
@@ -424,12 +356,7 @@ void MainWindow::on_pushButtonGrid_clicked()
     this->show();
 }
 
-void MainWindow::on_pushButtonFightinDistribution_clicked()
-{
-    long long routnamentUID = ui->tournamentUidLabel->text().toLongLong();
-    qDebug() << "routnamentUID: " << routnamentUID;
-    FitingDistribution dlg(routnamentUID);
-}
+
 
 void MainWindow::on_pushButtonPair_clicked()
 {
@@ -524,7 +451,7 @@ void MainWindow::on_pushButtonLoadWinner_clicked()
         }
         else if (0 < orderUID)
         {
-            if (DBUtils::updateNodeOfGrid(TOURNAMENT_CATEGORIES_FK, VERTEX, orderUID, result))
+            if (DBUtils::insertResultOfFightForNodeOfGrid(TOURNAMENT_CATEGORIES_FK, VERTEX, orderUID, result))
                 ++okCount;
             else
                 errorMessage +=
@@ -560,7 +487,7 @@ void MainWindow::on_manda_clicked()
 {
     long long routnamentUID = ui->tournamentUidLabel->text().toLongLong();
     qDebug() << "routnamentUID: " << routnamentUID;
-    ReportManda d(routnamentUID);
+    ReportManda dlgggg(routnamentUID); // TODO разкоментировать
 }
 
 

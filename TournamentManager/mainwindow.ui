@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>629</width>
-    <height>489</height>
+    <height>490</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -221,11 +221,22 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButtonFightinDistribution">
-            <property name="text">
-             <string>График распеределения боёв</string>
-            </property>
-           </widget>
+           <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <item>
+             <widget class="QPushButton" name="pushButton">
+              <property name="text">
+               <string>График распеределения боёв</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButtonTimeScheduling">
+              <property name="text">
+               <string>Расписание</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
           <item>
            <widget class="QPushButton" name="pushButtonPair">

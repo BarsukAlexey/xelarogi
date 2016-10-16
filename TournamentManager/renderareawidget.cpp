@@ -141,7 +141,7 @@ void RenderAreaWidget::mousePressEvent(QMouseEvent* event)
     if (event->button() == Qt::RightButton){
         if (selectedNode.v != noNode.v)
         {
-            if (selectedNode.v == currentNode.v && selectedNode.isFighing)
+            if (selectedNode.v == currentNode.v && selectedNode.isFight)
             {
                 QSqlQuery query("UPDATE GRID SET ORDER_FK = ?, result = ? WHERE TOURNAMENT_CATEGORIES_FK = ? AND VERTEX = ?");
                 query.bindValue(0, QVariant(QVariant::Int));
@@ -163,7 +163,7 @@ void RenderAreaWidget::mousePressEvent(QMouseEvent* event)
             DBUtils::NodeOfTournirGrid node0 = selectedNode;
             DBUtils::NodeOfTournirGrid node1 = currentNode;
             selectedNode = noNode;
-            if (!node0.isFighing && !node1.isFighing)
+            if (!node0.isFight && !node1.isFight)
             {
                 DBUtils::swapNodesOfGrid(tournamentCategories, node0.v, node1.v);
             }
@@ -251,7 +251,7 @@ void RenderAreaWidget::paintRect(int i, int j, QPainter& painter, const DBUtils:
     }
 
     QString text(node.name == "_________"? "" : node.name);
-    if (node.isFighing)
+    if (node.isFight)
     {
         if (0 < node.UID && !node.result.isEmpty())
             text += " (" + node.result + ")";
@@ -357,7 +357,7 @@ void RenderAreaWidget::printTableGridInExcel(QAxObject* workbook, DialogChoseDat
 
     const int countColumns = log2(nodes.last().v) + 1;
     int countPlayers = 0;
-    for (const DBUtils::NodeOfTournirGrid& node : nodes) if (!node.isFighing) ++countPlayers;
+    for (const DBUtils::NodeOfTournirGrid& node : nodes) if (!node.isFight) ++countPlayers;
 
     int offset = 3;
     int maxRow = offset;
@@ -372,7 +372,7 @@ void RenderAreaWidget::printTableGridInExcel(QAxObject* workbook, DialogChoseDat
         maxRow = qMax(maxRow, p.x() + 1 + offset);
         maxColumn = qMax(maxColumn, p.y() + 1);
 
-        if (node.isFighing)
+        if (node.isFight)
             ExcelUtils::setValue(sheet, p.x() + 1 + offset, p.y() + 1, node.name + "\n" + node.result);
         else
         {
@@ -420,7 +420,7 @@ void RenderAreaWidget::printTableGridInExcel(QAxObject* workbook, DialogChoseDat
             return lhs.v > rhs.v;
         });
 
-        while (nodes.size() && !nodes.front().isFighing) nodes.pop_front();
+        while (nodes.size() && !nodes.front().isFight) nodes.pop_front();
 
         for (int i = 0; i < nodes.size(); ++i)
         {

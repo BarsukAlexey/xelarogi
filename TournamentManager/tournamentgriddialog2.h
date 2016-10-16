@@ -83,7 +83,7 @@ public:
 
 private:
 
-    static void generatGrid(const long long tournamentCaterotyUID, QVector<long long> bestFighters);
+    static void generatGrid(const long long tournamentUID, const long long tournamentCaterotyUID, QVector<long long> bestFighters);
     static bool deleteGrid (const long long uidTC);
 
 private slots:

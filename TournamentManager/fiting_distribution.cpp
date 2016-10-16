@@ -13,12 +13,14 @@
 #include <QSqlError>
 #include <QSqlDatabase>
 #include <QSqlQuery>
+#include <QProgressDialog>
 
 
 
 
 
-FitingDistribution::FitingDistribution(const long long tournamentUID)
+FitingDistribution::FitingDistribution(const long long tournamentUID, QObject* parent) :
+    QObject(parent)
 {
     DialogChoseData dlg(DialogChoseData::Type::fiting_distribution);
     if (dlg.exec() != QDialog::Accepted)
@@ -27,32 +29,29 @@ FitingDistribution::FitingDistribution(const long long tournamentUID)
 
 
     QAxWidget excel("Excel.Application");
-    excel.setProperty("Visible", true);
     QAxObject *workbooks = excel.querySubObject("WorkBooks");
     workbooks->dynamicCall("Add");
     QAxObject *workbook = excel.querySubObject("ActiveWorkBook");
     QAxObject *sheets = workbook->querySubObject("WorkSheets");
 
+    QProgressDialog progress;
+    progress.setMaximum(DBUtils::get_MAX_UID_TC___TYPE_FK___AGE_FROM___AGE_TILL(tournamentUID).size());
+    progress.setWindowModality(Qt::ApplicationModal);
+    progress.setMinimumDuration(0);
+
+    int iteration = 1;
     QStringList days = DBUtils::get_DAYS_FROM_TOURNAMENTS(tournamentUID);
-
-
-    QSqlQuery queryTYPE_FK_AGE_FROM("SELECT MAX(UID) as MAX_UID_TC, TYPE_FK, AGE_FROM, AGE_TILL "
-                                    "FROM TOURNAMENT_CATEGORIES "
-                                    "WHERE TOURNAMENT_FK = ? "
-                                    "GROUP BY TYPE_FK, AGE_FROM, AGE_TILL "
-                                    "ORDER BY TYPE_FK, AGE_FROM, AGE_TILL");
-    queryTYPE_FK_AGE_FROM.addBindValue(tournamentUID);
-    if (!queryTYPE_FK_AGE_FROM.exec())
+    for (const std::tuple<int, int, int, int> tuple : DBUtils::get_MAX_UID_TC___TYPE_FK___AGE_FROM___AGE_TILL(tournamentUID))
     {
-        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << queryTYPE_FK_AGE_FROM.lastError().text() << queryTYPE_FK_AGE_FROM.lastQuery();
-        return ;
-    }
-    while (queryTYPE_FK_AGE_FROM.next())
-    {
-        long long TYPE_FK = queryTYPE_FK_AGE_FROM.value("TYPE_FK").toLongLong();
-        QString AGE_FROM = queryTYPE_FK_AGE_FROM.value("AGE_FROM").toString();
-        QString AGE_TILL = queryTYPE_FK_AGE_FROM.value("AGE_TILL").toString();
-        long long MAX_UID_TC = queryTYPE_FK_AGE_FROM.value("MAX_UID_TC").toLongLong();
+        int MAX_UID_TC = std::get<0>(tuple);
+        int TYPE_FK    = std::get<1>(tuple);
+        int AGE_FROM   = std::get<2>(tuple);
+        int AGE_TILL   = std::get<3>(tuple);
+
+        progress.setValue(iteration++);
+        if (progress.wasCanceled())
+            break;
+
         QVector<int> totalSum(3 * days.size());
         int totalPeople = 0;
 
@@ -74,127 +73,71 @@ FitingDistribution::FitingDistribution(const long long tournamentUID)
 
         initTableHeads(sheet, currentRow, days);
 
-        QSqlQuery querySEX_FK("SELECT AGE_CATEGORY_FK, SEX_FK "
-                              "FROM TOURNAMENT_CATEGORIES "
-                              "WHERE TOURNAMENT_FK = ? AND TYPE_FK = ? AND AGE_FROM = ? AND AGE_TILL = ? "
-                              "GROUP BY AGE_CATEGORY_FK, SEX_FK "
-                              "ORDER BY SEX_FK");
-        querySEX_FK.addBindValue(tournamentUID);
-        querySEX_FK.addBindValue(TYPE_FK);
-        querySEX_FK.addBindValue(AGE_FROM);
-        querySEX_FK.addBindValue(AGE_TILL);
-        if (!querySEX_FK.exec())
-        {
-            qDebug() << __LINE__ << __PRETTY_FUNCTION__ << querySEX_FK.lastError().text() << " " << querySEX_FK.lastQuery();
-            return;
-        }
+        QSqlQuery* modelAGE_CATEGORY_FK___SEX_FK =
+                DBUtils::get___AGE_CATEGORY_FK___SEX_FK(tournamentUID, TYPE_FK, AGE_FROM, AGE_TILL);
 
-        while (querySEX_FK.next())
+        while (modelAGE_CATEGORY_FK___SEX_FK->next())
         {
-            long long SEX_FK = querySEX_FK.value("SEX_FK").toLongLong();
-            long long ageCatUID = querySEX_FK.value("AGE_CATEGORY_FK").toLongLong();
+            int SEX_FK    = modelAGE_CATEGORY_FK___SEX_FK->value("SEX_FK").toInt();
+            int ageCatUID = modelAGE_CATEGORY_FK___SEX_FK->value("AGE_CATEGORY_FK").toInt();
 
             ExcelUtils::setValue  (sheet, currentRow, 1, DBUtils::getField("NAME", "AGE_CATEGORIES", ageCatUID), 0);
             ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 2 + 3 * days.size());
             ++currentRow;
 
-            QSqlQuery queryWEIGHT_FROM("SELECT UID AS UID_TC, WEIGHT_FROM, WEIGHT_TILL "
-                                       "FROM TOURNAMENT_CATEGORIES "
-                                       "WHERE TOURNAMENT_FK = ? AND TYPE_FK = ?  AND AGE_FROM = ? AND SEX_FK = ? AND AGE_CATEGORY_FK = ? "
-                                       "GROUP BY WEIGHT_FROM, WEIGHT_TILL "
-                                       "ORDER BY WEIGHT_FROM, WEIGHT_TILL");
-            queryWEIGHT_FROM.addBindValue(tournamentUID);
-            queryWEIGHT_FROM.addBindValue(TYPE_FK);
-            queryWEIGHT_FROM.addBindValue(AGE_FROM);
-            queryWEIGHT_FROM.addBindValue(SEX_FK);
-            queryWEIGHT_FROM.addBindValue(ageCatUID);
-            if (!queryWEIGHT_FROM.exec())
+            QSqlQuery* modelWEIGHTS =
+                    DBUtils::get___WEIGHT_FROM___WEIGHT_TILL(tournamentUID, TYPE_FK, AGE_FROM, AGE_TILL, SEX_FK, ageCatUID);
+
+            while (modelWEIGHTS->next())
             {
-                qDebug() << __LINE__ << __PRETTY_FUNCTION__ << queryWEIGHT_FROM.lastError().text() << " " << queryWEIGHT_FROM.lastQuery();
-                return;
-            }
+                int WEIGHT_FROM = modelWEIGHTS->value("WEIGHT_FROM").toInt();
+                int WEIGHT_TILL = modelWEIGHTS->value("WEIGHT_TILL").toInt();
 
-            while (queryWEIGHT_FROM.next())
-            {
-                QString UID_TC = queryWEIGHT_FROM.value("UID_TC").toString();
-                QString WEIGHT_FROM = queryWEIGHT_FROM.value("WEIGHT_FROM").toString();
-                QString WEIGHT_TILL = queryWEIGHT_FROM.value("WEIGHT_TILL").toString();
-
-
-                ExcelUtils::setValue(sheet, currentRow, 1, DBUtils::getField("WEIGHT", "TOURNAMENT_CATEGORIES", UID_TC));
-                ExcelUtils::setBorder(sheet, currentRow, 1, currentRow, 2 + 3 * days.size());
-
-
-                QSqlQuery queryTOURNAMENT_CATEGORIES_UID("SELECT * FROM TOURNAMENT_CATEGORIES WHERE TOURNAMENT_FK = ? AND TYPE_FK = ? AND SEX_FK = ? AND AGE_FROM = ? AND WEIGHT_FROM = ?");
-                queryTOURNAMENT_CATEGORIES_UID.bindValue(0, tournamentUID);
-                queryTOURNAMENT_CATEGORIES_UID.bindValue(1, TYPE_FK);
-                queryTOURNAMENT_CATEGORIES_UID.bindValue(2, SEX_FK);
-                queryTOURNAMENT_CATEGORIES_UID.bindValue(3, AGE_FROM);
-                queryTOURNAMENT_CATEGORIES_UID.bindValue(4, WEIGHT_FROM);
-                if (!queryTOURNAMENT_CATEGORIES_UID.exec() || !queryTOURNAMENT_CATEGORIES_UID.next()){
-                    qDebug() << __LINE__ << __PRETTY_FUNCTION__ << queryTOURNAMENT_CATEGORIES_UID.lastError().text() << " " << queryTOURNAMENT_CATEGORIES_UID.lastQuery();
-                    return;
-                }
-
-                long long UID_TOURNAMENT_CATEGORY = queryTOURNAMENT_CATEGORIES_UID.value("UID").toLongLong();
-
-                ExcelUtils::setValue(sheet, currentRow, 1, DBUtils::getField("WEIGHT", "TOURNAMENT_CATEGORIES", UID_TOURNAMENT_CATEGORY));
-
-
-                QSqlQuery queryCOUNT("SELECT count() AS COUNT FROM ORDERS WHERE TOURNAMENT_CATEGORY_FK = ? GROUP BY TOURNAMENT_CATEGORY_FK");
-                queryCOUNT.bindValue(0, UID_TOURNAMENT_CATEGORY);
-                if (!queryCOUNT.exec())
+                QSqlQuery* modelUidTc = DBUtils::get___TC_UIDS(tournamentUID, TYPE_FK, AGE_FROM, AGE_TILL, SEX_FK, ageCatUID, WEIGHT_FROM, WEIGHT_TILL);
+                while (modelUidTc->next())
                 {
-                    qDebug() << __LINE__ << __PRETTY_FUNCTION__ << queryCOUNT.lastError().text() << " " << queryCOUNT.lastQuery();
-                    return;
-                }
-                int count = 0;
-                if (queryCOUNT.next())
-                    count = queryCOUNT.value("COUNT").toInt();
-                //qDebug() << TYPE_FK << AGE_FROM << SEX_FK << WEIGHT_FROM << UID_TOURNAMENT_CATEGORY << ": " << count;
 
-                ExcelUtils::setValue(sheet, currentRow, 2, QString::number(count));
-                totalPeople += count;
+                    long long UID_TOURNAMENT_CATEGORY = modelUidTc->value("UID").toLongLong();
+
+                    ExcelUtils::setBorder(sheet, currentRow, 1, currentRow, 2 + 3 * days.size());
+                    ExcelUtils::setValue (sheet, currentRow, 1, DBUtils::getField("WEIGHT", "TOURNAMENT_CATEGORIES", UID_TOURNAMENT_CATEGORY));
 
 
-                if (0 < count)
-                {
-                    QVector<int> fights;
-                    for (int fight = 1; ; fight *= 2)
+                    int countPeople = 0;
+                    QVector<std::map<int, int>> countFights;
+                    for (const DBUtils::NodeOfTournirGrid& node : DBUtils::getNodes(UID_TOURNAMENT_CATEGORY))
                     {
-                        if (count < 2 * fight)
+                        if (node.isFight)
                         {
-                            if (0 < count - fight) fights.push_back(count - fight);
-                            break;
+                            int t = 3 * node.DAY_FIGHT + node.TIME_FIGHT;
+                            if (countFights.size() <= t) countFights.resize(t + 1);
+                            ++countFights[t][RenderAreaWidget::log2(node.v)];
                         }
                         else
-                            fights.push_back(fight);
-                    }
-
-                    if (3 * days.size() < fights.size())
-                    {
-                        QMessageBox::warning(0, QString("Проблема"), QString("Для сетки \"%1\" необходимо %2 боя (боёв), но имеется только %3 день (дня, дней)").arg(DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", UID_TOURNAMENT_CATEGORY)).arg(fights.size()).arg(days.size()));
-                    }
-                    else if (fights.size() <= 3 * fights.size() )
-                    {
-                        const int onOneDay = fights.size() / days.size();
-                        int rest = fights.size() % days.size();
-                        for (int d = qMax(0, days.size() - fights.size()); d < days.size(); ++d)
                         {
-                            for (int f = 0; f < onOneDay + (0 < rest? 1 : 0); ++f)
-                            {
-                                if (!fights.empty())
-                                {
-                                    ExcelUtils::setValue(sheet, currentRow, 3 + 3 * d + f, QString::number(fights.back()));
-                                    totalSum[3 * d + f] += fights.back();
-                                    fights.pop_back();
-                                }
-                            }
-                            if (0 < rest) --rest;
+                            ++countPeople;
+                            ++totalPeople;
                         }
                     }
+
+                    ExcelUtils::setValue(sheet, currentRow, 2, QString::number(countPeople));
+
+                    for (int i = 0; i < countFights.size(); ++i){
+                        if (countFights[i].size())
+                        {
+                            QString str;
+                            for (auto it = countFights[i].rbegin(); it != countFights[i].rend(); ++it)
+                            {
+                                if (!str.isEmpty()) str += ", ";
+                                str += QString::number(it->second);
+                                totalSum[i] += it->second;
+                            }
+                            ExcelUtils::setValue(sheet, currentRow, 3 + i, str);
+                        }
+                    }
+
+                    ++currentRow;
                 }
-                ++currentRow;
             }
         }
 
@@ -217,10 +160,13 @@ FitingDistribution::FitingDistribution(const long long tournamentUID)
         ExcelUtils::setFitToPagesWide(sheet, 1);
 
 
+
+
         delete sheet;
     }
 
 
+    excel.setProperty("Visible", true);
     delete sheets;
     delete workbook;
     delete workbooks;

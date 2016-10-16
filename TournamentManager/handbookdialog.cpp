@@ -61,6 +61,7 @@ HandbookDialog::HandbookDialog(QString tableName, QString tableRusName,
     {
         if (!model->submitAll())
             qDebug() << model->lastError().text();
+        model->select();
     });
     connect(ui->btnRevert, &QPushButton::clicked, [model]()
     {

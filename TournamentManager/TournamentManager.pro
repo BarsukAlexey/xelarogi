@@ -20,7 +20,6 @@ SOURCES += main.cpp\
     handbookdialog.cpp \
     databaseexpert.cpp \
     webreportdialog.cpp \
-    tournamentmanager.cpp \
     createtournamentdialog.cpp \
     createtournamentordersdialog.cpp \
     renderareawidget.cpp \
@@ -49,13 +48,17 @@ SOURCES += main.cpp\
     countryiconsdialog.cpp \
     formdipl.cpp \
     dialogselectfieldsfordimloma.cpp \
-    dialogchosedata.cpp
+    dialogchosedata.cpp \
+    dialogschedule.cpp \
+    dialogschedulesettinglists.cpp \
+    dialogschedule2.cpp \
+    dialogschedule2treewidget.cpp \
+    dialogschedule2tablewidget.cpp
 
 HEADERS  += mainwindow.h \
     handbookdialog.h \
     databaseexpert.h \
     webreportdialog.h \
-    tournamentmanager.h \
     createtournamentdialog.h \
     createtournamentordersdialog.h \
     renderareawidget.h \
@@ -84,7 +87,12 @@ HEADERS  += mainwindow.h \
     countryiconsdialog.h \
     formdipl.h \
     dialogselectfieldsfordimloma.h \
-    dialogchosedata.h
+    dialogchosedata.h \
+    dialogschedule.h \
+    dialogschedulesettinglists.h \
+    dialogschedule2.h \
+    dialogschedule2treewidget.h \
+    dialogschedule2tablewidget.h
 
 FORMS    += mainwindow.ui \
     handbookdialog.ui \
@@ -105,7 +113,10 @@ FORMS    += mainwindow.ui \
     formdipl.ui \
     dialogselectfieldsfordimloma.ui \
     dialogchosedata.ui \
-    fighting_pairs.ui
+    fighting_pairs.ui \
+    dialogschedule.ui \
+    dialogschedulesettinglists.ui \
+    dialogschedule2.ui
 
 DISTFILES +=
 
