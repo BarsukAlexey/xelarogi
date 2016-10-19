@@ -802,7 +802,7 @@ QSqlQuery*DBUtils::get___TYPE_FK___AGE_FROM___AGE_TILL(const int RING_TATAMI_LIS
     return q;
 }
 
-int DBUtils::getMaxCountOfDays(const int tournamentUID, const int day)
+int DBUtils::getMaxCountOfRings(const int tournamentUID, const int day)
 {
     QSqlQuery query;
     if (!query.prepare("SELECT MAX(RING) AS MAXRING "
@@ -977,6 +977,73 @@ QSqlQuery*DBUtils::getDateRingOrderFromSchedule(const int tournamentCategoryUID,
     if (q->lastError().isValid())
         qDebug() << __PRETTY_FUNCTION__ << q->lastError();
     return q;
+}
+
+int DBUtils::getAnotherRing(const int tournamentCategoryUID, const int day, const int ring)
+{
+    QSqlQuery *q = new QSqlQuery;
+    if (!q->prepare(
+            "SELECT * "
+            "FROM SCHEDULES "
+            "WHERE "
+            "   TOURNAMENT_CATEGORY_FK = ? AND "
+            "   DAY = ? AND "
+            "   RING != ?"
+            ))
+    {
+        qDebug() << __PRETTY_FUNCTION__ << q->lastError();
+    }
+    q->addBindValue(tournamentCategoryUID);
+    q->addBindValue(day);
+    q->addBindValue(ring);
+
+    if (q->lastError().isValid())
+        qDebug() << __PRETTY_FUNCTION__ << q->lastError();
+    q->exec();
+    if (q->lastError().isValid())
+        qDebug() << __PRETTY_FUNCTION__ << q->lastError();
+
+    int anotherRing = -1;
+    if (q->next())
+    {
+        anotherRing = q->value("RING").toInt();
+    }
+    delete q;
+    return anotherRing;
+}
+
+std::tuple<int, int, int> DBUtils::getDayRingOrder(const int tournamentCategoryUID, const int level)
+{
+    QSqlQuery *q = new QSqlQuery;
+    if (!q->prepare(
+            "SELECT * "
+            "FROM SCHEDULES "
+            "WHERE "
+            "   TOURNAMENT_CATEGORY_FK = ? AND "
+            "   LEVEL == ?"
+            ))
+    {
+        qDebug() << __PRETTY_FUNCTION__ << q->lastError();
+    }
+    q->addBindValue(tournamentCategoryUID);
+    q->addBindValue(level);
+
+    if (q->lastError().isValid())
+        qDebug() << __PRETTY_FUNCTION__ << q->lastError();
+    q->exec();
+    if (q->lastError().isValid())
+        qDebug() << __PRETTY_FUNCTION__ << q->lastError();
+
+    std::tuple<int, int, int> tuple(-1, -1, -1);
+    if (q->next())
+    {
+        tuple = std::make_tuple(
+                    q->value("DAY").toInt(),
+                    q->value("RING").toInt(),
+                    q->value("ORDER_NUMBER").toInt());
+    }
+    delete q;
+    return tuple;
 }
 
 

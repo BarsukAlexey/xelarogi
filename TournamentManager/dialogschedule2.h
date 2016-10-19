@@ -16,6 +16,7 @@
 #include "utils.h"
 #include "dialogschedule2inputtype.h"
 #include "dialogchosedata.h"
+#include "excel_utils.h"
 
 namespace Ui {
 class Dialogschedule2;

@@ -16,8 +16,14 @@ void Dialogschedule2TreeWidget::startDrag(Qt::DropActions )
     //qDebug() << "stringList: " << stringList;
 
     QByteArray itemData;
-    QDataStream dataStream(&itemData, QIODevice::WriteOnly);
-    dataStream << stringList;
+    {
+        QDataStream dataStream(&itemData, QIODevice::WriteOnly);
+        dataStream << stringList;
+        dataStream.device()->close();
+        // dataStream надо закрыть и сделать FLUSH
+        // http://www.prog.org.ru/topic_14195_0.html
+    }
+    qDebug() << __LINE__ << __PRETTY_FUNCTION__ << itemData.size();
 
     QMimeData *mimeData = new QMimeData;
     mimeData->setData("application/x-lolka", itemData);

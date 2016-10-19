@@ -75,7 +75,7 @@ Dialogschedule2::~Dialogschedule2()
 
 void Dialogschedule2::onCountOfRingsChanged()
 {
-    const int maxCountOfDays = DBUtils::getMaxCountOfDays(tournamentUID, ui->comboBoxDay->currentIndex());
+    const int maxCountOfDays = DBUtils::getMaxCountOfRings(tournamentUID, ui->comboBoxDay->currentIndex());
     if (ui->spinBoxRing->value() < maxCountOfDays)
     {
         ui->spinBoxRing->setValue(maxCountOfDays);
@@ -89,13 +89,19 @@ void Dialogschedule2::onCountOfRingsChanged()
 
 void Dialogschedule2::onDateChanged()
 {
-    ui->spinBoxRing->setValue(DBUtils::getMaxCountOfDays(tournamentUID, ui->comboBoxDay->currentIndex()));
+    ui->spinBoxRing->setValue(DBUtils::getMaxCountOfRings(tournamentUID, ui->comboBoxDay->currentIndex()));
     onCountOfRingsChanged();
     updateRowsInTable();
 }
 
 void Dialogschedule2::onOhDrop(QStringList str, const int currentRow, const int ring)
 {
+    if (str.size() != 3 || !(0<=currentRow && currentRow < ui->tableWidget->rowCount()))
+    {
+        qDebug() << "FUCK" << __LINE__ << __PRETTY_FUNCTION__ << str << currentRow;
+        return;
+    }
+
     int maxOrder = -1;
     for (int r = 0; r < ui->tableWidget->rowCount(); ++r)
         if (ui->tableWidget->item(r, ring))
@@ -104,6 +110,130 @@ void Dialogschedule2::onOhDrop(QStringList str, const int currentRow, const int 
     int currentOrder = maxOrder + 1;
     if (ui->tableWidget->item(currentRow, ring))
         currentOrder = ui->tableWidget->item(currentRow, ring)->data(Qt::UserRole).toInt();
+
+    if (str[0].toInt() == -1)
+    {
+        QSqlQuery* schelder = DBUtils::getSchelder(tournamentUID, ui->comboBoxDay->currentIndex(), ring);
+        if (schelder->next())
+        {
+            if (schelder->value("TOURNAMENT_CATEGORY_FK").toInt() == -1)
+            {
+                QMessageBox::warning(this, "", "На одном ринге может быть только \"один сон\".\n"
+                                                      "Удалите существующий сон и вставьте новый.");
+                delete schelder;
+                return ;
+            }
+        }
+
+        if (currentOrder != 0)
+        {
+            QMessageBox::warning(this, "", "Сон может быть только на первом месте.");
+            delete schelder;
+            return ;
+        }
+        delete schelder;
+    } else
+    {
+        if (currentRow == 0)
+        {
+            QSqlQuery* schelder = DBUtils::getSchelder(tournamentUID, ui->comboBoxDay->currentIndex(), ring);
+            if (schelder->next())
+            {
+                if (schelder->value("TOURNAMENT_CATEGORY_FK").toInt() == -1)
+                {
+                    QMessageBox::warning(this, "", "Нельзя ничего вставлять перед сном.");
+                    delete schelder;
+                    return ;
+                }
+            }
+            delete schelder;
+        }
+
+        if (0 < str[0].toInt())
+        {
+            const int uidTC = str[0].toInt();
+            const int level = str[1].toInt();
+            QVector<QVector<DBUtils::NodeOfTournirGrid> > grid = DBUtils::getNodesAsLevelListOfList(uidTC);
+            const int levelCount = grid.size();
+
+
+            std::tuple<int, int, int> dayRingOrder = DBUtils::getDayRingOrder(uidTC, level);
+            if (std::get<0>(dayRingOrder) != -1)
+            {
+                QMessageBox::warning(this, "",  "Такая сетка уже есть.");
+                return ;
+            }
+
+            if (level == -1)
+            {
+                for (int i = 0; i < levelCount; ++i)
+                {
+                    std::tuple<int, int, int> dayRingOrder = DBUtils::getDayRingOrder(uidTC, i);
+                    if (std::get<0>(dayRingOrder) != -1)
+                    {
+                        QMessageBox::warning(this, "",
+                                             "Один из кругов этой сетки уже в расписании.\n"
+                                             "Удалите этот круг. И киньте эту сетку целиком ещё раз."
+                                             );
+                        return ;
+                    }
+                }
+            }
+            else
+            {
+                if (std::get<0>(DBUtils::getDayRingOrder(uidTC, -1)) != -1)
+                {
+                    QMessageBox::warning(this, "",
+                                         "Вы уже кинули всю сетку целиком.\n"
+                                         "Удалите эту сетку. И киньте этот круг ещё раз."
+                                         );
+                    return ;
+                }
+
+
+                if (level + 1 != levelCount)
+                {
+                    int countOfNotPlayedFights = 0;
+                    for (const DBUtils::NodeOfTournirGrid& node : grid[level + 1])
+                    {
+                        if (node.isFight && node.UID <= 0)
+                        {
+                            ++countOfNotPlayedFights;
+                        }
+                    }
+                    if (0 < countOfNotPlayedFights && std::get<0>(DBUtils::getDayRingOrder(uidTC, level + 1)) == -1)
+                    {
+                        QMessageBox::warning(this, "",
+                                             "Вставьте предыдущий круг турнирной сетки в расписание\n"
+                                             );
+                        return ;
+                    }
+                }
+
+                int anotherRing = DBUtils::getAnotherRing(uidTC, ui->comboBoxDay->currentIndex(), ring);
+                if (anotherRing != -1)
+                {
+                    qDebug() << "anotherRing:" << anotherRing;
+                    QMessageBox::warning(this, "", "В этот день данную турнирную категорию можно "
+                                                   "проводить только на ринге #" + QString::number(anotherRing + 1));
+                    return ;
+                }
+
+                if (level + 1 != levelCount)
+                {
+                    if (currentOrder <= std::get<2>(DBUtils::getDayRingOrder(uidTC, level + 1)))
+                    {
+                        QMessageBox::warning(this, "",
+                                             "На данном ринге вначале должен идти предудущий круг, а затем текущий"
+                                             );
+                        return ;
+                    }
+                }
+
+            }
+        }
+    }
+
 
     if (str[0].toInt() == -1 || str[0].toInt() == -2)
     {
@@ -265,7 +395,7 @@ void Dialogschedule2::updateTree()
     time.start();
 
     QStringList days = DBUtils::get_DAYS_FROM_TOURNAMENTS(tournamentUID);
-    int maxCountOfDays = DBUtils::getMaxCountOfDays(tournamentUID, ui->comboBoxDay->currentIndex());
+    int maxCountOfDays = DBUtils::getMaxCountOfRings(tournamentUID, ui->comboBoxDay->currentIndex());
     for (int i = days.size(); i < maxCountOfDays; ++i)
         days << "День #" + QString::number(i + 1);
 
@@ -369,12 +499,26 @@ void Dialogschedule2::updateTree()
 
 void Dialogschedule2::onPushButtonListOfPairs()
 {
-    QString existingDirectory = QFileDialog::getExistingDirectory(this);
-    if (existingDirectory.isEmpty())
+    QString mainDirectory = QFileDialog::getExistingDirectory(this);
+    if (mainDirectory.isEmpty())
         return;
 
-    DialogChoseData dlg(DialogChoseData::Type::makeGridsForPointFighting);
-    if (dlg.exec() != QDialog::Accepted)
+    QString pathCube = QDir(mainDirectory).filePath("Cube");
+    QString pathTournament = QDir(mainDirectory).filePath("Tournament");
+
+    QDir(pathCube).removeRecursively();
+    QDir(pathTournament).removeRecursively();
+
+    QDir(mainDirectory).mkpath("Cube");
+    QDir(mainDirectory).mkpath("Tournament");
+
+
+    DialogChoseData dlgTournament(DialogChoseData::Type::fighting_pair);
+    if (dlgTournament.exec() != QDialog::Accepted)
+        return;
+
+    DialogChoseData dlgCube(DialogChoseData::Type::makeGridsForPointFighting);
+    if (dlgCube.exec() != QDialog::Accepted)
         return;
 
     const int typeText =
@@ -389,11 +533,9 @@ void Dialogschedule2::onPushButtonListOfPairs()
             ui->radioFlagClub   ->isChecked()? 3 : -1;
 
 
-
-
     for (int ring = 0; ring < ui->tableWidget->columnCount(); ++ring)
     {
-        QVector<long long> uidTCs_forTournament;
+        QVector<std::pair<int, int>> uidTCs_forTournament;
         QVector<long long> uidTCs_forCub;
 
         QSqlQuery* schelder = DBUtils::getSchelder(tournamentUID, ui->comboBoxDay->currentIndex(), ring);
@@ -405,12 +547,36 @@ void Dialogschedule2::onPushButtonListOfPairs()
             if (level == -1)
                 uidTCs_forCub << uidTC;
             else
-                uidTCs_forTournament << uidTC;
+                uidTCs_forTournament << std::make_pair(uidTC, level);
         }
         delete schelder;
 
         if (!uidTCs_forTournament.isEmpty())
         {
+            QAxWidget excel("Excel.Application");
+            QAxObject *workbooks = excel.querySubObject("WorkBooks");
+            workbooks->dynamicCall("Add");
+            QAxObject *workbook = excel.querySubObject("ActiveWorkBook");
+            QAxObject *sheets = workbook->querySubObject("WorkSheets");
+
+            FightingPairs::writeListOfPairs(
+                        uidTCs_forTournament,
+                        sheets,
+                        dlgTournament,
+                        ring + 1,
+                        typeText,
+                        typeFlag,
+                        ui->comboBoxDay->currentText(),
+                        pathTournament,
+                        tournamentUID
+                        );
+
+            ExcelUtils::saveAsFile(workbook, pathTournament, "Состав пар Ринг " + QString::number(ring + 1));
+            workbook->dynamicCall("Close (Boolean)", true);
+            excel.dynamicCall("Quit()");
+            delete sheets;
+            delete workbook;
+            delete workbooks;
         }
 
         if (!uidTCs_forCub.isEmpty())
@@ -418,13 +584,13 @@ void Dialogschedule2::onPushButtonListOfPairs()
             QAxWidget excel("Excel.Application");
             QAxObject *workbooks = excel.querySubObject("WorkBooks");
             FightingPairs::writeGridsForPointFighting(
-                        existingDirectory,
+                        pathCube,
                         uidTCs_forCub,
                         workbooks,
                         excel,
                         ring + 1,
                         ui->comboBoxDay->currentText(),
-                        dlg,
+                        dlgCube,
                         typeText,
                         typeFlag
                         );

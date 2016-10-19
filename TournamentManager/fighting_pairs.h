@@ -41,8 +41,16 @@ private:
     QVector<QSpinBox*> spinBoxes;
     Ui::FightingPairs* ui;
 
-    void printListOfPairsInExcel(DialogChoseData& dlg, QAxObject *sheets, const QVector<DBUtils::NodeOfTournirGrid>& pairs, int ring);
-    void printListOfPairsInJSON(const QVector<DBUtils::NodeOfTournirGrid>& pairs, int ring, const QString& existingDirectory);
+    static void printListOfPairsInExcel(
+            DialogChoseData& dlg,
+            QAxObject *sheets,
+            const QVector<DBUtils::NodeOfTournirGrid>& pairs,
+            int ring,
+            int typeText,
+            QString stringDate,
+            int tournamentUID
+            );
+    static void printListOfPairsInJSON(const QVector<DBUtils::NodeOfTournirGrid>& pairs, int ring, const QString& existingDirectory, int typeText, int typeFlag);
     void makeGridsForPointFighting(QString existingDirectory, QVector<long long> tournamentCategoryUIDs);
 public:
     static void writeGridsForPointFighting(
@@ -55,6 +63,17 @@ public:
             DialogChoseData& dlg,
             const int typeText,
             const int typeFlag
+            );
+    static void writeListOfPairs(
+            const QVector<std::pair<int, int>>& uidTC_Level,
+            QAxObject *sheets,
+            DialogChoseData& dlg,
+            int ringNumber,
+            int typeText,
+            int typeFlag,
+            QString stringDate,
+            QString existingDirectory,
+            int tournamentUID
             );
 private:
     static QString getTextLocal(long long orderUID, int type);

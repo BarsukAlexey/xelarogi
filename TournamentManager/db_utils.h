@@ -119,13 +119,14 @@ public:
 
 
     // для таблицы SCHEDULES
-    static int getMaxCountOfDays(const int tournamentUID, const int day);
+    static int getMaxCountOfRings(const int tournamentUID, const int day);
     static QSqlQuery* getSchelder(const int tournamentUID, const int day, const int ring);
     static bool updateSchedule(const int tournamentUID, const int day, const int ring, const int order, const int newOrder);
     static bool insertInSchedule(const int tournamentUID, const int day, const int ring, const int order, const int uidTC, const int level, const QString name);
     static bool deleteInSchedule(const int tournamentUID, const int day, const int ring, const int order);
     static QSqlQuery* getDateRingOrderFromSchedule(const int tournamentCategoryUID, const int level = -1);
-
+    static int getAnotherRing(const int tournamentCategoryUID, const int day, const int ring);
+    static std::tuple<int, int, int> getDayRingOrder(const int tournamentCategoryUID, const int level);
 
     static int getAge(QDate DATE_WEIGHTING, QDate birthdayDate);
     static QString roundDouble(double x, int precision);
