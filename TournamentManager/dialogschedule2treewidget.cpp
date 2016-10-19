@@ -8,6 +8,8 @@ Dialogschedule2TreeWidget::Dialogschedule2TreeWidget(QWidget *parent) :
     //setDropIndicatorShown(true);
 }
 
+
+
 void Dialogschedule2TreeWidget::startDrag(Qt::DropActions )
 {
     QStringList stringList = currentIndex().data(Qt::UserRole).toStringList();
@@ -22,6 +24,23 @@ void Dialogschedule2TreeWidget::startDrag(Qt::DropActions )
 
     QDrag *drag = new QDrag(this);
     drag->setMimeData(mimeData);
-    drag->exec(Qt::MoveAction);
+    if (drag->exec(Qt::MoveAction))
+    {
+        //qDebug() << "TODO больше нельзя его изать";
+    }
+    else
+    {
+        //qDebug() << "Не попал =)";
+    }
+}
+
+void Dialogschedule2TreeWidget::setTournamentUID(const int tournamentUID)
+{
+    this->tournamentUID = tournamentUID;
+}
+
+void Dialogschedule2TreeWidget::updateDataInTable()
+{
+
 }
 

@@ -369,7 +369,7 @@ void RenderAreaWidget::printTableGridInExcel(QAxObject* workbook, DialogChoseDat
 
         QPoint p = getCell(node.v, countColumns);
 
-        maxRow = qMax(maxRow, p.x() + 1 + offset);
+        maxRow    = qMax(maxRow   , p.x() + 1 + offset);
         maxColumn = qMax(maxColumn, p.y() + 1);
 
         if (node.isFight)
@@ -405,7 +405,7 @@ void RenderAreaWidget::printTableGridInExcel(QAxObject* workbook, DialogChoseDat
                     delete border;
                     delete cell;
 
-                    maxRow = qMax(maxRow, row + 1 + offset);
+                    maxRow    = qMax(maxRow   , row + 1 + offset);
                     maxColumn = qMax(maxColumn, a.y() + 1);
                 }
             }
@@ -433,6 +433,8 @@ void RenderAreaWidget::printTableGridInExcel(QAxObject* workbook, DialogChoseDat
     for (int i = 1; i <= maxColumn; ++i) ExcelUtils::setColumnWidth(sheet, i, 50);
     for (int i = 1; i <= maxColumn; ++i) ExcelUtils::setColumnAutoFit(sheet, i);
     for (int i = 1; i <= maxRow   ; ++i) ExcelUtils::setRowAutoFit(sheet, i);
+
+
 
     long long tournamentUID = DBUtils::getField("TOURNAMENT_FK", "TOURNAMENT_CATEGORIES", tournamentCategory).toLongLong();
 

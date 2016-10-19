@@ -53,7 +53,9 @@ SOURCES += main.cpp\
     dialogschedulesettinglists.cpp \
     dialogschedule2.cpp \
     dialogschedule2treewidget.cpp \
-    dialogschedule2tablewidget.cpp
+    dialogschedule2tablewidget.cpp \
+    utils.cpp \
+    dialogschedule2inputtype.cpp
 
 HEADERS  += mainwindow.h \
     handbookdialog.h \
@@ -92,7 +94,9 @@ HEADERS  += mainwindow.h \
     dialogschedulesettinglists.h \
     dialogschedule2.h \
     dialogschedule2treewidget.h \
-    dialogschedule2tablewidget.h
+    dialogschedule2tablewidget.h \
+    utils.h \
+    dialogschedule2inputtype.h
 
 FORMS    += mainwindow.ui \
     handbookdialog.ui \
@@ -116,7 +120,8 @@ FORMS    += mainwindow.ui \
     fighting_pairs.ui \
     dialogschedule.ui \
     dialogschedulesettinglists.ui \
-    dialogschedule2.ui
+    dialogschedule2.ui \
+    dialogschedule2inputtype.ui
 
 DISTFILES +=
 

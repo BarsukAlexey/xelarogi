@@ -130,6 +130,7 @@ FightingPairs::~FightingPairs()
 void FightingPairs::printListOfPairsInExcel(DialogChoseData& dlg, QAxObject *sheet,
                                  const QVector<DBUtils::NodeOfTournirGrid>& pairs, int ring)
 {
+    /*/
 
     int currentRow = 2;
 
@@ -193,10 +194,12 @@ void FightingPairs::printListOfPairsInExcel(DialogChoseData& dlg, QAxObject *she
     ExcelUtils::setTournamentName(sheet, DBUtils::getTournamentNameAsHeadOfDocument(tournamentUID), 1, 1, 1, 3);
 
     ExcelUtils::setFooter(sheet, currentRow, 1, 3, 25, dlg.getJudges(), DBUtils::getJudges(tournamentUID));
+    /**/
 }
 
 void FightingPairs::printListOfPairsInJSON(const QVector<DBUtils::NodeOfTournirGrid>& pairs, int ring, const QString& existingDirectory)
 {
+    /*/
     QJsonArray arr;
     int fightingId = 1;
     for (const DBUtils::NodeOfTournirGrid& f : pairs)
@@ -214,11 +217,23 @@ void FightingPairs::printListOfPairsInJSON(const QVector<DBUtils::NodeOfTournirG
         return;
     }
     qDebug() << "writing: " << saveFile.write(QJsonDocument(arr).toJson()) << "БайТ in" << path;
+    /**/
 }
 
 
 void FightingPairs::makeGridsForPointFighting(QString existingDirectory, QVector<long long> tournamentCategoryUIDs)
 {
+    const int typeText =
+            ui->radioTextCountry->isChecked()? 0 :
+            ui->radioTextRegion ->isChecked()? 1 :
+            ui->radioTextCity   ->isChecked()? 2 :
+            ui->radioTextClub   ->isChecked()? 3 : -1;
+    const int typeFlag =
+            ui->radioFlagCountry->isChecked()? 0 :
+            ui->radioFlagRegion ->isChecked()? 1 :
+            ui->radioFlagCity   ->isChecked()? 2 :
+            ui->radioFlagClub   ->isChecked()? 3 : -1;
+
     DialogChoseData dlg(DialogChoseData::Type::makeGridsForPointFighting);
     if (dlg.exec() != QDialog::Accepted)
         return;
@@ -234,10 +249,10 @@ void FightingPairs::makeGridsForPointFighting(QString existingDirectory, QVector
 
 
 
-    QProgressDialog progress(this);
-    progress.setWindowModality(Qt::WindowModal);
-    progress.setMinimumDuration(0);
-    progress.setMaximum(tournamentCategoryUIDs.size());
+//    QProgressDialog progress(this);
+//    progress.setWindowModality(Qt::WindowModal);
+//    progress.setMinimumDuration(0);
+//    progress.setMaximum(tournamentCategoryUIDs.size());
 
 
     MyThread *myThread = new MyThread(constDurationOfGrid, ui->ringSpinBox->value());
@@ -266,88 +281,18 @@ void FightingPairs::makeGridsForPointFighting(QString existingDirectory, QVector
     int idRing = 1;
     for (QVector<long long> uids : ansTournamentCategoryUIDs)
     {
-        if (progress.wasCanceled())
-            break;
+//        if (progress.wasCanceled())
+//            break;
 
-        QVector<QVector<int> > fightNumber;  // fightNumber[tree][vertex] = orderFightNumber
-        {
-            QVector<std::pair<int, int> > orderOfFights;  // pair(idTree, node.v)
-            for (int i = 0; i < uids.size(); ++i)
-            {
-                QVector<DBUtils::NodeOfTournirGrid> nodes = DBUtils::getNodes(uids[i]);
-                std::reverse(nodes.begin(), nodes.end());
-                fightNumber << QVector<int>(nodes.size() + 1);
-                for (DBUtils::NodeOfTournirGrid node : nodes)
-                    if (node.isFight)
-                    {
-                        orderOfFights << std::make_pair(i, node.v);
-                        //qDebug() << "orderOfFights:" << i << node.v;
-                    }
-            }
-            for (int i = 0; i < orderOfFights.size(); ++i)
-            {
-                std::pair<int, int> v = orderOfFights[i];
-                if (fightNumber[v.first][v.second] == 0)
-                {
-                    fightNumber[v.first][v.second] = i + 1;
-                    if (i + 1 != orderOfFights.size() &&
-                        2 * v.second < fightNumber[v.first].size() &&
-                        fightNumber[v.first][2 * v.second] != 0 &&
-                        fightNumber[v.first][v.second] == fightNumber[v.first][2 * v.second] + 1)
-                    {
-                        fightNumber[v.first][v.second] = i + 2;
-                        std::pair<int, int> nextV = orderOfFights[i + 1];
-                        fightNumber[nextV.first][nextV.second] = i + 1;
-                    }
-                }
-            }
-        }
-
-
-        QVector<QJsonObject> jsonObjects;
-        for (int i = 0; i < uids.size(); ++i)
-        {
-            workbooks->dynamicCall("Add");
-            QAxObject *workbook = excel.querySubObject("ActiveWorkBook");
-            RenderAreaWidget::printTableGridInExcel(
-                        workbook, dlg, uids[i], true,
-                        existingDirectory, fightNumber[i], ui->qLineEdit->text(),
-                        dlg.getTranslations()["Татами"] + " " +  QString("%1 (%2)").arg(idRing, 2, 10, QChar('0')).arg(i + 1, 2, 10, QChar('0')));
-            workbook->dynamicCall("Close()");
-            delete workbook;
-
-            progress.setValue(progress.value() + 1);
-
-
-            QVector<DBUtils::NodeOfTournirGrid> fightingNodes;
-            for (DBUtils::NodeOfTournirGrid node : DBUtils::getNodes(uids[i]))
-                if (node.isFight)
-                    fightingNodes << node;
-            std::reverse(fightingNodes.begin(), fightingNodes.end());
-            for (int j = 0; j < fightingNodes.size(); ++j)
-            {
-                const DBUtils::NodeOfTournirGrid f = fightingNodes[j];
-                QJsonObject a = getQJsonObject(f, fightNumber[i][f.v]);
-                jsonObjects << a;
-            }
-        }
-
-        qSort(jsonObjects.begin(), jsonObjects.end(), [](const QJsonObject & x, const QJsonObject & y){
-            return x["fightId"].toInt() < y["fightId"].toInt();
-        });
-
-        QJsonArray arr;
-        for(QJsonObject x : jsonObjects) arr << x;
-        const QString path =  QDir(existingDirectory).filePath("ring " + QString::number(idRing) + ".json");
-        QFile saveFile(path);
-        if (!saveFile.open(QIODevice::WriteOnly))
-        {
-            QMessageBox::warning(0, "", "Невозможно сохранить файл " + path);
-        }
-        else {
-            qint64 localWrite = saveFile.write(QJsonDocument(arr).toJson());
-            qDebug() << "writing: " << localWrite << "БайТ in " << path;
-        }
+        writeGridsForPointFighting(existingDirectory,
+                                   uids,
+                                   workbooks,
+                                   excel,
+                                   idRing,
+                                   ui->qLineEdit->text(),
+                                   dlg,
+                                   typeText,
+                                   typeFlag);
 
         ++idRing;
     }
@@ -360,25 +305,116 @@ void FightingPairs::makeGridsForPointFighting(QString existingDirectory, QVector
     /**/
 }
 
-QString FightingPairs::getTextLocal(long long orderUID)
+void FightingPairs::writeGridsForPointFighting(
+        QString existingDirectory,
+        QVector<long long> uids,
+        QAxObject *workbooks,
+        QAxWidget& excel,
+        const int numberRing,
+        const QString date,
+        DialogChoseData& dlg,
+        const int typeText,
+        const int typeFlag
+        )
 {
-    if (ui->radioTextCountry->isChecked()) return DBUtils::getField("NAME", "COUNTRIES"   , DBUtils::getField("COUNTRY_FK"    , "ORDERS", orderUID));
-    if (ui->radioTextRegion ->isChecked()) return DBUtils::getField("NAME", "REGIONS"     , DBUtils::getField("REGION_FK"     , "ORDERS", orderUID));
-    if (ui->radioTextCity   ->isChecked()) return DBUtils::getField("NAME", "REGION_UNITS", DBUtils::getField("REGION_UNIT_FK", "ORDERS", orderUID));
-    if (ui->radioTextClub   ->isChecked()) return DBUtils::getField("NAME", "CLUBS"       , DBUtils::getField("CLUB_FK"       , "ORDERS", orderUID));
+    QVector<QVector<int> > fightNumber;  // fightNumber[tree][vertex] = orderFightNumber
+    {
+        QVector<std::pair<int, int> > orderOfFights;  // pair(idTree, node.v)
+        for (int i = 0; i < uids.size(); ++i)
+        {
+            QVector<DBUtils::NodeOfTournirGrid> nodes = DBUtils::getNodes(uids[i]);
+            std::reverse(nodes.begin(), nodes.end());
+            fightNumber << QVector<int>(nodes.size() + 1);
+            for (DBUtils::NodeOfTournirGrid node : nodes)
+                if (node.isFight)
+                {
+                    orderOfFights << std::make_pair(i, node.v);
+                    //qDebug() << "orderOfFights:" << i << node.v;
+                }
+        }
+        for (int i = 0; i < orderOfFights.size(); ++i)
+        {
+            std::pair<int, int> v = orderOfFights[i];
+            if (fightNumber[v.first][v.second] == 0)
+            {
+                fightNumber[v.first][v.second] = i + 1;
+                if (i + 1 != orderOfFights.size() &&
+                    2 * v.second < fightNumber[v.first].size() &&
+                    fightNumber[v.first][2 * v.second] != 0 &&
+                    fightNumber[v.first][v.second] == fightNumber[v.first][2 * v.second] + 1)
+                {
+                    fightNumber[v.first][v.second] = i + 2;
+                    std::pair<int, int> nextV = orderOfFights[i + 1];
+                    fightNumber[nextV.first][nextV.second] = i + 1;
+                }
+            }
+        }
+    }
+
+
+    QVector<QJsonObject> jsonObjects;
+    for (int i = 0; i < uids.size(); ++i)
+    {
+        workbooks->dynamicCall("Add");
+        QAxObject *workbook = excel.querySubObject("ActiveWorkBook");
+        RenderAreaWidget::printTableGridInExcel(
+                    workbook, dlg, uids[i], true,
+                    existingDirectory, fightNumber[i], date,
+                    dlg.getTranslations()["Татами"] + " " +  QString("%1 (%2)").arg(numberRing, 2, 10, QChar('0')).arg(i + 1, 2, 10, QChar('0')));
+        workbook->dynamicCall("Close()");
+        delete workbook;
+
+        QVector<DBUtils::NodeOfTournirGrid> fightingNodes;
+        for (DBUtils::NodeOfTournirGrid node : DBUtils::getNodes(uids[i]))
+            if (node.isFight)
+                fightingNodes << node;
+        std::reverse(fightingNodes.begin(), fightingNodes.end());
+        for (int j = 0; j < fightingNodes.size(); ++j)
+        {
+            const DBUtils::NodeOfTournirGrid f = fightingNodes[j];
+            QJsonObject a = getQJsonObject(f, fightNumber[i][f.v], typeText, typeFlag);
+            jsonObjects << a;
+        }
+    }
+
+    qSort(jsonObjects.begin(), jsonObjects.end(), [](const QJsonObject & x, const QJsonObject & y){
+        return x["fightId"].toInt() < y["fightId"].toInt();
+    });
+
+    QJsonArray arr;
+    for(QJsonObject x : jsonObjects) arr << x;
+    const QString path =  QDir(existingDirectory).filePath("ring " + QString::number(numberRing) + ".json");
+    QFile saveFile(path);
+    if (!saveFile.open(QIODevice::WriteOnly))
+    {
+        QMessageBox::warning(0, "", "Невозможно сохранить файл " + path);
+    }
+    else {
+        qint64 localWrite = saveFile.write(QJsonDocument(arr).toJson());
+        qDebug() << "writing: " << localWrite << "БайТ in " << path;
+    }
+    /**/
+}
+
+QString FightingPairs::getTextLocal(long long orderUID, int type)
+{
+    if (type == 0) return DBUtils::getField("NAME", "COUNTRIES"   , DBUtils::getField("COUNTRY_FK"    , "ORDERS", orderUID));
+    if (type == 1) return DBUtils::getField("NAME", "REGIONS"     , DBUtils::getField("REGION_FK"     , "ORDERS", orderUID));
+    if (type == 2) return DBUtils::getField("NAME", "REGION_UNITS", DBUtils::getField("REGION_UNIT_FK", "ORDERS", orderUID));
+    if (type == 3) return DBUtils::getField("NAME", "CLUBS"       , DBUtils::getField("CLUB_FK"       , "ORDERS", orderUID));
     return "";
 }
 
-QString FightingPairs::getFlagImage(long long orderUID)
+QString FightingPairs::getFlagImage(long long orderUID, int type)
 {
-    if (ui->radioFlagCountry->isChecked()) return DBUtils::getField("FLAG", "COUNTRIES"   , DBUtils::getField("COUNTRY_FK"    , "ORDERS", orderUID));
-    if (ui->radioFlagRegion ->isChecked()) return DBUtils::getField("FLAG", "REGIONS"     , DBUtils::getField("REGION_FK"     , "ORDERS", orderUID));
-    if (ui->radioFlagCity   ->isChecked()) return DBUtils::getField("FLAG", "REGION_UNITS", DBUtils::getField("REGION_UNIT_FK", "ORDERS", orderUID));
-    if (ui->radioFlagClub   ->isChecked()) return DBUtils::getField("FLAG", "CLUBS"       , DBUtils::getField("CLUB_FK"       , "ORDERS", orderUID));
+    if (type == 0) return DBUtils::getField("FLAG", "COUNTRIES"   , DBUtils::getField("COUNTRY_FK"    , "ORDERS", orderUID));
+    if (type == 1) return DBUtils::getField("FLAG", "REGIONS"     , DBUtils::getField("REGION_FK"     , "ORDERS", orderUID));
+    if (type == 2) return DBUtils::getField("FLAG", "REGION_UNITS", DBUtils::getField("REGION_UNIT_FK", "ORDERS", orderUID));
+    if (type == 3) return DBUtils::getField("FLAG", "CLUBS"       , DBUtils::getField("CLUB_FK"       , "ORDERS", orderUID));
     return "";
 }
 
-QJsonObject FightingPairs::getQJsonObject(const DBUtils::NodeOfTournirGrid& f, const int fightingId)
+QJsonObject FightingPairs::getQJsonObject(const DBUtils::NodeOfTournirGrid& f, const int fightingId, int typeText, int typeFlag)
 {
     QJsonObject a;
     a["nameOfLeftFighter" ] = f.leftUID  <= 0? f.leftName  : DBUtils::getField("SECOND_NAME", "ORDERS", f.leftUID ) + " " + DBUtils::getField("FIRST_NAME", "ORDERS", f.leftUID );
@@ -393,11 +429,11 @@ QJsonObject FightingPairs::getQJsonObject(const DBUtils::NodeOfTournirGrid& f, c
     a["durationOfRound"] = DBUtils::getField("DURATION_FIGHING", "TOURNAMENT_CATEGORIES", f.tournamentCategory);
     a["durationOfBreak"] = DBUtils::getField("DURATION_BREAK"  , "TOURNAMENT_CATEGORIES", f.tournamentCategory);
 
-    a["regionOfLeftFighter" ] = getTextLocal(f.leftUID );
-    a["regionOfRightFighter"] = getTextLocal(f.rightUID);
+    a["regionOfLeftFighter" ] = getTextLocal(f.leftUID , typeText);
+    a["regionOfRightFighter"] = getTextLocal(f.rightUID, typeText);
 
-    a["leftFlag" ] = getFlagImage(f.leftUID );
-    a["rightFlag"] = getFlagImage(f.rightUID);
+    a["leftFlag" ] = getFlagImage(f.leftUID , typeFlag);
+    a["rightFlag"] = getFlagImage(f.rightUID, typeFlag);
 
     a["TOURNAMENT_CATEGORIES_FK"] = f.tournamentCategory;
     a["VERTEX"] = f.v;

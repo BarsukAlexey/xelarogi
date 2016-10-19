@@ -4,6 +4,7 @@
 #include "db_utils.h"
 #include "dialogchosedata.h"
 
+#include <QAxWidget>
 #include <QGroupBox>
 #include <QRadioButton>
 #include <QObject>
@@ -43,9 +44,22 @@ private:
     void printListOfPairsInExcel(DialogChoseData& dlg, QAxObject *sheets, const QVector<DBUtils::NodeOfTournirGrid>& pairs, int ring);
     void printListOfPairsInJSON(const QVector<DBUtils::NodeOfTournirGrid>& pairs, int ring, const QString& existingDirectory);
     void makeGridsForPointFighting(QString existingDirectory, QVector<long long> tournamentCategoryUIDs);
-    QString getTextLocal(long long orderUID);
-    QString getFlagImage(long long orderUID);
-    QJsonObject getQJsonObject(const DBUtils::NodeOfTournirGrid& f, const int fightingId);
+public:
+    static void writeGridsForPointFighting(
+            QString existingDirectory,
+            QVector<long long> uids,
+            QAxObject *workbooks,
+            QAxWidget& excel,
+            const int numberRing,
+            const QString date,
+            DialogChoseData& dlg,
+            const int typeText,
+            const int typeFlag
+            );
+private:
+    static QString getTextLocal(long long orderUID, int type);
+    static QString getFlagImage(long long orderUID, int type);
+    static QJsonObject getQJsonObject(const DBUtils::NodeOfTournirGrid& f, const int fightingId, int typeText, int typeFlag);
 
     std::vector<int> getDurationsOfFightsForChampionship(const QVector<int>& selectedRows);
 

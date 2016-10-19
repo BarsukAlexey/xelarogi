@@ -118,6 +118,14 @@ public:
     static QSqlQuery *get___TYPE_FK___AGE_FROM___AGE_TILL(const int RING_TATAMI_LIST_FK);
 
 
+    // для таблицы SCHEDULES
+    static int getMaxCountOfDays(const int tournamentUID, const int day);
+    static QSqlQuery* getSchelder(const int tournamentUID, const int day, const int ring);
+    static bool updateSchedule(const int tournamentUID, const int day, const int ring, const int order, const int newOrder);
+    static bool insertInSchedule(const int tournamentUID, const int day, const int ring, const int order, const int uidTC, const int level, const QString name);
+    static bool deleteInSchedule(const int tournamentUID, const int day, const int ring, const int order);
+    static QSqlQuery* getDateRingOrderFromSchedule(const int tournamentCategoryUID, const int level = -1);
+
 
     static int getAge(QDate DATE_WEIGHTING, QDate birthdayDate);
     static QString roundDouble(double x, int precision);

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>548</width>
-    <height>335</height>
+    <width>1114</width>
+    <height>631</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,6 +16,12 @@
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
     <widget class="QSplitter" name="splitter">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
@@ -31,6 +37,22 @@
          </property>
         </widget>
        </item>
+       <item row="3" column="1">
+        <widget class="QSpinBox" name="spinBoxDelay">
+         <property name="minimum">
+          <number>5</number>
+         </property>
+         <property name="maximum">
+          <number>100500</number>
+         </property>
+         <property name="singleStep">
+          <number>10</number>
+         </property>
+         <property name="value">
+          <number>120</number>
+         </property>
+        </widget>
+       </item>
        <item row="1" column="1">
         <widget class="QSpinBox" name="spinBoxRing">
          <property name="minimum">
@@ -38,26 +60,6 @@
          </property>
          <property name="maximum">
           <number>228</number>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="label_3">
-         <property name="text">
-          <string>Задержка смены пар (в секундах)</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1">
-        <widget class="QSpinBox" name="spinBoxRing_2">
-         <property name="minimum">
-          <number>120</number>
-         </property>
-         <property name="maximum">
-          <number>100500</number>
          </property>
         </widget>
        </item>
@@ -78,6 +80,16 @@
          </property>
         </widget>
        </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>Задержка смены пар (в секундах)</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
        <item row="2" column="0">
         <widget class="QLabel" name="label_2">
          <property name="text">
@@ -91,24 +103,150 @@
        <item row="2" column="1">
         <widget class="QComboBox" name="comboBoxDay"/>
        </item>
-       <item row="4" column="0" colspan="2">
+       <item row="7" column="0" colspan="2">
         <widget class="Dialogschedule2TreeWidget" name="treeWidget">
-         <attribute name="headerVisible">
-          <bool>false</bool>
-         </attribute>
+         <property name="focusPolicy">
+          <enum>Qt::ClickFocus</enum>
+         </property>
+         <property name="styleSheet">
+          <string notr="true"/>
+         </property>
+         <property name="columnCount">
+          <number>5</number>
+         </property>
          <column>
           <property name="text">
-           <string notr="true">1</string>
+           <string notr="true">Категория</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string notr="true">Бои</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Дата</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Ринг</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Порядок</string>
           </property>
          </column>
         </widget>
        </item>
+       <item row="4" column="0">
+        <widget class="QGroupBox" name="groupBox_2">
+         <property name="title">
+          <string>Текст</string>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item>
+           <widget class="QRadioButton" name="radioTextCountry">
+            <property name="text">
+             <string>Страна</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="radioTextRegion">
+            <property name="text">
+             <string>Регион</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="radioTextCity">
+            <property name="text">
+             <string>Город</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="radioTextClub">
+            <property name="text">
+             <string>Клуб</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QGroupBox" name="groupBox">
+         <property name="title">
+          <string>Флаг</string>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QRadioButton" name="radioFlagCountry">
+            <property name="text">
+             <string>Страна</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="radioFlagRegion">
+            <property name="text">
+             <string>Регион</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="radioFlagCity">
+            <property name="text">
+             <string>Город</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="radioFlagClub">
+            <property name="text">
+             <string>Клуб</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QPushButton" name="pushButton">
+         <property name="text">
+          <string>Сохранить расписание в excel...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="QPushButton" name="pushButtonListOfPairs">
+         <property name="text">
+          <string>Получить  список пар и сетки на день...</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
-     <widget class="QTableWidget" name="tableWidget">
-      <attribute name="horizontalHeaderVisible">
-       <bool>false</bool>
-      </attribute>
+     <widget class="Dialogschedule2TableWidget" name="tableWidget">
+      <property name="focusPolicy">
+       <enum>Qt::NoFocus</enum>
+      </property>
+      <property name="editTriggers">
+       <set>QAbstractItemView::NoEditTriggers</set>
+      </property>
+      <property name="selectionMode">
+       <enum>QAbstractItemView::NoSelection</enum>
+      </property>
      </widget>
     </widget>
    </item>
@@ -120,7 +258,18 @@
    <extends>QTreeWidget</extends>
    <header>dialogschedule2treewidget.h</header>
   </customwidget>
+  <customwidget>
+   <class>Dialogschedule2TableWidget</class>
+   <extends>QTableWidget</extends>
+   <header>dialogschedule2tablewidget.h</header>
+  </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>spinBoxRing</tabstop>
+  <tabstop>comboBoxDay</tabstop>
+  <tabstop>spinBoxDelay</tabstop>
+  <tabstop>treeWidget</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

@@ -338,9 +338,11 @@ void MainWindow::connectButtons()
     });
 
     connect(ui->pushButtonTimeScheduling, &QPushButton::clicked, [this](){
+        this->hide();
         long long tournamentUID = ui->tournamentUidLabel->text().toLongLong();
-        Dialogschedule2 dlg (tournamentUID, this);
+        Dialogschedule2 dlg (tournamentUID, 0);
         dlg.exec();
+        this->show();
     });
 }
 

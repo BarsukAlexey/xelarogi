@@ -802,6 +802,182 @@ QSqlQuery*DBUtils::get___TYPE_FK___AGE_FROM___AGE_TILL(const int RING_TATAMI_LIS
     return q;
 }
 
+int DBUtils::getMaxCountOfDays(const int tournamentUID, const int day)
+{
+    QSqlQuery query;
+    if (!query.prepare("SELECT MAX(RING) AS MAXRING "
+                       "FROM SCHEDULES "
+                       "WHERE "
+                       "    TOURNAMENT_FK = ? AND "
+                       "    DAY = ? "))
+    {
+        qDebug() << query.lastError();
+    }
+    query.addBindValue(tournamentUID);
+    query.addBindValue(day);
+
+    query.exec();
+    if (query.lastError().isValid())
+        qDebug() << query.lastError();
+
+    int maxCountOfRing = 1;
+    if (query.next())
+    {
+        maxCountOfRing = query.value("MAXRING").toInt() + 1;
+    }
+    return maxCountOfRing;
+}
+
+QSqlQuery*DBUtils::getSchelder(const int tournamentUID, const int day, const int ring)
+{
+    QSqlQuery *q = new QSqlQuery;
+    if (!q->prepare(
+            "SELECT * "
+            "FROM "
+            "   SCHEDULES "
+            "WHERE "
+            "   TOURNAMENT_FK = ? AND "
+            "   DAY = ? AND "
+            "   RING = ? "
+            "ORDER "
+            "   BY ORDER_NUMBER"
+            ))
+    {
+        qDebug() << q->lastError();
+    }
+    q->addBindValue(tournamentUID);
+    q->addBindValue(day);
+    q->addBindValue(ring);
+    if (q->lastError().isValid())
+        qDebug() << q->lastError();
+    q->exec();
+    if (q->lastError().isValid())
+        qDebug() << q->lastError();
+
+    return q;
+}
+
+bool DBUtils::updateSchedule(const int tournamentUID, const int day, const int ring, const int order, const int newOrder)
+{
+    QSqlQuery *q = new QSqlQuery;
+    if (!q->prepare(
+            "UPDATE "
+            "SCHEDULES "
+            "SET "
+            "   ORDER_NUMBER = ? "
+            "WHERE "
+            "   TOURNAMENT_FK = ? AND "
+            "   DAY = ? AND "
+            "   RING = ? AND "
+            "   ORDER_NUMBER = ? "
+            ))
+    {
+        qDebug() << __PRETTY_FUNCTION__ << q->lastError();
+    }
+    q->addBindValue(newOrder);
+
+    q->addBindValue(tournamentUID);
+    q->addBindValue(day);
+    q->addBindValue(ring);
+    q->addBindValue(order);
+
+    if (q->lastError().isValid())
+        qDebug() << __PRETTY_FUNCTION__ << q->lastError();
+    int res = q->exec();
+    if (q->lastError().isValid())
+        qDebug() << __PRETTY_FUNCTION__ << q->lastError();
+    delete q;
+    return res;
+}
+
+bool DBUtils::insertInSchedule(const int tournamentUID, const int day, const int ring, const int order, const int uidTC, const int level, const QString name)
+{
+    QSqlQuery *q = new QSqlQuery;
+    if (!q->prepare(
+            "INSERT INTO SCHEDULES ( "
+            "   TOURNAMENT_FK, "
+            "   DAY, "
+            "   RING, "
+            "   ORDER_NUMBER, "
+            "   TOURNAMENT_CATEGORY_FK, "
+            "   LEVEL, "
+            "   NAME "
+            ") "
+            "VALUES (?,?,?,?,  ?,?,?)"
+            ))
+    {
+        qDebug() << __PRETTY_FUNCTION__ << q->lastError();
+    }
+    q->addBindValue(tournamentUID);
+    q->addBindValue(day);
+    q->addBindValue(ring);
+    q->addBindValue(order);
+
+    q->addBindValue(uidTC);
+    q->addBindValue(level);
+    q->addBindValue(name);
+
+    if (q->lastError().isValid())
+        qDebug() << __PRETTY_FUNCTION__ << q->lastError();
+    int res = q->exec();
+    if (q->lastError().isValid())
+        qDebug() << __PRETTY_FUNCTION__ << q->lastError();
+    delete q;
+    return res;
+}
+
+bool DBUtils::deleteInSchedule(const int tournamentUID, const int day, const int ring, const int order)
+{
+    QSqlQuery *q = new QSqlQuery;
+    if (!q->prepare(
+            "DELETE "
+            "FROM"
+            "   SCHEDULES "
+            "WHERE "
+            "   TOURNAMENT_FK = ? AND "
+            "   DAY = ? AND "
+            "   RING = ? AND "
+            "   ORDER_NUMBER = ? "
+            ))
+    {
+        qDebug() << __PRETTY_FUNCTION__ << q->lastError();
+    }
+    q->addBindValue(tournamentUID);
+    q->addBindValue(day);
+    q->addBindValue(ring);
+    q->addBindValue(order);
+
+    if (q->lastError().isValid())
+        qDebug() << __PRETTY_FUNCTION__ << q->lastError();
+    q->exec();
+    if (q->lastError().isValid())
+        qDebug() << __PRETTY_FUNCTION__ << q->lastError();
+    return q;
+}
+
+QSqlQuery*DBUtils::getDateRingOrderFromSchedule(const int tournamentCategoryUID, const int level)
+{
+    QSqlQuery *q = new QSqlQuery;
+    if (!q->prepare(
+            "SELECT * "
+            "FROM SCHEDULES "
+            "WHERE "
+            "   TOURNAMENT_CATEGORY_FK = ? AND "
+            "   LEVEL = ?"
+            ))
+    {
+        qDebug() << __PRETTY_FUNCTION__ << q->lastError();
+    }
+    q->addBindValue(tournamentCategoryUID);
+    q->addBindValue(level);
+
+    if (q->lastError().isValid())
+        qDebug() << __PRETTY_FUNCTION__ << q->lastError();
+    q->exec();
+    if (q->lastError().isValid())
+        qDebug() << __PRETTY_FUNCTION__ << q->lastError();
+    return q;
+}
 
 
 QString DBUtils::roundDouble(double x, int precision)
@@ -833,26 +1009,6 @@ QString DBUtils::toString(QVector<std::pair<DBUtils::TypeField, QString> > vecto
 
 QString DBUtils::getTournamentNameAsHeadOfDocument(long long tournamentUID)
 {
-//    QDate a = DBUtils::getFieldDateAsDate("DATE_WEIGHTING", "TOURNAMENTS", tournamentUID);
-//    QDate b = DBUtils::getFieldDateAsDate("DATE_END", "TOURNAMENTS", tournamentUID);
-//    QString resA;
-//    QString resB = QString::number(b.day()) + " " + getRussianMonth(b.month()) + " " + QString::number(b.year()) + " г.";
-//    if (a.year() != b.year())
-//    {
-//        resA = QString::number(a.day()) + " " + getRussianMonth(a.month()) + " " + QString::number(a.year()) + " - ";
-//    }
-//    else if (a.month() != b.month())
-//    {
-//        resA = QString::number(a.day()) + " " + getRussianMonth(a.month()) + " - ";
-//    }
-//    else if (a.day() != b.day())
-//    {
-//        resA = QString::number(a.day()) + "-";
-//    }
-//    else
-//    {
-//        resA = "";
-//    }
     return DBUtils::getField("NAME"          , "TOURNAMENTS", tournamentUID) + "\n" +
            DBUtils::getField("HOST"          , "TOURNAMENTS", tournamentUID) + ", " +
            DBUtils::getField("TEXT_DAT_RANGE", "TOURNAMENTS", tournamentUID);
