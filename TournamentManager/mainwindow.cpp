@@ -31,15 +31,29 @@ MainWindow::MainWindow(QWidget *parent) :
     srand(time(0));
 
     m_database = QSqlDatabase::addDatabase("QSQLITE");
+    if (m_database.lastError().isValid())
+    {
+        qDebug() << __LINE__ << m_database.lastError();
+        return;
+    }
+
     m_database.setDatabaseName("./database/kickboxing.db");
+    if (m_database.lastError().isValid())
+    {
+        qDebug() << __LINE__ << m_database.lastError();
+        return;
+    }
 
     if (m_database.open()) {
         qDebug() << "opened";
     }
     else  {
-        qDebug() << m_database.lastError().text();
+        qDebug() << __LINE__ << m_database.lastError();
         return;
     }
+
+    //qDebug() << m_database.tables();
+    //return;
 
 
     connect(ui->countryAction, &QAction::triggered, [this] () {

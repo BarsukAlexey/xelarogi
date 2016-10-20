@@ -4,7 +4,7 @@ Dialogschedule2TreeWidget::Dialogschedule2TreeWidget(QWidget *parent) :
     QTreeWidget(parent)
 {
     setDragEnabled(true);
-    setAcceptDrops(false);
+    //setAcceptDrops(false);
     //setDropIndicatorShown(true);
 }
 
@@ -13,31 +13,28 @@ Dialogschedule2TreeWidget::Dialogschedule2TreeWidget(QWidget *parent) :
 void Dialogschedule2TreeWidget::startDrag(Qt::DropActions )
 {
     QStringList stringList = currentIndex().data(Qt::UserRole).toStringList();
-    //qDebug() << "stringList: " << stringList;
-
-    QByteArray itemData;
+    if (stringList.isEmpty())
     {
-        QDataStream dataStream(&itemData, QIODevice::WriteOnly);
-        dataStream << stringList;
-        dataStream.device()->close();
-        // dataStream надо закрыть и сделать FLUSH
-        // http://www.prog.org.ru/topic_14195_0.html
+        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << "FUCK";
+        return;
     }
-    qDebug() << __LINE__ << __PRETTY_FUNCTION__ << itemData.size();
+
+
+    QByteArray byteArray;
+    QDataStream dataStream(&byteArray, QIODevice::WriteOnly);
+    dataStream << stringList; // http://www.prog.org.ru/topic_14195_0.html
+    if (byteArray.isEmpty())
+    {
+        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << "FUCK";
+        return;
+    }
 
     QMimeData *mimeData = new QMimeData;
-    mimeData->setData("application/x-lolka", itemData);
+    mimeData->setData(getMimiType(), byteArray);
 
     QDrag *drag = new QDrag(this);
     drag->setMimeData(mimeData);
-    if (drag->exec(Qt::MoveAction))
-    {
-        //qDebug() << "TODO больше нельзя его изать";
-    }
-    else
-    {
-        //qDebug() << "Не попал =)";
-    }
+    drag->exec();
 }
 
 void Dialogschedule2TreeWidget::setTournamentUID(const int tournamentUID)

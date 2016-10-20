@@ -8,26 +8,23 @@ Dialogschedule2TableWidget::Dialogschedule2TableWidget(QWidget* parent) :
 
 void Dialogschedule2TableWidget::dragEnterEvent(QDragEnterEvent* event)
 {
-    if (event->mimeData()->hasFormat("application/x-lolka"))
-        event->accept();
-    else
-        event->ignore();
+    if (event->mimeData()->hasFormat(Dialogschedule2TreeWidget::getMimiType()))
+    {
+        event->acceptProposedAction();
+    }
 }
 
-void Dialogschedule2TableWidget::dragLeaveEvent(QDragLeaveEvent* event)
-{
-    event->accept();
-}
+//void Dialogschedule2TableWidget::dragLeaveEvent(QDragLeaveEvent* event)
+//{
+//    event->accept();
+//}
 
 void Dialogschedule2TableWidget::dragMoveEvent(QDragMoveEvent* event)
 {
-
-    if (event->mimeData()->hasFormat("application/x-lolka") &&
+    if (event->mimeData()->hasFormat(Dialogschedule2TreeWidget::getMimiType()) &&
         indexAt(event->pos()).isValid())
     {
-        event->accept();
-    } else {
-        event->ignore();
+        event->acceptProposedAction();
     }
 }
 
@@ -35,24 +32,28 @@ void Dialogschedule2TableWidget::dropEvent(QDropEvent* event)
 {
     QModelIndex index = indexAt(event->pos());
 
-    if (event->mimeData()->hasFormat("application/x-lolka") &&
+    if (event->mimeData()->hasFormat(Dialogschedule2TreeWidget::getMimiType()) &&
         index.isValid())
     {
-        QStringList strs;
+        QByteArray pieceData = event->mimeData()->data(Dialogschedule2TreeWidget::getMimiType());
+        if (pieceData.isEmpty())
         {
-            QByteArray pieceData = event->mimeData()->data("application/x-lolka");
-            QDataStream dataStream(&pieceData, QIODevice::ReadOnly);
-            dataStream >> strs;
+            qDebug() << __LINE__ << __PRETTY_FUNCTION__ << "FUCK";
+            return;
         }
-        event->setDropAction(Qt::MoveAction);
-        event->accept();
 
-        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << "Кинул" << strs << "   в" << index;
-        emit ohDrop(strs, index.row(), index.column());
-    }
-    else
-    {
-        event->ignore();
+        QDataStream dataStream(&pieceData, QIODevice::ReadOnly);
+        QStringList strs;
+        dataStream >> strs;
+        if (strs.isEmpty())
+        {
+            qDebug() << __LINE__ << __PRETTY_FUNCTION__ << "FUCK";
+            return;
+        }
+
+        event->acceptProposedAction();
+
+        emit dataIsDropped(strs, index.row(), index.column());
     }
 }
 

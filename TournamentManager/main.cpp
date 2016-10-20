@@ -31,8 +31,8 @@ void on_terminate()
 
 int main(int argc, char *argv[])
 {
-    qInstallMessageHandler(break_point);
-    std::set_terminate(on_terminate);
+//    qInstallMessageHandler(break_point);
+//    std::set_terminate(on_terminate);
 
 
     QApplication a(argc, argv);
@@ -43,11 +43,11 @@ int main(int argc, char *argv[])
 
 
     MainWindow w;
-    //w.show();
+    w.show();
 
-    Dialogschedule2 dlg(21, 0);
-    dlg.showMaximized();
-    return dlg.exec();
+    //Dialogschedule2 dlg(21, 0);
+    //dlg.showMaximized();
+    //return dlg.exec();
 
 
     return a.exec();

@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'dialogschedule2.ui'
 **
-** Created by: Qt User Interface Compiler version 5.5.1
+** Created by: Qt User Interface Compiler version 5.7.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -238,12 +238,12 @@ public:
         ___qtreewidgetitem->setText(4, QApplication::translate("Dialogschedule2", "\320\237\320\276\321\200\321\217\320\264\320\276\320\272", 0));
         ___qtreewidgetitem->setText(3, QApplication::translate("Dialogschedule2", "\320\240\320\270\320\275\320\263", 0));
         ___qtreewidgetitem->setText(2, QApplication::translate("Dialogschedule2", "\320\224\320\260\321\202\320\260", 0));
-        groupBox_2->setTitle(QApplication::translate("Dialogschedule2", "\320\242\320\265\320\272\321\201\321\202", 0));
+        groupBox_2->setTitle(QApplication::translate("Dialogschedule2", "\320\242\320\265\320\272\321\201\321\202 (\320\264\320\273\321\217 \320\262\321\201\320\265\320\263\320\276 \320\272\321\200\320\276\320\274\320\265 \321\201\320\265\321\202\320\276\320\272)", 0));
         radioTextCountry->setText(QApplication::translate("Dialogschedule2", "\320\241\321\202\321\200\320\260\320\275\320\260", 0));
         radioTextRegion->setText(QApplication::translate("Dialogschedule2", "\320\240\320\265\320\263\320\270\320\276\320\275", 0));
         radioTextCity->setText(QApplication::translate("Dialogschedule2", "\320\223\320\276\321\200\320\276\320\264", 0));
         radioTextClub->setText(QApplication::translate("Dialogschedule2", "\320\232\320\273\321\203\320\261", 0));
-        groupBox->setTitle(QApplication::translate("Dialogschedule2", "\320\244\320\273\320\260\320\263", 0));
+        groupBox->setTitle(QApplication::translate("Dialogschedule2", "\320\244\320\273\320\260\320\263 (\320\264\320\273\321\217 \320\262\321\201\320\265\320\263\320\276 \320\272\321\200\320\276\320\274\320\265 \321\201\320\265\321\202\320\276\320\272)", 0));
         radioFlagCountry->setText(QApplication::translate("Dialogschedule2", "\320\241\321\202\321\200\320\260\320\275\320\260", 0));
         radioFlagRegion->setText(QApplication::translate("Dialogschedule2", "\320\240\320\265\320\263\320\270\320\276\320\275", 0));
         radioFlagCity->setText(QApplication::translate("Dialogschedule2", "\320\223\320\276\321\200\320\276\320\264", 0));

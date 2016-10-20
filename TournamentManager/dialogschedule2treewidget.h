@@ -12,14 +12,17 @@ class Dialogschedule2TreeWidget : public QTreeWidget
     Q_OBJECT
 public:
     explicit Dialogschedule2TreeWidget(QWidget *parent = 0);
+    static QString getMimiType(){ return "application/x-qwerty"; }
 
 private:
     int tournamentUID;
+    QStringList list;
 
 protected:
     void startDrag(Qt::DropActions supportedActions) Q_DECL_OVERRIDE;
 
 signals:
+    //dataIsDroped(QStringList list);
 
 public slots:
     void setTournamentUID(const int tournamentUID);

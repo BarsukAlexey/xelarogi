@@ -24,42 +24,11 @@ Dialogschedule2::Dialogschedule2(int tournamentUID, QWidget *parent) :
 
     connect(ui->spinBoxRing, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &Dialogschedule2::onCountOfRingsChanged);
     connect(ui->spinBoxDelay, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &Dialogschedule2::onDateChanged);
-    connect(ui->tableWidget, &Dialogschedule2TableWidget::ohDrop, this, &Dialogschedule2::onOhDrop);
+    connect(ui->tableWidget, &Dialogschedule2TableWidget::dataIsDropped, this, &Dialogschedule2::onDataIsDropped);
     connect(ui->comboBoxDay, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &Dialogschedule2::onDateChanged);
 
     ui->tableWidget->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
-    connect(ui->tableWidget, &Dialogschedule2TableWidget::customContextMenuRequested, [this] (const QPoint& pos)
-    {
-        QModelIndex index = ui->tableWidget->indexAt(pos);
-        //qDebug() << pos << index;
-        if (!index.isValid() || !ui->tableWidget->item(index.row(), index.column()))
-            return;
-
-        QMenu menu;
-        QAction deleteAction("Удалить", &menu);
-        connect(&deleteAction, &QAction::triggered, [this, &pos] ()
-        {
-            QModelIndex index = ui->tableWidget->indexAt(pos);
-            int ring = index.column();
-
-            int maxOrder = -1;
-            for (int r = 0; r < ui->tableWidget->rowCount(); ++r)
-                if (ui->tableWidget->item(r, ring))
-                    maxOrder = ui->tableWidget->item(r, ring)->data(Qt::UserRole).toInt();
-
-            int currnetOrder = ui->tableWidget->item(index.row(), index.column())->data(Qt::UserRole).toInt();
-
-            DBUtils::deleteInSchedule(this->tournamentUID, ui->comboBoxDay->currentIndex(), ring, currnetOrder);
-            for (int order = currnetOrder + 1; order <= maxOrder; ++order)
-                DBUtils::updateSchedule(this->tournamentUID, ui->comboBoxDay->currentIndex(), ring, order, order - 1);
-
-            //qDebug() << pos << index;
-            this->updateRowsInTable();
-            this->updateTree();
-        });
-        menu.addAction(&deleteAction);
-        menu.exec(ui->tableWidget->viewport()->mapToGlobal(pos));
-    });
+    connect(ui->tableWidget, &Dialogschedule2TableWidget::customContextMenuRequested, this, &Dialogschedule2::onCustomContextMenuRequested);
 
     connect(ui->pushButtonListOfPairs, &QPushButton::clicked, this, &Dialogschedule2::onPushButtonListOfPairs);
 }
@@ -94,7 +63,7 @@ void Dialogschedule2::onDateChanged()
     updateRowsInTable();
 }
 
-void Dialogschedule2::onOhDrop(QStringList str, const int currentRow, const int ring)
+void Dialogschedule2::onDataIsDropped(QStringList str, const int currentRow, const int ring)
 {
     if (str.size() != 3 || !(0<=currentRow && currentRow < ui->tableWidget->rowCount()))
     {
@@ -193,6 +162,8 @@ void Dialogschedule2::onOhDrop(QStringList str, const int currentRow, const int 
 
                 if (level + 1 != levelCount)
                 {
+                    std::tuple<int, int, int> dayRingOrder = DBUtils::getDayRingOrder(uidTC, level + 1);
+
                     int countOfNotPlayedFights = 0;
                     for (const DBUtils::NodeOfTournirGrid& node : grid[level + 1])
                     {
@@ -201,11 +172,16 @@ void Dialogschedule2::onOhDrop(QStringList str, const int currentRow, const int 
                             ++countOfNotPlayedFights;
                         }
                     }
-                    if (0 < countOfNotPlayedFights && std::get<0>(DBUtils::getDayRingOrder(uidTC, level + 1)) == -1)
+
+                    if (0 < countOfNotPlayedFights && std::get<0>(dayRingOrder) == -1)
                     {
-                        QMessageBox::warning(this, "",
-                                             "Вставьте предыдущий круг турнирной сетки в расписание\n"
-                                             );
+                        QMessageBox::warning(this, "", "Вставьте предыдущий круг турнирной сетки в расписание");
+                        return ;
+                    }
+
+                    if (std::get<0>(dayRingOrder) != -1 && ui->comboBoxDay->currentIndex() < std::get<0>(dayRingOrder))
+                    {
+                        QMessageBox::warning(this, "", "См. на дату предыдущего круга");
                         return ;
                     }
                 }
@@ -221,11 +197,11 @@ void Dialogschedule2::onOhDrop(QStringList str, const int currentRow, const int 
 
                 if (level + 1 != levelCount)
                 {
-                    if (currentOrder <= std::get<2>(DBUtils::getDayRingOrder(uidTC, level + 1)))
+
+                    if (std::get<2>(dayRingOrder) != -1 && currentOrder <= std::get<2>(dayRingOrder))
                     {
-                        QMessageBox::warning(this, "",
-                                             "На данном ринге вначале должен идти предудущий круг, а затем текущий"
-                                             );
+                        QMessageBox::warning(this, "", "На данном ринге вначале должен идти предудущий круг,"
+                                                       " а затем текущий");
                         return ;
                     }
                 }
@@ -265,6 +241,56 @@ void Dialogschedule2::onOhDrop(QStringList str, const int currentRow, const int 
                 str[2]);
 
     updateRowsInTable();
+    updateTree();
+}
+
+void Dialogschedule2::onCustomContextMenuRequested(const QPoint& pos)
+{
+    QModelIndex index = ui->tableWidget->indexAt(pos);
+    //qDebug() << pos << index;
+    if (!index.isValid() || !ui->tableWidget->item(index.row(), index.column()))
+        return;
+
+    QMenu menu;
+    QAction deleteAction("Удалить", &menu);
+    connect(&deleteAction, &QAction::triggered, [this, &pos] ()
+    {
+        QModelIndex index = ui->tableWidget->indexAt(pos);
+        int ring = index.column();
+
+        int maxOrder = -1;
+        for (int r = 0; r < ui->tableWidget->rowCount(); ++r)
+            if (ui->tableWidget->item(r, ring))
+                maxOrder = ui->tableWidget->item(r, ring)->data(Qt::UserRole).toInt();
+
+        int currnetOrder = ui->tableWidget->item(index.row(), index.column())->data(Qt::UserRole).toInt();
+
+
+        QSqlQuery* schelder =
+                DBUtils::getSchelder(tournamentUID, ui->comboBoxDay->currentIndex(), ring);
+        for(int i = 0; i <= currnetOrder; ++i)
+            schelder->next();
+        const int uidTC = schelder->value("TOURNAMENT_CATEGORY_FK").toInt();
+        const int level = schelder->value("LEVEL").toInt();
+        delete schelder;
+        if (1 <= level && std::get<0>(DBUtils::getDayRingOrder(uidTC, level - 1)) != -1)
+        {
+            QMessageBox::warning(this, "", "Удалите сначала \"" +
+                                 (level-1==0?"ФИНАЛ":level-1==1?"ПОЛУФИНАЛ":"1/"+QString::number(1<<(level-1))) +
+                                 "\" взятой турнирной категории из расписания");
+            return;
+        }
+
+        DBUtils::deleteInSchedule(this->tournamentUID, ui->comboBoxDay->currentIndex(), ring, currnetOrder);
+        for (int order = currnetOrder + 1; order <= maxOrder; ++order)
+            DBUtils::updateSchedule(this->tournamentUID, ui->comboBoxDay->currentIndex(), ring, order, order - 1);
+
+        //qDebug() << pos << index;
+        this->updateRowsInTable();
+        this->updateTree();
+    });
+    menu.addAction(&deleteAction);
+    menu.exec(ui->tableWidget->viewport()->mapToGlobal(pos));
 }
 
 void Dialogschedule2::updateRowsInTable()
@@ -394,6 +420,7 @@ void Dialogschedule2::updateTree()
     QTime time;
     time.start();
 
+    ui->treeWidget->clear();
     QStringList days = DBUtils::get_DAYS_FROM_TOURNAMENTS(tournamentUID);
     int maxCountOfDays = DBUtils::getMaxCountOfRings(tournamentUID, ui->comboBoxDay->currentIndex());
     for (int i = days.size(); i < maxCountOfDays; ++i)
@@ -553,30 +580,71 @@ void Dialogschedule2::onPushButtonListOfPairs()
 
         if (!uidTCs_forTournament.isEmpty())
         {
-            QAxWidget excel("Excel.Application");
-            QAxObject *workbooks = excel.querySubObject("WorkBooks");
-            workbooks->dynamicCall("Add");
-            QAxObject *workbook = excel.querySubObject("ActiveWorkBook");
-            QAxObject *sheets = workbook->querySubObject("WorkSheets");
+            QStringList errors;
+            {
+                QSet<int> set;
+                for (std::pair<int, int> pair : uidTCs_forTournament)
+                {
+                    const int uidTC = pair.first;
+                    const int level = pair.second;
+                    if (!set.contains(uidTC))
+                    {
+                        set << uidTC;
+                        QVector<QVector<DBUtils::NodeOfTournirGrid> > grid =
+                                DBUtils::getNodesAsLevelListOfList(uidTC);
+                        if (level + 1 != grid.size())
+                        {
+                            for (const DBUtils::NodeOfTournirGrid& node : grid[level + 1])
+                            {
+                                if (node.isFight && node.UID <= 0)
+                                {
+                                    errors
+                                            << "Не заполнен круг: " + RenderAreaWidget::getNameOfLevel(node.v)
+                                            << "для сетки " +
+                                               DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", node.tournamentCategory)
+                                            << ""
+                                            << "";
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
 
-            FightingPairs::writeListOfPairs(
-                        uidTCs_forTournament,
-                        sheets,
-                        dlgTournament,
-                        ring + 1,
-                        typeText,
-                        typeFlag,
-                        ui->comboBoxDay->currentText(),
-                        pathTournament,
-                        tournamentUID
-                        );
+            if (!errors.isEmpty())
+            {
+                errors.push_front("Проблема на ринге #" + QString::number(ring + 1) + "\n");
+                ErrorMessagesDialog dlg(errors, this);
+                dlg.exec();
+            }
+            else
+            {
+                QAxWidget excel("Excel.Application");
+                QAxObject *workbooks = excel.querySubObject("WorkBooks");
+                workbooks->dynamicCall("Add");
+                QAxObject *workbook = excel.querySubObject("ActiveWorkBook");
+                QAxObject *sheets = workbook->querySubObject("WorkSheets");
 
-            ExcelUtils::saveAsFile(workbook, pathTournament, "Состав пар Ринг " + QString::number(ring + 1));
-            workbook->dynamicCall("Close (Boolean)", true);
-            excel.dynamicCall("Quit()");
-            delete sheets;
-            delete workbook;
-            delete workbooks;
+                FightingPairs::writeListOfPairs(
+                            uidTCs_forTournament,
+                            sheets,
+                            dlgTournament,
+                            ring + 1,
+                            typeText,
+                            typeFlag,
+                            ui->comboBoxDay->currentText(),
+                            pathTournament,
+                            tournamentUID
+                            );
+
+                ExcelUtils::saveAsFile(workbook, pathTournament, "Состав пар Ринг " + QString::number(ring + 1));
+                workbook->dynamicCall("Close (Boolean)", true);
+                excel.dynamicCall("Quit()");
+                delete sheets;
+                delete workbook;
+                delete workbooks;
+            }
         }
 
         if (!uidTCs_forCub.isEmpty())

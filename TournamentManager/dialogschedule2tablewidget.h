@@ -8,6 +8,8 @@
 #include <QDropEvent>
 #include <QMimeData>
 
+#include "dialogschedule2treewidget.h"
+
 class Dialogschedule2TableWidget : public QTableWidget
 {
     Q_OBJECT
@@ -17,12 +19,12 @@ public:
 
 protected:
     void dragEnterEvent(QDragEnterEvent *event) Q_DECL_OVERRIDE;
-    void dragLeaveEvent(QDragLeaveEvent *event) Q_DECL_OVERRIDE;
+    //void dragLeaveEvent(QDragLeaveEvent *event) Q_DECL_OVERRIDE;
     void dragMoveEvent(QDragMoveEvent *event) Q_DECL_OVERRIDE;
     void dropEvent(QDropEvent *event) Q_DECL_OVERRIDE;
 
 signals:
-    ohDrop(QStringList strs, int row, int column);
+    dataIsDropped(QStringList strs, int row, int column);
 
 public slots:
 

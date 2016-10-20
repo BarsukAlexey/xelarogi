@@ -17,6 +17,8 @@
 #include "dialogschedule2inputtype.h"
 #include "dialogchosedata.h"
 #include "excel_utils.h"
+#include "renderareawidget.h"
+#include "errormessagesdialog.h"
 
 namespace Ui {
 class Dialogschedule2;
@@ -39,8 +41,10 @@ private:
 private slots:
     void onCountOfRingsChanged();
     void onDateChanged();
+    void onDataIsDropped(QStringList str, const int row, const int ring);
+    void onCustomContextMenuRequested(const QPoint& pos);
 
-    void onOhDrop(QStringList str, const int row, const int ring);
+
     void updateRowsInTable();
     void updateTree();
 
