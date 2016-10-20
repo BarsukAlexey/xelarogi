@@ -43,12 +43,10 @@ int main(int argc, char *argv[])
 
 
     MainWindow w;
-    w.show();
+    //w.show(); return a.exec();
 
-    //Dialogschedule2 dlg(21, 0);
-    //dlg.showMaximized();
-    //return dlg.exec();
+    Dialogschedule2 dlg(21, 0); dlg.showMaximized(); return dlg.exec();
 
 
-    return a.exec();
+
 }

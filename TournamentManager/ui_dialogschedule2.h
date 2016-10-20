@@ -57,7 +57,7 @@ public:
     QRadioButton *radioFlagRegion;
     QRadioButton *radioFlagCity;
     QRadioButton *radioFlagClub;
-    QPushButton *pushButton;
+    QPushButton *pushButtonSaveSchelder;
     QPushButton *pushButtonListOfPairs;
     Dialogschedule2TableWidget *tableWidget;
 
@@ -198,10 +198,10 @@ public:
 
         gridLayout->addWidget(groupBox, 4, 1, 1, 1);
 
-        pushButton = new QPushButton(widget);
-        pushButton->setObjectName(QStringLiteral("pushButton"));
+        pushButtonSaveSchelder = new QPushButton(widget);
+        pushButtonSaveSchelder->setObjectName(QStringLiteral("pushButtonSaveSchelder"));
 
-        gridLayout->addWidget(pushButton, 5, 0, 1, 1);
+        gridLayout->addWidget(pushButtonSaveSchelder, 5, 0, 1, 1);
 
         pushButtonListOfPairs = new QPushButton(widget);
         pushButtonListOfPairs->setObjectName(QStringLiteral("pushButtonListOfPairs"));
@@ -243,12 +243,12 @@ public:
         radioTextRegion->setText(QApplication::translate("Dialogschedule2", "\320\240\320\265\320\263\320\270\320\276\320\275", 0));
         radioTextCity->setText(QApplication::translate("Dialogschedule2", "\320\223\320\276\321\200\320\276\320\264", 0));
         radioTextClub->setText(QApplication::translate("Dialogschedule2", "\320\232\320\273\321\203\320\261", 0));
-        groupBox->setTitle(QApplication::translate("Dialogschedule2", "\320\244\320\273\320\260\320\263 (\320\264\320\273\321\217 \320\262\321\201\320\265\320\263\320\276 \320\272\321\200\320\276\320\274\320\265 \321\201\320\265\321\202\320\276\320\272)", 0));
+        groupBox->setTitle(QApplication::translate("Dialogschedule2", "\320\244\320\273\320\260\320\263 (\320\264\320\273\321\217 *.JSON)", 0));
         radioFlagCountry->setText(QApplication::translate("Dialogschedule2", "\320\241\321\202\321\200\320\260\320\275\320\260", 0));
         radioFlagRegion->setText(QApplication::translate("Dialogschedule2", "\320\240\320\265\320\263\320\270\320\276\320\275", 0));
         radioFlagCity->setText(QApplication::translate("Dialogschedule2", "\320\223\320\276\321\200\320\276\320\264", 0));
         radioFlagClub->setText(QApplication::translate("Dialogschedule2", "\320\232\320\273\321\203\320\261", 0));
-        pushButton->setText(QApplication::translate("Dialogschedule2", "\320\241\320\276\321\205\321\200\320\260\320\275\320\270\321\202\321\214 \321\200\320\260\321\201\320\277\320\270\321\201\320\260\320\275\320\270\320\265 \320\262 excel...", 0));
+        pushButtonSaveSchelder->setText(QApplication::translate("Dialogschedule2", "\320\241\320\276\321\205\321\200\320\260\320\275\320\270\321\202\321\214 \321\200\320\260\321\201\320\277\320\270\321\201\320\260\320\275\320\270\320\265 \320\262 excel...", 0));
         pushButtonListOfPairs->setText(QApplication::translate("Dialogschedule2", "\320\237\320\276\320\273\321\203\321\207\320\270\321\202\321\214  \321\201\320\277\320\270\321\201\320\276\320\272 \320\277\320\260\321\200 \320\270 \321\201\320\265\321\202\320\272\320\270 \320\275\320\260 \320\264\320\265\320\275\321\214...", 0));
     } // retranslateUi
 

@@ -41,7 +41,7 @@ public:
     static void setRowAutoFit(QAxObject *sheet, int row);
     static void setRowHeight(QAxObject *sheet, int row, int height);
 
-    static void setColumnWidth(QAxObject *sheet, int column, int height);
+    static void setColumnWidth(QAxObject *sheet, int column, int width);
 
     static void setPageOrientation(QAxObject* sheet, int orientation);
     static void setWrapText(QAxObject* sheet, int row, int column);

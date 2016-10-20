@@ -77,10 +77,10 @@ void ExcelUtils::setRowHeight(QAxObject* sheet, int row, int height)
     pRow->setProperty("RowHeight", height);
 }
 
-void ExcelUtils::setColumnWidth(QAxObject* sheet, int column, int height)
+void ExcelUtils::setColumnWidth(QAxObject* sheet, int column, int width)
 {
     QAxObject *pRow = sheet->querySubObject("Columns(QVariant&)", column);
-    pRow->setProperty("ColumnWidth", height);
+    pRow->setProperty("ColumnWidth", width);
 }
 
 // 1 - портретная, 2 - альбомная

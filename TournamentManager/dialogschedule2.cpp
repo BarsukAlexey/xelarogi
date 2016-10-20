@@ -31,6 +31,7 @@ Dialogschedule2::Dialogschedule2(int tournamentUID, QWidget *parent) :
     connect(ui->tableWidget, &Dialogschedule2TableWidget::customContextMenuRequested, this, &Dialogschedule2::onCustomContextMenuRequested);
 
     connect(ui->pushButtonListOfPairs, &QPushButton::clicked, this, &Dialogschedule2::onPushButtonListOfPairs);
+    connect(ui->pushButtonSaveSchelder, &QPushButton::clicked, this, &Dialogschedule2::onPushButtonSaveSchelderClicked);
 }
 
 Dialogschedule2::~Dialogschedule2()
@@ -38,6 +39,94 @@ Dialogschedule2::~Dialogschedule2()
     QSettings settings;
     settings.setValue("spinBoxDelay", ui->spinBoxDelay->value());
     delete ui;
+}
+
+QVector<std::tuple<int, QString, QColor>> Dialogschedule2::getInfoForRing(const int tournamentUID, const int day, const int ring, const int delay)
+{
+    QVector<std::tuple<int, QString, QColor>> arr;
+    int currentTime = 0;
+    int currentRow = 0;
+    QSqlQuery* schelder = DBUtils::getSchelder(tournamentUID, day, ring);
+    while (schelder->next())
+    {
+        int uid = schelder->value("UID").toInt();
+        //int order = schelder->value("ORDER_NUMBER").toInt();
+        int uidTC = schelder->value("TOURNAMENT_CATEGORY_FK").toInt();
+        int level = schelder->value("LEVEL").toInt();
+
+        int duration;
+        QString name;
+        QString stringLevel;
+
+        if (uidTC == -1)
+        {
+            duration = level;
+            name = DBUtils::getField("NAME", "SCHEDULES", uid);
+        }
+        else if (uidTC == -2)
+        {
+            duration = level;
+            name = DBUtils::getField("NAME", "SCHEDULES", uid);
+        }
+        else if (level == -1)
+        {
+            duration = DBUtils::getDurationOfGrid(uidTC, delay);
+            name = DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", uidTC);
+            stringLevel = "Все круги";
+        }
+        else
+        {
+            duration = 0;
+            QVector<QVector<DBUtils::NodeOfTournirGrid> > arr = DBUtils::getNodesAsLevelListOfList(uidTC);
+            if (0 <= level && level < arr.size())
+            {
+                const int durationPair = DBUtils::getDurationOfFightinPair(uidTC);
+                for (const DBUtils::NodeOfTournirGrid& node : arr[level])
+                    if (node.isFight && node.UID <= 0)
+                        duration += durationPair + delay;
+            }
+            else
+                qDebug() << "Fuck:" << "uidTC, level: " << uidTC << level;
+
+            name = DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", uidTC);
+            stringLevel = (level == 0? "Финал" : level == 1? "Полуфинал" : "1 / " + QString::number(1 << level));
+        }
+
+        const int timeEnd = currentTime + duration;
+
+        int cntOccurRows = 1;
+        while ((currentRow + cntOccurRows + 1) * durationOfRow <= timeEnd)
+            ++cntOccurRows;
+
+
+        QString text = name +
+                       (stringLevel.isEmpty()? "" : "\n" + stringLevel) +
+                       "\n" +
+                       Utils::getTime(currentTime) +
+                       "-" +
+                       Utils::getTime(timeEnd) +
+                       " (" +
+                       Utils::getTime(duration) +
+                       ")";
+
+
+        QColor color;
+        if (uidTC == -1)
+            color = QColor(Qt::darkGray);
+        else if (uidTC == -2)
+            color = QColor(Qt::darkMagenta);
+        else if (level == -1)
+            color = QColor(Qt::darkBlue);
+        else
+            color = QColor("#ff7b6d");
+
+        arr << std::make_tuple(cntOccurRows, text, color);
+
+        currentRow += cntOccurRows;
+        currentTime += duration;
+    }
+    delete schelder;
+    return arr;
 }
 
 
@@ -311,83 +400,20 @@ void Dialogschedule2::updateRowsInTable()
 
     for (int ring = 0; ring < ui->tableWidget->columnCount(); ++ring)
     {
-        int currentTime = 0;
-        int currentRow = 0;
-        QSqlQuery* schelder = DBUtils::getSchelder(tournamentUID, ui->comboBoxDay->currentIndex(), ring);
-        while (schelder->next())
+        QVector<std::tuple<int, QString, QColor> > infoForRing =
+                getInfoForRing(tournamentUID, ui->comboBoxDay->currentIndex(), ring, ui->spinBoxDelay->value());
+        for (int order = 0, currentRow = 0; order < infoForRing.size(); ++order)
         {
-            int uid = schelder->value("UID").toInt();
-            int order = schelder->value("ORDER_NUMBER").toInt();
-            int uidTC = schelder->value("TOURNAMENT_CATEGORY_FK").toInt();
-            int level = schelder->value("LEVEL").toInt();
-
-            int duration;
-            QString name;
-            QString stringLevel;
-
-            if (uidTC == -1)
-            {
-                duration = level;
-                name = DBUtils::getField("NAME", "SCHEDULES", uid);
-            }
-            else if (uidTC == -2)
-            {
-                duration = level;
-                name = DBUtils::getField("NAME", "SCHEDULES", uid);
-            }
-            else if (level == -1)
-            {
-                duration = DBUtils::getDurationOfGrid(uidTC, ui->spinBoxDelay->value());
-                name = DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", uidTC);
-                stringLevel = "Все круги";
-            }
-            else
-            {
-                duration = 0;
-                QVector<QVector<DBUtils::NodeOfTournirGrid> > arr = DBUtils::getNodesAsLevelListOfList(uidTC);
-                if (0 <= level && level < arr.size())
-                {
-                    const int durationPair = DBUtils::getDurationOfFightinPair(uidTC);
-                    for (const DBUtils::NodeOfTournirGrid& node : arr[level])
-                        if (node.isFight && node.UID <= 0)
-                            duration += durationPair +
-                                        ui->spinBoxDelay->value();
-                }
-                else
-                    qDebug() << "Fuck:" << "uidTC, level: " << uidTC << level;
-
-                name = DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", uidTC);
-                stringLevel = (level == 0? "Финал" : level == 1? "Полуфинал" : "1 / " + QString::number(1 << level));
-            }
-
-            const int timeEnd = currentTime + duration;
-
-            int cntOccurRows = 1;
-            while ((currentRow + cntOccurRows + 1) * durationOfRow <= timeEnd)
-                ++cntOccurRows;
+            int cntOccurRows = std::get<0>(infoForRing[order]);
+            QString text = std::get<1>(infoForRing[order]);
+            QColor color = std::get<2>(infoForRing[order]);
 
             QTableWidgetItem* item = new QTableWidgetItem;
             item->setTextAlignment(Qt::AlignHCenter | Qt::AlignTop);
-            item->setText(name +
-                          (stringLevel.isEmpty()? "" : "\n" + stringLevel) +
-                          "\n" +
-                          Utils::getTime(currentTime) +
-                          "-" +
-                          Utils::getTime(timeEnd) +
-                          " (" +
-                          Utils::getTime(duration) +
-                          ")"
-                          );
+            item->setText(text);
 
             item->setData(Qt::UserRole, order);
-            if (uidTC == -1)
-                item->setBackgroundColor(QColor(Qt::darkGray));
-            else if (uidTC == -2)
-                item->setBackgroundColor(QColor(Qt::darkMagenta));
-            else if (level == -1)
-                item->setBackgroundColor(QColor(Qt::darkBlue));
-            else
-                item->setBackgroundColor(QColor("#ff7b6d"));
+            item->setBackgroundColor(color);
             item->setForeground(QBrush(Qt::white));
 
             ui->tableWidget->setItem(currentRow, ring, item);
@@ -402,12 +428,8 @@ void Dialogschedule2::updateRowsInTable()
                 ui->tableWidget->setSpan(currentRow, ring, cntOccurRows, 1);
             }
 
-
             currentRow += cntOccurRows;
-            currentTime += duration;
         }
-
-        delete schelder;
     }
 
     ui->tableWidget->resizeColumnsToContents();
@@ -666,6 +688,91 @@ void Dialogschedule2::onPushButtonListOfPairs()
             excel.dynamicCall("Quit()");
         }
     }
+}
+
+void Dialogschedule2::onPushButtonSaveSchelderClicked()
+{
+    QAxWidget excel("Excel.Application", this);
+    excel.setProperty("Visible", true);
+    QAxObject *workbooks = excel.querySubObject("WorkBooks");
+    workbooks->dynamicCall("Add");
+    QAxObject *workbook = excel.querySubObject("ActiveWorkBook");
+    QAxObject *sheets = workbook->querySubObject("WorkSheets");
+    QAxObject* sheet = ExcelUtils::addNewSheet(sheets);
+
+    QVector<QVector<std::tuple<int, QString, QColor>>> infoForRings;
+    int minCntOccurSleep = 0;
+    for (int ring = 0; ring < ui->tableWidget->columnCount(); ++ring)
+    {
+        const QVector<std::tuple<int, QString, QColor>> infoForRing =
+                getInfoForRing(tournamentUID, ui->comboBoxDay->currentIndex(), ring, ui->spinBoxDelay->value());
+        infoForRings << infoForRing;
+        if (!infoForRing.isEmpty())
+        {
+            int cntOccurRows = std::get<0>(infoForRing[0]);
+            QString text = std::get<1>(infoForRing[0]);
+            if (text.startsWith("Сон"))
+            {
+                minCntOccurSleep = minCntOccurSleep == 0? cntOccurRows : qMin(minCntOccurSleep, cntOccurRows);
+            }
+        }
+    }
+
+    for (int ring = 0; ring <= ui->tableWidget->columnCount(); ++ring)
+        ExcelUtils::setColumnWidth(sheet, ring + 1, 50);
+
+    const int offset = 5;
+    int maxRow = offset + 1;
+    for (int ring = 0; ring < ui->tableWidget->columnCount(); ++ring)
+    {
+        ExcelUtils::setValue  (sheet, offset - 1, ring + 2, "Ринг" " #" + QString::number(ring + 1));
+        const QVector<std::tuple<int, QString, QColor>>& infoForRing = infoForRings[ring];
+        for (int order = 0, currentRow = offset; order < infoForRing.size(); ++order)
+        {
+            int cntOccurRows = std::get<0>(infoForRing[order]);
+            QString text = std::get<1>(infoForRing[order]);
+            //QColor color = std::get<2>(infoForRing[order]);
+            if (text.startsWith("Сон"))
+            {
+                cntOccurRows -= minCntOccurSleep;
+                text = "";
+            }
+
+            if (cntOccurRows)
+            {
+                ExcelUtils::uniteRange(sheet, currentRow, ring + 2, currentRow + cntOccurRows - 1, ring + 2);
+                ExcelUtils::setValue  (sheet, currentRow, ring + 2, text, 1, 0);
+            }
+
+            currentRow += cntOccurRows;
+            maxRow = qMax(maxRow, currentRow);
+        }
+    }
+    ExcelUtils::setBorder(sheet, offset - 1, 1, maxRow - 1, ui->tableWidget->columnCount() + 1);
+
+    for (int row = offset; row < maxRow; ++row)
+    {
+        ExcelUtils::setValue(sheet, row, 1, Utils::getTime(durationOfRow * (row - offset + minCntOccurSleep)),  0);
+    }
+
+
+    for (int ring = 0; ring <= ui->tableWidget->columnCount(); ++ring)
+        ExcelUtils::setColumnAutoFit(sheet, ring + 1);
+
+    ExcelUtils::setTournamentName(
+                sheet,
+                DBUtils::getTournamentNameAsHeadOfDocument(tournamentUID),
+                1, 1, 1, ui->tableWidget->columnCount() + 1);
+    ExcelUtils::setValue(sheet, 2, 1, "Расписание");
+    ExcelUtils::uniteRange(sheet, 2, 1, 2, ui->tableWidget->columnCount() + 1);
+    ExcelUtils::setValue(sheet, 3, 1, ui->comboBoxDay->currentText());
+    ExcelUtils::uniteRange(sheet, 3, 1, 3, ui->tableWidget->columnCount() + 1);
+
+    delete sheet;
+    delete sheets;
+    delete workbook;
+    delete workbooks;
+    //excel.dynamicCall("Quit()");
 }
 
 

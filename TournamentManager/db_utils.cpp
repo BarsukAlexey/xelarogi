@@ -653,7 +653,7 @@ QVector<long long> DBUtils::get_UIDs_of_TOURNAMENT_CATEGORIES(long long tourname
                 "SELECT * "
                 "FROM TOURNAMENT_CATEGORIES "
                 "WHERE TOURNAMENT_FK = ? "
-                "ORDER BY AGE_FROM, AGE_TILL, TYPE_FK, SEX_FK, WEIGHT_FROM, WEIGHT_TILL");
+                "ORDER BY TYPE_FK, AGE_FROM, AGE_TILL, SEX_FK, WEIGHT_FROM, WEIGHT_TILL");
     query.addBindValue(tournamentUID);
     if (!query.exec())
         qDebug() << __LINE__ << __PRETTY_FUNCTION__ << query.lastError().text() << query.lastQuery();
