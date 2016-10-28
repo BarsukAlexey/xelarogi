@@ -49,7 +49,7 @@
 #include "report_manda.h"
 #include "formdipl.h"
 #include "handbookdialog.h"
-#include "tournamentgriddialog2.h"
+#include "dialogtournamentgrid.h"
 #include "fiting_distribution.h"
 #include "fighting_pairs.h"
 #include "weighing_protocol.h"

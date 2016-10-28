@@ -26,9 +26,37 @@ namespace Ui {
 class FightingPairs;
 }
 
+
+
 class FightingPairs : public QDialog
 {
     Q_OBJECT
+
+    class NodeOfGridWithNames
+    {
+    public:
+        DBUtils::NodeOfTournirGrid node;
+
+        QString name;
+
+        int leftUID;
+        int rightUID;
+        QString leftName;
+        QString rightName;
+
+        NodeOfGridWithNames(const DBUtils::NodeOfTournirGrid& node = DBUtils::NodeOfTournirGrid()) :
+            node(node),
+
+            name(""),
+
+            leftUID(-1),
+            rightUID(-1),
+            leftName(""),
+            rightName("")
+        {
+
+        }
+    };
 
 public:
     explicit FightingPairs(long long _tournamentUID, QWidget* parent = 0);
@@ -44,13 +72,13 @@ private:
     static void printListOfPairsInExcel(
             DialogChoseData& dlg,
             QAxObject *sheets,
-            const QVector<DBUtils::NodeOfTournirGrid>& pairs,
+            const QVector<NodeOfGridWithNames>& pairs,
             int ring,
             int typeText,
             QString stringDate,
             int tournamentUID
             );
-    static void printListOfPairsInJSON(const QVector<DBUtils::NodeOfTournirGrid>& pairs, int ring, const QString& existingDirectory, int typeText, int typeFlag);
+    static void printListOfPairsInJSON(const QVector<NodeOfGridWithNames>& pairs, int ring, const QString& existingDirectory, int typeText, int typeFlag);
     void makeGridsForPointFighting(QString existingDirectory, QVector<long long> tournamentCategoryUIDs);
 public:
     static void writeGridsForPointFighting(
@@ -78,7 +106,7 @@ public:
 private:
     static QString getTextLocal(long long orderUID, int type);
     static QString getFlagImage(long long orderUID, int type);
-    static QJsonObject getQJsonObject(const DBUtils::NodeOfTournirGrid& f, const int fightingId, int typeText, int typeFlag);
+    static QJsonObject getQJsonObject(const NodeOfGridWithNames& f, const int fightingId, int typeText, int typeFlag);
 
     std::vector<int> getDurationsOfFightsForChampionship(const QVector<int>& selectedRows);
 

@@ -275,48 +275,22 @@ QVector<DBUtils::NodeOfTournirGrid> DBUtils::getNodes(long long tournamentCatego
     query.addBindValue(tournamentCategories);
     if (!query.exec())
     {
-        qDebug() << __PRETTY_FUNCTION__ << query.lastQuery();
+        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << query.lastError() << query.lastQuery();
         return arr;
     }
     while (query.next())
     {
-        QString orderUID = query.value("ORDER_FK").toString();
+        int orderUID = query.value("ORDER_FK").toInt();
         bool isFighing = query.value("IS_FIGHTING").toBool();
-        QString name = "_________";
-        QString region = "";
-        if (!orderUID.isEmpty())
-        {
-            name   = DBUtils::getField("SECOND_NAME", "ORDERS", orderUID, __PRETTY_FUNCTION__) +  " " +
-                     DBUtils::getField("FIRST_NAME" , "ORDERS", orderUID, __PRETTY_FUNCTION__);
-            region =
-                    DBUtils::getField("NAME", "COUNTRIES", DBUtils::getField("COUNTRY_FK", "ORDERS", orderUID, __PRETTY_FUNCTION__), __PRETTY_FUNCTION__) +
-                    " / " +
-                    DBUtils::getField("NAME", "REGIONS"  , DBUtils::getField("REGION_FK" , "ORDERS", orderUID, __PRETTY_FUNCTION__), __PRETTY_FUNCTION__);
-        }
-        NodeOfTournirGrid node = NodeOfTournirGrid(
-                                     tournamentCategories,
-                                     query.value("VERTEX").toInt(),
-                                     isFighing,
-                                     orderUID.toLongLong(),
-                                     query.value("result").toString(),
-                                     query.value("DAY_FIGHT").toInt(),
-                                     query.value("TIME_FIGHT").toInt()
-                                     );
-        node.name   = name;
-        node.region = region;
-
-        arr << node;
-    }
-    for (int v = 1; v <= arr.size(); ++v)
-    {
-        if (arr[v - 1].isFight)
-        {
-            arr[v - 1].leftUID   = arr[2 * v + 1 - 1].UID;
-            arr[v - 1].leftName  = arr[2 * v + 1 - 1].name;
-
-            arr[v - 1].rightUID  = arr[2 * v     - 1].UID;
-            arr[v - 1].rightName = arr[2 * v     - 1].name;
-        }
+        arr << NodeOfTournirGrid(
+                    tournamentCategories,
+                    query.value("VERTEX").toInt(),
+                    isFighing,
+                    orderUID,
+                    query.value("result").toString(),
+                    query.value("DAY_FIGHT").toInt(),
+                    query.value("TIME_FIGHT").toInt()
+                    );
     }
     return arr;
 }

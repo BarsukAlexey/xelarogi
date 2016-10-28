@@ -23,7 +23,6 @@ SOURCES += main.cpp\
     createtournamentdialog.cpp \
     createtournamentordersdialog.cpp \
     renderareawidget.cpp \
-    tournamentgriddialog2.cpp \
     createtournamentcategoriesdialog.cpp \
     fiting_distribution.cpp \
     excel_utils.cpp \
@@ -55,7 +54,9 @@ SOURCES += main.cpp\
     dialogschedule2treewidget.cpp \
     dialogschedule2tablewidget.cpp \
     utils.cpp \
-    dialogschedule2inputtype.cpp
+    dialogschedule2inputtype.cpp \
+    dialogtournamentgrid.cpp \
+    createtournamentcategoriesdialog2.cpp
 
 HEADERS  += mainwindow.h \
     handbookdialog.h \
@@ -64,7 +65,6 @@ HEADERS  += mainwindow.h \
     createtournamentdialog.h \
     createtournamentordersdialog.h \
     renderareawidget.h \
-    tournamentgriddialog2.h \
     createtournamentcategoriesdialog.h \
     fiting_distribution.h \
     excel_utils.h \
@@ -78,7 +78,6 @@ HEADERS  += mainwindow.h \
     generatetournamentcategoriesdialog.h \
     errormessagesdialog.h \
     logindialog.h \
-    trophygenerator.h \
     trophygeneratorsettingsdialog.h \
     report_manda.h \
     report_ministr.h \
@@ -96,7 +95,10 @@ HEADERS  += mainwindow.h \
     dialogschedule2treewidget.h \
     dialogschedule2tablewidget.h \
     utils.h \
-    dialogschedule2inputtype.h
+    dialogschedule2inputtype.h \
+    dialogtournamentgrid.h \
+    createtournamentcategoriesdialog2.h \
+    trophygenerator.h
 
 FORMS    += mainwindow.ui \
     handbookdialog.ui \
@@ -121,7 +123,9 @@ FORMS    += mainwindow.ui \
     dialogschedule.ui \
     dialogschedulesettinglists.ui \
     dialogschedule2.ui \
-    dialogschedule2inputtype.ui
+    dialogschedule2inputtype.ui \
+    dialogtournamentgrid.ui \
+    createtournamentcategoriesdialog2.ui
 
 DISTFILES +=
 

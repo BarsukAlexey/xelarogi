@@ -198,13 +198,13 @@ public class Fighting {
     }
 
     void addOnePointToLeftFighter(int fromJudge) {
-        if (isDisqOrForceWinner())
+        if (isDisqOrForceWinner() || status == FightStatus.Break)
             return;
         ++countOfPointsForTheLeftFighter[currentRound][fromJudge];
     }
 
     void addOnePointToRightFighter(int fromJudge) {
-        if (isDisqOrForceWinner())
+        if (isDisqOrForceWinner() || status == FightStatus.Break)
             return;
         ++countOfPointsForTheRightFighter[currentRound][fromJudge];
     }
@@ -402,13 +402,10 @@ public class Fighting {
     }
 
     /**
-     * Одно предупреждение идет левому бойцу. Если их больше 1ого, до дисквалификация
+     * Одно предупреждение идет левому бойцу
      */
     void addForestallingToLeft() {
-//        if (isDisqOrForceWinner())
-//            return;
-
-        if (countOfForestallingToLeft == 0) {
+        if (countOfForestallingToLeft <= 3) {
             ++countOfForestallingToLeft;
             Penalty penalty = new Penalty(TypePenalty.FO, Player.Left);
             stackPenalty.push(penalty);
@@ -416,13 +413,10 @@ public class Fighting {
     }
 
     /**
-     * Одно предупреждение идет правому бойцу. Если их больше 1ого, до дисквалификация
+     * Одно предупреждение идет правому бойцу
      */
     void addForestallingToRight() {
-//        if (isDisqOrForceWinner())
-//            return;
-
-        if (countOfForestallingToRight == 0) {
+        if (countOfForestallingToRight <= 3) {
             ++countOfForestallingToRight;
             Penalty penalty = new Penalty(TypePenalty.FO, Player.Right);
             stackPenalty.push(penalty);

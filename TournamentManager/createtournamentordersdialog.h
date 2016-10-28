@@ -31,7 +31,7 @@
 #include "databaseexpert.h"
 #include "webreportdialog.h"
 #include "errormessagesdialog.h"
-#include "tournamentgriddialog2.h"
+#include "dialogtournamentgrid.h"
 
 
 namespace Ui {

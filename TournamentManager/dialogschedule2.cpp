@@ -768,6 +768,8 @@ void Dialogschedule2::onPushButtonSaveSchelderClicked()
     ExcelUtils::setValue(sheet, 3, 1, ui->comboBoxDay->currentText());
     ExcelUtils::uniteRange(sheet, 3, 1, 3, ui->tableWidget->columnCount() + 1);
 
+
+
     delete sheet;
     delete sheets;
     delete workbook;

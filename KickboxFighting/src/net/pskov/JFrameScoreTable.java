@@ -6,6 +6,8 @@ import net.pskov.some_enum.FightStatus;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.font.TextLayout;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
@@ -144,16 +146,14 @@ class JFrameScoreTable extends JDialog {
                     "6 - STOP ROUND!"
             };
 
-            int height = scrDim.height / msg.length;
+            int height = scrDim.height / (msg.length);
             int sz = 100;
             for (String aMsg : msg) {
                 sz = Math.min(sz, GraphicsUtilities.getMaxFittingFontSize(g, g.getFont(), aMsg, g.getClipBounds().width - scrDim.width, height));
             }
             for (int i = 0; i < msg.length; i++) {
-                //GraphicsUtilities.drawTextInCenterOfRectangle(g, Color.black, msg[i], 0, i * height, g.getClipBounds().width - scrDim.width, height, sz);
                 GraphicsUtilities.drawTextInTheLeftOfRectangle(g, Color.black, msg[i], 0, i * height, height, sz);
             }
-
             g.translate(-scrDim.width, 0);
         } else
             scrDim = new Dimension(g.getClipBounds().width, g.getClipBounds().height);

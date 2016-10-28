@@ -327,7 +327,7 @@ CreateTournamentOrdersDialog::CreateTournamentOrdersDialog(const QSqlDatabase &d
 
         QString uidTC = DBUtils::getField("TOURNAMENT_CATEGORY_FK", "ORDERS", orderUID);
         QString filter = DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", uidTC);
-        TournamentGridDialog2 dlg(filter, tournamentUID, this);
+        DialogTournamentGrid dlg(this, filter, tournamentUID);
         dlg.exec();
 
         model->submitAll();

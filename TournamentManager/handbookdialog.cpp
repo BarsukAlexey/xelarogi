@@ -60,7 +60,7 @@ HandbookDialog::HandbookDialog(QString tableName, QString tableRusName,
     connect(ui->btnSave, &QPushButton::clicked, [model]()
     {
         if (!model->submitAll())
-            qDebug() << model->lastError().text();
+            QMessageBox::critical(0, "", model->lastError().text());
         model->select();
     });
     connect(ui->btnRevert, &QPushButton::clicked, [model]()
@@ -142,7 +142,9 @@ void HandlebookRelationDelegate::paint(QPainter *painter, const QStyleOptionView
     }
 }
 
-QWidget *HandlebookRelationDelegate::createEditor(QWidget *aParent, const QStyleOptionViewItem &option, const QModelIndex &index) const
+QWidget *HandlebookRelationDelegate::createEditor(QWidget *aParent,
+                                                  const QStyleOptionViewItem &option,
+                                                  const QModelIndex &index) const
 {
     const QSqlRelationalTableModel *sqlModel = qobject_cast<const QSqlRelationalTableModel *>(index.model());
     QSqlTableModel *childModel = sqlModel ? sqlModel->relationModel(index.column()) : 0;
@@ -180,6 +182,8 @@ QWidget *HandlebookRelationDelegate::createEditor(QWidget *aParent, const QStyle
             QModelIndex countryIndex = sqlModel->index(index.row(), countryColumn);
             QString countryName = countryIndex.data(Qt::DisplayRole).toString();
 
+            //sqlModel->relationModel(countryIndex);
+
             QString countryFK = "";
             QSqlQuery query;
             query.prepare("SELECT * FROM COUNTRIES WHERE NAME = ?");
@@ -190,15 +194,27 @@ QWidget *HandlebookRelationDelegate::createEditor(QWidget *aParent, const QStyle
             }
             query.clear();
 
-            QComboBox *combo = new QComboBox(aParent);
-            query.prepare("SELECT * REGIONS WHERE COUNTRY_FK = " + countryFK);
-            QSqlTableModel* regionModel = new QSqlTableModel;
-            regionModel->setTable("REGIONS");
+
+
+            QSqlTableModel *regionModel = new QSqlTableModel(aParent);
+            regionModel->setTable(childModel->tableName());
             regionModel->setFilter("COUNTRY_FK = " + countryFK);
             regionModel->select();
+            QComboBox *combo = new QComboBox(aParent);
             combo->setModel(regionModel);
             combo->setModelColumn(regionModel->fieldIndex("NAME"));
             combo->installEventFilter(const_cast<HandlebookRelationDelegate *>(this));
+            qDebug() << "Here: ";
+
+//            QComboBox *combo = new QComboBox(aParent);
+//            query.prepare("SELECT * REGIONS WHERE COUNTRY_FK = " + countryFK);
+//            QSqlTableModel* regionModel = new QSqlTableModel;
+//            regionModel->setTable("REGIONS");
+//            regionModel->setFilter("COUNTRY_FK = " + countryFK);
+//            regionModel->select();
+//            combo->setModel(regionModel);
+//            combo->setModelColumn(regionModel->fieldIndex("NAME"));
+//            combo->installEventFilter(const_cast<HandlebookRelationDelegate *>(this));
 
             return combo;
         }
@@ -290,7 +306,7 @@ void HandlebookRelationDelegate::setModelData(QWidget *editor, QAbstractItemMode
     }
 
     int currentItem = combo->currentIndex();
-    int childColIndex = childModel->fieldIndex(sqlModel->relation(index.column()).displayColumn());
+    int childColIndex  = childModel->fieldIndex(sqlModel->relation(index.column()).displayColumn());
     int childEditIndex = childModel->fieldIndex(sqlModel->relation(index.column()).indexColumn());
     sqlModel->setData(index,
             childModel->data(childModel->index(currentItem, childColIndex), Qt::DisplayRole),

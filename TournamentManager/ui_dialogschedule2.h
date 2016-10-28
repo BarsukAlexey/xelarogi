@@ -15,6 +15,7 @@
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QDialog>
+#include <QtWidgets/QFormLayout>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QHBoxLayout>
@@ -22,8 +23,10 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QRadioButton>
+#include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QSpinBox>
 #include <QtWidgets/QSplitter>
+#include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 #include "dialogschedule2tablewidget.h"
 #include "dialogschedule2treewidget.h"
@@ -36,15 +39,18 @@ public:
     QGridLayout *gridLayout_2;
     QSplitter *splitter;
     QWidget *widget;
-    QGridLayout *gridLayout;
-    QLabel *label;
-    QSpinBox *spinBoxDelay;
-    QSpinBox *spinBoxRing;
+    QVBoxLayout *verticalLayout;
     QLabel *labelContest;
-    QLabel *label_3;
+    QHBoxLayout *horizontalLayout_5;
+    QSpacerItem *horizontalSpacer_4;
+    QFormLayout *formLayout;
+    QLabel *label;
+    QSpinBox *spinBoxRing;
     QLabel *label_2;
     QComboBox *comboBoxDay;
-    Dialogschedule2TreeWidget *treeWidget;
+    QLabel *label_3;
+    QSpinBox *spinBoxDelay;
+    QHBoxLayout *horizontalLayout_4;
     QGroupBox *groupBox_2;
     QHBoxLayout *horizontalLayout_2;
     QRadioButton *radioTextCountry;
@@ -57,8 +63,12 @@ public:
     QRadioButton *radioFlagRegion;
     QRadioButton *radioFlagCity;
     QRadioButton *radioFlagClub;
+    QSpacerItem *horizontalSpacer_2;
+    QHBoxLayout *horizontalLayout_3;
     QPushButton *pushButtonSaveSchelder;
     QPushButton *pushButtonListOfPairs;
+    QSpacerItem *horizontalSpacer;
+    Dialogschedule2TreeWidget *treeWidget;
     Dialogschedule2TableWidget *tableWidget;
 
     void setupUi(QDialog *Dialogschedule2)
@@ -78,30 +88,8 @@ public:
         splitter->setOrientation(Qt::Horizontal);
         widget = new QWidget(splitter);
         widget->setObjectName(QStringLiteral("widget"));
-        gridLayout = new QGridLayout(widget);
-        gridLayout->setObjectName(QStringLiteral("gridLayout"));
-        label = new QLabel(widget);
-        label->setObjectName(QStringLiteral("label"));
-        label->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
-
-        gridLayout->addWidget(label, 1, 0, 1, 1);
-
-        spinBoxDelay = new QSpinBox(widget);
-        spinBoxDelay->setObjectName(QStringLiteral("spinBoxDelay"));
-        spinBoxDelay->setMinimum(5);
-        spinBoxDelay->setMaximum(100500);
-        spinBoxDelay->setSingleStep(10);
-        spinBoxDelay->setValue(120);
-
-        gridLayout->addWidget(spinBoxDelay, 3, 1, 1, 1);
-
-        spinBoxRing = new QSpinBox(widget);
-        spinBoxRing->setObjectName(QStringLiteral("spinBoxRing"));
-        spinBoxRing->setMinimum(1);
-        spinBoxRing->setMaximum(228);
-
-        gridLayout->addWidget(spinBoxRing, 1, 1, 1, 1);
-
+        verticalLayout = new QVBoxLayout(widget);
+        verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
         labelContest = new QLabel(widget);
         labelContest->setObjectName(QStringLiteral("labelContest"));
         QFont font;
@@ -111,37 +99,63 @@ public:
         labelContest->setFont(font);
         labelContest->setAlignment(Qt::AlignCenter);
 
-        gridLayout->addWidget(labelContest, 0, 0, 1, 2);
+        verticalLayout->addWidget(labelContest);
 
-        label_3 = new QLabel(widget);
-        label_3->setObjectName(QStringLiteral("label_3"));
-        label_3->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+        horizontalLayout_5 = new QHBoxLayout();
+        horizontalLayout_5->setObjectName(QStringLiteral("horizontalLayout_5"));
+        horizontalSpacer_4 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-        gridLayout->addWidget(label_3, 3, 0, 1, 1);
+        horizontalLayout_5->addItem(horizontalSpacer_4);
+
+        formLayout = new QFormLayout();
+        formLayout->setObjectName(QStringLiteral("formLayout"));
+        label = new QLabel(widget);
+        label->setObjectName(QStringLiteral("label"));
+        label->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+
+        formLayout->setWidget(0, QFormLayout::LabelRole, label);
+
+        spinBoxRing = new QSpinBox(widget);
+        spinBoxRing->setObjectName(QStringLiteral("spinBoxRing"));
+        spinBoxRing->setMinimum(1);
+        spinBoxRing->setMaximum(228);
+
+        formLayout->setWidget(0, QFormLayout::FieldRole, spinBoxRing);
 
         label_2 = new QLabel(widget);
         label_2->setObjectName(QStringLiteral("label_2"));
         label_2->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
-        gridLayout->addWidget(label_2, 2, 0, 1, 1);
+        formLayout->setWidget(1, QFormLayout::LabelRole, label_2);
 
         comboBoxDay = new QComboBox(widget);
         comboBoxDay->setObjectName(QStringLiteral("comboBoxDay"));
 
-        gridLayout->addWidget(comboBoxDay, 2, 1, 1, 1);
+        formLayout->setWidget(1, QFormLayout::FieldRole, comboBoxDay);
 
-        treeWidget = new Dialogschedule2TreeWidget(widget);
-        QTreeWidgetItem *__qtreewidgetitem = new QTreeWidgetItem();
-        __qtreewidgetitem->setText(1, QString::fromUtf8("\320\221\320\276\320\270"));
-        __qtreewidgetitem->setText(0, QString::fromUtf8("\320\232\320\260\321\202\320\265\320\263\320\276\321\200\320\270\321\217"));
-        treeWidget->setHeaderItem(__qtreewidgetitem);
-        treeWidget->setObjectName(QStringLiteral("treeWidget"));
-        treeWidget->setFocusPolicy(Qt::ClickFocus);
-        treeWidget->setStyleSheet(QStringLiteral(""));
-        treeWidget->setColumnCount(5);
+        label_3 = new QLabel(widget);
+        label_3->setObjectName(QStringLiteral("label_3"));
+        label_3->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
-        gridLayout->addWidget(treeWidget, 7, 0, 1, 2);
+        formLayout->setWidget(2, QFormLayout::LabelRole, label_3);
 
+        spinBoxDelay = new QSpinBox(widget);
+        spinBoxDelay->setObjectName(QStringLiteral("spinBoxDelay"));
+        spinBoxDelay->setMinimum(5);
+        spinBoxDelay->setMaximum(100500);
+        spinBoxDelay->setSingleStep(10);
+        spinBoxDelay->setValue(120);
+
+        formLayout->setWidget(2, QFormLayout::FieldRole, spinBoxDelay);
+
+
+        horizontalLayout_5->addLayout(formLayout);
+
+
+        verticalLayout->addLayout(horizontalLayout_5);
+
+        horizontalLayout_4 = new QHBoxLayout();
+        horizontalLayout_4->setObjectName(QStringLiteral("horizontalLayout_4"));
         groupBox_2 = new QGroupBox(widget);
         groupBox_2->setObjectName(QStringLiteral("groupBox_2"));
         horizontalLayout_2 = new QHBoxLayout(groupBox_2);
@@ -168,7 +182,7 @@ public:
         horizontalLayout_2->addWidget(radioTextClub);
 
 
-        gridLayout->addWidget(groupBox_2, 4, 0, 1, 1);
+        horizontalLayout_4->addWidget(groupBox_2);
 
         groupBox = new QGroupBox(widget);
         groupBox->setObjectName(QStringLiteral("groupBox"));
@@ -196,17 +210,46 @@ public:
         horizontalLayout->addWidget(radioFlagClub);
 
 
-        gridLayout->addWidget(groupBox, 4, 1, 1, 1);
+        horizontalLayout_4->addWidget(groupBox);
 
+        horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_4->addItem(horizontalSpacer_2);
+
+
+        verticalLayout->addLayout(horizontalLayout_4);
+
+        horizontalLayout_3 = new QHBoxLayout();
+        horizontalLayout_3->setObjectName(QStringLiteral("horizontalLayout_3"));
         pushButtonSaveSchelder = new QPushButton(widget);
         pushButtonSaveSchelder->setObjectName(QStringLiteral("pushButtonSaveSchelder"));
 
-        gridLayout->addWidget(pushButtonSaveSchelder, 5, 0, 1, 1);
+        horizontalLayout_3->addWidget(pushButtonSaveSchelder);
 
         pushButtonListOfPairs = new QPushButton(widget);
         pushButtonListOfPairs->setObjectName(QStringLiteral("pushButtonListOfPairs"));
 
-        gridLayout->addWidget(pushButtonListOfPairs, 5, 1, 1, 1);
+        horizontalLayout_3->addWidget(pushButtonListOfPairs);
+
+        horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_3->addItem(horizontalSpacer);
+
+
+        verticalLayout->addLayout(horizontalLayout_3);
+
+        treeWidget = new Dialogschedule2TreeWidget(widget);
+        QTreeWidgetItem *__qtreewidgetitem = new QTreeWidgetItem();
+        __qtreewidgetitem->setText(1, QString::fromUtf8("\320\221\320\276\320\270"));
+        __qtreewidgetitem->setText(0, QString::fromUtf8("\320\232\320\260\321\202\320\265\320\263\320\276\321\200\320\270\321\217"));
+        treeWidget->setHeaderItem(__qtreewidgetitem);
+        treeWidget->setObjectName(QStringLiteral("treeWidget"));
+        treeWidget->setFocusPolicy(Qt::ClickFocus);
+        treeWidget->setStyleSheet(QStringLiteral(""));
+        treeWidget->setAlternatingRowColors(true);
+        treeWidget->setColumnCount(5);
+
+        verticalLayout->addWidget(treeWidget);
 
         splitter->addWidget(widget);
         tableWidget = new Dialogschedule2TableWidget(splitter);
@@ -230,14 +273,10 @@ public:
     void retranslateUi(QDialog *Dialogschedule2)
     {
         Dialogschedule2->setWindowTitle(QApplication::translate("Dialogschedule2", "Dialog", 0));
-        label->setText(QApplication::translate("Dialogschedule2", "\320\232\320\276\320\273\320\270\321\207\320\265\321\201\321\202\320\262\320\276 \320\277\320\273\320\276\321\211\320\260\320\264\320\276\320\272:", 0));
         labelContest->setText(QApplication::translate("Dialogschedule2", "#", 0));
-        label_3->setText(QApplication::translate("Dialogschedule2", "\320\227\320\260\320\264\320\265\321\200\320\266\320\272\320\260 \321\201\320\274\320\265\320\275\321\213 \320\277\320\260\321\200 (\320\262 \321\201\320\265\320\272\321\203\320\275\320\264\320\260\321\205)", 0));
+        label->setText(QApplication::translate("Dialogschedule2", "\320\232\320\276\320\273\320\270\321\207\320\265\321\201\321\202\320\262\320\276 \320\277\320\273\320\276\321\211\320\260\320\264\320\276\320\272:", 0));
         label_2->setText(QApplication::translate("Dialogschedule2", "\320\224\320\265\320\275\321\214:", 0));
-        QTreeWidgetItem *___qtreewidgetitem = treeWidget->headerItem();
-        ___qtreewidgetitem->setText(4, QApplication::translate("Dialogschedule2", "\320\237\320\276\321\200\321\217\320\264\320\276\320\272", 0));
-        ___qtreewidgetitem->setText(3, QApplication::translate("Dialogschedule2", "\320\240\320\270\320\275\320\263", 0));
-        ___qtreewidgetitem->setText(2, QApplication::translate("Dialogschedule2", "\320\224\320\260\321\202\320\260", 0));
+        label_3->setText(QApplication::translate("Dialogschedule2", "\320\227\320\260\320\264\320\265\321\200\320\266\320\272\320\260 \321\201\320\274\320\265\320\275\321\213 \320\277\320\260\321\200 (\320\262 \321\201\320\265\320\272\321\203\320\275\320\264\320\260\321\205)", 0));
         groupBox_2->setTitle(QApplication::translate("Dialogschedule2", "\320\242\320\265\320\272\321\201\321\202 (\320\264\320\273\321\217 \320\262\321\201\320\265\320\263\320\276 \320\272\321\200\320\276\320\274\320\265 \321\201\320\265\321\202\320\276\320\272)", 0));
         radioTextCountry->setText(QApplication::translate("Dialogschedule2", "\320\241\321\202\321\200\320\260\320\275\320\260", 0));
         radioTextRegion->setText(QApplication::translate("Dialogschedule2", "\320\240\320\265\320\263\320\270\320\276\320\275", 0));
@@ -250,6 +289,10 @@ public:
         radioFlagClub->setText(QApplication::translate("Dialogschedule2", "\320\232\320\273\321\203\320\261", 0));
         pushButtonSaveSchelder->setText(QApplication::translate("Dialogschedule2", "\320\241\320\276\321\205\321\200\320\260\320\275\320\270\321\202\321\214 \321\200\320\260\321\201\320\277\320\270\321\201\320\260\320\275\320\270\320\265 \320\262 excel...", 0));
         pushButtonListOfPairs->setText(QApplication::translate("Dialogschedule2", "\320\237\320\276\320\273\321\203\321\207\320\270\321\202\321\214  \321\201\320\277\320\270\321\201\320\276\320\272 \320\277\320\260\321\200 \320\270 \321\201\320\265\321\202\320\272\320\270 \320\275\320\260 \320\264\320\265\320\275\321\214...", 0));
+        QTreeWidgetItem *___qtreewidgetitem = treeWidget->headerItem();
+        ___qtreewidgetitem->setText(4, QApplication::translate("Dialogschedule2", "\320\237\320\276\321\200\321\217\320\264\320\276\320\272", 0));
+        ___qtreewidgetitem->setText(3, QApplication::translate("Dialogschedule2", "\320\240\320\270\320\275\320\263", 0));
+        ___qtreewidgetitem->setText(2, QApplication::translate("Dialogschedule2", "\320\224\320\260\321\202\320\260", 0));
     } // retranslateUi
 
 };

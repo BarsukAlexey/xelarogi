@@ -2,14 +2,13 @@
 #define DBUTILS_H
 
 #include <algorithm>
-
 #include <QDate>
 #include <QDebug>
 #include <QMap>
 #include <QSqlDatabase>
+#include <QSqlQueryModel>
 #include <QStringList>
 #include <QVector>
-#include <QSqlQueryModel>
 
 
 class DBUtils
@@ -27,14 +26,6 @@ public:
         QString result;
         int DAY_FIGHT;
         int TIME_FIGHT;
-
-        QString name;
-        QString region;
-
-        long long leftUID;
-        long long rightUID;
-        QString leftName;
-        QString rightName;
 
         explicit NodeOfTournirGrid(long long tournamentCategory = -1,
                                    int v = -1,
@@ -69,7 +60,8 @@ public:
     // для таблицы ORDERS
     static QString getSecondNameAndFirstName(long long UID);
     static QString getSecondNameAndOneLetterOfName(long long UID);
-    static QSet<long long> getSetOfOrdersInTournamentCategory(long long uidTournamentCategory);
+    static QSet<long long> getSetOfOrdersInTournamentCategory(long long uidTournamentCategory); // TODO DELETE ?
+
 
 
     // для таблицы TOURNAMENTS

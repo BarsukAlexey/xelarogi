@@ -75,12 +75,14 @@ void ExcelUtils::setRowHeight(QAxObject* sheet, int row, int height)
 //    razmer->setProperty("RowHeight",100);
     QAxObject *pRow = sheet->querySubObject("Rows(QVariant&)", row);
     pRow->setProperty("RowHeight", height);
+    delete pRow;
 }
 
 void ExcelUtils::setColumnWidth(QAxObject* sheet, int column, int width)
 {
     QAxObject *pRow = sheet->querySubObject("Columns(QVariant&)", column);
     pRow->setProperty("ColumnWidth", width);
+    delete pRow;
 }
 
 // 1 - портретная, 2 - альбомная
@@ -199,7 +201,19 @@ QAxObject*ExcelUtils::addNewSheet(QAxObject* sheets)
     // Capture last sheet and add new sheet
     QAxObject* lastSheet = sheets->querySubObject("Item(int)", intCount);
     sheets->dynamicCall("Add(QVariant)", lastSheet->asVariant());
+    delete lastSheet;
     // Capture the new sheet and move to after last sheet
     QAxObject* sheet = sheets->querySubObject("Item(int)", intCount);
     return sheet;
+}
+
+void ExcelUtils::normalizeColumnWidth(QAxObject* sheet, int column, int infWidth)
+{
+    QAxObject *pColumn = sheet->querySubObject("Columns(QVariant&)", column);
+    if (qAbs(infWidth - pColumn->property("ColumnWidth").toDouble()) < 1e-7 ||
+        pColumn->property("ColumnWidth").toDouble() < 8.43)
+    {
+        pColumn->setProperty("ColumnWidth", 8.43);
+    }
+    delete pColumn;
 }

@@ -60,6 +60,8 @@ public:
     static void setFooter(QAxObject* sheet, int row, int column0, int column1, int height, QVector<std::pair<int, QString>> what, QVector<QString> namsses);
 
     static QAxObject* addNewSheet(QAxObject* sheets);
+
+    static void normalizeColumnWidth(QAxObject* sheet, int column, int infWidth = 50);
 };
 
 #endif // EXCELUTILS_H

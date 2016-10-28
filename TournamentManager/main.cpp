@@ -1,12 +1,10 @@
-#include "mainwindow.h"
+#include <iostream>
 #include <QApplication>
 #include <QDebug>
 #include <QMessageBox>
-#include "dialogschedule2.h"
-#include "dialogschedule2inputtype.h"
-#include "iostream"
-using namespace std;
 
+#include "mainwindow.h"
+#include "createtournamentcategoriesdialog2.h"
 
 void break_point(QtMsgType msgType, const QMessageLogContext &, const QString &msg)
 {
@@ -20,32 +18,29 @@ void break_point(QtMsgType msgType, const QMessageLogContext &, const QString &m
 
 void on_terminate()
 {
-    int a = 228;
-    int b = 223;
-    int c;
-    c = a + b;
-    c += a += b;
+    qDebug() << "on_terminate";
 }
 
 
 
 int main(int argc, char *argv[])
 {
-//    qInstallMessageHandler(break_point);
-//    std::set_terminate(on_terminate);
+    qInstallMessageHandler(break_point);
+    std::set_terminate(on_terminate);
 
 
     QApplication a(argc, argv);
-    QCoreApplication::setOrganizationName("My pussy tast like pepsi cola");
-    QCoreApplication::setOrganizationDomain("pussy.com");
-    QCoreApplication::setApplicationName("Tournament Manager");
-
+    QCoreApplication::setOrganizationName("Secret Organization Name");
+    QCoreApplication::setOrganizationDomain("SecretOrganizationDomain.com");
+    QCoreApplication::setApplicationName("Perfect Tournament Manager");
 
 
     MainWindow w;
     //w.show(); return a.exec();
 
-    Dialogschedule2 dlg(21, 0); dlg.showMaximized(); return dlg.exec();
+    CreateTournamentCategoriesDialog2 dlg(0, 21);
+    dlg.showMaximized();
+    return dlg.exec();
 
 
 

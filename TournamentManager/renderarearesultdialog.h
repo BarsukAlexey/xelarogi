@@ -12,11 +12,11 @@ class RenderAreaResultDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit RenderAreaResultDialog(QString name, QString region, QWidget *parent = 0);
+    explicit RenderAreaResultDialog(QString name, QWidget *parent = 0);
     ~RenderAreaResultDialog();
 
 public:
-    static QString mLastResult;
+    QString getResult();
 
 private:
     Ui::RenderAreaResultDialog *ui;

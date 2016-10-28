@@ -131,7 +131,7 @@ FightingPairs::~FightingPairs()
 void FightingPairs::printListOfPairsInExcel(
         DialogChoseData& dlg,
         QAxObject *sheet,
-        const QVector<DBUtils::NodeOfTournirGrid>& pairs,
+        const QVector<NodeOfGridWithNames>& pairs,
         int ring,
         int typeText,
         QString stringDate,
@@ -158,12 +158,12 @@ void FightingPairs::printListOfPairsInExcel(
 
     for (int i = 0, pair = 1; i < pairs.size(); ++i, ++pair)
     {
-        const DBUtils::NodeOfTournirGrid& f = pairs[i];
-        if (i == 0 || pairs[i].tournamentCategory != pairs[i - 1].tournamentCategory)
+        const NodeOfGridWithNames& f = pairs[i];
+        if (i == 0 || pairs[i].node.tournamentCategory != pairs[i - 1].node.tournamentCategory)
         {
             ++currentRow;
 
-            QString nameOfLevel = RenderAreaWidget::getNameOfLevel(f.v);
+            QString nameOfLevel = RenderAreaWidget::getNameOfLevel(f.node.v);
             if (translations.contains(nameOfLevel)) nameOfLevel = translations[nameOfLevel];
 
             ExcelUtils::setValue(sheet, currentRow, 1, nameOfLevel);
@@ -172,7 +172,7 @@ void FightingPairs::printListOfPairsInExcel(
             ++currentRow;
 
             ExcelUtils::setValue(sheet, currentRow, 1,
-                                 DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", f.tournamentCategory));
+                                 DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", f.node.tournamentCategory));
             ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 3);
             ++currentRow;
         }
@@ -206,7 +206,7 @@ void FightingPairs::printListOfPairsInExcel(
 }
 
 void FightingPairs::printListOfPairsInJSON(
-        const QVector<DBUtils::NodeOfTournirGrid>& pairs,
+        const QVector<NodeOfGridWithNames>& pairs,
         int ring,
         const QString& existingDirectory,
         int typeText,
@@ -215,7 +215,7 @@ void FightingPairs::printListOfPairsInJSON(
     //
     QJsonArray arr;
     int fightingId = 1;
-    for (const DBUtils::NodeOfTournirGrid& f : pairs)
+    for (const NodeOfGridWithNames f : pairs)
     {
         QJsonObject a = getQJsonObject(f, fightingId, typeText, typeFlag);
         arr << a;
@@ -429,7 +429,7 @@ QString FightingPairs::getFlagImage(long long orderUID, int type)
     return "";
 }
 
-QJsonObject FightingPairs::getQJsonObject(const DBUtils::NodeOfTournirGrid& f, const int fightingId, int typeText, int typeFlag)
+QJsonObject FightingPairs::getQJsonObject(const NodeOfGridWithNames& f, const int fightingId, int typeText, int typeFlag)
 {
     QJsonObject a;
     a["nameOfLeftFighter" ] = f.leftUID  <= 0? f.leftName  : DBUtils::getField("SECOND_NAME", "ORDERS", f.leftUID ) + " " + DBUtils::getField("FIRST_NAME", "ORDERS", f.leftUID );
@@ -437,12 +437,12 @@ QJsonObject FightingPairs::getQJsonObject(const DBUtils::NodeOfTournirGrid& f, c
 
     a["fightId"] = fightingId;
 
-    a["categoryOfFighting"]      = DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", f.tournamentCategory);
-    a["categoryOfFightingShort"] = DBUtils::getWeightAsOneNumberPlusMinus(f.tournamentCategory);
+    a["categoryOfFighting"]      = DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", f.node.tournamentCategory);
+    a["categoryOfFightingShort"] = DBUtils::getWeightAsOneNumberPlusMinus(f.node.tournamentCategory);
 
-    a["countOfRounds"  ] = DBUtils::getField("ROUND_COUNT"     , "TOURNAMENT_CATEGORIES", f.tournamentCategory);
-    a["durationOfRound"] = DBUtils::getField("DURATION_FIGHING", "TOURNAMENT_CATEGORIES", f.tournamentCategory);
-    a["durationOfBreak"] = DBUtils::getField("DURATION_BREAK"  , "TOURNAMENT_CATEGORIES", f.tournamentCategory);
+    a["countOfRounds"  ] = DBUtils::getField("ROUND_COUNT"     , "TOURNAMENT_CATEGORIES", f.node.tournamentCategory);
+    a["durationOfRound"] = DBUtils::getField("DURATION_FIGHING", "TOURNAMENT_CATEGORIES", f.node.tournamentCategory);
+    a["durationOfBreak"] = DBUtils::getField("DURATION_BREAK"  , "TOURNAMENT_CATEGORIES", f.node.tournamentCategory);
 
     a["regionOfLeftFighter" ] = getTextLocal(f.leftUID , typeText);
     a["regionOfRightFighter"] = getTextLocal(f.rightUID, typeText);
@@ -450,14 +450,14 @@ QJsonObject FightingPairs::getQJsonObject(const DBUtils::NodeOfTournirGrid& f, c
     a["leftFlag" ] = getFlagImage(f.leftUID , typeFlag);
     a["rightFlag"] = getFlagImage(f.rightUID, typeFlag);
 
-    a["TOURNAMENT_CATEGORIES_FK"] = f.tournamentCategory;
-    a["VERTEX"] = f.v;
+    a["TOURNAMENT_CATEGORIES_FK"] = f.node.tournamentCategory;
+    a["VERTEX"] = f.node.v;
 
     a["orderUID_left" ] = f.leftUID ;
     a["orderUID_right"] = f.rightUID;
 
-    a["IN_CASE_TIE"         ] = DBUtils::getField("IN_CASE_TIE"         , "TOURNAMENT_CATEGORIES", f.tournamentCategory).toInt();
-    a["DURATION_EXTRA_ROUND"] = DBUtils::getField("DURATION_EXTRA_ROUND", "TOURNAMENT_CATEGORIES", f.tournamentCategory).toInt();
+    a["IN_CASE_TIE"         ] = DBUtils::getField("IN_CASE_TIE"         , "TOURNAMENT_CATEGORIES", f.node.tournamentCategory).toInt();
+    a["DURATION_EXTRA_ROUND"] = DBUtils::getField("DURATION_EXTRA_ROUND", "TOURNAMENT_CATEGORIES", f.node.tournamentCategory).toInt();
     return a;
 }
 
@@ -638,30 +638,40 @@ void FightingPairs::writeListOfPairs(
         int tournamentUID
         )
 {
-    QVector<DBUtils::NodeOfTournirGrid> pairs;
+    QVector<NodeOfGridWithNames> pairs;
     {
-        QMap<int, QVector<QVector<DBUtils::NodeOfTournirGrid>>> map;
+        QMap<int, QVector<QVector<NodeOfGridWithNames>>> map;
         for (std::pair<int, int> it : uidTC_Level)
         {
             if (!map.contains(it.first))
             {
-                map[it.first] = DBUtils::getNodesAsLevelListOfList(it.first);
+                QVector<QVector<DBUtils::NodeOfTournirGrid>> grid = DBUtils::getNodesAsLevelListOfList(it.first);
+                QVector<QVector<NodeOfGridWithNames>> gridWithNames(grid.size());
+                for (int i = 0; i < grid.size(); ++i)
+                {
+                    gridWithNames[i].resize(grid[i].size());
+                    for (int j = 0; j < grid[i].size(); ++j)
+                    {
+                        gridWithNames[i][j] = NodeOfGridWithNames(grid[i][j]);
+                    }
+                }
+                map[it.first] = gridWithNames;
             }
         }
         for (int i = 0; i < uidTC_Level.size(); ++i)
         {
             int uidTC = uidTC_Level[i].first;
             int turn  = uidTC_Level[i].second;
-            QVector<QVector<DBUtils::NodeOfTournirGrid>>& grid = map[uidTC];
+            QVector<QVector<NodeOfGridWithNames>>& grid = map[uidTC];
             for (int j = grid[turn].size() - 1; 0 <= j; --j)
             {
-                DBUtils::NodeOfTournirGrid& node = grid[turn][j];
-                if (node.isFight && node.UID <= 0)
+                NodeOfGridWithNames& node = grid[turn][j];
+                if (node.node.isFight && node.node.UID <= 0)
                 {
                     node.name      = "Winner # " + QString::number(pairs.size() + 1);
-                    node.leftUID   = grid[turn + 1][2 * j + 1].UID;
+                    node.leftUID   = grid[turn + 1][2 * j + 1].node.UID;
                     node.leftName  = grid[turn + 1][2 * j + 1].name;
-                    node.rightUID  = grid[turn + 1][2 * j    ].UID;
+                    node.rightUID  = grid[turn + 1][2 * j    ].node.UID;
                     node.rightName = grid[turn + 1][2 * j    ].name;
 
                     pairs << node;

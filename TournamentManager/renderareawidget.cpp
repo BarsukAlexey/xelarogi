@@ -1,40 +1,14 @@
-#include "excel_utils.h"
 #include "renderareawidget.h"
 
-#include <QPainter>
-#include <QPaintEvent>
-#include <QVector>
-#include <QRect>
-#include <QDebug>
-#include <QWidget>
-#include <QPainter>
-#include <QPaintEvent>
-#include <QDebug>
-#include <QTime>
-#include <QtAlgorithms>
-#include <QSqlQuery>
-#include <QSqlError>
-#include <QAxObject>
-#include <QAxBase>
-#include <QWidget>
-#include <QPainter>
-#include <QPaintEvent>
-#include <QAxObject>
-#include <QAxBase>
-#include <QDebug>
-#include <QAxObject>
-#include <QAxWidget>
-#include <QFileDialog>
-
-
-RenderAreaWidget::RenderAreaWidget(QWidget *parent, int widthCell, int heightCell)
-    : QWidget(parent)
+RenderAreaWidget::RenderAreaWidget(QWidget *parent, int widthCell, int heightCell) :
+    QWidget(parent),
+    tournamentCategories(-1),
+    fontSize(8),
+    countRows(0),
+    countColumns(0),
+    widthCell(widthCell),
+    heightCell(heightCell)
 {
-    tournamentCategories = -1;
-    countRows = 0;
-    countColumns = 0;
-    this->widthCell = widthCell;
-    this->heightCell = heightCell;
     setNormalSize();
 }
 
@@ -53,61 +27,25 @@ QPoint RenderAreaWidget::getCell(int v)
     return p;
 }
 
-long long RenderAreaWidget::getTournamentUID() const
-{
-    long long tournamentUID = -1;
-    QSqlQuery query;
-    if (!query.prepare("SELECT * FROM TOURNAMENT_CATEGORIES WHERE UID = ?"))
-        qDebug() << query.lastError().text();
-    query.bindValue(0, tournamentCategories);
-    if (query.exec() && query.next())
-    {
-        tournamentUID = query.value("TOURNAMENT_FK").toLongLong();
-    }
-    else
-    {
-        qDebug() << query.lastError().text();
-    }
-
-    return tournamentUID;
-}
-
-QString RenderAreaWidget::getCategoryName() const
-{
-    QString name = "";
-    QSqlQuery query;
-    if (!query.prepare("SELECT NAME FROM TOURNAMENT_CATEGORIES WHERE UID = ?"))
-        qDebug() << query.lastError().text();
-    query.bindValue(0, tournamentCategories);
-    if (query.exec() && query.next())
-    {
-        name = query.value("NAME").toString();
-    }
-    else
-    {
-        qDebug() << query.lastError().text();
-    }
-
-    return name;
-}
 
 void RenderAreaWidget::paintEvent(QPaintEvent* )
 {
-    //qDebug() << __PRETTY_FUNCTION__ << " " << QDateTime::currentDateTime();
-    //return;
+//    QTime time;
+//    time.start();
 
     QPainter painter(this);
 
     painter.fillRect(painter.viewport(), Qt::white);
 
-    QVector<DBUtils::NodeOfTournirGrid> nodes = DBUtils::getNodes(tournamentCategories);
+    if (tournamentCategories <= 0) return ;
+
     if (nodes.empty()) return;
 
     for (const DBUtils::NodeOfTournirGrid& node : nodes)
     {
         for (int child : {2 * node.v, 2 * node.v + 1})
         {
-            if (qBinaryFind(nodes, DBUtils::NodeOfTournirGrid(-1, child)) != nodes.end() )
+            if (child <= nodes.size())
             {
                 paintLine(getCell(node.v), getCell(child), painter);
             }
@@ -117,15 +55,10 @@ void RenderAreaWidget::paintEvent(QPaintEvent* )
     for (const DBUtils::NodeOfTournirGrid& node : nodes)
     {
         QPoint cell = getCell(node.v);
-        paintRect(cell.x(), cell.y(), painter, node);
+        paintNodeOfGrid(cell.x(), cell.y(), painter, node);
     }
 
-    //countColumns = qMax(countColumns, log2(nodes.last().v) + 1);
-    countColumns = log2(nodes.last().v) + 1;
-    countRows = 2 * (1 << (countColumns - 1)) - 1;
-    setNormalSize();
-
-
+//   qDebug() << "Grid is painted: " << time.elapsed();
 }
 
 void RenderAreaWidget::mousePressEvent(QMouseEvent* event)
@@ -170,10 +103,10 @@ void RenderAreaWidget::mousePressEvent(QMouseEvent* event)
             if (node0.v > node1.v) std::swap(node0, node1);
             if (2 * node0.v == node1.v || 2 * node0.v + 1 == node1.v)
             {
-                RenderAreaResultDialog dlg(node1.name, node1.region, this);
+                RenderAreaResultDialog dlg(DBUtils::getSecondNameAndFirstName(node1.UID), this);
                 dlg.exec();
 
-                node0.result = RenderAreaResultDialog::mLastResult;
+                node0.result = dlg.getResult();
 
                 QString orderUID;
                 {
@@ -194,33 +127,16 @@ void RenderAreaWidget::mousePressEvent(QMouseEvent* event)
             }
         }
     }
+    nodes = DBUtils::getNodes(tournamentCategories);
     repaint();
     emit iChangeToutGrid();
 }
 
-void RenderAreaWidget::getAppropriateFontSize(QPainter& painter, const QRect& rect, const QString& text, int flags)
-{
-    QFont font = painter.font();
-    int l = 1, r = 228;
-    const qreal coef = 0.9;
-    while (l < r)
-    {
-        qreal m = (l + r + 1) / 2;
-        font.setPointSizeF(m);
-        QRect boundingRect = QFontMetrics(font).boundingRect(text);
-        if (boundingRect.width() <= coef * rect.width() && boundingRect.height() <= coef * rect.height())
-            l = m;
-        else
-            r = m - 1;
-    }
-    font.setPointSizeF(l);
-    painter.setFont(font);
-    painter.drawText(rect, flags, text);
-}
 
 
 
-void RenderAreaWidget::paintRect(int i, int j, QPainter& painter, const DBUtils::NodeOfTournirGrid& node)
+
+void RenderAreaWidget::paintNodeOfGrid(int i, int j, QPainter& painter, const DBUtils::NodeOfTournirGrid& node)
 {
     QRect rect(j * widthCell, i * heightCell, widthCell, heightCell);
     if (node.v == selectedNode.v)
@@ -250,19 +166,29 @@ void RenderAreaWidget::paintRect(int i, int j, QPainter& painter, const DBUtils:
         painter.drawRect(rect);
     }
 
-    QString text(node.name == "_________"? "" : node.name);
+    QString text(node.UID <= 0? "" : DBUtils::getSecondNameAndFirstName(node.UID));
     if (node.isFight)
     {
         if (0 < node.UID && !node.result.isEmpty())
             text += " (" + node.result + ")";
     }
     else
-        text += " (" + node.region + ")";
+    {
+        QString location = DBUtils::get(locationData, node.UID);
+        if (!location.isEmpty())
+            text += " (" + location + ")";
+    }
     painter.setPen(Qt::black);
-    getAppropriateFontSize(painter, rect, text, Qt::AlignHCenter | Qt::AlignVCenter);
+
+
+    QFont font = painter.font();
+    font.setPointSize(fontSize);
+    painter.setFont(font);
+    rect.setWidth(100500);
+    painter.drawText(rect, Qt::AlignLeft | Qt::AlignVCenter, " " + text);
 }
 
-void RenderAreaWidget::paintLine(QPoint aa, QPoint bb, QPainter& painter)
+void RenderAreaWidget::paintLine(const QPoint& aa, const QPoint& bb, QPainter& painter)
 {
     QPoint a(qMin(aa.x(), bb.x()), qMin(aa.y(), bb.y()));
     QPoint b(qMax(aa.x(), bb.x()), qMax(aa.y(), bb.y()));
@@ -274,16 +200,33 @@ void RenderAreaWidget::paintLine(QPoint aa, QPoint bb, QPainter& painter)
 
 void RenderAreaWidget::setNormalSize()
 {
-    resize(countColumns * widthCell + 1, countRows * heightCell + 1);
+    if (nodes.isEmpty())
+    {
+        countColumns = 0;
+        countRows = 0;
+        resize(0, 0);
+    }
+    else
+    {
+        countColumns = log2(nodes.last().v) + 1;
+        countRows = 2 * (1 << (countColumns - 1)) - 1;
+        resize(countColumns * widthCell + 1, countRows * heightCell + 1);
+    }
+    //qDebug() << "RenderAreaWidget::size: " << size();
 }
 
 
 
 
-void RenderAreaWidget::slotSetTournamentCategories(int tournamentCategories)
+void RenderAreaWidget::tournamentCategoryIsChanged(int tournamentCategory)
 {
-    this->tournamentCategories = tournamentCategories;
+    this->tournamentCategories = tournamentCategory;
     selectedNode = noNode;
+    if (tournamentCategory <= 0)
+        nodes.clear();
+    else
+        nodes = DBUtils::getNodes(tournamentCategory);
+    setNormalSize();
     repaint();
 }
 
@@ -301,6 +244,18 @@ void RenderAreaWidget::heightChanged(int height)
     repaint();
 }
 
+void RenderAreaWidget::onLocationDataIsChanged(const QVector<std::pair<DBUtils::TypeField, QString> >& locationData)
+{
+    this->locationData = locationData;
+    repaint();
+}
+
+void RenderAreaWidget::onFontSizeChanged(const int fontSize)
+{
+    this->fontSize = fontSize;
+    repaint();
+}
+
 
 
 void RenderAreaWidget::onSaveInExcel()
@@ -313,7 +268,6 @@ void RenderAreaWidget::onSaveInExcel()
     QString directoryPath = QFileDialog::getExistingDirectory(this, tr("Выберите папку"), NULL, QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks);
     if (directoryPath.isNull()) return;
     //qDebug() << dir;
-
 
 
     QAxWidget excel("Excel.Application");
@@ -349,7 +303,7 @@ void RenderAreaWidget::printTableGridInExcel(QAxObject* workbook, DialogChoseDat
         bool likePointFighing, QString directoryPath, QVector<int> fightNumber, QString text, QString prefFileName)
 {
     QAxObject *sheets   = workbook->querySubObject("WorkSheets");
-    QAxObject *sheet    = sheets->querySubObject( "Item( int )", 1);
+    QAxObject *sheet    = sheets->querySubObject("Item( int )", 1);
 
     QVector<DBUtils::NodeOfTournirGrid> nodes = DBUtils::getNodes(tournamentCategory);
     if (nodes.empty()) return;
@@ -362,6 +316,7 @@ void RenderAreaWidget::printTableGridInExcel(QAxObject* workbook, DialogChoseDat
     int offset = 3;
     int maxRow = offset;
     int maxColumn = 1;
+
     QVector<std::pair<QString, QVector<std::pair<DBUtils::TypeField, QString> > > > data = dlg.getData();
 
     for (const DBUtils::NodeOfTournirGrid& node : nodes)
@@ -373,7 +328,12 @@ void RenderAreaWidget::printTableGridInExcel(QAxObject* workbook, DialogChoseDat
         maxColumn = qMax(maxColumn, p.y() + 1);
 
         if (node.isFight)
-            ExcelUtils::setValue(sheet, p.x() + 1 + offset, p.y() + 1, node.name + "\n" + node.result);
+        {
+            if (0 < node.UID)
+            {
+                ExcelUtils::setValue(sheet, p.x() + 1 + offset, p.y() + 1, DBUtils::getSecondNameAndFirstName(node.UID) + "\n" + node.result);
+            }
+        }
         else
         {
             QString message;
@@ -381,15 +341,14 @@ void RenderAreaWidget::printTableGridInExcel(QAxObject* workbook, DialogChoseDat
             {
                 message += DBUtils::get(data[i].second, node.UID) + (i + 1 == data.size()? "" : " ");
             }
-            //ExcelUtils::setValue(sheet, p.x() + 1 + offset, p.y() + 1, node.name + "\n" + node.region);
-            ExcelUtils::setValue(sheet, p.x() + 1 + offset, p.y() + 1, node.name + "\n" + message);
+            ExcelUtils::setValue(sheet, p.x() + 1 + offset, p.y() + 1, DBUtils::getSecondNameAndFirstName(node.UID) + "\n" + message);
         }
 
         ExcelUtils::setBorder(sheet, p.x() + 1 + offset, p.y() + 1, p.x() + 1 + offset, p.y() + 1, 3);
 
         for (int child : {2 * node.v, 2 * node.v + 1})
         {
-            if (qBinaryFind(nodes, DBUtils::NodeOfTournirGrid(-1, child)) != nodes.end() )
+            if (child <= nodes.size())
             {
                 QPoint aa = getCell(node.v, countColumns);
                 QPoint bb = getCell(child, countColumns);
@@ -433,12 +392,21 @@ void RenderAreaWidget::printTableGridInExcel(QAxObject* workbook, DialogChoseDat
     for (int i = 1; i <= maxColumn; ++i) ExcelUtils::setColumnWidth(sheet, i, 50);
     for (int i = 1; i <= maxColumn; ++i) ExcelUtils::setColumnAutoFit(sheet, i);
     for (int i = 1; i <= maxRow   ; ++i) ExcelUtils::setRowAutoFit(sheet, i);
+    for (int i = 1; i <= maxColumn; ++i)
+    {
+        QAxObject *pColumn = sheet->querySubObject("Columns(QVariant&)", i);
+        if (qAbs(50 - pColumn->property("ColumnWidth").toDouble()) < 1e-7 ||
+            pColumn->property("ColumnWidth").toDouble() < 8.43)
+        {
+            pColumn->setProperty("ColumnWidth", 8.43);
+        }
+        delete pColumn;
+    }
 
+    maxColumn = qMax(4, maxColumn);
 
 
     long long tournamentUID = DBUtils::getField("TOURNAMENT_FK", "TOURNAMENT_CATEGORIES", tournamentCategory).toLongLong();
-
-    maxColumn = qMax(4, maxColumn);
 
     ExcelUtils::setTournamentName(sheet, DBUtils::getTournamentNameAsHeadOfDocument(tournamentUID), 1, 1, 1, maxColumn);
 
@@ -458,7 +426,10 @@ void RenderAreaWidget::printTableGridInExcel(QAxObject* workbook, DialogChoseDat
     ExcelUtils::setCenterHorizontally(sheet, true);
 
 
+    QTime timer;
+    timer.start();
     ExcelUtils::saveAsFile(workbook, directoryPath, prefFileName + ", " + DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", tournamentCategory) + ".xls");
+    //qDebug() << "\t\t\t\tsave in" << timer.elapsed();
 
     delete sheet;
     delete sheets;

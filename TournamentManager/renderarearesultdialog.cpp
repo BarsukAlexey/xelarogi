@@ -1,18 +1,15 @@
 #include "renderarearesultdialog.h"
 #include "ui_renderarearesultdialog.h"
 
-QString RenderAreaResultDialog::mLastResult = "";
 
-RenderAreaResultDialog::RenderAreaResultDialog(QString name, QString region, QWidget *parent) :
+RenderAreaResultDialog::RenderAreaResultDialog(QString name, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::RenderAreaResultDialog)
 {
     ui->setupUi(this);
-    ui->label->setText("Спортсмен " + name + " (" + region + ") победил в бою.\nЗапишите его результат в поле ниже");
+    ui->label->setText("Спортсмен(ка)" + name + " победил(а) в бою.\nВведите результат боя");
 
-    connect(ui->pushButton, &QPushButton::clicked, [this] ()
-    {
-        mLastResult = ui->textEdit->toPlainText();
+    connect(ui->pushButton, &QPushButton::clicked, [this] (){
         this->accept();
     });
 }
@@ -20,4 +17,9 @@ RenderAreaResultDialog::RenderAreaResultDialog(QString name, QString region, QWi
 RenderAreaResultDialog::~RenderAreaResultDialog()
 {
     delete ui;
+}
+
+QString RenderAreaResultDialog::getResult()
+{
+    return ui->textEdit->toPlainText();
 }

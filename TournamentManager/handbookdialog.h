@@ -9,6 +9,7 @@
 #include <QSqlDriver>
 #include <QSqlDatabase>
 #include <QSqlQuery>
+#include <QMessageBox>
 #include <QSqlError>
 #include <QSqlRecord>
 #include <QWidget>
