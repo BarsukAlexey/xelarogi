@@ -1082,3 +1082,28 @@ QString DBUtils::convertToRoman(int val) {
 }
 
 int DBUtils::isPow2(int a) { return !(a & (a - 1)); }
+
+QMap<QString, std::tuple<QString, QString> > DBUtils::get_NAME_RUS__RELATION_TABLE_NAME()
+{
+    QSqlQuery *q = new QSqlQuery;
+    if (!q->prepare(
+            "SELECT * "
+            "FROM FIELD_TRANSLATES "
+            ))
+    {
+        qDebug() << __PRETTY_FUNCTION__ << q->lastError();
+    }
+    q->exec();
+    if (q->lastError().isValid())
+        qDebug() << __PRETTY_FUNCTION__ << q->lastError();
+
+    QMap<QString, std::tuple<QString, QString> > map;
+    while (q->next())
+    {
+        map[q->value("NAME_ENG").toString()] = std::make_tuple(
+                                                   q->value("NAME_RUS").toString(),
+                                                   q->value("RELATION_TABLE_NAME").toString());
+    }
+    delete q;
+    return map;
+}

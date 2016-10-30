@@ -38,12 +38,13 @@ public:
     QPushButton *btnSave;
     QPushButton *btnRevert;
     QPushButton *btnExit;
+    QSpacerItem *horizontalSpacer_3;
 
     void setupUi(QDialog *HandbookDialog)
     {
         if (HandbookDialog->objectName().isEmpty())
             HandbookDialog->setObjectName(QStringLiteral("HandbookDialog"));
-        HandbookDialog->resize(872, 435);
+        HandbookDialog->resize(943, 512);
         gridLayout = new QGridLayout(HandbookDialog);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
         horizontalLayout = new QHBoxLayout();
@@ -96,6 +97,10 @@ public:
         btnExit->setObjectName(QStringLiteral("btnExit"));
 
         horizontalLayout_2->addWidget(btnExit);
+
+        horizontalSpacer_3 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_2->addItem(horizontalSpacer_3);
 
 
         gridLayout->addLayout(horizontalLayout_2, 2, 0, 1, 1);

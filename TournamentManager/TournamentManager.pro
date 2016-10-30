@@ -18,8 +18,6 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     handbookdialog.cpp \
-    databaseexpert.cpp \
-    webreportdialog.cpp \
     createtournamentdialog.cpp \
     createtournamentordersdialog.cpp \
     renderareawidget.cpp \
@@ -60,8 +58,6 @@ SOURCES += main.cpp\
 
 HEADERS  += mainwindow.h \
     handbookdialog.h \
-    databaseexpert.h \
-    webreportdialog.h \
     createtournamentdialog.h \
     createtournamentordersdialog.h \
     renderareawidget.h \

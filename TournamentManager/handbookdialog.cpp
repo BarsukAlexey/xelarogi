@@ -20,8 +20,10 @@ HandbookDialog::HandbookDialog(QString tableName, QString tableRusName,
     ui->label->setText(tableRusName);
     this->setWindowTitle("Редактирование справочника: " + tableRusName);
 
-    QMap<QString, QString> rusFieldNames = DataBaseExpert::fieldTranslationMap(m_database);
-    auto ralTablesForFields = DataBaseExpert::ralationTablesForFields(m_database);
+//    QMap<QString, QString> rusFieldNames = DataBaseExpert::fieldTranslationMap(m_database);
+//    auto ralTablesForFields = DataBaseExpert::ralationTablesForFields(m_database);
+    QMap<QString, std::tuple<QString, QString> > map = DBUtils::get_NAME_RUS__RELATION_TABLE_NAME();
+
     m_record = database.record(tableName);
 
     QSqlRelationalTableModel * model = new QSqlRelationalTableModel(0, database);
@@ -29,9 +31,9 @@ HandbookDialog::HandbookDialog(QString tableName, QString tableRusName,
     for (int i = 0; i < m_record.count(); ++i)
     {
         QString fieldName = m_record.fieldName(i);
-        if (fieldName.size() > 3 && fieldName.right(3) == "_FK")
+        if (fieldName.right(3) == "_FK")
         {
-            model->setRelation(i, QSqlRelation(ralTablesForFields[fieldName], "UID", "NAME"));
+            model->setRelation(i, QSqlRelation(std::get<1>(map[fieldName]), "UID", "NAME"));
         }
     }
     model->setEditStrategy(QSqlTableModel::OnManualSubmit);
@@ -39,7 +41,7 @@ HandbookDialog::HandbookDialog(QString tableName, QString tableRusName,
 
     for (int i = 0; i < m_record.count(); ++i)
     {
-        model->setHeaderData(i, Qt::Horizontal, rusFieldNames[m_record.fieldName(i)]);
+        model->setHeaderData(i, Qt::Horizontal, std::get<0>(map[m_record.fieldName(i)]));
     }
 
     ui->tableView->setModel(model);

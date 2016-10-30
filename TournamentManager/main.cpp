@@ -38,7 +38,8 @@ int main(int argc, char *argv[])
     MainWindow w;
     //w.show(); return a.exec();
 
-    CreateTournamentCategoriesDialog2 dlg(0, 21);
+    //CreateTournamentCategoriesDialog2 dlg(0, "TOURNAMENT_CATEGORIES", "TOURNAMENT_FK = 21");
+    CreateTournamentCategoriesDialog2 dlg(0, "TOURNAMENT_CATEGORIES", "");
     dlg.showMaximized();
     return dlg.exec();
 

@@ -126,6 +126,8 @@ public:
     static int isPow2(int a);
 
 
+    // FIELD_TRANSLATES
+    static QMap<QString, std::tuple<QString, QString>> get_NAME_RUS__RELATION_TABLE_NAME();
 
 
     enum TypeField

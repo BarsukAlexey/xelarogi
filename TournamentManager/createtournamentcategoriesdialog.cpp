@@ -4,7 +4,6 @@
 #include "db_utils.h"
 #include <QDialogButtonBox>
 #include <QSqlRecord>
-#include "databaseexpert.h"
 #include "dialog_create_age_category.h"
 #include <QSortFilterProxyModel>
 

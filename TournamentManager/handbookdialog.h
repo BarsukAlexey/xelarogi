@@ -24,8 +24,8 @@
 #include <QDateEdit>
 #include <QChar>
 
-#include "databaseexpert.h"
-#include "webreportdialog.h"
+
+#include "db_utils.h"
 
 namespace Ui {
 class HandbookDialog;

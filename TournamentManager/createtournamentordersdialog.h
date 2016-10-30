@@ -28,8 +28,6 @@
 #include <QMessageBox>
 #include <QFileDialog>
 
-#include "databaseexpert.h"
-#include "webreportdialog.h"
 #include "errormessagesdialog.h"
 #include "dialogtournamentgrid.h"
 
