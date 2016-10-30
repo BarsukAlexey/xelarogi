@@ -1,5 +1,5 @@
 #include "dialogmanagersqltable.h"
-#include "ui_createtournamentcategoriesdialog2.h"
+#include "ui_dialogmanagersqltable.h"
 
 
 ColumnAlignedLayout::ColumnAlignedLayout(QWidget* parent)

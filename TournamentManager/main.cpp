@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
     DialogManagerSqlTable dlg(
                 0,
                 "TOURNAMENT_CATEGORIES",
-                "",
+                "TOURNAMENT_FK = 21",
                 QStringList() << "TOURNAMENT_FK"
                 );
     dlg.showMaximized();
