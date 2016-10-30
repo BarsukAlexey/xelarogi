@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>CreateTournamentCategoriesDialog2</class>
- <widget class="QDialog" name="CreateTournamentCategoriesDialog2">
+ <class>DialogManagerSqlTable</class>
+ <widget class="QDialog" name="DialogManagerSqlTable">
   <property name="geometry">
    <rect>
     <x>0</x>

@@ -54,7 +54,7 @@ SOURCES += main.cpp\
     utils.cpp \
     dialogschedule2inputtype.cpp \
     dialogtournamentgrid.cpp \
-    createtournamentcategoriesdialog2.cpp
+    dialogmanagersqltable.cpp
 
 HEADERS  += mainwindow.h \
     handbookdialog.h \
@@ -93,8 +93,8 @@ HEADERS  += mainwindow.h \
     utils.h \
     dialogschedule2inputtype.h \
     dialogtournamentgrid.h \
-    createtournamentcategoriesdialog2.h \
-    trophygenerator.h
+    trophygenerator.h \
+    dialogmanagersqltable.h
 
 FORMS    += mainwindow.ui \
     handbookdialog.ui \
@@ -121,7 +121,7 @@ FORMS    += mainwindow.ui \
     dialogschedule2.ui \
     dialogschedule2inputtype.ui \
     dialogtournamentgrid.ui \
-    createtournamentcategoriesdialog2.ui
+    dialogmanagersqltable.ui
 
 DISTFILES +=
 

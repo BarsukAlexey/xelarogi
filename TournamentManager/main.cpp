@@ -4,7 +4,7 @@
 #include <QMessageBox>
 
 #include "mainwindow.h"
-#include "createtournamentcategoriesdialog2.h"
+#include "dialogmanagersqltable.h"
 
 void break_point(QtMsgType msgType, const QMessageLogContext &, const QString &msg)
 {
@@ -39,7 +39,12 @@ int main(int argc, char *argv[])
     //w.show(); return a.exec();
 
     //CreateTournamentCategoriesDialog2 dlg(0, "TOURNAMENT_CATEGORIES", "TOURNAMENT_FK = 21");
-    CreateTournamentCategoriesDialog2 dlg(0, "TOURNAMENT_CATEGORIES", "");
+    DialogManagerSqlTable dlg(
+                0,
+                "TOURNAMENT_CATEGORIES",
+                "",
+                QStringList() << "TOURNAMENT_FK"
+                );
     dlg.showMaximized();
     return dlg.exec();
 

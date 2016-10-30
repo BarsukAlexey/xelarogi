@@ -1,4 +1,4 @@
-#include "createtournamentcategoriesdialog2.h"
+#include "dialogmanagersqltable.h"
 #include "ui_createtournamentcategoriesdialog2.h"
 
 
@@ -20,8 +20,16 @@ void ColumnAlignedLayout::setGeometry(const QRect& r)
         return;
     }
 
-    Q_ASSERT_X(headerView->count() == count(), "layout", "there must be as many items in the layout as there are columns in the table");
-    if (headerView->count() != count())
+    int countSectionNotHidden = 0;
+    for (int ii = 0; ii < headerView->count(); ++ii)
+    {
+        if (!headerView->isSectionHidden(ii))
+        {
+            ++countSectionNotHidden;
+        }
+    }
+    Q_ASSERT_X(countSectionNotHidden == count(), "layout", "there must be as many items in the layout as there are columns in the table");
+    if (countSectionNotHidden != count())
     {
         return;
     }
@@ -33,24 +41,23 @@ void ColumnAlignedLayout::setGeometry(const QRect& r)
 
     int delta = headerX - widgetX;
 
-    for (int ii = 0; ii < headerView->count(); ++ii)
+    for (int i = 0, indexOfLineEdit = 0; i < headerView->count(); ++i)
     {
-        int pos = headerView->sectionViewportPosition(ii);
-        int size = headerView->sectionSize(ii);
+        if (!headerView->isSectionHidden(i))
+        {
+            int pos = headerView->sectionViewportPosition(i);
+            int size = headerView->sectionSize(i);
 
-        auto item = itemAt(ii);
-        auto r = item->geometry();
-        r.setLeft(pos + delta);
-        r.setWidth(size);
-        item->setGeometry(r);
+            QLayoutItem* item = itemAt(indexOfLineEdit++);
+            QRect r = item->geometry();
+            r.setLeft(pos + delta);
+            r.setWidth(size);
+            item->setGeometry(r);
+        }
     }
 }
 
-MySqlRelationalDelegate::MySqlRelationalDelegate(QObject* parent) :
-    QSqlRelationalDelegate(parent)
-{
 
-}
 
 QWidget* MySqlRelationalDelegate::createEditor(QWidget* parent, const QStyleOptionViewItem& i, const QModelIndex& index) const
 {
@@ -79,6 +86,12 @@ QWidget* MySqlRelationalDelegate::createEditor(QWidget* parent, const QStyleOpti
     }
 
     return QSqlRelationalDelegate::createEditor(parent, i, index);
+}
+
+MySqlRelationalDelegate::MySqlRelationalDelegate(QObject* parent) :
+    QSqlRelationalDelegate(parent)
+{
+
 }
 
 void MySqlRelationalDelegate::setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const
@@ -113,14 +126,7 @@ void MySqlRelationalDelegate::setModelData(QWidget* editor, QAbstractItemModel* 
 MySortFilterProxyModel::MySortFilterProxyModel(QObject *parent) :
     QSortFilterProxyModel(parent)
 {
-    columnsForSortForTournamentCategoties
-            << QSqlDatabase::database().record("TOURNAMENT_CATEGORIES").indexOf("TYPE_FK")
-            << QSqlDatabase::database().record("TOURNAMENT_CATEGORIES").indexOf("AGE_FROM")
-            << QSqlDatabase::database().record("TOURNAMENT_CATEGORIES").indexOf("AGE_TILL")
-            << QSqlDatabase::database().record("TOURNAMENT_CATEGORIES").indexOf("SEX_FK")
-            << QSqlDatabase::database().record("TOURNAMENT_CATEGORIES").indexOf("WEIGHT_FROM")
-            << QSqlDatabase::database().record("TOURNAMENT_CATEGORIES").indexOf("WEIGHT_TILL")
-               ;
+
 }
 
 QVariant MySortFilterProxyModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -136,6 +142,29 @@ void MySortFilterProxyModel::setMyFilter(const int column, const QStringList& fi
         filters.resize(column + 1);
     filters[column] = filter;
     invalidateFilter();
+}
+
+void MySortFilterProxyModel::setSourceModel(QAbstractItemModel* sourceModel)
+{
+    QSortFilterProxyModel::setSourceModel(sourceModel);
+
+    const QSqlRelationalTableModel *sqlModel =
+            qobject_cast<const QSqlRelationalTableModel *>(sourceModel);
+    if (sqlModel)
+    {
+        if (sqlModel->tableName() == "TOURNAMENT_CATEGORIES")
+        {
+            QSqlRecord record = QSqlDatabase::database().record("TOURNAMENT_CATEGORIES");
+            columnsForSort
+                << record.indexOf("TOURNAMENT_FK")
+                << record.indexOf("TYPE_FK")
+                << record.indexOf("AGE_FROM")
+                << record.indexOf("AGE_TILL")
+                << record.indexOf("SEX_FK")
+                << record.indexOf("WEIGHT_FROM")
+                << record.indexOf("WEIGHT_TILL");
+        }
+    }
 }
 
 bool MySortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
@@ -170,7 +199,7 @@ bool MySortFilterProxyModel::lessThan(const QModelIndex& left, const QModelIndex
     {
         QVariantList a; a << left.data();
         QVariantList b; b << right.data();
-        for (const int& column : columnsForSortForTournamentCategoties)
+        for (const int& column : columnsForSort)
         {
             a << sqlModel->index(left .row(), column).data();
             b << sqlModel->index(right.row(), column).data();
@@ -182,10 +211,14 @@ bool MySortFilterProxyModel::lessThan(const QModelIndex& left, const QModelIndex
 
 }
 
-CreateTournamentCategoriesDialog2::CreateTournamentCategoriesDialog2(QWidget *parent, const QString& table, const QString& whereStatement) :
+DialogManagerSqlTable::DialogManagerSqlTable(
+        QWidget *parent,
+        const QString& table,
+        const QString& whereStatement,
+        const QStringList& hidenColumns) :
 
     QDialog(parent),
-    ui(new Ui::CreateTournamentCategoriesDialog2)
+    ui(new Ui::DialogManagerSqlTable)
 {
     ui->setupUi(this);
     setWindowFlags(Qt::Window);
@@ -215,6 +248,19 @@ CreateTournamentCategoriesDialog2::CreateTournamentCategoriesDialog2(QWidget *pa
             model->setRelation(model->fieldIndex(eng), QSqlRelation(relTable, "UID", "NAME"));
     }
 
+    QSet<int> idOfhidenColumns;
+    for (const QString column : hidenColumns)
+    {
+        int index = model->fieldIndex(column);
+        if (index == -1)
+        {
+            qDebug() << "WTF! no suck column:" << index;
+        }
+        else
+        {
+            idOfhidenColumns << index;
+        }
+    }
 
     model->select();
     while (model->canFetchMore())
@@ -239,6 +285,7 @@ CreateTournamentCategoriesDialog2::CreateTournamentCategoriesDialog2(QWidget *pa
             new MySortFilterProxyModel(this);
     proxyModel->setSourceModel(model);
     proxyModel->setDynamicSortFilter(false);
+    //proxyModel->setSortCaseSensitivity(Qt::CaseInsensitive);
 
 
     ui->tableView_2->setModel(proxyModel);
@@ -257,13 +304,20 @@ CreateTournamentCategoriesDialog2::CreateTournamentCategoriesDialog2(QWidget *pa
     alignedLayout = new ColumnAlignedLayout(ui->widget2222);
     for (int i = 0; i < model->columnCount(); ++i)
     {
-        QLineEdit *edit = new QLineEdit(this);
-        edit->setPlaceholderText(model->headerData(i, Qt::Horizontal).toString());
-        alignedLayout->addWidget(edit);
-        connect(edit, &QLineEdit::textChanged, [i, proxyModel](const QString& str){
-            QStringList list = str.split(" ", QString::SkipEmptyParts);
-            proxyModel->setMyFilter(i, list);
-        });
+        if (idOfhidenColumns.contains(i))
+        {
+            ui->tableView_2->hideColumn(i);
+        }
+        else
+        {
+            QLineEdit *edit = new QLineEdit(this);
+            edit->setPlaceholderText(model->headerData(i, Qt::Horizontal).toString());
+            alignedLayout->addWidget(edit);
+            connect(edit, &QLineEdit::textChanged, [i, proxyModel](const QString& str){
+                QStringList list = str.split(" ", QString::SkipEmptyParts);
+                proxyModel->setMyFilter(i, list);
+            });
+        }
     }
 
     ui->widget2222->setLayout(alignedLayout);
@@ -293,12 +347,14 @@ CreateTournamentCategoriesDialog2::CreateTournamentCategoriesDialog2(QWidget *pa
 
 }
 
-CreateTournamentCategoriesDialog2::~CreateTournamentCategoriesDialog2()
+DialogManagerSqlTable::~DialogManagerSqlTable()
 {
     delete ui;
 }
 
-void CreateTournamentCategoriesDialog2::invalidateAlignedLayout()
+
+
+void DialogManagerSqlTable::invalidateAlignedLayout()
 {
     alignedLayout->invalidate();
 }
