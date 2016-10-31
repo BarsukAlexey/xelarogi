@@ -211,20 +211,16 @@ bool MySortFilterProxyModel::lessThan(const QModelIndex& left, const QModelIndex
 
 }
 
-DialogManagerSqlTable::DialogManagerSqlTable(
-        QWidget *parent,
-        const QString& table,
-        const QString& whereStatement,
-        const QStringList& hidenColumns) :
-
-    QDialog(parent),
+DialogManagerSqlTable::DialogManagerSqlTable(QWidget *parent) :
+    QWidget(parent),
     ui(new Ui::DialogManagerSqlTable)
 {
     ui->setupUi(this);
-    setWindowFlags(Qt::Window);
+}
 
-
-    QSqlRelationalTableModel *model = new QSqlRelationalTableModel(this);
+void DialogManagerSqlTable::setSqlTable(const QString& table, const QString& whereStatement, const QStringList& hidenColumns)
+{
+    model = new QSqlRelationalTableModel(this);
 
     model->setTable(table);
     if (!whereStatement.isEmpty())
@@ -327,7 +323,7 @@ DialogManagerSqlTable::DialogManagerSqlTable(
     connect(ui->tableView_2->horizontalHeader(), SIGNAL(sectionResized(int,int,int)), SLOT(invalidateAlignedLayout()));
     connect(ui->tableView_2->horizontalScrollBar(), SIGNAL(valueChanged(int)), SLOT(invalidateAlignedLayout()));
 
-    connect(ui->pushButtonSave, &QPushButton::clicked, [this, model](){
+    connect(ui->pushButtonSave, &QPushButton::clicked, [this](){
         if (model->submitAll())
             qDebug() << "Save all";
         else
@@ -337,14 +333,18 @@ DialogManagerSqlTable::DialogManagerSqlTable(
             //model->revertAll();
         }
     });
-    connect(ui->pushButtonCancel, &QPushButton::clicked, [model](){
+    connect(ui->pushButtonCancel, &QPushButton::clicked, [this](){
         model->revertAll();
         model->select();
     });
-    connect(ui->pushButtonInsert, &QPushButton::clicked, [model](){
+    connect(ui->pushButtonInsert, &QPushButton::clicked, [this](){
         model->insertRow(model->rowCount());
     });
+}
 
+void DialogManagerSqlTable::updateData()
+{
+    model->select();
 }
 
 DialogManagerSqlTable::~DialogManagerSqlTable()

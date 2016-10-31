@@ -9,7 +9,14 @@
 #include <QSqlRelationalTableModel>
 #include <QMenu>
 #include <QAction>
-#include <createtypedialog.h>
+#include <QDialogButtonBox>
+#include <QSqlRecord>
+#include <QSortFilterProxyModel>
+
+#include "generatetournamentcategoriesdialog.h"
+#include "db_utils.h"
+#include "dialog_create_age_category.h"
+#include "createtypedialog.h"
 
 namespace Ui {
 class CreateTournamentCategoriesDialog;
@@ -24,22 +31,9 @@ public:
     ~CreateTournamentCategoriesDialog();
 
 private slots:
-    void onAddBtn();
-    void on_pushButtonSaveChanges(long long categoryUID);
     void on_pushButtonAddGroupOfCaterories_clicked();
-    void on_buttonAddAgeCat_clicked();
 
 private:
-    void updateTable();
-    void updateDataWidget(long long categoryUID);
-    void fillSexComboBox();
-    void fillAgeCategory();
-    void fillTypeComboBox();
-    void fillTie();
-    void selectSexByUID(long long sexUID);
-    void selectAgeCategory(long long ageCategoryUID);
-    void selectTypeByUID(long long typeUID);
-    void addContextMenu();
 
 private:
     Ui::CreateTournamentCategoriesDialog *ui;

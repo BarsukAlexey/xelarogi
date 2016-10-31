@@ -36,18 +36,15 @@ int main(int argc, char *argv[])
 
 
     MainWindow w;
-    //w.show(); return a.exec();
-
-    //CreateTournamentCategoriesDialog2 dlg(0, "TOURNAMENT_CATEGORIES", "TOURNAMENT_FK = 21");
-    DialogManagerSqlTable dlg(
-                0,
-                "TOURNAMENT_CATEGORIES",
-                "TOURNAMENT_FK = 21",
-                QStringList() << "TOURNAMENT_FK"
-                );
-    dlg.showMaximized();
-    return dlg.exec();
+    w.show(); return a.exec();
 
 
-
+//    DialogManagerSqlTable dlg;
+//    dlg.setSqlTable(
+//                "TOURNAMENT_CATEGORIES",
+//                "TOURNAMENT_FK = 21"
+//                //QStringList() << "TOURNAMENT_FK"
+//                );
+//    dlg.showMaximized();
+//    return a.exec();
 }

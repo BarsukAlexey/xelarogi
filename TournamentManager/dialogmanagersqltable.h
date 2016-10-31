@@ -89,12 +89,14 @@ namespace Ui {
 class DialogManagerSqlTable;
 }
 
-class DialogManagerSqlTable : public QDialog
+class DialogManagerSqlTable : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit DialogManagerSqlTable(QWidget *parent, const QString& table, const QString& whereStatement, const QStringList& hidenColumns = QStringList());
+    explicit DialogManagerSqlTable(QWidget *parent = 0);
+    void setSqlTable(const QString& table, const QString& whereStatement, const QStringList& hidenColumns = QStringList());
+    void updateData();
     ~DialogManagerSqlTable();
 
 
@@ -102,6 +104,7 @@ public:
 private:
     Ui::DialogManagerSqlTable *ui;
     ColumnAlignedLayout *alignedLayout;
+    QSqlRelationalTableModel *model;
 
 private slots:
     void invalidateAlignedLayout();
