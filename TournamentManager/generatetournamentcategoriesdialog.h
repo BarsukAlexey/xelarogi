@@ -8,6 +8,8 @@
 #include <QMessageBox>
 #include <QStringList>
 
+#include "sqltablemanager.h"
+
 namespace Ui {
 class GenerateTournamentCategoriesDialog;
 }

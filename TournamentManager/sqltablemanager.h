@@ -1,5 +1,6 @@
-#ifndef DIALOGMANAGERSQLTABLE_H
-#define DIALOGMANAGERSQLTABLE_H
+#ifndef SQLTABLEMANAGER_H
+#define SQLTABLEMANAGER_H
+
 
 #include "db_utils.h"
 
@@ -86,23 +87,23 @@ private:
 
 
 namespace Ui {
-class DialogManagerSqlTable;
+class SqlTableManager;
 }
 
-class DialogManagerSqlTable : public QWidget
+class SqlTableManager : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit DialogManagerSqlTable(QWidget *parent = 0);
+    explicit SqlTableManager(QWidget *parent = 0);
     void setSqlTable(const QString& table, const QString& whereStatement, const QStringList& hidenColumns = QStringList());
     void updateData();
-    ~DialogManagerSqlTable();
+    ~SqlTableManager();
 
 
 
 private:
-    Ui::DialogManagerSqlTable *ui;
+    Ui::SqlTableManager *ui;
     ColumnAlignedLayout *alignedLayout;
     QSqlRelationalTableModel *model;
 
@@ -110,4 +111,4 @@ private slots:
     void invalidateAlignedLayout();
 };
 
-#endif // DIALOGMANAGERSQLTABLE_H
+#endif // SQLTABLEMANAGER_H

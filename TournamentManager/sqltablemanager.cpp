@@ -1,5 +1,5 @@
-#include "dialogmanagersqltable.h"
-#include "ui_dialogmanagersqltable.h"
+#include "sqltablemanager.h"
+#include "ui_sqltablemanager.h"
 
 
 ColumnAlignedLayout::ColumnAlignedLayout(QWidget* parent)
@@ -211,14 +211,14 @@ bool MySortFilterProxyModel::lessThan(const QModelIndex& left, const QModelIndex
 
 }
 
-DialogManagerSqlTable::DialogManagerSqlTable(QWidget *parent) :
+SqlTableManager::SqlTableManager(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::DialogManagerSqlTable)
+    ui(new Ui::SqlTableManager)
 {
     ui->setupUi(this);
 }
 
-void DialogManagerSqlTable::setSqlTable(const QString& table, const QString& whereStatement, const QStringList& hidenColumns)
+void SqlTableManager::setSqlTable(const QString& table, const QString& whereStatement, const QStringList& hidenColumns)
 {
     model = new QSqlRelationalTableModel(this);
 
@@ -268,14 +268,6 @@ void DialogManagerSqlTable::setSqlTable(const QString& table, const QString& whe
         if (relModel)
             relModel->sort(1, Qt::SortOrder::AscendingOrder);
     }
-
-
-
-    ui->tableView->setModel(model);
-    ui->tableView->setItemDelegate(new MySqlRelationalDelegate(ui->tableView));
-    ui->tableView->resizeColumnsToContents();
-    ui->tableView->resizeRowsToContents();
-
 
     MySortFilterProxyModel *proxyModel =
             new MySortFilterProxyModel(this);
@@ -342,19 +334,19 @@ void DialogManagerSqlTable::setSqlTable(const QString& table, const QString& whe
     });
 }
 
-void DialogManagerSqlTable::updateData()
+void SqlTableManager::updateData()
 {
     model->select();
 }
 
-DialogManagerSqlTable::~DialogManagerSqlTable()
+SqlTableManager::~SqlTableManager()
 {
     delete ui;
 }
 
 
 
-void DialogManagerSqlTable::invalidateAlignedLayout()
+void SqlTableManager::invalidateAlignedLayout()
 {
     alignedLayout->invalidate();
 }

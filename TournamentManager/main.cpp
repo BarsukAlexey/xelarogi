@@ -4,7 +4,10 @@
 #include <QMessageBox>
 
 #include "mainwindow.h"
-#include "dialogmanagersqltable.h"
+#include "sqltablemanager.h"
+#include "dialogsqltablemanager.h"
+
+
 
 void break_point(QtMsgType msgType, const QMessageLogContext &, const QString &msg)
 {
@@ -36,15 +39,13 @@ int main(int argc, char *argv[])
 
 
     MainWindow w;
-    w.show(); return a.exec();
+    //w.show(); return a.exec();
+
+    //GenerateTournamentCategoriesDialog dl(21); return dl.exec();
+
+    DialogSqlTableManager dlg("TOURNAMENT_CATEGORIES", "TOURNAMENT_FK = 21");
+    return dlg.exec();
 
 
-//    DialogManagerSqlTable dlg;
-//    dlg.setSqlTable(
-//                "TOURNAMENT_CATEGORIES",
-//                "TOURNAMENT_FK = 21"
-//                //QStringList() << "TOURNAMENT_FK"
-//                );
-//    dlg.showMaximized();
-//    return a.exec();
+
 }

@@ -18,7 +18,7 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="DialogManagerSqlTable" name="managerSqlTable" native="true"/>
+    <widget class="SqlTableManager" name="managerSqlTable" native="true"/>
    </item>
    <item>
     <widget class="QPushButton" name="pushButtonAddGroupOfCaterories">
@@ -31,9 +31,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>DialogManagerSqlTable</class>
+   <class>SqlTableManager</class>
    <extends>QWidget</extends>
-   <header>dialogmanagersqltable.h</header>
+   <header>sqltablemanager.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

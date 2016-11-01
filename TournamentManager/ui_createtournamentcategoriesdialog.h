@@ -17,7 +17,7 @@
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QVBoxLayout>
-#include "dialogmanagersqltable.h"
+#include "sqltablemanager.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -25,7 +25,7 @@ class Ui_CreateTournamentCategoriesDialog
 {
 public:
     QVBoxLayout *verticalLayout;
-    DialogManagerSqlTable *managerSqlTable;
+    SqlTableManager *managerSqlTable;
     QPushButton *pushButtonAddGroupOfCaterories;
 
     void setupUi(QDialog *CreateTournamentCategoriesDialog)
@@ -36,7 +36,7 @@ public:
         CreateTournamentCategoriesDialog->resize(1069, 581);
         verticalLayout = new QVBoxLayout(CreateTournamentCategoriesDialog);
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
-        managerSqlTable = new DialogManagerSqlTable(CreateTournamentCategoriesDialog);
+        managerSqlTable = new SqlTableManager(CreateTournamentCategoriesDialog);
         managerSqlTable->setObjectName(QStringLiteral("managerSqlTable"));
 
         verticalLayout->addWidget(managerSqlTable);

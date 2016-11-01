@@ -23,7 +23,7 @@ GenerateTournamentCategoriesDialog::GenerateTournamentCategoriesDialog(long long
     connect(this, &GenerateTournamentCategoriesDialog::accepted, [this, tournamentUID] ()
     {
 
-        QString weightCorrect = ui->weightsLE->text().trimmed().replace(",", ".");
+        QString weightCorrect = ui->weightsLE->text().simplified().replace(",", ".").replace(" ", "");
         QStringList weights = weightCorrect.split(";", QString::SkipEmptyParts);
         if (weights.size() > 0 && weights.front() != "0")
             weights.push_front("0");
@@ -63,21 +63,10 @@ GenerateTournamentCategoriesDialog::GenerateTournamentCategoriesDialog(long long
 
     });
 
-    connect(ui->lineEditTypeAge, &QLineEdit::textChanged, [this](QString text){
-        ui->lineEditTypeAge_2->setText(text);
-        ui->lineEditTypeAge_3->setText(text);
+    connect(ui->pushButtonAddType, &QPushButton::clicked, [this](){
+
     });
 
-    connect(ui->lineEditTypeWeight, &QLineEdit::textChanged, [this](QString text){
-        ui->lineEditTypeWeight_2->setText(text);
-        ui->lineEditTypeWeight_3->setText(text);
-    });
-
-
-    fillSexCB();
-    fillComboBoxAgeCategory();
-    fillTypeCB();
-    fillTie();
 }
 
 
@@ -95,6 +84,7 @@ QString GenerateTournamentCategoriesDialog::insertInDB(long long ageCatUID, int 
                                                        QString weightUnit, QString wordWeightFrom, QString wordWeightTill)
 {
     QString newCategoryMsg = "Добавлены новые категории:\n";
+    QString errors = "Ошибки:\n";
 
     if (IN_CASE_TIE != 2)
         DURATION_EXTRA_ROUND = 0;
@@ -153,7 +143,12 @@ QString GenerateTournamentCategoriesDialog::insertInDB(long long ageCatUID, int 
         query.addBindValue(weight);
 
         if (!query.exec())
+        {
             qDebug() << query.lastError().text();
+            errors += modifyName + "\n" +
+                      query.lastError().databaseText() + "\n" +
+                      query.lastError().driverText() + "\n\n";
+        }
         else
         {
             newCategoryMsg += "\t" + modifyName + "\n";
@@ -162,7 +157,7 @@ QString GenerateTournamentCategoriesDialog::insertInDB(long long ageCatUID, int 
         query.clear();
     }
 
-    return newCategoryMsg;
+    return newCategoryMsg + "\n\n" + errors;
 }
 
 
