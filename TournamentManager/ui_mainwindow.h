@@ -22,10 +22,11 @@
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QSpacerItem>
+#include <QtWidgets/QSplitter>
 #include <QtWidgets/QStackedWidget>
 #include <QtWidgets/QStatusBar>
+#include <QtWidgets/QTableView>
 #include <QtWidgets/QToolBar>
-#include <QtWidgets/QTreeWidget>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 
@@ -48,11 +49,10 @@ public:
     QAction *actionAgeCategory;
     QAction *iconsAction;
     QWidget *centralWidget;
-    QHBoxLayout *horizontalLayout_2;
+    QSplitter *splitter;
     QWidget *widget;
     QGridLayout *gridLayout_3;
-    QTreeWidget *tournamentTreeWidget;
-    QPushButton *pushButtonAddContest;
+    QTableView *tournamentTableView;
     QStackedWidget *stackedWidget;
     QWidget *generalPage;
     QGridLayout *gridLayout_2;
@@ -120,44 +120,30 @@ public:
         iconsAction->setObjectName(QStringLiteral("iconsAction"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
-        horizontalLayout_2 = new QHBoxLayout(centralWidget);
-        horizontalLayout_2->setSpacing(6);
-        horizontalLayout_2->setContentsMargins(11, 11, 11, 11);
-        horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
-        widget = new QWidget(centralWidget);
+        splitter = new QSplitter(centralWidget);
+        splitter->setObjectName(QStringLiteral("splitter"));
+        splitter->setGeometry(QRect(9, 9, 605, 422));
+        splitter->setOrientation(Qt::Horizontal);
+        widget = new QWidget(splitter);
         widget->setObjectName(QStringLiteral("widget"));
         gridLayout_3 = new QGridLayout(widget);
         gridLayout_3->setSpacing(6);
         gridLayout_3->setContentsMargins(11, 11, 11, 11);
         gridLayout_3->setObjectName(QStringLiteral("gridLayout_3"));
-        tournamentTreeWidget = new QTreeWidget(widget);
-        QTreeWidgetItem *__qtreewidgetitem = new QTreeWidgetItem();
-        __qtreewidgetitem->setText(0, QStringLiteral("1"));
-        tournamentTreeWidget->setHeaderItem(__qtreewidgetitem);
-        tournamentTreeWidget->setObjectName(QStringLiteral("tournamentTreeWidget"));
+        tournamentTableView = new QTableView(widget);
+        tournamentTableView->setObjectName(QStringLiteral("tournamentTableView"));
         QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
-        sizePolicy.setHeightForWidth(tournamentTreeWidget->sizePolicy().hasHeightForWidth());
-        tournamentTreeWidget->setSizePolicy(sizePolicy);
-        tournamentTreeWidget->setMaximumSize(QSize(400, 16777215));
-        tournamentTreeWidget->setAlternatingRowColors(false);
-        tournamentTreeWidget->setIndentation(10);
-        tournamentTreeWidget->setAnimated(true);
-        tournamentTreeWidget->header()->setCascadingSectionResizes(true);
-        tournamentTreeWidget->header()->setStretchLastSection(true);
+        sizePolicy.setHeightForWidth(tournamentTableView->sizePolicy().hasHeightForWidth());
+        tournamentTableView->setSizePolicy(sizePolicy);
+        tournamentTableView->setMaximumSize(QSize(400, 16777215));
+        tournamentTableView->setAlternatingRowColors(false);
 
-        gridLayout_3->addWidget(tournamentTreeWidget, 0, 0, 1, 1);
+        gridLayout_3->addWidget(tournamentTableView, 0, 0, 1, 1);
 
-        pushButtonAddContest = new QPushButton(widget);
-        pushButtonAddContest->setObjectName(QStringLiteral("pushButtonAddContest"));
-
-        gridLayout_3->addWidget(pushButtonAddContest, 1, 0, 1, 1);
-
-
-        horizontalLayout_2->addWidget(widget);
-
-        stackedWidget = new QStackedWidget(centralWidget);
+        splitter->addWidget(widget);
+        stackedWidget = new QStackedWidget(splitter);
         stackedWidget->setObjectName(QStringLiteral("stackedWidget"));
         stackedWidget->setMinimumSize(QSize(0, 0));
         generalPage = new QWidget();
@@ -317,9 +303,7 @@ public:
         gridLayout->addLayout(verticalLayout, 2, 0, 1, 1);
 
         stackedWidget->addWidget(ordersPage);
-
-        horizontalLayout_2->addWidget(stackedWidget);
-
+        splitter->addWidget(stackedWidget);
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QStringLiteral("menuBar"));
@@ -354,7 +338,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        stackedWidget->setCurrentIndex(0);
+        stackedWidget->setCurrentIndex(1);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -376,7 +360,6 @@ public:
         orderAction->setText(QApplication::translate("MainWindow", "\320\227\320\260\321\217\320\262\320\272\320\270", 0));
         actionAgeCategory->setText(QApplication::translate("MainWindow", "\320\222\320\276\320\267\321\200\320\260\321\201\321\202\320\275\321\213\320\265 \320\272\320\260\321\202\320\265\320\263\320\276\321\200\320\270\320\270", 0));
         iconsAction->setText(QApplication::translate("MainWindow", "\320\244\320\273\320\260\320\263\320\270 \321\201\321\202\321\200\320\260\320\275", 0));
-        pushButtonAddContest->setText(QApplication::translate("MainWindow", "\320\224\320\276\320\261\320\260\320\262\320\270\321\202\321\214 \321\201\320\276\321\200\320\265\320\262\320\275\320\276\320\262\320\260\320\275\320\270\320\265", 0));
         label->setText(QApplication::translate("MainWindow", "\320\222\321\213\320\261\320\265\321\200\320\265\321\202\320\265 \321\202\321\203\321\200\320\275\320\270\321\200", 0));
         tournamentLabel->setText(QApplication::translate("MainWindow", "\320\242\321\203\321\200\320\275\320\270\321\200 \320\275\320\265 \320\262\321\213\320\261\321\200\320\260\320\275", 0));
         tournamentUidLabel->setText(QApplication::translate("MainWindow", "TextLabel", 0));

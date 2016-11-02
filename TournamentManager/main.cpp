@@ -39,13 +39,9 @@ int main(int argc, char *argv[])
 
 
     MainWindow w;
-    //w.show(); return a.exec();
+    w.show(); return a.exec();
 
     //GenerateTournamentCategoriesDialog dl(21); return dl.exec();
-
-    DialogSqlTableManager dlg("TOURNAMENT_CATEGORIES", "TOURNAMENT_FK = 21");
-    return dlg.exec();
-
 
 
 }

@@ -29,7 +29,7 @@
      <item row="0" column="1">
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <widget class="QPushButton" name="pushButtonAddType">
+        <widget class="QPushButton" name="pushButtonType">
          <property name="maximumSize">
           <size>
            <width>24</width>
@@ -42,9 +42,9 @@
         </widget>
        </item>
        <item>
-        <widget class="QComboBox" name="typeCB">
+        <widget class="QComboBox" name="comboBoxType">
          <property name="maxVisibleItems">
-          <number>20</number>
+          <number>1000</number>
          </property>
         </widget>
        </item>
@@ -61,9 +61,9 @@
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QComboBox" name="sexCB">
+      <widget class="QComboBox" name="comboBoxSex">
        <property name="maxVisibleItems">
-        <number>20</number>
+        <number>1000</number>
        </property>
       </widget>
      </item>
@@ -93,7 +93,11 @@
         </widget>
        </item>
        <item>
-        <widget class="QComboBox" name="comboBoxAgeCategory"/>
+        <widget class="QComboBox" name="comboBoxAgeCategory">
+         <property name="maxVisibleItems">
+          <number>1000</number>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>
@@ -148,8 +152,11 @@
          </widget>
         </item>
         <item>
-         <widget class="QLineEdit" name="lineEditTypeAge">
+         <widget class="QLineEdit" name="lineEditWordAge">
           <property name="text">
+           <string>лет</string>
+          </property>
+          <property name="placeholderText">
            <string>лет</string>
           </property>
          </widget>
@@ -161,11 +168,17 @@
         <property name="text">
          <string>до</string>
         </property>
+        <property name="placeholderText">
+         <string>до</string>
+        </property>
        </widget>
       </item>
       <item>
        <widget class="QLineEdit" name="lineEditAgeFrom">
         <property name="text">
+         <string>от</string>
+        </property>
+        <property name="placeholderText">
          <string>от</string>
         </property>
        </widget>
@@ -204,13 +217,16 @@
         <item>
          <widget class="QLineEdit" name="weightsLE">
           <property name="placeholderText">
-           <string>20;35.5;40;48</string>
+           <string>40 50 60.5 73</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QLineEdit" name="lineEditTypeWeight">
+         <widget class="QLineEdit" name="lineEditWordWeight">
           <property name="text">
+           <string>кг</string>
+          </property>
+          <property name="placeholderText">
            <string>кг</string>
           </property>
          </widget>
@@ -222,11 +238,17 @@
         <property name="text">
          <string>до</string>
         </property>
+        <property name="placeholderText">
+         <string>до</string>
+        </property>
        </widget>
       </item>
       <item row="2" column="0">
        <widget class="QLineEdit" name="lineEditWeightFrom">
         <property name="text">
+         <string>свыше</string>
+        </property>
+        <property name="placeholderText">
          <string>свыше</string>
         </property>
        </widget>
@@ -239,7 +261,7 @@
      <item row="0" column="0">
       <widget class="QLabel" name="label_11">
        <property name="text">
-        <string>Количество раундов</string>
+        <string>Раунды</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -313,7 +335,11 @@
       </widget>
      </item>
      <item row="3" column="1">
-      <widget class="QComboBox" name="comboBoxTie"/>
+      <widget class="QComboBox" name="comboBoxTie">
+       <property name="maxVisibleItems">
+        <number>1000</number>
+       </property>
+      </widget>
      </item>
      <item row="4" column="0">
       <widget class="QLabel" name="label_12">
@@ -370,17 +396,18 @@
   <zorder>verticalSpacer</zorder>
  </widget>
  <tabstops>
-  <tabstop>typeCB</tabstop>
-  <tabstop>sexCB</tabstop>
+  <tabstop>pushButtonType</tabstop>
+  <tabstop>comboBoxType</tabstop>
+  <tabstop>comboBoxSex</tabstop>
   <tabstop>pushButtonAddAgeCategory</tabstop>
   <tabstop>comboBoxAgeCategory</tabstop>
   <tabstop>ageFromSB</tabstop>
   <tabstop>ageTillSB</tabstop>
-  <tabstop>lineEditTypeAge</tabstop>
+  <tabstop>lineEditWordAge</tabstop>
   <tabstop>lineEditAgeTill</tabstop>
   <tabstop>lineEditAgeFrom</tabstop>
   <tabstop>weightsLE</tabstop>
-  <tabstop>lineEditTypeWeight</tabstop>
+  <tabstop>lineEditWordWeight</tabstop>
   <tabstop>lineEditWeightTill</tabstop>
   <tabstop>lineEditWeightFrom</tabstop>
   <tabstop>roundCountSB</tabstop>
@@ -393,29 +420,13 @@
  <connections>
   <connection>
    <sender>buttonBox</sender>
-   <signal>accepted()</signal>
-   <receiver>GenerateTournamentCategoriesDialog</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>257</x>
-     <y>561</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>157</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>buttonBox</sender>
    <signal>rejected()</signal>
    <receiver>GenerateTournamentCategoriesDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>325</x>
-     <y>561</y>
+     <x>334</x>
+     <y>607</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>

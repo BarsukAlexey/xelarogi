@@ -37,10 +37,10 @@ public:
     QFormLayout *formLayout;
     QLabel *label_2;
     QHBoxLayout *horizontalLayout;
-    QPushButton *pushButtonAddType;
-    QComboBox *typeCB;
+    QPushButton *pushButtonType;
+    QComboBox *comboBoxType;
     QLabel *label_3;
-    QComboBox *sexCB;
+    QComboBox *comboBoxSex;
     QLabel *label;
     QHBoxLayout *horizontalLayout_4;
     QPushButton *pushButtonAddAgeCategory;
@@ -52,7 +52,7 @@ public:
     QSpinBox *ageFromSB;
     QLabel *label_5;
     QSpinBox *ageTillSB;
-    QLineEdit *lineEditTypeAge;
+    QLineEdit *lineEditWordAge;
     QLineEdit *lineEditAgeTill;
     QLineEdit *lineEditAgeFrom;
     QLabel *label_17;
@@ -61,7 +61,7 @@ public:
     QHBoxLayout *horizontalLayout_3;
     QLabel *label_7;
     QLineEdit *weightsLE;
-    QLineEdit *lineEditTypeWeight;
+    QLineEdit *lineEditWordWeight;
     QLineEdit *lineEditWeightTill;
     QLineEdit *lineEditWeightFrom;
     QFormLayout *formLayout_2;
@@ -95,17 +95,17 @@ public:
 
         horizontalLayout = new QHBoxLayout();
         horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
-        pushButtonAddType = new QPushButton(GenerateTournamentCategoriesDialog);
-        pushButtonAddType->setObjectName(QStringLiteral("pushButtonAddType"));
-        pushButtonAddType->setMaximumSize(QSize(24, 16777215));
+        pushButtonType = new QPushButton(GenerateTournamentCategoriesDialog);
+        pushButtonType->setObjectName(QStringLiteral("pushButtonType"));
+        pushButtonType->setMaximumSize(QSize(24, 16777215));
 
-        horizontalLayout->addWidget(pushButtonAddType);
+        horizontalLayout->addWidget(pushButtonType);
 
-        typeCB = new QComboBox(GenerateTournamentCategoriesDialog);
-        typeCB->setObjectName(QStringLiteral("typeCB"));
-        typeCB->setMaxVisibleItems(20);
+        comboBoxType = new QComboBox(GenerateTournamentCategoriesDialog);
+        comboBoxType->setObjectName(QStringLiteral("comboBoxType"));
+        comboBoxType->setMaxVisibleItems(1000);
 
-        horizontalLayout->addWidget(typeCB);
+        horizontalLayout->addWidget(comboBoxType);
 
 
         formLayout->setLayout(0, QFormLayout::FieldRole, horizontalLayout);
@@ -116,11 +116,11 @@ public:
 
         formLayout->setWidget(1, QFormLayout::LabelRole, label_3);
 
-        sexCB = new QComboBox(GenerateTournamentCategoriesDialog);
-        sexCB->setObjectName(QStringLiteral("sexCB"));
-        sexCB->setMaxVisibleItems(20);
+        comboBoxSex = new QComboBox(GenerateTournamentCategoriesDialog);
+        comboBoxSex->setObjectName(QStringLiteral("comboBoxSex"));
+        comboBoxSex->setMaxVisibleItems(1000);
 
-        formLayout->setWidget(1, QFormLayout::FieldRole, sexCB);
+        formLayout->setWidget(1, QFormLayout::FieldRole, comboBoxSex);
 
         label = new QLabel(GenerateTournamentCategoriesDialog);
         label->setObjectName(QStringLiteral("label"));
@@ -138,6 +138,7 @@ public:
 
         comboBoxAgeCategory = new QComboBox(GenerateTournamentCategoriesDialog);
         comboBoxAgeCategory->setObjectName(QStringLiteral("comboBoxAgeCategory"));
+        comboBoxAgeCategory->setMaxVisibleItems(1000);
 
         horizontalLayout_4->addWidget(comboBoxAgeCategory);
 
@@ -179,10 +180,10 @@ public:
 
         horizontalLayout_2->addWidget(ageTillSB);
 
-        lineEditTypeAge = new QLineEdit(groupBox_2);
-        lineEditTypeAge->setObjectName(QStringLiteral("lineEditTypeAge"));
+        lineEditWordAge = new QLineEdit(groupBox_2);
+        lineEditWordAge->setObjectName(QStringLiteral("lineEditWordAge"));
 
-        horizontalLayout_2->addWidget(lineEditTypeAge);
+        horizontalLayout_2->addWidget(lineEditWordAge);
 
 
         verticalLayout_2->addLayout(horizontalLayout_2);
@@ -223,10 +224,10 @@ public:
 
         horizontalLayout_3->addWidget(weightsLE);
 
-        lineEditTypeWeight = new QLineEdit(groupBox);
-        lineEditTypeWeight->setObjectName(QStringLiteral("lineEditTypeWeight"));
+        lineEditWordWeight = new QLineEdit(groupBox);
+        lineEditWordWeight->setObjectName(QStringLiteral("lineEditWordWeight"));
 
-        horizontalLayout_3->addWidget(lineEditTypeWeight);
+        horizontalLayout_3->addWidget(lineEditWordWeight);
 
 
         gridLayout->addLayout(horizontalLayout_3, 0, 0, 1, 1);
@@ -295,6 +296,7 @@ public:
 
         comboBoxTie = new QComboBox(GenerateTournamentCategoriesDialog);
         comboBoxTie->setObjectName(QStringLiteral("comboBoxTie"));
+        comboBoxTie->setMaxVisibleItems(1000);
 
         formLayout_2->setWidget(3, QFormLayout::FieldRole, comboBoxTie);
 
@@ -329,17 +331,18 @@ public:
         buttonBox->raise();
         groupBox->raise();
         groupBox_2->raise();
-        QWidget::setTabOrder(typeCB, sexCB);
-        QWidget::setTabOrder(sexCB, pushButtonAddAgeCategory);
+        QWidget::setTabOrder(pushButtonType, comboBoxType);
+        QWidget::setTabOrder(comboBoxType, comboBoxSex);
+        QWidget::setTabOrder(comboBoxSex, pushButtonAddAgeCategory);
         QWidget::setTabOrder(pushButtonAddAgeCategory, comboBoxAgeCategory);
         QWidget::setTabOrder(comboBoxAgeCategory, ageFromSB);
         QWidget::setTabOrder(ageFromSB, ageTillSB);
-        QWidget::setTabOrder(ageTillSB, lineEditTypeAge);
-        QWidget::setTabOrder(lineEditTypeAge, lineEditAgeTill);
+        QWidget::setTabOrder(ageTillSB, lineEditWordAge);
+        QWidget::setTabOrder(lineEditWordAge, lineEditAgeTill);
         QWidget::setTabOrder(lineEditAgeTill, lineEditAgeFrom);
         QWidget::setTabOrder(lineEditAgeFrom, weightsLE);
-        QWidget::setTabOrder(weightsLE, lineEditTypeWeight);
-        QWidget::setTabOrder(lineEditTypeWeight, lineEditWeightTill);
+        QWidget::setTabOrder(weightsLE, lineEditWordWeight);
+        QWidget::setTabOrder(lineEditWordWeight, lineEditWeightTill);
         QWidget::setTabOrder(lineEditWeightTill, lineEditWeightFrom);
         QWidget::setTabOrder(lineEditWeightFrom, roundCountSB);
         QWidget::setTabOrder(roundCountSB, duratiobFightingSB);
@@ -348,7 +351,6 @@ public:
         QWidget::setTabOrder(comboBoxTie, spinBoxExtraRound);
 
         retranslateUi(GenerateTournamentCategoriesDialog);
-        QObject::connect(buttonBox, SIGNAL(accepted()), GenerateTournamentCategoriesDialog, SLOT(accept()));
         QObject::connect(buttonBox, SIGNAL(rejected()), GenerateTournamentCategoriesDialog, SLOT(reject()));
 
         QMetaObject::connectSlotsByName(GenerateTournamentCategoriesDialog);
@@ -358,24 +360,30 @@ public:
     {
         GenerateTournamentCategoriesDialog->setWindowTitle(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\224\320\276\320\261\320\260\320\262\320\273\320\265\320\275\320\270\320\265 \320\272\320\260\321\202\320\265\320\263\320\276\321\200\320\270\320\271 \321\202\321\203\321\200\320\275\320\270\321\200\320\260", 0));
         label_2->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\240\320\260\320\267\320\264\320\265\320\273", 0));
-        pushButtonAddType->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "+", 0));
+        pushButtonType->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "+", 0));
         label_3->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\237\320\276\320\273", 0));
         label->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\222\320\276\320\267\321\200\320\260\321\201\321\202\320\275\320\260\321\217 \320\272\320\260\321\202\320\265\320\263\320\276\321\200\320\270\321\217", 0));
         pushButtonAddAgeCategory->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "+", 0));
         groupBox_2->setTitle(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\222\320\276\320\267\321\200\320\260\321\201\321\202", 0));
         label_4->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\222\320\276\320\267\321\200\320\260\321\201\321\202 \320\276\321\202", 0));
         label_5->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\273\320\265\321\202 \320\264\320\276", 0));
-        lineEditTypeAge->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\273\320\265\321\202", 0));
+        lineEditWordAge->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\273\320\265\321\202", 0));
+        lineEditWordAge->setPlaceholderText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\273\320\265\321\202", 0));
         lineEditAgeTill->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\264\320\276", 0));
+        lineEditAgeTill->setPlaceholderText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\264\320\276", 0));
         lineEditAgeFrom->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\276\321\202", 0));
+        lineEditAgeFrom->setPlaceholderText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\276\321\202", 0));
         label_17->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "<html><head/><body><p>\320\225\321\201\320\273\320\270 \321\203\320\272\320\260\320\267\320\260\321\202\321\214, \320\275\320\260\320\277\321\200\320\270\320\274\320\265\321\200, \320\264\320\270\320\260\320\277\320\260\320\267\320\276\320\275 \320\276\321\202 0 \320\264\320\276 5 \320\273\320\265\321\202, \321\202\320\276 \321\202\320\276\320\263\320\264\320\260 \320\261\321\203\320\264\320\265\321\202 \320\276\320\261\320\276\320\261\321\200\320\260\320\266\320\260\321\202\321\214\321\201\321\217 &quot;\320\264\320\276 5 \320\273\320\265\321\202&quot;</p><p>\320\225\321\201\320\273\320\270 \320\276\321\202 35 \320\273\320\265\321\202 \320\264\320\276 99 \320\273\320\265\321\202, \321\202\320\276 &quot;\320\276\321\202 35 \320\273\320\265\321\202&quot;</p><p>\320\225\321\201\320\273\320\270 \320\276\321\202 18 \320\264\320\276 23 \320\273\320\265\321\202, \321\202\320\276 &quot;18-23 \320\273\320\265\321\202&quot;</p></body></html>", 0));
         groupBox->setTitle(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\222\320\265\321\201", 0));
         label_7->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\223\321\200\320\260\320\275\320\270\321\207\320\275\321\213\320\265 \320\267\320\275\320\260\321\207\320\265\320\275\320\270\321\217 \320\262\320\265\321\201\320\260", 0));
-        weightsLE->setPlaceholderText(QApplication::translate("GenerateTournamentCategoriesDialog", "20;35.5;40;48", 0));
-        lineEditTypeWeight->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\272\320\263", 0));
+        weightsLE->setPlaceholderText(QApplication::translate("GenerateTournamentCategoriesDialog", "40 50 60.5 73", 0));
+        lineEditWordWeight->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\272\320\263", 0));
+        lineEditWordWeight->setPlaceholderText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\272\320\263", 0));
         lineEditWeightTill->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\264\320\276", 0));
+        lineEditWeightTill->setPlaceholderText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\264\320\276", 0));
         lineEditWeightFrom->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\321\201\320\262\321\213\321\210\320\265", 0));
-        label_11->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\232\320\276\320\273\320\270\321\207\320\265\321\201\321\202\320\262\320\276 \321\200\320\260\321\203\320\275\320\264\320\276\320\262", 0));
+        lineEditWeightFrom->setPlaceholderText(QApplication::translate("GenerateTournamentCategoriesDialog", "\321\201\320\262\321\213\321\210\320\265", 0));
+        label_11->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\240\320\260\321\203\320\275\320\264\321\213", 0));
         label_9->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\221\320\276\320\271", 0));
         label_10->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\237\320\265\321\200\320\265\321\200\321\213\320\262", 0));
         label_13->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\222 \321\201\320\273\321\203\321\207\320\260\320\265 \320\275\320\270\321\207\321\214\320\270", 0));

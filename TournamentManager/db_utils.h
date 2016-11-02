@@ -104,6 +104,13 @@ public:
     static QString getNormanAgeRangeFromTOURNAMENT_CATEGORIES(long long uidCategory);
     static QString getNameForExcelSheet(long long uidTC);
     static int getMaxDayFromGrids(long long tournamentUID);
+    static QString insertTournamentCaregory(
+            long long ageCatUID, int ageFrom, int ageTill, QVector<double> weights,
+            long long tournamentUID, long long typeUID, long long sexUID,
+            int durationFighting, int durationBreak, int roundCount,
+            int IN_CASE_TIE, int DURATION_EXTRA_ROUND,
+            QString ageUnit, QString wordAgeFrom, QString wordAgeTill,
+            QString weightUnit, QString wordWeightFrom, QString wordWeightTill);
 
 
     // для таблицы RING_TATAMI_LISTS_DATA

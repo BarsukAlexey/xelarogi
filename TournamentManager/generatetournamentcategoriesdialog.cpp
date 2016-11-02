@@ -1,8 +1,6 @@
 #include "generatetournamentcategoriesdialog.h"
 #include "ui_generatetournamentcategoriesdialog.h"
-#include "db_utils.h"
-#include "createtypedialog.h"
-#include "dialog_create_age_category.h"
+
 
 GenerateTournamentCategoriesDialog::GenerateTournamentCategoriesDialog(long long tournamentUID, QWidget *parent) :
     QDialog(parent),
@@ -12,237 +10,185 @@ GenerateTournamentCategoriesDialog::GenerateTournamentCategoriesDialog(long long
     ui->setupUi(this);
 
 
+    modelType = new QSqlRelationalTableModel(this);
+    modelType->setTable("TYPES");
+    modelType->setSort(1, Qt::AscendingOrder);
+    modelType->select();
+    ui->comboBoxType->setModel(modelType);
+    ui->comboBoxType->setModelColumn(1);
 
-    void (QComboBox:: *indexChangedSignal)(int) = &QComboBox::currentIndexChanged;
-    connect(ui->comboBoxTie, indexChangedSignal, [this](const int x){
-        ui->spinBoxExtraRound->setEnabled(x == 2);
-    });
+    modelSex = new QSqlRelationalTableModel(this);
+    modelSex->setTable("SEXES");
+    modelSex->setSort(1, Qt::AscendingOrder);
+    modelSex->select();
+    ui->comboBoxSex->setModel(modelSex);
+    ui->comboBoxSex->setModelColumn(1);
 
-    connect(ui->sexCB, &QComboBox::currentTextChanged, this, &GenerateTournamentCategoriesDialog::fillComboBoxAgeCategory);
+    modelAgeType = new QSqlRelationalTableModel(this);
+    modelAgeType->setTable("AGE_CATEGORIES");
+    modelAgeType->setSort(1, Qt::AscendingOrder);
+    modelAgeType->select();
+    ui->comboBoxAgeCategory->setModel(modelAgeType);
+    ui->comboBoxAgeCategory->setModelColumn(1);
 
-    connect(this, &GenerateTournamentCategoriesDialog::accepted, [this, tournamentUID] ()
-    {
+    modelTie = new QSqlRelationalTableModel(this);
+    modelTie->setTable("IN_CASES_OF_TIE");
+    modelTie->setSort(1, Qt::AscendingOrder);
+    modelTie->select();
+    ui->comboBoxTie->setModel(modelTie);
+    ui->comboBoxTie->setModelColumn(1);
 
-        QString weightCorrect = ui->weightsLE->text().simplified().replace(",", ".").replace(" ", "");
-        QStringList weights = weightCorrect.split(";", QString::SkipEmptyParts);
-        if (weights.size() > 0 && weights.front() != "0")
-            weights.push_front("0");
-        weights.push_back("100000.0");
-        QVector<double> w;
-        for (QString s : weights) w << s.toDouble();
+    QSettings settings;
+    ui->lineEditWordAge->setText(settings.value("GenerateTournamentCategoriesDialog/lineEditWordAge", ui->lineEditWordAge->text()).toString());
+    ui->lineEditAgeTill->setText(settings.value("GenerateTournamentCategoriesDialog/lineEditAgeTill", ui->lineEditAgeTill->text()).toString());
+    ui->lineEditAgeFrom->setText(settings.value("GenerateTournamentCategoriesDialog/lineEditAgeFrom", ui->lineEditAgeFrom->text()).toString());
 
-        QString newCategoryMsg = insertInDB(
-                                     ui->comboBoxAgeCategory->currentData(Qt::UserRole).toLongLong(),
-
-                                     ui->ageFromSB->value(),
-                                     ui->ageTillSB->value(),
-
-                                     w,
-                                     tournamentUID,
-                                     ui->typeCB->currentData(Qt::UserRole).toLongLong(),
-                                     ui->sexCB->currentData(Qt::UserRole).toLongLong(),
-
-                                     ui->duratiobFightingSB->value(),
-                                     ui->durationBreakSB->value(),
-                                     ui->roundCountSB->value(),
-
-                                     ui->comboBoxTie->currentIndex(),
-                                     ui->spinBoxExtraRound->value(),
+    ui->lineEditWordWeight->setText(settings.value("GenerateTournamentCategoriesDialog/lineEditWordWeight", ui->lineEditWordWeight->text()).toString());
+    ui->lineEditWeightTill->setText(settings.value("GenerateTournamentCategoriesDialog/lineEditWeightTill", ui->lineEditWeightTill->text()).toString());
+    ui->lineEditWeightFrom->setText(settings.value("GenerateTournamentCategoriesDialog/lineEditWeightFrom", ui->lineEditWeightFrom->text()).toString());
 
 
-                                     ui->lineEditTypeAge->text(),
-                                     ui->lineEditAgeFrom->text(),
-                                     ui->lineEditAgeTill->text(),
 
-                                     ui->lineEditTypeWeight->text(),
-                                     ui->lineEditWeightFrom->text(),
-                                     ui->lineEditWeightTill->text()
-                                     );
+    connect(ui->buttonBox, &QDialogButtonBox::accepted, this, &GenerateTournamentCategoriesDialog::on_accepted);
 
-        QMessageBox::information(this, "Добавлены новые категории", newCategoryMsg);
+    connect(ui->pushButtonType, &QPushButton::clicked, this, &GenerateTournamentCategoriesDialog::onPushButtonTypeClicked);
+    connect(ui->pushButtonAddAgeCategory, &QPushButton::clicked, this, &GenerateTournamentCategoriesDialog::onPushButtonAddAgeCategoryClicked);
 
-    });
-
-    connect(ui->pushButtonAddType, &QPushButton::clicked, [this](){
-
-    });
 
 }
 
 
 GenerateTournamentCategoriesDialog::~GenerateTournamentCategoriesDialog()
 {
+    QSettings settings;
+    settings.setValue("GenerateTournamentCategoriesDialog/lineEditWordAge", ui->lineEditWordAge->text());
+    settings.setValue("GenerateTournamentCategoriesDialog/lineEditAgeTill", ui->lineEditAgeTill->text());
+    settings.setValue("GenerateTournamentCategoriesDialog/lineEditAgeFrom", ui->lineEditAgeFrom->text());
+
+    settings.setValue("GenerateTournamentCategoriesDialog/lineEditWordWeight", ui->lineEditWordWeight->text());
+    settings.setValue("GenerateTournamentCategoriesDialog/lineEditWeightTill", ui->lineEditWeightTill->text());
+    settings.setValue("GenerateTournamentCategoriesDialog/lineEditWeightFrom", ui->lineEditWeightFrom->text());
+
     delete ui;
 }
 
-QString GenerateTournamentCategoriesDialog::insertInDB(long long ageCatUID, int ageFrom, int ageTill,
-                                                       QVector<double> weights,
-                                                       long long tournamentUID, long long typeUID, long long sexUID,
-                                                       int durationFighting, int durationBreak, int roundCount,
-                                                       int IN_CASE_TIE, int DURATION_EXTRA_ROUND,
-                                                       QString ageUnit, QString wordAgeFrom, QString wordAgeTill,
-                                                       QString weightUnit, QString wordWeightFrom, QString wordWeightTill)
+
+
+void GenerateTournamentCategoriesDialog::onPushButtonTypeClicked()
 {
-    QString newCategoryMsg = "Добавлены новые категории:\n";
-    QString errors = "Ошибки:\n";
+    DialogSqlTableManager dlg(this, "TYPES");
+    dlg.exec();
+    modelType->select();
+}
 
-    if (IN_CASE_TIE != 2)
-        DURATION_EXTRA_ROUND = 0;
-
-    for (int index = 0; index + 1 < weights.size(); index++)
-    {
-        double weightFrom = weights[index];
-        double weightTill = weights[index + 1];
-
-
-        QString age;
-        if      (ageFrom == 0)  age = wordAgeTill + " " + QString::number(ageTill) + " " + ageUnit;
-        else if (99 <= ageTill) age = wordAgeFrom + " " + QString::number(ageFrom) + " " + ageUnit;
-        else                    age = QString::number(ageFrom) + "-" + QString::number(ageTill) + " " + ageUnit;
-
-        QString weight;
-        if      (weightFrom == 0)   weight = wordWeightTill + " " + DBUtils::roundDouble(weightTill, 3) + " " + weightUnit;
-        else if (300 <= weightTill) weight = wordWeightFrom + " " + DBUtils::roundDouble(weightFrom, 3) + " " + weightUnit;
-        else                        weight = DBUtils::roundDouble(weightFrom, 3) + "-" + DBUtils::roundDouble(weightTill, 3) + " " + weightUnit;
-
-
-        QString modifyName =
-                DBUtils::getField("NAME", "TYPES", typeUID) + ", " +
-                DBUtils::getField("NAME", "AGE_CATEGORIES", ageCatUID) + ", " +
-                age + ", " +
-                weight + ".";
-
-        QSqlQuery query;
-        if (!query.prepare("INSERT INTO TOURNAMENT_CATEGORIES( "
-                           "NAME, AGE_CATEGORY_FK, AGE_FROM, AGE_TILL, WEIGHT_FROM, WEIGHT_TILL, "
-                           "SEX_FK, TYPE_FK, TOURNAMENT_FK, "
-                           "DURATION_FIGHING, DURATION_BREAK, ROUND_COUNT, "
-                           "IN_CASE_TIE, DURATION_EXTRA_ROUND, "
-                           "AGE, WEIGHT) "
-                           "VALUES (?, ?, ?, ?, ?, ?,    ?, ?, ?,   ?, ?, ?,   ?, ?,     ?, ?)"))
-            qDebug() << query.lastError().text();
-        query.addBindValue(modifyName);
-        query.addBindValue(ageCatUID);
-        query.addBindValue(ageFrom);
-        query.addBindValue(ageTill);
-        query.addBindValue(weightFrom);
-        query.addBindValue(weightTill);
-
-        query.addBindValue(sexUID);
-        query.addBindValue(typeUID);
-        query.addBindValue(tournamentUID);
-
-        query.addBindValue(durationFighting);
-        query.addBindValue(durationBreak);
-        query.addBindValue(roundCount);
-
-        query.addBindValue(IN_CASE_TIE);
-        query.addBindValue(DURATION_EXTRA_ROUND);
-
-        query.addBindValue(age);
-        query.addBindValue(weight);
-
-        if (!query.exec())
-        {
-            qDebug() << query.lastError().text();
-            errors += modifyName + "\n" +
-                      query.lastError().databaseText() + "\n" +
-                      query.lastError().driverText() + "\n\n";
-        }
-        else
-        {
-            newCategoryMsg += "\t" + modifyName + "\n";
-        }
-
-        query.clear();
-    }
-
-    return newCategoryMsg + "\n\n" + errors;
+void GenerateTournamentCategoriesDialog::onPushButtonAddAgeCategoryClicked()
+{
+    DialogSqlTableManager dlg(this, "AGE_CATEGORIES");
+    dlg.exec();
+    modelAgeType->select();
 }
 
 
-
-void GenerateTournamentCategoriesDialog::fillSexCB()
+void GenerateTournamentCategoriesDialog::on_accepted()
 {
-    ui->sexCB->clear();
-
-    QSqlQuery query;
-    if (!query.prepare("SELECT * FROM SEXES"))
-        qDebug() << query.lastError().text();
-    if (query.exec())
+    int indexType = ui->comboBoxType->currentIndex();
+    if (indexType == -1)
     {
-        int index = 0;
-        while (query.next())
-        {
-            ui->sexCB->addItem(query.value("NAME").toString());
-            ui->sexCB->setItemData(index, query.value("UID").toLongLong(), Qt::UserRole);
-            ++index;
-        }
-    }
-    else
-    {
-        qDebug() << query.lastError().text();
-    }
-}
-
-void GenerateTournamentCategoriesDialog::fillTypeCB()
-{
-    ui->typeCB->clear();
-
-    QSqlQuery query;
-    if (!query.prepare("SELECT * FROM TYPES"))
-        qDebug() << query.lastError().text();
-    if (query.exec())
-    {
-        int index = 0;
-        while (query.next())
-        {
-            ui->typeCB->addItem(query.value("NAME").toString());
-            ui->typeCB->setItemData(index, query.value("UID").toLongLong(), Qt::UserRole);
-            ++index;
-        }
-    }
-    else
-    {
-        qDebug() << query.lastError().text();
-    }
-}
-
-void GenerateTournamentCategoriesDialog::fillTie()
-{
-    ui->comboBoxTie->addItem("Клик мышкой");
-    ui->comboBoxTie->addItem("Европейская система");
-    ui->comboBoxTie->addItem("Дополнительный раунд");
-}
-
-void GenerateTournamentCategoriesDialog::fillComboBoxAgeCategory()
-{
-    ui->comboBoxAgeCategory->clear();
-
-    QSqlQuery query("SELECT * FROM AGE_CATEGORIES WHERE SEX_FK = ?");
-    query.addBindValue(ui->sexCB->currentData(Qt::UserRole).toLongLong());
-    if (!query.exec())
-    {
-        qDebug() << query.lastError();
+        QMessageBox::warning(this, "", "Выберите раздел");
         return ;
     }
-    while (query.next())
-    {
-        ui->comboBoxAgeCategory->addItem(query.value("NAME").toString(), query.value("UID").toLongLong());
-    }
-}
 
-void GenerateTournamentCategoriesDialog::on_pushButton_clicked()
-{
-    CreateTypeDialog dlg(this);
-    if (dlg.exec() == QDialog::Accepted)
+    int indexAgeCategory = ui->comboBoxAgeCategory->currentIndex();
+    if (indexAgeCategory == -1)
     {
-        fillTypeCB();
+        QMessageBox::warning(this, "", "Выберите возрастную категорию");
+        return ;
     }
-}
 
-void GenerateTournamentCategoriesDialog::on_pushButtonAddAgeCategory_clicked()
-{
-    DialogCreateAgeCategory(this, ui->sexCB->currentData(Qt::UserRole).toLongLong()).exec();
-    fillComboBoxAgeCategory();
+    if (ui->lineEditWordAge->text().simplified().isEmpty())
+    {
+        QMessageBox::warning(this, "", "Выберите слово \"лет\" в форме \"Возраст\"");
+        return ;
+    }
+    if (ui->lineEditAgeTill->text().simplified().isEmpty())
+    {
+        QMessageBox::warning(this, "", "Выберите слово \"до\" в форме \"Возраст\"");
+        return ;
+    }
+    if (ui->lineEditAgeFrom->text().simplified().isEmpty())
+    {
+        QMessageBox::warning(this, "", "Выберите слово \"от\" в форме \"Возраст\"");
+        return ;
+    }
+
+    QStringList weights = ui->weightsLE->text().split(" ", QString::SkipEmptyParts);
+    if (weights.isEmpty())
+    {
+        QMessageBox::warning(this, "", "Выберите граничные веса");
+        return ;
+    }
+    QVector<double> w;
+    w << 0;
+    for (QString s : weights){
+        bool ok = true;
+        w << s.toDouble(&ok);
+        if (!ok)
+        {
+            QMessageBox::warning(this, "", "Не возможно распознать число: " + s);
+            return ;
+        }
+    }
+    w << 1000;
+
+
+
+    if (ui->lineEditWordWeight->text().simplified().isEmpty())
+    {
+        QMessageBox::warning(this, "", "Выберите слово \"кг\" в форме \"Вес\"");
+        return ;
+    }
+    if (ui->lineEditWeightTill->text().simplified().isEmpty())
+    {
+        QMessageBox::warning(this, "", "Выберите слово \"до\" в форме \"Вес\"");
+        return ;
+    }
+    if (ui->lineEditWeightFrom->text().simplified().isEmpty())
+    {
+        QMessageBox::warning(this, "", "Выберите слово \"свыше\" в форме \"Вес\"");
+        return ;
+    }
+
+
+    QString message =
+            DBUtils::insertTournamentCaregory(
+                modelAgeType->data(modelAgeType->index(indexAgeCategory, 0), Qt::EditRole).toInt(),
+
+                ui->ageFromSB->value(),
+                ui->ageTillSB->value(),
+
+                w,
+                mTournamentUID,
+                modelType->data(modelType->index(indexType, 0), Qt::EditRole).toInt(),
+                modelSex->data(modelSex->index(ui->comboBoxSex->currentIndex(), 0), Qt::EditRole).toInt(),
+
+                ui->duratiobFightingSB->value(),
+                ui->durationBreakSB->value(),
+                ui->roundCountSB->value(),
+
+                modelTie->data(modelTie->index(ui->comboBoxTie->currentIndex(), 0), Qt::EditRole).toInt(),
+                ui->spinBoxExtraRound->value(),
+
+
+                ui->lineEditWordAge->text(),
+                ui->lineEditAgeFrom->text(),
+                ui->lineEditAgeTill->text(),
+
+                ui->lineEditWordWeight->text(),
+                ui->lineEditWeightFrom->text(),
+                ui->lineEditWeightTill->text()
+                );
+
+    QMessageBox::information(this, "", message);
+
+    accept();
 }

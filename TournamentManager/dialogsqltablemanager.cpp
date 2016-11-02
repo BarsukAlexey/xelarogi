@@ -13,7 +13,9 @@ DialogSqlTableManager::DialogSqlTableManager(
     ui(new Ui::DialogSqlTableManager)
 {
     ui->setupUi(this);
+    setWindowFlags(Qt::Window);
     ui->sqlTableManager->setSqlTable(table, whereStatement, hidenColumns);
+    ui->label->setText(table);
 }
 
 DialogSqlTableManager::~DialogSqlTableManager()

@@ -1,13 +1,7 @@
 #include "ebnutvbazu.h"
-#include "db_utils.h"
 
-#include <QDebug>
-#include <QSqlQuery>
-#include <QSqlDatabase>
-#include <QSqlError>
-#include <QDate>
-#include <utility>
-#include <generatetournamentcategoriesdialog.h>
+
+
 
 
 //void f()
@@ -327,7 +321,7 @@ void EbnutVBazu::setTournamentCat(long long tournamentUID)
             else if (std::get<0>(tup) <= 14) time << 90  << 45 << 2;
             else if (std::get<0>(tup) <= 20) time << 120 << 60 << 2;
 
-            GenerateTournamentCategoriesDialog::insertInDB(
+            DBUtils::insertTournamentCaregory(
                         std::get<0>(tup),
                         std::get<3>(tup), std::get<4>(tup),
                         weigths, tournamentUID, type.first, std::get<2>(tup),
