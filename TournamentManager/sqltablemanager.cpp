@@ -59,6 +59,11 @@ void ColumnAlignedLayout::setGeometry(const QRect& r)
 
 
 
+
+
+
+
+
 QWidget* MySqlRelationalDelegate::createEditor(QWidget* parent, const QStyleOptionViewItem& i, const QModelIndex& index) const
 {
     const MySortFilterProxyModel *proxyModel =
@@ -77,6 +82,19 @@ QWidget* MySqlRelationalDelegate::createEditor(QWidget* parent, const QStyleOpti
     if (QString::compare(sqlModel->record().field(index.column()).name(), "UID", Qt::CaseInsensitive) == 0)
         return 0;
 
+    if (QString::compare(sqlModel->record().field(index.column()).name(), "FLAG", Qt::CaseInsensitive) == 0)
+    {
+        QImage img;
+        QByteArray byteArray = QByteArray::fromBase64(index.data().toString().toLocal8Bit());
+        if (byteArray.size() > 0)
+        {
+            img.loadFromData(byteArray);
+        }
+        ImageLoaderWidget * imageLoaderWidget = new ImageLoaderWidget(parent, img);
+        //imageLoaderWidget->installEventFilter(const_cast<MySqlRelationalDelegate *>(this));
+        return imageLoaderWidget;
+    }
+
     if(sqlModel->record().field(index.column()).type() == QVariant::Int)
     {
         QSpinBox* spinBox = new QSpinBox(parent);
@@ -88,6 +106,31 @@ QWidget* MySqlRelationalDelegate::createEditor(QWidget* parent, const QStyleOpti
     return QSqlRelationalDelegate::createEditor(parent, i, index);
 }
 
+//bool MySqlRelationalDelegate::editorEvent(QEvent* event, QAbstractItemModel* model,
+//                                          const QStyleOptionViewItem& option, const QModelIndex& index)
+//{
+//    MySortFilterProxyModel *proxyModel =
+//            qobject_cast<MySortFilterProxyModel *>(model);
+//    if (proxyModel)
+//    {
+//        return editorEvent(event, proxyModel->sourceModel(), option, proxyModel->mapToSource(index));
+//    }
+
+//    const QSqlRelationalTableModel *sqlModel =
+//            qobject_cast<const QSqlRelationalTableModel *>(index.model());
+//    if (!sqlModel)
+//        return QSqlRelationalDelegate::editorEvent(event, model, option, index);
+//    if (QString::compare(sqlModel->record().field(index.column()).name(), "FLAG", Qt::CaseInsensitive) == 0)
+//    {
+//        qDebug() << "editorEvent:: " << event->type();
+//    }
+
+//    bool res = QSqlRelationalDelegate::editorEvent(event, model, option, index);
+//    qDebug() << res << event->type();
+//    return res;
+
+//}
+
 MySqlRelationalDelegate::MySqlRelationalDelegate(QObject* parent) :
     QSqlRelationalDelegate(parent)
 {
@@ -96,7 +139,7 @@ MySqlRelationalDelegate::MySqlRelationalDelegate(QObject* parent) :
 
 void MySqlRelationalDelegate::setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const
 {
-    const MySortFilterProxyModel *proxyModel = qobject_cast<const MySortFilterProxyModel *>(model);
+    MySortFilterProxyModel *proxyModel = qobject_cast<MySortFilterProxyModel *>(model);
 
     if (proxyModel)
     {
@@ -119,9 +162,102 @@ void MySqlRelationalDelegate::setModelData(QWidget* editor, QAbstractItemModel* 
         return;
     }
 
+    if (QString::compare(sqlModel->record().field(index.column()).name(), "FLAG", Qt::CaseInsensitive) == 0)
+    {
+        ImageLoaderWidget* imgLoader = qobject_cast<ImageLoaderWidget *>(editor);
+        QString base64Image = imgLoader->getBase64Image();
+        sqlModel->setData(index, base64Image, Qt::DisplayRole);
+        sqlModel->setData(index, base64Image, Qt::EditRole);
+        return ;
+    }
 
     QSqlRelationalDelegate::setModelData(editor, model, index);
 }
+
+void MySqlRelationalDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const
+{
+    const MySortFilterProxyModel *proxyModel = qobject_cast<const MySortFilterProxyModel *>(index.model());
+
+    if (proxyModel)
+    {
+        paint(painter, option, proxyModel->mapToSource(index));
+        return;
+    }
+
+    const QSqlRelationalTableModel *sqlModel = qobject_cast<const  QSqlRelationalTableModel *>(index.model());
+    if (!sqlModel)
+    {
+        QSqlRelationalDelegate::paint(painter, option, index);
+        return;
+    }
+
+    if (QString::compare(sqlModel->record().field(index.column()).name(), "FLAG", Qt::CaseInsensitive) == 0)
+    {
+//        qDebug()<< sqlModel->data(sqlModel->index(index.row(), 1))
+//                << QString::number(option.state, 16)
+//                << QString::number(QStyle::State_Selected, 16);
+
+        if (option.state & QStyle::State_Selected)
+        {
+            painter->fillRect(option.rect, option.palette.highlight());
+        }
+//        qDebug()
+//                << sqlModel->data(sqlModel->index(index.row(), 1))
+//                << QString::number(option.state, 16)
+//                << QString::number(QStyle::State_Selected, 16);
+
+//        if (!(option.state & 0x10100))
+//        {
+//            return ;
+//        }
+
+        QByteArray byteArray = QByteArray::fromBase64(index.data().toString().toLocal8Bit());
+        if (byteArray.size() > 0)
+        {
+            QPixmap pixmap;
+            pixmap.loadFromData(byteArray);
+            pixmap = pixmap.scaled(option.rect.size(), Qt::KeepAspectRatio);
+            QPoint A(option.rect.x() + (option.rect.width() - pixmap.width()) / 2,
+                     option.rect.y() + (option.rect.height() - pixmap.height()) / 2);
+            QPoint B = A + QPoint(pixmap.width(), pixmap.height());
+
+            painter->drawPixmap(QRect(A, B), pixmap);
+
+            painter->setPen(Qt::lightGray);
+
+            painter->drawLine(A, B - QPoint(pixmap.width(), 0));
+            painter->drawLine(A + QPoint(pixmap.width(), 0), B);
+        }
+        return ;
+    }
+
+    QSqlRelationalDelegate::paint(painter, option, index);
+}
+
+QSize MySqlRelationalDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const
+{
+    const MySortFilterProxyModel *proxyModel = qobject_cast<const MySortFilterProxyModel *>(index.model());
+
+    if (proxyModel)
+    {
+        return sizeHint(option, proxyModel->mapToSource(index));
+    }
+
+    const QSqlRelationalTableModel *sqlModel = qobject_cast<const  QSqlRelationalTableModel *>(index.model());
+    if (!sqlModel)
+    {
+        return QSqlRelationalDelegate::sizeHint(option, index);
+
+    }
+
+    if (QString::compare(sqlModel->record().field(index.column()).name(), "FLAG", Qt::CaseInsensitive) == 0)
+    {
+        return QSize(300, 100);
+    }
+    return QSqlRelationalDelegate::sizeHint(option, index);
+}
+
+
 
 MySortFilterProxyModel::MySortFilterProxyModel(QObject *parent) :
     QSortFilterProxyModel(parent)
@@ -315,9 +451,16 @@ void SqlTableManager::setSqlTable(const QString& table, const QString& whereStat
     connect(ui->tableView_2->horizontalHeader(), SIGNAL(sectionResized(int,int,int)), SLOT(invalidateAlignedLayout()));
     connect(ui->tableView_2->horizontalScrollBar(), SIGNAL(valueChanged(int)), SLOT(invalidateAlignedLayout()));
 
-    connect(ui->pushButtonSave, &QPushButton::clicked, [this](){
+    connect(ui->pushButtonSave, &QPushButton::clicked, [this, proxyModel](){
+        //qDebug() << model->rowCount();
         if (model->submitAll())
+        {
             qDebug() << "Save all";
+            while (model->canFetchMore())
+                model->fetchMore();
+            proxyModel->invalidate();
+            //qDebug() << model->rowCount();
+        }
         else
         {
             qDebug() << model->lastError();
@@ -327,7 +470,6 @@ void SqlTableManager::setSqlTable(const QString& table, const QString& whereStat
     });
     connect(ui->pushButtonCancel, &QPushButton::clicked, [this](){
         model->revertAll();
-        model->select();
     });
     connect(ui->pushButtonInsert, &QPushButton::clicked, [this](){
         model->insertRow(model->rowCount());
@@ -337,6 +479,9 @@ void SqlTableManager::setSqlTable(const QString& table, const QString& whereStat
 void SqlTableManager::updateData()
 {
     model->select();
+    while (model->canFetchMore())
+        model->fetchMore();
+    //proxyModel->invalidate();
 }
 
 SqlTableManager::~SqlTableManager()
@@ -350,3 +495,4 @@ void SqlTableManager::invalidateAlignedLayout()
 {
     alignedLayout->invalidate();
 }
+

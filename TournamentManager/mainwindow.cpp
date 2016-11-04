@@ -8,116 +8,70 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
 
-//    while (true)
-//    {
-//        LoginDialog loginDialog(this);
-//        if (loginDialog.exec() == QDialog::Accepted)
-//        {
-//            break;
-//        }
-//        if (!LoginDialog::mOkBtnClicked)
-//        {
-//            exit(0);
-//        }
-//        else
-//        {
-//            QMessageBox::warning(this, "Неудачная попытка авторизации", "Логи или пароль введены неверно");
-//        }
-//    }
-
-
     ui->setupUi(this);
 
-    srand(time(0));
+//    connect(ui->countryAction, &QAction::triggered, [this] () {
+//        HandbookDialog handbookDlg(QString("COUNTRIES"), QString("Страны"), m_database, this, {"UID", "FLAG"});
+//        handbookDlg.exec();
+//    });
 
-    m_database = QSqlDatabase::addDatabase("QSQLITE");
-    if (m_database.lastError().isValid())
-    {
-        qDebug() << __LINE__ << m_database.lastError();
-        return;
-    }
+//    connect(ui->regionAction, &QAction::triggered, [this] () {
+//        HandbookDialog handbookDlg(QString("REGIONS"), QString("Регионы"), m_database, this, {"UID", "FLAG"});
+//        handbookDlg.exec();
+//    });
 
-    m_database.setDatabaseName("./database/kickboxing.db");
-    if (m_database.lastError().isValid())
-    {
-        qDebug() << __LINE__ << m_database.lastError();
-        return;
-    }
+//    connect(ui->ateAction, &QAction::triggered, [this] () {
+//        HandbookDialog handbookDlg(QString("REGION_UNITS"), QString("АТЕ"), m_database, this, {"UID", "FLAG"});
+//        handbookDlg.exec();
+//    });
 
-    if (m_database.open()) {
-        qDebug() << "opened";
-    }
-    else  {
-        qDebug() << __LINE__ << m_database.lastError();
-        return;
-    }
+//    connect(ui->sexAction, &QAction::triggered, [this] () {
+//        HandbookDialog handbookDlg(QString("SEXES"), QString("Пол"), m_database, this, {"UID"});
+//        handbookDlg.exec();
+//    });
 
-    //qDebug() << m_database.tables();
-    //return;
+//    connect(ui->typeAction, &QAction::triggered, [this] () {
+//        HandbookDialog handbookDlg(QString("TYPES"), QString("Разделы"), m_database, this, {"UID"});
+//        handbookDlg.exec();
+//    });
 
+//    connect(ui->sportCategoryAction, &QAction::triggered, [this] () {
+//        HandbookDialog handbookDlg(QString("SPORT_CATEGORIES"), QString("Спортивные разряды"), m_database, this, {"UID"});
+//        handbookDlg.exec();
+//    });
 
-    connect(ui->countryAction, &QAction::triggered, [this] () {
-        HandbookDialog handbookDlg(QString("COUNTRIES"), QString("Страны"), m_database, this, {"UID", "FLAG"});
-        handbookDlg.exec();
-    });
+//    connect(ui->tournamentAction, &QAction::triggered, [this] () {
+//        HandbookDialog handbookDlg(QString("TOURNAMENTS"), QString("Турниры"), m_database, this, {"UID"});
+//        handbookDlg.exec();
+//        updateTournamentTreeWidget();
+//    });
 
-    connect(ui->regionAction, &QAction::triggered, [this] () {
-        HandbookDialog handbookDlg(QString("REGIONS"), QString("Регионы"), m_database, this, {"UID", "FLAG"});
-        handbookDlg.exec();
-    });
+//    connect(ui->tournamentCategoryAction, &QAction::triggered, [this] () {
+//        HandbookDialog handbookDlg(QString("TOURNAMENT_CATEGORIES"), QString("Категории турнира"), m_database, this, {"UID"});
+//        handbookDlg.exec();
+//    });
 
-    connect(ui->ateAction, &QAction::triggered, [this] () {
-        HandbookDialog handbookDlg(QString("REGION_UNITS"), QString("АТЕ"), m_database, this, {"UID", "FLAG"});
-        handbookDlg.exec();
-    });
+//    connect(ui->clubAction, &QAction::triggered, [this] () {
+//        HandbookDialog handbookDlg(QString("CLUBS"), QString("Клубы"), m_database, this, {"UID", "FLAG"});
+//        handbookDlg.exec();
+//    });
 
-    connect(ui->sexAction, &QAction::triggered, [this] () {
-        HandbookDialog handbookDlg(QString("SEXES"), QString("Пол"), m_database, this, {"UID"});
-        handbookDlg.exec();
-    });
+//    connect(ui->coachAction, &QAction::triggered, [this] () {
+//        HandbookDialog handbookDlg(QString("COACHS"), QString("Тренерский состав"), m_database, this, {"UID"});
+//        handbookDlg.exec();
+//    });
 
-    connect(ui->typeAction, &QAction::triggered, [this] () {
-        HandbookDialog handbookDlg(QString("TYPES"), QString("Разделы"), m_database, this, {"UID"});
-        handbookDlg.exec();
-    });
+//    connect(ui->orderAction, &QAction::triggered, [this] () {
+//        HandbookDialog handbookDlg(QString("ORDERS"), QString("Заявки"), m_database, this,
+//        {"UID"});
+//        handbookDlg.exec();
+//    });
 
-    connect(ui->sportCategoryAction, &QAction::triggered, [this] () {
-        HandbookDialog handbookDlg(QString("SPORT_CATEGORIES"), QString("Спортивные разряды"), m_database, this, {"UID"});
-        handbookDlg.exec();
-    });
-
-    connect(ui->tournamentAction, &QAction::triggered, [this] () {
-        HandbookDialog handbookDlg(QString("TOURNAMENTS"), QString("Турниры"), m_database, this, {"UID"});
-        handbookDlg.exec();
-        updateTournamentTreeWidget();
-    });
-
-    connect(ui->tournamentCategoryAction, &QAction::triggered, [this] () {
-        HandbookDialog handbookDlg(QString("TOURNAMENT_CATEGORIES"), QString("Категории турнира"), m_database, this, {"UID"});
-        handbookDlg.exec();
-    });
-
-    connect(ui->clubAction, &QAction::triggered, [this] () {
-        HandbookDialog handbookDlg(QString("CLUBS"), QString("Клубы"), m_database, this, {"UID", "FLAG"});
-        handbookDlg.exec();
-    });
-
-    connect(ui->coachAction, &QAction::triggered, [this] () {
-        HandbookDialog handbookDlg(QString("COACHS"), QString("Тренерский состав"), m_database, this, {"UID"});
-        handbookDlg.exec();
-    });
-
-    connect(ui->orderAction, &QAction::triggered, [this] () {
-        HandbookDialog handbookDlg(QString("ORDERS"), QString("Заявки"), m_database, this,
-        {"UID"});
-        handbookDlg.exec();
-    });
-
-    connect(ui->actionAgeCategory, &QAction::triggered, [this] () {
-        HandbookDialog handbookDlg(QString("AGE_CATEGORIES"), QString("Возрастные категории"), m_database, this,
-        {"UID"});
-        handbookDlg.exec();
-    });
+//    connect(ui->actionAgeCategory, &QAction::triggered, [this] () {
+//        HandbookDialog handbookDlg(QString("AGE_CATEGORIES"), QString("Возрастные категории"), m_database, this,
+//        {"UID"});
+//        handbookDlg.exec();
+//    });
 
 
     connect(ui->trophyBtnImage, &QPushButton::clicked, [this]()
@@ -130,179 +84,137 @@ MainWindow::MainWindow(QWidget *parent) :
     updateTournamentTreeWidget();
 
     ui->tournamentUidLabel->setVisible(false);
-
-    //
-
-//    QVector<std::pair<long long, QString>> vect;
-//    {
-//        QSqlQuery query("SELECT * FROM TOURNAMENT_CATEGORIES WHERE TOURNAMENT_FK = ?");
-//        query.addBindValue(21);
-//        if (query.exec())
-//        {
-//            while (query.next())
-//            {
-//                qlonglong uid = query.value("UID").toLongLong();
-//                QString str = query.value("NAME").toString()
-//                              .replace("кг.", "kg.")
-//                              .replace("лет", "years")
-//                              .replace("свыше ", "+")
-//                              .replace("+ ", "+")
-//                              .replace("до", "-")
-//                              .replace("- ", "-")
-//                              ;
-//                qDebug() << uid << str;
-//                vect << std::make_pair(uid, str);
-//            }
-//        }
-//    }
-//    {
-//        for (std::pair<long long, QString> p : vect)
-//        {
-//            QSqlQuery query("UPDATE TOURNAMENT_CATEGORIES "
-//                            "SET NAME = ? "
-//                            "WHERE UID = ?");
-//            query.addBindValue(p.second);
-//            query.addBindValue(p.first);
-//            query.exec();
-//        }
-//    }
 }
 
 MainWindow::~MainWindow()
 {
-    if (m_database.isOpen())
-        m_database.close();
-
     delete ui;
 }
 
-void MainWindow::paintEvent(QPaintEvent *event)
-{
-    QMainWindow::paintEvent(event);
-}
+
 
 
 void MainWindow::updateTournamentTreeWidget()
 {
-    ui->tournamentTreeWidget->clear();
-    ui->tournamentTreeWidget->setColumnCount(1);
-    ui->tournamentTreeWidget->setHeaderLabels({"Турнир"});
+//    ui->tournamentTreeWidget->clear();
+//    ui->tournamentTreeWidget->setColumnCount(1);
+//    ui->tournamentTreeWidget->setHeaderLabels({"Турнир"});
 
-    ui->tournamentTreeWidget->setColumnWidth(0, 200);
+//    ui->tournamentTreeWidget->setColumnWidth(0, 200);
 
-    std::map<int, std::vector<QTreeWidgetItem*>, std::greater<int>> items;
+//    std::map<int, std::vector<QTreeWidgetItem*>, std::greater<int>> items;
 
-    QSqlQuery query;
-    query.prepare("SELECT * FROM TOURNAMENTS ORDER BY DATE_BEGIN ASC");
-    int currentYear = -1000;
-    if (query.exec())
-    {
-        while (query.next())
-        {
-            QString uid = query.value("UID").toString();
-            QString name = query.value("NAME").toString();
-            QDate beginDate = QDate::fromString(query.value("DATE_BEGIN").toString(),"yyyy-MM-dd");
+//    QSqlQuery query;
+//    query.prepare("SELECT * FROM TOURNAMENTS ORDER BY DATE_BEGIN ASC");
+//    int currentYear = -1000;
+//    if (query.exec())
+//    {
+//        while (query.next())
+//        {
+//            QString uid = query.value("UID").toString();
+//            QString name = query.value("NAME").toString();
+//            QDate beginDate = QDate::fromString(query.value("DATE_BEGIN").toString(),"yyyy-MM-dd");
 
-            int year = beginDate.year();
-            if (year != currentYear)
-            {
-                currentYear = year;
-            }
+//            int year = beginDate.year();
+//            if (year != currentYear)
+//            {
+//                currentYear = year;
+//            }
 
-            QTreeWidgetItem* item = new QTreeWidgetItem({name});
-            item->setData(0, Qt::UserRole, uid);
-            item->setData(1, Qt::UserRole, uid);
+//            QTreeWidgetItem* item = new QTreeWidgetItem({name});
+//            item->setData(0, Qt::UserRole, uid);
+//            item->setData(1, Qt::UserRole, uid);
 
-            items[currentYear].push_back(item);
-        }
+//            items[currentYear].push_back(item);
+//        }
 
-        for (auto pair : items)
-        {
-            int year = pair.first;
-            QTreeWidgetItem* topLevel = new QTreeWidgetItem({QString::number(year) + " год", ""});
-            for (QTreeWidgetItem* item : items[year])
-            {
-                topLevel->addChild(item);
-            }
-            ui->tournamentTreeWidget->addTopLevelItem(topLevel);
-        }
-        for (int i = 0; i <ui->tournamentTreeWidget->model()->rowCount(); ++i)
-        {
-            QModelIndex localIndex = ui->tournamentTreeWidget->model()->index(i, 0);
-            ui->tournamentTreeWidget->setExpanded(localIndex, true);
-        }
+//        for (auto pair : items)
+//        {
+//            int year = pair.first;
+//            QTreeWidgetItem* topLevel = new QTreeWidgetItem({QString::number(year) + " год", ""});
+//            for (QTreeWidgetItem* item : items[year])
+//            {
+//                topLevel->addChild(item);
+//            }
+//            ui->tournamentTreeWidget->addTopLevelItem(topLevel);
+//        }
+//        for (int i = 0; i <ui->tournamentTreeWidget->model()->rowCount(); ++i)
+//        {
+//            QModelIndex localIndex = ui->tournamentTreeWidget->model()->index(i, 0);
+//            ui->tournamentTreeWidget->setExpanded(localIndex, true);
+//        }
 
-        connect(ui->tournamentTreeWidget, &QTreeWidget::clicked, [this] (const QModelIndex& index)
-        {
-            if (index.parent() == QModelIndex())
-            {
-                ui->stackedWidget->setCurrentIndex(0);
-            }
-            else
-            {
-                QString uid = index.data(Qt::UserRole).toString();
-                if (!uid.isEmpty())
-                {
-                    long long tournamentUID = uid.toLongLong();
-                    QSqlQuery tournamentQuery;
-                    tournamentQuery.prepare("SELECT * FROM TOURNAMENTS WHERE UID = ?");
-                    tournamentQuery.bindValue(0, tournamentUID);
-                    if (tournamentQuery.exec() && tournamentQuery.next())
-                    {
-                        ui->tournamentLabel->setText(tournamentQuery.value("NAME").toString());
-                        ui->tournamentUidLabel->setText(QString::number(tournamentUID));
-                    }
-                    else
-                    {
-                        qDebug() << tournamentQuery.lastError().text();
-                    }
+//        connect(ui->tournamentTreeWidget, &QTreeWidget::clicked, [this] (const QModelIndex& index)
+//        {
+//            if (index.parent() == QModelIndex())
+//            {
+//                ui->stackedWidget->setCurrentIndex(0);
+//            }
+//            else
+//            {
+//                QString uid = index.data(Qt::UserRole).toString();
+//                if (!uid.isEmpty())
+//                {
+//                    long long tournamentUID = uid.toLongLong();
+//                    QSqlQuery tournamentQuery;
+//                    tournamentQuery.prepare("SELECT * FROM TOURNAMENTS WHERE UID = ?");
+//                    tournamentQuery.bindValue(0, tournamentUID);
+//                    if (tournamentQuery.exec() && tournamentQuery.next())
+//                    {
+//                        ui->tournamentLabel->setText(tournamentQuery.value("NAME").toString());
+//                        ui->tournamentUidLabel->setText(QString::number(tournamentUID));
+//                    }
+//                    else
+//                    {
+//                        qDebug() << tournamentQuery.lastError().text();
+//                    }
 
-                    ui->stackedWidget->setCurrentIndex(1);
-                }
-            }
-        });
-    }
-    else
-    {
-        qDebug() << query.lastError().text();
-    }
+//                    ui->stackedWidget->setCurrentIndex(1);
+//                }
+//            }
+//        });
+//    }
+//    else
+//    {
+//        qDebug() << query.lastError().text();
+//    }
 
-    ui->tournamentTreeWidget->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
-    connect(ui->tournamentTreeWidget, &QTreeWidget::customContextMenuRequested, [this] (const QPoint& pos)
-    {
-        QMenu menu;
+//    ui->tournamentTreeWidget->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
+//    connect(ui->tournamentTreeWidget, &QTreeWidget::customContextMenuRequested, [this] (const QPoint& pos)
+//    {
+//        QMenu menu;
 
 
-        connect(menu.addAction("Добавить..."), &QAction::triggered, [this, pos] ()
-        {
-            CreateTournamentDialog dlg(this);
-            dlg.exec();
-            updateTournamentTreeWidget();
-        });
-        connect(menu.addAction("Удалить"), &QAction::triggered, [this, pos] ()
-        {
-            QModelIndex index = ui->tournamentTreeWidget->indexAt(pos);
-            QString uid = index.data(Qt::UserRole).toString();
-            if (uid.isEmpty() == false)
-            {
-                long long tournamentUID = uid.toLongLong();
-                QSqlQuery query;
-                query.prepare("DELETE FROM TOURNAMENTS WHERE UID = ?");
-                query.bindValue(0, tournamentUID);
-                if (!query.exec())
-                {
-                    qDebug() << query.lastError().text();
-                }
-                else
-                {
-                    updateTournamentTreeWidget();
-                    ui->stackedWidget->setCurrentIndex(0);
-                }
-            }
-        });
+//        connect(menu.addAction("Добавить..."), &QAction::triggered, [this, pos] ()
+//        {
+//            CreateTournamentDialog dlg(this);
+//            dlg.exec();
+//            updateTournamentTreeWidget();
+//        });
+//        connect(menu.addAction("Удалить"), &QAction::triggered, [this, pos] ()
+//        {
+//            QModelIndex index = ui->tournamentTreeWidget->indexAt(pos);
+//            QString uid = index.data(Qt::UserRole).toString();
+//            if (uid.isEmpty() == false)
+//            {
+//                long long tournamentUID = uid.toLongLong();
+//                QSqlQuery query;
+//                query.prepare("DELETE FROM TOURNAMENTS WHERE UID = ?");
+//                query.bindValue(0, tournamentUID);
+//                if (!query.exec())
+//                {
+//                    qDebug() << query.lastError().text();
+//                }
+//                else
+//                {
+//                    updateTournamentTreeWidget();
+//                    ui->stackedWidget->setCurrentIndex(0);
+//                }
+//            }
+//        });
 
-        menu.exec(ui->tournamentTreeWidget->viewport()->mapToGlobal(pos));
-    });
+//        menu.exec(ui->tournamentTreeWidget->viewport()->mapToGlobal(pos));
+//    });
 }
 
 void MainWindow::connectButtons()
@@ -311,7 +223,7 @@ void MainWindow::connectButtons()
     {
         this->hide();
         long long tournamentUID = ui->tournamentUidLabel->text().toLongLong();
-        CreateTournamentOrdersDialog dlg(m_database, tournamentUID, 0);
+        CreateTournamentOrdersDialog dlg(tournamentUID, 0);
         dlg.showMaximized();
         dlg.exec();
         this->show();
@@ -517,9 +429,3 @@ void MainWindow::on_btn_report_ministr_clicked()
 
 
 
-void MainWindow::on_pushButtonAddContest_clicked()
-{
-    CreateTournamentDialog dlg(this);
-    dlg.exec();
-    updateTournamentTreeWidget();
-}

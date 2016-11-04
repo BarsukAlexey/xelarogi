@@ -8,7 +8,7 @@
 
 QSqlRecord CreateTournamentOrdersDialog::m_record;
 
-CreateTournamentOrdersDialog::CreateTournamentOrdersDialog(const QSqlDatabase &database,
+CreateTournamentOrdersDialog::CreateTournamentOrdersDialog(
                                                            long long tournamentUID,
                                                            QWidget *parent,
                                                            QString filterSecondName,
@@ -16,7 +16,7 @@ CreateTournamentOrdersDialog::CreateTournamentOrdersDialog(const QSqlDatabase &d
                                                            ):
     QDialog(parent),
     ui(new Ui::CreateTournamentOrdersDialog),
-    m_database(database),
+    m_database(QSqlDatabase::database()),
     mTournamentUID(tournamentUID)
 {
     ui->setupUi(this);

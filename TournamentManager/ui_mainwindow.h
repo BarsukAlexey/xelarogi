@@ -145,7 +145,6 @@ public:
         splitter->addWidget(widget);
         stackedWidget = new QStackedWidget(splitter);
         stackedWidget->setObjectName(QStringLiteral("stackedWidget"));
-        stackedWidget->setMinimumSize(QSize(0, 0));
         generalPage = new QWidget();
         generalPage->setObjectName(QStringLiteral("generalPage"));
         generalPage->setMinimumSize(QSize(200, 0));
@@ -319,26 +318,25 @@ public:
         MainWindow->setStatusBar(statusBar);
 
         menuBar->addAction(handbookMenu->menuAction());
+        handbookMenu->addAction(tournamentAction);
+        handbookMenu->addAction(tournamentCategoryAction);
+        handbookMenu->addAction(orderAction);
+        handbookMenu->addSeparator();
         handbookMenu->addAction(countryAction);
         handbookMenu->addAction(regionAction);
         handbookMenu->addAction(ateAction);
-        handbookMenu->addAction(sexAction);
+        handbookMenu->addSeparator();
         handbookMenu->addAction(actionAgeCategory);
         handbookMenu->addAction(typeAction);
         handbookMenu->addAction(sportCategoryAction);
         handbookMenu->addSeparator();
-        handbookMenu->addAction(tournamentAction);
-        handbookMenu->addAction(tournamentCategoryAction);
-        handbookMenu->addSeparator();
         handbookMenu->addAction(clubAction);
         handbookMenu->addAction(coachAction);
         handbookMenu->addSeparator();
-        handbookMenu->addSeparator();
-        handbookMenu->addAction(orderAction);
 
         retranslateUi(MainWindow);
 
-        stackedWidget->setCurrentIndex(1);
+        stackedWidget->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -346,7 +344,6 @@ public:
 
     void retranslateUi(QMainWindow *MainWindow)
     {
-        MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0));
         countryAction->setText(QApplication::translate("MainWindow", "\320\241\321\202\321\200\320\260\320\275\321\213", 0));
         regionAction->setText(QApplication::translate("MainWindow", "\320\240\320\265\320\263\320\270\320\276\320\275\321\213", 0));
         ateAction->setText(QApplication::translate("MainWindow", "\320\220\320\242\320\225", 0));
@@ -378,6 +375,7 @@ public:
         manda->setText(QApplication::translate("MainWindow", "\320\237\321\200\320\276\321\202\320\276\320\272\320\276\320\273 \320\274\320\260\320\275\320\264\320\260\321\202\320\275\320\276\320\271 \320\272\320\276\320\274\320\270\321\201\321\201\320\270\320\270", 0));
         btn_report_ministr->setText(QApplication::translate("MainWindow", "\320\236\321\202\321\207\321\221\321\202 \320\274\320\270\320\275\320\270\321\201\321\202\320\265\321\200\321\201\321\202\320\262\320\260", 0));
         handbookMenu->setTitle(QApplication::translate("MainWindow", "\320\241\320\277\321\200\320\260\320\262\320\276\321\207\320\275\320\270\320\272\320\270", 0));
+        Q_UNUSED(MainWindow);
     } // retranslateUi
 
 };

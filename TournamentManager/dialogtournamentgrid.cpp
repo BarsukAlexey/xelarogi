@@ -955,7 +955,7 @@ void DialogTournamentGrid::onCustomContextMenuRequested(const QPoint& pos)
         connect(restrictAction, &QAction::triggered, [this, &index] ()
         {
             long long orderUID = index.data(Qt::UserRole).toLongLong();
-            CreateTournamentOrdersDialog(QSqlDatabase::database(), this->tournamentUID, this,
+            CreateTournamentOrdersDialog(this->tournamentUID, this,
                                          DBUtils::getField("SECOND_NAME", "ORDERS", orderUID),
                                          DBUtils::getField("FIRST_NAME", "ORDERS", orderUID)
                                          ).exec();
@@ -967,7 +967,7 @@ void DialogTournamentGrid::onCustomContextMenuRequested(const QPoint& pos)
     contextMenu.addAction(&delAction);
     connect(&delAction, &QAction::triggered, [this, &pos] ()
     {
-        CreateTournamentOrdersDialog(QSqlDatabase::database(), this->tournamentUID, this).exec();
+        CreateTournamentOrdersDialog(this->tournamentUID, this).exec();
         onActivatedCategory();
     });
 

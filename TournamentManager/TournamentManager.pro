@@ -40,7 +40,6 @@ SOURCES += main.cpp\
     report_ministr.cpp \
     dialog_insert_data_in_database.cpp \
     dialog_change_category.cpp \
-    dialog_create_age_category.cpp \
     mythread.cpp \
     countryiconsdialog.cpp \
     formdipl.cpp \
@@ -55,7 +54,8 @@ SOURCES += main.cpp\
     dialogschedule2inputtype.cpp \
     dialogtournamentgrid.cpp \
     sqltablemanager.cpp \
-    dialogsqltablemanager.cpp
+    dialogsqltablemanager.cpp \
+    imageloaderwidget.cpp
 
 HEADERS  += mainwindow.h \
     handbookdialog.h \
@@ -80,7 +80,6 @@ HEADERS  += mainwindow.h \
     report_ministr.h \
     dialog_insert_data_in_database.h \
     dialog_change_category.h \
-    dialog_create_age_category.h \
     mythread.h \
     countryiconsdialog.h \
     formdipl.h \
@@ -96,7 +95,8 @@ HEADERS  += mainwindow.h \
     dialogtournamentgrid.h \
     trophygenerator.h \
     sqltablemanager.h \
-    dialogsqltablemanager.h
+    dialogsqltablemanager.h \
+    imageloaderwidget.h
 
 FORMS    += mainwindow.ui \
     handbookdialog.ui \
@@ -112,7 +112,6 @@ FORMS    += mainwindow.ui \
     trophygeneratorsettingsdialog.ui \
     dialog_insert_data_in_database.ui \
     dialogchangecategory.ui \
-    dialog_create_age_category.ui \
     countryiconsdialog.ui \
     formdipl.ui \
     dialogselectfieldsfordimloma.ui \
@@ -124,7 +123,8 @@ FORMS    += mainwindow.ui \
     dialogschedule2inputtype.ui \
     dialogtournamentgrid.ui \
     sqltablemanager.ui \
-    dialogsqltablemanager.ui
+    dialogsqltablemanager.ui \
+    imageloaderwidget.ui
 
 DISTFILES +=
 

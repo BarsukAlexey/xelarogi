@@ -12,7 +12,6 @@
 
 #include "createtypedialog.h"
 #include "db_utils.h"
-#include "dialog_create_age_category.h"
 #include "dialogsqltablemanager.h"
 
 namespace Ui {

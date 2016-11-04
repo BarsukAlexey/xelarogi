@@ -3,6 +3,7 @@
 
 
 #include "db_utils.h"
+#include "imageloaderwidget.h"
 
 #include <QAbstractItemModel>
 #include <QDebug>
@@ -21,6 +22,15 @@
 #include <QSqlRelationalDelegate>
 #include <QSqlRelationalTableModel>
 
+#include <QPainter>
+#include <QFileDialog>
+#include <QBuffer>
+
+#include <QEvent>
+#include <QKeyEvent>
+
+
+
 class ColumnAlignedLayout : public QHBoxLayout
 {
     Q_OBJECT
@@ -38,17 +48,44 @@ private:
 };
 
 
+
+
 class MySqlRelationalDelegate : public QSqlRelationalDelegate
 {
     Q_OBJECT
 
 public:
     explicit MySqlRelationalDelegate(QObject *parent = 0);
-    void setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const;
+    void setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const Q_DECL_OVERRIDE;
+    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const Q_DECL_OVERRIDE;
+    QSize sizeHint(const QStyleOptionViewItem &option,
+                   const QModelIndex &index) const Q_DECL_OVERRIDE;
+
+//    bool eventFilter(QObject* object, QEvent* event) Q_DECL_OVERRIDE
+//    {
+//////        if (event->type() != QEvent::Paint)
+//////            qDebug() << object << event->type();
+////        ImageLoaderWidget* editor = qobject_cast<ImageLoaderWidget*>(object);
+////        if (editor)
+////        {
+////            if (event->type() != QEvent::FocusOut)
+////            {
+////                //emit commitData(editor);
+////            }
+//////            if (event->type() != QEvent::Paint)
+//////                qDebug() << editor << event->type();
+////        }
+//        bool res = QSqlRelationalDelegate::eventFilter(object, event);
+//        //if (res) qDebug() << object << event->type() << res;
+//        return res;
+//    }
 
 protected:
-    QWidget* createEditor(QWidget *, const QStyleOptionViewItem &, const QModelIndex &) const;
-
+    QWidget *createEditor(QWidget *, const QStyleOptionViewItem &, const QModelIndex &) const Q_DECL_OVERRIDE;
+//    bool editorEvent(QEvent * event,
+//                     QAbstractItemModel * model,
+//                     const QStyleOptionViewItem & option,
+//                     const QModelIndex & index) Q_DECL_OVERRIDE;
 };
 
 
@@ -96,7 +133,7 @@ class SqlTableManager : public QWidget
 
 public:
     explicit SqlTableManager(QWidget *parent = 0);
-    void setSqlTable(const QString& table, const QString& whereStatement, const QStringList& hidenColumns = QStringList());
+    void setSqlTable(const QString& table, const QString& whereStatement = "", const QStringList& hidenColumns = QStringList());
     void updateData();
     ~SqlTableManager();
 
@@ -112,3 +149,4 @@ private slots:
 };
 
 #endif // SQLTABLEMANAGER_H
+
