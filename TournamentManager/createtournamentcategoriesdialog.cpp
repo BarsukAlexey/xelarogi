@@ -12,11 +12,12 @@ CreateTournamentCategoriesDialog::CreateTournamentCategoriesDialog(long long tou
     ui->setupUi(this);
     setWindowFlags(Qt::Window);
 
-    ui->managerSqlTable->setSqlTable(
-                "TOURNAMENT_CATEGORIES",
-                "TOURNAMENT_FK = " + QString::number(mTournamentUID),
-                QStringList() //<< "TOURNAMENT_FK"
-                );
+    //  TODO
+//    ui->managerSqlTable->setSqlTable(
+//                "TOURNAMENT_CATEGORIES",
+//                "TOURNAMENT_FK = " + QString::number(mTournamentUID),
+//                QStringList() //<< "TOURNAMENT_FK"
+//                );
 }
 
 CreateTournamentCategoriesDialog::~CreateTournamentCategoriesDialog()

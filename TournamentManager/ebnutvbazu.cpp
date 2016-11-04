@@ -4,71 +4,7 @@
 
 
 
-//void f()
-//{
 
-//    QSqlDatabase source = QSqlDatabase::addDatabase("QSQLITE", "LOL");
-//    source.setDatabaseName("./database/losko/kickboxing.db");
-//    if (!source.open())
-//    {
-//        qDebug() << "source!";
-//        return;
-//    }
-//    qDebug() << source;
-
-
-
-//    QSqlDatabase target = QSqlDatabase::addDatabase("QSQLITE", "LOLKA");
-//    target.setDatabaseName("./database/kickboxing.db");
-//    if (!target.open())
-//    {
-//        qDebug() << "target!";
-//        return;
-//    }
-//    qDebug() << target;
-
-
-
-//    QSqlQuery q(source);
-//    q.prepare("SELECT * FROM TOURNAMENT_CATEGORIES");
-//    q.exec();
-
-//    int row = 0;
-//    while (q.next())
-//    {
-//        //qDebug() << q.value("UID");
-//        QSqlQuery fuck(target);
-//        fuck.prepare("INSERT INTO TOURNAMENT_CATEGORIES VALUES (?,?,?,?,?,   ?,?,?,?,?, ?,?,?,?,?, ?,? )");
-//        if (fuck.lastError().isValid()) qDebug() << fuck.lastError();
-//        fuck.addBindValue(q.value("UID").toInt());
-//        fuck.addBindValue(q.value("TOURNAMENT_FK"));
-//        fuck.addBindValue(q.value("TYPE_FK"));
-//        fuck.addBindValue(q.value("SEX_FK"));
-//        fuck.addBindValue(q.value("AGE_CATEGORY_FK"));
-//        fuck.addBindValue(q.value("AGE_FROM"));
-//        fuck.addBindValue(q.value("AGE_TILL"));
-//        fuck.addBindValue(q.value("WEIGHT_FROM"));
-//        fuck.addBindValue(q.value("WEIGHT_TILL"));
-//        fuck.addBindValue(q.value("NAME"));
-//        fuck.addBindValue(q.value("AGE"));
-//        fuck.addBindValue(q.value("WEIGHT"));
-//        fuck.addBindValue(q.value("ROUND_COUNT"));
-//        fuck.addBindValue(q.value("DURATION_FIGHING"));
-//        fuck.addBindValue(q.value("DURATION_BREAK"));
-//        fuck.addBindValue(q.value("IN_CASE_TIE"));
-//        fuck.addBindValue(q.value("DURATION_EXTRA_ROUND"));
-//        if (fuck.lastError().isValid()) qDebug() << fuck.lastError();
-//        qDebug() << row++;
-//        if (!fuck.exec())
-//        {
-//            QMessageBox::warning(0, "",
-//                                 fuck.lastError().text() + "\n" +
-//                                 q.value("NAME").toString()
-//                                 );
-//        }
-//        //if (fuck.lastError().isValid()) qDebug() << fuck.lastError();
-//    }
-//}
 
 
 void EbnutVBazu::f(const QSqlDatabase &database, long long )
@@ -334,4 +270,76 @@ void EbnutVBazu::setTournamentCat(long long tournamentUID)
     }
 
     //QSqlDatabase::database().commit();
+}
+
+void EbnutVBazu::copyTable(QString table)
+{
+    QSqlDatabase source = QSqlDatabase::addDatabase("QSQLITE", "LOL");
+    source.setDatabaseName("./database/losko/kickboxing.db");
+    if (!source.open())
+    {
+        qDebug() << "source!";
+        return;
+    }
+    qDebug() << source;
+
+
+
+    QSqlDatabase target = QSqlDatabase::addDatabase("QSQLITE", "LOLKA");
+    target.setDatabaseName("./database/kickboxing.db");
+    if (!target.open())
+    {
+        qDebug() << "target!";
+        return;
+    }
+    qDebug() << target;
+
+
+
+    QSqlQuery q(source);
+    q.prepare("SELECT * FROM " + table);
+    q.exec();
+
+    int row = 0;
+    while (q.next())
+    {
+        qDebug() << row++;
+        QString heads;
+        QString lolka;
+        QVariantList vals;
+        QSqlRecord record = q.record();
+        for (int i = 0; i < record.count(); ++i)
+        {
+            vals <<record.value(i);
+            if (i)
+            {
+                heads += ", ";
+                lolka += ", ";
+            }
+            heads += record.fieldName(i);
+            lolka += "?";
+        }
+
+        QSqlQuery fuck(target);
+        fuck.prepare("INSERT INTO " + table + " (" +
+                     heads +
+                     ")  VALUES (" +
+                     lolka +
+                     ")");
+        if (fuck.lastError().isValid()){
+            qDebug() << fuck.lastError() << fuck.lastQuery();
+            return ;
+        }
+
+        for (QVariant val : vals)
+        {
+           fuck.addBindValue(val);
+        }
+
+
+        if (!fuck.exec())
+        {
+            qDebug() << "fuck.exec():: " << fuck.lastError() << vals.first();// << fuck.executedQuery();
+        }
+    }
 }

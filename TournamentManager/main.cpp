@@ -8,6 +8,8 @@
 #include "dialogsqltablemanager.h"
 #include "imageloaderwidget.h"
 
+#include "ebnutvbazu.h"
+
 
 
 void break_point(QtMsgType msgType, const QMessageLogContext &, const QString &msg)
@@ -93,9 +95,16 @@ int main(int argc, char *argv[])
     //GenerateTournamentCategoriesDialog dl(21); return dl.exec();
 
     SqlTableManager m(0);
-    m.setSqlTable("COUNTRIES");
-    //m.setSqlTable("TOURNAMENT_CATEGORIES");
+    //m.setSqlTable("COUNTRIES");
+    QMap<QString, QVariant> map;
+
+    map["TOURNAMENT_FK"] = 22;
+    m.setSqlTable("TOURNAMENT_CATEGORIES",
+                  "TOURNAMENT_FK = 22",
+                  map);
     m.showMaximized();
+
+    //EbnutVBazu::copyTable("TOURNAMENTS");
 
 
 

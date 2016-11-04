@@ -62,7 +62,11 @@ void ColumnAlignedLayout::setGeometry(const QRect& r)
 
 
 
-
+MySqlRelationalDelegate::MySqlRelationalDelegate(QObject* parent, QMap<int, QVariant> columnDefaultValue) :
+    QSqlRelationalDelegate(parent),
+    columnDefaultValue(columnDefaultValue)
+{
+}
 
 QWidget* MySqlRelationalDelegate::createEditor(QWidget* parent, const QStyleOptionViewItem& i, const QModelIndex& index) const
 {
@@ -91,7 +95,7 @@ QWidget* MySqlRelationalDelegate::createEditor(QWidget* parent, const QStyleOpti
             img.loadFromData(byteArray);
         }
         ImageLoaderWidget * imageLoaderWidget = new ImageLoaderWidget(parent, img);
-        //imageLoaderWidget->installEventFilter(const_cast<MySqlRelationalDelegate *>(this));
+        imageLoaderWidget->installEventFilter(const_cast<MySqlRelationalDelegate *>(this)); // хуй знает зачем эта строчка кода, но пусть будет
         return imageLoaderWidget;
     }
 
@@ -103,7 +107,13 @@ QWidget* MySqlRelationalDelegate::createEditor(QWidget* parent, const QStyleOpti
         return spinBox;
     }
 
-    return QSqlRelationalDelegate::createEditor(parent, i, index);
+    QWidget* editor = QSqlRelationalDelegate::createEditor(parent, i, index);
+    QComboBox *combo = qobject_cast<QComboBox *>(editor);
+    if (combo)
+    {
+        combo->setMaxVisibleItems(1000);
+    }
+    return editor;
 }
 
 //bool MySqlRelationalDelegate::editorEvent(QEvent* event, QAbstractItemModel* model,
@@ -131,11 +141,7 @@ QWidget* MySqlRelationalDelegate::createEditor(QWidget* parent, const QStyleOpti
 
 //}
 
-MySqlRelationalDelegate::MySqlRelationalDelegate(QObject* parent) :
-    QSqlRelationalDelegate(parent)
-{
 
-}
 
 void MySqlRelationalDelegate::setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const
 {
@@ -154,10 +160,16 @@ void MySqlRelationalDelegate::setModelData(QWidget* editor, QAbstractItemModel* 
         return;
     }
 
+    QMapIterator<int, QVariant> iter(columnDefaultValue);
+    while (iter.hasNext()) {
+        iter.next();
+        sqlModel->setData(sqlModel->index(index.row(), iter.key()), iter.value());
+    }
+
     if(sqlModel->record().field(index.column()).type() == QVariant::Int)
     {
         QSpinBox* spinBox = qobject_cast<QSpinBox *>(editor);
-        sqlModel->setData(index, spinBox->value(), Qt::DisplayRole);
+        //sqlModel->setData(index, spinBox->value(), Qt::DisplayRole);
         sqlModel->setData(index, spinBox->value(), Qt::EditRole);
         return;
     }
@@ -166,7 +178,7 @@ void MySqlRelationalDelegate::setModelData(QWidget* editor, QAbstractItemModel* 
     {
         ImageLoaderWidget* imgLoader = qobject_cast<ImageLoaderWidget *>(editor);
         QString base64Image = imgLoader->getBase64Image();
-        sqlModel->setData(index, base64Image, Qt::DisplayRole);
+        //sqlModel->setData(index, base64Image, Qt::DisplayRole);
         sqlModel->setData(index, base64Image, Qt::EditRole);
         return ;
     }
@@ -354,7 +366,9 @@ SqlTableManager::SqlTableManager(QWidget *parent) :
     ui->setupUi(this);
 }
 
-void SqlTableManager::setSqlTable(const QString& table, const QString& whereStatement, const QStringList& hidenColumns)
+void SqlTableManager::setSqlTable(const QString& table,
+                                  const QString& whereStatement,
+                                  QMap<QString, QVariant> columnValue)
 {
     model = new QSqlRelationalTableModel(this);
 
@@ -380,18 +394,12 @@ void SqlTableManager::setSqlTable(const QString& table, const QString& whereStat
             model->setRelation(model->fieldIndex(eng), QSqlRelation(relTable, "UID", "NAME"));
     }
 
-    QSet<int> idOfhidenColumns;
-    for (const QString column : hidenColumns)
-    {
-        int index = model->fieldIndex(column);
-        if (index == -1)
-        {
-            qDebug() << "WTF! no suck column:" << index;
-        }
-        else
-        {
-            idOfhidenColumns << index;
-        }
+
+    QMapIterator<QString, QVariant> iter(columnValue);
+    QMap<int, QVariant> columnDefaultValue;
+    while (iter.hasNext()) {
+        iter.next();
+        columnDefaultValue[model->fieldIndex(iter.key())] = iter.value();
     }
 
     model->select();
@@ -414,7 +422,7 @@ void SqlTableManager::setSqlTable(const QString& table, const QString& whereStat
 
     ui->tableView_2->setModel(proxyModel);
     ui->tableView_2->sortByColumn(1, Qt::SortOrder::AscendingOrder);
-    ui->tableView_2->setItemDelegate(new MySqlRelationalDelegate(ui->tableView_2));
+    ui->tableView_2->setItemDelegate(new MySqlRelationalDelegate(ui->tableView_2, columnDefaultValue));
     ui->tableView_2->resizeColumnsToContents();
     ui->tableView_2->resizeRowsToContents();
 
@@ -428,7 +436,7 @@ void SqlTableManager::setSqlTable(const QString& table, const QString& whereStat
     alignedLayout = new ColumnAlignedLayout(ui->widget2222);
     for (int i = 0; i < model->columnCount(); ++i)
     {
-        if (idOfhidenColumns.contains(i))
+        if (columnDefaultValue.contains(i))
         {
             ui->tableView_2->hideColumn(i);
         }

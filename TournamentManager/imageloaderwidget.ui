@@ -18,7 +18,11 @@
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
-    <widget class="ImageLoader" name="frame"/>
+    <widget class="ImageLoader" name="frame">
+     <property name="focusPolicy">
+      <enum>Qt::StrongFocus</enum>
+     </property>
+    </widget>
    </item>
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -43,6 +47,9 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="focusPolicy">
+        <enum>Qt::StrongFocus</enum>
+       </property>
        <property name="text">
         <string>Выбрать..</string>
        </property>
@@ -56,21 +63,11 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="focusPolicy">
+        <enum>Qt::StrongFocus</enum>
+       </property>
        <property name="text">
         <string>Удалить</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pushButton_3">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>Применить</string>
        </property>
       </widget>
      </item>

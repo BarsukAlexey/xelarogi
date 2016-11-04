@@ -10,7 +10,7 @@ ImageLoader::ImageLoader(QWidget* parent) :
 
 void ImageLoader::paintEvent(QPaintEvent* event)
 {
-
+    //qDebug() << QApplication::focusWidget();
     if (img.isNull())
     {
         QFrame::paintEvent(event);

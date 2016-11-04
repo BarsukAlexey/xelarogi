@@ -32,7 +32,6 @@ public:
     QSpacerItem *verticalSpacer;
     QPushButton *pushButton_2;
     QPushButton *pushButton;
-    QPushButton *pushButton_3;
     QSpacerItem *verticalSpacer_2;
 
     void setupUi(QWidget *ImageLoaderWidget)
@@ -46,6 +45,7 @@ public:
         horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
         frame = new ImageLoader(ImageLoaderWidget);
         frame->setObjectName(QStringLiteral("frame"));
+        frame->setFocusPolicy(Qt::StrongFocus);
 
         horizontalLayout->addWidget(frame);
 
@@ -62,6 +62,7 @@ public:
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(pushButton_2->sizePolicy().hasHeightForWidth());
         pushButton_2->setSizePolicy(sizePolicy);
+        pushButton_2->setFocusPolicy(Qt::StrongFocus);
 
         verticalLayout->addWidget(pushButton_2);
 
@@ -69,15 +70,9 @@ public:
         pushButton->setObjectName(QStringLiteral("pushButton"));
         sizePolicy.setHeightForWidth(pushButton->sizePolicy().hasHeightForWidth());
         pushButton->setSizePolicy(sizePolicy);
+        pushButton->setFocusPolicy(Qt::StrongFocus);
 
         verticalLayout->addWidget(pushButton);
-
-        pushButton_3 = new QPushButton(ImageLoaderWidget);
-        pushButton_3->setObjectName(QStringLiteral("pushButton_3"));
-        sizePolicy.setHeightForWidth(pushButton_3->sizePolicy().hasHeightForWidth());
-        pushButton_3->setSizePolicy(sizePolicy);
-
-        verticalLayout->addWidget(pushButton_3);
 
         verticalSpacer_2 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
@@ -96,7 +91,6 @@ public:
     {
         pushButton_2->setText(QApplication::translate("ImageLoaderWidget", "\320\222\321\213\320\261\321\200\320\260\321\202\321\214..", 0));
         pushButton->setText(QApplication::translate("ImageLoaderWidget", "\320\243\320\264\320\260\320\273\320\270\321\202\321\214", 0));
-        pushButton_3->setText(QApplication::translate("ImageLoaderWidget", "\320\237\321\200\320\270\320\274\320\265\320\275\320\270\321\202\321\214", 0));
         Q_UNUSED(ImageLoaderWidget);
     } // retranslateUi
 

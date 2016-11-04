@@ -10,6 +10,8 @@
 #include <QDate>
 #include <utility>
 #include <QSqlDatabase>
+#include <QSqlRecord>
+#include <QMessageBox>
 
 class EbnutVBazu
 {
@@ -20,6 +22,9 @@ public:
     static void setRandomWinner();
 
     static void setTournamentCat(long long tournamentUID);
+
+
+    static void copyTable(QString table);
 
 };
 
