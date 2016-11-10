@@ -242,8 +242,8 @@ void DialogTournamentGrid::generatGrid(const long long tournamentUID, const long
         query.addBindValue(0);
         query.addBindValue("");
 
-        query.addBindValue(dayFight[RenderAreaWidget::log2(v)]);
-        query.addBindValue(timeFight[RenderAreaWidget::log2(v)]);
+        query.addBindValue(dayFight [Utils::log2(v)]);
+        query.addBindValue(timeFight[Utils::log2(v)]);
         if (!query.exec())
             qDebug() << __LINE__ << __PRETTY_FUNCTION__ << query.lastError() << query.lastQuery();
     }
@@ -662,7 +662,7 @@ void DialogTournamentGrid::saveAllGridsInExcel()
     QTime timer;
     timer.start();
 
-    QVector<long long> UID_TCs = DBUtils::get_UIDs_of_TOURNAMENT_CATEGORIES(tournamentUID);
+    QVector<long long> UID_TCs = DBUtils::getTournamentCategoryUIDs(tournamentUID);
 
     QProgressDialog progress(this);
     progress.setWindowModality(Qt::WindowModal);

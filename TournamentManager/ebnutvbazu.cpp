@@ -300,6 +300,7 @@ void EbnutVBazu::copyTable(QString table)
     q.prepare("SELECT * FROM " + table);
     q.exec();
 
+    target.transaction();
     int row = 0;
     while (q.next())
     {
@@ -342,4 +343,5 @@ void EbnutVBazu::copyTable(QString table)
             qDebug() << "fuck.exec():: " << fuck.lastError() << vals.first();// << fuck.executedQuery();
         }
     }
+    target.commit();
 }

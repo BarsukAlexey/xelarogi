@@ -10,7 +10,6 @@
 #include <QSqlRelationalTableModel>
 #include <QStringList>
 
-#include "createtypedialog.h"
 #include "db_utils.h"
 #include "dialogsqltablemanager.h"
 

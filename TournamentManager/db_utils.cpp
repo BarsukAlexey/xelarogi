@@ -1,15 +1,35 @@
 #include "db_utils.h"
-#include "renderareawidget.h"
-#include <QSqlQuery>
-#include <QVariant>
-#include <QDebug>
-#include <QSqlError>
-#include <QDate>
-#include <algorithm>
-#include <utility>
 
 
+QVariant DBUtils::get(const QString& field, const QString& table, const QVariant& UID)
+{
+    QSqlQuery query("SELECT * FROM " + table + " WHERE UID = ?");
+    query.addBindValue(UID);
+    if (query.exec() && query.next())
+    {
+        return query.value(field);
+    }
+    else
+    {
+        //qDebug() << __LINE__ << __PRETTY_FUNCTION__ << PRETTY_FUNCTION << query.lastError()<< query.lastQuery() << "  UID:" << UID << " field:" << field;
+    }
+    return QVariant();
+}
 
+//QString DBUtils::getField(const QString& field, const QString& table, const QString& UID, QString )
+//{
+//    QSqlQuery query("SELECT * FROM " + table + " WHERE UID = ?");
+//    query.bindValue(0, UID);
+//    if (query.exec() && query.next())
+//    {
+//        return query.value(field).toString();
+//    }
+//    else
+//    {
+//        //qDebug() << __LINE__ << __PRETTY_FUNCTION__ << PRETTY_FUNCTION << query.lastError()<< query.lastQuery() << "  UID:" << UID << " field:" << field;
+//    }
+//    return "";
+//}
 
 QString DBUtils::getField(const QString& field, const QString& table, const QString& UID, QString )
 {
@@ -138,16 +158,6 @@ QSet<long long> DBUtils::getSetOfOrdersInTournamentCategory(long long uidTournam
     return set;
 }
 
-int DBUtils::getAge(QDate DATE_WEIGHTING, QDate birthdayDate)
-{
-    int age = DATE_WEIGHTING.year() - birthdayDate.year();
-    if ( DATE_WEIGHTING.month() <  birthdayDate.month() ||
-        (DATE_WEIGHTING.month() == birthdayDate.month() && DATE_WEIGHTING.day() < birthdayDate.day()))
-    {
-        --age;
-    }
-    return age;
-}
 
 QVector<QString> DBUtils::getJudges(long long tournamentUID)
 {
@@ -362,7 +372,7 @@ QVector<QVector<DBUtils::NodeOfTournirGrid> > DBUtils::getNodesAsLevelListOfList
     QVector<QVector<DBUtils::NodeOfTournirGrid> > result;
     for(DBUtils::NodeOfTournirGrid node : DBUtils::getNodes(tournamentCategoryUID))
     {
-        if (result.size() == 0 || RenderAreaWidget::log2(result.back().last().v) != RenderAreaWidget::log2(node.v))
+        if (result.size() == 0 || Utils::log2(result.back().last().v) != Utils::log2(node.v))
         {
             result << QVector<DBUtils::NodeOfTournirGrid>();
         }
@@ -608,7 +618,7 @@ bool DBUtils::updateLevelOfNodeOfGrid(int TOURNAMENT_CATEGORIES_FK, int VERTEX, 
     return query.exec();
 }
 
-QVector<long long> DBUtils::get_UIDOrder_for_TC(long long UIDtournamentCategory)
+QVector<long long> DBUtils::getOrderUIDs(long long UIDtournamentCategory)
 {
     QSet<long long> set;
     for (auto node : getNodes(UIDtournamentCategory))
@@ -620,7 +630,7 @@ QVector<long long> DBUtils::get_UIDOrder_for_TC(long long UIDtournamentCategory)
     return result;
 }
 
-QVector<long long> DBUtils::get_UIDs_of_TOURNAMENT_CATEGORIES(long long tournamentUID)
+QVector<long long> DBUtils::getTournamentCategoryUIDs(long long tournamentUID)
 {
     QVector<long long> uids;
     QSqlQuery query(
@@ -1170,7 +1180,7 @@ QString DBUtils::convertToRoman(int val) {
 
 int DBUtils::isPow2(int a) { return !(a & (a - 1)); }
 
-QMap<QString, std::tuple<QString, QString> > DBUtils::get_NAME_RUS__RELATION_TABLE_NAME()
+QMap<QString, QSqlRecord> DBUtils::get_NAME_RUS__RELATION_TABLE_NAME()
 {
     QSqlQuery *q = new QSqlQuery;
     if (!q->prepare(
@@ -1184,12 +1194,10 @@ QMap<QString, std::tuple<QString, QString> > DBUtils::get_NAME_RUS__RELATION_TAB
     if (q->lastError().isValid())
         qDebug() << __PRETTY_FUNCTION__ << q->lastError();
 
-    QMap<QString, std::tuple<QString, QString> > map;
+    QMap<QString, QSqlRecord> map;
     while (q->next())
     {
-        map[q->value("NAME_ENG").toString()] = std::make_tuple(
-                                                   q->value("NAME_RUS").toString(),
-                                                   q->value("RELATION_TABLE_NAME").toString());
+        map[q->value("NAME_ENG").toString()] = q->record();
     }
     delete q;
     return map;

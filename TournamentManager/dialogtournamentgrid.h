@@ -4,6 +4,7 @@
 #include "dialogchosedata.h"
 #include "renderareawidget.h"
 #include "createtournamentordersdialog.h"
+#include "utils.h"
 
 #include <algorithm>
 #include <assert.h>

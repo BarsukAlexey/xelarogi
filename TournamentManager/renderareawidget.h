@@ -4,6 +4,7 @@
 #include "db_utils.h"
 #include "dialogchosedata.h"
 #include "excel_utils.h"
+#include "utils.h"
 #include "renderarearesultdialog.h"
 
 #include <QAxBase>

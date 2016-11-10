@@ -93,6 +93,7 @@ public:
         tableWidget->setHorizontalHeaderItem(1, __qtablewidgetitem1);
         tableWidget->setObjectName(QStringLiteral("tableWidget"));
         tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        tableWidget->horizontalHeader()->setStretchLastSection(true);
 
         gridLayout_3->addWidget(tableWidget, 0, 0, 1, 3);
 

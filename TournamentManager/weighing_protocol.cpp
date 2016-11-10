@@ -29,7 +29,7 @@ WeighingProtocol::WeighingProtocol(const long long tournamentUID, QObject* paren
 
 
 
-    for (const long long uidTC: DBUtils::get_UIDs_of_TOURNAMENT_CATEGORIES(tournamentUID))
+    for (const long long uidTC: DBUtils::getTournamentCategoryUIDs(tournamentUID))
     {
         QVector<DBUtils::NodeOfTournirGrid> leafOFTree = DBUtils::getLeafOFTree(uidTC);
         QStringList heads;

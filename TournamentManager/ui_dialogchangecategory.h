@@ -18,6 +18,7 @@
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QPushButton>
 #include <QtWidgets/QTableWidget>
 
 QT_BEGIN_NAMESPACE
@@ -27,14 +28,15 @@ class Ui_DialogChangeCategory
 public:
     QGridLayout *gridLayout;
     QLabel *label;
-    QTableWidget *tableWidget;
     QDialogButtonBox *buttonBox;
+    QTableWidget *tableWidget;
+    QPushButton *pushButtonShowGrid;
 
     void setupUi(QDialog *DialogChangeCategory)
     {
         if (DialogChangeCategory->objectName().isEmpty())
             DialogChangeCategory->setObjectName(QStringLiteral("DialogChangeCategory"));
-        DialogChangeCategory->resize(619, 566);
+        DialogChangeCategory->resize(754, 465);
         gridLayout = new QGridLayout(DialogChangeCategory);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
         label = new QLabel(DialogChangeCategory);
@@ -46,31 +48,44 @@ public:
 
         gridLayout->addWidget(label, 0, 0, 1, 1);
 
-        tableWidget = new QTableWidget(DialogChangeCategory);
-        if (tableWidget->columnCount() < 2)
-            tableWidget->setColumnCount(2);
-        tableWidget->setObjectName(QStringLiteral("tableWidget"));
-        tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
-        tableWidget->setSelectionMode(QAbstractItemView::SingleSelection);
-        tableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
-        tableWidget->setColumnCount(2);
-        tableWidget->horizontalHeader()->setCascadingSectionResizes(true);
-        tableWidget->horizontalHeader()->setProperty("showSortIndicator", QVariant(false));
-        tableWidget->horizontalHeader()->setStretchLastSection(false);
-
-        gridLayout->addWidget(tableWidget, 1, 0, 1, 1);
-
         buttonBox = new QDialogButtonBox(DialogChangeCategory);
         buttonBox->setObjectName(QStringLiteral("buttonBox"));
         buttonBox->setOrientation(Qt::Horizontal);
         buttonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
 
-        gridLayout->addWidget(buttonBox, 2, 0, 1, 1);
+        gridLayout->addWidget(buttonBox, 3, 0, 1, 1);
+
+        tableWidget = new QTableWidget(DialogChangeCategory);
+        if (tableWidget->columnCount() < 6)
+            tableWidget->setColumnCount(6);
+        QTableWidgetItem *__qtablewidgetitem = new QTableWidgetItem();
+        tableWidget->setHorizontalHeaderItem(0, __qtablewidgetitem);
+        QTableWidgetItem *__qtablewidgetitem1 = new QTableWidgetItem();
+        tableWidget->setHorizontalHeaderItem(1, __qtablewidgetitem1);
+        QTableWidgetItem *__qtablewidgetitem2 = new QTableWidgetItem();
+        tableWidget->setHorizontalHeaderItem(2, __qtablewidgetitem2);
+        QTableWidgetItem *__qtablewidgetitem3 = new QTableWidgetItem();
+        tableWidget->setHorizontalHeaderItem(3, __qtablewidgetitem3);
+        QTableWidgetItem *__qtablewidgetitem4 = new QTableWidgetItem();
+        tableWidget->setHorizontalHeaderItem(4, __qtablewidgetitem4);
+        QTableWidgetItem *__qtablewidgetitem5 = new QTableWidgetItem();
+        tableWidget->setHorizontalHeaderItem(5, __qtablewidgetitem5);
+        tableWidget->setObjectName(QStringLiteral("tableWidget"));
+        tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        tableWidget->setSelectionMode(QAbstractItemView::SingleSelection);
+        tableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
+        tableWidget->horizontalHeader()->setStretchLastSection(true);
+        tableWidget->verticalHeader()->setVisible(false);
+
+        gridLayout->addWidget(tableWidget, 1, 0, 1, 1);
+
+        pushButtonShowGrid = new QPushButton(DialogChangeCategory);
+        pushButtonShowGrid->setObjectName(QStringLiteral("pushButtonShowGrid"));
+
+        gridLayout->addWidget(pushButtonShowGrid, 2, 0, 1, 1);
 
 
         retranslateUi(DialogChangeCategory);
-        QObject::connect(buttonBox, SIGNAL(accepted()), DialogChangeCategory, SLOT(accept()));
-        QObject::connect(buttonBox, SIGNAL(rejected()), DialogChangeCategory, SLOT(reject()));
 
         QMetaObject::connectSlotsByName(DialogChangeCategory);
     } // setupUi
@@ -79,6 +94,19 @@ public:
     {
         DialogChangeCategory->setWindowTitle(QApplication::translate("DialogChangeCategory", "Dialog", 0));
         label->setText(QApplication::translate("DialogChangeCategory", "TextLabel", 0));
+        QTableWidgetItem *___qtablewidgetitem = tableWidget->horizontalHeaderItem(0);
+        ___qtablewidgetitem->setText(QApplication::translate("DialogChangeCategory", "UID", 0));
+        QTableWidgetItem *___qtablewidgetitem1 = tableWidget->horizontalHeaderItem(1);
+        ___qtablewidgetitem1->setText(QApplication::translate("DialogChangeCategory", "\320\235\320\260\320\270\320\274\320\265\320\275\320\276\320\262\320\260\320\275\320\270\320\265", 0));
+        QTableWidgetItem *___qtablewidgetitem2 = tableWidget->horizontalHeaderItem(2);
+        ___qtablewidgetitem2->setText(QApplication::translate("DialogChangeCategory", "\320\240\320\260\320\267\320\264\320\265\320\273", 0));
+        QTableWidgetItem *___qtablewidgetitem3 = tableWidget->horizontalHeaderItem(3);
+        ___qtablewidgetitem3->setText(QApplication::translate("DialogChangeCategory", "\320\222\320\265\321\201 \320\276\321\202 ", 0));
+        QTableWidgetItem *___qtablewidgetitem4 = tableWidget->horizontalHeaderItem(4);
+        ___qtablewidgetitem4->setText(QApplication::translate("DialogChangeCategory", "\320\222\320\265\321\201 \320\264\320\276", 0));
+        QTableWidgetItem *___qtablewidgetitem5 = tableWidget->horizontalHeaderItem(5);
+        ___qtablewidgetitem5->setText(QApplication::translate("DialogChangeCategory", "\320\232\320\276\320\273-\320\262\320\276 \321\207\320\265\320\273\320\276\320\262\320\265\320\272", 0));
+        pushButtonShowGrid->setText(QApplication::translate("DialogChangeCategory", "\320\237\320\276\320\272\320\260\320\267\320\260\321\202\321\214 \321\201\320\265\321\202\320\272\321\203", 0));
     } // retranslateUi
 
 };

@@ -12,17 +12,11 @@ RenderAreaWidget::RenderAreaWidget(QWidget *parent, int widthCell, int heightCel
     setNormalSize();
 }
 
-int RenderAreaWidget::log2(int x)
-{
-    int ans = 0;
-    while (x >>= 1) ++ans;
-    return ans;
-}
 
 QPoint RenderAreaWidget::getCell(int v)
 {
     QPoint p;
-    p.setY(countColumns - log2(v) - 1);
+    p.setY(countColumns - Utils::log2(v) - 1);
     p.setX( (1 << (p.y() + 1)) * ((1 << (countColumns - p.y())) - 1 - v) + (1 << p.y()) - 1);
     return p;
 }
@@ -208,7 +202,7 @@ void RenderAreaWidget::setNormalSize()
     }
     else
     {
-        countColumns = log2(nodes.last().v) + 1;
+        countColumns = Utils::log2(nodes.last().v) + 1;
         countRows = 2 * (1 << (countColumns - 1)) - 1;
         resize(countColumns * widthCell + 1, countRows * heightCell + 1);
     }
@@ -260,7 +254,6 @@ void RenderAreaWidget::onFontSizeChanged(const int fontSize)
 
 void RenderAreaWidget::onSaveInExcel()
 {
-    qDebug() << "RenderAreaWidget::onSaveInExcel: " << DialogChoseData::Type::grids;
     DialogChoseData dlg(DialogChoseData::Type::grids);
     if (dlg.exec() != QDialog::Accepted)
         return;
@@ -294,7 +287,7 @@ void RenderAreaWidget::clearSelection()
 QPoint RenderAreaWidget::getCell(int v, int countColumns)
 {
     QPoint p;
-    p.setY(countColumns - log2(v) - 1);
+    p.setY(countColumns - Utils::log2(v) - 1);
     p.setX( (1 << (p.y() + 1)) * ((1 << (countColumns - p.y())) - 1 - v) + (1 << p.y()) - 1);
     return p;
 }
@@ -309,7 +302,7 @@ void RenderAreaWidget::printTableGridInExcel(QAxObject* workbook, DialogChoseDat
     if (nodes.empty()) return;
     qSort(nodes);
 
-    const int countColumns = log2(nodes.last().v) + 1;
+    const int countColumns = Utils::log2(nodes.last().v) + 1;
     int countPlayers = 0;
     for (const DBUtils::NodeOfTournirGrid& node : nodes) if (!node.isFight) ++countPlayers;
 
@@ -321,6 +314,7 @@ void RenderAreaWidget::printTableGridInExcel(QAxObject* workbook, DialogChoseDat
 
     for (const DBUtils::NodeOfTournirGrid& node : nodes)
     {
+        //QApplication::processEvents(); TODO
 
         QPoint p = getCell(node.v, countColumns);
 
@@ -437,6 +431,6 @@ void RenderAreaWidget::printTableGridInExcel(QAxObject* workbook, DialogChoseDat
 
 QString RenderAreaWidget::getNameOfLevel(int vertex)
 {
-    int level = RenderAreaWidget::log2(vertex) + 1;
+    int level = Utils::log2(vertex) + 1;
     return level == 1? "Финал" : level == 2? "Полуфинал" : "1 / " + QString::number(1 << (level - 1));
 }

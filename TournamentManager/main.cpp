@@ -1,14 +1,13 @@
 #include <iostream>
+
 #include <QApplication>
 #include <QDebug>
 #include <QMessageBox>
-
-#include "mainwindow.h"
-#include "sqltablemanager.h"
-#include "dialogsqltablemanager.h"
-#include "imageloaderwidget.h"
-
-#include "ebnutvbazu.h"
+#include <QSqlDatabase>
+#include <QSqlError>
+#include <QSqlQuery>
+#include <QSqlRecord>
+#include "logindialog.h"
 
 
 
@@ -49,30 +48,40 @@ void auth()
 
 void connectDB()
 {
-    QSqlDatabase m_database = QSqlDatabase::addDatabase("QSQLITE");
-    if (m_database.lastError().isValid())
+    QSqlDatabase database = QSqlDatabase::addDatabase("QSQLITE");
+    if (database.lastError().isValid())
     {
-        QMessageBox::critical(0, "", m_database.lastError().text());
+        QMessageBox::critical(0, "", database.lastError().text());
         exit(0);
     }
 
-    m_database.setDatabaseName("./database/kickboxing.db");
-    if (m_database.lastError().isValid())
+    database.setDatabaseName("./database/kickboxing.db");
+    if (database.lastError().isValid())
     {
-        QMessageBox::critical(0, "", m_database.lastError().text());
+        QMessageBox::critical(0, "", database.lastError().text());
         exit(0);
     }
 
-    if (m_database.open())
+    if (database.open())
     {
         qDebug() << "opened";
     }
     else
     {
-        QMessageBox::critical(0, "", m_database.lastError().text());
+        QMessageBox::critical(0, "", database.lastError().text());
         exit(0);
     }
+
+    QSqlQuery query;
+    query.exec("PRAGMA foreign_keys = ON;");
 }
+
+
+//#include "dialogsqltablemanager.h"
+#include "createtournamentordersdialog.h"
+
+
+
 
 int main(int argc, char *argv[])
 {
@@ -87,26 +96,9 @@ int main(int argc, char *argv[])
     //auth();
     connectDB();
 
-//    HandbookDialog handbookDlg(QString("REGION_UNITS"), QString("АТЕ"), QSqlDatabase::database(), 0, {"UID", "FLAG"});
-//    handbookDlg.exec();
-
-    //MainWindow w; w.show(); return a.exec();
-
-    //GenerateTournamentCategoriesDialog dl(21); return dl.exec();
-
-    SqlTableManager m(0);
-    //m.setSqlTable("COUNTRIES");
-    QMap<QString, QVariant> map;
-
-    map["TOURNAMENT_FK"] = 22;
-    m.setSqlTable("TOURNAMENT_CATEGORIES",
-                  "TOURNAMENT_FK = 22",
-                  map);
-    m.showMaximized();
-
-    //EbnutVBazu::copyTable("TOURNAMENTS");
-
-
+    //DialogSqlTableManager dlg(0, "TOURNAMENTS"); dlg.showMaximized(); return dlg.exec();
+    CreateTournamentOrdersDialog dlg(21, 0, "LOLKA", "OLOLLOEV"); return dlg.exec();
+    //qDebug() << findUidToutnamentCategory(21, QDate(1991, 6, 9), 3, 60, 1393);
 
     return a.exec();
 }

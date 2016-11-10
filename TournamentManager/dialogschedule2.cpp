@@ -467,7 +467,7 @@ void Dialogschedule2::updateTree()
         ui->treeWidget->addTopLevelItem(item);
     }
 
-    for (const int tournamentCategoryUID : DBUtils::get_UIDs_of_TOURNAMENT_CATEGORIES(tournamentUID))
+    for (const int tournamentCategoryUID : DBUtils::getTournamentCategoryUIDs(tournamentUID))
     {
         QTreeWidgetItem *item = new QTreeWidgetItem();
         item->setText(0, DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", tournamentCategoryUID));

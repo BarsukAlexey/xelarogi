@@ -14,7 +14,6 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QDialog>
-#include <QtWidgets/QDialogButtonBox>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QVBoxLayout>
@@ -28,13 +27,13 @@ public:
     QVBoxLayout *verticalLayout;
     QLabel *label;
     SqlTableManager *sqlTableManager;
-    QDialogButtonBox *buttonBox;
 
     void setupUi(QDialog *DialogSqlTableManager)
     {
         if (DialogSqlTableManager->objectName().isEmpty())
             DialogSqlTableManager->setObjectName(QStringLiteral("DialogSqlTableManager"));
-        DialogSqlTableManager->resize(400, 300);
+        DialogSqlTableManager->resize(800, 600);
+        DialogSqlTableManager->setMinimumSize(QSize(800, 600));
         verticalLayout = new QVBoxLayout(DialogSqlTableManager);
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
         label = new QLabel(DialogSqlTableManager);
@@ -58,17 +57,8 @@ public:
 
         verticalLayout->addWidget(sqlTableManager);
 
-        buttonBox = new QDialogButtonBox(DialogSqlTableManager);
-        buttonBox->setObjectName(QStringLiteral("buttonBox"));
-        buttonBox->setOrientation(Qt::Horizontal);
-        buttonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
-
-        verticalLayout->addWidget(buttonBox);
-
 
         retranslateUi(DialogSqlTableManager);
-        QObject::connect(buttonBox, SIGNAL(accepted()), DialogSqlTableManager, SLOT(accept()));
-        QObject::connect(buttonBox, SIGNAL(rejected()), DialogSqlTableManager, SLOT(reject()));
 
         QMetaObject::connectSlotsByName(DialogSqlTableManager);
     } // setupUi

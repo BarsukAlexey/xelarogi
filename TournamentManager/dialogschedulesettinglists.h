@@ -8,10 +8,13 @@
 #include <QInputDialog>
 #include <QTableWidgetItem>
 #include <QComboBox>
+#include <QSqlRecord>
+#include <QSqlQuery>
 
 
 
-#include "handbookdialog.h"
+
+
 
 namespace Ui {
 class DialogScheduleSettingLists;

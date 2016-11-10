@@ -41,8 +41,8 @@ public:
     QSpacerItem *horizontalSpacer;
     QSpacerItem *horizontalSpacer_2;
     QSpacerItem *horizontalSpacer_3;
-    QPushButton *pushButton;
-    QPushButton *pushButton_2;
+    QPushButton *pushButtonDelete;
+    QPushButton *pushButtonSaveInExcel;
 
     void setupUi(QWidget *SqlTableManager)
     {
@@ -66,6 +66,8 @@ public:
 
         tableView_2 = new QTableView(layoutWidget);
         tableView_2->setObjectName(QStringLiteral("tableView_2"));
+        tableView_2->setSelectionMode(QAbstractItemView::SingleSelection);
+        tableView_2->setSelectionBehavior(QAbstractItemView::SelectRows);
         tableView_2->setSortingEnabled(true);
 
         verticalLayout->addWidget(tableView_2);
@@ -103,15 +105,15 @@ public:
 
         horizontalLayout->addItem(horizontalSpacer_3);
 
-        pushButton = new QPushButton(SqlTableManager);
-        pushButton->setObjectName(QStringLiteral("pushButton"));
+        pushButtonDelete = new QPushButton(SqlTableManager);
+        pushButtonDelete->setObjectName(QStringLiteral("pushButtonDelete"));
 
-        horizontalLayout->addWidget(pushButton);
+        horizontalLayout->addWidget(pushButtonDelete);
 
-        pushButton_2 = new QPushButton(SqlTableManager);
-        pushButton_2->setObjectName(QStringLiteral("pushButton_2"));
+        pushButtonSaveInExcel = new QPushButton(SqlTableManager);
+        pushButtonSaveInExcel->setObjectName(QStringLiteral("pushButtonSaveInExcel"));
 
-        horizontalLayout->addWidget(pushButton_2);
+        horizontalLayout->addWidget(pushButtonSaveInExcel);
 
 
         gridLayout->addLayout(horizontalLayout, 1, 0, 1, 1);
@@ -127,8 +129,8 @@ public:
         pushButtonSave->setText(QApplication::translate("SqlTableManager", "\320\241\320\276\321\205\321\200\320\260\320\275\320\270\321\202\321\214 \320\270\320\267\320\274\320\265\320\275\320\265\320\275\320\270\321\217", 0));
         pushButtonCancel->setText(QApplication::translate("SqlTableManager", "\320\236\321\202\320\272\320\260\321\202\320\270\321\202\321\214 \320\270\320\267\320\274\320\265\320\275\320\265\320\275\320\270\321\217", 0));
         pushButtonInsert->setText(QApplication::translate("SqlTableManager", "\320\224\320\276\320\261\320\260\320\262\320\270\321\202\321\214 \320\275\320\276\320\262\321\203\321\216 \320\267\320\260\320\277\320\270\321\201\321\214", 0));
-        pushButton->setText(QApplication::translate("SqlTableManager", "\320\243\320\264\320\260\320\273\320\270\321\202\321\214", 0));
-        pushButton_2->setText(QApplication::translate("SqlTableManager", "\320\241\320\276\321\205\321\200\320\260\320\275\320\270\321\202\321\214 \320\262 Excel", 0));
+        pushButtonDelete->setText(QApplication::translate("SqlTableManager", "\320\243\320\264\320\260\320\273\320\270\321\202\321\214", 0));
+        pushButtonSaveInExcel->setText(QApplication::translate("SqlTableManager", "\320\241\320\276\321\205\321\200\320\260\320\275\320\270\321\202\321\214 \320\262 Excel", 0));
         Q_UNUSED(SqlTableManager);
     } // retranslateUi
 

@@ -1,9 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include "countryiconsdialog.h"
 #include "createtournamentcategoriesdialog.h"
-#include "createtournamentdialog.h"
 #include "createtournamentordersdialog.h"
 #include "dialogschedule.h"
 #include "dialogschedule2.h"
@@ -13,12 +11,11 @@
 #include "fiting_distribution.h"
 #include "formdipl.h"
 #include "generatetournamentcategoriesdialog.h"
-#include "handbookdialog.h"
+
 #include "logindialog.h"
 #include "report_manda.h"
 #include "report_ministr.h"
-#include "trophygenerator.h"
-#include "trophygeneratorsettingsdialog.h"
+
 #include "weighing_protocol.h"
 #include "winner_report.h"
 
@@ -56,6 +53,24 @@
 
 
 
+class TournamentModel : public QAbstractTableModel
+{
+    Q_OBJECT
+public:
+    TournamentModel(QObject* parent);
+    int rowCount(const QModelIndex &parent = QModelIndex()) const ;
+    int columnCount(const QModelIndex &parent = QModelIndex()) const;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+    int getUID(int row);
+    void selectAndSortData();
+private:
+    QSqlRelationalTableModel *modelTournament;
+};
+
+
+
+
 namespace Ui {
 class MainWindow;
 }
@@ -68,23 +83,14 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-
-private slots:
-    void on_pushButtonGrid_clicked();
-    void on_pushButtonPair_clicked();
-    void on_pushButtonProtokolVzveshinanya_clicked();
-    void on_pushButtonWinnerReport_clicked();
-    void on_pushButtonLoadWinner_clicked();
-    void on_manda_clicked();
-    void on_btn_report_ministr_clicked();
-
 private:
-    void updateTournamentTreeWidget();
-    void connectButtons();
-    
+    void onAction(QString table);
 
 private:
     Ui::MainWindow *ui;
+    TournamentModel* model;
+    int tournamentUID;
+
 };
 
 #endif // MAINWINDOW_H

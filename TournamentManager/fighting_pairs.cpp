@@ -39,7 +39,7 @@ FightingPairs::FightingPairs(long long _tournamentUID, QWidget* parent) :
 {
     ui->setupUi(this);
 
-    for (const long long tournamentCategotyUID : DBUtils::get_UIDs_of_TOURNAMENT_CATEGORIES(tournamentUID))
+    for (const long long tournamentCategotyUID : DBUtils::getTournamentCategoryUIDs(tournamentUID))
     {
          QVector<QVector<DBUtils::NodeOfTournirGrid> > grid =
                  DBUtils::getNodesAsLevelListOfList(tournamentCategotyUID);

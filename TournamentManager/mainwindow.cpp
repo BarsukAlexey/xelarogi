@@ -1,89 +1,158 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-using namespace std;
+TournamentModel::TournamentModel(QObject* parent) :
+    QAbstractTableModel(parent)
+{
+    modelTournament = new QSqlRelationalTableModel(this);
+    modelTournament->setTable("TOURNAMENTS");
+    selectAndSortData();
+}
+
+
+int TournamentModel::rowCount(const QModelIndex& ) const
+{
+    return modelTournament->rowCount();
+}
+
+int TournamentModel::columnCount(const QModelIndex& ) const
+{
+    return 1;
+}
+
+QVariant TournamentModel::data(const QModelIndex& index, int role) const
+{
+    if (role == Qt::DisplayRole)
+    {
+        int row = index.row();
+        QString name = modelTournament->data(modelTournament->index(row, modelTournament->fieldIndex("NAME"))).toString();
+        QString date = modelTournament->data(modelTournament->index(row, modelTournament->fieldIndex("TEXT_DAT_RANGE"))).toString();
+        return name + (date.isEmpty()? "" : "\n(" + date + ")");
+    }
+    return QVariant();
+}
+
+QVariant TournamentModel::headerData(int , Qt::Orientation orientation, int role) const
+{
+    if (role == Qt::DisplayRole)
+    {
+        if (orientation == Qt::Horizontal) {
+            return "Турнир";
+        }
+    }
+    return QVariant();
+}
+
+int TournamentModel::getUID(int row)
+{
+    return modelTournament->data(modelTournament->index(row, 0)).toInt();
+}
+
+void TournamentModel::selectAndSortData()
+{
+    beginResetModel();
+    modelTournament->select();
+    while (modelTournament->canFetchMore())
+        modelTournament->fetchMore();
+    modelTournament->sort(0, Qt::SortOrder::DescendingOrder);
+    endResetModel();
+}
+
+
+
+
+
+
+
+
+
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-
     ui->setupUi(this);
 
-//    connect(ui->countryAction, &QAction::triggered, [this] () {
-//        HandbookDialog handbookDlg(QString("COUNTRIES"), QString("Страны"), m_database, this, {"UID", "FLAG"});
-//        handbookDlg.exec();
-//    });
+    model = new TournamentModel(this);
+    ui->tableViewTournament->setModel(model);
+    ui->tableViewTournament->resizeColumnsToContents();
+    ui->tableViewTournament->resizeRowsToContents();
 
-//    connect(ui->regionAction, &QAction::triggered, [this] () {
-//        HandbookDialog handbookDlg(QString("REGIONS"), QString("Регионы"), m_database, this, {"UID", "FLAG"});
-//        handbookDlg.exec();
-//    });
-
-//    connect(ui->ateAction, &QAction::triggered, [this] () {
-//        HandbookDialog handbookDlg(QString("REGION_UNITS"), QString("АТЕ"), m_database, this, {"UID", "FLAG"});
-//        handbookDlg.exec();
-//    });
-
-//    connect(ui->sexAction, &QAction::triggered, [this] () {
-//        HandbookDialog handbookDlg(QString("SEXES"), QString("Пол"), m_database, this, {"UID"});
-//        handbookDlg.exec();
-//    });
-
-//    connect(ui->typeAction, &QAction::triggered, [this] () {
-//        HandbookDialog handbookDlg(QString("TYPES"), QString("Разделы"), m_database, this, {"UID"});
-//        handbookDlg.exec();
-//    });
-
-//    connect(ui->sportCategoryAction, &QAction::triggered, [this] () {
-//        HandbookDialog handbookDlg(QString("SPORT_CATEGORIES"), QString("Спортивные разряды"), m_database, this, {"UID"});
-//        handbookDlg.exec();
-//    });
-
-//    connect(ui->tournamentAction, &QAction::triggered, [this] () {
-//        HandbookDialog handbookDlg(QString("TOURNAMENTS"), QString("Турниры"), m_database, this, {"UID"});
-//        handbookDlg.exec();
-//        updateTournamentTreeWidget();
-//    });
-
-//    connect(ui->tournamentCategoryAction, &QAction::triggered, [this] () {
-//        HandbookDialog handbookDlg(QString("TOURNAMENT_CATEGORIES"), QString("Категории турнира"), m_database, this, {"UID"});
-//        handbookDlg.exec();
-//    });
-
-//    connect(ui->clubAction, &QAction::triggered, [this] () {
-//        HandbookDialog handbookDlg(QString("CLUBS"), QString("Клубы"), m_database, this, {"UID", "FLAG"});
-//        handbookDlg.exec();
-//    });
-
-//    connect(ui->coachAction, &QAction::triggered, [this] () {
-//        HandbookDialog handbookDlg(QString("COACHS"), QString("Тренерский состав"), m_database, this, {"UID"});
-//        handbookDlg.exec();
-//    });
-
-//    connect(ui->orderAction, &QAction::triggered, [this] () {
-//        HandbookDialog handbookDlg(QString("ORDERS"), QString("Заявки"), m_database, this,
-//        {"UID"});
-//        handbookDlg.exec();
-//    });
-
-//    connect(ui->actionAgeCategory, &QAction::triggered, [this] () {
-//        HandbookDialog handbookDlg(QString("AGE_CATEGORIES"), QString("Возрастные категории"), m_database, this,
-//        {"UID"});
-//        handbookDlg.exec();
-//    });
-
-
-    connect(ui->trophyBtnImage, &QPushButton::clicked, [this]()
-    {
-        FormDipl * wdg = new FormDipl(ui->tournamentUidLabel->text().toLongLong());
-        wdg->showMaximized();
+    connect(ui->tableViewTournament->selectionModel(),&QItemSelectionModel::selectionChanged,
+            [this](const QItemSelection& a, const QItemSelection& ){
+        if (a.indexes().isEmpty())
+            ui->stackedWidget->setCurrentIndex(0);
+        else
+        {
+            ui->stackedWidget->setCurrentIndex(1);
+            int row = a.indexes()[0].row();
+            ui->labelTournament->setText(a.indexes()[0].data().toString());
+            tournamentUID = model->getUID(row);
+        }
+    });
+    connect(ui->tableViewTournament->model(), &QAbstractItemModel::modelReset, [this](){
+        //ui->stackedWidget->setCurrentIndex(0);
     });
 
-    connectButtons();
-    updateTournamentTreeWidget();
 
-    ui->tournamentUidLabel->setVisible(false);
+
+
+
+    connect(ui->tournamentAction, &QAction::triggered, [this](){
+        onAction("TOURNAMENTS");
+        model->selectAndSortData();
+    });
+
+
+    connect(ui->countryAction, &QAction::triggered, [this](){
+        onAction("COUNTRIES");
+    });
+    connect(ui->regionAction, &QAction::triggered, [this](){
+        onAction("REGIONS");
+    });
+    connect(ui->ateAction, &QAction::triggered, [this](){
+        onAction("REGION_UNITS");
+    });
+
+
+    connect(ui->actionAgeCategory, &QAction::triggered, [this](){
+        onAction("AGE_CATEGORIES");
+    });
+    connect(ui->typeAction, &QAction::triggered, [this](){
+        onAction("TYPES");
+    });
+    connect(ui->sportCategoryAction, &QAction::triggered, [this](){
+        onAction("SPORT_CATEGORIES");
+    });
+
+    connect(ui->clubAction, &QAction::triggered, [this](){
+        onAction("CLUBS");
+    });
+    connect(ui->coachAction, &QAction::triggered, [this](){
+        onAction("COACHS");
+    });
+
+
+
+    connect(ui->createTournamentCategoriesBtn, &QPushButton::clicked, [this] ()
+    {
+        this->hide();
+        qDebug() << "tournamentUID: " << tournamentUID;
+        CreateTournamentCategoriesDialog dlg(tournamentUID, 0);
+        dlg.showMaximized();
+        dlg.exec();
+        this->show();
+    });
+
+    connect(ui->createOrdersBtn, &QPushButton::clicked, [this] ()
+    {
+        this->hide();
+        CreateTournamentOrdersDialog dlg(tournamentUID, 0);
+        dlg.showMaximized();
+        dlg.exec();
+        this->show();
+    });
 }
 
 MainWindow::~MainWindow()
@@ -91,341 +160,207 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-
-
-
-void MainWindow::updateTournamentTreeWidget()
-{
-//    ui->tournamentTreeWidget->clear();
-//    ui->tournamentTreeWidget->setColumnCount(1);
-//    ui->tournamentTreeWidget->setHeaderLabels({"Турнир"});
-
-//    ui->tournamentTreeWidget->setColumnWidth(0, 200);
-
-//    std::map<int, std::vector<QTreeWidgetItem*>, std::greater<int>> items;
-
-//    QSqlQuery query;
-//    query.prepare("SELECT * FROM TOURNAMENTS ORDER BY DATE_BEGIN ASC");
-//    int currentYear = -1000;
-//    if (query.exec())
-//    {
-//        while (query.next())
-//        {
-//            QString uid = query.value("UID").toString();
-//            QString name = query.value("NAME").toString();
-//            QDate beginDate = QDate::fromString(query.value("DATE_BEGIN").toString(),"yyyy-MM-dd");
-
-//            int year = beginDate.year();
-//            if (year != currentYear)
-//            {
-//                currentYear = year;
-//            }
-
-//            QTreeWidgetItem* item = new QTreeWidgetItem({name});
-//            item->setData(0, Qt::UserRole, uid);
-//            item->setData(1, Qt::UserRole, uid);
-
-//            items[currentYear].push_back(item);
-//        }
-
-//        for (auto pair : items)
-//        {
-//            int year = pair.first;
-//            QTreeWidgetItem* topLevel = new QTreeWidgetItem({QString::number(year) + " год", ""});
-//            for (QTreeWidgetItem* item : items[year])
-//            {
-//                topLevel->addChild(item);
-//            }
-//            ui->tournamentTreeWidget->addTopLevelItem(topLevel);
-//        }
-//        for (int i = 0; i <ui->tournamentTreeWidget->model()->rowCount(); ++i)
-//        {
-//            QModelIndex localIndex = ui->tournamentTreeWidget->model()->index(i, 0);
-//            ui->tournamentTreeWidget->setExpanded(localIndex, true);
-//        }
-
-//        connect(ui->tournamentTreeWidget, &QTreeWidget::clicked, [this] (const QModelIndex& index)
-//        {
-//            if (index.parent() == QModelIndex())
-//            {
-//                ui->stackedWidget->setCurrentIndex(0);
-//            }
-//            else
-//            {
-//                QString uid = index.data(Qt::UserRole).toString();
-//                if (!uid.isEmpty())
-//                {
-//                    long long tournamentUID = uid.toLongLong();
-//                    QSqlQuery tournamentQuery;
-//                    tournamentQuery.prepare("SELECT * FROM TOURNAMENTS WHERE UID = ?");
-//                    tournamentQuery.bindValue(0, tournamentUID);
-//                    if (tournamentQuery.exec() && tournamentQuery.next())
-//                    {
-//                        ui->tournamentLabel->setText(tournamentQuery.value("NAME").toString());
-//                        ui->tournamentUidLabel->setText(QString::number(tournamentUID));
-//                    }
-//                    else
-//                    {
-//                        qDebug() << tournamentQuery.lastError().text();
-//                    }
-
-//                    ui->stackedWidget->setCurrentIndex(1);
-//                }
-//            }
-//        });
-//    }
-//    else
-//    {
-//        qDebug() << query.lastError().text();
-//    }
-
-//    ui->tournamentTreeWidget->setContextMenuPolicy(Qt::ContextMenuPolicy::CustomContextMenu);
-//    connect(ui->tournamentTreeWidget, &QTreeWidget::customContextMenuRequested, [this] (const QPoint& pos)
-//    {
-//        QMenu menu;
-
-
-//        connect(menu.addAction("Добавить..."), &QAction::triggered, [this, pos] ()
-//        {
-//            CreateTournamentDialog dlg(this);
-//            dlg.exec();
-//            updateTournamentTreeWidget();
-//        });
-//        connect(menu.addAction("Удалить"), &QAction::triggered, [this, pos] ()
-//        {
-//            QModelIndex index = ui->tournamentTreeWidget->indexAt(pos);
-//            QString uid = index.data(Qt::UserRole).toString();
-//            if (uid.isEmpty() == false)
-//            {
-//                long long tournamentUID = uid.toLongLong();
-//                QSqlQuery query;
-//                query.prepare("DELETE FROM TOURNAMENTS WHERE UID = ?");
-//                query.bindValue(0, tournamentUID);
-//                if (!query.exec())
-//                {
-//                    qDebug() << query.lastError().text();
-//                }
-//                else
-//                {
-//                    updateTournamentTreeWidget();
-//                    ui->stackedWidget->setCurrentIndex(0);
-//                }
-//            }
-//        });
-
-//        menu.exec(ui->tournamentTreeWidget->viewport()->mapToGlobal(pos));
-//    });
-}
-
-void MainWindow::connectButtons()
-{
-    connect(ui->createOrdersBtn, &QPushButton::clicked, [this] ()
-    {
-        this->hide();
-        long long tournamentUID = ui->tournamentUidLabel->text().toLongLong();
-        CreateTournamentOrdersDialog dlg(tournamentUID, 0);
-        dlg.showMaximized();
-        dlg.exec();
-        this->show();
-    });
-
-    connect(ui->createTournamentCategoriesBtn, &QPushButton::clicked, [this] ()
-    {
-        this->hide();
-        long long tournamentUID = ui->tournamentUidLabel->text().toLongLong();
-        CreateTournamentCategoriesDialog dlg(tournamentUID, 0);
-        dlg.showMaximized();
-        dlg.exec();
-        this->show();
-    });
-
-    connect(ui->trophyBtn, &QPushButton::clicked, [this] ()
-    {
-        TrophyGeneratorSettingsDialog dlg(this);
-        dlg.exec();
-        if (dlg.result() == QDialog::Accepted)
-        {
-            long long tournamentUID = ui->tournamentUidLabel->text().toLongLong();
-            TrophyGenerator trophyGenerator(tournamentUID);
-        }
-    });
-
-    connect(ui->pushButton_Flag, &QPushButton::clicked, [this] (){
-        long long tournamentUID = ui->tournamentUidLabel->text().toLongLong();
-        CountryIconsDialog dlg (tournamentUID);
-        dlg.exec();
-    });
-
-
-    connect(ui->pushButton, &QPushButton::clicked, [this](){
-        long long tournamentUID = ui->tournamentUidLabel->text().toLongLong();
-        DialogSchedule dlg (this, tournamentUID);
-        dlg.exec();
-    });
-
-    connect(ui->pushButtonTimeScheduling, &QPushButton::clicked, [this](){
-        this->hide();
-        long long tournamentUID = ui->tournamentUidLabel->text().toLongLong();
-        Dialogschedule2 dlg (tournamentUID, 0);
-        dlg.exec();
-        this->show();
-    });
-}
-
-
-void MainWindow::on_pushButtonGrid_clicked()
+void MainWindow::onAction(QString table)
 {
     this->hide();
-    long long routnamentUID = ui->tournamentUidLabel->text().toLongLong();
-    qDebug() << "routnamentUID: " << routnamentUID;
-    //DialogTournamentGrid dialog("", routnamentUID, 0);
-    DialogTournamentGrid dialog(0, "", routnamentUID);
-    dialog.showMaximized();
-    dialog.exec();
-    this->show();
-}
-
-
-
-void MainWindow::on_pushButtonPair_clicked()
-{
-    this->hide();
-    long long routnamentUID = ui->tournamentUidLabel->text().toLongLong();
-    qDebug() << "routnamentUID: " << routnamentUID;
-    FightingPairs dialog(routnamentUID, 0);
-    dialog.showMaximized();
-    dialog.exec();
-    this->show();
-}
-
-void MainWindow::on_pushButtonProtokolVzveshinanya_clicked()
-{
-    long long routnamentUID = ui->tournamentUidLabel->text().toLongLong();
-    qDebug() << "routnamentUID: " << routnamentUID;
-    WeighingProtocol(routnamentUID, this);
-}
-
-void MainWindow::on_pushButtonWinnerReport_clicked()
-{
-    long long routnamentUID = ui->tournamentUidLabel->text().toLongLong();
-    qDebug() << "routnamentUID: " << routnamentUID;
-    WinnerReport(routnamentUID, this);
-}
-
-void MainWindow::on_pushButtonLoadWinner_clicked()
-{
-    QString openFileName = QFileDialog::getOpenFileName(this);
-    if (openFileName.isEmpty())
-        return;
-
-    QFile file(openFileName);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        QMessageBox::information(this, ". . .", "Не возможно откыть файл", QMessageBox::Yes);
-        return;
-    }
-    QJsonDocument d = QJsonDocument::fromJson(QString(file.readAll()).toUtf8());
-    file.close();
-
-
-    int okCount = 0;
-    int countSame = 0;
-    QStringList errorMessage;
-    QJsonArray array = d.array();
-    for (int i = 0; i < array.size(); ++i)
-    {
-        QJsonObject object = array[i].toObject();
-        int TOURNAMENT_CATEGORIES_FK = object["TOURNAMENT_CATEGORIES_FK"].toInt();
-        int VERTEX         = object["VERTEX"].toInt();
-        int orderUID       = object["orderUID"].toInt();
-        int orderUID_left  = object["orderUID_left"].toInt();
-        int orderUID_right = object["orderUID_right"].toInt();
-
-        QString result = object["result"].toString();
-
-
-        //qDebug() << TOURNAMENT_CATEGORIES_FK << VERTEX << orderUID;
-
-        QVector<DBUtils::NodeOfTournirGrid> nodes = DBUtils::getNodes(TOURNAMENT_CATEGORIES_FK);
-
-
-        if (nodes.size() <= 2 * VERTEX + 1 - 1)
-        {
-            errorMessage +=
-                    "Не возможно загрузть результаты для " + DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", TOURNAMENT_CATEGORIES_FK) + "\n"
-                    "Пара: " + DBUtils::getSecondNameAndFirstName(orderUID_left) + " VS " + DBUtils::getSecondNameAndFirstName(orderUID_right) + "\n"
-                    "Так как сетка была изменена или удалена\n";
-            continue;
-        }
-
-        if (orderUID_left != nodes[2 * VERTEX + 1 - 1].UID && orderUID_right != nodes[2 * VERTEX - 1].UID){
-            errorMessage +=
-                    "Не возможно загрузть результаты для " + DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", TOURNAMENT_CATEGORIES_FK) + "\n"
-                    "Пара: " + DBUtils::getSecondNameAndFirstName(orderUID_left) + " VS " + DBUtils::getSecondNameAndFirstName(orderUID_right) + "\n"
-                    "Так как сетка изменилась\n";
-            continue;
-        }
-
-        if (0 < nodes[VERTEX - 1].UID)
-        {
-            if (0 < orderUID && orderUID != nodes[VERTEX - 1].UID)
-                errorMessage +=
-                        "Не возможно загрузть результаты для " + DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", TOURNAMENT_CATEGORIES_FK) + "\n"
-                        "Пара: " + DBUtils::getSecondNameAndFirstName(orderUID_left) + " VS " + DBUtils::getSecondNameAndFirstName(orderUID_right) + "\n"
-                        "Так как победитель уже занесен в турнирную сетку\n" +
-                        "В программе победитель: " + DBUtils::getSecondNameAndFirstName(nodes[VERTEX - 1].UID) + "\n"
-                        "A Вы пытаетесь загрузить: " + DBUtils::getSecondNameAndFirstName(orderUID) + "\n";
-            else if (orderUID == nodes[VERTEX - 1].UID)
-                ++countSame;
-        }
-        else if (0 < orderUID)
-        {
-            if (DBUtils::insertResultOfFightForNodeOfGrid(TOURNAMENT_CATEGORIES_FK, VERTEX, orderUID, result))
-                ++okCount;
-            else
-                errorMessage +=
-                    "Не возможно загрузть результаты для " + DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", TOURNAMENT_CATEGORIES_FK) + "\n"
-                    "Пара: " + DBUtils::getSecondNameAndFirstName(orderUID_left) + " VS " + DBUtils::getSecondNameAndFirstName(orderUID_right) + "\n"
-                    "Неизвестная ошибка\n";
-        }
-        else if (orderUID <= 0)
-        {
-            errorMessage +=
-                "Не возможно загрузть результаты для " + DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", TOURNAMENT_CATEGORIES_FK) + "\n"
-                "Пара: " + DBUtils::getSecondNameAndFirstName(orderUID_left) + " VS " + DBUtils::getSecondNameAndFirstName(orderUID_right) + "\n"
-                "Жюри не запускала эту пару на ринг\n";
-        }
-        else
-        {
-            qDebug() << "wtf";
-        }
-    }
-
-    QMessageBox dlg(this);
-    dlg.setText("Успешно загруженно: " + QString::number(okCount) + "\n" +
-                "Уже в БД есть: " + QString::number(countSame) + "\n" +
-                "Ошибок: " + QString::number(array.size() - okCount - countSame));
+    DialogSqlTableManager dlg(0, table);
+    dlg.showMaximized();
     dlg.exec();
-
-    ErrorMessagesDialog dlg2(errorMessage, this);
-    dlg2.exec();
+    this->show();
 }
 
 
-void MainWindow::on_manda_clicked()
-{
-    long long routnamentUID = ui->tournamentUidLabel->text().toLongLong();
-    qDebug() << "routnamentUID: " << routnamentUID;
-    ReportManda dlgggg(routnamentUID); // TODO разкоментировать
-}
 
 
-void MainWindow::on_btn_report_ministr_clicked()
-{
-    long long routnamentUID = ui->tournamentUidLabel->text().toLongLong();
-    qDebug() << "routnamentUID: " << routnamentUID;
-    ReporMinistr d(routnamentUID);
-}
+
+
+
+//    connect(ui->pushButton_Flag, &QPushButton::clicked, [this] (){
+//        long long tournamentUID = ui->tournamentUidLabel->text().toLongLong();
+////        CountryIconsDialog dlg (tournamentUID);
+////        dlg.exec();
+//    });
+
+
+//    connect(ui->pushButton, &QPushButton::clicked, [this](){
+//        long long tournamentUID = ui->tournamentUidLabel->text().toLongLong();
+//        DialogSchedule dlg (this, tournamentUID);
+//        dlg.exec();
+//    });
+
+//    connect(ui->pushButtonTimeScheduling, &QPushButton::clicked, [this](){
+//        this->hide();
+//        long long tournamentUID = ui->tournamentUidLabel->text().toLongLong();
+//        Dialogschedule2 dlg (tournamentUID, 0);
+//        dlg.exec();
+//        this->show();
+//    });
+
+//    connect(ui->trophyBtnImage, &QPushButton::clicked, [this]()
+//    {
+//        FormDipl * wdg = new FormDipl(ui->tournamentUidLabel->text().toLongLong());
+//        wdg->showMaximized();
+//    });
+
+//}
+
+
+
+
+//void MainWindow::on_pushButtonGrid_clicked()
+//{
+//    this->hide();
+//    long long routnamentUID = ui->tournamentUidLabel->text().toLongLong();
+//    qDebug() << "routnamentUID: " << routnamentUID;
+//    //DialogTournamentGrid dialog("", routnamentUID, 0);
+//    DialogTournamentGrid dialog(0, "", routnamentUID);
+//    dialog.showMaximized();
+//    dialog.exec();
+//    this->show();
+//}
+
+
+
+//void MainWindow::on_pushButtonPair_clicked()
+//{
+//    this->hide();
+//    long long routnamentUID = ui->tournamentUidLabel->text().toLongLong();
+//    qDebug() << "routnamentUID: " << routnamentUID;
+//    FightingPairs dialog(routnamentUID, 0);
+//    dialog.showMaximized();
+//    dialog.exec();
+//    this->show();
+//}
+
+//void MainWindow::on_pushButtonProtokolVzveshinanya_clicked()
+//{
+//    long long routnamentUID = ui->tournamentUidLabel->text().toLongLong();
+//    qDebug() << "routnamentUID: " << routnamentUID;
+//    WeighingProtocol(routnamentUID, this);
+//}
+
+//void MainWindow::on_pushButtonWinnerReport_clicked()
+//{
+//    long long routnamentUID = ui->tournamentUidLabel->text().toLongLong();
+//    qDebug() << "routnamentUID: " << routnamentUID;
+//    WinnerReport(routnamentUID, this);
+//}
+
+//void MainWindow::on_pushButtonLoadWinner_clicked()
+//{
+//    QString openFileName = QFileDialog::getOpenFileName(this);
+//    if (openFileName.isEmpty())
+//        return;
+
+//    QFile file(openFileName);
+//    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+//    {
+//        QMessageBox::information(this, ". . .", "Не возможно откыть файл", QMessageBox::Yes);
+//        return;
+//    }
+//    QJsonDocument d = QJsonDocument::fromJson(QString(file.readAll()).toUtf8());
+//    file.close();
+
+
+//    int okCount = 0;
+//    int countSame = 0;
+//    QStringList errorMessage;
+//    QJsonArray array = d.array();
+//    for (int i = 0; i < array.size(); ++i)
+//    {
+//        QJsonObject object = array[i].toObject();
+//        int TOURNAMENT_CATEGORIES_FK = object["TOURNAMENT_CATEGORIES_FK"].toInt();
+//        int VERTEX         = object["VERTEX"].toInt();
+//        int orderUID       = object["orderUID"].toInt();
+//        int orderUID_left  = object["orderUID_left"].toInt();
+//        int orderUID_right = object["orderUID_right"].toInt();
+
+//        QString result = object["result"].toString();
+
+
+//        //qDebug() << TOURNAMENT_CATEGORIES_FK << VERTEX << orderUID;
+
+//        QVector<DBUtils::NodeOfTournirGrid> nodes = DBUtils::getNodes(TOURNAMENT_CATEGORIES_FK);
+
+
+//        if (nodes.size() <= 2 * VERTEX + 1 - 1)
+//        {
+//            errorMessage +=
+//                    "Не возможно загрузть результаты для " + DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", TOURNAMENT_CATEGORIES_FK) + "\n"
+//                    "Пара: " + DBUtils::getSecondNameAndFirstName(orderUID_left) + " VS " + DBUtils::getSecondNameAndFirstName(orderUID_right) + "\n"
+//                    "Так как сетка была изменена или удалена\n";
+//            continue;
+//        }
+
+//        if (orderUID_left != nodes[2 * VERTEX + 1 - 1].UID && orderUID_right != nodes[2 * VERTEX - 1].UID){
+//            errorMessage +=
+//                    "Не возможно загрузть результаты для " + DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", TOURNAMENT_CATEGORIES_FK) + "\n"
+//                    "Пара: " + DBUtils::getSecondNameAndFirstName(orderUID_left) + " VS " + DBUtils::getSecondNameAndFirstName(orderUID_right) + "\n"
+//                    "Так как сетка изменилась\n";
+//            continue;
+//        }
+
+//        if (0 < nodes[VERTEX - 1].UID)
+//        {
+//            if (0 < orderUID && orderUID != nodes[VERTEX - 1].UID)
+//                errorMessage +=
+//                        "Не возможно загрузть результаты для " + DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", TOURNAMENT_CATEGORIES_FK) + "\n"
+//                        "Пара: " + DBUtils::getSecondNameAndFirstName(orderUID_left) + " VS " + DBUtils::getSecondNameAndFirstName(orderUID_right) + "\n"
+//                        "Так как победитель уже занесен в турнирную сетку\n" +
+//                        "В программе победитель: " + DBUtils::getSecondNameAndFirstName(nodes[VERTEX - 1].UID) + "\n"
+//                        "A Вы пытаетесь загрузить: " + DBUtils::getSecondNameAndFirstName(orderUID) + "\n";
+//            else if (orderUID == nodes[VERTEX - 1].UID)
+//                ++countSame;
+//        }
+//        else if (0 < orderUID)
+//        {
+//            if (DBUtils::insertResultOfFightForNodeOfGrid(TOURNAMENT_CATEGORIES_FK, VERTEX, orderUID, result))
+//                ++okCount;
+//            else
+//                errorMessage +=
+//                    "Не возможно загрузть результаты для " + DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", TOURNAMENT_CATEGORIES_FK) + "\n"
+//                    "Пара: " + DBUtils::getSecondNameAndFirstName(orderUID_left) + " VS " + DBUtils::getSecondNameAndFirstName(orderUID_right) + "\n"
+//                    "Неизвестная ошибка\n";
+//        }
+//        else if (orderUID <= 0)
+//        {
+//            errorMessage +=
+//                "Не возможно загрузть результаты для " + DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", TOURNAMENT_CATEGORIES_FK) + "\n"
+//                "Пара: " + DBUtils::getSecondNameAndFirstName(orderUID_left) + " VS " + DBUtils::getSecondNameAndFirstName(orderUID_right) + "\n"
+//                "Жюри не запускала эту пару на ринг\n";
+//        }
+//        else
+//        {
+//            qDebug() << "wtf";
+//        }
+//    }
+
+//    QMessageBox dlg(this);
+//    dlg.setText("Успешно загруженно: " + QString::number(okCount) + "\n" +
+//                "Уже в БД есть: " + QString::number(countSame) + "\n" +
+//                "Ошибок: " + QString::number(array.size() - okCount - countSame));
+//    dlg.exec();
+
+//    ErrorMessagesDialog dlg2(errorMessage, this);
+//    dlg2.exec();
+//}
+
+
+//void MainWindow::on_manda_clicked()
+//{
+////    long long routnamentUID = ui->tournamentUidLabel->text().toLongLong();
+////    qDebug() << "routnamentUID: " << routnamentUID;
+////    ReportManda dlgggg(routnamentUID); // TODO разкоментировать
+//}
+
+
+//void MainWindow::on_btn_report_ministr_clicked()
+//{
+////    long long routnamentUID = ui->tournamentUidLabel->text().toLongLong();
+////    qDebug() << "routnamentUID: " << routnamentUID;
+////    ReporMinistr d(routnamentUID);
+//}
+
 
 
 

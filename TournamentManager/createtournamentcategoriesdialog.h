@@ -15,7 +15,6 @@
 
 #include "generatetournamentcategoriesdialog.h"
 #include "db_utils.h"
-#include "createtypedialog.h"
 
 namespace Ui {
 class CreateTournamentCategoriesDialog;

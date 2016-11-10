@@ -1,6 +1,16 @@
 #ifndef DBUTILS_H
 #define DBUTILS_H
 
+#include "utils.h"
+
+#include <QSqlQuery>
+#include <QVariant>
+#include <QDebug>
+#include <QSqlError>
+#include <QDate>
+#include <algorithm>
+#include <utility>
+
 #include <algorithm>
 #include <QDate>
 #include <QDebug>
@@ -9,6 +19,9 @@
 #include <QSqlQueryModel>
 #include <QStringList>
 #include <QVector>
+#include <QSqlRecord>
+#include <QSqlQuery>
+
 
 
 class DBUtils
@@ -51,6 +64,7 @@ public:
         }
     };
 
+    static QVariant get(const QString& field, const QString& table, const QVariant& UID);
     static QString getField(const QString& field, const QString& table, const QString& UID, QString PRETTY_FUNCTION = __PRETTY_FUNCTION__);
     static QString getField(const QString& field, const QString& table, const long long UID, QString PRETTY_FUNCTION = __PRETTY_FUNCTION__);
     static QString getFieldDate(const QString& field, const QString& table, const long long UID, QString PRETTY_FUNCTION = __PRETTY_FUNCTION__);
@@ -61,6 +75,44 @@ public:
     static QString getSecondNameAndFirstName(long long UID);
     static QString getSecondNameAndOneLetterOfName(long long UID);
     static QSet<long long> getSetOfOrdersInTournamentCategory(long long uidTournamentCategory); // TODO DELETE ?
+    static int findUidToutnamentCategory(int tournamentUID, QDate birthday, int sexUID, double weight, int typeUID)
+    {
+        int age = Utils::getAge(birthday, DBUtils::get("DATE_WEIGHTING", "TOURNAMENTS", tournamentUID).toDate());
+        QSqlQuery query;
+        if (!query.prepare("SELECT * "
+                           "FROM TOURNAMENT_CATEGORIES "
+                           "WHERE "
+                           "    TOURNAMENT_FK = ? AND "
+                           "    TYPE_FK = ? AND "
+                           "    SEX_FK = ? AND "
+                           "    AGE_FROM <= ? AND ? <= AGE_TILL AND "
+                           "    WEIGHT_FROM + 1e-7 < ? AND ? < WEIGHT_TILL + 1e-7 "
+                           ))
+        {
+            qDebug() << query.lastError();
+            return -1;
+        }
+        query.addBindValue(tournamentUID);
+        query.addBindValue(typeUID);
+        query.addBindValue(sexUID);
+        query.addBindValue(age);
+        query.addBindValue(age);
+        query.addBindValue(weight);
+        query.addBindValue(weight);
+
+        qDebug() << tournamentUID << birthday << sexUID << weight << typeUID;
+
+        if (!query.exec())
+        {
+            qDebug() << query.lastError();
+            return -1;
+        }
+        if (query.next())
+        {
+            return query.value("UID").toInt();
+        }
+        return -1;
+    }
 
 
 
@@ -96,8 +148,8 @@ public:
 
 
     // для таблицы TOURNAMENT_CATEGORIES
-    static QVector<long long> get_UIDs_of_TOURNAMENT_CATEGORIES(long long tournamentUID);
-    static QVector<long long> get_UIDOrder_for_TC(long long UIDtournamentCategory);
+    static QVector<long long> getTournamentCategoryUIDs(long long tournamentUID);
+    static QVector<long long> getOrderUIDs(long long UIDtournamentCategory);
     static QVector<std::tuple<long long, int, int, long long> > get_distinct_TYPE_FK_AgeFrom_AgeTill(long long tournamentUID);
     static QMap<QString, QVector<long long> > get_weight_and_orderUIDs(long long tournamentUID, long long type_fk, int age_from, int age_till, int sex_fk, int maxPlace);
     static QString getWeightAsOneNumberPlusMinus(long long uidCategory);
@@ -127,14 +179,14 @@ public:
     static int getAnotherRing(const int tournamentCategoryUID, const int day, const int ring);
     static std::tuple<int, int, int> getDayRingOrder(const int tournamentCategoryUID, const int level);
 
-    static int getAge(QDate DATE_WEIGHTING, QDate birthdayDate);
+
     static QString roundDouble(double x, int precision);
     static QString convertToRoman(int val);
     static int isPow2(int a);
 
 
     // FIELD_TRANSLATES
-    static QMap<QString, std::tuple<QString, QString>> get_NAME_RUS__RELATION_TABLE_NAME();
+    static QMap<QString, QSqlRecord> get_NAME_RUS__RELATION_TABLE_NAME();
 
 
     enum TypeField

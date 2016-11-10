@@ -3,6 +3,7 @@
 
 
 #include "db_utils.h"
+#include "excel_utils.h"
 #include "imageloaderwidget.h"
 
 #include <QAbstractItemModel>
@@ -15,12 +16,14 @@
 #include <QScrollBar>
 #include <QSortFilterProxyModel>
 #include <QSpinBox>
+
 #include <QSqlError>
 #include <QSqlField>
 #include <QSqlRecord>
-#include <QSqlRelation>
-#include <QSqlRelationalDelegate>
-#include <QSqlRelationalTableModel>
+#include <QSqlTableModel>
+
+#include <QItemDelegate>
+
 
 #include <QPainter>
 #include <QFileDialog>
@@ -30,6 +33,13 @@
 #include <QKeyEvent>
 #include <QMapIterator>
 
+
+#include <QDateEdit>
+#include <QAxWidget>
+#include <QAxObject>
+#include <QProgressDialog>
+#include <QComboBox>
+#include <QSqlRelationalDelegate>
 
 
 class ColumnAlignedLayout : public QHBoxLayout
@@ -49,16 +59,16 @@ private:
 };
 
 
+//----------------------------------------------------------------------------------------------------------
 
-
-class MySqlRelationalDelegate : public QSqlRelationalDelegate
+class MyQSqlRelationalDelegate : public QSqlRelationalDelegate
 {
     Q_OBJECT
 private:
     const QMap<int, QVariant> columnDefaultValue;
 
 public:
-    explicit MySqlRelationalDelegate(QObject *parent, QMap<int, QVariant> columnDefaultValue);
+    explicit MyQSqlRelationalDelegate(QObject *parent, QMap<int, QVariant> columnDefaultValue);
     void setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const Q_DECL_OVERRIDE;
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const Q_DECL_OVERRIDE;
     QSize sizeHint(const QStyleOptionViewItem &option,
@@ -66,7 +76,6 @@ public:
 
     bool eventFilter(QObject* object, QEvent* event) Q_DECL_OVERRIDE
     {
-        //qDebug() << "eventFilter" << event;
         if (event->type() != QEvent::FocusOut)
         {
             ImageLoaderWidget* editor = qobject_cast<ImageLoaderWidget*>(object);
@@ -75,26 +84,17 @@ public:
                 emit commitData(editor);
             }
         }
-        bool res = QSqlRelationalDelegate::eventFilter(object, event);
+        bool res = QItemDelegate::eventFilter(object, event);
         return res;
     }
 
 protected:
     QWidget *createEditor(QWidget *, const QStyleOptionViewItem &, const QModelIndex &) const Q_DECL_OVERRIDE;
-//    bool editorEvent(QEvent * event,
-//                     QAbstractItemModel * model,
-//                     const QStyleOptionViewItem & option,
-//                     const QModelIndex & index) Q_DECL_OVERRIDE
-//    {
-//        qDebug() << "editorEvent" << event << index;
-//        return QSqlRelationalDelegate::editorEvent(event,
-//                                                   model,
-//                                                   option,
-//                                                   index);
-//    }
+
+
 };
 
-
+//----------------------------------------------------------------------------------------------------------
 
 class MySortFilterProxyModel : public QSortFilterProxyModel
 {
@@ -110,23 +110,14 @@ protected:
     bool lessThan(const QModelIndex &left, const QModelIndex &right) const Q_DECL_OVERRIDE;
 
 private:
+    QSqlRelationalTableModel *sqlModel;
     QVector<int> columnsForSort;
     QVector<QStringList> filters;
 };
 
 
 
-
-
-
-
-
-
-
-
-
-
-
+//----------------------------------------------------------------------------------------------------------
 
 
 namespace Ui {
@@ -142,19 +133,26 @@ public:
     void setSqlTable(const QString& table,
                      const QString& whereStatement = "",
                      QMap<QString, QVariant> columnValue = QMap<QString, QVariant>());
-    void updateData();
+    void updateMyData(int row = -1);
     ~SqlTableManager();
+    QModelIndex getUidIndexOfSelectedRow();
 
+
+
+private:
+    void saveToExcel();
+private slots:
+    void submitAllChanges();
 
 
 private:
     Ui::SqlTableManager *ui;
     ColumnAlignedLayout *alignedLayout;
     QSqlRelationalTableModel *model;
-
-private slots:
-    void invalidateAlignedLayout();
+    MySortFilterProxyModel *proxyModel;
 };
 
 #endif // SQLTABLEMANAGER_H
+
+
 

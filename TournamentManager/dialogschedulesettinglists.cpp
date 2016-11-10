@@ -90,8 +90,6 @@ DialogScheduleSettingLists::DialogScheduleSettingLists(QWidget *parent, const lo
     }
     ui->tableWidget->resizeColumnsToContents();
 
-    //HandbookDialog * dlg = new HandbookDialog("RING_TATAMI_LISTS", "Список", QSqlDatabase::database());
-    //    dlg->exec();
 }
 
 DialogScheduleSettingLists::~DialogScheduleSettingLists()
