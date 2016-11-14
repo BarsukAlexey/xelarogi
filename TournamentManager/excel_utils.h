@@ -4,6 +4,18 @@
 #include <QAxObject>
 #include <QString>
 #include <QVector>
+#include <QDate>
+#include <QDebug>
+#include <QVector>
+#include <QFile>
+#include <QDebug>
+#include <QVariant>
+#include <QDir>
+#include <QMessageBox>
+
+#include <windows.h>
+#include <w32api.h>
+#include <tlhelp32.h>
 
 // http://www.wiki.crossplatform.ru/index.php/%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0_%D1%81_MS_Office_%D1%81_%D0%BF%D0%BE%D0%BC%D0%BE%D1%89%D1%8C%D1%8E_ActiveQt
 // http://www.forum.crossplatform.ru/lofiversion/index.php/t2450.html
@@ -56,12 +68,15 @@ public:
     static void setTournamentName(QAxObject* sheet, QString text, int row0, int column0, int row1, int column1);
 
     static QString getValue(QAxObject* sheet, int row, int column);
+    static QVariant get(QAxObject* sheet, int row, int column);
 
     static void setFooter(QAxObject* sheet, int row, int column0, int column1, int height, QVector<std::pair<int, QString>> what, QVector<QString> namsses);
 
     static QAxObject* addNewSheet(QAxObject* sheets);
 
     static void normalizeColumnWidth(QAxObject* sheet, int column, int infWidth = 50);
+
+    static bool checkExcel();
 };
 
 #endif // EXCELUTILS_H

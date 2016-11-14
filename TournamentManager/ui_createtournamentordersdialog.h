@@ -16,7 +16,6 @@
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
-#include <QtWidgets/QLabel>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QVBoxLayout>
 #include "sqltablemanager.h"
@@ -29,10 +28,9 @@ public:
     QVBoxLayout *verticalLayout;
     SqlTableManager *widget;
     QHBoxLayout *horizontalLayout;
-    QPushButton *loadBtn;
+    QPushButton *pushButtonLoad;
     QPushButton *pushButtonChangeCategory;
     QPushButton *pushButtonShowGrid;
-    QLabel *label_4;
 
     void setupUi(QDialog *CreateTournamentOrdersDialog)
     {
@@ -53,10 +51,10 @@ public:
 
         horizontalLayout = new QHBoxLayout();
         horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
-        loadBtn = new QPushButton(CreateTournamentOrdersDialog);
-        loadBtn->setObjectName(QStringLiteral("loadBtn"));
+        pushButtonLoad = new QPushButton(CreateTournamentOrdersDialog);
+        pushButtonLoad->setObjectName(QStringLiteral("pushButtonLoad"));
 
-        horizontalLayout->addWidget(loadBtn);
+        horizontalLayout->addWidget(pushButtonLoad);
 
         pushButtonChangeCategory = new QPushButton(CreateTournamentOrdersDialog);
         pushButtonChangeCategory->setObjectName(QStringLiteral("pushButtonChangeCategory"));
@@ -71,11 +69,6 @@ public:
 
         verticalLayout->addLayout(horizontalLayout);
 
-        label_4 = new QLabel(CreateTournamentOrdersDialog);
-        label_4->setObjectName(QStringLiteral("label_4"));
-
-        verticalLayout->addWidget(label_4);
-
 
         retranslateUi(CreateTournamentOrdersDialog);
 
@@ -85,10 +78,9 @@ public:
     void retranslateUi(QDialog *CreateTournamentOrdersDialog)
     {
         CreateTournamentOrdersDialog->setWindowTitle(QApplication::translate("CreateTournamentOrdersDialog", "\320\224\320\276\320\261\320\260\320\262\320\273\320\265\320\275\320\270\320\265 \320\267\320\260\321\217\320\262\320\276\320\272 \320\272 \321\202\321\203\321\200\320\275\320\270\321\200\321\203", 0));
-        loadBtn->setText(QApplication::translate("CreateTournamentOrdersDialog", "\320\227\320\260\320\263\321\200\321\203\320\267\320\270\321\202\321\214 \320\270\320\267 excel", 0));
+        pushButtonLoad->setText(QApplication::translate("CreateTournamentOrdersDialog", "\320\227\320\260\320\263\321\200\321\203\320\267\320\270\321\202\321\214 \320\270\320\267 excel", 0));
         pushButtonChangeCategory->setText(QApplication::translate("CreateTournamentOrdersDialog", "\320\241\320\274\320\265\320\275\320\270\321\202\321\214 \320\272\320\260\321\202\320\265\320\263\320\276\321\200\320\270\321\216 \321\203\321\207\320\260\321\201\321\202\320\275\320\270\320\272\320\260....", 0));
         pushButtonShowGrid->setText(QApplication::translate("CreateTournamentOrdersDialog", "\320\237\320\276\320\272\320\260\320\267\320\260\321\202\321\214 \321\201\320\265\321\202\320\272\321\203", 0));
-        label_4->setText(QApplication::translate("CreateTournamentOrdersDialog", "*\320\237\320\265\321\200\320\265\320\264 \320\267\320\260\320\263\321\200\321\203\320\267\320\272\320\276\320\271 \320\267\320\260\321\217\320\262\320\276\320\272 \320\267\320\260\320\272\321\200\321\213\321\202\321\214 Excel \320\270 \320\262\321\201\320\265 \320\265\320\263\320\276 \320\277\321\200\320\276\321\206\320\265\321\201\321\201\321\213 \320\262 \320\264\320\270\321\201\320\277\320\265\321\202\321\207\320\265\321\200\320\265 \320\267\320\260\320\264\320\260\321\207", 0));
     } // retranslateUi
 
 };

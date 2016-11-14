@@ -77,11 +77,9 @@ void connectDB()
 }
 
 
-//#include "dialogsqltablemanager.h"
+
 #include "createtournamentordersdialog.h"
-
-
-
+#include "createtournamentcategoriesdialog.h"
 
 int main(int argc, char *argv[])
 {
@@ -96,8 +94,37 @@ int main(int argc, char *argv[])
     //auth();
     connectDB();
 
-    //DialogSqlTableManager dlg(0, "TOURNAMENTS"); dlg.showMaximized(); return dlg.exec();
-    CreateTournamentOrdersDialog dlg(21, 0, "LOLKA", "OLOLLOEV"); return dlg.exec();
+
+//    QMap<QString, QVariant> map;
+//    map["COUNTRY_FK"] = 278;
+//    DialogSqlTableManager dlg(0, "CLUBS", "",  map);
+//    dlg.setVisibleShit("LOLKA");
+//    dlg.showMaximized();
+//    dlg.exec();
+//    qDebug() << "dlg.exec(): " << dlg.getUID();
+//    return 0;
+
+
+//    qDebug() << QDate::fromString("01.2.2011", "d.M.yyyy");
+//    return 0;
+
+    CreateTournamentCategoriesDialog dlg(21);
+    dlg.open();
+
+    CreateTournamentOrdersDialog dlg2(21);
+    dlg2.resize(dlg.size().width() * 2, dlg.size().height());
+    dlg2.open();
+
+
+//    DialogSqlTableManager dd(0, "CLUBS");
+//    dd.open();
+
+//    DialogSqlTableManager ddd(0, "COACHS");
+//    ddd.open();
+
+//    DialogSqlTableManager ddd(0, "REGION_UNITS");
+//     ddd.open();
+    //return dlg.exec();
     //qDebug() << findUidToutnamentCategory(21, QDate(1991, 6, 9), 3, 60, 1393);
 
     return a.exec();

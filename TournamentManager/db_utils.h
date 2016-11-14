@@ -75,44 +75,7 @@ public:
     static QString getSecondNameAndFirstName(long long UID);
     static QString getSecondNameAndOneLetterOfName(long long UID);
     static QSet<long long> getSetOfOrdersInTournamentCategory(long long uidTournamentCategory); // TODO DELETE ?
-    static int findUidToutnamentCategory(int tournamentUID, QDate birthday, int sexUID, double weight, int typeUID)
-    {
-        int age = Utils::getAge(birthday, DBUtils::get("DATE_WEIGHTING", "TOURNAMENTS", tournamentUID).toDate());
-        QSqlQuery query;
-        if (!query.prepare("SELECT * "
-                           "FROM TOURNAMENT_CATEGORIES "
-                           "WHERE "
-                           "    TOURNAMENT_FK = ? AND "
-                           "    TYPE_FK = ? AND "
-                           "    SEX_FK = ? AND "
-                           "    AGE_FROM <= ? AND ? <= AGE_TILL AND "
-                           "    WEIGHT_FROM + 1e-7 < ? AND ? < WEIGHT_TILL + 1e-7 "
-                           ))
-        {
-            qDebug() << query.lastError();
-            return -1;
-        }
-        query.addBindValue(tournamentUID);
-        query.addBindValue(typeUID);
-        query.addBindValue(sexUID);
-        query.addBindValue(age);
-        query.addBindValue(age);
-        query.addBindValue(weight);
-        query.addBindValue(weight);
-
-        qDebug() << tournamentUID << birthday << sexUID << weight << typeUID;
-
-        if (!query.exec())
-        {
-            qDebug() << query.lastError();
-            return -1;
-        }
-        if (query.next())
-        {
-            return query.value("UID").toInt();
-        }
-        return -1;
-    }
+    static int findUidToutnamentCategory(int tournamentUID, QDate birthday, int sexUID, double weight, int typeUID);
 
 
 

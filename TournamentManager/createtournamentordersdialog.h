@@ -6,6 +6,8 @@
 #include "dialogtournamentgrid.h"
 #include "errormessagesdialog.h"
 #include "excel_utils.h"
+#include "dialogsqltablemanager.h"
+#include "errormessagesdialog.h"
 
 #include <QAction>
 #include <QAxBase>
@@ -44,44 +46,28 @@ class CreateTournamentOrdersDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit CreateTournamentOrdersDialog(
-                                            long long tournamentUID,
-                                            QWidget *parent = 0,
-                                            QString filterSecondName = "",
-                                            QString filterFirstName = ""
-                                          );
+    explicit CreateTournamentOrdersDialog(int tournamentUID,
+                                          QWidget *parent = 0,
+                                          QString filterSecondName = "",
+                                          QString filterFirstName = "");
     ~CreateTournamentOrdersDialog();
 
 private slots:
     void loadFromExcel();
 
 private:
-    int getGenderUID(QString genderName);
-    int getTypeUID(QString typeName);
+    int getGenderUID(const QString& gender);
 
-
-    QVariant getSportCategoryUID(QString categoryName);
-
-    QVariant getCountryUID(QString countryName);
-    QVariant getRegionUID(QString regionName, long long countryUID);
-    QVariant getRegionUnitUID(QString unitName, long long regionUID, long long countryUID);
-
-    QVariant getClubUID(QString clubName, long long coutryUID, long long regionUID, long long unitUID);
-    QVariant getCoachUID(QString coachName, long long clubUID);
-
-
+    int getUID(QString& name,
+               const QString& table,
+               QMap<QString, QString>& mapNames,
+               const QMap<QString, QVariant>& map = QMap<QString, QVariant>());
 
 private slots:
-    //void onPushButtonChangeCategory();
 
 private:
     Ui::CreateTournamentOrdersDialog *ui;
-    long long tournamentUID;
-    QString globalError = "";
-
-    QHash<QString, QString> mCountry;
-    QHash<QString, QString> mRegion;
-    QHash<QString, QString> mType;
+    const int tournamentUID;
 };
 
 #endif // CREATETOURNAMENTORDERSDIALOG_H

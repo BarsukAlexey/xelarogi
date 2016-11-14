@@ -21,9 +21,13 @@ public:
                                    const QString& whereStatement = "",
                                    QMap<QString, QVariant> columnValue = QMap<QString, QVariant>());
     ~DialogSqlTableManager();
+    void setVisibleShit(const QString& text, const QString& newName);
+    int getUID();
 
 private:
     Ui::DialogSqlTableManager *ui;
+    QModelIndex index;
+    QString newName;
 };
 
 #endif // DIALOGSQLTABLEMANAGER_H

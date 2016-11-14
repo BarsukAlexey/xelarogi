@@ -158,6 +158,45 @@ QSet<long long> DBUtils::getSetOfOrdersInTournamentCategory(long long uidTournam
     return set;
 }
 
+int DBUtils::findUidToutnamentCategory(int tournamentUID, QDate birthday, int sexUID, double weight, int typeUID)
+{
+    int age = Utils::getAge(birthday, DBUtils::get("DATE_WEIGHTING", "TOURNAMENTS", tournamentUID).toDate());
+    QSqlQuery query;
+    if (!query.prepare("SELECT * "
+                       "FROM TOURNAMENT_CATEGORIES "
+                       "WHERE "
+                       "    TOURNAMENT_FK = ? AND "
+                       "    TYPE_FK = ? AND "
+                       "    SEX_FK = ? AND "
+                       "    AGE_FROM <= ? AND ? <= AGE_TILL AND "
+                       "    WEIGHT_FROM + 1e-7 < ? AND ? < WEIGHT_TILL + 1e-7 "
+                       ))
+    {
+        qDebug() << query.lastError();
+        return -1;
+    }
+    query.addBindValue(tournamentUID);
+    query.addBindValue(typeUID);
+    query.addBindValue(sexUID);
+    query.addBindValue(age);
+    query.addBindValue(age);
+    query.addBindValue(weight);
+    query.addBindValue(weight);
+
+    //qDebug() << tournamentUID << birthday << sexUID << weight << typeUID;
+
+    if (!query.exec())
+    {
+        qDebug() << query.lastError();
+        return -1;
+    }
+    if (query.next())
+    {
+        return query.value("UID").toInt();
+    }
+    return -1;
+}
+
 
 QVector<QString> DBUtils::getJudges(long long tournamentUID)
 {
@@ -170,10 +209,10 @@ QVector<QString> DBUtils::getJudges(long long tournamentUID)
 QVector<std::tuple<int, int, int, int> > DBUtils::get_MAX_UID_TC___TYPE_FK___AGE_FROM___AGE_TILL(const int tournamentUID)
 {
     QSqlQuery query("SELECT MAX(UID) as MAX_UID_TC, TYPE_FK, AGE_FROM, AGE_TILL "
-                                    "FROM TOURNAMENT_CATEGORIES "
-                                    "WHERE TOURNAMENT_FK = ? "
-                                    "GROUP BY TYPE_FK, AGE_FROM, AGE_TILL "
-                                    "ORDER BY TYPE_FK, AGE_FROM, AGE_TILL");
+                    "FROM TOURNAMENT_CATEGORIES "
+                    "WHERE TOURNAMENT_FK = ? "
+                    "GROUP BY TYPE_FK, AGE_FROM, AGE_TILL "
+                    "ORDER BY TYPE_FK, AGE_FROM, AGE_TILL");
     query.addBindValue(tournamentUID);
     if (!query.exec())
     {

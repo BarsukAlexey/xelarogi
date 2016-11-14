@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui sql axcontainer printsupport #webkitwidgets
+QT       += core gui sql axcontainer printsupport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -13,6 +13,7 @@ CONFIG += c++11
 TARGET = TournamentManager
 TEMPLATE = app
 
+LIBS     += libgdi32
 
 
 SOURCES += main.cpp \
@@ -30,17 +31,16 @@ SOURCES += main.cpp \
     createtournamentordersdialog.cpp \
     sqltablemanager.cpp \
     dialogsqltablemanager.cpp \
-    imageloaderwidget.cpp
-
+    imageloaderwidget.cpp \
+    errormessagesdialog.cpp \
+    createtournamentcategoriesdialog.cpp \
+    generatetournamentcategoriesdialog.cpp \
 
 #    fiting_distribution.cpp \
 #    mainwindow.cpp \
-#    createtournamentcategoriesdialog.cpp \
 #    fighting_pairs.cpp \
 #    weighing_protocol.cpp \
 #    winner_report.cpp \
-#    generatetournamentcategoriesdialog.cpp \
-#    errormessagesdialog.cpp \
 #    report_manda.cpp \
 #    report_ministr.cpp \
 #    mythread.cpp \
@@ -66,17 +66,17 @@ HEADERS  += logindialog.h \
     createtournamentordersdialog.h \
     sqltablemanager.h \
     dialogsqltablemanager.h \
-    imageloaderwidget.h
+    imageloaderwidget.h \
+    errormessagesdialog.h \
+    createtournamentcategoriesdialog.h \
+    generatetournamentcategoriesdialog.h \
 
 #    fiting_distribution.h \
 #    mainwindow.h \
 
-#    createtournamentcategoriesdialog.h \
 #    fighting_pairs.h \
 #    weighing_protocol.h \
 #    winner_report.h \
-#    generatetournamentcategoriesdialog.h \
-#    errormessagesdialog.h \
 #    report_manda.h \
 #    report_ministr.h \
 #    mythread.h \
@@ -98,12 +98,12 @@ FORMS +=  logindialog.ui \
     createtournamentordersdialog.ui \
     sqltablemanager.ui \
     dialogsqltablemanager.ui \
-    imageloaderwidget.ui
+    imageloaderwidget.ui \
+    errormessagesdialog.ui \
+    createtournamentcategoriesdialog.ui \
+    generatetournamentcategoriesdialog.ui \
 
 #    mainwindow.ui \
-#    createtournamentcategoriesdialog.ui \
-#    generatetournamentcategoriesdialog.ui \
-#    errormessagesdialog.ui \
 #    formdipl.ui \
 #    fighting_pairs.ui \
 #    dialogschedule.ui \

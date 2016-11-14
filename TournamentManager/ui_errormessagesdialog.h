@@ -43,7 +43,7 @@ public:
         buttonBox = new QDialogButtonBox(ErrorMessagesDialog);
         buttonBox->setObjectName(QStringLiteral("buttonBox"));
         buttonBox->setOrientation(Qt::Horizontal);
-        buttonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
+        buttonBox->setStandardButtons(QDialogButtonBox::Ok);
 
         gridLayout->addWidget(buttonBox, 1, 0, 1, 1);
 

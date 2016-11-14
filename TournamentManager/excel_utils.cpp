@@ -1,10 +1,6 @@
 #include "excel_utils.h"
 
-#include <QVector>
-#include <QFile>
-#include <QDebug>
-#include <QVariant>
-#include <QDir>
+
 
 
 
@@ -178,11 +174,15 @@ QString ExcelUtils::getValue(QAxObject* sheet, int row, int column)
     QAxObject* cell = sheet->querySubObject("Cells( int, int )", row, column);
     QString value = cell->dynamicCall("Value()").toString().simplified();
     delete cell;
-    if (value.isNull())
-    {
-        return "";
-    }
     return value;
+}
+
+QVariant ExcelUtils::get(QAxObject* sheet, int row, int column)
+{
+    QAxObject* cell = sheet->querySubObject("Cells( int, int )", row, column);
+    QVariant var = cell->dynamicCall("Value()");
+    delete cell;
+    return var;
 }
 
 void ExcelUtils::setFooter(QAxObject* sheet, int row, int column0, int column1, int height, QVector<std::pair<int, QString> > what, QVector<QString> names){
@@ -216,4 +216,39 @@ void ExcelUtils::normalizeColumnWidth(QAxObject* sheet, int column, int infWidth
         pColumn->setProperty("ColumnWidth", 8.43);
     }
     delete pColumn;
+}
+
+bool ExcelUtils::checkExcel()
+{
+
+    HANDLE hSnap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+    if (hSnap == NULL)
+    {
+        QMessageBox::critical(0, "Error!", "Error Load ToolHelp", QMessageBox::Close);
+        return false;
+    }
+
+    PROCESSENTRY32 proc = { sizeof(proc) };
+
+    if (Process32First(hSnap, &proc))
+    {
+        while (Process32Next(hSnap, &proc))
+        {
+            QString name;
+            for(int pos = 0; proc.szExeFile[pos]; ++pos)
+                name[pos] = proc.szExeFile[pos];
+            //qDebug() << name;
+            if (name.compare("excel.exe", Qt::CaseInsensitive) == 0)
+            {
+                QMessageBox::critical(0, "",
+                                      "Откройте диспетчер задач.\n"
+                                      "Перейдите на вкладку \"Подробности\"\n"
+                                      "Найдите все \"excel.exe\"\n"
+                                      "Нажмите кнопку \"Снять задачу\"\n",
+                                      QMessageBox::Close);
+                return true;
+            }
+        }
+    }
+    return false;
 }

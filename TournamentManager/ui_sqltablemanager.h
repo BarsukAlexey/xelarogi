@@ -66,7 +66,7 @@ public:
 
         tableView_2 = new QTableView(layoutWidget);
         tableView_2->setObjectName(QStringLiteral("tableView_2"));
-        tableView_2->setSelectionMode(QAbstractItemView::SingleSelection);
+        tableView_2->setSelectionMode(QAbstractItemView::MultiSelection);
         tableView_2->setSelectionBehavior(QAbstractItemView::SelectRows);
         tableView_2->setSortingEnabled(true);
 

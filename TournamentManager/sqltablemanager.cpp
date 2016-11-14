@@ -63,7 +63,7 @@ void ColumnAlignedLayout::setGeometry(const QRect& r)
 
 
 MyQSqlRelationalDelegate::MyQSqlRelationalDelegate(QObject* parent, QMap<int, QVariant> columnDefaultValue) :
-    QSqlRelationalDelegate(parent),
+    QItemDelegate(parent),
     columnDefaultValue(columnDefaultValue)
 {
 }
@@ -78,10 +78,10 @@ QWidget* MyQSqlRelationalDelegate::createEditor(QWidget* parent, const QStyleOpt
         return createEditor(parent, i, sourceIndex);
     }
 
-    const QSqlRelationalTableModel *sqlModel =
-            qobject_cast<const QSqlRelationalTableModel *>(index.model());
+    const MyQSqlRelationalTableModel *sqlModel =
+            qobject_cast<const MyQSqlRelationalTableModel *>(index.model());
     if (!sqlModel)
-        return QSqlRelationalDelegate::createEditor(parent, i, index);
+        return QItemDelegate::createEditor(parent, i, index);
 
     QSqlField field = sqlModel->record().field(index.column());
     if (QString::compare(field.name(), "UID", Qt::CaseInsensitive) == 0)
@@ -100,11 +100,100 @@ QWidget* MyQSqlRelationalDelegate::createEditor(QWidget* parent, const QStyleOpt
         return imageLoaderWidget;
     }
 
+
+
+    if (sqlModel->relationModel(index.column()))
+    {
+        if (sqlModel->tableName() == "ORDERS" && sqlModel->fieldIndex("TOURNAMENT_CATEGORY_FK") == index.column())
+        {
+            return 0;
+        }
+
+        QString whereStatement = "";
+
+        if (sqlModel->fieldIndex("REGION_FK") == index.column())
+        {
+            whereStatement = "COUNTRY_FK = " + sqlModel->index(index.row(), sqlModel->fieldIndex("COUNTRY_FK")).data(Qt::EditRole).toString();
+        }
+        if (sqlModel->fieldIndex("REGION_UNIT_FK") == index.column())
+        {
+            whereStatement = "REGION_FK = " + sqlModel->index(index.row(), sqlModel->fieldIndex("REGION_FK")).data(Qt::EditRole).toString();
+        }
+        if (sqlModel->fieldIndex("CLUB_FK") == index.column() && sqlModel->tableName() == "ORDERS")
+        {
+            whereStatement = "REGION_UNIT_FK = " + sqlModel->index(index.row(), sqlModel->fieldIndex("REGION_UNIT_FK")).data(Qt::EditRole).toString();
+        }
+        if (sqlModel->fieldIndex("COACH_FK") == index.column() && sqlModel->tableName() == "ORDERS")
+        {
+            whereStatement = "CLUB_FK = " + sqlModel->index(index.row(), sqlModel->fieldIndex("CLUB_FK")).data(Qt::EditRole).toString();
+        }
+        if (sqlModel->fieldIndex("SEX_FK") == index.column() && sqlModel->tableName() == "ORDERS")
+        {
+            QString str;
+            {
+                QSqlQuery q;
+                q.prepare("SELECT DISTINCT SEX_FK FROM TOURNAMENT_CATEGORIES WHERE TOURNAMENT_FK = ?");
+                int uidTC = sqlModel->index(index.row(), sqlModel->fieldIndex("TOURNAMENT_CATEGORY_FK")).data(Qt::EditRole).toInt();
+                int uidT = DBUtils::get("TOURNAMENT_FK", "TOURNAMENT_CATEGORIES", uidTC).toInt();
+                q.addBindValue(uidT);
+                q.exec();
+                while(q.next())
+                {
+                    if (!str.isEmpty()) str += ", ";
+                    str += q.value("SEX_FK").toString();
+                }
+                //qDebug() << str;
+            }
+            whereStatement = "UID IN (" + str + ")";
+        }
+        if (sqlModel->fieldIndex("TYPE_FK") == index.column() && sqlModel->tableName() == "ORDERS")
+        {
+            QString str;
+            {
+                QSqlQuery q;
+                q.prepare("SELECT DISTINCT TYPE_FK FROM TOURNAMENT_CATEGORIES WHERE TOURNAMENT_FK = ?");
+                int uidTC = sqlModel->index(index.row(), sqlModel->fieldIndex("TOURNAMENT_CATEGORY_FK")).data(Qt::EditRole).toInt();
+                int uidT = DBUtils::get("TOURNAMENT_FK", "TOURNAMENT_CATEGORIES", uidTC).toInt();
+                q.addBindValue(uidT);
+                q.exec();
+                while(q.next())
+                {
+                    if (!str.isEmpty()) str += ", ";
+                    str += q.value("TYPE_FK").toString();
+                }
+                //qDebug() << str;
+            }
+            whereStatement = "UID IN (" + str + ")";
+        }
+
+
+        QSqlTableModel *childModel = sqlModel->relationModel(index.column(), parent, whereStatement);
+        int seletedRow = -1;
+        for (int r = 0; r < childModel->rowCount(); ++r)
+        {
+            if (childModel->index(r, 0).data().toInt() == index.data(Qt::EditRole).toInt())
+            {
+                seletedRow = r;
+                break;
+            }
+        }
+        //qDebug() << "seletedRow: " << seletedRow;
+
+        QComboBox *combo = new QComboBox(parent);
+        combo->setModel(childModel);
+        combo->setModelColumn(sqlModel->displayColumn(index.column()));
+        combo->setMaxVisibleItems(1000);
+        combo->setCurrentIndex(seletedRow);
+        combo->installEventFilter(const_cast<MyQSqlRelationalDelegate *>(this));
+        return combo;
+    }
+
     if(field.type() == QVariant::Int)
     {
         QSpinBox* spinBox = new QSpinBox(parent);
         spinBox->setMaximum(100500);
         spinBox->setValue(index.data().toInt());
+        // installEventFilter ???
         return spinBox;
     }
 
@@ -114,79 +203,32 @@ QWidget* MyQSqlRelationalDelegate::createEditor(QWidget* parent, const QStyleOpt
     {
         QDateEdit *dateEdit = new QDateEdit(parent);
         dateEdit->setDate(index.data(Qt::EditRole).toDate());
+        // installEventFilter ???
         return dateEdit;
     }
 
 
-    if (sqlModel->relationModel(index.column()))
-    {
-        QWidget* editor = QSqlRelationalDelegate::createEditor(parent, i, index);
-        QComboBox *combo = qobject_cast<QComboBox *>(editor);
 
-        QSqlTableModel *childModel = qobject_cast<QSqlTableModel *>(combo->model());
-        while (childModel && childModel->canFetchMore())
-        {
-            childModel->fetchMore();
-        }
-        combo->setMaxVisibleItems(1000);
-        if (sqlModel->isDirty(index))
-        {
-            int uidChild = index.data(Qt::EditRole).toInt();
-            for (int r = 0; r < childModel->rowCount(); ++r)
-            {
-                if (childModel->data(childModel->index(r, 0)).toInt() == uidChild)
-                {
-                    combo->setCurrentIndex(r);
-                    break;
-                }
-            }
-        }
-        return editor;
-    }
-    return QSqlRelationalDelegate::createEditor(parent, i, index);
+    return QItemDelegate::createEditor(parent, i, index);
 }
 
-//bool MySqlRelationalDelegate::editorEvent(QEvent* event, QAbstractItemModel* model,
-//                                          const QStyleOptionViewItem& option, const QModelIndex& index)
-//{
-//    MySortFilterProxyModel *proxyModel =
-//            qobject_cast<MySortFilterProxyModel *>(model);
-//    if (proxyModel)
-//    {
-//        return editorEvent(event, proxyModel->sourceModel(), option, proxyModel->mapToSource(index));
-//    }
-
-//    const QSqlRelationalTableModel *sqlModel =
-//            qobject_cast<const QSqlRelationalTableModel *>(index.model());
-//    if (!sqlModel)
-//        return QSqlRelationalDelegate::editorEvent(event, model, option, index);
-//    if (QString::compare(sqlModel->record().field(index.column()).name(), "FLAG", Qt::CaseInsensitive) == 0)
-//    {
-//        qDebug() << "editorEvent:: " << event->type();
-//    }
-
-//    bool res = QSqlRelationalDelegate::editorEvent(event, model, option, index);
-//    qDebug() << res << event->type();
-//    return res;
-
-//}
-
-
-
-void MyQSqlRelationalDelegate::setModelData(QWidget* editor, QAbstractItemModel* model, const QModelIndex& index) const
+void MyQSqlRelationalDelegate::setModelData(QWidget* editor,
+                                            QAbstractItemModel* model,
+                                            const QModelIndex& _index) const
 {
     MySortFilterProxyModel *proxyModel = qobject_cast<MySortFilterProxyModel *>(model);
 
+    QModelIndex index = _index;
     if (proxyModel)
     {
-        setModelData(editor, proxyModel->sourceModel(),  proxyModel->mapToSource(index));
-        return;
+        index = proxyModel->mapToSource(index);
+        model = proxyModel->sourceModel();
     }
 
-    QSqlRelationalTableModel *sqlModel = qobject_cast<QSqlRelationalTableModel *>(model);
+    MyQSqlRelationalTableModel *sqlModel = qobject_cast<MyQSqlRelationalTableModel *>(model);
     if (!sqlModel)
     {
-        QSqlRelationalDelegate::setModelData(editor, model, index);
+        QItemDelegate::setModelData(editor, model, index);
         return;
     }
 
@@ -197,18 +239,31 @@ void MyQSqlRelationalDelegate::setModelData(QWidget* editor, QAbstractItemModel*
         sqlModel->setData(sqlModel->index(index.row(), iter.key()), iter.value());
     }
 
+
+
     QSqlField field = sqlModel->record().field(index.column());
 
-    if(field.type() == QVariant::Int)
-    {
-        QSpinBox* spinBox = qobject_cast<QSpinBox *>(editor);
-        sqlModel->setData(index, spinBox->value(), Qt::EditRole);
-    }
-    else if (QString::compare(field.name(), "FLAG", Qt::CaseInsensitive) == 0)
+    if (QString::compare(field.name(), "FLAG", Qt::CaseInsensitive) == 0)
     {
         ImageLoaderWidget* imgLoader = qobject_cast<ImageLoaderWidget *>(editor);
         QString base64Image = imgLoader->getBase64Image();
         sqlModel->setData(index, base64Image, Qt::EditRole);
+    }
+    else if (sqlModel->relationModel(index.column()))
+    {
+        QComboBox *combo = qobject_cast<QComboBox *>(editor);
+        QSqlTableModel *childModel = qobject_cast<QSqlTableModel *>(combo->model());
+        int currentItem = combo->currentIndex();
+        QVariant data = childModel->index(currentItem, 0).data(Qt::EditRole);
+        //qDebug() << data;
+        sqlModel->setData(index,
+                          data.toInt(),
+                          Qt::EditRole);
+    }
+    else if(field.type() == QVariant::Int)
+    {
+        QSpinBox* spinBox = qobject_cast<QSpinBox *>(editor);
+        sqlModel->setData(index, spinBox->value(), Qt::EditRole);
     }
     else if (field.name().startsWith("DATE", Qt::CaseInsensitive) ||
              field.name().compare("BIRTHDATE", Qt::CaseInsensitive) == 0)
@@ -218,32 +273,55 @@ void MyQSqlRelationalDelegate::setModelData(QWidget* editor, QAbstractItemModel*
     }
     else
     {
-        QSqlRelationalDelegate::setModelData(editor, model, index);
+        QItemDelegate::setModelData(editor, sqlModel, index);
     }
+
 
 
     if (sqlModel->tableName() == "ORDERS")
     {
-        int uidTC = sqlModel->data(sqlModel->index(index.row(), sqlModel->fieldIndex("TOURNAMENT_CATEGORY_FK"))).toInt();
+        int sexUID     = sqlModel->index(index.row(), sqlModel->fieldIndex("SEX_FK"    )).data(Qt::EditRole).toInt();
+        int typeUID    = sqlModel->index(index.row(), sqlModel->fieldIndex("TYPE_FK"   )).data(Qt::EditRole).toInt();
+        double weight  = sqlModel->index(index.row(), sqlModel->fieldIndex("WEIGHT"    )).data(Qt::EditRole).toDouble();
+        QDate birthday = sqlModel->index(index.row(), sqlModel->fieldIndex("BIRTHDATE" )).data(Qt::EditRole).toDate();
+
+        int uidTC = sqlModel->index(index.row(), sqlModel->fieldIndex("TOURNAMENT_CATEGORY_FK")).data(Qt::EditRole).toInt();
         int uidT = DBUtils::get("TOURNAMENT_FK", "TOURNAMENT_CATEGORIES", uidTC).toInt();
-        int newUidTc = DBUtils::findUidToutnamentCategory(
-                    uidT,
-                    sqlModel->data(sqlModel->index(index.row(), sqlModel->fieldIndex("BIRTHDATE"))).toDate(),
-                    sqlModel->data(sqlModel->index(index.row(), sqlModel->fieldIndex("SEX_FK"))).toInt(),
-                    sqlModel->data(sqlModel->index(index.row(), sqlModel->fieldIndex("WEIGHT"))).toDouble(),
-                    sqlModel->data(sqlModel->index(index.row(), sqlModel->fieldIndex("TYPE_FK"))).toInt()
-                    );
+        int newUidTc = DBUtils::findUidToutnamentCategory(uidT, birthday, sexUID, weight, typeUID);
+
         QModelIndex indexTC = sqlModel->index(index.row(), sqlModel->fieldIndex("TOURNAMENT_CATEGORY_FK"));
-        qDebug() << "find TC:" << newUidTc;
-        if (newUidTc <= 0)
-        {
-            sqlModel->setData(indexTC, QVariant(), Qt::EditRole);
-        }
-        else
-        {
-            sqlModel->setData(indexTC, newUidTc, Qt::EditRole);
-        }
+//        qDebug() << "old, new:" << uidT << birthday << sexUID << weight << typeUID << uidTC << newUidTc
+//                 << indexTC
+//                 << proxyModel->mapFromSource(indexTC);
+        if (1 <= newUidTc)
+            sqlModel->setData(indexTC, newUidTc);
+
         emit sqlModel->dataChanged(indexTC, indexTC);
+        if (proxyModel)
+            emit proxyModel->dataChanged(proxyModel->mapFromSource(indexTC),
+                                         proxyModel->mapFromSource(indexTC));
+
+        QVector<int> columns;
+        columns
+              << sqlModel->fieldIndex("COUNTRY_FK")
+              << sqlModel->fieldIndex("REGION_FK")
+              << sqlModel->fieldIndex("REGION_UNIT_FK")
+              << sqlModel->fieldIndex("CLUB_FK")
+              << sqlModel->fieldIndex("COACH_FK");
+
+        int startPos = columns.indexOf(index.column());
+        if (startPos != -1)
+        {
+            for (int i = startPos + 1; i < columns.size(); ++i)
+            {
+                QModelIndex ind = sqlModel->index(index.row(), columns[i]);
+                sqlModel->setData(ind, QVariant());
+                emit sqlModel->dataChanged(ind, ind);
+                if (proxyModel)
+                    emit proxyModel->dataChanged(proxyModel->mapFromSource(ind),
+                                                 proxyModel->mapFromSource(ind));
+            }
+        }
     }
 }
 
@@ -260,7 +338,7 @@ void MyQSqlRelationalDelegate::paint(QPainter* painter, const QStyleOptionViewIt
         index = proxyModel->mapToSource(index);
     }
 
-    const QSqlRelationalTableModel *sqlModel = qobject_cast<const  QSqlRelationalTableModel *>(index.model());
+    const MyQSqlRelationalTableModel *sqlModel = qobject_cast<const  MyQSqlRelationalTableModel *>(index.model());
     QSqlField field = sqlModel->record().field(index.column());
 
     if (QString::compare(field.name(), "FLAG", Qt::CaseInsensitive) == 0)
@@ -295,7 +373,7 @@ void MyQSqlRelationalDelegate::paint(QPainter* painter, const QStyleOptionViewIt
     }
     else
     {
-        QSqlRelationalDelegate::paint(painter, option, index);
+        QItemDelegate::paint(painter, option, index);
     }
 }
 
@@ -308,10 +386,10 @@ QSize MyQSqlRelationalDelegate::sizeHint(const QStyleOptionViewItem& option, con
         return sizeHint(option, proxyModel->mapToSource(index));
     }
 
-    const QSqlRelationalTableModel *sqlModel = qobject_cast<const  QSqlRelationalTableModel *>(index.model());
+    const MyQSqlRelationalTableModel *sqlModel = qobject_cast<const  MyQSqlRelationalTableModel *>(index.model());
     if (!sqlModel)
     {
-        return QSqlRelationalDelegate::sizeHint(option, index);
+        return QItemDelegate::sizeHint(option, index);
 
     }
 
@@ -319,7 +397,7 @@ QSize MyQSqlRelationalDelegate::sizeHint(const QStyleOptionViewItem& option, con
     {
         return QSize(300, 100);
     }
-    return QSqlRelationalDelegate::sizeHint(option, index);
+    return QItemDelegate::sizeHint(option, index);
 }
 
 
@@ -350,7 +428,7 @@ void MySortFilterProxyModel::setMyFilter(const int column, const QStringList& fi
 void MySortFilterProxyModel::setSourceModel(QAbstractItemModel* sourceModel)
 {
     QSortFilterProxyModel::setSourceModel(sourceModel);
-    sqlModel = qobject_cast<QSqlRelationalTableModel *>(sourceModel);
+    sqlModel = qobject_cast<MyQSqlRelationalTableModel *>(sourceModel);
 
     QSqlRecord record = QSqlDatabase::database().record(sqlModel->tableName());
     if (sqlModel->tableName() == "TOURNAMENT_CATEGORIES")
@@ -363,11 +441,6 @@ void MySortFilterProxyModel::setSourceModel(QAbstractItemModel* sourceModel)
             << record.indexOf("SEX_FK")
             << record.indexOf("WEIGHT_FROM")
             << record.indexOf("WEIGHT_TILL");
-    }
-    if (sqlModel->tableName() == "TOURNAMENTS")
-    {
-        columnsForSort
-            << record.indexOf("UID");
     }
     if (sqlModel->tableName() == "ORDERS")
     {
@@ -382,6 +455,34 @@ void MySortFilterProxyModel::setSourceModel(QAbstractItemModel* sourceModel)
             << record.indexOf("TOURNAMENT_CATEGORY_FK");
     }
 
+    if (sqlModel->tableName() == "REGIONS")
+    {
+        columnsForSort
+            << record.indexOf("COUNTRY_FK")
+            << record.indexOf("NAME");
+    }
+    if (sqlModel->tableName() == "REGION_UNITS")
+    {
+        columnsForSort
+            << record.indexOf("COUNTRY_FK")
+            << record.indexOf("REGION_FK")
+            << record.indexOf("NAME");
+    }
+
+    if (sqlModel->tableName() == "CLUBS")
+    {
+        columnsForSort
+            << record.indexOf("COUNTRY_FK")
+            << record.indexOf("REGION_FK")
+            << record.indexOf("REGION_UNIT_FK")
+            << record.indexOf("NAME");
+    }
+    if (sqlModel->tableName() == "COACHS")
+    {
+        columnsForSort
+            << record.indexOf("CLUB_FK")
+            << record.indexOf("NAME");
+    }
 }
 
 bool MySortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
@@ -445,7 +546,7 @@ SqlTableManager::SqlTableManager(QWidget *parent) :
 }
 
 void SqlTableManager::setSqlTable(const QString& table,
-                                  const QString& whereStatement,
+                                  QString whereStatement,
                                   QMap<QString, QVariant> columnValue)
 {
     if (model)
@@ -453,19 +554,26 @@ void SqlTableManager::setSqlTable(const QString& table,
         qDebug() << "Повторная попытка setSqlTable";
         return;
     }
-    model = new QSqlRelationalTableModel(this);
+    model = new MyQSqlRelationalTableModel(this);
 
     model->setTable(table);
+
+    QMapIterator<QString, QVariant> iterator(columnValue);
+    while (iterator.hasNext())
+    {
+        iterator.next();
+        if (!whereStatement.isEmpty()) whereStatement += " AND ";
+        whereStatement += iterator.key() + " = " + iterator.value().toString();
+    }
     if (!whereStatement.isEmpty())
+    {
+        //qDebug() << "whereStatement:" << whereStatement;
         model->setFilter(whereStatement);
+    }
 
-    model->setJoinMode(QSqlRelationalTableModel::JoinMode::LeftJoin);
-
-    model->setEditStrategy(QSqlRelationalTableModel::OnManualSubmit);
-
+    model->setEditStrategy(QSqlTableModel::OnManualSubmit);
 
     QMap<QString, QSqlRecord > map = DBUtils::get_NAME_RUS__RELATION_TABLE_NAME();
-    QMap<int, int> columnSortColumn;
     for (int i = 0; i < model->columnCount(); ++i)
     {
         QString eng = model->headerData(i, Qt::Horizontal).toString();
@@ -476,12 +584,14 @@ void SqlTableManager::setSqlTable(const QString& table,
             QString relTable = map[eng].value("RELATION_TABLE_NAME").toString();
             if (!relTable.isEmpty())
             {
-                model->setRelation(model->fieldIndex(eng), QSqlRelation(relTable, "UID", "NAME"));
-                columnSortColumn[i] = map[eng].value("DISPLAY_COLUMN").toInt();
+                model->setRelation(model->fieldIndex(eng), relTable, "NAME");
             }
         }
     }
 
+    model->select();
+    while (model->canFetchMore())
+        model->fetchMore();
 
     QMapIterator<QString, QVariant> iter(columnValue);
     QMap<int, QVariant> columnDefaultValue;
@@ -490,19 +600,8 @@ void SqlTableManager::setSqlTable(const QString& table,
         iter.next();
         columnDefaultValue[model->fieldIndex(iter.key())] = iter.value();
     }
+    this->columnDefaultValue = columnDefaultValue;
 
-    model->select();
-    while (model->canFetchMore())
-        model->fetchMore();
-
-    for (int i = 0; i < model->columnCount(); ++i)
-    {
-        QSqlTableModel* childModel = model->relationModel(i);
-        if (childModel)
-        {
-            childModel->sort(columnSortColumn[i], Qt::AscendingOrder);
-        }
-    }
 
 
     proxyModel = new MySortFilterProxyModel(this);
@@ -532,15 +631,18 @@ void SqlTableManager::setSqlTable(const QString& table,
 
 
     alignedLayout = new ColumnAlignedLayout(ui->widget2222);
+    lineEdits.clear();
     for (int i = 0; i < model->columnCount(); ++i)
     {
         if (columnDefaultValue.contains(i))
         {
             ui->tableView_2->hideColumn(i);
+            lineEdits << 0;
         }
         else
         {
             QLineEdit *edit = new QLineEdit(this);
+            lineEdits << edit;
             edit->setPlaceholderText(model->headerData(i, Qt::Horizontal).toString());
             alignedLayout->addWidget(edit);
             connect(edit, &QLineEdit::textChanged, [i, this](const QString& str){
@@ -565,7 +667,8 @@ void SqlTableManager::setSqlTable(const QString& table,
     connect(ui->pushButtonInsert, &QPushButton::clicked, [this](){
         int row = model->rowCount();
         model->insertRow(row);
-        ui->tableView_2->scrollTo(proxyModel->mapFromSource(model->index(row, 0)), QAbstractItemView::PositionAtCenter);
+        //ui->tableView_2->scrollTo(proxyModel->mapFromSource(model->index(row, 0)), QAbstractItemView::PositionAtCenter);
+        ui->tableView_2->scrollToBottom();
     });
     connect(ui->pushButtonDelete, &QPushButton::clicked, [this](){
         qDebug() << "DELETING";
@@ -589,6 +692,11 @@ void SqlTableManager::setSqlTable(const QString& table,
     });
 }
 
+void SqlTableManager::setFilter(const QString& columnName, const QString& text)
+{
+    lineEdits[model->fieldIndex(columnName)]->setText(text);
+}
+
 void SqlTableManager::updateMyData(int row)
 {
     model->select();
@@ -606,13 +714,46 @@ SqlTableManager::~SqlTableManager()
 
 QModelIndex SqlTableManager::getUidIndexOfSelectedRow()
 {
+    if (model->isDirty())
+    {
+        QMessageBox::warning(0, "", "Сохраните изменения и выберите запись");
+        return QModelIndex();
+    }
+
     QModelIndexList rows = ui->tableView_2->selectionModel()->selectedRows();
+    if (1 < rows.count())
+    {
+        QMessageBox::warning(0, "",
+                             "Количество выделеных строк: " + QString::number(rows.count()) + "\n" +
+                             "Выберите какую-нибудь одну строку");
+        return QModelIndex();
+    }
     if (rows.count())
         return rows[0];
     return QModelIndex();
 }
 
-void SqlTableManager::submitAllChanges()
+bool SqlTableManager::addNewName(const QString& name)
+{
+    QSqlRecord rec = model->record();
+
+    QMapIterator<int, QVariant> iter(columnDefaultValue);
+    while (iter.hasNext()) {
+        iter.next();
+        rec.setValue(iter.key(), iter.value());
+    }
+    rec.setValue("NAME", name);
+    //qDebug() << rec;
+    bool ok = model->insertRecord(-1, rec) && submitAllChanges();
+    if (ok)
+    {
+        updateMyData(proxyModel->mapFromSource(model->index(model->rowCount() - 1, 0)).row());
+        //qDebug() << model->record();
+    }
+    return ok;
+}
+
+bool SqlTableManager::submitAllChanges()
 {
     if (model->submitAll())
     {
@@ -620,14 +761,15 @@ void SqlTableManager::submitAllChanges()
         while (model->canFetchMore())
             model->fetchMore();
         proxyModel->invalidate();
-        //ui->tableView_2->resizeColumnsToContents();
-        alignedLayout->invalidate();
+//        alignedLayout->invalidate();
+        return true;
     }
     else
     {
         qDebug() << model->lastError();
         QMessageBox::warning(this, "", "Некорректные данные:\n" + model->lastError().databaseText() + "\n" + model->lastError().driverText());
         //model->revertAll();
+        return false;
     }
 }
 
@@ -709,3 +851,77 @@ void SqlTableManager::saveToExcel()
 }
 
 
+
+
+MyQSqlRelationalTableModel::MyQSqlRelationalTableModel(QObject* parent) : QSqlTableModel(parent)
+{
+
+}
+
+void MyQSqlRelationalTableModel::setTable(const QString& table)
+{
+    QSqlTableModel::setTable(table);
+
+    int size = QSqlDatabase::database().record(table).count();
+    hashs = QVector<QMap<int, QVariant>>(size);
+    tables = QVector<QString>(size);
+    displayColumns = QVector<int>(size);
+}
+
+QSqlTableModel*MyQSqlRelationalTableModel::relationModel(int column, QObject* parent, const QString& whereStatment) const
+{
+    if (!haveRelation(column))
+        return 0;
+    QSqlTableModel* model = new QSqlTableModel(parent);
+    model->setTable(tables[column]);
+    model->setFilter(whereStatment);
+    model->sort(displayColumns[column], Qt::AscendingOrder);
+    model->select();
+    while (model->canFetchMore())
+        model->fetchMore();
+    return model;
+}
+
+void MyQSqlRelationalTableModel::setRelation(int column, const QString& table, const QString& columnName)
+{
+    tables[column] = table;
+    displayColumns[column] = QSqlDatabase::database().record(table).indexOf(columnName);
+}
+
+QVariant MyQSqlRelationalTableModel::data(const QModelIndex& index, int role) const
+{
+    QVariant data = QSqlTableModel::data(index, role);
+    if (role == Qt::DisplayRole && haveRelation(index.column()))
+    {
+        return hashs[index.column()][data.toInt()];
+    }
+    return data;
+}
+
+bool MyQSqlRelationalTableModel::haveRelation(int column) const
+{
+    return 0 <= column && column < tables.size() && !tables[column].isEmpty();
+}
+
+int MyQSqlRelationalTableModel::displayColumn(int column) const
+{
+    return displayColumns[column];
+}
+
+bool MyQSqlRelationalTableModel::select()
+{
+    bool result = QSqlTableModel::select();
+    for (int c = 0; c < tables.size(); ++c)
+    {
+        hashs[c].clear();
+        if (!haveRelation(c)) continue;
+        QSqlTableModel* model = relationModel(c);
+        for (int r = 0; r < model->rowCount(); ++r)
+        {
+            QSqlRecord record = model->record(r);
+            hashs[c][record.value(0).toInt()] = record.value(displayColumns[c]);
+        }
+        delete model;
+    }
+    return result;
+}

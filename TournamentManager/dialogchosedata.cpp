@@ -400,7 +400,6 @@ void DialogChoseData::onDeleteRow()
 
 void DialogChoseData::onTableClicked(const QModelIndex &index)
 {
-    // TODO
     if (!index.isValid())
         return;
 
