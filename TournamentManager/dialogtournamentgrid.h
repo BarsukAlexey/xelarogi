@@ -99,7 +99,7 @@ public:
 
 private:
     static void generatGrid(const long long tournamentUID, const long long tournamentCaterotyUID, QVector<long long> bestFighters);
-    static bool deleteGrid (const long long uidTC);
+    static void deleteGrid (const long long uidTC);
     QString getLocation(const int orderUID);
     QVector<std::pair<DBUtils::TypeField, QString>> getLocationData();
 

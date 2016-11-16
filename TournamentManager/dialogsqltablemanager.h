@@ -18,10 +18,10 @@ class DialogSqlTableManager : public QDialog
 public:
     explicit DialogSqlTableManager(QWidget *parent,
                                    const QString& table,
-                                   const QString& whereStatement = "",
+                                   const QString& filter = "",
                                    QMap<QString, QVariant> columnValue = QMap<QString, QVariant>());
     ~DialogSqlTableManager();
-    void setVisibleShit(const QString& text, const QString& newName);
+    void setVisibleShit(const QString& text, const QString& newName, bool showAddAsIs = true);
     int getUID();
 
 private:

@@ -1,95 +1,29 @@
 #include "db_utils.h"
 
 
-QVariant DBUtils::get(const QString& field, const QString& table, const QVariant& UID)
+QVariant DBUtils::get(const QString& field, const QString& table, const QVariant& UID, const QString)
 {
     QSqlQuery query("SELECT * FROM " + table + " WHERE UID = ?");
     query.addBindValue(UID);
-    if (query.exec() && query.next())
+    if (!query.exec())
+        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << query.lastError()<< query.lastQuery();
+    if (query.next())
     {
         return query.value(field);
-    }
-    else
-    {
-        //qDebug() << __LINE__ << __PRETTY_FUNCTION__ << PRETTY_FUNCTION << query.lastError()<< query.lastQuery() << "  UID:" << UID << " field:" << field;
     }
     return QVariant();
 }
 
-//QString DBUtils::getField(const QString& field, const QString& table, const QString& UID, QString )
-//{
-//    QSqlQuery query("SELECT * FROM " + table + " WHERE UID = ?");
-//    query.bindValue(0, UID);
-//    if (query.exec() && query.next())
-//    {
-//        return query.value(field).toString();
-//    }
-//    else
-//    {
-//        //qDebug() << __LINE__ << __PRETTY_FUNCTION__ << PRETTY_FUNCTION << query.lastError()<< query.lastQuery() << "  UID:" << UID << " field:" << field;
-//    }
-//    return "";
-//}
-
 QString DBUtils::getField(const QString& field, const QString& table, const QString& UID, QString )
 {
-    QSqlQuery query("SELECT * FROM " + table + " WHERE UID = ?");
-    query.bindValue(0, UID);
-    if (query.exec() && query.next())
-    {
-        return query.value(field).toString();
-    }
-    else
-    {
-        //qDebug() << __LINE__ << __PRETTY_FUNCTION__ << PRETTY_FUNCTION << query.lastError()<< query.lastQuery() << "  UID:" << UID << " field:" << field;
-    }
-    return "";
+    return get(field, table, UID).toString();
 }
 
 QString DBUtils::getField(const QString& field, const QString& table, const long long UID, QString )
 {
-    QSqlQuery query("SELECT * FROM " + table + " WHERE UID = ?");
-    query.bindValue(0, UID);
-    if (query.exec() && query.next())
-    {
-        return query.value(field).toString();
-    }
-    else
-    {
-        //qDebug() << __LINE__ << __PRETTY_FUNCTION__ << PRETTY_FUNCTION << query.lastError()<< query.lastQuery() << "  UID:" << UID << " field:" << field;
-    }
-    return "";
+    return get(field, table, UID).toString();
 }
 
-QString DBUtils::getFieldDate(const QString& field, const QString& table, const long long UID, QString )
-{
-    QSqlQuery query("SELECT * FROM " + table + " WHERE UID = ?");
-    query.bindValue(0, UID);
-    if (query.exec() && query.next())
-    {
-        return query.value(field).toDate().toString("dd.MM.yyyy");
-    }
-    else
-    {
-        //qDebug() << __LINE__ << __PRETTY_FUNCTION__ << PRETTY_FUNCTION << query.lastError()<< query.lastQuery() << "  UID:" << UID;
-    }
-    return "";
-}
-
-QDate DBUtils::getFieldDateAsDate(const QString& field, const QString& table, const long long UID)
-{
-    QSqlQuery query("SELECT * FROM " + table + " WHERE UID = ?");
-    query.bindValue(0, UID);
-    if (query.exec() && query.next())
-    {
-        return query.value(field).toDate();
-    }
-    else
-    {
-        //qDebug() << __LINE__ << __PRETTY_FUNCTION__ << query.lastError().text() << query.lastQuery();
-    }
-    return QDate();
-}
 
 
 QStringList DBUtils::get_DAYS_FROM_TOURNAMENTS(long long UID)
@@ -125,7 +59,9 @@ QString DBUtils::getSecondNameAndFirstName(long long UID)
         res = query.value("SECOND_NAME").toString() + " " +
               query.value("FIRST_NAME").toString();
     else
-        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << query.lastError().text() << query.lastQuery() << " UID: " << UID;
+    {
+        //qDebug() << __LINE__ << __PRETTY_FUNCTION__ << query.lastError().text() << query.lastQuery() << " UID: " << UID;
+    }
     return res;
 }
 
@@ -318,7 +254,7 @@ QVector<DBUtils::NodeOfTournirGrid> DBUtils::getNodes(long long tournamentCatego
 
     QSqlQuery query(
                 "SELECT * "
-                "FROM GRID "
+                "FROM GRIDS "
                 "WHERE TOURNAMENT_CATEGORIES_FK = ? "
                 "ORDER BY VERTEX");
     query.addBindValue(tournamentCategories);
@@ -348,7 +284,7 @@ QSqlQuery* DBUtils::getFightNodes(int tournamentCategoryUID)
 {
     QSqlQuery * query = new QSqlQuery(
                 "SELECT * "
-                "FROM GRID "
+                "FROM GRIDS "
                 "WHERE TOURNAMENT_CATEGORIES_FK = ? AND IS_FIGHTING = 1 ");
     query->addBindValue(tournamentCategoryUID);
     if (!query->exec())
@@ -357,54 +293,6 @@ QSqlQuery* DBUtils::getFightNodes(int tournamentCategoryUID)
     }
     return query;
 }
-
-//int DBUtils::f(int tournamentCategoryUID, int day, int time)
-//{
-//    QSqlQuery * query = new QSqlQuery(
-//                "SELECT COUNT(*) AS cnt "
-//                "FROM GRID "
-//                "WHERE "
-//                "   TOURNAMENT_CATEGORIES_FK = ? AND "
-//                "   IS_FIGHTING = 1 AND "
-//                "   ORDER_FK <= 0 AND "
-//                "   DAY_FIGHT = ? AND "
-//                "   TIME_FIGHT = ? "
-//                "GROUP BY DAY_FIGHT, TIME_FIGHT ");
-//    query->addBindValue(tournamentCategoryUID);
-//    query->addBindValue(day);
-//    query->addBindValue(time);
-//    if (!query->exec())
-//    {
-//        qDebug() << __PRETTY_FUNCTION__ << query->lastQuery();
-//    }
-//    int cnt = 0;
-//    if (query->next())
-//    {
-//        cnt = query->value("cnt").toInt();
-//    }
-//    return cnt;
-//}
-
-//QSqlQuery*DBUtils::ff(int tournamentCategoryUID)
-//{
-//    QSqlQuery * query = new QSqlQuery;
-//    if (!query->prepare(
-//                "SELECT COUNT(*) AS cnt, DAY_FIGHT, TIME_FIGHT "
-//                "FROM GRID "
-//                "WHERE "
-//                "   TOURNAMENT_CATEGORIES_FK = ? AND "
-//                "   IS_FIGHTING = 1 AND "
-//                "   ORDER_FK <= 0 AND "
-//                "GROUP BY DAY_FIGHT, TIME_FIGHT "
-//                "ORDER BY DAY_FIGHT, TIME_FIGHT "))
-//        qDebug() << query->lastError();
-//    query->addBindValue(tournamentCategoryUID);
-//    if (!query->exec())
-//    {
-//        qDebug() << query->lastError();
-//    }
-//    return query;
-//}
 
 QVector<QVector<DBUtils::NodeOfTournirGrid> > DBUtils::getNodesAsLevelListOfList(long long tournamentCategoryUID)
 {
@@ -450,13 +338,13 @@ QVector<DBUtils::NodeOfTournirGrid> DBUtils::getFightingNodes(long long tourname
 
 void DBUtils::insertLeafOfGrid(long long TOURNAMENT_CATEGORIES_FK, long long VERTEX, long long orderUID)
 {
-    QSqlQuery query("INSERT INTO GRID VALUES (?, ?, ?,    ?, ?,    ?, ?) ");
+    QSqlQuery query("INSERT INTO GRIDS VALUES (?, ?, ?,    ?, ?,    ?, ?) ");
     query.addBindValue(TOURNAMENT_CATEGORIES_FK);
     query.addBindValue(VERTEX);
     query.addBindValue(0);
 
     query.addBindValue(orderUID);
-    query.addBindValue("");
+    query.addBindValue(QVariant());
 
     query.addBindValue(-1);
     query.addBindValue(-1);
@@ -466,7 +354,7 @@ void DBUtils::insertLeafOfGrid(long long TOURNAMENT_CATEGORIES_FK, long long VER
 
 bool DBUtils::insertResultOfFightForNodeOfGrid(long long TOURNAMENT_CATEGORIES_FK, long long VERTEX, long long orderUID, QString result)
 {
-    QSqlQuery query("UPDATE GRID "
+    QSqlQuery query("UPDATE GRIDS "
                     "SET ORDER_FK = ? , result = ? "
                     "WHERE TOURNAMENT_CATEGORIES_FK = ? AND VERTEX = ?");
     query.addBindValue(orderUID);
@@ -479,7 +367,7 @@ bool DBUtils::insertResultOfFightForNodeOfGrid(long long TOURNAMENT_CATEGORIES_F
 void DBUtils::swapNodesOfGrid(long long tournamentCategories, int node0v, int node1v)
 {
     {
-        QSqlQuery query("UPDATE GRID SET VERTEX = ? WHERE TOURNAMENT_CATEGORIES_FK = ? AND VERTEX = ?");
+        QSqlQuery query("UPDATE GRIDS SET VERTEX = ? WHERE TOURNAMENT_CATEGORIES_FK = ? AND VERTEX = ?");
         query.bindValue(0, 100500);
         query.bindValue(1, tournamentCategories);
         query.bindValue(2, node0v);
@@ -487,7 +375,7 @@ void DBUtils::swapNodesOfGrid(long long tournamentCategories, int node0v, int no
             qDebug() << __PRETTY_FUNCTION__ << " " << query.lastError().text() << "\n" << query.lastQuery();
     }
     {
-        QSqlQuery query("UPDATE GRID SET VERTEX = ? WHERE TOURNAMENT_CATEGORIES_FK = ? AND VERTEX = ?");
+        QSqlQuery query("UPDATE GRIDS SET VERTEX = ? WHERE TOURNAMENT_CATEGORIES_FK = ? AND VERTEX = ?");
         query.bindValue(0, node0v);
         query.bindValue(1, tournamentCategories);
         query.bindValue(2, node1v);
@@ -495,7 +383,7 @@ void DBUtils::swapNodesOfGrid(long long tournamentCategories, int node0v, int no
             qDebug() << __PRETTY_FUNCTION__ << " " << query.lastError().text() << "\n" << query.lastQuery();
     }
     {
-        QSqlQuery query("UPDATE GRID SET VERTEX = ? WHERE TOURNAMENT_CATEGORIES_FK = ? AND VERTEX = ?");
+        QSqlQuery query("UPDATE GRIDS SET VERTEX = ? WHERE TOURNAMENT_CATEGORIES_FK = ? AND VERTEX = ?");
         query.bindValue(0, node1v);
         query.bindValue(1, tournamentCategories);
         query.bindValue(2, 100500);
@@ -600,7 +488,12 @@ int DBUtils::getNumberOfCastingOfLots(long long uidOrder)
 
     QSqlQuery query;
 
-    if (!query.prepare("SELECT VERTEX FROM GRID WHERE TOURNAMENT_CATEGORIES_FK = ? AND ORDER_FK = ? AND IS_FIGHTING = \"false\""))
+    if (!query.prepare("SELECT VERTEX "
+                       "FROM GRIDS "
+                       "WHERE "
+                       "    TOURNAMENT_CATEGORIES_FK = ? AND "
+                       "    ORDER_FK = ? AND "
+                       "    IS_FIGHTING = 0"))
     {
         qDebug() << __PRETTY_FUNCTION__ << " " << query.lastError().text() << "\n" << query.lastQuery();
         return -1;
@@ -612,12 +505,11 @@ int DBUtils::getNumberOfCastingOfLots(long long uidOrder)
         qDebug() << __PRETTY_FUNCTION__ << " " << query.lastError().text() << "\n" << query.lastQuery();
         return -1;
     }
-
     int v = query.value("VERTEX").toInt();
 
 
     query.clear();
-    if (!query.prepare("SELECT MAX(VERTEX) AS maxVertex FROM GRID WHERE TOURNAMENT_CATEGORIES_FK = ?"))
+    if (!query.prepare("SELECT MAX(VERTEX) AS maxVertex FROM GRIDS WHERE TOURNAMENT_CATEGORIES_FK = ?"))
     {
         qDebug() << __PRETTY_FUNCTION__ << " " << query.lastError().text() << "\n" << query.lastQuery();
         return -1;
@@ -630,24 +522,12 @@ int DBUtils::getNumberOfCastingOfLots(long long uidOrder)
     }
     int maxVertex = query.value("maxVertex").toInt();
 
-
-//    QVector<NodeOfTournirGrid> leafOFTree = DBUtils::getLeafOFTree(uidTC);
-//    int maxVertex = 1;
-//    int v = -1;
-//    for(const DBUtils::NodeOfTournirGrid& leaf : leafOFTree)
-//    {
-//        maxVertex = qMax(maxVertex, leaf.v); // TOO SLOW
-//        if (leaf.UID == uidOrder)
-//        {
-//            v = leaf.v;
-//        }
-//    }
     return maxVertex - v + 1;
 }
 
 bool DBUtils::updateLevelOfNodeOfGrid(int TOURNAMENT_CATEGORIES_FK, int VERTEX, int DAY_FIGHT, int TIME_FIGHT)
 {
-    QSqlQuery query("UPDATE GRID "
+    QSqlQuery query("UPDATE GRIDS "
                     "SET DAY_FIGHT = ?, TIME_FIGHT = ? "
                     "WHERE TOURNAMENT_CATEGORIES_FK = ? AND VERTEX = ?");
     query.addBindValue(DAY_FIGHT);
@@ -655,6 +535,13 @@ bool DBUtils::updateLevelOfNodeOfGrid(int TOURNAMENT_CATEGORIES_FK, int VERTEX, 
     query.addBindValue(TOURNAMENT_CATEGORIES_FK);
     query.addBindValue(VERTEX);
     return query.exec();
+}
+
+void DBUtils::deleteGrid(const int tournamentCategoryUID)
+{
+    QSqlQuery query("DELETE FROM GRIDS WHERE TOURNAMENT_CATEGORIES_FK = ?");
+    query.addBindValue(tournamentCategoryUID);
+    query.exec();
 }
 
 QVector<long long> DBUtils::getOrderUIDs(long long UIDtournamentCategory)
@@ -785,7 +672,7 @@ int DBUtils::getMaxDayFromGrids(long long tournamentUID)
     QSqlQuery q;
     q.prepare(
                 "SELECT MAX(DAY_FIGHT) AS MAXDAY "
-                "FROM GRID A "
+                "FROM GRIDS A "
                 "   LEFT JOIN TOURNAMENT_CATEGORIES B "
                 "       ON A.TOURNAMENT_CATEGORIES_FK = B.UID "
                 "WHERE TOURNAMENT_FK = ? "

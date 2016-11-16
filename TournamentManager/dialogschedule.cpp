@@ -27,6 +27,7 @@ DialogSchedule::DialogSchedule(QWidget *parent, long long tournamentUID) :
         this->modelList->select();
         this->ui->comboBoxList->setCurrentIndex(this->ui->comboBoxList->findText(text));
     });
+    connect(ui->pushButtonSaveExcel, &QPushButton::clicked, this, &DialogSchedule::onSaveExcel);
 
 
     void (QComboBox:: *indexChangedSignal)(int) = &QComboBox::currentIndexChanged;
@@ -49,8 +50,8 @@ DialogSchedule::~DialogSchedule()
 
 void DialogSchedule::onListChanged()
 {
-    QTime t;
-    t.start();
+    //QTime t;
+    //t.start();
 
     int indexComboBox = ui->comboBoxList->currentIndex();
     if (indexComboBox == -1)
@@ -143,20 +144,6 @@ void DialogSchedule::onListChanged()
                     QVector<std::map<int, int>> targetFights(maxCountColumns - 1);
 
 
-//                    for (int i = 1; i < maxCountColumns; ++i)
-//                    {
-//                        int cnt = DBUtils::f(UID_TOURNAMENT_CATEGORY, (i - 1) / 3, (i - 1) % 3);
-//                    }
-
-//                    QSqlQuery* q = DBUtils::ff(UID_TOURNAMENT_CATEGORYT);
-//                    while (q->next())
-//                    {
-//                        int cnt  = q->value("cnt").toInt();
-//                        int day  = q->value("DAY_FIGHT").toInt();
-//                        int time = q->value("TIME_FIGHT").toInt();
-//                    }
-
-
                     QSqlQuery* queryOrders = DBUtils::getFightNodes(UID_TOURNAMENT_CATEGORY);
                     const int durationOnePairOnRing = DBUtils::getDurationOfFightinPair(UID_TOURNAMENT_CATEGORY) +
                                                       ui->spinBoxDelay->value();
@@ -169,29 +156,14 @@ void DialogSchedule::onListChanged()
                         int v = queryOrders->value("VERTEX").toInt();
                         if (winner <= 0)
                         {
-                            ++countFights[t][RenderAreaWidget::log2(v)];
+                            ++countFights[t][Utils::log2(v)];
                         }
-                        ++targetFights[t][RenderAreaWidget::log2(v)];
+                        ++targetFights[t][Utils::log2(v)];
                         durations[t] += durationOnePairOnRing;
                     }
                     delete queryOrders;
 
-//                    for (const DBUtils::NodeOfTournirGrid& node : DBUtils::getNodes(UID_TOURNAMENT_CATEGORY))
-//                    {
-//                        if (node.isFighing)
-//                        {
-//                            int t = 3 * node.DAY_FIGHT + node.TIME_FIGHT;
-//                            if (countFights.size() <= t) countFights.resize(t + 1);
-//                            if (targetFights.size() <= t) targetFights.resize(t + 1);
-//                            if (node.UID <= 0)
-//                            {
-//                                ++countFights[t][RenderAreaWidget::log2(node.v)];
-//                            }
-//                            ++targetFights[t][RenderAreaWidget::log2(node.v)];
-//                            durations[t] += DBUtils::getDurationOfFightinPair(node.tournamentCategory) +
-//                                            ui->spinBoxDelay->value();
-//                        }
-//                    }
+
                     for (int i = 0; i < countFights.size(); ++i){
                         if (countFights[i].size())
                         {
@@ -258,12 +230,12 @@ void DialogSchedule::onListChanged()
         if      (i % 3 == 1) head += "Утро";
         else if (i % 3 == 2) head += "День";
         else                 head += "Вечер";
+        head += "\n";
 
         if (0 < i && durations[i - 1] != 0)
         {
             int time = durations[i - 1] / ui->spinBoxRing->value();
-            head += "\n" +
-                    QString::number(time / 3600) + " ч. " +
+            head += QString::number(time / 3600) + " ч. " +
                     QString("%1").arg(time / 60 % 60, 2, 10, QChar('0')) + " м.";
         }
         heads << head;
@@ -272,7 +244,7 @@ void DialogSchedule::onListChanged()
     ui->tableWidget->setHorizontalHeaderLabels(heads);
 
 
-    qDebug("Time elapsed: %d ms", t.elapsed());
+    //qDebug("Time elapsed: %d ms", t.elapsed());
 }
 
 void DialogSchedule::onCellClicked(int currentRow, int currentColumn)
@@ -309,7 +281,7 @@ void DialogSchedule::onCellClicked(int currentRow, int currentColumn)
                 int cnt = 0;
                 for (const DBUtils::NodeOfTournirGrid& node : DBUtils::getNodes(tournamentCategories[currentRow]))
                 {
-                    if (RenderAreaWidget::log2(node.v) == level &&
+                    if (Utils::log2(node.v) == level &&
                         node.isFight &&
                         DBUtils::updateLevelOfNodeOfGrid(node.tournamentCategory, node.v, (currentColumn - 1) / 3, (currentColumn - 1) % 3))
                     {
@@ -325,7 +297,7 @@ void DialogSchedule::onCellClicked(int currentRow, int currentColumn)
     onListChanged();
 }
 
-void DialogSchedule::onButCl()
+void DialogSchedule::onSaveExcel()
 {
     FitingDistribution(tournamentUID, this);
 }

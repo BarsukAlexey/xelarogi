@@ -146,6 +146,8 @@ void CreateTournamentOrdersDialog::loadFromExcel()
             if (!birthday.isValid()) birthday = QDate::fromString(ExcelUtils::getValue(sheet, row, 4), "d.M.yyyy");
             bool weightIsCorrect;
             double weight = ExcelUtils::get(sheet, row, 5).toDouble(&weightIsCorrect);
+//            qDebug() << ExcelUtils::get(sheet, row, 5)
+//                     << ExcelUtils::get(sheet, row, 5).toDouble();
             QString gender = ExcelUtils::getValue(sheet, row, 6);
             QString type = ExcelUtils::getValue(sheet, row, 7);
             QString regionUnitName = ExcelUtils::getValue(sheet, row, 8);
@@ -196,7 +198,7 @@ void CreateTournamentOrdersDialog::loadFromExcel()
             }
             else
             {
-                typeUID = getUID(type, "TYPES", types);
+                typeUID = getUID(type, "TYPES", types, QMap<QString, QVariant>(), false);
                 if (typeUID == -1)
                 {
                    fuckOff = true;
@@ -396,7 +398,7 @@ void CreateTournamentOrdersDialog::loadFromExcel()
     if (errors.size() > 0)
     {
         errors.push_front(filePath + "\n");
-        qDebug() << errors.size() << " errors";
+        //qDebug() << errors.size() << " errors";
         ErrorMessagesDialog dlg(errors, this);
         dlg.exec();
     }
@@ -435,7 +437,8 @@ int CreateTournamentOrdersDialog::getUID(
         QString& name,
         const QString& table,
         QMap<QString, QString>& mapNames,
-        const QMap<QString, QVariant>& map)
+        const QMap<QString, QVariant>& map,
+        bool showAddAsIs)
 {
     if (mapNames.contains(name))
         name = mapNames[name];
@@ -460,18 +463,20 @@ int CreateTournamentOrdersDialog::getUID(
         }
     }
     DialogSqlTableManager dlg(this, table, "", map);
+    //DialogSqlTableManager dlg(0, table, "", map);
+    dlg.setModal(true);
     QString message;
     if (table == "TYPES" || table == "SPORT_CATEGORIES" || table == "COUNTRIES")
     {
-        message = "Нет такой записи в справочнике:\n" +
-                  name + "\n";
+        message = "Нет такой записи:\n" +
+                  name;
     }
     else if (table == "REGIONS")
     {
         message =
                 "В стране " + DBUtils::getField("NAME", "COUNTRIES", map["COUNTRY_FK"].toString()) +
                 " нет такого региона:\n" +
-                name + "\n";
+                name;
     }
     else if (table == "REGION_UNITS")
     {
@@ -479,7 +484,7 @@ int CreateTournamentOrdersDialog::getUID(
                 "В стране " + DBUtils::getField("NAME", "COUNTRIES", map["COUNTRY_FK"].toString()) +
                 " в регионе " + DBUtils::getField("NAME", "REGIONS", map["REGION_FK"].toString()) +
                 " нет населённого пункта:\n" +
-                name + "\n";
+                name;
     }
     else if (table == "CLUBS")
     {
@@ -488,7 +493,7 @@ int CreateTournamentOrdersDialog::getUID(
                 " в регионе " + DBUtils::getField("NAME", "REGIONS", map["REGION_FK"].toString()) +
                 " в населённом пункте " + DBUtils::getField("NAME", "REGION_UNITS", map["REGION_UNIT_FK"].toString()) +
                 " нет такого клуба:\n" +
-                name + "\n";
+                name;
     }
     else if (table == "COACHS")
     {
@@ -499,11 +504,10 @@ int CreateTournamentOrdersDialog::getUID(
                 " в населённом пункте " + DBUtils::getField("NAME", "REGION_UNITS", DBUtils::get("REGION_UNIT_FK", "CLUBS", clubUID).toString()) +
                 " в клубе "             + DBUtils::getField("NAME", "CLUBS", clubUID) +
                 " нет такого тренера:\n"  +
-                name + "\n";
+                name;
     }
-    message += "Добавьте запись в справочник или выберите на что заменить";
 
-    dlg.setVisibleShit(message, name);
+    dlg.setVisibleShit(message, name, showAddAsIs);
     dlg.showMaximized();
     if (dlg.exec() == QDialog::Rejected)
         return -1;

@@ -61,7 +61,8 @@ private:
     int getUID(QString& name,
                const QString& table,
                QMap<QString, QString>& mapNames,
-               const QMap<QString, QVariant>& map = QMap<QString, QVariant>());
+               const QMap<QString, QVariant>& map = QMap<QString, QVariant>(),
+               bool showAddAsIs = true);
 
 private slots:
 

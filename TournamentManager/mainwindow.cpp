@@ -92,7 +92,7 @@ MainWindow::MainWindow(QWidget *parent) :
         }
     });
     connect(ui->tableViewTournament->model(), &QAbstractItemModel::modelReset, [this](){
-        //ui->stackedWidget->setCurrentIndex(0);
+        ui->stackedWidget->setCurrentIndex(0);
     });
 
 
@@ -104,6 +104,15 @@ MainWindow::MainWindow(QWidget *parent) :
         model->selectAndSortData();
     });
 
+    connect(ui->actionAgeCategory, &QAction::triggered, [this](){
+        onAction("AGE_CATEGORIES");
+    });
+    connect(ui->typeAction, &QAction::triggered, [this](){
+        onAction("TYPES");
+    });
+    connect(ui->sportCategoryAction, &QAction::triggered, [this](){
+        onAction("SPORT_CATEGORIES");
+    });
 
     connect(ui->countryAction, &QAction::triggered, [this](){
         onAction("COUNTRIES");
@@ -115,17 +124,6 @@ MainWindow::MainWindow(QWidget *parent) :
         onAction("REGION_UNITS");
     });
 
-
-    connect(ui->actionAgeCategory, &QAction::triggered, [this](){
-        onAction("AGE_CATEGORIES");
-    });
-    connect(ui->typeAction, &QAction::triggered, [this](){
-        onAction("TYPES");
-    });
-    connect(ui->sportCategoryAction, &QAction::triggered, [this](){
-        onAction("SPORT_CATEGORIES");
-    });
-
     connect(ui->clubAction, &QAction::triggered, [this](){
         onAction("CLUBS");
     });
@@ -135,23 +133,66 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
 
-    connect(ui->createTournamentCategoriesBtn, &QPushButton::clicked, [this] ()
+    connect(ui->pushButtonTournamentCategories, &QPushButton::clicked, [this] ()
     {
         this->hide();
-        qDebug() << "tournamentUID: " << tournamentUID;
         CreateTournamentCategoriesDialog dlg(tournamentUID, 0);
         dlg.showMaximized();
         dlg.exec();
         this->show();
     });
 
-    connect(ui->createOrdersBtn, &QPushButton::clicked, [this] ()
+    connect(ui->pushButtonOrders, &QPushButton::clicked, [this] ()
     {
         this->hide();
         CreateTournamentOrdersDialog dlg(tournamentUID, 0);
         dlg.showMaximized();
         dlg.exec();
         this->show();
+    });
+
+    connect(ui->pushButtonGrids, &QPushButton::clicked, [this] ()
+    {
+        this->hide();
+        DialogTournamentGrid dlg(0, "", tournamentUID);
+        dlg.showMaximized();
+        dlg.exec();
+        this->show();
+    });
+    connect(ui->pushButtonProtokolVzveshinanya, &QPushButton::clicked, [this] ()
+    {
+        WeighingProtocol w(tournamentUID);
+    });
+    connect(ui->pushButtonFightDist, &QPushButton::clicked, [this] ()
+    {
+        this->hide();
+        DialogSchedule dlg(0, tournamentUID);
+        dlg.showMaximized();
+        dlg.exec();
+        this->show();
+    });
+
+
+
+
+    connect(ui->pushButtonCountries, &QPushButton::clicked, [this] ()
+    {
+        onButton("COUNTRY_FK", "COUNTRIES");
+    });
+
+    connect(ui->pushButtonRegions, &QPushButton::clicked, [this] ()
+    {
+        onButton("REGION_FK", "REGIONS");
+    });
+
+    connect(ui->pushButtonCities, &QPushButton::clicked, [this] ()
+    {
+        onButton("REGION_UNIT_FK", "REGION_UNITS");
+    });
+
+    connect(ui->pushButtonClubs, &QPushButton::clicked, [this] ()
+    {
+        onButton("CLUB_FK", "CLUBS");
     });
 }
 
@@ -164,6 +205,26 @@ void MainWindow::onAction(QString table)
 {
     this->hide();
     DialogSqlTableManager dlg(0, table);
+    dlg.showMaximized();
+    dlg.exec();
+    this->show();
+}
+
+void MainWindow::onButton(const QString& field, const QString& table)
+{
+    this->hide();
+    QString filter =
+            "UID IN ("
+            "SELECT " + field + " "
+            "FROM "
+            "    ORDERS O "
+            "    JOIN TOURNAMENT_CATEGORIES T  "
+            "    ON O.TOURNAMENT_CATEGORY_FK = T.UID "
+            "WHERE "
+            "    T.TOURNAMENT_FK = " + QString::number(tournamentUID) + " "
+            "GROUP BY " + field +
+            ")";
+    DialogSqlTableManager dlg(0, table, filter);
     dlg.showMaximized();
     dlg.exec();
     this->show();

@@ -151,7 +151,7 @@ class SqlTableManager : public QWidget
 public:
     explicit SqlTableManager(QWidget *parent = 0);
     void setSqlTable(const QString& table,
-                     QString whereStatement = "",
+                     QString filter = "",
                      QMap<QString, QVariant> columnValue = QMap<QString, QVariant>());
     void setFilter(const QString& columnName, const QString& text);
     void updateMyData(int row = -1);

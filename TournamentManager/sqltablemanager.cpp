@@ -487,6 +487,8 @@ void MySortFilterProxyModel::setSourceModel(QAbstractItemModel* sourceModel)
 
 bool MySortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
 {
+    if (!sqlModel->index(sourceRow, 0).data(Qt::EditRole).toInt())
+        return true;
     for (int column = 0; column < filters.size(); ++column)
     {
         const QStringList& list = filters[column];
@@ -546,7 +548,7 @@ SqlTableManager::SqlTableManager(QWidget *parent) :
 }
 
 void SqlTableManager::setSqlTable(const QString& table,
-                                  QString whereStatement,
+                                  QString filter,
                                   QMap<QString, QVariant> columnValue)
 {
     if (model)
@@ -562,13 +564,12 @@ void SqlTableManager::setSqlTable(const QString& table,
     while (iterator.hasNext())
     {
         iterator.next();
-        if (!whereStatement.isEmpty()) whereStatement += " AND ";
-        whereStatement += iterator.key() + " = " + iterator.value().toString();
+        if (!filter.isEmpty()) filter += " AND ";
+        filter += iterator.key() + " = " + iterator.value().toString();
     }
-    if (!whereStatement.isEmpty())
+    if (!filter.isEmpty())
     {
-        //qDebug() << "whereStatement:" << whereStatement;
-        model->setFilter(whereStatement);
+        model->setFilter(filter);
     }
 
     model->setEditStrategy(QSqlTableModel::OnManualSubmit);
@@ -671,18 +672,11 @@ void SqlTableManager::setSqlTable(const QString& table,
         ui->tableView_2->scrollToBottom();
     });
     connect(ui->pushButtonDelete, &QPushButton::clicked, [this](){
-        qDebug() << "DELETING";
         for (QModelIndex index : ui->tableView_2->selectionModel()->selectedRows())
         {
-            if (model->removeRow(proxyModel->mapToSource(index).row()))
-                qDebug() << "remove: "  << index.row();
-            else
-                qDebug() << "NOT remove: "  << index.row();
-
-//            if (proxyModel->removeRow(index.row()))
-//                qDebug() << "remove: "  << index.row();
-//            else
-//                qDebug() << "NOT remove: "  << index.row();
+            if (!model->removeRow(proxyModel->mapToSource(index).row()))
+                qDebug() << "NOT remove!";
+            //qDebug() << index << index.data();
         }
         submitAllChanges();
     });
@@ -757,7 +751,7 @@ bool SqlTableManager::submitAllChanges()
 {
     if (model->submitAll())
     {
-        qDebug() << "Save all";
+        //qDebug() << "Save all";
         while (model->canFetchMore())
             model->fetchMore();
         proxyModel->invalidate();

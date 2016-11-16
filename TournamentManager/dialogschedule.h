@@ -4,11 +4,12 @@
 #include <QDialog>
 #include <QScrollBar>
 #include <QStyledItemDelegate>
+#include <QPainter>
 
-
+#include "utils.h"
 #include "db_utils.h"
 #include "dialogschedulesettinglists.h"
-#include "renderareawidget.h"
+//#include "renderareawidget.h"
 #include "fiting_distribution.h"
 
 namespace Ui {
@@ -55,7 +56,7 @@ private:
 public slots:
     void onListChanged();
     void onCellClicked(int row, int column);
-    void onButCl();
+    void onSaveExcel();
 };
 
 #endif // DIALOGSCHEDULE_H

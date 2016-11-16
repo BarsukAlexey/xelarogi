@@ -69,7 +69,7 @@
    <item row="0" column="0" colspan="3">
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string>Список</string>
+      <string/>
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
@@ -125,7 +125,7 @@
     </widget>
    </item>
    <item row="0" column="3">
-    <widget class="QPushButton" name="pushButton">
+    <widget class="QPushButton" name="pushButtonSaveExcel">
      <property name="text">
       <string>Сохранить в Excel...</string>
      </property>

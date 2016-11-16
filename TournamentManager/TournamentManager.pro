@@ -35,18 +35,19 @@ SOURCES += main.cpp \
     errormessagesdialog.cpp \
     createtournamentcategoriesdialog.cpp \
     generatetournamentcategoriesdialog.cpp \
+    mainwindow.cpp \
+    weighing_protocol.cpp \
+    dialogschedule.cpp \
+    dialogschedulesettinglists.cpp \
+    fiting_distribution.cpp
 
-#    fiting_distribution.cpp \
-#    mainwindow.cpp \
 #    fighting_pairs.cpp \
-#    weighing_protocol.cpp \
 #    winner_report.cpp \
 #    report_manda.cpp \
 #    report_ministr.cpp \
 #    mythread.cpp \
 #    formdipl.cpp \
-#    dialogschedule.cpp \
-#    dialogschedulesettinglists.cpp \
+
 #    dialogschedule2.cpp \
 #    dialogschedule2treewidget.cpp \
 #    dialogschedule2tablewidget.cpp \
@@ -70,19 +71,19 @@ HEADERS  += logindialog.h \
     errormessagesdialog.h \
     createtournamentcategoriesdialog.h \
     generatetournamentcategoriesdialog.h \
-
-#    fiting_distribution.h \
-#    mainwindow.h \
+    mainwindow.h \
+    weighing_protocol.h \
+    dialogschedule.h \
+    dialogschedulesettinglists.h \
+    fiting_distribution.h \
 
 #    fighting_pairs.h \
-#    weighing_protocol.h \
 #    winner_report.h \
 #    report_manda.h \
 #    report_ministr.h \
 #    mythread.h \
 #    formdipl.h \
-#    dialogschedule.h \
-#    dialogschedulesettinglists.h \
+
 #    dialogschedule2.h \
 #    dialogschedule2treewidget.h \
 #    dialogschedule2tablewidget.h \
@@ -102,14 +103,16 @@ FORMS +=  logindialog.ui \
     errormessagesdialog.ui \
     createtournamentcategoriesdialog.ui \
     generatetournamentcategoriesdialog.ui \
-
-#    mainwindow.ui \
-#    formdipl.ui \
-#    fighting_pairs.ui \
-#    dialogschedule.ui \
-#    dialogschedulesettinglists.ui \
+    mainwindow.ui \
+    dialogschedule.ui \
+    dialogschedulesettinglists.ui \
 #    dialogschedule2.ui \
 #    dialogschedule2inputtype.ui \
+
+#    formdipl.ui \
+#    fighting_pairs.ui \
+
+
 
 
 DISTFILES +=

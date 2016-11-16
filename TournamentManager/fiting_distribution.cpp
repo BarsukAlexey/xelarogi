@@ -1,19 +1,6 @@
 #include "fiting_distribution.h"
 
-#include "db_utils.h"
-#include "dialogchosedata.h"
-#include "excel_utils.h"
-#include "renderareawidget.h"
 
-
-#include <QAxObject>
-#include <QAxWidget>
-#include <QDate>
-#include <QDebug>
-#include <QSqlError>
-#include <QSqlDatabase>
-#include <QSqlQuery>
-#include <QProgressDialog>
 
 
 
@@ -51,6 +38,7 @@ FitingDistribution::FitingDistribution(const long long tournamentUID, QObject* p
         progress.setValue(iteration++);
         if (progress.wasCanceled())
             break;
+        QApplication::processEvents();
 
         QVector<int> totalSum(3 * days.size());
         int totalPeople = 0;
@@ -111,7 +99,7 @@ FitingDistribution::FitingDistribution(const long long tournamentUID, QObject* p
                         {
                             int t = 3 * node.DAY_FIGHT + node.TIME_FIGHT;
                             if (countFights.size() <= t) countFights.resize(t + 1);
-                            ++countFights[t][RenderAreaWidget::log2(node.v)];
+                            ++countFights[t][Utils::log2(node.v)];
                         }
                         else
                         {

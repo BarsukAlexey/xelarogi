@@ -6,7 +6,7 @@
 DialogSqlTableManager::DialogSqlTableManager(
         QWidget *parent,
         const QString& table,
-        const QString& whereStatement,
+        const QString& filter,
         QMap<QString, QVariant> columnValue) :
 
     QDialog(parent),
@@ -14,7 +14,7 @@ DialogSqlTableManager::DialogSqlTableManager(
 {
     ui->setupUi(this);
     setWindowFlags(Qt::Window);
-    ui->sqlTableManager->setSqlTable(table, whereStatement, columnValue);
+    ui->sqlTableManager->setSqlTable(table, filter, columnValue);
 
     QMap<QString, QSqlRecord > map = DBUtils::get_NAME_RUS__RELATION_TABLE_NAME();
     ui->labelTitle->setText(map[table].value("NAME_RUS").toString());
@@ -49,11 +49,14 @@ DialogSqlTableManager::~DialogSqlTableManager()
     delete ui;
 }
 
-void DialogSqlTableManager::setVisibleShit(const QString& text, const QString& newName)
+void DialogSqlTableManager::setVisibleShit(const QString& text,
+                                           const QString& newName,
+                                           bool showAddAsIs)
 {
     ui->widget->setVisible(true);
     ui->labelMessage->setVisible(true);
     ui->labelMessage->setText(text);
+    ui->pushButtonJustAdd->setEnabled(showAddAsIs);
     this->newName = newName;
 }
 

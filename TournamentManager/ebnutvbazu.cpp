@@ -23,7 +23,7 @@ void EbnutVBazu::f(const QSqlDatabase &database, long long )
         qDebug() << "\n" << __PRETTY_FUNCTION__ << "\n" << query->lastError().text() << "\n" << query->lastQuery() << "\n";
     delete query;
 
-    query = new QSqlQuery("DELETE FROM GRID", database);
+    query = new QSqlQuery("DELETE FROM GRIDS", database);
     if (!query->exec())
         qDebug() << "\n" << __PRETTY_FUNCTION__ << "\n" << query->lastError().text() << "\n" << query->lastQuery() << "\n";
     delete query;
@@ -128,7 +128,7 @@ void EbnutVBazu::setRandomWinner()
             int child = rand() % 2? 2 * v + 1 : 2 * v;
             if (child <= nodes.size())
             {
-                QSqlQuery q("UPDATE GRID SET ORDER_FK = ?, result = ?  WHERE TOURNAMENT_CATEGORIES_FK = ? AND VERTEX = ?");
+                QSqlQuery q("UPDATE GRIDS SET ORDER_FK = ?, result = ?  WHERE TOURNAMENT_CATEGORIES_FK = ? AND VERTEX = ?");
                 if (nodes[child - 1].UID == 0)
                 {
                     qDebug() << "Fuck";
@@ -159,7 +159,7 @@ void EbnutVBazu::setTournamentCat(long long tournamentUID)
         "DELETE FROM CLUBS; ",
         "DELETE FROM COACHS; ",
         "DELETE FROM COUNTRIES; ",
-        "DELETE FROM GRID; ",
+        "DELETE FROM GRIDS; ",
         "DELETE FROM ORDERS; ",
         "DELETE FROM REGION_UNITS; ",
         "DELETE FROM REGIONS; ",
@@ -281,6 +281,10 @@ void EbnutVBazu::copyTable(QString table)
         qDebug() << "source!";
         return;
     }
+    {
+        QSqlQuery query(source);
+        query.exec("PRAGMA foreign_keys = ON;");
+    }
     qDebug() << source;
 
 
@@ -293,6 +297,10 @@ void EbnutVBazu::copyTable(QString table)
         return;
     }
     qDebug() << target;
+    {
+        QSqlQuery query(target);
+        query.exec("PRAGMA foreign_keys = ON;");
+    }
 
 
 

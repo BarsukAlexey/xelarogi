@@ -98,11 +98,14 @@ DialogTournamentGrid::~DialogTournamentGrid()
     delete ui;
 }
 
-void DialogTournamentGrid::generatGrid(const long long tournamentUID, const long long tournamentCaterotyUID, QVector<long long> bestUID)
+void DialogTournamentGrid::generatGrid(const long long tournamentUID,
+                                       const long long tournamentCaterotyUID,
+                                       QVector<long long> bestUID)
 {
     {
         // удалим старую сетку
-        QSqlQuery query("DELETE FROM GRID WHERE TOURNAMENT_CATEGORIES_FK = ? ");
+        //DBUtils::dele
+        QSqlQuery query("DELETE FROM GRIDS WHERE TOURNAMENT_CATEGORIES_FK = ? ");
         query.addBindValue(tournamentCaterotyUID);
         if (!query.exec())
         {
@@ -110,6 +113,8 @@ void DialogTournamentGrid::generatGrid(const long long tournamentUID, const long
             return;
         }
     }
+
+    srand(time(0));
 
     QVector<int> dayFight; // dayFight[levelGrid]
     QVector<int> timeFight; // dayFight[levelGrid]
@@ -195,7 +200,7 @@ void DialogTournamentGrid::generatGrid(const long long tournamentUID, const long
         {
             ++n;
             long long orderUID = query.value("UID").toLongLong();
-            long long region   = query.value("REGION_FK").toLongLong();;
+            long long region   = query.value("CLUB_FK").toLongLong();;
             if (!bestUID.contains(orderUID))
                 usualFighters[region].push_back(orderUID);
         }
@@ -234,13 +239,13 @@ void DialogTournamentGrid::generatGrid(const long long tournamentUID, const long
     {
         if (isLeaf[v]) continue;
 
-        QSqlQuery query("INSERT INTO GRID VALUES (?,?,?,   ?,?,   ?,?)");
+        QSqlQuery query("INSERT INTO GRIDS VALUES (?,?,?,   ?,?,   ?,?)");
         query.addBindValue(tournamentCaterotyUID);
         query.addBindValue(v);
         query.addBindValue(1);
 
-        query.addBindValue(0);
-        query.addBindValue("");
+        query.addBindValue(QVariant());
+        query.addBindValue(QVariant());
 
         query.addBindValue(dayFight [Utils::log2(v)]);
         query.addBindValue(timeFight[Utils::log2(v)]);
@@ -266,13 +271,14 @@ void DialogTournamentGrid::generatGrid(const long long tournamentUID, const long
             vertexOfBest << v;
 
             isUsedLeaf[v] = true;
-            regionLeaf[v] = DBUtils::getField("REGION_FK", "ORDERS", bestUID[i]).toLongLong();
+            regionLeaf[v] = DBUtils::getField("CLUB_FK", "ORDERS", bestUID[i]).toLongLong();
 
             DBUtils::insertLeafOfGrid(tournamentCaterotyUID, v, bestUID[i]);
         }
     }
 
 
+    /*/
     if (2 <= n)
     {
         // пытаемся сделать так, чтобы в правом и в левом подДеревьях было по одному представителю от каждого региона
@@ -325,13 +331,11 @@ void DialogTournamentGrid::generatGrid(const long long tournamentUID, const long
                 //qDebug() << orderUID_V << " v:" << v;
                 DBUtils::insertLeafOfGrid(tournamentCaterotyUID, v, orderUID_V);
                 isUsedLeaf[v] = true;
-                regionLeaf[v] = DBUtils::getField("REGION_FK", "ORDERS", orderUID_V).toLongLong();
+                regionLeaf[v] = DBUtils::getField("CLUB_FK", "ORDERS", orderUID_V).toLongLong();
             }
         }
     }
-
-
-    //
+    /**/
 
     // находим пару для тех бойцов, для которые без пары
     for (int v = 1; v <= maxVertex; ++v)
@@ -368,7 +372,7 @@ void DialogTournamentGrid::generatGrid(const long long tournamentUID, const long
 
             DBUtils::insertLeafOfGrid(tournamentCaterotyUID, v, orderUID_V);
             isUsedLeaf[v] = true;
-            regionLeaf[v] = DBUtils::getField("REGION_FK", "ORDERS", orderUID_V).toLongLong();
+            regionLeaf[v] = DBUtils::getField("CLUB_FK", "ORDERS", orderUID_V).toLongLong();
             //qDebug() << v << "cur: " << DBUtils::getField("REGION_FK", "ORDERS", orderUID_V).toLongLong() <<  "regionAnother: " << regionAnother;
         }
     }
@@ -428,8 +432,8 @@ void DialogTournamentGrid::generatGrid(const long long tournamentUID, const long
 
         isUsedLeaf[pair.first ] = true;
         isUsedLeaf[pair.second] = true;
-        regionLeaf[pair.first ] = DBUtils::getField("REGION_FK", "ORDERS", orderUID0).toLongLong();
-        regionLeaf[pair.second] = DBUtils::getField("REGION_FK", "ORDERS", orderUID1).toLongLong();
+        regionLeaf[pair.first ] = DBUtils::getField("CLUB_FK", "ORDERS", orderUID0).toLongLong();
+        regionLeaf[pair.second] = DBUtils::getField("CLUB_FK", "ORDERS", orderUID1).toLongLong();
         //qDebug() << pair.first << pair.second << DBUtils::getField("REGION_FK", "ORDERS", orderUID0) << DBUtils::getField("REGION_FK", "ORDERS", orderUID1);
     }
 
@@ -458,35 +462,26 @@ void DialogTournamentGrid::generatGrid(const long long tournamentUID, const long
     QSqlDatabase::database().commit();
 }
 
-bool DialogTournamentGrid::deleteGrid(const long long uidTC)
+void DialogTournamentGrid::deleteGrid(const long long uidTC)
 {
-    {
-        // проверяем есть ли турнирная сетка, если есть, то задаём вопрос
-        QSqlQuery query("SELECT * FROM GRID WHERE TOURNAMENT_CATEGORIES_FK = ? ");
-        query.addBindValue(uidTC);
-        if (query.exec())
-        {
-            if (query.next())
-            {
-                QMessageBox::StandardButton reply;
-                reply = QMessageBox::question(0, "?", QString("Удалить сетку ") +
-                                              DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", uidTC) +
-                                              "?", QMessageBox::Yes | QMessageBox::No);
-                if (reply == QMessageBox::No)
-                    return false;
-            }
-        }
-        else
-        {
-            qDebug() << __PRETTY_FUNCTION__ << query.lastError() << query.lastQuery();
-            return true;
-        }
-    }
-    QSqlQuery query("DELETE FROM GRID WHERE TOURNAMENT_CATEGORIES_FK = ?");
-    query.addBindValue(uidTC);;
+    // проверяем есть ли турнирная сетка, если есть, то задаём вопрос
+    QSqlQuery query("SELECT * FROM GRIDS WHERE TOURNAMENT_CATEGORIES_FK = ? ");
+    query.addBindValue(uidTC);
     if (!query.exec())
-        qDebug() << __PRETTY_FUNCTION__ << " " << query.lastError().text() << " " << query.lastQuery();
-    return true;
+        qDebug() << __PRETTY_FUNCTION__ << query.lastError() << query.lastQuery();
+
+    if (!query.next())
+    {
+        return ;
+    }
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(0, "", QString("Удалить сетку ") +
+                                  DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", uidTC) +
+                                  "?", QMessageBox::Yes | QMessageBox::No);
+    if (reply == QMessageBox::No)
+        return ;
+
+    DBUtils::deleteGrid(uidTC);
 }
 
 QString DialogTournamentGrid::getLocation(const int orderUID)
@@ -596,14 +591,14 @@ void DialogTournamentGrid::onButtonGenerateGrid()
     //
     {
         // проверяем есть ли турнирная сетка, если есть, то задаём вопрос
-        QSqlQuery query("SELECT * FROM GRID WHERE TOURNAMENT_CATEGORIES_FK = ? ");
+        QSqlQuery query("SELECT * FROM GRIDS WHERE TOURNAMENT_CATEGORIES_FK = ? ");
         query.addBindValue(ui->qComboBoxSelectCategory->currentData(Qt::UserRole).toInt());
         if (query.exec())
         {
             if (query.next())
             {
                 QMessageBox::StandardButton reply;
-                reply = QMessageBox::question(this, "?", "Сетка уже есть. Новая генерация сетки приведет к потере старой сетки. Продолжить?", QMessageBox::Yes | QMessageBox::No);
+                reply = QMessageBox::question(this, "", "Сетка уже есть. Новая генерация сетки приведет к потере старой сетки. Продолжить?", QMessageBox::Yes | QMessageBox::No);
                 if (reply == QMessageBox::No)
                     return;
             }
@@ -723,12 +718,27 @@ void DialogTournamentGrid::saveAllGridsInExcel()
 
 void DialogTournamentGrid::deleteAllGrids()
 {
+    for (int i = 0; i < 4; ++i)
+    {
+        QMessageBox::StandardButton reply;
+        reply = QMessageBox::question(0, "",
+                                      QString() +
+                                      "Удалить ВСЕ сетки?\n" +
+                                      (i == 0? "" : i == 1? "Вы уверены?" : i == 2? "Точно?" : "Удаляю..."),
+                                      QMessageBox::Yes | QMessageBox::No);
+        if (reply == QMessageBox::No)
+            return ;
+    }
+    QProgressDialog progress("", "Cancel", 0, ui->qComboBoxSelectCategory->count(), this);
+    progress.setWindowModality(Qt::ApplicationModal);
+    progress.setMinimumDuration(0);
     for (int i = 0; i < ui->qComboBoxSelectCategory->count(); ++i)
     {
-        if (!deleteGrid(ui->qComboBoxSelectCategory->itemData(i, Qt::UserRole).toInt()))
-        {
+        if (progress.wasCanceled())
             break;
-        }
+        progress.setValue(i);
+        QApplication::processEvents();
+        DBUtils::deleteGrid(ui->qComboBoxSelectCategory->itemData(i, Qt::UserRole).toInt());
     }
     ui->pRenderArea->tournamentCategoryIsChanged(ui->qComboBoxSelectCategory->currentData(Qt::UserRole).toInt());
     fillListOfPairs();
@@ -743,8 +753,8 @@ void DialogTournamentGrid::onDeleteGrid()
 
 void DialogTournamentGrid::fillCategoryCombobox(QString filterStr)
 {
-    QTime time;
-    time.start();
+    //QTime time;
+    //time.start();
 
     ui->qComboBoxSelectCategory->clear();
 
@@ -856,7 +866,7 @@ void DialogTournamentGrid::fillCategoryCombobox(QString filterStr)
 
     onActivatedCategory();
 
-    qDebug() << __LINE__ << __PRETTY_FUNCTION__ << "Time:" << time.elapsed();
+    //qDebug() << __LINE__ << __PRETTY_FUNCTION__ << "Time:" << time.elapsed();
 }
 
 void DialogTournamentGrid::onCellClickedOntableGrid(int row, int column)
@@ -955,10 +965,12 @@ void DialogTournamentGrid::onCustomContextMenuRequested(const QPoint& pos)
         connect(restrictAction, &QAction::triggered, [this, &index] ()
         {
             long long orderUID = index.data(Qt::UserRole).toLongLong();
-            CreateTournamentOrdersDialog(this->tournamentUID, this,
+            CreateTournamentOrdersDialog dlg(this->tournamentUID, 0,
                                          DBUtils::getField("SECOND_NAME", "ORDERS", orderUID),
                                          DBUtils::getField("FIRST_NAME", "ORDERS", orderUID)
-                                         ).exec();
+                                         );
+            dlg.showMaximized(); // НИХУЯ не работает DOTO
+            dlg.exec();
             onActivatedCategory();
         });
     }

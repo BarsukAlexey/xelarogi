@@ -6,6 +6,7 @@ ErrorMessagesDialog::ErrorMessagesDialog(QStringList list, QWidget *parent) :
     ui(new Ui::ErrorMessagesDialog)
 {
     ui->setupUi(this);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     ui->plainTextEdit->clear();
     QString message = "";

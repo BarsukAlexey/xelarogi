@@ -14,6 +14,7 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QGridLayout>
+#include <QtWidgets/QGroupBox>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
@@ -63,12 +64,12 @@ public:
     QLabel *labelTournament;
     QVBoxLayout *verticalLayout;
     QSpacerItem *verticalSpacer_2;
-    QPushButton *createTournamentCategoriesBtn;
-    QPushButton *createOrdersBtn;
-    QPushButton *pushButtonGrid;
+    QPushButton *pushButtonTournamentCategories;
+    QPushButton *pushButtonOrders;
+    QPushButton *pushButtonGrids;
     QPushButton *pushButtonProtokolVzveshinanya;
     QHBoxLayout *horizontalLayout_3;
-    QPushButton *pushButton;
+    QPushButton *pushButtonFightDist;
     QPushButton *pushButtonTimeScheduling;
     QPushButton *pushButtonPair;
     QPushButton *pushButtonLoadWinner;
@@ -80,6 +81,13 @@ public:
     QPushButton *btn_report_ministr;
     QSpacerItem *horizontalSpacer;
     QSpacerItem *verticalSpacer;
+    QGroupBox *groupBox;
+    QVBoxLayout *verticalLayout_2;
+    QPushButton *pushButtonCountries;
+    QPushButton *pushButtonRegions;
+    QPushButton *pushButtonCities;
+    QPushButton *pushButtonClubs;
+    QSpacerItem *verticalSpacer_4;
     QMenuBar *menuBar;
     QMenu *handbookMenu;
     QToolBar *mainToolBar;
@@ -128,6 +136,7 @@ public:
         tableViewTournament = new QTableView(splitter);
         tableViewTournament->setObjectName(QStringLiteral("tableViewTournament"));
         tableViewTournament->setMinimumSize(QSize(300, 0));
+        tableViewTournament->setFocusPolicy(Qt::WheelFocus);
         tableViewTournament->setEditTriggers(QAbstractItemView::NoEditTriggers);
         tableViewTournament->setSelectionMode(QAbstractItemView::SingleSelection);
         tableViewTournament->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -187,27 +196,27 @@ public:
 
         verticalLayout->addItem(verticalSpacer_2);
 
-        createTournamentCategoriesBtn = new QPushButton(ordersPage);
-        createTournamentCategoriesBtn->setObjectName(QStringLiteral("createTournamentCategoriesBtn"));
-        createTournamentCategoriesBtn->setFlat(false);
+        pushButtonTournamentCategories = new QPushButton(ordersPage);
+        pushButtonTournamentCategories->setObjectName(QStringLiteral("pushButtonTournamentCategories"));
+        pushButtonTournamentCategories->setFlat(false);
 
-        verticalLayout->addWidget(createTournamentCategoriesBtn);
+        verticalLayout->addWidget(pushButtonTournamentCategories);
 
-        createOrdersBtn = new QPushButton(ordersPage);
-        createOrdersBtn->setObjectName(QStringLiteral("createOrdersBtn"));
+        pushButtonOrders = new QPushButton(ordersPage);
+        pushButtonOrders->setObjectName(QStringLiteral("pushButtonOrders"));
         QSizePolicy sizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
-        sizePolicy.setHeightForWidth(createOrdersBtn->sizePolicy().hasHeightForWidth());
-        createOrdersBtn->setSizePolicy(sizePolicy);
-        createOrdersBtn->setMinimumSize(QSize(0, 0));
+        sizePolicy.setHeightForWidth(pushButtonOrders->sizePolicy().hasHeightForWidth());
+        pushButtonOrders->setSizePolicy(sizePolicy);
+        pushButtonOrders->setMinimumSize(QSize(0, 0));
 
-        verticalLayout->addWidget(createOrdersBtn);
+        verticalLayout->addWidget(pushButtonOrders);
 
-        pushButtonGrid = new QPushButton(ordersPage);
-        pushButtonGrid->setObjectName(QStringLiteral("pushButtonGrid"));
+        pushButtonGrids = new QPushButton(ordersPage);
+        pushButtonGrids->setObjectName(QStringLiteral("pushButtonGrids"));
 
-        verticalLayout->addWidget(pushButtonGrid);
+        verticalLayout->addWidget(pushButtonGrids);
 
         pushButtonProtokolVzveshinanya = new QPushButton(ordersPage);
         pushButtonProtokolVzveshinanya->setObjectName(QStringLiteral("pushButtonProtokolVzveshinanya"));
@@ -217,10 +226,10 @@ public:
         horizontalLayout_3 = new QHBoxLayout();
         horizontalLayout_3->setSpacing(6);
         horizontalLayout_3->setObjectName(QStringLiteral("horizontalLayout_3"));
-        pushButton = new QPushButton(ordersPage);
-        pushButton->setObjectName(QStringLiteral("pushButton"));
+        pushButtonFightDist = new QPushButton(ordersPage);
+        pushButtonFightDist->setObjectName(QStringLiteral("pushButtonFightDist"));
 
-        horizontalLayout_3->addWidget(pushButton);
+        horizontalLayout_3->addWidget(pushButtonFightDist);
 
         pushButtonTimeScheduling = new QPushButton(ordersPage);
         pushButtonTimeScheduling->setObjectName(QStringLiteral("pushButtonTimeScheduling"));
@@ -282,6 +291,39 @@ public:
 
         gridLayout->addLayout(verticalLayout, 1, 0, 1, 1);
 
+        groupBox = new QGroupBox(ordersPage);
+        groupBox->setObjectName(QStringLiteral("groupBox"));
+        verticalLayout_2 = new QVBoxLayout(groupBox);
+        verticalLayout_2->setSpacing(6);
+        verticalLayout_2->setContentsMargins(11, 11, 11, 11);
+        verticalLayout_2->setObjectName(QStringLiteral("verticalLayout_2"));
+        pushButtonCountries = new QPushButton(groupBox);
+        pushButtonCountries->setObjectName(QStringLiteral("pushButtonCountries"));
+
+        verticalLayout_2->addWidget(pushButtonCountries);
+
+        pushButtonRegions = new QPushButton(groupBox);
+        pushButtonRegions->setObjectName(QStringLiteral("pushButtonRegions"));
+
+        verticalLayout_2->addWidget(pushButtonRegions);
+
+        pushButtonCities = new QPushButton(groupBox);
+        pushButtonCities->setObjectName(QStringLiteral("pushButtonCities"));
+
+        verticalLayout_2->addWidget(pushButtonCities);
+
+        pushButtonClubs = new QPushButton(groupBox);
+        pushButtonClubs->setObjectName(QStringLiteral("pushButtonClubs"));
+
+        verticalLayout_2->addWidget(pushButtonClubs);
+
+        verticalSpacer_4 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        verticalLayout_2->addItem(verticalSpacer_4);
+
+
+        gridLayout->addWidget(groupBox, 1, 1, 1, 1);
+
         stackedWidget->addWidget(ordersPage);
         splitter->addWidget(stackedWidget);
 
@@ -304,13 +346,13 @@ public:
         menuBar->addAction(handbookMenu->menuAction());
         handbookMenu->addAction(tournamentAction);
         handbookMenu->addSeparator();
-        handbookMenu->addAction(countryAction);
-        handbookMenu->addAction(regionAction);
-        handbookMenu->addAction(ateAction);
-        handbookMenu->addSeparator();
         handbookMenu->addAction(actionAgeCategory);
         handbookMenu->addAction(typeAction);
         handbookMenu->addAction(sportCategoryAction);
+        handbookMenu->addSeparator();
+        handbookMenu->addAction(countryAction);
+        handbookMenu->addAction(regionAction);
+        handbookMenu->addAction(ateAction);
         handbookMenu->addSeparator();
         handbookMenu->addAction(clubAction);
         handbookMenu->addAction(coachAction);
@@ -328,9 +370,9 @@ public:
     {
         countryAction->setText(QApplication::translate("MainWindow", "\320\241\321\202\321\200\320\260\320\275\321\213", 0));
         regionAction->setText(QApplication::translate("MainWindow", "\320\240\320\265\320\263\320\270\320\276\320\275\321\213", 0));
-        ateAction->setText(QApplication::translate("MainWindow", "\320\223\320\276\321\200\320\276\320\264\320\260", 0));
+        ateAction->setText(QApplication::translate("MainWindow", "\320\235\320\260\321\201\320\265\320\273\320\265\320\275\320\275\321\213\320\265 \320\277\321\203\320\275\320\272\321\202\321\213", 0));
         sexAction->setText(QApplication::translate("MainWindow", "\320\237\320\276\320\273", 0));
-        typeAction->setText(QApplication::translate("MainWindow", "\320\240\320\260\320\267\320\264\320\265\320\273\321\213", 0));
+        typeAction->setText(QApplication::translate("MainWindow", "\320\241\321\202\320\270\320\273\320\270", 0));
         sportCategoryAction->setText(QApplication::translate("MainWindow", "\320\241\320\277\320\276\321\200\321\202\320\270\320\262\320\275\321\213\320\265 \321\200\320\260\320\267\321\200\321\217\320\264\321\213", 0));
         tournamentAction->setText(QApplication::translate("MainWindow", "\320\242\321\203\321\200\320\275\320\270\321\200\321\213", 0));
         tournamentCategoryAction->setText(QApplication::translate("MainWindow", "\320\232\320\260\321\202\320\265\320\263\320\276\321\200\320\270\320\270 \321\202\321\203\321\200\320\275\320\270\321\200\320\276\320\262", 0));
@@ -341,11 +383,11 @@ public:
         iconsAction->setText(QApplication::translate("MainWindow", "\320\244\320\273\320\260\320\263\320\270 \321\201\321\202\321\200\320\260\320\275", 0));
         label->setText(QApplication::translate("MainWindow", "\320\222\321\213\320\261\320\265\321\200\320\265\321\202\320\265 \321\202\321\203\321\200\320\275\320\270\321\200", 0));
         labelTournament->setText(QApplication::translate("MainWindow", "\320\242\321\203\321\200\320\275\320\270\321\200 \320\275\320\265 \320\262\321\213\320\261\321\200\320\260\320\275", 0));
-        createTournamentCategoriesBtn->setText(QApplication::translate("MainWindow", "\320\232\320\260\321\202\320\265\320\263\320\276\321\200\320\270\320\270 \321\202\321\203\321\200\320\275\320\270\321\200\320\260", 0));
-        createOrdersBtn->setText(QApplication::translate("MainWindow", "\320\227\320\260\321\217\320\262\320\272\320\270", 0));
-        pushButtonGrid->setText(QApplication::translate("MainWindow", "\320\242\321\203\321\200\320\275\320\270\321\200\320\275\321\213\320\265 \321\201\320\265\321\202\320\272\320\270", 0));
+        pushButtonTournamentCategories->setText(QApplication::translate("MainWindow", "\320\232\320\260\321\202\320\265\320\263\320\276\321\200\320\270\320\270 \321\202\321\203\321\200\320\275\320\270\321\200\320\260", 0));
+        pushButtonOrders->setText(QApplication::translate("MainWindow", "\320\227\320\260\321\217\320\262\320\272\320\270", 0));
+        pushButtonGrids->setText(QApplication::translate("MainWindow", "\320\242\321\203\321\200\320\275\320\270\321\200\320\275\321\213\320\265 \321\201\320\265\321\202\320\272\320\270", 0));
         pushButtonProtokolVzveshinanya->setText(QApplication::translate("MainWindow", "\320\237\321\200\320\276\321\202\320\276\320\272\320\276\320\273 \320\262\320\267\320\262\320\265\321\210\320\270\320\262\320\260\320\275\320\270\321\217", 0));
-        pushButton->setText(QApplication::translate("MainWindow", "\320\223\321\200\320\260\321\204\320\270\320\272 \321\200\320\260\321\201\320\277\320\265\321\200\320\265\320\264\320\265\320\273\320\265\320\275\320\270\321\217 \320\261\320\276\321\221\320\262", 0));
+        pushButtonFightDist->setText(QApplication::translate("MainWindow", "\320\223\321\200\320\260\321\204\320\270\320\272 \321\200\320\260\321\201\320\277\320\265\321\200\320\265\320\264\320\265\320\273\320\265\320\275\320\270\321\217 \320\261\320\276\321\221\320\262", 0));
         pushButtonTimeScheduling->setText(QApplication::translate("MainWindow", "\320\240\320\260\321\201\320\277\320\270\321\201\320\260\320\275\320\270\320\265", 0));
         pushButtonPair->setText(QApplication::translate("MainWindow", "\320\241\320\276\321\201\321\202\320\260\320\262 \320\277\320\260\321\200", 0));
         pushButtonLoadWinner->setText(QApplication::translate("MainWindow", "\320\227\320\260\320\263\321\200\321\203\320\267\320\270\321\202\321\214 \321\200\320\265\320\267\321\203\320\273\321\214\321\202\320\260\321\202\321\213 \320\261\320\276\321\221\320\262", 0));
@@ -354,6 +396,11 @@ public:
         trophyBtnImage->setText(QApplication::translate("MainWindow", "\320\241\320\276\320\267\320\264\320\260\321\202\321\214 \320\261\320\265\320\271\320\264\320\266\320\270 / \320\263\321\200\320\260\320\274\320\276\321\202\321\213 (PDF)", 0));
         manda->setText(QApplication::translate("MainWindow", "\320\237\321\200\320\276\321\202\320\276\320\272\320\276\320\273 \320\274\320\260\320\275\320\264\320\260\321\202\320\275\320\276\320\271 \320\272\320\276\320\274\320\270\321\201\321\201\320\270\320\270", 0));
         btn_report_ministr->setText(QApplication::translate("MainWindow", "\320\236\321\202\321\207\321\221\321\202 \320\274\320\270\320\275\320\270\321\201\321\202\320\265\321\200\321\201\321\202\320\262\320\260", 0));
+        groupBox->setTitle(QApplication::translate("MainWindow", "\320\241\320\277\321\200\320\260\320\262\320\276\321\207\320\275\320\270\320\272\320\270", 0));
+        pushButtonCountries->setText(QApplication::translate("MainWindow", "\320\241\321\202\321\200\320\260\320\275\321\213", 0));
+        pushButtonRegions->setText(QApplication::translate("MainWindow", "\320\240\320\265\320\263\320\270\320\276\320\275\321\213", 0));
+        pushButtonCities->setText(QApplication::translate("MainWindow", "\320\235\320\260\321\201\320\265\320\273\320\265\320\275\320\275\321\213\320\265 \320\277\321\203\320\275\320\272\321\202\321\213", 0));
+        pushButtonClubs->setText(QApplication::translate("MainWindow", "\320\232\320\273\321\203\320\261\321\213", 0));
         handbookMenu->setTitle(QApplication::translate("MainWindow", "\320\241\320\277\321\200\320\260\320\262\320\276\321\207\320\275\320\270\320\272\320\270", 0));
         Q_UNUSED(MainWindow);
     } // retranslateUi

@@ -63,7 +63,11 @@ public:
 
         labelMessage = new QLabel(DialogSqlTableManager);
         labelMessage->setObjectName(QStringLiteral("labelMessage"));
+        QFont font1;
+        font1.setPointSize(11);
+        labelMessage->setFont(font1);
         labelMessage->setAlignment(Qt::AlignCenter);
+        labelMessage->setTextInteractionFlags(Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse);
 
         verticalLayout->addWidget(labelMessage);
 
@@ -103,12 +107,12 @@ public:
 
     void retranslateUi(QDialog *DialogSqlTableManager)
     {
-        DialogSqlTableManager->setWindowTitle(QApplication::translate("DialogSqlTableManager", "Dialog", 0));
         labelTitle->setText(QApplication::translate("DialogSqlTableManager", "\320\227\320\260\320\263\320\276\320\273\320\276\320\262\320\276\320\272", 0));
         labelMessage->setText(QApplication::translate("DialogSqlTableManager", "TextLabel", 0));
         pushButtonSelect->setText(QApplication::translate("DialogSqlTableManager", "\320\227\320\260\320\274\320\265\320\275\320\270\321\202\321\214 \320\275\320\260 \320\262\321\213\320\261\321\200\320\260\320\275\320\275\321\203\321\216 \320\267\320\260\320\277\320\270\321\201\321\214", 0));
         pushButtonJustAdd->setText(QApplication::translate("DialogSqlTableManager", "\320\224\320\276\320\261\320\260\320\262\320\270\321\202\321\214 \"\320\272\320\260\320\272 \320\265\321\201\321\202\321\214\"", 0));
         pushButtonStop->setText(QApplication::translate("DialogSqlTableManager", "\320\236\321\201\321\202\320\260\320\275\320\276\320\262\320\270\321\202\321\214 \320\267\320\260\320\263\321\200\321\203\320\267\320\272\321\203 \320\267\320\260\321\217\320\262\320\276\320\272", 0));
+        Q_UNUSED(DialogSqlTableManager);
     } // retranslateUi
 
 };

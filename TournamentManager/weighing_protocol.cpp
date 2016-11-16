@@ -1,14 +1,5 @@
 #include "weighing_protocol.h"
-#include "db_utils.h"
-#include "excel_utils.h"
 
-#include <QAxWidget>
-#include <QAxObject>
-#include <QStringList>
-#include <QSqlQuery>
-#include <QDebug>
-#include <QSqlError>
-#include <QFile>
 
 
 WeighingProtocol::WeighingProtocol(const long long tournamentUID, QObject* parent)
@@ -19,18 +10,25 @@ WeighingProtocol::WeighingProtocol(const long long tournamentUID, QObject* paren
         return;
 
     QAxWidget excel("Excel.Application");
-    excel.setProperty("Visible", true);
+    //excel.setProperty("Visible", true);
     QAxObject *workbooks = excel.querySubObject("WorkBooks");
     workbooks->dynamicCall("Add");
     QAxObject *workbook = excel.querySubObject("ActiveWorkBook");
     QAxObject *sheets = workbook->querySubObject("WorkSheets");
 
+    QVector<long long> tournamentCategoryUIDs = DBUtils::getTournamentCategoryUIDs(tournamentUID);
 
+    QProgressDialog progress("", "Cancel", 0, tournamentCategoryUIDs.size());
+    progress.setWindowModality(Qt::ApplicationModal);
+    progress.setMinimumDuration(0);
 
-
-
-    for (const long long uidTC: DBUtils::getTournamentCategoryUIDs(tournamentUID))
+    for (const long long uidTC : tournamentCategoryUIDs)
     {
+        progress.setValue(progress.value() + 1);
+        if (progress.wasCanceled())
+            break;
+        QApplication::processEvents();
+
         QVector<DBUtils::NodeOfTournirGrid> leafOFTree = DBUtils::getLeafOFTree(uidTC);
         QStringList heads;
         QVector<std::pair<QString, QVector<std::pair<DBUtils::TypeField, QString> > > > data = dlg.getData();
@@ -106,4 +104,6 @@ WeighingProtocol::WeighingProtocol(const long long tournamentUID, QObject* paren
     delete sheets;
     delete workbook;
     delete workbooks;
+
+    excel.setProperty("Visible", true);
 }

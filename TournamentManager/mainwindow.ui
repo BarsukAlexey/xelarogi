@@ -24,6 +24,9 @@
          <height>0</height>
         </size>
        </property>
+       <property name="focusPolicy">
+        <enum>Qt::WheelFocus</enum>
+       </property>
        <property name="editTriggers">
         <set>QAbstractItemView::NoEditTriggers</set>
        </property>
@@ -133,7 +136,7 @@
             </spacer>
            </item>
            <item>
-            <widget class="QPushButton" name="createTournamentCategoriesBtn">
+            <widget class="QPushButton" name="pushButtonTournamentCategories">
              <property name="text">
               <string>Категории турнира</string>
              </property>
@@ -143,7 +146,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="createOrdersBtn">
+            <widget class="QPushButton" name="pushButtonOrders">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                <horstretch>0</horstretch>
@@ -162,7 +165,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="pushButtonGrid">
+            <widget class="QPushButton" name="pushButtonGrids">
              <property name="text">
               <string>Турнирные сетки</string>
              </property>
@@ -178,7 +181,7 @@
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_3">
              <item>
-              <widget class="QPushButton" name="pushButton">
+              <widget class="QPushButton" name="pushButtonFightDist">
                <property name="text">
                 <string>График распеределения боёв</string>
                </property>
@@ -274,6 +277,56 @@
            </item>
           </layout>
          </item>
+         <item row="1" column="1">
+          <widget class="QGroupBox" name="groupBox">
+           <property name="title">
+            <string>Справочники</string>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_2">
+            <item>
+             <widget class="QPushButton" name="pushButtonCountries">
+              <property name="text">
+               <string>Страны</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButtonRegions">
+              <property name="text">
+               <string>Регионы</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButtonCities">
+              <property name="text">
+               <string>Населенные пункты</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pushButtonClubs">
+              <property name="text">
+               <string>Клубы</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="verticalSpacer_4">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </widget>
+         </item>
         </layout>
        </widget>
       </widget>
@@ -296,13 +349,13 @@
     </property>
     <addaction name="tournamentAction"/>
     <addaction name="separator"/>
-    <addaction name="countryAction"/>
-    <addaction name="regionAction"/>
-    <addaction name="ateAction"/>
-    <addaction name="separator"/>
     <addaction name="actionAgeCategory"/>
     <addaction name="typeAction"/>
     <addaction name="sportCategoryAction"/>
+    <addaction name="separator"/>
+    <addaction name="countryAction"/>
+    <addaction name="regionAction"/>
+    <addaction name="ateAction"/>
     <addaction name="separator"/>
     <addaction name="clubAction"/>
     <addaction name="coachAction"/>
@@ -331,7 +384,7 @@
   </action>
   <action name="ateAction">
    <property name="text">
-    <string>Города</string>
+    <string>Населенные пункты</string>
    </property>
   </action>
   <action name="sexAction">
@@ -341,7 +394,7 @@
   </action>
   <action name="typeAction">
    <property name="text">
-    <string>Разделы</string>
+    <string>Стили</string>
    </property>
   </action>
   <action name="sportCategoryAction">

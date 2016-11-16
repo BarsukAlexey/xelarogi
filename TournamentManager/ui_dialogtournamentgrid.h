@@ -20,6 +20,7 @@
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
+#include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QRadioButton>
@@ -61,11 +62,17 @@ public:
     QGroupBox *groupBox_5;
     QGridLayout *gridLayout_6;
     QSpinBox *spinBoxFontSizeOfOrders;
-    QSpinBox *spinBoxFontSizeOfTC;
-    QSpinBox *spinBoxWidth;
     QSpinBox *spinBoxHeight;
+    QSpinBox *spinBoxWidth;
+    QSpinBox *spinBoxFontSizeOfTC;
     QSpinBox *spinBoxFontSizeOfListOfPairs;
     QSpinBox *spinBoxFontSizeOfNodeOfGrid;
+    QLabel *label;
+    QLabel *label_2;
+    QLabel *label_3;
+    QLabel *label_4;
+    QLabel *label_5;
+    QLabel *label_6;
     QSpacerItem *horizontalSpacer;
     QComboBox *qComboBoxSelectCategory;
     QTableWidget *qTableWidget;
@@ -92,6 +99,7 @@ public:
     {
         if (DialogTournamentGrid->objectName().isEmpty())
             DialogTournamentGrid->setObjectName(QStringLiteral("DialogTournamentGrid"));
+        DialogTournamentGrid->resize(966, 430);
         gridLayout_2 = new QGridLayout(DialogTournamentGrid);
         gridLayout_2->setObjectName(QStringLiteral("gridLayout_2"));
         splitter = new QSplitter(DialogTournamentGrid);
@@ -187,15 +195,15 @@ public:
         spinBoxFontSizeOfOrders->setMaximum(228);
         spinBoxFontSizeOfOrders->setValue(9);
 
-        gridLayout_6->addWidget(spinBoxFontSizeOfOrders, 0, 1, 1, 1);
+        gridLayout_6->addWidget(spinBoxFontSizeOfOrders, 1, 1, 1, 1);
 
-        spinBoxFontSizeOfTC = new QSpinBox(groupBox_5);
-        spinBoxFontSizeOfTC->setObjectName(QStringLiteral("spinBoxFontSizeOfTC"));
-        spinBoxFontSizeOfTC->setMinimum(1);
-        spinBoxFontSizeOfTC->setMaximum(228);
-        spinBoxFontSizeOfTC->setValue(8);
+        spinBoxHeight = new QSpinBox(groupBox_5);
+        spinBoxHeight->setObjectName(QStringLiteral("spinBoxHeight"));
+        spinBoxHeight->setMinimum(1);
+        spinBoxHeight->setMaximum(3000);
+        spinBoxHeight->setValue(30);
 
-        gridLayout_6->addWidget(spinBoxFontSizeOfTC, 0, 0, 1, 1);
+        gridLayout_6->addWidget(spinBoxHeight, 1, 4, 1, 1);
 
         spinBoxWidth = new QSpinBox(groupBox_5);
         spinBoxWidth->setObjectName(QStringLiteral("spinBoxWidth"));
@@ -204,15 +212,15 @@ public:
         spinBoxWidth->setSingleStep(5);
         spinBoxWidth->setValue(300);
 
-        gridLayout_6->addWidget(spinBoxWidth, 0, 3, 1, 1);
+        gridLayout_6->addWidget(spinBoxWidth, 1, 3, 1, 1);
 
-        spinBoxHeight = new QSpinBox(groupBox_5);
-        spinBoxHeight->setObjectName(QStringLiteral("spinBoxHeight"));
-        spinBoxHeight->setMinimum(1);
-        spinBoxHeight->setMaximum(3000);
-        spinBoxHeight->setValue(30);
+        spinBoxFontSizeOfTC = new QSpinBox(groupBox_5);
+        spinBoxFontSizeOfTC->setObjectName(QStringLiteral("spinBoxFontSizeOfTC"));
+        spinBoxFontSizeOfTC->setMinimum(1);
+        spinBoxFontSizeOfTC->setMaximum(228);
+        spinBoxFontSizeOfTC->setValue(8);
 
-        gridLayout_6->addWidget(spinBoxHeight, 0, 4, 1, 1);
+        gridLayout_6->addWidget(spinBoxFontSizeOfTC, 1, 0, 1, 1);
 
         spinBoxFontSizeOfListOfPairs = new QSpinBox(groupBox_5);
         spinBoxFontSizeOfListOfPairs->setObjectName(QStringLiteral("spinBoxFontSizeOfListOfPairs"));
@@ -220,7 +228,7 @@ public:
         spinBoxFontSizeOfListOfPairs->setMaximum(228);
         spinBoxFontSizeOfListOfPairs->setValue(9);
 
-        gridLayout_6->addWidget(spinBoxFontSizeOfListOfPairs, 0, 5, 1, 1);
+        gridLayout_6->addWidget(spinBoxFontSizeOfListOfPairs, 1, 5, 1, 1);
 
         spinBoxFontSizeOfNodeOfGrid = new QSpinBox(groupBox_5);
         spinBoxFontSizeOfNodeOfGrid->setObjectName(QStringLiteral("spinBoxFontSizeOfNodeOfGrid"));
@@ -228,7 +236,37 @@ public:
         spinBoxFontSizeOfNodeOfGrid->setMaximum(228);
         spinBoxFontSizeOfNodeOfGrid->setValue(9);
 
-        gridLayout_6->addWidget(spinBoxFontSizeOfNodeOfGrid, 0, 2, 1, 1);
+        gridLayout_6->addWidget(spinBoxFontSizeOfNodeOfGrid, 1, 2, 1, 1);
+
+        label = new QLabel(groupBox_5);
+        label->setObjectName(QStringLiteral("label"));
+
+        gridLayout_6->addWidget(label, 0, 0, 1, 1);
+
+        label_2 = new QLabel(groupBox_5);
+        label_2->setObjectName(QStringLiteral("label_2"));
+
+        gridLayout_6->addWidget(label_2, 0, 1, 1, 1);
+
+        label_3 = new QLabel(groupBox_5);
+        label_3->setObjectName(QStringLiteral("label_3"));
+
+        gridLayout_6->addWidget(label_3, 0, 2, 1, 1);
+
+        label_4 = new QLabel(groupBox_5);
+        label_4->setObjectName(QStringLiteral("label_4"));
+
+        gridLayout_6->addWidget(label_4, 0, 3, 1, 1);
+
+        label_5 = new QLabel(groupBox_5);
+        label_5->setObjectName(QStringLiteral("label_5"));
+
+        gridLayout_6->addWidget(label_5, 0, 4, 1, 1);
+
+        label_6 = new QLabel(groupBox_5);
+        label_6->setObjectName(QStringLiteral("label_6"));
+
+        gridLayout_6->addWidget(label_6, 0, 5, 1, 1);
 
 
         horizontalLayout_5->addWidget(groupBox_5);
@@ -418,7 +456,13 @@ public:
         checkBoxRegion->setText(QApplication::translate("DialogTournamentGrid", "\320\240\320\265\320\263\320\270\320\276\320\275", 0));
         checkBoxCity->setText(QApplication::translate("DialogTournamentGrid", "\320\223\320\276\321\200\320\276\320\264", 0));
         checkBoxClub->setText(QApplication::translate("DialogTournamentGrid", "\320\232\320\273\321\203\320\261", 0));
-        groupBox_5->setTitle(QApplication::translate("DialogTournamentGrid", "\320\242\321\203\321\200. \320\272\320\260\321\202.\\\320\242\320\260\320\261\320\273.\\\320\222\321\213\321\201\320\276\321\202\320\260\\\320\250\320\270\321\200\320\270\320\275\320\260\\\320\241\320\277\320\270\321\201\320\276\320\272 \320\277\320\260\321\200", 0));
+        groupBox_5->setTitle(QString());
+        label->setText(QApplication::translate("DialogTournamentGrid", "\320\232\320\260\321\202\320\265\320\263.", 0));
+        label_2->setText(QApplication::translate("DialogTournamentGrid", "\320\243\321\207\320\260\321\201\321\202\320\275.", 0));
+        label_3->setText(QApplication::translate("DialogTournamentGrid", "\320\241\320\265\321\202\320\272\320\260", 0));
+        label_4->setText(QApplication::translate("DialogTournamentGrid", "\320\250\320\270\321\200\320\270\320\275\320\260", 0));
+        label_5->setText(QApplication::translate("DialogTournamentGrid", "\320\222\321\213\321\201\320\276\321\202\320\260", 0));
+        label_6->setText(QApplication::translate("DialogTournamentGrid", "\320\237\320\260\321\200\321\213", 0));
         QTableWidgetItem *___qtablewidgetitem = qTableWidget->horizontalHeaderItem(0);
         ___qtablewidgetitem->setText(QApplication::translate("DialogTournamentGrid", "\320\241\320\277\320\276\321\200\321\202\321\201\320\274\320\265\320\275", 0));
         QTableWidgetItem *___qtablewidgetitem1 = qTableWidget->horizontalHeaderItem(1);

@@ -1,10 +1,22 @@
 #ifndef FITINGDISTRIBUTION_H
 #define FITINGDISTRIBUTION_H
 
-#include <QObject>
-#include <QDialog>
-#include <QSqlDatabase>
+#include "db_utils.h"
+#include "dialogchosedata.h"
+#include "excel_utils.h"
+#include "renderareawidget.h"
+
+#include <QApplication>
 #include <QAxObject>
+#include <QAxWidget>
+#include <QDate>
+#include <QDebug>
+#include <QDialog>
+#include <QObject>
+#include <QProgressDialog>
+#include <QSqlDatabase>
+#include <QSqlError>
+#include <QSqlQuery>
 #include <QSqlRecord>
 
 class FitingDistribution : public QObject

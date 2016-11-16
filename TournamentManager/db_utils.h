@@ -64,10 +64,9 @@ public:
         }
     };
 
-    static QVariant get(const QString& field, const QString& table, const QVariant& UID);
+    static QVariant get(const QString& field, const QString& table, const QVariant& UID, const QString PRETTY_FUNCTION = __PRETTY_FUNCTION__);
     static QString getField(const QString& field, const QString& table, const QString& UID, QString PRETTY_FUNCTION = __PRETTY_FUNCTION__);
     static QString getField(const QString& field, const QString& table, const long long UID, QString PRETTY_FUNCTION = __PRETTY_FUNCTION__);
-    static QString getFieldDate(const QString& field, const QString& table, const long long UID, QString PRETTY_FUNCTION = __PRETTY_FUNCTION__);
     static QDate getFieldDateAsDate(const QString& field, const QString& table, const long long UID);
 
 
@@ -89,7 +88,7 @@ public:
     static QSqlQuery *get___TC_UIDS                                                         (int tournamentUID, int TYPE_FK, int AGE_FROM, int AGE_TILL, int SEX_FK, int ageCatUID, int WEIGHT_FROM, int WEIGHT_TILL);
 
 
-    // для таблицы GRID
+    // для таблицы GRIDS
     static QVector<NodeOfTournirGrid> getNodes(long long tournamentCategoryUID);
     static QSqlQuery* getFightNodes(int tournamentCategoryUID);
     //static int f(int tournamentCategoryUID, int day, int time);
@@ -106,7 +105,7 @@ public:
     static QVector<std::pair<long long, std::pair<int, int>>> getUIDsAndPlaces(long long tournamentCategoryUID, int maxPlace, bool skeepEmptyGrids);
     static int getNumberOfCastingOfLots(long long UIDOrder);
     static bool updateLevelOfNodeOfGrid(int TOURNAMENT_CATEGORIES_FK, int VERTEX, int DAY_FIGHT, int TIME_FIGHT);
-
+    static void deleteGrid(const int tournamentCategoryUID);
 
 
 
@@ -295,7 +294,7 @@ public:
         }
         else if (typeField == birthyhdate)
         {
-            text = getFieldDate("BIRTHDATE", "ORDERS", uidOrder, __PRETTY_FUNCTION__);
+            text = get("BIRTHDATE", "ORDERS", uidOrder, __PRETTY_FUNCTION__).toDate().toString("dd.MM.yyyy");;
         }
         else if (typeField == sex)
         {

@@ -8,6 +8,7 @@
 #include <QSqlQuery>
 #include <QSqlRecord>
 #include "logindialog.h"
+#include "mainwindow.h"
 
 
 
@@ -64,7 +65,7 @@ void connectDB()
 
     if (database.open())
     {
-        qDebug() << "opened";
+        //qDebug() << "opened";
     }
     else
     {
@@ -78,8 +79,9 @@ void connectDB()
 
 
 
-#include "createtournamentordersdialog.h"
-#include "createtournamentcategoriesdialog.h"
+//#include "createtournamentordersdialog.h"
+//#include "createtournamentcategoriesdialog.h"
+#include "ebnutvbazu.h"
 
 int main(int argc, char *argv[])
 {
@@ -93,39 +95,20 @@ int main(int argc, char *argv[])
 
     //auth();
     connectDB();
+    //EbnutVBazu::copyTable("AGE_CATEGORIES");
+    //EbnutVBazu::copyTable("TOURNAMENT_CATEGORIES");
 
 
-//    QMap<QString, QVariant> map;
-//    map["COUNTRY_FK"] = 278;
-//    DialogSqlTableManager dlg(0, "CLUBS", "",  map);
-//    dlg.setVisibleShit("LOLKA");
-//    dlg.showMaximized();
-//    dlg.exec();
-//    qDebug() << "dlg.exec(): " << dlg.getUID();
-//    return 0;
+    MainWindow w;
+    w.show();
 
+    //CreateTournamentCategoriesDialog dlg(21);
+    //dlg.open();
 
-//    qDebug() << QDate::fromString("01.2.2011", "d.M.yyyy");
-//    return 0;
+    //CreateTournamentOrdersDialog dlg2(21);
+    //dlg2.resize(dlg.size().width() * 2, dlg.size().height());
+    //dlg2.open();
 
-    CreateTournamentCategoriesDialog dlg(21);
-    dlg.open();
-
-    CreateTournamentOrdersDialog dlg2(21);
-    dlg2.resize(dlg.size().width() * 2, dlg.size().height());
-    dlg2.open();
-
-
-//    DialogSqlTableManager dd(0, "CLUBS");
-//    dd.open();
-
-//    DialogSqlTableManager ddd(0, "COACHS");
-//    ddd.open();
-
-//    DialogSqlTableManager ddd(0, "REGION_UNITS");
-//     ddd.open();
-    //return dlg.exec();
-    //qDebug() << findUidToutnamentCategory(21, QDate(1991, 6, 9), 3, 60, 1393);
 
     return a.exec();
 }

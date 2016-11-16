@@ -44,7 +44,7 @@ public:
     QSpacerItem *horizontalSpacer;
     QSpacerItem *horizontalSpacer_2;
     QTableWidget *tableWidget;
-    QPushButton *pushButton;
+    QPushButton *pushButtonSaveExcel;
 
     void setupUi(QDialog *DialogSchedule)
     {
@@ -120,10 +120,10 @@ public:
 
         gridLayout->addWidget(tableWidget, 1, 0, 1, 5);
 
-        pushButton = new QPushButton(DialogSchedule);
-        pushButton->setObjectName(QStringLiteral("pushButton"));
+        pushButtonSaveExcel = new QPushButton(DialogSchedule);
+        pushButtonSaveExcel->setObjectName(QStringLiteral("pushButtonSaveExcel"));
 
-        gridLayout->addWidget(pushButton, 0, 3, 1, 1);
+        gridLayout->addWidget(pushButtonSaveExcel, 0, 3, 1, 1);
 
 
         retranslateUi(DialogSchedule);
@@ -137,9 +137,9 @@ public:
         groupBox_5->setTitle(QApplication::translate("DialogSchedule", "\320\237\320\260\321\200\320\260\320\274\320\265\321\202\321\200\321\213", 0));
         label->setText(QApplication::translate("DialogSchedule", "\320\232\320\276\320\273\320\270\321\207\320\265\321\201\321\202\320\262\320\276 \321\200\320\270\320\275\320\263\320\276\320\262", 0));
         label_3->setText(QApplication::translate("DialogSchedule", "\320\227\320\260\320\264\320\265\321\200\320\266\320\272\320\260 \320\277\321\200\320\270 \321\201\320\274\320\265\320\275\320\265 \320\277\320\260\321\200 \320\275\320\260 \321\200\320\270\320\275\320\263\320\265 (\320\262 \321\201\320\265\320\272\321\203\320\275\320\264\320\260\321\205)", 0));
-        groupBox->setTitle(QApplication::translate("DialogSchedule", "\320\241\320\277\320\270\321\201\320\276\320\272", 0));
+        groupBox->setTitle(QString());
         pushButtonLists->setText(QApplication::translate("DialogSchedule", "\320\235\320\260\321\201\321\202\321\200\320\276\320\271\320\272\320\260 \321\201\320\277\320\270\321\201\320\272\320\276\320\262...", 0));
-        pushButton->setText(QApplication::translate("DialogSchedule", "\320\241\320\276\321\205\321\200\320\260\320\275\320\270\321\202\321\214 \320\262 Excel...", 0));
+        pushButtonSaveExcel->setText(QApplication::translate("DialogSchedule", "\320\241\320\276\321\205\321\200\320\260\320\275\320\270\321\202\321\214 \320\262 Excel...", 0));
     } // retranslateUi
 
 };

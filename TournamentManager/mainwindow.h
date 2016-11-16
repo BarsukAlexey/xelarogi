@@ -6,11 +6,11 @@
 #include "dialogschedule.h"
 #include "dialogschedule2.h"
 #include "dialogtournamentgrid.h"
-#include "ebnutvbazu.h"
 #include "fighting_pairs.h"
 #include "fiting_distribution.h"
 #include "formdipl.h"
 #include "generatetournamentcategoriesdialog.h"
+#include "dialogtournamentgrid.h"
 
 #include "logindialog.h"
 #include "report_manda.h"
@@ -18,6 +18,8 @@
 
 #include "weighing_protocol.h"
 #include "winner_report.h"
+#include "dialogschedule.h"
+
 
 #include <algorithm>
 #include <ctime>
@@ -85,6 +87,7 @@ public:
 
 private:
     void onAction(QString table);
+    void onButton(const QString &field, const QString& table);
 
 private:
     Ui::MainWindow *ui;
