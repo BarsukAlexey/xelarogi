@@ -50,9 +50,9 @@ DialogChoseData::DialogChoseData(DialogChoseData::Type type, QWidget *parent) :
     ui->tableWidget->setColumnWidth(0,400);
     ui->tableWidget->setColumnWidth(1,200);
 
-    ui->groupBoxTitle->setEnabled(enableTitle());
-    ui->groupBox_Rows->setEnabled(enableRows());
-    ui->comboBoxMaxPlace->setEnabled(enableMaxPlace());
+    if (!enableTitle   ()) ui->groupBoxTitle   ->hide();
+    if (!enableRows    ()) ui->groupBox_Rows   ->hide();
+    if (!enableMaxPlace()) ui->groupBoxMaxPlace->hide();
 
     //qDebug() << "DialogChoseData " << this->type << type;
     QDir recoredDir(getDirPath());

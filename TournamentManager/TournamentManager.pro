@@ -39,19 +39,22 @@ SOURCES += main.cpp \
     weighing_protocol.cpp \
     dialogschedule.cpp \
     dialogschedulesettinglists.cpp \
-    fiting_distribution.cpp
+    fiting_distribution.cpp \
+    fighting_pairs.cpp \
+    mythread.cpp \
+    dialogorderoftc.cpp \
+    dialogschedule2.cpp \
+    dialogschedule2treewidget.cpp \
+    dialogschedule2tablewidget.cpp \
+    dialogschedule2inputtype.cpp \
 
-#    fighting_pairs.cpp \
 #    winner_report.cpp \
 #    report_manda.cpp \
 #    report_ministr.cpp \
-#    mythread.cpp \
 #    formdipl.cpp \
 
-#    dialogschedule2.cpp \
-#    dialogschedule2treewidget.cpp \
-#    dialogschedule2tablewidget.cpp \
-#    dialogschedule2inputtype.cpp \
+
+
 
 HEADERS  += logindialog.h \
     db_utils.h \
@@ -76,18 +79,19 @@ HEADERS  += logindialog.h \
     dialogschedule.h \
     dialogschedulesettinglists.h \
     fiting_distribution.h \
-
-#    fighting_pairs.h \
+    fighting_pairs.h \
+    mythread.h \
+    dialogorderoftc.h \
+    dialogschedule2.h \
+    dialogschedule2treewidget.h \
+    dialogschedule2tablewidget.h \
+    dialogschedule2inputtype.h \
 #    winner_report.h \
 #    report_manda.h \
 #    report_ministr.h \
-#    mythread.h \
 #    formdipl.h \
 
-#    dialogschedule2.h \
-#    dialogschedule2treewidget.h \
-#    dialogschedule2tablewidget.h \
-#    dialogschedule2inputtype.h \
+
 
 
 FORMS +=  logindialog.ui \
@@ -106,11 +110,12 @@ FORMS +=  logindialog.ui \
     mainwindow.ui \
     dialogschedule.ui \
     dialogschedulesettinglists.ui \
-#    dialogschedule2.ui \
-#    dialogschedule2inputtype.ui \
+    fighting_pairs.ui \
+    dialogorderoftc.ui \
+    dialogschedule2.ui \
+    dialogschedule2inputtype.ui \
 
 #    formdipl.ui \
-#    fighting_pairs.ui \
 
 
 

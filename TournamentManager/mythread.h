@@ -99,7 +99,7 @@ protected:
                              QString("%1").arg(curTime / 60%60, 2, 10, QChar('0')) + " м.";
             message2 +=  QString::number(cnt) + ", ";
         }
-        qDebug() << "time.size()" << time.size() << "min,max:" << minSumSeg << maxSumSeg << "Delta: " << (maxSumSeg - minSumSeg) / 60 << "In my thread: " << reportMessage << " count in rings:" << message2;
+        //qDebug() << "time.size()" << time.size() << "min,max:" << minSumSeg << maxSumSeg << "Delta: " << (maxSumSeg - minSumSeg) / 60 << "In my thread: " << reportMessage << " count in rings:" << message2;
     }
 };
 

@@ -141,7 +141,6 @@ MainWindow::MainWindow(QWidget *parent) :
         dlg.exec();
         this->show();
     });
-
     connect(ui->pushButtonOrders, &QPushButton::clicked, [this] ()
     {
         this->hide();
@@ -150,7 +149,6 @@ MainWindow::MainWindow(QWidget *parent) :
         dlg.exec();
         this->show();
     });
-
     connect(ui->pushButtonGrids, &QPushButton::clicked, [this] ()
     {
         this->hide();
@@ -167,6 +165,22 @@ MainWindow::MainWindow(QWidget *parent) :
     {
         this->hide();
         DialogSchedule dlg(0, tournamentUID);
+        dlg.showMaximized();
+        dlg.exec();
+        this->show();
+    });
+    connect(ui->pushButtonTimeScheduling, &QPushButton::clicked, [this] ()
+    {
+        this->hide();
+        Dialogschedule2 dlg(tournamentUID);
+        dlg.showMaximized();
+        dlg.exec();
+        this->show();
+    });
+    connect(ui->pushButtonPair, &QPushButton::clicked, [this] ()
+    {
+        this->hide();
+        FightingPairs dlg(tournamentUID);
         dlg.showMaximized();
         dlg.exec();
         this->show();

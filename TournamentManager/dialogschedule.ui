@@ -127,7 +127,7 @@
    <item row="0" column="3">
     <widget class="QPushButton" name="pushButtonSaveExcel">
      <property name="text">
-      <string>Сохранить в Excel...</string>
+      <string>Сохранить всё в Excel...</string>
      </property>
     </widget>
    </item>

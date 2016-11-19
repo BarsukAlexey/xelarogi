@@ -3,6 +3,7 @@
 
 #include "db_utils.h"
 #include "dialogchosedata.h"
+#include "dialogorderoftc.h"
 
 #include <QAxWidget>
 #include <QGroupBox>
@@ -22,41 +23,38 @@
 
 
 
+
+class NodeOfGridWithNames : public DBUtils::NodeOfTournirGrid
+{
+public:
+    QString name;
+
+    int leftUID;
+    int rightUID;
+    QString leftName;
+    QString rightName;
+
+    explicit NodeOfGridWithNames(const DBUtils::NodeOfTournirGrid& node = DBUtils::NodeOfTournirGrid()) :
+        DBUtils::NodeOfTournirGrid(node),
+        name(""),
+
+        leftUID(-1),
+        rightUID(-1),
+        leftName(""),
+        rightName("")
+    {
+
+    }
+};
+
 namespace Ui {
 class FightingPairs;
 }
 
 
-
 class FightingPairs : public QDialog
 {
     Q_OBJECT
-
-    class NodeOfGridWithNames
-    {
-    public:
-        DBUtils::NodeOfTournirGrid node;
-
-        QString name;
-
-        int leftUID;
-        int rightUID;
-        QString leftName;
-        QString rightName;
-
-        NodeOfGridWithNames(const DBUtils::NodeOfTournirGrid& node = DBUtils::NodeOfTournirGrid()) :
-            node(node),
-
-            name(""),
-
-            leftUID(-1),
-            rightUID(-1),
-            leftName(""),
-            rightName("")
-        {
-
-        }
-    };
 
 public:
     explicit FightingPairs(long long _tournamentUID, QWidget* parent = 0);

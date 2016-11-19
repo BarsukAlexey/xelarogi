@@ -42,7 +42,7 @@ public:
     {
         if (DialogDisq->objectName().isEmpty())
             DialogDisq->setObjectName(QStringLiteral("DialogDisq"));
-        DialogDisq->resize(398, 201);
+        DialogDisq->resize(201, 125);
         verticalLayout = new QVBoxLayout(DialogDisq);
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
         groupBox = new QGroupBox(DialogDisq);

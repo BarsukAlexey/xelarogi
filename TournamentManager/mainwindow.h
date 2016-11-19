@@ -11,6 +11,7 @@
 #include "formdipl.h"
 #include "generatetournamentcategoriesdialog.h"
 #include "dialogtournamentgrid.h"
+#include "fighting_pairs.h"
 
 #include "logindialog.h"
 #include "report_manda.h"
@@ -19,6 +20,8 @@
 #include "weighing_protocol.h"
 #include "winner_report.h"
 #include "dialogschedule.h"
+
+#include "dialogschedule2.h"
 
 
 #include <algorithm>

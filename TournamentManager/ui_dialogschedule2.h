@@ -15,7 +15,6 @@
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QDialog>
-#include <QtWidgets/QFormLayout>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QHBoxLayout>
@@ -40,16 +39,17 @@ public:
     QSplitter *splitter;
     QWidget *widget;
     QVBoxLayout *verticalLayout;
-    QLabel *labelContest;
-    QHBoxLayout *horizontalLayout_5;
-    QSpacerItem *horizontalSpacer_4;
-    QFormLayout *formLayout;
-    QLabel *label;
-    QSpinBox *spinBoxRing;
-    QLabel *label_2;
-    QComboBox *comboBoxDay;
+    QHBoxLayout *horizontalLayout_8;
+    QHBoxLayout *horizontalLayout_6;
     QLabel *label_3;
     QSpinBox *spinBoxDelay;
+    QHBoxLayout *horizontalLayout_5;
+    QLabel *label;
+    QSpinBox *spinBoxRing;
+    QHBoxLayout *horizontalLayout_7;
+    QLabel *label_2;
+    QComboBox *comboBoxDay;
+    QSpacerItem *horizontalSpacer_3;
     QHBoxLayout *horizontalLayout_4;
     QGroupBox *groupBox_2;
     QHBoxLayout *horizontalLayout_2;
@@ -90,54 +90,15 @@ public:
         widget->setObjectName(QStringLiteral("widget"));
         verticalLayout = new QVBoxLayout(widget);
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
-        labelContest = new QLabel(widget);
-        labelContest->setObjectName(QStringLiteral("labelContest"));
-        QFont font;
-        font.setPointSize(14);
-        font.setBold(true);
-        font.setWeight(75);
-        labelContest->setFont(font);
-        labelContest->setAlignment(Qt::AlignCenter);
-
-        verticalLayout->addWidget(labelContest);
-
-        horizontalLayout_5 = new QHBoxLayout();
-        horizontalLayout_5->setObjectName(QStringLiteral("horizontalLayout_5"));
-        horizontalSpacer_4 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        horizontalLayout_5->addItem(horizontalSpacer_4);
-
-        formLayout = new QFormLayout();
-        formLayout->setObjectName(QStringLiteral("formLayout"));
-        label = new QLabel(widget);
-        label->setObjectName(QStringLiteral("label"));
-        label->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
-
-        formLayout->setWidget(0, QFormLayout::LabelRole, label);
-
-        spinBoxRing = new QSpinBox(widget);
-        spinBoxRing->setObjectName(QStringLiteral("spinBoxRing"));
-        spinBoxRing->setMinimum(1);
-        spinBoxRing->setMaximum(228);
-
-        formLayout->setWidget(0, QFormLayout::FieldRole, spinBoxRing);
-
-        label_2 = new QLabel(widget);
-        label_2->setObjectName(QStringLiteral("label_2"));
-        label_2->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
-
-        formLayout->setWidget(1, QFormLayout::LabelRole, label_2);
-
-        comboBoxDay = new QComboBox(widget);
-        comboBoxDay->setObjectName(QStringLiteral("comboBoxDay"));
-
-        formLayout->setWidget(1, QFormLayout::FieldRole, comboBoxDay);
-
+        horizontalLayout_8 = new QHBoxLayout();
+        horizontalLayout_8->setObjectName(QStringLiteral("horizontalLayout_8"));
+        horizontalLayout_6 = new QHBoxLayout();
+        horizontalLayout_6->setObjectName(QStringLiteral("horizontalLayout_6"));
         label_3 = new QLabel(widget);
         label_3->setObjectName(QStringLiteral("label_3"));
         label_3->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
 
-        formLayout->setWidget(2, QFormLayout::LabelRole, label_3);
+        horizontalLayout_6->addWidget(label_3);
 
         spinBoxDelay = new QSpinBox(widget);
         spinBoxDelay->setObjectName(QStringLiteral("spinBoxDelay"));
@@ -146,13 +107,51 @@ public:
         spinBoxDelay->setSingleStep(10);
         spinBoxDelay->setValue(120);
 
-        formLayout->setWidget(2, QFormLayout::FieldRole, spinBoxDelay);
+        horizontalLayout_6->addWidget(spinBoxDelay);
 
 
-        horizontalLayout_5->addLayout(formLayout);
+        horizontalLayout_8->addLayout(horizontalLayout_6);
+
+        horizontalLayout_5 = new QHBoxLayout();
+        horizontalLayout_5->setObjectName(QStringLiteral("horizontalLayout_5"));
+        label = new QLabel(widget);
+        label->setObjectName(QStringLiteral("label"));
+        label->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+
+        horizontalLayout_5->addWidget(label);
+
+        spinBoxRing = new QSpinBox(widget);
+        spinBoxRing->setObjectName(QStringLiteral("spinBoxRing"));
+        spinBoxRing->setMinimum(1);
+        spinBoxRing->setMaximum(228);
+
+        horizontalLayout_5->addWidget(spinBoxRing);
 
 
-        verticalLayout->addLayout(horizontalLayout_5);
+        horizontalLayout_8->addLayout(horizontalLayout_5);
+
+        horizontalLayout_7 = new QHBoxLayout();
+        horizontalLayout_7->setObjectName(QStringLiteral("horizontalLayout_7"));
+        label_2 = new QLabel(widget);
+        label_2->setObjectName(QStringLiteral("label_2"));
+        label_2->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+
+        horizontalLayout_7->addWidget(label_2);
+
+        comboBoxDay = new QComboBox(widget);
+        comboBoxDay->setObjectName(QStringLiteral("comboBoxDay"));
+
+        horizontalLayout_7->addWidget(comboBoxDay);
+
+        horizontalSpacer_3 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_7->addItem(horizontalSpacer_3);
+
+
+        horizontalLayout_8->addLayout(horizontalLayout_7);
+
+
+        verticalLayout->addLayout(horizontalLayout_8);
 
         horizontalLayout_4 = new QHBoxLayout();
         horizontalLayout_4->setObjectName(QStringLiteral("horizontalLayout_4"));
@@ -261,7 +260,6 @@ public:
 
         gridLayout_2->addWidget(splitter, 0, 0, 1, 1);
 
-        QWidget::setTabOrder(spinBoxRing, comboBoxDay);
         QWidget::setTabOrder(comboBoxDay, spinBoxDelay);
         QWidget::setTabOrder(spinBoxDelay, treeWidget);
 
@@ -273,10 +271,9 @@ public:
     void retranslateUi(QDialog *Dialogschedule2)
     {
         Dialogschedule2->setWindowTitle(QApplication::translate("Dialogschedule2", "Dialog", 0));
-        labelContest->setText(QApplication::translate("Dialogschedule2", "#", 0));
+        label_3->setText(QApplication::translate("Dialogschedule2", "\320\227\320\260\320\264\320\265\321\200\320\266\320\272\320\260 (\320\262 \321\201\320\265\320\272\321\203\320\275\320\264\320\260\321\205)", 0));
         label->setText(QApplication::translate("Dialogschedule2", "\320\232\320\276\320\273\320\270\321\207\320\265\321\201\321\202\320\262\320\276 \320\277\320\273\320\276\321\211\320\260\320\264\320\276\320\272:", 0));
         label_2->setText(QApplication::translate("Dialogschedule2", "\320\224\320\265\320\275\321\214:", 0));
-        label_3->setText(QApplication::translate("Dialogschedule2", "\320\227\320\260\320\264\320\265\321\200\320\266\320\272\320\260 \321\201\320\274\320\265\320\275\321\213 \320\277\320\260\321\200 (\320\262 \321\201\320\265\320\272\321\203\320\275\320\264\320\260\321\205)", 0));
         groupBox_2->setTitle(QApplication::translate("Dialogschedule2", "\320\242\320\265\320\272\321\201\321\202 (\320\264\320\273\321\217 \320\262\321\201\320\265\320\263\320\276 \320\272\321\200\320\276\320\274\320\265 \321\201\320\265\321\202\320\276\320\272)", 0));
         radioTextCountry->setText(QApplication::translate("Dialogschedule2", "\320\241\321\202\321\200\320\260\320\275\320\260", 0));
         radioTextRegion->setText(QApplication::translate("Dialogschedule2", "\320\240\320\265\320\263\320\270\320\276\320\275", 0));

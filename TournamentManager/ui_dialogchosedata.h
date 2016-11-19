@@ -67,7 +67,7 @@ public:
     QLineEdit *lineEditTitleMainSecretary;
     QLineEdit *lineEditTitleMainJudge;
     QDialogButtonBox *buttonBox;
-    QGroupBox *groupBox_3;
+    QGroupBox *groupBoxMaxPlace;
     QGridLayout *gridLayout_7;
     QSpacerItem *horizontalSpacer_3;
     QComboBox *comboBoxMaxPlace;
@@ -243,21 +243,21 @@ public:
 
         gridLayout->addWidget(buttonBox, 6, 0, 1, 1);
 
-        groupBox_3 = new QGroupBox(DialogChoseData);
-        groupBox_3->setObjectName(QStringLiteral("groupBox_3"));
-        gridLayout_7 = new QGridLayout(groupBox_3);
+        groupBoxMaxPlace = new QGroupBox(DialogChoseData);
+        groupBoxMaxPlace->setObjectName(QStringLiteral("groupBoxMaxPlace"));
+        gridLayout_7 = new QGridLayout(groupBoxMaxPlace);
         gridLayout_7->setObjectName(QStringLiteral("gridLayout_7"));
         horizontalSpacer_3 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
         gridLayout_7->addItem(horizontalSpacer_3, 0, 1, 1, 1);
 
-        comboBoxMaxPlace = new QComboBox(groupBox_3);
+        comboBoxMaxPlace = new QComboBox(groupBoxMaxPlace);
         comboBoxMaxPlace->setObjectName(QStringLiteral("comboBoxMaxPlace"));
 
         gridLayout_7->addWidget(comboBoxMaxPlace, 0, 0, 1, 1);
 
 
-        gridLayout->addWidget(groupBox_3, 3, 0, 1, 1);
+        gridLayout->addWidget(groupBoxMaxPlace, 3, 0, 1, 1);
 
         QWidget::setTabOrder(comboBox, pushButtonSaveAs);
         QWidget::setTabOrder(pushButtonSaveAs, pushButtonSave);
@@ -304,7 +304,7 @@ public:
         lineEditTitleAssociateMainJudge->setText(QApplication::translate("DialogChoseData", "\320\227\320\260\320\274. \320\263\320\273\320\260\320\262\320\275\320\276\320\263\320\276 \321\201\321\203\320\264\321\214\320\270:", 0));
         lineEditTitleMainSecretary->setText(QApplication::translate("DialogChoseData", "\320\223\320\273\320\260\320\262\320\275\321\213\320\271 \321\201\320\265\320\272\321\200\320\265\321\202\320\260\321\200\321\214:", 0));
         lineEditTitleMainJudge->setText(QApplication::translate("DialogChoseData", "\320\223\320\273\320\260\320\262\320\275\321\213\320\271 \321\201\321\203\320\264\321\214\321\217:", 0));
-        groupBox_3->setTitle(QApplication::translate("DialogChoseData", "\320\234\320\260\320\272\321\201. \320\267\320\260\320\275\321\217\321\202\320\276\320\265 \320\274\320\265\321\201\321\202\320\276 (\320\262\320\272\320\273\321\216\321\207\320\270\321\202\320\265\320\273\321\214\320\275\320\276) \320\262 \321\202\321\203\321\200\320\275\320\270\321\200\320\275\320\276\320\271 \321\201\320\265\321\202\320\272\320\265 (\320\264\320\273\321\217 \321\201\320\277\320\270\321\201\320\272\320\260 \320\277\321\200\320\270\320\267\321\221\321\200\320\276\320\262)", 0));
+        groupBoxMaxPlace->setTitle(QApplication::translate("DialogChoseData", "\320\234\320\260\320\272\321\201. \320\267\320\260\320\275\321\217\321\202\320\276\320\265 \320\274\320\265\321\201\321\202\320\276 (\320\262\320\272\320\273\321\216\321\207\320\270\321\202\320\265\320\273\321\214\320\275\320\276) \320\262 \321\202\321\203\321\200\320\275\320\270\321\200\320\275\320\276\320\271 \321\201\320\265\321\202\320\272\320\265 (\320\264\320\273\321\217 \321\201\320\277\320\270\321\201\320\272\320\260 \320\277\321\200\320\270\320\267\321\221\321\200\320\276\320\262)", 0));
     } // retranslateUi
 
 };

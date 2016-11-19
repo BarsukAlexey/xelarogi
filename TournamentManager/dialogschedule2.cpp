@@ -14,7 +14,7 @@ Dialogschedule2::Dialogschedule2(int tournamentUID, QWidget *parent) :
     QSettings settings;
     ui->spinBoxDelay->setValue(settings.value("spinBoxDelay", ui->spinBoxDelay->value()).toInt());
 
-    ui->labelContest->setText(DBUtils::getField("NAME", "TOURNAMENTS", tournamentUID));
+    //ui->labelContest->setText(DBUtils::getField("NAME", "TOURNAMENTS", tournamentUID));
     ui->comboBoxDay->addItems(DBUtils::get_DAYS_FROM_TOURNAMENTS(tournamentUID));
 
     updateTree();

@@ -387,11 +387,14 @@ void CreateTournamentOrdersDialog::loadFromExcel()
                 }
             }
         }
+        delete sheet;
     }
 
+    delete sheets;
     workbook->dynamicCall("Save()");
     workbook->dynamicCall("Close()");
     delete workbook;
+    delete workbooks;
     excel->dynamicCall("Quit()");
     delete excel;
 

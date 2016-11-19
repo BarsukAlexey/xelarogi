@@ -118,6 +118,12 @@ FightingPairs::FightingPairs(long long _tournamentUID, QWidget* parent) :
     connect(ui->spinBoxDelay, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &FightingPairs::onItemSelectionChanged);
     connect(ui->radioButtonChampionship, &QRadioButton::clicked, this, &FightingPairs::onItemSelectionChanged);
     connect(ui->radioButtonCube, &QRadioButton::clicked, this, &FightingPairs::onItemSelectionChanged);
+    connect(ui->radioButtonChampionship, &QRadioButton::clicked, [this](){
+        ui->qTableWidget->showColumn(2);
+    });
+    connect(ui->radioButtonCube, &QRadioButton::clicked, [this](){
+        ui->qTableWidget->hideColumn(2);
+    });
     for (QSpinBox* spinBox : spinBoxes)
     {
         connect(spinBox, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), this, &FightingPairs::onItemSelectionChanged);
@@ -159,11 +165,11 @@ void FightingPairs::printListOfPairsInExcel(
     for (int i = 0, pair = 1; i < pairs.size(); ++i, ++pair)
     {
         const NodeOfGridWithNames& f = pairs[i];
-        if (i == 0 || pairs[i].node.tournamentCategory != pairs[i - 1].node.tournamentCategory)
+        if (i == 0 || pairs[i].tournamentCategory != pairs[i - 1].tournamentCategory)
         {
             ++currentRow;
 
-            QString nameOfLevel = RenderAreaWidget::getNameOfLevel(f.node.v);
+            QString nameOfLevel = RenderAreaWidget::getNameOfLevel(f.v);
             if (translations.contains(nameOfLevel)) nameOfLevel = translations[nameOfLevel];
 
             ExcelUtils::setValue(sheet, currentRow, 1, nameOfLevel);
@@ -172,7 +178,7 @@ void FightingPairs::printListOfPairsInExcel(
             ++currentRow;
 
             ExcelUtils::setValue(sheet, currentRow, 1,
-                                 DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", f.node.tournamentCategory));
+                                 DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", f.tournamentCategory));
             ExcelUtils::uniteRange(sheet, currentRow, 1, currentRow, 3);
             ++currentRow;
         }
@@ -229,7 +235,7 @@ void FightingPairs::printListOfPairsInJSON(
         QMessageBox::warning(0, "", "Невозможно сохранить файл " + path);
         return;
     }
-    qDebug() << "writing: " << saveFile.write(QJsonDocument(arr).toJson()) << "БайТ in" << path;
+    saveFile.write(QJsonDocument(arr).toJson());
     /**/
 }
 
@@ -262,12 +268,6 @@ void FightingPairs::makeGridsForPointFighting(QString existingDirectory, QVector
 
 
 
-//    QProgressDialog progress(this);
-//    progress.setWindowModality(Qt::WindowModal);
-//    progress.setMinimumDuration(0);
-//    progress.setMaximum(tournamentCategoryUIDs.size());
-
-
     MyThread *myThread = new MyThread(constDurationOfGrid, ui->ringSpinBox->value());
     myThread->start();
     if (!myThread->wait(60 * 1000))
@@ -285,6 +285,7 @@ void FightingPairs::makeGridsForPointFighting(QString existingDirectory, QVector
         {
             ansTournamentCategoryUIDs.back() << constTournamentCategoryUIDs.takeFirst();
         }
+
     }
 
 
@@ -294,8 +295,15 @@ void FightingPairs::makeGridsForPointFighting(QString existingDirectory, QVector
     int idRing = 1;
     for (QVector<long long> uids : ansTournamentCategoryUIDs)
     {
-//        if (progress.wasCanceled())
-//            break;
+        DialogOrderOfTC dlgOrder(this);
+        QVector<std::pair<int, int>> uid_level;
+        for (int uid : uids) uid_level << std::make_pair(uid, -1);
+        dlgOrder.setTournamentCategories(uid_level, "Татами #" + QString::number(idRing));
+        dlgOrder.showMaximized();
+        dlgOrder.exec();
+        uid_level = dlgOrder.getTournamentCategories();
+        for (int i = 0; i < uid_level.size(); ++i)
+            uids[i] = uid_level[i].first;
 
         writeGridsForPointFighting(existingDirectory,
                                    uids,
@@ -313,14 +321,12 @@ void FightingPairs::makeGridsForPointFighting(QString existingDirectory, QVector
     excel.dynamicCall("Quit()");
 
     QMessageBox::information(0, "", myThread->reportMessage);
-
     delete myThread;
-    /**/
 }
 
 void FightingPairs::writeGridsForPointFighting(
         QString existingDirectory,
-        QVector<long long> uids,
+        QVector<long long> tournamentCategoryUIDs,
         QAxObject *workbooks,
         QAxWidget& excel,
         const int numberRing,
@@ -333,9 +339,9 @@ void FightingPairs::writeGridsForPointFighting(
     QVector<QVector<int> > fightNumber;  // fightNumber[tree][vertex] = orderFightNumber
     {
         QVector<std::pair<int, int> > orderOfFights;  // pair(idTree, node.v)
-        for (int i = 0; i < uids.size(); ++i)
+        for (int i = 0; i < tournamentCategoryUIDs.size(); ++i)
         {
-            QVector<DBUtils::NodeOfTournirGrid> nodes = DBUtils::getNodes(uids[i]);
+            QVector<DBUtils::NodeOfTournirGrid> nodes = DBUtils::getNodes(tournamentCategoryUIDs[i]);
             std::reverse(nodes.begin(), nodes.end());
             fightNumber << QVector<int>(nodes.size() + 1);
             for (DBUtils::NodeOfTournirGrid node : nodes)
@@ -366,27 +372,39 @@ void FightingPairs::writeGridsForPointFighting(
 
 
     QVector<QJsonObject> jsonObjects;
-    for (int i = 0; i < uids.size(); ++i)
+    for (int i = 0; i < tournamentCategoryUIDs.size(); ++i)
     {
         workbooks->dynamicCall("Add");
         QAxObject *workbook = excel.querySubObject("ActiveWorkBook");
         RenderAreaWidget::printTableGridInExcel(
-                    workbook, dlg, uids[i], true,
+                    workbook, dlg, tournamentCategoryUIDs[i], true,
                     existingDirectory, fightNumber[i], date,
                     dlg.getTranslations()["Татами"] + " " +  QString("%1 (%2)").arg(numberRing, 2, 10, QChar('0')).arg(i + 1, 2, 10, QChar('0')));
         workbook->dynamicCall("Close()");
         delete workbook;
 
-        QVector<DBUtils::NodeOfTournirGrid> fightingNodes;
-        for (DBUtils::NodeOfTournirGrid node : DBUtils::getNodes(uids[i]))
-            if (node.isFight)
-                fightingNodes << node;
-        std::reverse(fightingNodes.begin(), fightingNodes.end());
-        for (int j = 0; j < fightingNodes.size(); ++j)
+        QVector<NodeOfGridWithNames> fightNodes;
+        for (const DBUtils::NodeOfTournirGrid& node : DBUtils::getNodes(tournamentCategoryUIDs[i]))
+            fightNodes << NodeOfGridWithNames(node);
+        for (int j = fightNodes.size() - 1; 0 <= j; --j)
         {
-            const DBUtils::NodeOfTournirGrid f = fightingNodes[j];
-            QJsonObject a = getQJsonObject(f, fightNumber[i][f.v], typeText, typeFlag);
-            jsonObjects << a;
+            NodeOfGridWithNames& node = fightNodes[j];
+            if (!node.isFight)
+            {
+                node.name = DBUtils::getSecondNameAndFirstName(node.UID);
+            }
+            else
+            {
+                node.name = "Winner #" + QString::number(fightNumber[i][node.v]);
+
+                node.leftUID   = fightNodes[2 * node.v + 1 - 1].UID;
+                node.leftName  = fightNodes[2 * node.v + 1 - 1].name;
+
+                node.rightUID  = fightNodes[2 * node.v     - 1].UID;
+                node.rightName = fightNodes[2 * node.v     - 1].name;
+
+                jsonObjects << getQJsonObject(node, fightNumber[i][node.v], typeText, typeFlag);
+            }
         }
     }
 
@@ -404,7 +422,7 @@ void FightingPairs::writeGridsForPointFighting(
     }
     else {
         qint64 localWrite = saveFile.write(QJsonDocument(arr).toJson());
-        qDebug() << "writing: " << localWrite << "БайТ in " << path;
+        //qDebug() << "writing: " << localWrite << "БайТ in " << path;
     }
     /**/
 }
@@ -437,12 +455,12 @@ QJsonObject FightingPairs::getQJsonObject(const NodeOfGridWithNames& f, const in
 
     a["fightId"] = fightingId;
 
-    a["categoryOfFighting"]      = DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", f.node.tournamentCategory);
-    a["categoryOfFightingShort"] = DBUtils::getWeightAsOneNumberPlusMinus(f.node.tournamentCategory);
+    a["categoryOfFighting"]      = DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", f.tournamentCategory);
+    a["categoryOfFightingShort"] = DBUtils::getWeightAsOneNumberPlusMinus(f.tournamentCategory);
 
-    a["countOfRounds"  ] = DBUtils::getField("ROUND_COUNT"     , "TOURNAMENT_CATEGORIES", f.node.tournamentCategory);
-    a["durationOfRound"] = DBUtils::getField("DURATION_FIGHING", "TOURNAMENT_CATEGORIES", f.node.tournamentCategory);
-    a["durationOfBreak"] = DBUtils::getField("DURATION_BREAK"  , "TOURNAMENT_CATEGORIES", f.node.tournamentCategory);
+    a["countOfRounds"  ] = DBUtils::getField("ROUND_COUNT"     , "TOURNAMENT_CATEGORIES", f.tournamentCategory);
+    a["durationOfRound"] = DBUtils::getField("DURATION_FIGHING", "TOURNAMENT_CATEGORIES", f.tournamentCategory);
+    a["durationOfBreak"] = DBUtils::getField("DURATION_BREAK"  , "TOURNAMENT_CATEGORIES", f.tournamentCategory);
 
     a["regionOfLeftFighter" ] = getTextLocal(f.leftUID , typeText);
     a["regionOfRightFighter"] = getTextLocal(f.rightUID, typeText);
@@ -450,14 +468,14 @@ QJsonObject FightingPairs::getQJsonObject(const NodeOfGridWithNames& f, const in
     a["leftFlag" ] = getFlagImage(f.leftUID , typeFlag);
     a["rightFlag"] = getFlagImage(f.rightUID, typeFlag);
 
-    a["TOURNAMENT_CATEGORIES_FK"] = f.node.tournamentCategory;
-    a["VERTEX"] = f.node.v;
+    a["TOURNAMENT_CATEGORIES_FK"] = f.tournamentCategory;
+    a["VERTEX"] = f.v;
 
     a["orderUID_left" ] = f.leftUID ;
     a["orderUID_right"] = f.rightUID;
 
-    a["IN_CASE_TIE"         ] = DBUtils::getField("IN_CASE_TIE"         , "TOURNAMENT_CATEGORIES", f.node.tournamentCategory).toInt();
-    a["DURATION_EXTRA_ROUND"] = DBUtils::getField("DURATION_EXTRA_ROUND", "TOURNAMENT_CATEGORIES", f.node.tournamentCategory).toInt();
+    a["IN_CASE_TIE"         ] = DBUtils::getField("IN_CASE_TIE"         , "TOURNAMENT_CATEGORIES", f.tournamentCategory).toInt();
+    a["DURATION_EXTRA_ROUND"] = DBUtils::getField("DURATION_EXTRA_ROUND", "TOURNAMENT_CATEGORIES", f.tournamentCategory).toInt();
     return a;
 }
 
@@ -550,25 +568,18 @@ void FightingPairs::onGoPress()
 
     std::vector<int> countOfGrids = myThread->ans; // countOfGrids[idRing] = кол-во сеток на ринге #idRing
 
-
-    QProgressDialog progress(this);
-    progress.setWindowModality(Qt::WindowModal);
-    progress.setMinimumDuration(0);
-    progress.setMaximum(selectedRows.length());
-
-
-    QAxWidget excel("Excel.Application");
+    QAxObject excel("Excel.Application");
     QAxObject *workbooks = excel.querySubObject("WorkBooks");
     workbooks->dynamicCall("Add");
     QAxObject *workbook = excel.querySubObject("ActiveWorkBook");
     QAxObject *sheets = workbook->querySubObject("WorkSheets");
+
     QString message;
     for (int idRing = 0; idRing < ui->ringSpinBox->value() && !selectedRows.isEmpty(); ++idRing)
     {
         QVector<int> selectedRowsForCurrentRing;
         for (int i = 0; i < countOfGrids[idRing]; ++i){
             selectedRowsForCurrentRing << selectedRows.takeFirst();
-            progress.setValue(progress.value() + 1);
         }
 
         int time = 0;
@@ -602,26 +613,35 @@ void FightingPairs::onGoPress()
         }
         message += " " + QString::number(time / 3600) + " ч. " + QString("%1").arg(time / 60%60, 2, 10, QChar('0')) + " м.";
 
+        DialogOrderOfTC dlgOrder(this);
+        dlgOrder.setModal(true);
+        dlgOrder.setTournamentCategories(uidTC_Level, "Ринг #" + QString::number(idRing + 1));
+        dlgOrder.showMaximized();
+        dlgOrder.exec();
+        uidTC_Level = dlgOrder.getTournamentCategories();
+
         writeListOfPairs(uidTC_Level, sheets, dlg, idRing + 1, typeText, typeFlag, ui->qLineEdit->text(),
                          existingDirectory,
                          tournamentUID);
 
-        if (progress.wasCanceled())
-            break;
     }
-    progress.setMaximum(selectedRows.length());
+
 
     ExcelUtils::saveAsFile(workbook, existingDirectory, "Состав пар");
-    workbook->dynamicCall("Close (Boolean)", true);
-    excel.dynamicCall("Quit()");
+
     delete sheets;
+    //workbook->dynamicCall("Close (Boolean)", true);
+    workbook->dynamicCall("Close()");
     delete workbook;
     delete workbooks;
+    excel.dynamicCall("Quit()");
 
 
-    qDebug() << message;
+
+
+
+    //qDebug() << message;
     QMessageBox::information(this, "", myThread->reportMessage);
-
     delete myThread;
 }
 
@@ -666,12 +686,12 @@ void FightingPairs::writeListOfPairs(
             for (int j = grid[turn].size() - 1; 0 <= j; --j)
             {
                 NodeOfGridWithNames& node = grid[turn][j];
-                if (node.node.isFight && node.node.UID <= 0)
+                if (node.isFight && node.UID <= 0)
                 {
                     node.name      = "Winner # " + QString::number(pairs.size() + 1);
-                    node.leftUID   = grid[turn + 1][2 * j + 1].node.UID;
+                    node.leftUID   = grid[turn + 1][2 * j + 1].UID;
                     node.leftName  = grid[turn + 1][2 * j + 1].name;
-                    node.rightUID  = grid[turn + 1][2 * j    ].node.UID;
+                    node.rightUID  = grid[turn + 1][2 * j    ].UID;
                     node.rightName = grid[turn + 1][2 * j    ].name;
 
                     pairs << node;

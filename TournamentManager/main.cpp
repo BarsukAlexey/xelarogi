@@ -20,11 +20,13 @@ void break_point(QtMsgType msgType, const QMessageLogContext &, const QString &m
         return ;
     }
     std::cerr << msg.toStdString() << std::endl;
+    return ;
 }
 
 void on_terminate()
 {
     qDebug() << "on_terminate";
+    return ;
 }
 
 void auth()
@@ -81,7 +83,9 @@ void connectDB()
 
 //#include "createtournamentordersdialog.h"
 //#include "createtournamentcategoriesdialog.h"
-#include "ebnutvbazu.h"
+//#include "ebnutvbazu.h"
+//#include "dialogorderoftc.h"
+//#include <utility>
 
 int main(int argc, char *argv[])
 {
@@ -101,6 +105,24 @@ int main(int argc, char *argv[])
 
     MainWindow w;
     w.show();
+
+//    DialogOrderOfTC dlg;
+//    dlg.setTournamentCategories(QVector<std::pair<int, int>>()
+//                                << std::make_pair(270, 1)
+//                                << std::make_pair(270, 0)
+
+//                                << std::make_pair(271, 1)
+//                                << std::make_pair(271, 0)
+
+//                                << std::make_pair(279, 1)
+//                                << std::make_pair(279, 0),
+//                                "По кругу"
+//                                );
+//    dlg.exec();
+
+
+
+
 
     //CreateTournamentCategoriesDialog dlg(21);
     //dlg.open();

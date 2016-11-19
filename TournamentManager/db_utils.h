@@ -91,8 +91,6 @@ public:
     // для таблицы GRIDS
     static QVector<NodeOfTournirGrid> getNodes(long long tournamentCategoryUID);
     static QSqlQuery* getFightNodes(int tournamentCategoryUID);
-    //static int f(int tournamentCategoryUID, int day, int time);
-    //static QSqlQuery * ff(int tournamentCategoryUID);
     static QVector<QVector<NodeOfTournirGrid> > getNodesAsLevelListOfList(long long tournamentCategoryUID);
     static QVector<NodeOfTournirGrid> getLeafOFTree(long long tournamentCategoryUID);
     static QVector<NodeOfTournirGrid> getFightingNodes(long long tournamentCategoryUID);
