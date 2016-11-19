@@ -9,7 +9,7 @@ class ReporMinistr : public QObject
 {
     Q_OBJECT
 public:
-    explicit ReporMinistr(const long long tournamentUID);
+    static void report(const long long tournamentUID);
 
 private:
     static void f2(QAxObject *sheet, const long long tournamentUID);

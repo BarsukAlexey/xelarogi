@@ -22,6 +22,8 @@
 #include "dialogschedule.h"
 
 #include "dialogschedule2.h"
+#include "report_manda.h"
+#include "report_ministr.h"
 
 
 #include <algorithm>
@@ -88,11 +90,16 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+private slots:
+    void on_pushButtonLoadWinner_clicked();
+    void on_pushButtonWinnerReport_clicked();
+    void on_manda_clicked();
+    void on_btn_report_ministr_clicked();
+
 private:
     void onAction(QString table);
     void onButton(const QString &field, const QString& table);
 
-private:
     Ui::MainWindow *ui;
     TournamentModel* model;
     int tournamentUID;

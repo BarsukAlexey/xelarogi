@@ -14,7 +14,7 @@
 #include <iostream>
 #include <utility>
 
-ReporMinistr::ReporMinistr(const long long tournamentUID)
+void ReporMinistr::report(const long long tournamentUID)
 {
     QAxWidget excel("Excel.Application");
     excel.setProperty("Visible", true);

@@ -105,7 +105,8 @@ QVector<std::tuple<int, QString, QColor>> Dialogschedule2::getInfoForRing(
 
         QString text = name +
                        (stringLevel.isEmpty()? "" : "\n" + stringLevel) +
-                       "\n" +
+                       //"\n" +
+                       ". " +
                        Utils::getTime(currentTime) +
                        "-" +
                        Utils::getTime(timeEnd) +
@@ -686,6 +687,7 @@ void Dialogschedule2::onPushButtonListOfPairs()
             excel.dynamicCall("Quit()");
         }
     }
+    QMessageBox::information(this, "", "DONE!");
 }
 
 void Dialogschedule2::onPushButtonSaveSchelderClicked()
@@ -738,14 +740,21 @@ void Dialogschedule2::onPushButtonSaveSchelderClicked()
 
             if (cntOccurRows)
             {
-                ExcelUtils::uniteRange(sheet, currentRow, ring + 2, currentRow + cntOccurRows - 1, ring + 2);
                 ExcelUtils::setValue  (sheet, currentRow, ring + 2, text, 1, 0);
+                ExcelUtils::uniteRange(sheet, currentRow, ring + 2, currentRow + cntOccurRows - 1, ring + 2);
+                if (cntOccurRows == 2)
+                {
+                    // 45
+                    //ExcelUtils::setRowHeight()
+                }
             }
 
             currentRow += cntOccurRows;
             maxRow = qMax(maxRow, currentRow);
         }
     }
+
+
     ExcelUtils::setBorder(sheet, offset - 1, 1, maxRow - 1, ui->tableWidget->columnCount() + 1);
 
     for (int row = offset; row < maxRow; ++row)
@@ -766,6 +775,28 @@ void Dialogschedule2::onPushButtonSaveSchelderClicked()
     ExcelUtils::setValue(sheet, 3, 1, ui->comboBoxDay->currentText());
     ExcelUtils::uniteRange(sheet, 3, 1, 3, ui->tableWidget->columnCount() + 1);
 
+
+//    for (int ring = 0; ring < ui->tableWidget->columnCount(); ++ring)
+//    {
+//        const QVector<std::tuple<int, QString, QColor>>& infoForRing = infoForRings[ring];
+//        for (int order = 0, currentRow = offset; order < infoForRing.size(); ++order)
+//        {
+//            int cntOccurRows = std::get<0>(infoForRing[order]);
+//            QString text = std::get<1>(infoForRing[order]);
+//            if (text.startsWith("Сон"))
+//            {
+//                cntOccurRows -= minCntOccurSleep;
+//                text = "";
+//            }
+
+//            if (cntOccurRows)
+//            {
+//                //ExcelUtils::uniteRange(sheet, currentRow, ring + 2, currentRow + cntOccurRows - 1, ring + 2);
+//            }
+
+//            currentRow += cntOccurRows;
+//        }
+//    }
 
 
     delete sheet;

@@ -47,11 +47,10 @@ SOURCES += main.cpp \
     dialogschedule2treewidget.cpp \
     dialogschedule2tablewidget.cpp \
     dialogschedule2inputtype.cpp \
-
-#    winner_report.cpp \
-#    report_manda.cpp \
-#    report_ministr.cpp \
-#    formdipl.cpp \
+    winner_report.cpp \
+    report_manda.cpp \
+    report_ministr.cpp \
+    formdipl.cpp \
 
 
 
@@ -86,10 +85,10 @@ HEADERS  += logindialog.h \
     dialogschedule2treewidget.h \
     dialogschedule2tablewidget.h \
     dialogschedule2inputtype.h \
-#    winner_report.h \
-#    report_manda.h \
-#    report_ministr.h \
-#    formdipl.h \
+    winner_report.h \
+    report_manda.h \
+    report_ministr.h \
+    formdipl.h \
 
 
 
@@ -114,8 +113,7 @@ FORMS +=  logindialog.ui \
     dialogorderoftc.ui \
     dialogschedule2.ui \
     dialogschedule2inputtype.ui \
-
-#    formdipl.ui \
+    formdipl.ui \
 
 
 

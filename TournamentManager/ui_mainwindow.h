@@ -74,8 +74,6 @@ public:
     QPushButton *pushButtonPair;
     QPushButton *pushButtonLoadWinner;
     QPushButton *pushButtonWinnerReport;
-    QHBoxLayout *horizontalLayout;
-    QPushButton *trophyBtn;
     QPushButton *trophyBtnImage;
     QPushButton *manda;
     QPushButton *btn_report_ministr;
@@ -254,21 +252,10 @@ public:
 
         verticalLayout->addWidget(pushButtonWinnerReport);
 
-        horizontalLayout = new QHBoxLayout();
-        horizontalLayout->setSpacing(6);
-        horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
-        trophyBtn = new QPushButton(ordersPage);
-        trophyBtn->setObjectName(QStringLiteral("trophyBtn"));
-
-        horizontalLayout->addWidget(trophyBtn);
-
         trophyBtnImage = new QPushButton(ordersPage);
         trophyBtnImage->setObjectName(QStringLiteral("trophyBtnImage"));
 
-        horizontalLayout->addWidget(trophyBtnImage);
-
-
-        verticalLayout->addLayout(horizontalLayout);
+        verticalLayout->addWidget(trophyBtnImage);
 
         manda = new QPushButton(ordersPage);
         manda->setObjectName(QStringLiteral("manda"));
@@ -392,7 +379,6 @@ public:
         pushButtonPair->setText(QApplication::translate("MainWindow", "\320\241\320\276\321\201\321\202\320\260\320\262 \320\277\320\260\321\200", 0));
         pushButtonLoadWinner->setText(QApplication::translate("MainWindow", "\320\227\320\260\320\263\321\200\321\203\320\267\320\270\321\202\321\214 \321\200\320\265\320\267\321\203\320\273\321\214\321\202\320\260\321\202\321\213 \320\261\320\276\321\221\320\262", 0));
         pushButtonWinnerReport->setText(QApplication::translate("MainWindow", "\320\241\320\277\320\270\321\201\320\276\320\272 \320\277\320\276\320\261\320\265\320\264\320\270\321\202\320\265\320\273\320\265\320\271", 0));
-        trophyBtn->setText(QApplication::translate("MainWindow", "\320\241\320\276\320\267\320\264\320\260\321\202\321\214 \320\263\321\200\320\260\320\274\320\276\321\202\321\213 (Excel)", 0));
         trophyBtnImage->setText(QApplication::translate("MainWindow", "\320\241\320\276\320\267\320\264\320\260\321\202\321\214 \320\261\320\265\320\271\320\264\320\266\320\270 / \320\263\321\200\320\260\320\274\320\276\321\202\321\213 (PDF)", 0));
         manda->setText(QApplication::translate("MainWindow", "\320\237\321\200\320\276\321\202\320\276\320\272\320\276\320\273 \320\274\320\260\320\275\320\264\320\260\321\202\320\275\320\276\320\271 \320\272\320\276\320\274\320\270\321\201\321\201\320\270\320\270", 0));
         btn_report_ministr->setText(QApplication::translate("MainWindow", "\320\236\321\202\321\207\321\221\321\202 \320\274\320\270\320\275\320\270\321\201\321\202\320\265\321\200\321\201\321\202\320\262\320\260", 0));
