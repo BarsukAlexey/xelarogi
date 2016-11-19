@@ -854,7 +854,12 @@ QSqlQuery*DBUtils::getSchelder(const int tournamentUID, const int day, const int
     return q;
 }
 
-bool DBUtils::updateSchedule(const int tournamentUID, const int day, const int ring, const int order, const int newOrder)
+bool DBUtils::updateOrderNumberOfRecordOfSchedule(
+        const int tournamentUID,
+        const int day,
+        const int ring,
+        const int order,
+        const int newOrder)
 {
     QSqlQuery *q = new QSqlQuery;
     if (!q->prepare(
@@ -903,7 +908,7 @@ bool DBUtils::insertInSchedule(const int tournamentUID, const int day, const int
             "VALUES (?,?,?,?,  ?,?,?)"
             ))
     {
-        qDebug() << __PRETTY_FUNCTION__ << q->lastError();
+        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << q->lastError();
     }
     q->addBindValue(tournamentUID);
     q->addBindValue(day);
@@ -915,10 +920,14 @@ bool DBUtils::insertInSchedule(const int tournamentUID, const int day, const int
     q->addBindValue(name);
 
     if (q->lastError().isValid())
-        qDebug() << __PRETTY_FUNCTION__ << q->lastError();
+        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << q->lastError();
     int res = q->exec();
     if (q->lastError().isValid())
-        qDebug() << __PRETTY_FUNCTION__ << q->lastError();
+        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << q->lastError() << q->lastQuery()
+                 << tournamentUID
+                 << day
+                 << ring
+                 << order;
     delete q;
     return res;
 }
@@ -948,7 +957,11 @@ bool DBUtils::deleteInSchedule(const int tournamentUID, const int day, const int
         qDebug() << __PRETTY_FUNCTION__ << q->lastError();
     q->exec();
     if (q->lastError().isValid())
-        qDebug() << __PRETTY_FUNCTION__ << q->lastError();
+        qDebug() << __PRETTY_FUNCTION__ << q->lastError() << q->lastQuery()
+                 << tournamentUID
+                 << day
+                 << ring
+                 << order;
     return q;
 }
 

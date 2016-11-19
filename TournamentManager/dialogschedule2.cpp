@@ -32,6 +32,9 @@ Dialogschedule2::Dialogschedule2(int tournamentUID, QWidget *parent) :
 
     connect(ui->pushButtonListOfPairs, &QPushButton::clicked, this, &Dialogschedule2::onPushButtonListOfPairs);
     connect(ui->pushButtonSaveSchelder, &QPushButton::clicked, this, &Dialogschedule2::onPushButtonSaveSchelderClicked);
+
+    connect(ui->pushButtonUP, &QPushButton::clicked, this, &Dialogschedule2::onPushButtonUP);
+    connect(ui->pushButtonDOWN, &QPushButton::clicked, this, &Dialogschedule2::onPushButtonDown);
 }
 
 Dialogschedule2::~Dialogschedule2()
@@ -41,7 +44,8 @@ Dialogschedule2::~Dialogschedule2()
     delete ui;
 }
 
-QVector<std::tuple<int, QString, QColor>> Dialogschedule2::getInfoForRing(const int tournamentUID, const int day, const int ring, const int delay)
+QVector<std::tuple<int, QString, QColor>> Dialogschedule2::getInfoForRing(
+        const int tournamentUID, const int day, const int ring, const int delay)
 {
     QVector<std::tuple<int, QString, QColor>> arr;
     int currentTime = 0;
@@ -278,7 +282,7 @@ void Dialogschedule2::onDataIsDropped(QStringList str, const int currentRow, con
                 int anotherRing = DBUtils::getAnotherRing(uidTC, ui->comboBoxDay->currentIndex(), ring);
                 if (anotherRing != -1)
                 {
-                    qDebug() << "anotherRing:" << anotherRing;
+                    //qDebug() << "anotherRing:" << anotherRing;
                     QMessageBox::warning(this, "", "В этот день данную турнирную категорию можно "
                                                    "проводить только на ринге #" + QString::number(anotherRing + 1));
                     return ;
@@ -312,14 +316,6 @@ void Dialogschedule2::onDataIsDropped(QStringList str, const int currentRow, con
             return;
     }
 
-    for (int i = maxOrder; currentOrder <= i; --i)
-        DBUtils::updateSchedule(
-                    tournamentUID,
-                    ui->comboBoxDay->currentIndex(),
-                    ring,
-                    i,
-                    i + 1);
-
     DBUtils::insertInSchedule(
                 tournamentUID,
                 ui->comboBoxDay->currentIndex(),
@@ -347,10 +343,10 @@ void Dialogschedule2::onCustomContextMenuRequested(const QPoint& pos)
         QModelIndex index = ui->tableWidget->indexAt(pos);
         int ring = index.column();
 
-        int maxOrder = -1;
-        for (int r = 0; r < ui->tableWidget->rowCount(); ++r)
-            if (ui->tableWidget->item(r, ring))
-                maxOrder = ui->tableWidget->item(r, ring)->data(Qt::UserRole).toInt();
+        //int maxOrder = -1;
+        //for (int r = 0; r < ui->tableWidget->rowCount(); ++r)
+            //if (ui->tableWidget->item(r, ring))
+                //maxOrder = ui->tableWidget->item(r, ring)->data(Qt::UserRole).toInt();
 
         int currnetOrder = ui->tableWidget->item(index.row(), index.column())->data(Qt::UserRole).toInt();
 
@@ -371,8 +367,8 @@ void Dialogschedule2::onCustomContextMenuRequested(const QPoint& pos)
         }
 
         DBUtils::deleteInSchedule(this->tournamentUID, ui->comboBoxDay->currentIndex(), ring, currnetOrder);
-        for (int order = currnetOrder + 1; order <= maxOrder; ++order)
-            DBUtils::updateSchedule(this->tournamentUID, ui->comboBoxDay->currentIndex(), ring, order, order - 1);
+        //for (int order = currnetOrder + 1; order <= maxOrder; ++order)
+            //DBUtils::updateSchedule(this->tournamentUID, ui->comboBoxDay->currentIndex(), ring, order, order - 1);
 
         //qDebug() << pos << index;
         this->updateRowsInTable();
@@ -384,6 +380,8 @@ void Dialogschedule2::onCustomContextMenuRequested(const QPoint& pos)
 
 void Dialogschedule2::updateRowsInTable()
 {
+    ui->tableWidget->clearSpans();
+    ui->tableWidget->clear();
     ui->tableWidget->setRowCount(0);
     ui->tableWidget->setRowCount(24 * 60 * 60 / durationOfRow);
     ui->tableWidget->resizeRowsToContents();
@@ -543,7 +541,7 @@ void Dialogschedule2::updateTree()
     for (int column = 0; column < ui->treeWidget->columnCount(); ++column)
         ui->treeWidget->resizeColumnToContents(column);
 
-    qDebug() << __PRETTY_FUNCTION__ << time.elapsed();
+    //qDebug() << __PRETTY_FUNCTION__ << time.elapsed();
 }
 
 void Dialogschedule2::onPushButtonListOfPairs()
@@ -775,6 +773,102 @@ void Dialogschedule2::onPushButtonSaveSchelderClicked()
     delete workbook;
     delete workbooks;
     //excel.dynamicCall("Quit()");
+}
+
+void Dialogschedule2::onPushButtonUP()
+{
+    //QTime t; t.start();
+
+    QModelIndexList indexs = ui->tableWidget->selectionModel()->selectedIndexes();
+    if (indexs.isEmpty()) return;
+    QModelIndex index = indexs[0];
+    const int order_number = index.data(Qt::UserRole).toInt();
+    //qDebug() << "order_number:" << order_number;
+    if (order_number == 0) return;
+
+    const int day = ui->comboBoxDay->currentIndex();
+    const int ring = index.column();
+    QSqlQuery* schelder = DBUtils::getSchelder(tournamentUID, day, ring);
+
+    int countRecords = 0;
+    for (int row = 0, prevTC = -1; schelder->next(); ++row, ++countRecords)
+    {
+        int TC = schelder->value("TOURNAMENT_CATEGORY_FK").toInt();
+        if (row == order_number - 1)
+            prevTC = TC;
+        if (row == order_number && (prevTC == TC || prevTC == -1))
+            return;
+    }
+    if (!(order_number < countRecords))
+        return;
+
+    DBUtils::updateOrderNumberOfRecordOfSchedule(tournamentUID, day, ring, order_number, -1);
+    DBUtils::updateOrderNumberOfRecordOfSchedule(tournamentUID, day, ring, order_number - 1, order_number);
+    DBUtils::updateOrderNumberOfRecordOfSchedule(tournamentUID, day, ring, -1, order_number - 1);
+    updateRowsInTable();
+    updateTree();
+
+    QVector<std::tuple<int, QString, QColor> > infoForRing
+            = getInfoForRing(tournamentUID, day, ring, ui->spinBoxDelay->value());
+    int index_row = 0;
+    for (int i = 0; i < order_number - 1; ++i)
+        index_row += std::get<0>(infoForRing[i]);
+
+    QAbstractItemModel* model = ui->tableWidget->model();
+    index = model->index(index_row, index.column());
+    QItemSelectionModel* selectModel = ui->tableWidget->selectionModel();
+    selectModel->setCurrentIndex(index, QItemSelectionModel::ClearAndSelect);
+
+    //qDebug() << "onPushButtonUP: " << t.elapsed();
+}
+
+void Dialogschedule2::onPushButtonDown()
+{
+    //QTime t; t.start();
+
+    QModelIndexList indexs = ui->tableWidget->selectionModel()->selectedIndexes();
+    if (indexs.isEmpty()) return;
+    QModelIndex index = indexs[0];
+    const int order_number = index.data(Qt::UserRole).toInt();
+    //qDebug() << "order_number:" << order_number;
+    //if (order_number == 0) return;
+
+    const int day = ui->comboBoxDay->currentIndex();
+    const int ring = index.column();
+    QSqlQuery* schelder = DBUtils::getSchelder(tournamentUID, day, ring);
+
+    int countRecords = 0;
+    for (int row = 0, curTC = -1; schelder->next(); ++row, ++countRecords)
+    {
+        int TC = schelder->value("TOURNAMENT_CATEGORY_FK").toInt();
+        if (row == order_number)
+            curTC = TC;
+        if (row == order_number + 1 && (curTC == TC || curTC == -1))
+            return;
+    }
+    if (!(order_number + 1 < countRecords))
+        return;
+
+    DBUtils::updateOrderNumberOfRecordOfSchedule(tournamentUID, day, ring, order_number, -1);
+    DBUtils::updateOrderNumberOfRecordOfSchedule(tournamentUID, day, ring, order_number + 1, order_number);
+    DBUtils::updateOrderNumberOfRecordOfSchedule(tournamentUID, day, ring, -1, order_number + 1);
+    updateRowsInTable();
+    updateTree();
+
+    QVector<std::tuple<int, QString, QColor> > infoForRing
+            = getInfoForRing(tournamentUID, day, ring, ui->spinBoxDelay->value());
+    int index_row = 0;
+    for (int i = 0; i < order_number + 1; ++i)
+    {
+        index_row += std::get<0>(infoForRing[i]);
+    }
+
+    QAbstractItemModel* model = ui->tableWidget->model();
+    index = model->index(index_row, index.column());
+    QItemSelectionModel* selectModel = ui->tableWidget->selectionModel();
+    selectModel->setCurrentIndex(index, QItemSelectionModel::ClearAndSelect);
+
+    //qDebug() << "onPushButtonUP: " << t.elapsed();
 }
 
 

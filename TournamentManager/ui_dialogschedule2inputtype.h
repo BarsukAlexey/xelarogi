@@ -39,6 +39,7 @@ public:
     {
         if (Dialogschedule2InputType->objectName().isEmpty())
             Dialogschedule2InputType->setObjectName(QStringLiteral("Dialogschedule2InputType"));
+        Dialogschedule2InputType->resize(292, 283);
         gridLayout = new QGridLayout(Dialogschedule2InputType);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
         widget = new QWidget(Dialogschedule2InputType);
@@ -83,7 +84,7 @@ public:
     void retranslateUi(QDialog *Dialogschedule2InputType)
     {
         Dialogschedule2InputType->setWindowTitle(QApplication::translate("Dialogschedule2InputType", "Dialog", 0));
-        textEdit->setPlaceholderText(QApplication::translate("Dialogschedule2InputType", "\320\222\320\262\320\265\320\264\320\270\321\202\320\265 \320\275\320\260\320\267\320\262\320\260\320\275\320\270\320\270\320\265 \320\274\320\265\321\200\320\276\320\277\321\200\320\270\321\217\321\202\320\270\321\217: \321\201\320\276\320\275, \320\276\320\261\320\265\320\264, \321\210\320\276\321\203 ...", 0));
+        textEdit->setPlaceholderText(QApplication::translate("Dialogschedule2InputType", "\320\222\320\262\320\265\320\264\320\270\321\202\320\265 \320\275\320\260\320\267\320\262\320\260\320\275\320\270\320\270\320\265 \320\274\320\265\321\200\320\276\320\277\321\200\320\270\321\217\321\202\320\270\321\217: \320\277\320\265\321\200\320\265\321\200\321\213\320\262, \320\276\320\261\320\265\320\264, \321\210\320\276\321\203 ...", 0));
         label_2->setText(QApplication::translate("Dialogschedule2InputType", "\320\224\320\273\320\270\321\202\320\265\320\273\321\214\320\275\320\276\321\201\321\202\321\214 \320\274\320\265\321\200\320\276\320\277\321\200\320\270\321\217\321\202\320\270\321\217 (\321\207\321\207:\320\274\320\274):", 0));
     } // retranslateUi
 

@@ -38,7 +38,8 @@ private:
     static const int durationOfRow = 5 * 60;
 
 private:
-    static QVector<std::tuple<int, QString, QColor>> getInfoForRing(const int tournamentUID, const int day, const int ring, const int delay);
+    static QVector<std::tuple<int, QString, QColor>> getInfoForRing(
+            const int tournamentUID, const int day, const int ring, const int delay);
 
 private slots:
     void onCountOfRingsChanged();
@@ -53,6 +54,8 @@ private slots:
     void onPushButtonListOfPairs();
     void onPushButtonSaveSchelderClicked();
 
+    void onPushButtonUP();
+    void onPushButtonDown();
 };
 
 #endif // DIALOGSCHEDULE2_H

@@ -2,6 +2,14 @@
 <ui version="4.0">
  <class>Dialogschedule2InputType</class>
  <widget class="QDialog" name="Dialogschedule2InputType">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>292</width>
+    <height>283</height>
+   </rect>
+  </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
@@ -12,7 +20,7 @@
       <item row="0" column="0" colspan="2">
        <widget class="QTextEdit" name="textEdit">
         <property name="placeholderText">
-         <string>Введите названиие мероприятия: сон, обед, шоу ...</string>
+         <string>Введите названиие мероприятия: перерыв, обед, шоу ...</string>
         </property>
        </widget>
       </item>

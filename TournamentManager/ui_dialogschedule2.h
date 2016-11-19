@@ -35,7 +35,7 @@ QT_BEGIN_NAMESPACE
 class Ui_Dialogschedule2
 {
 public:
-    QGridLayout *gridLayout_2;
+    QGridLayout *gridLayout;
     QSplitter *splitter;
     QWidget *widget;
     QVBoxLayout *verticalLayout;
@@ -69,22 +69,24 @@ public:
     QPushButton *pushButtonListOfPairs;
     QSpacerItem *horizontalSpacer;
     Dialogschedule2TreeWidget *treeWidget;
+    QWidget *widget1;
+    QHBoxLayout *horizontalLayout_9;
     Dialogschedule2TableWidget *tableWidget;
+    QVBoxLayout *verticalLayout_2;
+    QSpacerItem *verticalSpacer;
+    QPushButton *pushButtonUP;
+    QPushButton *pushButtonDOWN;
+    QSpacerItem *verticalSpacer_2;
 
     void setupUi(QDialog *Dialogschedule2)
     {
         if (Dialogschedule2->objectName().isEmpty())
             Dialogschedule2->setObjectName(QStringLiteral("Dialogschedule2"));
         Dialogschedule2->resize(1114, 631);
-        gridLayout_2 = new QGridLayout(Dialogschedule2);
-        gridLayout_2->setObjectName(QStringLiteral("gridLayout_2"));
+        gridLayout = new QGridLayout(Dialogschedule2);
+        gridLayout->setObjectName(QStringLiteral("gridLayout"));
         splitter = new QSplitter(Dialogschedule2);
         splitter->setObjectName(QStringLiteral("splitter"));
-        QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-        sizePolicy.setHorizontalStretch(0);
-        sizePolicy.setVerticalStretch(0);
-        sizePolicy.setHeightForWidth(splitter->sizePolicy().hasHeightForWidth());
-        splitter->setSizePolicy(sizePolicy);
         splitter->setOrientation(Qt::Horizontal);
         widget = new QWidget(splitter);
         widget->setObjectName(QStringLiteral("widget"));
@@ -251,14 +253,45 @@ public:
         verticalLayout->addWidget(treeWidget);
 
         splitter->addWidget(widget);
-        tableWidget = new Dialogschedule2TableWidget(splitter);
+        widget1 = new QWidget(splitter);
+        widget1->setObjectName(QStringLiteral("widget1"));
+        horizontalLayout_9 = new QHBoxLayout(widget1);
+        horizontalLayout_9->setObjectName(QStringLiteral("horizontalLayout_9"));
+        horizontalLayout_9->setContentsMargins(0, 0, 0, 0);
+        tableWidget = new Dialogschedule2TableWidget(widget1);
         tableWidget->setObjectName(QStringLiteral("tableWidget"));
         tableWidget->setFocusPolicy(Qt::NoFocus);
         tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
-        tableWidget->setSelectionMode(QAbstractItemView::NoSelection);
-        splitter->addWidget(tableWidget);
+        tableWidget->setSelectionMode(QAbstractItemView::SingleSelection);
 
-        gridLayout_2->addWidget(splitter, 0, 0, 1, 1);
+        horizontalLayout_9->addWidget(tableWidget);
+
+        verticalLayout_2 = new QVBoxLayout();
+        verticalLayout_2->setObjectName(QStringLiteral("verticalLayout_2"));
+        verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        verticalLayout_2->addItem(verticalSpacer);
+
+        pushButtonUP = new QPushButton(widget1);
+        pushButtonUP->setObjectName(QStringLiteral("pushButtonUP"));
+
+        verticalLayout_2->addWidget(pushButtonUP);
+
+        pushButtonDOWN = new QPushButton(widget1);
+        pushButtonDOWN->setObjectName(QStringLiteral("pushButtonDOWN"));
+
+        verticalLayout_2->addWidget(pushButtonDOWN);
+
+        verticalSpacer_2 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        verticalLayout_2->addItem(verticalSpacer_2);
+
+
+        horizontalLayout_9->addLayout(verticalLayout_2);
+
+        splitter->addWidget(widget1);
+
+        gridLayout->addWidget(splitter, 0, 0, 1, 1);
 
         QWidget::setTabOrder(comboBoxDay, spinBoxDelay);
         QWidget::setTabOrder(spinBoxDelay, treeWidget);
@@ -270,7 +303,6 @@ public:
 
     void retranslateUi(QDialog *Dialogschedule2)
     {
-        Dialogschedule2->setWindowTitle(QApplication::translate("Dialogschedule2", "Dialog", 0));
         label_3->setText(QApplication::translate("Dialogschedule2", "\320\227\320\260\320\264\320\265\321\200\320\266\320\272\320\260 (\320\262 \321\201\320\265\320\272\321\203\320\275\320\264\320\260\321\205)", 0));
         label->setText(QApplication::translate("Dialogschedule2", "\320\232\320\276\320\273\320\270\321\207\320\265\321\201\321\202\320\262\320\276 \320\277\320\273\320\276\321\211\320\260\320\264\320\276\320\272:", 0));
         label_2->setText(QApplication::translate("Dialogschedule2", "\320\224\320\265\320\275\321\214:", 0));
@@ -290,6 +322,9 @@ public:
         ___qtreewidgetitem->setText(4, QApplication::translate("Dialogschedule2", "\320\237\320\276\321\200\321\217\320\264\320\276\320\272", 0));
         ___qtreewidgetitem->setText(3, QApplication::translate("Dialogschedule2", "\320\240\320\270\320\275\320\263", 0));
         ___qtreewidgetitem->setText(2, QApplication::translate("Dialogschedule2", "\320\224\320\260\321\202\320\260", 0));
+        pushButtonUP->setText(QApplication::translate("Dialogschedule2", "UP", 0));
+        pushButtonDOWN->setText(QApplication::translate("Dialogschedule2", "DOWN", 0));
+        Q_UNUSED(Dialogschedule2);
     } // retranslateUi
 
 };
