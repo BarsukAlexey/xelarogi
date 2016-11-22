@@ -697,7 +697,8 @@ QString DBUtils::insertTournamentCaregory(
         int durationFighting, int durationBreak, int roundCount,
         int IN_CASE_TIE, int DURATION_EXTRA_ROUND,
         QString ageUnit, QString wordAgeFrom, QString wordAgeTill,
-        QString weightUnit, QString wordWeightFrom, QString wordWeightTill
+        QString weightUnit, QString wordWeightFrom, QString wordWeightTill,
+        int pointPanelMode
         )
 {
     QString newCategoryMsg = "Добавлены новые категории:\n";
@@ -735,8 +736,9 @@ QString DBUtils::insertTournamentCaregory(
                            "SEX_FK, TYPE_FK, TOURNAMENT_FK, "
                            "DURATION_FIGHING, DURATION_BREAK, ROUND_COUNT, "
                            "IN_CASE_TIE, DURATION_EXTRA_ROUND, "
-                           "AGE, WEIGHT) "
-                           "VALUES (?, ?, ?, ?, ?, ?,    ?, ?, ?,   ?, ?, ?,   ?, ?,     ?, ?)"))
+                           "AGE, WEIGHT, "
+                           "POINT_PANEL_MODE_FK) "
+                           "VALUES (?, ?, ?, ?, ?, ?,    ?, ?, ?,   ?, ?, ?,   ?, ?,     ?, ?,  ?)"))
             qDebug() << query.lastError().text();
         query.addBindValue(modifyName);
         query.addBindValue(ageCatUID);
@@ -758,6 +760,8 @@ QString DBUtils::insertTournamentCaregory(
 
         query.addBindValue(age);
         query.addBindValue(weight);
+
+        query.addBindValue(pointPanelMode);
 
         if (!query.exec())
         {

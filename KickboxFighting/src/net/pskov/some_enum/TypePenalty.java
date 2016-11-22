@@ -1,5 +1,5 @@
 package net.pskov.some_enum;
 
 public enum TypePenalty {
-    Minus, Ex, FO
+    Minus, Exit, Warning, KnockDown, KickCount
 }

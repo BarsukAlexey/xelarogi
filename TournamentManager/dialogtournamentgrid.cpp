@@ -277,66 +277,6 @@ void DialogTournamentGrid::generatGrid(const long long tournamentUID,
         }
     }
 
-
-    /*/
-    if (2 <= n)
-    {
-        // пытаемся сделать так, чтобы в правом и в левом подДеревьях было по одному представителю от каждого региона
-        for (QString prefix : {"11", "10"})
-        {
-            QVector<int> vertex;
-            QSet<long long> usedRegions;
-            for (int v = 1; v <= maxVertex; ++v)
-                if (isLeaf[v] && QString::number(v, 2).startsWith(prefix))
-                {
-                    if (regionLeaf[v] != 0)
-                        usedRegions << regionLeaf[v];
-                    else
-                        vertex << v;
-                }
-            std::sort(vertex.begin(), vertex.end(), [](int a, int b){ return (a&1) > (b&1);});
-            for (int v : vertexOfBest) // делаем так, чтобы вначале найти пару особым бойцам
-                if (vertex.contains(v ^ 1))
-                {
-                    vertex.removeOne(v ^ 1);
-                    vertex.push_front(v ^ 1);
-                }
-            //qDebug() << vertex;
-
-
-            QVector<long long> orderUIDs;
-            {
-                QVector<RegionRandomOrders> arr;
-                while (0 < notUsedFighters.size() && vertex.size() != orderUIDs.size())
-                {
-                    RegionRandomOrders cur = *notUsedFighters.begin();
-                    notUsedFighters.erase(notUsedFighters.begin());
-                    if (!usedRegions.contains(cur.region))
-                        orderUIDs << cur.orderUIDs.takeLast();
-                    if (cur.orderUIDs.size())
-                    {
-                        cur.random_number = rand();
-                        arr << cur;
-                    }
-                }
-                for (RegionRandomOrders x : arr) notUsedFighters.insert(x);
-            }
-
-
-            //qDebug() << "vertex: " << vertex;
-            while (!vertex.isEmpty() && !orderUIDs.isEmpty())
-            {
-                long long orderUID_V = orderUIDs.takeFirst();
-                int v = vertex.takeFirst();
-                //qDebug() << orderUID_V << " v:" << v;
-                DBUtils::insertLeafOfGrid(tournamentCaterotyUID, v, orderUID_V);
-                isUsedLeaf[v] = true;
-                regionLeaf[v] = DBUtils::getField("CLUB_FK", "ORDERS", orderUID_V).toLongLong();
-            }
-        }
-    }
-    /**/
-
     // находим пару для тех бойцов, для которые без пары
     for (int v = 1; v <= maxVertex; ++v)
     {
@@ -475,7 +415,9 @@ void DialogTournamentGrid::deleteGrid(const long long uidTC)
         return ;
     }
     QMessageBox::StandardButton reply;
-    reply = QMessageBox::question(0, "", QString("Удалить сетку ") +
+    reply = QMessageBox::question(0, "",
+                                  "При удалении сетки, она удаляется из расписания.\n"
+                                  "Удалить сетку " +
                                   DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", uidTC) +
                                   "?", QMessageBox::Yes | QMessageBox::No);
     if (reply == QMessageBox::No)
@@ -598,7 +540,11 @@ void DialogTournamentGrid::onButtonGenerateGrid()
             if (query.next())
             {
                 QMessageBox::StandardButton reply;
-                reply = QMessageBox::question(this, "", "Сетка уже есть. Новая генерация сетки приведет к потере старой сетки. Продолжить?", QMessageBox::Yes | QMessageBox::No);
+                reply = QMessageBox::question(
+                            this, "",
+                            "Новая генерация сетки приведет к потере старой сетки,\n"
+                            "а также к удалению данной сетки из расписания.\n"
+                            "Продолжить?", QMessageBox::Yes | QMessageBox::No);
                 if (reply == QMessageBox::No)
                     return;
             }
@@ -723,6 +669,7 @@ void DialogTournamentGrid::deleteAllGrids()
         QMessageBox::StandardButton reply;
         reply = QMessageBox::question(0, "",
                                       QString() +
+                                      "При удалении сетки, она удаляется из расписания.\n"
                                       "Удалить ВСЕ сетки?\n" +
                                       (i == 0? "" : i == 1? "Вы уверены?" : i == 2? "Точно?" : "Удаляю..."),
                                       QMessageBox::Yes | QMessageBox::No);

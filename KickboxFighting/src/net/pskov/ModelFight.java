@@ -2,6 +2,7 @@ package net.pskov;
 
 import net.pskov.some_enum.FightStatus;
 import net.pskov.some_enum.Player;
+import net.pskov.some_enum.PointPanelMode;
 import net.pskov.some_enum.TypePenalty;
 
 import javax.swing.*;
@@ -12,7 +13,7 @@ import java.io.File;
 import java.util.Stack;
 
 
-public class Fighting {
+public class ModelFight {
 
     private static final Sound soundGong = new Sound(new File("resources\\sounds\\gong.wav"));
     private static final Sound soundHummerBit = new Sound(new File("resources\\sounds\\stuk_molotka.wav"));
@@ -30,6 +31,7 @@ public class Fighting {
     private final int durationOfBreak; // длительности раунда в ms
     private final int durationOfExtraRound; // длительности раунда в ms
     private final int inCaseOfTie; // длительности раунда в ms
+    private final PointPanelMode pointPanelMode;
 
     // флаги стран
     private final BufferedImage imageLeftConnerFlag;
@@ -60,11 +62,36 @@ public class Fighting {
     private int countOfExToLeft; // количесво предупреждений, сделаных левому игроку
     private int countOfExToRight; // количесво предупреждений, сделаных левому игроку
 
+    private int countOfKnockDownToLeft;
+    private int countOfKnockDownToRight;
+
+    private int countOfKickCountToLeft;
+    private int countOfKickCountToRight;
 
     private final long TOURNAMENT_CATEGORIES_FK;
     private final int VERTEX;
     private String forceResult;
     private boolean wasExtraRound;
+
+    public PointPanelMode getPointPanelMode() {
+        return pointPanelMode;
+    }
+
+    public int getCountOfKnockDownToLeft() {
+        return countOfKnockDownToLeft;
+    }
+
+    public int getCountOfKnockDownToRight() {
+        return countOfKnockDownToRight;
+    }
+
+    public int getCountOfKickCountToLeft() {
+        return countOfKickCountToLeft;
+    }
+
+    public int getCountOfKickCountToRight() {
+        return countOfKickCountToRight;
+    }
 
 
     private static class Penalty {
@@ -88,7 +115,7 @@ public class Fighting {
         timer.stop();
     }
 
-    Fighting(
+    ModelFight(
             String nameOfLeftFighter,
             String nameOfRightFighter,
 
@@ -107,7 +134,9 @@ public class Fighting {
             String countryOfRightFighter,
 
             long TOURNAMENT_CATEGORIES_FK,
-            int VERTEX
+            int VERTEX,
+
+            PointPanelMode pointPanelMode
     ) {
         this.nameOfLeftFighter = nameOfLeftFighter;
         this.nameOfRightFighter = nameOfRightFighter;
@@ -120,6 +149,7 @@ public class Fighting {
         this.durationOfBreak = durationOfBreak;
         this.durationOfExtraRound = durationOfExtraRound;
         this.inCaseOfTie = inCaseOfTie;
+        this.pointPanelMode = pointPanelMode;
 
 
         /*/
@@ -155,6 +185,12 @@ public class Fighting {
 
             countOfExToLeft = 0;
             countOfExToRight = 0;
+
+            countOfKnockDownToLeft = 0;
+            countOfKnockDownToRight = 0;
+
+            countOfKickCountToLeft = 0;
+            countOfKickCountToRight = 0;
         }
 
 
@@ -407,7 +443,7 @@ public class Fighting {
     void addForestallingToLeft() {
         if (countOfForestallingToLeft <= 3) {
             ++countOfForestallingToLeft;
-            Penalty penalty = new Penalty(TypePenalty.FO, Player.Left);
+            Penalty penalty = new Penalty(TypePenalty.Warning, Player.Left);
             stackPenalty.push(penalty);
         }
     }
@@ -418,7 +454,7 @@ public class Fighting {
     void addForestallingToRight() {
         if (countOfForestallingToRight <= 3) {
             ++countOfForestallingToRight;
-            Penalty penalty = new Penalty(TypePenalty.FO, Player.Right);
+            Penalty penalty = new Penalty(TypePenalty.Warning, Player.Right);
             stackPenalty.push(penalty);
         }
     }
@@ -427,11 +463,13 @@ public class Fighting {
      * Левый боец вышел за ринг. Если 4 выхода, то дисквалификация
      */
     void addExToLeft() {
+        if (pointPanelMode != PointPanelMode.LightContact)
+            return;
 //        if (isDisqOrForceWinner())
 //            return;
         if (countOfExToLeft <= 3) {
             ++countOfExToLeft;
-            Penalty penalty = new Penalty(TypePenalty.Ex, Player.Left);
+            Penalty penalty = new Penalty(TypePenalty.Exit, Player.Left);
 // Не удалять закомментированный код, ибо правила постоянно меняются
 //        if (2 <= countOfExToLeft) {
 //            int[] countOfPointsForTheLeftFighter = getCountOfPointsForLeftFighter();
@@ -453,12 +491,14 @@ public class Fighting {
      * Правый боец вышел за ринг. Если 4 выхода, то дисквалификация
      */
     void addExToRight() {
+        if (pointPanelMode != PointPanelMode.LightContact)
+            return;
 //        if (isDisqOrForceWinner())
 //            return;
 
         if (countOfExToRight <= 3) {
             ++countOfExToRight;
-            Penalty penalty = new Penalty(TypePenalty.Ex, Player.Right);
+            Penalty penalty = new Penalty(TypePenalty.Exit, Player.Right);
 // Не удалять закомментированный код, ибо правила постоянно меняются
 //        if (2 <= countOfExToRight) {
 //            int[] countOfPointsForTheRightFighter = getCountOfPointsForRightFighter();
@@ -474,6 +514,42 @@ public class Fighting {
 //        if (4 == countOfExToRight) {
 //            disqualify(Player.Right);
 //        }
+    }
+
+    public void addKnockDownToLeft() {
+        if (!(pointPanelMode == PointPanelMode.K1 || pointPanelMode == PointPanelMode.FullContact))
+            return;
+        if (countOfKnockDownToLeft <= 3) {
+            countOfKnockDownToLeft++;
+            stackPenalty.add(new Penalty(TypePenalty.KnockDown, Player.Left));
+        }
+    }
+
+    public void addKnockDownToRight() {
+        if (!(pointPanelMode == PointPanelMode.K1 || pointPanelMode == PointPanelMode.FullContact))
+            return;
+        if (countOfKnockDownToRight <= 3) {
+            countOfKnockDownToRight++;
+            stackPenalty.add(new Penalty(TypePenalty.KnockDown, Player.Right));
+        }
+    }
+
+    public void addKickCountToLeft() {
+        if (pointPanelMode != PointPanelMode.FullContact)
+            return;
+        if (countOfKickCountToLeft <= 3) {
+            ++countOfKickCountToLeft;
+            stackPenalty.add(new Penalty(TypePenalty.KickCount, Player.Left));
+        }
+    }
+
+    public void addKickCountToRight() {
+        if (pointPanelMode != PointPanelMode.FullContact)
+            return;
+        if (countOfKickCountToRight <= 3) {
+            ++countOfKickCountToRight;
+            stackPenalty.add(new Penalty(TypePenalty.KickCount, Player.Right));
+        }
     }
 
 
@@ -631,14 +707,14 @@ public class Fighting {
             }
         }
 
-        if (penalty.typePenalty == TypePenalty.FO) {
+        if (penalty.typePenalty == TypePenalty.Warning) {
             if (penalty.player == Player.Left)
                 --countOfForestallingToLeft;
             if (penalty.player == Player.Right)
                 --countOfForestallingToRight;
         }
 
-        if (penalty.typePenalty == TypePenalty.Ex) {
+        if (penalty.typePenalty == TypePenalty.Exit) {
             if (penalty.player == Player.Left) {
                 --countOfExToLeft;
                 if (countOfExToLeft == 3 && status == FightStatus.DisqualificationLeft) {
@@ -652,6 +728,24 @@ public class Fighting {
                     status = statusBeforeDisqualification;
                     statusBeforeDisqualification = null;
                 }
+            }
+        }
+
+        if (penalty.typePenalty == TypePenalty.KnockDown){
+            if (penalty.player == Player.Left) {
+                --countOfKnockDownToLeft;
+            }
+            if (penalty.player == Player.Right) {
+                --countOfKnockDownToRight;
+            }
+        }
+
+        if (penalty.typePenalty == TypePenalty.KickCount){
+            if (penalty.player == Player.Left) {
+                --countOfKickCountToLeft;
+            }
+            if (penalty.player == Player.Right) {
+                --countOfKickCountToRight;
             }
         }
     }

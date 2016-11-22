@@ -2,7 +2,7 @@
 #include "ui_formdipl.h"
 
 FormDipl::FormDipl(long long UID_tournament, QWidget *parent) :
-    QWidget(parent),
+    QDialog(parent),
     ui(new Ui::FormDipl),
     UID_tournament(UID_tournament)
 {

@@ -39,11 +39,10 @@ QT_BEGIN_NAMESPACE
 class Ui_DialogTournamentGrid
 {
 public:
-    QGridLayout *gridLayout_2;
+    QGridLayout *gridLayout;
     QSplitter *splitter;
     QWidget *widget;
     QVBoxLayout *verticalLayout;
-    QLineEdit *filterCategoriesLE;
     QHBoxLayout *horizontalLayout;
     QGroupBox *groupBox;
     QHBoxLayout *horizontalLayout_2;
@@ -74,6 +73,7 @@ public:
     QLabel *label_5;
     QLabel *label_6;
     QSpacerItem *horizontalSpacer;
+    QLineEdit *filterCategoriesLE;
     QComboBox *qComboBoxSelectCategory;
     QTableWidget *qTableWidget;
     QHBoxLayout *horizontalLayout_4;
@@ -84,8 +84,6 @@ public:
     QPushButton *buttonSave;
     QPushButton *buttonSaveAll;
     QSpacerItem *horizontalSpacer_2;
-    QWidget *widget_2;
-    QVBoxLayout *verticalLayout_2;
     QTabWidget *qTabWidget;
     QWidget *tab;
     QGridLayout *gridLayout_3;
@@ -99,9 +97,9 @@ public:
     {
         if (DialogTournamentGrid->objectName().isEmpty())
             DialogTournamentGrid->setObjectName(QStringLiteral("DialogTournamentGrid"));
-        DialogTournamentGrid->resize(966, 430);
-        gridLayout_2 = new QGridLayout(DialogTournamentGrid);
-        gridLayout_2->setObjectName(QStringLiteral("gridLayout_2"));
+        DialogTournamentGrid->resize(1371, 610);
+        gridLayout = new QGridLayout(DialogTournamentGrid);
+        gridLayout->setObjectName(QStringLiteral("gridLayout"));
         splitter = new QSplitter(DialogTournamentGrid);
         splitter->setObjectName(QStringLiteral("splitter"));
         splitter->setOrientation(Qt::Horizontal);
@@ -109,11 +107,6 @@ public:
         widget->setObjectName(QStringLiteral("widget"));
         verticalLayout = new QVBoxLayout(widget);
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
-        filterCategoriesLE = new QLineEdit(widget);
-        filterCategoriesLE->setObjectName(QStringLiteral("filterCategoriesLE"));
-
-        verticalLayout->addWidget(filterCategoriesLE);
-
         horizontalLayout = new QHBoxLayout();
         horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
         groupBox = new QGroupBox(widget);
@@ -278,8 +271,14 @@ public:
 
         verticalLayout->addLayout(horizontalLayout_5);
 
+        filterCategoriesLE = new QLineEdit(widget);
+        filterCategoriesLE->setObjectName(QStringLiteral("filterCategoriesLE"));
+
+        verticalLayout->addWidget(filterCategoriesLE);
+
         qComboBoxSelectCategory = new QComboBox(widget);
         qComboBoxSelectCategory->setObjectName(QStringLiteral("qComboBoxSelectCategory"));
+        qComboBoxSelectCategory->setEditable(false);
         qComboBoxSelectCategory->setMaxVisibleItems(300);
 
         verticalLayout->addWidget(qComboBoxSelectCategory);
@@ -357,22 +356,23 @@ public:
         verticalLayout->addLayout(horizontalLayout_4);
 
         splitter->addWidget(widget);
-        widget_2 = new QWidget(splitter);
-        widget_2->setObjectName(QStringLiteral("widget_2"));
-        verticalLayout_2 = new QVBoxLayout(widget_2);
-        verticalLayout_2->setObjectName(QStringLiteral("verticalLayout_2"));
-        qTabWidget = new QTabWidget(widget_2);
+        qTabWidget = new QTabWidget(splitter);
         qTabWidget->setObjectName(QStringLiteral("qTabWidget"));
+        qTabWidget->setTabPosition(QTabWidget::West);
+        qTabWidget->setDocumentMode(false);
+        qTabWidget->setMovable(true);
         tab = new QWidget();
         tab->setObjectName(QStringLiteral("tab"));
         gridLayout_3 = new QGridLayout(tab);
+        gridLayout_3->setSpacing(0);
         gridLayout_3->setObjectName(QStringLiteral("gridLayout_3"));
+        gridLayout_3->setContentsMargins(0, 0, 0, 0);
         scrollArea = new QScrollArea(tab);
         scrollArea->setObjectName(QStringLiteral("scrollArea"));
         scrollArea->setAlignment(Qt::AlignCenter);
         pRenderArea = new RenderAreaWidget();
         pRenderArea->setObjectName(QStringLiteral("pRenderArea"));
-        pRenderArea->setGeometry(QRect(0, 0, 252, 348));
+        pRenderArea->setGeometry(QRect(64, 118, 252, 348));
         scrollArea->setWidget(pRenderArea);
 
         gridLayout_3->addWidget(scrollArea, 0, 0, 1, 1);
@@ -381,7 +381,9 @@ public:
         tab_2 = new QWidget();
         tab_2->setObjectName(QStringLiteral("tab_2"));
         gridLayout_4 = new QGridLayout(tab_2);
+        gridLayout_4->setSpacing(0);
         gridLayout_4->setObjectName(QStringLiteral("gridLayout_4"));
+        gridLayout_4->setContentsMargins(0, 0, 0, 0);
         tableWidgeRight = new QTableWidget(tab_2);
         if (tableWidgeRight->columnCount() < 5)
             tableWidgeRight->setColumnCount(5);
@@ -402,14 +404,10 @@ public:
         gridLayout_4->addWidget(tableWidgeRight, 0, 0, 1, 1);
 
         qTabWidget->addTab(tab_2, QString());
+        splitter->addWidget(qTabWidget);
 
-        verticalLayout_2->addWidget(qTabWidget);
+        gridLayout->addWidget(splitter, 0, 0, 1, 1);
 
-        splitter->addWidget(widget_2);
-
-        gridLayout_2->addWidget(splitter, 1, 0, 1, 1);
-
-        QWidget::setTabOrder(filterCategoriesLE, radioButtonAll);
         QWidget::setTabOrder(radioButtonAll, radioButtonLonly);
         QWidget::setTabOrder(radioButtonLonly, radioButtonInvalid);
         QWidget::setTabOrder(radioButtonInvalid, radioButtonInvalidTurn);
@@ -419,10 +417,12 @@ public:
         QWidget::setTabOrder(checkBoxCity, checkBoxClub);
         QWidget::setTabOrder(checkBoxClub, spinBoxFontSizeOfTC);
         QWidget::setTabOrder(spinBoxFontSizeOfTC, spinBoxFontSizeOfOrders);
-        QWidget::setTabOrder(spinBoxFontSizeOfOrders, spinBoxWidth);
+        QWidget::setTabOrder(spinBoxFontSizeOfOrders, spinBoxFontSizeOfNodeOfGrid);
+        QWidget::setTabOrder(spinBoxFontSizeOfNodeOfGrid, spinBoxWidth);
         QWidget::setTabOrder(spinBoxWidth, spinBoxHeight);
         QWidget::setTabOrder(spinBoxHeight, spinBoxFontSizeOfListOfPairs);
-        QWidget::setTabOrder(spinBoxFontSizeOfListOfPairs, qComboBoxSelectCategory);
+        QWidget::setTabOrder(spinBoxFontSizeOfListOfPairs, filterCategoriesLE);
+        QWidget::setTabOrder(filterCategoriesLE, qComboBoxSelectCategory);
         QWidget::setTabOrder(qComboBoxSelectCategory, buttonGenerate);
         QWidget::setTabOrder(buttonGenerate, buttonGenerateAll);
         QWidget::setTabOrder(buttonGenerateAll, buttonDelete);
@@ -444,8 +444,6 @@ public:
     void retranslateUi(QDialog *DialogTournamentGrid)
     {
         DialogTournamentGrid->setWindowTitle(QApplication::translate("DialogTournamentGrid", "\320\241\320\265\321\202\320\272\320\270", 0));
-        filterCategoriesLE->setInputMask(QString());
-        filterCategoriesLE->setPlaceholderText(QString());
         groupBox->setTitle(QApplication::translate("DialogTournamentGrid", "\320\244\320\270\320\273\321\214\321\202\321\200 \321\201\320\265\321\202\320\276\320\272", 0));
         radioButtonAll->setText(QApplication::translate("DialogTournamentGrid", "\320\222\321\201\320\265", 0));
         radioButtonLonly->setText(QApplication::translate("DialogTournamentGrid", "\320\236\320\264\320\270\320\275", 0));
@@ -463,6 +461,8 @@ public:
         label_4->setText(QApplication::translate("DialogTournamentGrid", "\320\250\320\270\321\200\320\270\320\275\320\260", 0));
         label_5->setText(QApplication::translate("DialogTournamentGrid", "\320\222\321\213\321\201\320\276\321\202\320\260", 0));
         label_6->setText(QApplication::translate("DialogTournamentGrid", "\320\237\320\260\321\200\321\213", 0));
+        filterCategoriesLE->setInputMask(QString());
+        filterCategoriesLE->setPlaceholderText(QString());
         QTableWidgetItem *___qtablewidgetitem = qTableWidget->horizontalHeaderItem(0);
         ___qtablewidgetitem->setText(QApplication::translate("DialogTournamentGrid", "\320\241\320\277\320\276\321\200\321\202\321\201\320\274\320\265\320\275", 0));
         QTableWidgetItem *___qtablewidgetitem1 = qTableWidget->horizontalHeaderItem(1);

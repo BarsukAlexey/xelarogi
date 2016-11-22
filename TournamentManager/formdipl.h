@@ -32,7 +32,7 @@ namespace Ui {
 class FormDipl;
 }
 
-class FormDipl : public QWidget
+class FormDipl : public QDialog
 {
     Q_OBJECT
 

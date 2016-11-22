@@ -122,7 +122,8 @@ public:
             int durationFighting, int durationBreak, int roundCount,
             int IN_CASE_TIE, int DURATION_EXTRA_ROUND,
             QString ageUnit, QString wordAgeFrom, QString wordAgeTill,
-            QString weightUnit, QString wordWeightFrom, QString wordWeightTill);
+            QString weightUnit, QString wordWeightFrom, QString wordWeightTill,
+            int pointPanelMode);
 
 
     // для таблицы RING_TATAMI_LISTS_DATA

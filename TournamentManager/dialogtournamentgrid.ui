@@ -6,31 +6,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>966</width>
-    <height>430</height>
+    <width>1371</width>
+    <height>610</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Сетки</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_2">
-   <item row="1" column="0">
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
     <widget class="QSplitter" name="splitter">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
      <widget class="QWidget" name="widget" native="true">
       <layout class="QVBoxLayout" name="verticalLayout">
-       <item>
-        <widget class="QLineEdit" name="filterCategoriesLE">
-         <property name="inputMask">
-          <string/>
-         </property>
-         <property name="placeholderText">
-          <string/>
-         </property>
-        </widget>
-       </item>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
@@ -281,7 +271,20 @@
         </layout>
        </item>
        <item>
+        <widget class="QLineEdit" name="filterCategoriesLE">
+         <property name="inputMask">
+          <string/>
+         </property>
+         <property name="placeholderText">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QComboBox" name="qComboBoxSelectCategory">
+         <property name="editable">
+          <bool>false</bool>
+         </property>
          <property name="maxVisibleItems">
           <number>300</number>
          </property>
@@ -417,82 +420,115 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="widget_2" native="true">
-      <layout class="QVBoxLayout" name="verticalLayout_2">
-       <item>
-        <widget class="QTabWidget" name="qTabWidget">
-         <property name="currentIndex">
-          <number>0</number>
-         </property>
-         <widget class="QWidget" name="tab">
-          <attribute name="title">
-           <string>Сетка</string>
-          </attribute>
-          <layout class="QGridLayout" name="gridLayout_3">
-           <item row="0" column="0">
-            <widget class="QScrollArea" name="scrollArea">
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-             <widget class="RenderAreaWidget" name="pRenderArea">
-              <property name="geometry">
-               <rect>
-                <x>0</x>
-                <y>0</y>
-                <width>252</width>
-                <height>348</height>
-               </rect>
-              </property>
-             </widget>
-            </widget>
-           </item>
-          </layout>
+     <widget class="QTabWidget" name="qTabWidget">
+      <property name="tabPosition">
+       <enum>QTabWidget::West</enum>
+      </property>
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <property name="documentMode">
+       <bool>false</bool>
+      </property>
+      <property name="movable">
+       <bool>true</bool>
+      </property>
+      <widget class="QWidget" name="tab">
+       <attribute name="title">
+        <string>Сетка</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_3">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <item row="0" column="0">
+         <widget class="QScrollArea" name="scrollArea">
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+          <widget class="RenderAreaWidget" name="pRenderArea">
+           <property name="geometry">
+            <rect>
+             <x>64</x>
+             <y>118</y>
+             <width>252</width>
+             <height>348</height>
+            </rect>
+           </property>
+          </widget>
          </widget>
-         <widget class="QWidget" name="tab_2">
-          <attribute name="title">
-           <string>Список</string>
-          </attribute>
-          <layout class="QGridLayout" name="gridLayout_4">
-           <item row="0" column="0">
-            <widget class="QTableWidget" name="tableWidgeRight">
-             <property name="editTriggers">
-              <set>QAbstractItemView::NoEditTriggers</set>
-             </property>
-             <property name="selectionMode">
-              <enum>QAbstractItemView::SingleSelection</enum>
-             </property>
-             <column>
-              <property name="text">
-               <string>Спортсмен A</string>
-              </property>
-             </column>
-             <column>
-              <property name="text">
-               <string>Регион A</string>
-              </property>
-             </column>
-             <column>
-              <property name="text">
-               <string>Спортсмен B</string>
-              </property>
-             </column>
-             <column>
-              <property name="text">
-               <string>Регион B</string>
-              </property>
-             </column>
-             <column>
-              <property name="text">
-               <string>Уровень</string>
-              </property>
-             </column>
-            </widget>
-           </item>
-          </layout>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_2">
+       <attribute name="title">
+        <string>Список</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_4">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <item row="0" column="0">
+         <widget class="QTableWidget" name="tableWidgeRight">
+          <property name="editTriggers">
+           <set>QAbstractItemView::NoEditTriggers</set>
+          </property>
+          <property name="selectionMode">
+           <enum>QAbstractItemView::SingleSelection</enum>
+          </property>
+          <column>
+           <property name="text">
+            <string>Спортсмен A</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Регион A</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Спортсмен B</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Регион B</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Уровень</string>
+           </property>
+          </column>
          </widget>
-        </widget>
-       </item>
-      </layout>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </widget>
    </item>
@@ -507,7 +543,6 @@
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>filterCategoriesLE</tabstop>
   <tabstop>radioButtonAll</tabstop>
   <tabstop>radioButtonLonly</tabstop>
   <tabstop>radioButtonInvalid</tabstop>
@@ -518,9 +553,11 @@
   <tabstop>checkBoxClub</tabstop>
   <tabstop>spinBoxFontSizeOfTC</tabstop>
   <tabstop>spinBoxFontSizeOfOrders</tabstop>
+  <tabstop>spinBoxFontSizeOfNodeOfGrid</tabstop>
   <tabstop>spinBoxWidth</tabstop>
   <tabstop>spinBoxHeight</tabstop>
   <tabstop>spinBoxFontSizeOfListOfPairs</tabstop>
+  <tabstop>filterCategoriesLE</tabstop>
   <tabstop>qComboBoxSelectCategory</tabstop>
   <tabstop>buttonGenerate</tabstop>
   <tabstop>buttonGenerateAll</tabstop>

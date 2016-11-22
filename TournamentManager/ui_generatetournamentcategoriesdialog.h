@@ -24,7 +24,6 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QPushButton>
-#include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QSpinBox>
 #include <QtWidgets/QVBoxLayout>
 
@@ -75,14 +74,15 @@ public:
     QComboBox *comboBoxTie;
     QLabel *label_12;
     QSpinBox *spinBoxExtraRound;
-    QSpacerItem *verticalSpacer;
+    QLabel *label_14;
+    QComboBox *comboBoxPointPanelMode;
     QDialogButtonBox *buttonBox;
 
     void setupUi(QDialog *GenerateTournamentCategoriesDialog)
     {
         if (GenerateTournamentCategoriesDialog->objectName().isEmpty())
             GenerateTournamentCategoriesDialog->setObjectName(QStringLiteral("GenerateTournamentCategoriesDialog"));
-        GenerateTournamentCategoriesDialog->resize(450, 617);
+        GenerateTournamentCategoriesDialog->resize(506, 584);
         verticalLayout = new QVBoxLayout(GenerateTournamentCategoriesDialog);
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
         formLayout = new QFormLayout();
@@ -314,12 +314,20 @@ public:
 
         formLayout_2->setWidget(4, QFormLayout::FieldRole, spinBoxExtraRound);
 
+        label_14 = new QLabel(GenerateTournamentCategoriesDialog);
+        label_14->setObjectName(QStringLiteral("label_14"));
+        label_14->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+
+        formLayout_2->setWidget(5, QFormLayout::LabelRole, label_14);
+
+        comboBoxPointPanelMode = new QComboBox(GenerateTournamentCategoriesDialog);
+        comboBoxPointPanelMode->setObjectName(QStringLiteral("comboBoxPointPanelMode"));
+        comboBoxPointPanelMode->setMaxVisibleItems(1000);
+
+        formLayout_2->setWidget(5, QFormLayout::FieldRole, comboBoxPointPanelMode);
+
 
         verticalLayout->addLayout(formLayout_2);
-
-        verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-
-        verticalLayout->addItem(verticalSpacer);
 
         buttonBox = new QDialogButtonBox(GenerateTournamentCategoriesDialog);
         buttonBox->setObjectName(QStringLiteral("buttonBox"));
@@ -388,6 +396,7 @@ public:
         label_10->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\237\320\265\321\200\320\265\321\200\321\213\320\262", 0));
         label_13->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\222 \321\201\320\273\321\203\321\207\320\260\320\265 \320\275\320\270\321\207\321\214\320\270", 0));
         label_12->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\224\320\276\320\277. \321\200\320\260\321\203\320\275\320\264", 0));
+        label_14->setText(QApplication::translate("GenerateTournamentCategoriesDialog", "\320\242\320\270\320\277 \321\202\320\260\320\261\320\273\320\276", 0));
     } // retranslateUi
 
 };

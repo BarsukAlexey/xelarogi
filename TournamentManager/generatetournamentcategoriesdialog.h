@@ -38,6 +38,7 @@ private:
     QSqlRelationalTableModel *modelSex;
     QSqlRelationalTableModel *modelAgeType;
     QSqlRelationalTableModel *modelTie;
+    QSqlRelationalTableModel *modelPointPanelMode;
 };
 
 #endif // GENERATETOURNAMENTCATEGORIESDIALOG_H

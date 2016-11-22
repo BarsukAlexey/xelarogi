@@ -15,6 +15,7 @@
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QComboBox>
+#include <QtWidgets/QDialog>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QHBoxLayout>
@@ -70,7 +71,7 @@ public:
     QRadioButton *radioButtonBadge;
     QRadioButton *radioButtonDiplom;
 
-    void setupUi(QWidget *FormDipl)
+    void setupUi(QDialog *FormDipl)
     {
         if (FormDipl->objectName().isEmpty())
             FormDipl->setObjectName(QStringLiteral("FormDipl"));
@@ -277,7 +278,7 @@ public:
         QMetaObject::connectSlotsByName(FormDipl);
     } // setupUi
 
-    void retranslateUi(QWidget *FormDipl)
+    void retranslateUi(QDialog *FormDipl)
     {
         FormDipl->setWindowTitle(QApplication::translate("FormDipl", "Form", 0));
         pushButtonAdd->setText(QApplication::translate("FormDipl", "\320\224\320\276\320\261\320\260\320\262\320\270\321\202\321\214 \321\201\321\202\321\200\320\276\320\272\321\203", 0));

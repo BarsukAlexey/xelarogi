@@ -2,26 +2,25 @@ package net.pskov;
 
 import net.pskov.some_enum.Player;
 import net.pskov.some_enum.FightStatus;
+import net.pskov.some_enum.PointPanelMode;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.font.TextLayout;
-import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 
 class JFrameScoreTable extends JDialog {
 
     private boolean isThisForJudge;
-    private final Fighting f;
+    private final ModelFight modelFight;
     private Timer timer;
 
-    JFrameScoreTable(boolean isThisForJudge, final Rectangle bound, final Fighting f) {
+    JFrameScoreTable(boolean isThisForJudge, final Rectangle bound, final ModelFight f) {
         super();
 
         this.isThisForJudge = isThisForJudge;
-        this.f = f;
+        this.modelFight = f;
 
         add(new JPanel() {
             @Override
@@ -30,64 +29,64 @@ class JFrameScoreTable extends JDialog {
             }
         });
 
-        if (isThisForJudge) {
-            addKeyListener(new KeyAdapter() {
-                @Override
-                public void keyPressed(KeyEvent e) {
-                    if (e.getKeyCode() == KeyEvent.VK_6) {
-                        f.setDialog(true);
-                        JDialogStopRound dialog = new JDialogStopRound(JFrameScoreTable.this);
-                        dialog.setVisible(true);
-                        f.setDialog(false);
-
-                        f.forceStopRound(dialog.getWinner(), dialog.getResult());
-                    }
-                }
-            });
-
-            //
-            addMouseMotionListener(new MouseMotionListener() {
-                @Override
-                public void mouseDragged(MouseEvent arg0) {
-                    mymove(arg0);
-                }
-
-                @Override
-                public void mouseMoved(MouseEvent arg0) {
-                    mymove(arg0);
-                }
-
-                private Robot robo;
-
-                {
-                    try {
-                        robo = new Robot();
-                    } catch (AWTException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                private final int fixX = bound.width / 2;
-                private final int fixY = bound.height / 2;
-
-                private void mymove(MouseEvent arg0) {
-                    if (robo == null) return;
-                    if (arg0.getX() == fixX && arg0.getY() == fixY) {
-                        // ignore mouse action
-                        return;
-                    }
-                    robo.mouseMove(fixX + JFrameScoreTable.this.getX(), fixY + JFrameScoreTable.this.getY());
-                }
-            });
-        }
+//        if (isThisForJudge) {
+//            addKeyListener(new KeyAdapter() {
+//                @Override
+//                public void keyPressed(KeyEvent e) {
+//                    if (e.getKeyCode() == KeyEvent.VK_6) {
+//                        f.setDialog(true);
+//                        JDialogStopRound dialog = new JDialogStopRound(JFrameScoreTable.this);
+//                        dialog.setVisible(true);
+//                        f.setDialog(false);
+//
+//                        f.forceStopRound(dialog.getWinner(), dialog.getResult());
+//                    }
+//                }
+//            });
+//
+//            //
+//            addMouseMotionListener(new MouseMotionListener() {
+//                @Override
+//                public void mouseDragged(MouseEvent arg0) {
+//                    mymove(arg0);
+//                }
+//
+//                @Override
+//                public void mouseMoved(MouseEvent arg0) {
+//                    mymove(arg0);
+//                }
+//
+//                private Robot robo;
+//
+//                {
+//                    try {
+//                        robo = new Robot();
+//                    } catch (AWTException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//
+//                private final int fixX = bound.width / 2;
+//                private final int fixY = bound.height / 2;
+//
+//                private void mymove(MouseEvent arg0) {
+//                    if (robo == null) return;
+//                    if (arg0.getX() == fixX && arg0.getY() == fixY) {
+//                        // ignore mouse action
+//                        return;
+//                    }
+//                    robo.mouseMove(fixX + JFrameScoreTable.this.getX(), fixY + JFrameScoreTable.this.getY());
+//                }
+//            });
+//        }
 
 
         setModal(true);
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-        setUndecorated(true);
+//        setUndecorated(true);
         pack();
-        setBounds(bound);
-//        setBounds(new Rectangle(100, 100, 800, 600));
+//        setBounds(bound);
+        setBounds(new Rectangle(100, 100, 1700, 600));
 
 
         timer = new Timer(250, new ActionListener() {
@@ -105,7 +104,7 @@ class JFrameScoreTable extends JDialog {
     public void dispose() {
         super.dispose();
         timer.stop();
-        f.dispose();
+        modelFight.dispose();
     }
 
     public void myPaint(Graphics gg) {
@@ -129,22 +128,62 @@ class JFrameScoreTable extends JDialog {
             scrDim = new Dimension((int) (0.85 * g.getClipBounds().width), g.getClipBounds().height);
             g.translate(scrDim.width, 0);
 
-            String[] msg = new String[]{
-                    "SPACE - start/pause",
-                    "ESC - exit",
+            String[] msg = null;
+            if (modelFight.getPointPanelMode() == PointPanelMode.LightContact)
+                msg = new String[]{
+                        "SPACE - start/pause",
+                        "ESC - exit",
 
-                    "Q - minus (red)",
-                    "A - fo (red)",
-                    "Z - ex (red)",
+                        "Q - minus (red)",
+                        "A - waring (red)",
+                        "Z - exit (red)",
 
-                    "O - minus (blue)",
-                    "K - fo (blue)",
-                    "M - ex (blue)",
+                        "O - minus (blue)",
+                        "K - waring (blue)",
+                        "M - exit (blue)",
 
-                    "G - cancel last penalty",
+                        "G - cancel last penalty",
 
-                    "6 - STOP ROUND!"
-            };
+                        "6 - STOP ROUND!"
+                };
+
+            else if (modelFight.getPointPanelMode() == PointPanelMode.K1)
+                msg = new String[]{
+                        "SPACE - start/pause",
+                        "ESC - exit",
+
+                        "Q - minus (red)",
+                        "A - waring (red)",
+                        "Z - knock down (red)",
+
+                        "O - minus (blue)",
+                        "K - waring (blue)",
+                        "M - knock down (blue)",
+
+                        "G - cancel last penalty",
+
+                        "6 - STOP ROUND!"
+                };
+            else
+                msg = new String[]{
+                        "SPACE - start/pause",
+                        "ESC - exit",
+
+                        "Q - minus (red)",
+                        "A - waring (red)",
+                        "Z - knock down (red)",
+                        "W - kick count (red)",
+
+                        "O - minus (blue)",
+                        "K - waring (blue)",
+                        "M - knock down (blue)",
+                        "I - kick count (blue)",
+
+                        "G - cancel last penalty",
+
+                        "6 - STOP ROUND!"
+                };
+
 
             int height = scrDim.height / (msg.length);
             int sz = 100;
@@ -171,17 +210,17 @@ class JFrameScoreTable extends JDialog {
 
         final double wUnit = scrDim.width / (11.5 + 11.5);
         final double hUnit = heightCenter / (10.5);
-        FightStatus status = f.getStatus();
+        FightStatus status = modelFight.getStatus();
 
         Player greyPlayer = Player.NoPlayer;
-        if (f.getWinner() != Player.NoPlayer) {
-            if (isThisForJudge && f.getWinner() == Player.Left || !isThisForJudge && f.getWinner() == Player.Right)
+        if (modelFight.getWinner() != Player.NoPlayer) {
+            if (isThisForJudge && modelFight.getWinner() == Player.Left || !isThisForJudge && modelFight.getWinner() == Player.Right)
                 greyPlayer = Player.Right;
             else
                 greyPlayer = Player.Left;
         }
-        final int[] countOfPointsForTheLeftFighter = isThisForJudge ? f.getCountOfPointsForLeftFighter() : f.getCountOfPointsForRightFighter();
-        final int[] countOfPointsForTheRightFighter = isThisForJudge ? f.getCountOfPointsForRightFighter() : f.getCountOfPointsForLeftFighter();
+        final int[] countOfPointsForTheLeftFighter = isThisForJudge ? modelFight.getCountOfPointsForLeftFighter() : modelFight.getCountOfPointsForRightFighter();
+        final int[] countOfPointsForTheRightFighter = isThisForJudge ? modelFight.getCountOfPointsForRightFighter() : modelFight.getCountOfPointsForLeftFighter();
 
 
 //        // начало заполения заголовка ----------------------------------------------------------------------------------
@@ -193,18 +232,18 @@ class JFrameScoreTable extends JDialog {
 //            winnerByPointsLeft, winnerByPointsRight,
 //            stoppedByJudge, forceLeftWinner, forceRightWinner,
 //            PendingExtraRound, ExtraRound, PauseExtraRound
-            if (f.getWinner() != Player.NoPlayer) {
-                GraphicsUtilities.fitAndDrawTextInCenterOfRectangle(g, Color.YELLOW, "Winner is " + (f.getWinner() == Player.Left ? f.getNameOfLeftFighter() : f.getNameOfRightFighter()), 0, 0, scrDim.width, heightRoof);
+            if (modelFight.getWinner() != Player.NoPlayer) {
+                GraphicsUtilities.fitAndDrawTextInCenterOfRectangle(g, Color.YELLOW, "Winner is " + (modelFight.getWinner() == Player.Left ? modelFight.getNameOfLeftFighter() : modelFight.getNameOfRightFighter()), 0, 0, scrDim.width, heightRoof);
             } else {
                 String roofInfo = "";
                 if (status == FightStatus.NotStart)
-                    roofInfo = String.format("Round %d/%d - Pending", f.getCurrentRound(), f.getCountOfRounds());
+                    roofInfo = String.format("Round %d/%d - Pending", modelFight.getCurrentRound(), modelFight.getCountOfRounds());
                 else if (status == FightStatus.Fight)
-                    roofInfo = String.format("Round %d/%d - Fight!", f.getCurrentRound(), f.getCountOfRounds());
+                    roofInfo = String.format("Round %d/%d - Fight!", modelFight.getCurrentRound(), modelFight.getCountOfRounds());
                 else if (status == FightStatus.Break)
-                    roofInfo = String.format("Round %d/%d - Break", f.getCurrentRound(), f.getCountOfRounds());
+                    roofInfo = String.format("Round %d/%d - Break", modelFight.getCurrentRound(), modelFight.getCountOfRounds());
                 else if (status == FightStatus.PauseFight)
-                    roofInfo = String.format("Round %d/%d - Pause", f.getCurrentRound(), f.getCountOfRounds());
+                    roofInfo = String.format("Round %d/%d - Pause", modelFight.getCurrentRound(), modelFight.getCountOfRounds());
                 else if (status == FightStatus.Tie)
                     roofInfo = "Tie...";
                 else if (status == FightStatus.PendingExtraRound)
@@ -217,7 +256,7 @@ class JFrameScoreTable extends JDialog {
                 final double widthTime = scrDim.width * 0.2;
                 int fontSizeOfRoofInfo = GraphicsUtilities.getMaxFittingFontSize(g, g.getFont(), roofInfo, 0.90 * (scrDim.width - widthTime) / 2, heightRoof);
 
-                int fontSizeOfTime = GraphicsUtilities.getMaxFittingFontSize(g, g.getFont(), f.getStringTime(), widthTime, heightRoof);
+                int fontSizeOfTime = GraphicsUtilities.getMaxFittingFontSize(g, g.getFont(), modelFight.getStringTime(), widthTime, heightRoof);
                 for (int i = 0; i < 10; i++) {
                     fontSizeOfTime = Math.min(fontSizeOfTime,
                             GraphicsUtilities.getMaxFittingFontSize(g, g.getFont(), String.format("%d%d:%d%d", i, i, i, i), widthTime, heightRoof));
@@ -226,7 +265,7 @@ class JFrameScoreTable extends JDialog {
 
                 GraphicsUtilities.drawTextInTheLeftOfRectangle(g, Color.BLACK, roofInfo, 0, 0, (int) heightRoof, fontSizeOfRoofInfo);
                 GraphicsUtilities.drawTextInTheRightOfRectangle(g, Color.BLACK, roofInfo, (int) ((scrDim.width - widthTime) / 2 + widthTime), 0, (int) ((scrDim.width - widthTime) / 2), (int) heightRoof, fontSizeOfRoofInfo);
-                GraphicsUtilities.drawTextInCenterOfRectangle(g, Color.BLACK, f.getStringTime(), (scrDim.width - widthTime) / 2, 0, widthTime, heightRoof, fontSizeOfTime);
+                GraphicsUtilities.drawTextInCenterOfRectangle(g, Color.BLACK, modelFight.getStringTime(), (scrDim.width - widthTime) / 2, 0, widthTime, heightRoof, fontSizeOfTime);
 
 
             }
@@ -238,12 +277,12 @@ class JFrameScoreTable extends JDialog {
             final int sizeOfFontForFightersAndCountries =
                     Math.min(
                             Math.min(
-                                    GraphicsUtilities.getMaxFittingFontSize(g, g.getFont(), f.getNameOfLeftFighter(), (3.5 + 3.5 + 3.5) * wUnit, hUnit),
-                                    GraphicsUtilities.getMaxFittingFontSize(g, g.getFont(), f.getNameOfRightFighter(), (3.5 + 3.5 + 3.5) * wUnit, hUnit)
+                                    GraphicsUtilities.getMaxFittingFontSize(g, g.getFont(), modelFight.getNameOfLeftFighter(), (3.5 + 3.5 + 3.5) * wUnit, hUnit),
+                                    GraphicsUtilities.getMaxFittingFontSize(g, g.getFont(), modelFight.getNameOfRightFighter(), (3.5 + 3.5 + 3.5) * wUnit, hUnit)
                             ),
                             Math.min(
-                                    GraphicsUtilities.getMaxFittingFontSize(g, g.getFont(), f.getCountryOfLeftFighter(), (3.5 + 3.5 + 3.5) * wUnit, hUnit),
-                                    GraphicsUtilities.getMaxFittingFontSize(g, g.getFont(), f.getCountryOfRightFighter(), (3.5 + 3.5 + 3.5) * wUnit, hUnit)
+                                    GraphicsUtilities.getMaxFittingFontSize(g, g.getFont(), modelFight.getCountryOfLeftFighter(), (3.5 + 3.5 + 3.5) * wUnit, hUnit),
+                                    GraphicsUtilities.getMaxFittingFontSize(g, g.getFont(), modelFight.getCountryOfRightFighter(), (3.5 + 3.5 + 3.5) * wUnit, hUnit)
                             )
                     ) - 2;
             final String fightNo = "Fight no.";
@@ -251,11 +290,11 @@ class JFrameScoreTable extends JDialog {
                     Math.min(
                             Math.min(
                                     GraphicsUtilities.getMaxFittingFontSize(g, g.getFont(), fightNo, 2 * wUnit, 0.5 * hUnit),
-                                    GraphicsUtilities.getMaxFittingFontSize(g, g.getFont(), f.getFightId() + "", 2 * wUnit, 0.5 * hUnit)
+                                    GraphicsUtilities.getMaxFittingFontSize(g, g.getFont(), modelFight.getFightId() + "", 2 * wUnit, 0.5 * hUnit)
                             ),
                             Math.min(
                                     GraphicsUtilities.getMaxFittingFontSize(g, g.getFont(), "---", 2 * wUnit, 0.5 * hUnit),
-                                    GraphicsUtilities.getMaxFittingFontSize(g, g.getFont(), f.getCategoryOfFighting() + "", 2 * wUnit, 0.5 * hUnit)
+                                    GraphicsUtilities.getMaxFittingFontSize(g, g.getFont(), modelFight.getCategoryOfFighting() + "", 2 * wUnit, 0.5 * hUnit)
                             )
                     );
 
@@ -278,12 +317,12 @@ class JFrameScoreTable extends JDialog {
 //            {
 //                int widthTime = scrDim.width;
 //                int heightTime = (int) ((6.4 - 1 - 2.5 - 1) * hUnit);
-//                int fontSizeOfTime = GraphicsUtilities.getMaxFittingFontSize(g, g.getFont(), f.getStringTime(), widthTime, heightTime);
+//                int fontSizeOfTime = GraphicsUtilities.getMaxFittingFontSize(g, g.getFont(), modelFight.getStringTime(), widthTime, heightTime);
 //                for (int i = 0; i < 10; i++) {
 //                    fontSizeOfTime = Math.min(fontSizeOfTime,
 //                            GraphicsUtilities.getMaxFittingFontSize(g, g.getFont(), String.format("%d%d:%d%d", i, i, i, i), widthTime, heightTime));
 //                }
-//                GraphicsUtilities.drawTextInCenterOfRectangle(g, Color.WHITE, f.getStringTime(), 0, (1 + 2.5 + 1) * hUnit, widthTime, heightTime, fontSizeOfTime);
+//                GraphicsUtilities.drawTextInCenterOfRectangle(g, Color.WHITE, modelFight.getStringTime(), 0, (1 + 2.5 + 1) * hUnit, widthTime, heightTime, fontSizeOfTime);
 //
 //            }
 
@@ -309,7 +348,7 @@ class JFrameScoreTable extends JDialog {
             GraphicsUtilities.drawTextInCenterOfRectangle(
                     g,
                     Color.BLACK,
-                    "" + f.getFightId(),
+                    "" + modelFight.getFightId(),
                     (11.5 - 1) * wUnit,
                     (0.3 + 0.5) * hUnit,
                     2 * wUnit,
@@ -331,7 +370,7 @@ class JFrameScoreTable extends JDialog {
             GraphicsUtilities.drawTextInCenterOfRectangle(
                     g,
                     Color.BLACK,
-                    f.getCategoryOfFighting(),
+                    modelFight.getCategoryOfFighting(),
                     (11.5 - 1) * wUnit,
                     (0.3 + 0.5 + 0.5 + 0.5) * hUnit,
                     2 * wUnit,
@@ -343,7 +382,7 @@ class JFrameScoreTable extends JDialog {
             GraphicsUtilities.drawTextInCenterOfRectangle(
                     g,
                     Color.WHITE,
-                    isThisForJudge ? f.getNameOfLeftFighter() : f.getNameOfRightFighter(),
+                    isThisForJudge ? modelFight.getNameOfLeftFighter() : modelFight.getNameOfRightFighter(),
                     0,
                     0,
                     (3.5 + 3.5 + 3.5) * wUnit,
@@ -354,7 +393,7 @@ class JFrameScoreTable extends JDialog {
 
 //            // флаг левого бойца
             {
-                BufferedImage flag = isThisForJudge ? f.getImageLeftConnerFlag() : f.getImageRightConnerFlag();
+                BufferedImage flag = isThisForJudge ? modelFight.getImageLeftConnerFlag() : modelFight.getImageRightConnerFlag();
                 if (flag != null) {
                     Dimension scaledDimension = GraphicsUtilities.getScaledDimension(flag.getWidth(), flag.getHeight(), (3.5 + 3.5 + 3.5) * wUnit, 2.5 * hUnit);
                     g.drawImage(
@@ -380,7 +419,7 @@ class JFrameScoreTable extends JDialog {
             GraphicsUtilities.drawTextInCenterOfRectangle(
                     g,
                     Color.WHITE,
-                    isThisForJudge ? f.getCountryOfLeftFighter() : f.getCountryOfRightFighter(),
+                    isThisForJudge ? modelFight.getCountryOfLeftFighter() : modelFight.getCountryOfRightFighter(),
                     0,
                     (1 + 2.5) * hUnit,
                     (3.5 + 3.5 + 3.5) * wUnit,
@@ -393,7 +432,7 @@ class JFrameScoreTable extends JDialog {
             GraphicsUtilities.drawTextInCenterOfRectangle(
                     g,
                     Color.WHITE,
-                    isThisForJudge ? f.getNameOfRightFighter() : f.getNameOfLeftFighter(),
+                    isThisForJudge ? modelFight.getNameOfRightFighter() : modelFight.getNameOfLeftFighter(),
                     (11.5 + 1) * wUnit,
                     0,
                     (3.5 + 3.5 + 3.5) * wUnit,
@@ -404,7 +443,7 @@ class JFrameScoreTable extends JDialog {
 
             // флаг правого бойца
             {
-                BufferedImage flag = isThisForJudge ? f.getImageRightConnerFlag() : f.getImageLeftConnerFlag();
+                BufferedImage flag = isThisForJudge ? modelFight.getImageRightConnerFlag() : modelFight.getImageLeftConnerFlag();
                 if (flag != null) {
                     Dimension scaledDimension = GraphicsUtilities.getScaledDimension(flag.getWidth(), flag.getHeight(), (3.5 + 3.5 + 3.5) * wUnit, 2.5 * hUnit);
                     g.drawImage(
@@ -430,7 +469,7 @@ class JFrameScoreTable extends JDialog {
             GraphicsUtilities.drawTextInCenterOfRectangle(
                     g,
                     Color.WHITE,
-                    isThisForJudge ? f.getCountryOfRightFighter() : f.getCountryOfLeftFighter(),
+                    isThisForJudge ? modelFight.getCountryOfRightFighter() : modelFight.getCountryOfLeftFighter(),
                     scrDim.width / 2 + wUnit,
                     (1 + 2.5) * hUnit,
                     (3.5 + 3.5 + 3.5) * wUnit,
@@ -448,14 +487,14 @@ class JFrameScoreTable extends JDialog {
                     g.setColor(Color.YELLOW);
                     g.fillRect(
                             (int) (scrDim.width / 2.0 - 10 - sideOfCube * (cube + 1) - widthSpaceBetweenCubes * cube),
-                            (int) (hUnit * 6.4 + (sideOfCube + heightSpaceBetweenCubes) * judge),
+                            (int) (hUnit * 5.4 + (sideOfCube + heightSpaceBetweenCubes) * judge),
                             sideOfCube, sideOfCube);
                 }
                 for (int cube = 0; cube < countOfPointsForTheRightFighter[judge] - countOfPointsForTheLeftFighter[judge]; cube++) {
                     g.setColor(Color.YELLOW);
                     g.fillRect(
                             (int) (scrDim.width / 2.0 + 10 + sideOfCube * (cube + 1) + widthSpaceBetweenCubes * cube),
-                            (int) (hUnit * 6.4 + (sideOfCube + heightSpaceBetweenCubes) * judge),
+                            (int) (hUnit * 5.4 + (sideOfCube + heightSpaceBetweenCubes) * judge),
                             sideOfCube, sideOfCube);
                 }
 
@@ -465,7 +504,7 @@ class JFrameScoreTable extends JDialog {
                     GraphicsUtilities.fitAndDrawTextInCenterOfRectangle(g, Color.WHITE,
                             (countOfPointsForTheLeftFighter[judge] - countOfPointsForTheRightFighter[judge]) + "",
                             (int) (scrDim.width / 2.0 - 10 - sideOfCube * (cube + 1) - widthSpaceBetweenCubes * cube),
-                            (int) (hUnit * 6.4 + (sideOfCube + heightSpaceBetweenCubes) * judge),
+                            (int) (hUnit * 5.4 + (sideOfCube + heightSpaceBetweenCubes) * judge),
                             sideOfCube, sideOfCube
                     );
                 }
@@ -475,7 +514,7 @@ class JFrameScoreTable extends JDialog {
                     GraphicsUtilities.fitAndDrawTextInCenterOfRectangle(g, Color.WHITE,
                             (countOfPointsForTheRightFighter[judge] - countOfPointsForTheLeftFighter[judge]) + "",
                             (int) (scrDim.width / 2.0 + 10 + sideOfCube * (cube + 1) + widthSpaceBetweenCubes * cube),
-                            (int) (hUnit * 6.4 + (sideOfCube + heightSpaceBetweenCubes) * judge),
+                            (int) (hUnit * 5.4 + (sideOfCube + heightSpaceBetweenCubes) * judge),
                             sideOfCube, sideOfCube
                     );
                 }
@@ -497,13 +536,13 @@ class JFrameScoreTable extends JDialog {
                     hUnit)
             );
 
-            int countJudgeForLeftFighter = isThisForJudge ? f.getCountJudgeForLeftFighter() : f.getCountJudgeForRightFighter();
-            int countJudgeForRightFighter = isThisForJudge ? f.getCountJudgeForRightFighter() : f.getCountJudgeForLeftFighter();
+            int countJudgeForLeftFighter = isThisForJudge ? modelFight.getCountJudgeForLeftFighter() : modelFight.getCountJudgeForRightFighter();
+            int countJudgeForRightFighter = isThisForJudge ? modelFight.getCountJudgeForRightFighter() : modelFight.getCountJudgeForLeftFighter();
             GraphicsUtilities.fitAndDrawTextInCenterOfRectangle(g, Color.BLACK, countJudgeForLeftFighter + " : " + countJudgeForRightFighter,
                     scrDim.width / 2 - 1 * wUnit, 8.5 * hUnit, 2 * wUnit, hUnit);
 
 
-            // рисуем Minus, Fo, Ex
+            // рисуем Minus, Fo, Exit
             {
                 double halfWidth = (scrDim.width / 2 - wUnit) / 2;
                 double sizeOfCube = Math.min(0.3 * hUnit, 0.3 * halfWidth / 2.2);
@@ -516,59 +555,177 @@ class JFrameScoreTable extends JDialog {
                  */
 
 
-                int sizeOfFont = Math.min(
-                        Math.min(
-                                GraphicsUtilities.getMaxFittingFontSize(g, g.getFont(), "Minus: ", halfWidth, 0.5 * hUnit),
-                                GraphicsUtilities.getMaxFittingFontSize(g, g.getFont(), "Fo: ", halfWidth, 0.5 * hUnit)
-                        ), GraphicsUtilities.getMaxFittingFontSize(g, g.getFont(), "Ex: ", halfWidth, 0.5 * hUnit));
+                int sizeOfFont;
+                if (modelFight.getPointPanelMode() == PointPanelMode.LightContact)
+                    sizeOfFont = Math.min(
+                            Math.min(
+                                    GraphicsUtilities.getMaxFittingFontSize(g, g.getFont(), "Minus: ", halfWidth, 0.5 * hUnit),
+                                    GraphicsUtilities.getMaxFittingFontSize(g, g.getFont(), "Warning: ", halfWidth, 0.5 * hUnit)
+                            ), GraphicsUtilities.getMaxFittingFontSize(g, g.getFont(), "Exit: ", halfWidth, 0.5 * hUnit));
+                else if (modelFight.getPointPanelMode() == PointPanelMode.K1)
+                    sizeOfFont = Math.min(
+                            Math.min(
+                                    GraphicsUtilities.getMaxFittingFontSize(g, g.getFont(), "Minus: ", halfWidth, 0.5 * hUnit),
+                                    GraphicsUtilities.getMaxFittingFontSize(g, g.getFont(), "Warning: ", halfWidth, 0.5 * hUnit)
+                            ), GraphicsUtilities.getMaxFittingFontSize(g, g.getFont(), "Knock down: ", halfWidth, 0.5 * hUnit));
+                else
+                    sizeOfFont = Math.min(
+                            Math.min(
+                                    GraphicsUtilities.getMaxFittingFontSize(g, g.getFont(), "Minus: ", halfWidth, 0.5 * hUnit),
+                                    GraphicsUtilities.getMaxFittingFontSize(g, g.getFont(), "Warning: ", halfWidth, 0.5 * hUnit)
+                            ),
+                            Math.min(
+                                    GraphicsUtilities.getMaxFittingFontSize(g, g.getFont(), "Knock down: ", halfWidth, 0.5 * hUnit),
+                                    GraphicsUtilities.getMaxFittingFontSize(g, g.getFont(), "Kick count: ", halfWidth, 0.5 * hUnit)
+                            ));
 
-                // рисуем Minus, Fo, Ex для левого бойца
+                // рисуем Minus, Fo, Exit для левого бойца
                 {
-                    GraphicsUtilities.drawTextInTheRightOfRectangle(g, Color.WHITE, "Minus: ",
-                            0, heightCenter + (-2) * hUnit, (scrDim.width / 2 - wUnit) / 2, 0.5 * hUnit, sizeOfFont);
-                    GraphicsUtilities.drawTextInTheRightOfRectangle(g, Color.WHITE, "Fo: ",
-                            0, heightCenter + (-2 + 0.6) * hUnit, (scrDim.width / 2 - wUnit) / 2, 0.5 * hUnit, sizeOfFont);
-                    GraphicsUtilities.drawTextInTheRightOfRectangle(g, Color.WHITE, "Ex: ",
-                            0, heightCenter + (-2 + 0.6 + 0.6) * hUnit, (scrDim.width / 2 - wUnit) / 2, 0.5 * hUnit, sizeOfFont);
-                    g.setColor(Color.YELLOW);
-                    double BUBEN = (0.5 * hUnit - sizeOfCube) / 2; // чтобы красиво было
-                    int countOfMinusToLeft = isThisForJudge ? f.getCountOfMinusToLeft() : f.getCountOfMinusToRight();
-                    int countOfForestallingToLeft = isThisForJudge ? f.getCountOfForestallingToLeft() : f.getCountOfForestallingToRight();
-                    int countOfExToLeft = isThisForJudge ? f.getCountOfExToLeft() : f.getCountOfExToRight();
-                    for (int i = 0; i < countOfMinusToLeft; i++) {
-                        g.fill(new Rectangle.Double((halfWidth + (i + 1) * widthSpaceBetweenCubes + i * sizeOfCube), heightCenter + (-2) * hUnit + BUBEN, sizeOfCube, sizeOfCube));
-                    }
-                    for (int i = 0; i < countOfForestallingToLeft; i++) {
-                        g.fill(new Rectangle.Double((halfWidth + (i + 1) * widthSpaceBetweenCubes + i * sizeOfCube), heightCenter + (-2 + 0.6) * hUnit + BUBEN, sizeOfCube, sizeOfCube));
-                    }
-                    for (int i = 0; i < countOfExToLeft; i++) {
-                        g.fill(new Rectangle.Double((halfWidth + (i + 1) * widthSpaceBetweenCubes + i * sizeOfCube), heightCenter + (-2 + 0.6 + 0.6) * hUnit + BUBEN, sizeOfCube, sizeOfCube));
+                    if (modelFight.getPointPanelMode() == PointPanelMode.LightContact) {
+                        GraphicsUtilities.drawTextInTheRightOfRectangle(g, Color.WHITE, "Minus: ",
+                                0, heightCenter + (-2) * hUnit, (scrDim.width / 2 - wUnit) / 2, 0.5 * hUnit, sizeOfFont);
+                        GraphicsUtilities.drawTextInTheRightOfRectangle(g, Color.WHITE, "Warning: ",
+                                0, heightCenter + (-2 + 0.6) * hUnit, (scrDim.width / 2 - wUnit) / 2, 0.5 * hUnit, sizeOfFont);
+                        GraphicsUtilities.drawTextInTheRightOfRectangle(g, Color.WHITE, "Exit: ",
+                                0, heightCenter + (-2 + 0.6 + 0.6) * hUnit, (scrDim.width / 2 - wUnit) / 2, 0.5 * hUnit, sizeOfFont);
+                        g.setColor(Color.YELLOW);
+                        double BUBEN = (0.5 * hUnit - sizeOfCube) / 2; // чтобы красиво было
+                        int countOfMinusToLeft = isThisForJudge ? modelFight.getCountOfMinusToLeft() : modelFight.getCountOfMinusToRight();
+                        int countOfForestallingToLeft = isThisForJudge ? modelFight.getCountOfForestallingToLeft() : modelFight.getCountOfForestallingToRight();
+                        int countOfExToLeft = isThisForJudge ? modelFight.getCountOfExToLeft() : modelFight.getCountOfExToRight();
+                        for (int i = 0; i < countOfMinusToLeft; i++) {
+                            g.fill(new Rectangle.Double((halfWidth + (i + 1) * widthSpaceBetweenCubes + i * sizeOfCube), heightCenter + (-2) * hUnit + BUBEN, sizeOfCube, sizeOfCube));
+                        }
+                        for (int i = 0; i < countOfForestallingToLeft; i++) {
+                            g.fill(new Rectangle.Double((halfWidth + (i + 1) * widthSpaceBetweenCubes + i * sizeOfCube), heightCenter + (-2 + 0.6) * hUnit + BUBEN, sizeOfCube, sizeOfCube));
+                        }
+                        for (int i = 0; i < countOfExToLeft; i++) {
+                            g.fill(new Rectangle.Double((halfWidth + (i + 1) * widthSpaceBetweenCubes + i * sizeOfCube), heightCenter + (-2 + 0.6 + 0.6) * hUnit + BUBEN, sizeOfCube, sizeOfCube));
+                        }
+                    } else if (modelFight.getPointPanelMode() == PointPanelMode.K1) {
+                        GraphicsUtilities.drawTextInTheRightOfRectangle(g, Color.WHITE, "Minus: ",
+                                0, heightCenter + (-2) * hUnit, (scrDim.width / 2 - wUnit) / 2, 0.5 * hUnit, sizeOfFont);
+                        GraphicsUtilities.drawTextInTheRightOfRectangle(g, Color.WHITE, "Warning: ",
+                                0, heightCenter + (-2 + 0.6) * hUnit, (scrDim.width / 2 - wUnit) / 2, 0.5 * hUnit, sizeOfFont);
+                        GraphicsUtilities.drawTextInTheRightOfRectangle(g, Color.WHITE, "Knock down: ",
+                                0, heightCenter + (-2 + 0.6 + 0.6) * hUnit, (scrDim.width / 2 - wUnit) / 2, 0.5 * hUnit, sizeOfFont);
+                        g.setColor(Color.YELLOW);
+                        double BUBEN = (0.5 * hUnit - sizeOfCube) / 2; // чтобы красиво было
+                        int countOfMinusToLeft = isThisForJudge ? modelFight.getCountOfMinusToLeft() : modelFight.getCountOfMinusToRight();
+                        int countOfForestallingToLeft = isThisForJudge ? modelFight.getCountOfForestallingToLeft() : modelFight.getCountOfForestallingToRight();
+                        int countOfKnockDown = isThisForJudge ? modelFight.getCountOfKnockDownToLeft() : modelFight.getCountOfKnockDownToRight();
+                        for (int i = 0; i < countOfMinusToLeft; i++) {
+                            g.fill(new Rectangle.Double((halfWidth + (i + 1) * widthSpaceBetweenCubes + i * sizeOfCube), heightCenter + (-2) * hUnit + BUBEN, sizeOfCube, sizeOfCube));
+                        }
+                        for (int i = 0; i < countOfForestallingToLeft; i++) {
+                            g.fill(new Rectangle.Double((halfWidth + (i + 1) * widthSpaceBetweenCubes + i * sizeOfCube), heightCenter + (-2 + 0.6) * hUnit + BUBEN, sizeOfCube, sizeOfCube));
+                        }
+                        for (int i = 0; i < countOfKnockDown; i++) {
+                            g.fill(new Rectangle.Double((halfWidth + (i + 1) * widthSpaceBetweenCubes + i * sizeOfCube), heightCenter + (-2 + 0.6 + 0.6) * hUnit + BUBEN, sizeOfCube, sizeOfCube));
+                        }
+                    } else if (modelFight.getPointPanelMode() == PointPanelMode.FullContact) {
+                        GraphicsUtilities.drawTextInTheRightOfRectangle(g, Color.WHITE, "Minus: ",
+                                0, heightCenter + (-2.5) * hUnit, (scrDim.width / 2 - wUnit) / 2, 0.5 * hUnit, sizeOfFont);
+                        GraphicsUtilities.drawTextInTheRightOfRectangle(g, Color.WHITE, "Warning: ",
+                                0, heightCenter + (-2.5 + 0.6) * hUnit, (scrDim.width / 2 - wUnit) / 2, 0.5 * hUnit, sizeOfFont);
+                        GraphicsUtilities.drawTextInTheRightOfRectangle(g, Color.WHITE, "Knock down: ",
+                                0, heightCenter + (-2.5 + 0.6 + 0.6) * hUnit, (scrDim.width / 2 - wUnit) / 2, 0.5 * hUnit, sizeOfFont);
+                        GraphicsUtilities.drawTextInTheRightOfRectangle(g, Color.WHITE, "Kick count: ",
+                                0, heightCenter + (-2.5 + 0.6 + 0.6 + 0.6) * hUnit, (scrDim.width / 2 - wUnit) / 2, 0.5 * hUnit, sizeOfFont);
+                        g.setColor(Color.YELLOW);
+                        double BUBEN = (0.5 * hUnit - sizeOfCube) / 2; // чтобы красиво было
+                        int countOfMinusToLeft = isThisForJudge ? modelFight.getCountOfMinusToLeft() : modelFight.getCountOfMinusToRight();
+                        int countOfForestallingToLeft = isThisForJudge ? modelFight.getCountOfForestallingToLeft() : modelFight.getCountOfForestallingToRight();
+                        int countOfKnockDown = isThisForJudge ? modelFight.getCountOfKnockDownToLeft() : modelFight.getCountOfKnockDownToRight();
+                        int countOfKickCount = isThisForJudge ? modelFight.getCountOfKickCountToLeft() : modelFight.getCountOfKickCountToRight();
+                        for (int i = 0; i < countOfMinusToLeft; i++) {
+                            g.fill(new Rectangle.Double((halfWidth + (i + 1) * widthSpaceBetweenCubes + i * sizeOfCube), heightCenter + (-2.5) * hUnit + BUBEN, sizeOfCube, sizeOfCube));
+                        }
+                        for (int i = 0; i < countOfForestallingToLeft; i++) {
+                            g.fill(new Rectangle.Double((halfWidth + (i + 1) * widthSpaceBetweenCubes + i * sizeOfCube), heightCenter + (-2.5 + 0.6) * hUnit + BUBEN, sizeOfCube, sizeOfCube));
+                        }
+                        for (int i = 0; i < countOfKnockDown; i++) {
+                            g.fill(new Rectangle.Double((halfWidth + (i + 1) * widthSpaceBetweenCubes + i * sizeOfCube), heightCenter + (-2.5 + 0.6 + 0.6) * hUnit + BUBEN, sizeOfCube, sizeOfCube));
+                        }
+                        for (int i = 0; i < countOfKickCount; i++) {
+                            g.fill(new Rectangle.Double((halfWidth + (i + 1) * widthSpaceBetweenCubes + i * sizeOfCube), heightCenter + (-2.5 + 0.6 + 0.6 + 0.6) * hUnit + BUBEN, sizeOfCube, sizeOfCube));
+                        }
                     }
                 }
 
-                // рисуем Minus, Fo, Ex для правого бойца
+                // рисуем Minus, Fo, Exit для правого бойца
                 {
                     g.translate(scrDim.width / 2 + wUnit, 0);
 
-                    GraphicsUtilities.drawTextInTheRightOfRectangle(g, Color.WHITE, "Minus: ",
-                            0, heightCenter + (-2) * hUnit, (scrDim.width / 2 - wUnit) / 2, 0.5 * hUnit, sizeOfFont);
-                    GraphicsUtilities.drawTextInTheRightOfRectangle(g, Color.WHITE, "Fo: ",
-                            0, heightCenter + (-2 + 0.6) * hUnit, (scrDim.width / 2 - wUnit) / 2, 0.5 * hUnit, sizeOfFont);
-                    GraphicsUtilities.drawTextInTheRightOfRectangle(g, Color.WHITE, "Ex: ",
-                            0, heightCenter + (-2 + 0.6 + 0.6) * hUnit, (scrDim.width / 2 - wUnit) / 2, 0.5 * hUnit, sizeOfFont);
-                    g.setColor(Color.YELLOW);
-                    double BUBEN = (0.5 * hUnit - sizeOfCube) / 2; // чтобы красиво было
-                    int countOfMinus = isThisForJudge ? f.getCountOfMinusToRight() : f.getCountOfMinusToLeft();
-                    int countOfForestalling = isThisForJudge ? f.getCountOfForestallingToRight() : f.getCountOfForestallingToLeft();
-                    int countOfEx = isThisForJudge ? f.getCountOfExToRight() : f.getCountOfExToLeft();
-                    for (int i = 0; i < countOfMinus; i++) {
-                        g.fill(new Rectangle.Double((halfWidth + (i + 1) * widthSpaceBetweenCubes + i * sizeOfCube), heightCenter + (-2) * hUnit + BUBEN, sizeOfCube, sizeOfCube));
-                    }
-                    for (int i = 0; i < countOfForestalling; i++) {
-                        g.fill(new Rectangle.Double((halfWidth + (i + 1) * widthSpaceBetweenCubes + i * sizeOfCube), heightCenter + (-2 + 0.6) * hUnit + BUBEN, sizeOfCube, sizeOfCube));
-                    }
-                    for (int i = 0; i < countOfEx; i++) {
-                        g.fill(new Rectangle.Double((halfWidth + (i + 1) * widthSpaceBetweenCubes + i * sizeOfCube), heightCenter + (-2 + 0.6 + 0.6) * hUnit + BUBEN, sizeOfCube, sizeOfCube));
+                    if (modelFight.getPointPanelMode() == PointPanelMode.LightContact) {
+                        GraphicsUtilities.drawTextInTheRightOfRectangle(g, Color.WHITE, "Minus: ",
+                                0, heightCenter + (-2) * hUnit, (scrDim.width / 2 - wUnit) / 2, 0.5 * hUnit, sizeOfFont);
+                        GraphicsUtilities.drawTextInTheRightOfRectangle(g, Color.WHITE, "Warning: ",
+                                0, heightCenter + (-2 + 0.6) * hUnit, (scrDim.width / 2 - wUnit) / 2, 0.5 * hUnit, sizeOfFont);
+                        GraphicsUtilities.drawTextInTheRightOfRectangle(g, Color.WHITE, "Exit: ",
+                                0, heightCenter + (-2 + 0.6 + 0.6) * hUnit, (scrDim.width / 2 - wUnit) / 2, 0.5 * hUnit, sizeOfFont);
+                        g.setColor(Color.YELLOW);
+                        double BUBEN = (0.5 * hUnit - sizeOfCube) / 2; // чтобы красиво было
+                        int countOfMinus = isThisForJudge ? modelFight.getCountOfMinusToRight() : modelFight.getCountOfMinusToLeft();
+                        int countOfForestalling = isThisForJudge ? modelFight.getCountOfForestallingToRight() : modelFight.getCountOfForestallingToLeft();
+                        int countOfEx = isThisForJudge ? modelFight.getCountOfExToRight() : modelFight.getCountOfExToLeft();
+                        for (int i = 0; i < countOfMinus; i++) {
+                            g.fill(new Rectangle.Double((halfWidth + (i + 1) * widthSpaceBetweenCubes + i * sizeOfCube), heightCenter + (-2) * hUnit + BUBEN, sizeOfCube, sizeOfCube));
+                        }
+                        for (int i = 0; i < countOfForestalling; i++) {
+                            g.fill(new Rectangle.Double((halfWidth + (i + 1) * widthSpaceBetweenCubes + i * sizeOfCube), heightCenter + (-2 + 0.6) * hUnit + BUBEN, sizeOfCube, sizeOfCube));
+                        }
+                        for (int i = 0; i < countOfEx; i++) {
+                            g.fill(new Rectangle.Double((halfWidth + (i + 1) * widthSpaceBetweenCubes + i * sizeOfCube), heightCenter + (-2 + 0.6 + 0.6) * hUnit + BUBEN, sizeOfCube, sizeOfCube));
+                        }
+                    } else if (modelFight.getPointPanelMode() == PointPanelMode.K1) {
+                        GraphicsUtilities.drawTextInTheRightOfRectangle(g, Color.WHITE, "Minus: ",
+                                0, heightCenter + (-2) * hUnit, (scrDim.width / 2 - wUnit) / 2, 0.5 * hUnit, sizeOfFont);
+                        GraphicsUtilities.drawTextInTheRightOfRectangle(g, Color.WHITE, "Warning: ",
+                                0, heightCenter + (-2 + 0.6) * hUnit, (scrDim.width / 2 - wUnit) / 2, 0.5 * hUnit, sizeOfFont);
+                        GraphicsUtilities.drawTextInTheRightOfRectangle(g, Color.WHITE, "Knock down: ",
+                                0, heightCenter + (-2 + 0.6 + 0.6) * hUnit, (scrDim.width / 2 - wUnit) / 2, 0.5 * hUnit, sizeOfFont);
+                        g.setColor(Color.YELLOW);
+                        double BUBEN = (0.5 * hUnit - sizeOfCube) / 2; // чтобы красиво было
+                        int countOfMinus = isThisForJudge ? modelFight.getCountOfMinusToRight() : modelFight.getCountOfMinusToLeft();
+                        int countOfForestalling = isThisForJudge ? modelFight.getCountOfForestallingToRight() : modelFight.getCountOfForestallingToLeft();
+                        int countOfKnockDown = isThisForJudge ? modelFight.getCountOfKnockDownToRight() : modelFight.getCountOfKnockDownToLeft();
+                        for (int i = 0; i < countOfMinus; i++) {
+                            g.fill(new Rectangle.Double((halfWidth + (i + 1) * widthSpaceBetweenCubes + i * sizeOfCube), heightCenter + (-2) * hUnit + BUBEN, sizeOfCube, sizeOfCube));
+                        }
+                        for (int i = 0; i < countOfForestalling; i++) {
+                            g.fill(new Rectangle.Double((halfWidth + (i + 1) * widthSpaceBetweenCubes + i * sizeOfCube), heightCenter + (-2 + 0.6) * hUnit + BUBEN, sizeOfCube, sizeOfCube));
+                        }
+                        for (int i = 0; i < countOfKnockDown; i++) {
+                            g.fill(new Rectangle.Double((halfWidth + (i + 1) * widthSpaceBetweenCubes + i * sizeOfCube), heightCenter + (-2 + 0.6 + 0.6) * hUnit + BUBEN, sizeOfCube, sizeOfCube));
+                        }
+                    } else {
+                        GraphicsUtilities.drawTextInTheRightOfRectangle(g, Color.WHITE, "Minus: ",
+                                0, heightCenter + (-2.5) * hUnit, (scrDim.width / 2 - wUnit) / 2, 0.5 * hUnit, sizeOfFont);
+                        GraphicsUtilities.drawTextInTheRightOfRectangle(g, Color.WHITE, "Warning: ",
+                                0, heightCenter + (-2.5 + 0.6) * hUnit, (scrDim.width / 2 - wUnit) / 2, 0.5 * hUnit, sizeOfFont);
+                        GraphicsUtilities.drawTextInTheRightOfRectangle(g, Color.WHITE, "Knock down: ",
+                                0, heightCenter + (-2.5 + 0.6 + 0.6) * hUnit, (scrDim.width / 2 - wUnit) / 2, 0.5 * hUnit, sizeOfFont);
+                        GraphicsUtilities.drawTextInTheRightOfRectangle(g, Color.WHITE, "Kick count: ",
+                                0, heightCenter + (-2.5 + 0.6 + 0.6 + 0.6) * hUnit, (scrDim.width / 2 - wUnit) / 2, 0.5 * hUnit, sizeOfFont);
+                        g.setColor(Color.YELLOW);
+                        double BUBEN = (0.5 * hUnit - sizeOfCube) / 2; // чтобы красиво было
+                        int countOfMinus = isThisForJudge ? modelFight.getCountOfMinusToRight() : modelFight.getCountOfMinusToLeft();
+                        int countOfForestalling = isThisForJudge ? modelFight.getCountOfForestallingToRight() : modelFight.getCountOfForestallingToLeft();
+                        int countOfKnockDown = isThisForJudge ? modelFight.getCountOfKnockDownToRight() : modelFight.getCountOfKnockDownToLeft();
+                        int countOfKickCount = isThisForJudge ? modelFight.getCountOfKickCountToRight() : modelFight.getCountOfKickCountToLeft();
+                        for (int i = 0; i < countOfMinus; i++) {
+                            g.fill(new Rectangle.Double((halfWidth + (i + 1) * widthSpaceBetweenCubes + i * sizeOfCube), heightCenter + (-2.5) * hUnit + BUBEN, sizeOfCube, sizeOfCube));
+                        }
+                        for (int i = 0; i < countOfForestalling; i++) {
+                            g.fill(new Rectangle.Double((halfWidth + (i + 1) * widthSpaceBetweenCubes + i * sizeOfCube), heightCenter + (-2.5 + 0.6) * hUnit + BUBEN, sizeOfCube, sizeOfCube));
+                        }
+                        for (int i = 0; i < countOfKnockDown; i++) {
+                            g.fill(new Rectangle.Double((halfWidth + (i + 1) * widthSpaceBetweenCubes + i * sizeOfCube), heightCenter + (-2.5 + 0.6 + 0.6) * hUnit + BUBEN, sizeOfCube, sizeOfCube));
+                        }
+                        for (int i = 0; i < countOfKickCount; i++) {
+                            g.fill(new Rectangle.Double((halfWidth + (i + 1) * widthSpaceBetweenCubes + i * sizeOfCube), heightCenter + (-2.5 + 0.6 + 0.6 + 0.6) * hUnit + BUBEN, sizeOfCube, sizeOfCube));
+                        }
                     }
 
                     g.translate(-(scrDim.width / 2 + wUnit), 0);

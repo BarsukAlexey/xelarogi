@@ -215,7 +215,7 @@
          <item>
           <widget class="QPushButton" name="pushButtonListOfPairs">
            <property name="text">
-            <string>Получить  список пар и сетки на день...</string>
+            <string>Получить список пар и сетки на день...</string>
            </property>
           </widget>
          </item>
@@ -277,7 +277,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="">
+     <widget class="QWidget" name="layoutWidget">
       <layout class="QHBoxLayout" name="horizontalLayout_9">
        <item>
         <widget class="Dialogschedule2TableWidget" name="tableWidget">
@@ -355,9 +355,21 @@
   </customwidget>
  </customwidgets>
  <tabstops>
-  <tabstop>comboBoxDay</tabstop>
   <tabstop>spinBoxDelay</tabstop>
-  <tabstop>treeWidget</tabstop>
+  <tabstop>spinBoxRing</tabstop>
+  <tabstop>comboBoxDay</tabstop>
+  <tabstop>radioTextCountry</tabstop>
+  <tabstop>radioTextRegion</tabstop>
+  <tabstop>radioTextCity</tabstop>
+  <tabstop>radioTextClub</tabstop>
+  <tabstop>radioFlagCountry</tabstop>
+  <tabstop>radioFlagRegion</tabstop>
+  <tabstop>radioFlagCity</tabstop>
+  <tabstop>radioFlagClub</tabstop>
+  <tabstop>pushButtonSaveSchelder</tabstop>
+  <tabstop>pushButtonListOfPairs</tabstop>
+  <tabstop>pushButtonUP</tabstop>
+  <tabstop>pushButtonDOWN</tabstop>
  </tabstops>
  <resources/>
  <connections/>

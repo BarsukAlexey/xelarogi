@@ -273,33 +273,29 @@ void Dialogschedule2::onDataIsDropped(QStringList str, const int currentRow, con
                         return ;
                     }
 
-                    if (std::get<0>(dayRingOrder) != -1 && ui->comboBoxDay->currentIndex() < std::get<0>(dayRingOrder))
+                    if (ui->comboBoxDay->currentIndex() < std::get<0>(dayRingOrder))
                     {
                         QMessageBox::warning(this, "", "См. на дату предыдущего круга");
                         return ;
                     }
-                }
 
-                int anotherRing = DBUtils::getAnotherRing(uidTC, ui->comboBoxDay->currentIndex(), ring);
-                if (anotherRing != -1)
-                {
-                    //qDebug() << "anotherRing:" << anotherRing;
-                    QMessageBox::warning(this, "", "В этот день данную турнирную категорию можно "
-                                                   "проводить только на ринге #" + QString::number(anotherRing + 1));
-                    return ;
-                }
+                    if (ui->comboBoxDay->currentIndex() == std::get<0>(dayRingOrder) &&
+                        std::get<1>(dayRingOrder) != ring)
+                    {
+                        QMessageBox::warning(this, "", "В этот день данную турнирную категорию можно "
+                                                       "проводить только на ринге #" + QString::number(ring + 1));
+                        return ;
+                    }
 
-                if (level + 1 != levelCount)
-                {
-
-                    if (std::get<2>(dayRingOrder) != -1 && currentOrder <= std::get<2>(dayRingOrder))
+                    if (ui->comboBoxDay->currentIndex() == std::get<0>(dayRingOrder) &&
+                        std::get<1>(dayRingOrder) == ring &&
+                        currentOrder <= std::get<2>(dayRingOrder))
                     {
                         QMessageBox::warning(this, "", "На данном ринге вначале должен идти предудущий круг,"
                                                        " а затем текущий");
                         return ;
                     }
                 }
-
             }
         }
     }

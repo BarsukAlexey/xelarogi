@@ -6,9 +6,9 @@ import net.pskov.controller.KeyboardController;
 import net.pskov.controller.MouseController;
 import net.pskov.some_enum.FightStatus;
 import net.pskov.some_enum.Player;
+import net.pskov.some_enum.PointPanelMode;
 import net.pskov.utils.ImageUtils;
 import net.pskov.utils.ReportUtis;
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -33,8 +33,8 @@ public class JFrameMainJudge extends JFrame {
 
     private final JTable table; // список дерущихся
 
-    private volatile Fighting activeFighting;
-    private volatile Vector<Fighting> allFighting;
+    private volatile ModelFight activeFighting;
+    private volatile Vector<ModelFight> allFighting;
     private volatile Vector<Boolean> canStartFight;
     private volatile Vector<String> stringOpenSystem;
 
@@ -134,7 +134,7 @@ public class JFrameMainJudge extends JFrame {
 //        setSize(1280, 800);
 
         new Timer(20, new ActionListener() { //
-        //new Timer(50, new ActionListener() {
+            //new Timer(50, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 updateMice();
@@ -180,7 +180,7 @@ public class JFrameMainJudge extends JFrame {
                         bounds[i] = t;
                     }
                 }
-                final Fighting finalFighting = activeFighting;
+                final ModelFight finalFighting = activeFighting;
                 scoreTable = new ArrayList<>();
                 for (int i = 0; i < screenDevices.length; i++) {
                     scoreTable.add(new JFrameScoreTable(i == 0, bounds[i], finalFighting));
@@ -375,7 +375,9 @@ public class JFrameMainJudge extends JFrame {
         final String[] heads = new String[]{"Fight #", "Can start?", "Red conner", "Country/Region", "Blue conner", "Country/Region",
                 "Winner", "Result", "Tournament Categoty", "Duration of fight", "Duration of break", "Count of rounds",
                 "In case of tie",
-                "Duration of extra round"};
+                "Duration of extra round",
+                "Point panel mode"
+        };
         final Vector<Object[]> data = new Vector<>();
 
 
@@ -385,7 +387,7 @@ public class JFrameMainJudge extends JFrame {
         for (JsonElement jsonElement : new JsonParser().parse(JSON_DATA).getAsJsonArray()) {
             JsonObject object = jsonElement.getAsJsonObject();
 
-            Fighting f = new Fighting(
+            ModelFight f = new ModelFight(
                     object.get("nameOfLeftFighter").getAsString(),
                     object.get("nameOfRightFighter").getAsString(),
                     object.get("fightId").getAsInt(),
@@ -404,7 +406,10 @@ public class JFrameMainJudge extends JFrame {
                     object.get("regionOfLeftFighter").getAsString(),
                     object.get("regionOfRightFighter").getAsString(),
                     object.get("TOURNAMENT_CATEGORIES_FK").getAsLong(),
-                    object.get("VERTEX").getAsInt()
+                    object.get("VERTEX").getAsInt(),
+                    object.get("POINT_PANEL_MODE").getAsInt() == 1 ? PointPanelMode.LightContact :
+                            object.get("POINT_PANEL_MODE").getAsInt() == 2 ? PointPanelMode.K1 :
+                                    PointPanelMode.FullContact
             );
             allFighting.add(f);
             long winner = object.get("orderUID") == null ? -1 : object.get("orderUID").getAsLong();
@@ -455,7 +460,7 @@ public class JFrameMainJudge extends JFrame {
 
                     in_case_tie == 0 ? "Mouse click" : in_case_tie == 1 ? "European system" : "Extra round",
                     object.get("DURATION_EXTRA_ROUND").getAsInt(),
-
+                    object.get("POINT_PANEL_MODE").getAsInt()
             });
         }
         table.setModel(new AbstractTableModel() {
@@ -471,7 +476,18 @@ public class JFrameMainJudge extends JFrame {
 
             @Override
             public Object getValueAt(int rowIndex, int columnIndex) {
-                return data.get(rowIndex)[columnIndex];
+                Object value = data.get(rowIndex)[columnIndex];
+                if (columnIndex == 14) {
+                    int x = (int) value;
+                    if (x == 1)
+                        return "Light contact mode";
+                    else if (x == 2)
+                        return "K-1 mode";
+                    else if (x == 3)
+                        return "Full contact mode";
+                    return "---";
+                }
+                return value;
             }
 
             @Override
@@ -535,12 +551,29 @@ public class JFrameMainJudge extends JFrame {
             activeFighting.addForestallingToRight();
         }
 
-        //  Если выход за ринг у кого-то
+        //  Если выход за ринг у кого-то или KNOCK DOWN
         if (pressedKeys.contains(Component.Identifier.Key.Z)) {
-            activeFighting.addExToLeft();
+            if (activeFighting.getPointPanelMode() == PointPanelMode.LightContact)
+                activeFighting.addExToLeft();
+            else if (activeFighting.getPointPanelMode() == PointPanelMode.K1 ||
+                    activeFighting.getPointPanelMode() == PointPanelMode.FullContact)
+                activeFighting.addKnockDownToLeft();
         }
         if (pressedKeys.contains(Component.Identifier.Key.M)) {
-            activeFighting.addExToRight();
+            if (activeFighting.getPointPanelMode() == PointPanelMode.LightContact)
+                activeFighting.addExToRight();
+            else if (activeFighting.getPointPanelMode() == PointPanelMode.K1 ||
+                    activeFighting.getPointPanelMode() == PointPanelMode.FullContact)
+                activeFighting.addKnockDownToRight();
+        }
+
+        if (pressedKeys.contains(Component.Identifier.Key.W)) {
+            if (activeFighting.getPointPanelMode() == PointPanelMode.FullContact)
+                activeFighting.addKickCountToLeft();
+        }
+        if (pressedKeys.contains(Component.Identifier.Key.I)) {
+            if (activeFighting.getPointPanelMode() == PointPanelMode.FullContact)
+                activeFighting.addKickCountToRight();
         }
 
         if (pressedKeys.contains(Component.Identifier.Key.G)) {

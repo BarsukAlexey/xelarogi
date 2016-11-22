@@ -142,7 +142,7 @@ void CreateTournamentOrdersDialog::loadFromExcel()
             if (secondName.isEmpty()) break;
             QString firstName  = ExcelUtils::getValue(sheet, row, 2);
             QString patronymic = ExcelUtils::getValue(sheet, row, 3);
-            QDate birthday = ExcelUtils::get(sheet, row, 4).toDate(); // TODO попробывать считать как текст
+            QDate birthday = ExcelUtils::get(sheet, row, 4).toDate();
             if (!birthday.isValid()) birthday = QDate::fromString(ExcelUtils::getValue(sheet, row, 4), "d.M.yyyy");
             bool weightIsCorrect;
             double weight = ExcelUtils::get(sheet, row, 5).toDouble(&weightIsCorrect);

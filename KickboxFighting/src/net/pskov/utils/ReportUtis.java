@@ -1,12 +1,12 @@
 package net.pskov.utils;
 
 
-import net.pskov.Fighting;
+import net.pskov.ModelFight;
 import net.pskov.some_enum.Player;
 import net.pskov.some_enum.TypePenalty;
 
 public class ReportUtis {
-    public static String getOpeningSystem(Fighting f) {
+    public static String getOpeningSystem(ModelFight f) {
         StringBuilder sb = new StringBuilder();
         sb.append("<html>\n" +
                 "<body>\n");
@@ -37,14 +37,14 @@ public class ReportUtis {
         sb.append("<table  cellspacing=\"0\" border=\"1\">\n");
         sb.append("    <caption>").append("Penalty").append("</caption>");
         sb.append("    <tr><td>&nbsp;</td><th>Red conner</th><th>Blue conner</th></tr>\n");
-        for (TypePenalty typePenalty : new TypePenalty[]{TypePenalty.Minus, TypePenalty.FO, TypePenalty.Ex}) {
+        for (TypePenalty typePenalty : new TypePenalty[]{TypePenalty.Minus, TypePenalty.Warning, TypePenalty.Exit}) {
             String str;
             if (typePenalty == TypePenalty.Minus)
                 str = "Minus";
-            else if (typePenalty == TypePenalty.FO)
+            else if (typePenalty == TypePenalty.Warning)
                 str = "Fo";
             else
-                str = "Ex";
+                str = "Exit";
             sb.append("    <tr><th>")
                     .append(str)
                     .append("</th><td>")

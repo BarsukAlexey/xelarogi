@@ -476,6 +476,8 @@ QJsonObject FightingPairs::getQJsonObject(const NodeOfGridWithNames& f, const in
 
     a["IN_CASE_TIE"         ] = DBUtils::getField("IN_CASE_TIE"         , "TOURNAMENT_CATEGORIES", f.tournamentCategory).toInt();
     a["DURATION_EXTRA_ROUND"] = DBUtils::getField("DURATION_EXTRA_ROUND", "TOURNAMENT_CATEGORIES", f.tournamentCategory).toInt();
+
+    a["POINT_PANEL_MODE"]= DBUtils::getField("POINT_PANEL_MODE_FK", "TOURNAMENT_CATEGORIES", f.tournamentCategory).toInt();
     return a;
 }
 

@@ -264,7 +264,8 @@ void EbnutVBazu::setTournamentCat(long long tournamentUID)
                         time[0], time[1], time[2],
                         2, 30,
                         "лет", "от", "до",
-                        "кг", "до", "свыше"
+                        "кг", "до", "свыше",
+                        1
                 );
         }
     }

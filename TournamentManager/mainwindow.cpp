@@ -187,12 +187,11 @@ MainWindow::MainWindow(QWidget *parent) :
     });
     connect(ui->trophyBtnImage, &QPushButton::clicked, [this]()
     {
-        //this->hide();
-        FormDipl * wdg = new FormDipl(tournamentUID);
-        wdg->showMaximized();
-        //dlg.showMaximized();
-        //dlg.exec();
-        //this->show();
+        this->hide();
+        FormDipl dlg(tournamentUID);
+        dlg.showMaximized();
+        dlg.exec();
+        this->show();
     });
 
 

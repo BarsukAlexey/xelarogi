@@ -38,6 +38,14 @@ GenerateTournamentCategoriesDialog::GenerateTournamentCategoriesDialog(long long
     ui->comboBoxTie->setModel(modelTie);
     ui->comboBoxTie->setModelColumn(1);
 
+
+    modelPointPanelMode = new QSqlRelationalTableModel(this);
+    modelPointPanelMode->setTable("POINT_PANEL_MODES");
+    modelPointPanelMode->setSort(1, Qt::AscendingOrder);
+    modelPointPanelMode->select();
+    ui->comboBoxPointPanelMode->setModel(modelPointPanelMode);
+    ui->comboBoxPointPanelMode->setModelColumn(1);
+
     QSettings settings;
     ui->lineEditWordAge->setText(settings.value("GenerateTournamentCategoriesDialog/lineEditWordAge", ui->lineEditWordAge->text()).toString());
     ui->lineEditAgeTill->setText(settings.value("GenerateTournamentCategoriesDialog/lineEditAgeTill", ui->lineEditAgeTill->text()).toString());
@@ -185,7 +193,9 @@ void GenerateTournamentCategoriesDialog::on_accepted()
 
                 ui->lineEditWordWeight->text(),
                 ui->lineEditWeightFrom->text(),
-                ui->lineEditWeightTill->text()
+                ui->lineEditWeightTill->text(),
+
+                modelPointPanelMode->data(modelPointPanelMode->index(ui->comboBoxPointPanelMode->currentIndex(), 0), Qt::EditRole).toInt()
                 );
 
     QMessageBox::information(this, "", message);
