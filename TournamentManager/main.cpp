@@ -81,11 +81,9 @@ void connectDB()
 
 
 
-//#include "createtournamentordersdialog.h"
-//#include "createtournamentcategoriesdialog.h"
-//#include "ebnutvbazu.h"
-//#include "dialogorderoftc.h"
-//#include <utility>
+
+//#include "dialogaward.h"
+#include "SoundPlayer.h"
 
 int main(int argc, char *argv[])
 {
@@ -99,37 +97,14 @@ int main(int argc, char *argv[])
 
     //auth();
     connectDB();
-    //EbnutVBazu::copyTable("AGE_CATEGORIES");
-    //EbnutVBazu::copyTable("TOURNAMENT_CATEGORIES");
 
-
-    MainWindow w;
-    w.show();
-
-//    DialogOrderOfTC dlg;
-//    dlg.setTournamentCategories(QVector<std::pair<int, int>>()
-//                                << std::make_pair(270, 1)
-//                                << std::make_pair(270, 0)
-
-//                                << std::make_pair(271, 1)
-//                                << std::make_pair(271, 0)
-
-//                                << std::make_pair(279, 1)
-//                                << std::make_pair(279, 0),
-//                                "По кругу"
-//                                );
+    SoundPlayer player;
+    player.show();
+//    DialogAward dlg;
 //    dlg.exec();
 
-
-
-
-
-    //CreateTournamentCategoriesDialog dlg(21);
-    //dlg.open();
-
-    //CreateTournamentOrdersDialog dlg2(21);
-    //dlg2.resize(dlg.size().width() * 2, dlg.size().height());
-    //dlg2.open();
+//    MainWindow w;
+//    w.show();
 
 
     return a.exec();

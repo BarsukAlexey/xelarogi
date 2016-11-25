@@ -24,6 +24,7 @@
 #include "dialogschedule2.h"
 #include "report_manda.h"
 #include "report_ministr.h"
+#include "dialogaward.h"
 
 
 #include <algorithm>
@@ -95,6 +96,8 @@ private slots:
     void on_pushButtonWinnerReport_clicked();
     void on_manda_clicked();
     void on_btn_report_ministr_clicked();
+
+    void on_pushButtonAward_clicked();
 
 private:
     void onAction(QString table);

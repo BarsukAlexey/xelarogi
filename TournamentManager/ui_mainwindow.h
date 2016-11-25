@@ -85,6 +85,7 @@ public:
     QPushButton *pushButtonPair;
     QPushButton *pushButtonLoadWinner;
     QPushButton *trophyBtnImage;
+    QPushButton *pushButtonAward;
     QSpacerItem *verticalSpacer;
     QSpacerItem *verticalSpacer_4;
     QMenuBar *menuBar;
@@ -306,6 +307,11 @@ public:
 
         verticalLayout->addWidget(trophyBtnImage);
 
+        pushButtonAward = new QPushButton(ordersPage);
+        pushButtonAward->setObjectName(QStringLiteral("pushButtonAward"));
+
+        verticalLayout->addWidget(pushButtonAward);
+
         verticalSpacer = new QSpacerItem(17, 13, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
         verticalLayout->addItem(verticalSpacer);
@@ -394,6 +400,7 @@ public:
         pushButtonPair->setText(QApplication::translate("MainWindow", "\320\241\320\276\321\201\321\202\320\260\320\262 \320\277\320\260\321\200", 0));
         pushButtonLoadWinner->setText(QApplication::translate("MainWindow", "\320\227\320\260\320\263\321\200\321\203\320\267\320\270\321\202\321\214 \321\200\320\265\320\267\321\203\320\273\321\214\321\202\320\260\321\202\321\213 \320\261\320\276\321\221\320\262", 0));
         trophyBtnImage->setText(QApplication::translate("MainWindow", "\320\241\320\276\320\267\320\264\320\260\321\202\321\214 \320\261\320\265\320\271\320\264\320\266\320\270 / \320\263\321\200\320\260\320\274\320\276\321\202\321\213 (PDF)", 0));
+        pushButtonAward->setText(QApplication::translate("MainWindow", "\320\246\320\265\321\200\320\265\320\274\320\276\320\275\320\270\321\217 \320\275\320\260\320\263\321\200\320\260\320\266\320\264\320\265\320\275\320\270\321\217", 0));
         handbookMenu->setTitle(QApplication::translate("MainWindow", "\320\241\320\277\321\200\320\260\320\262\320\276\321\207\320\275\320\270\320\272\320\270", 0));
         Q_UNUSED(MainWindow);
     } // retranslateUi

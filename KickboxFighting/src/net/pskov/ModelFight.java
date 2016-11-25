@@ -65,8 +65,10 @@ public class ModelFight {
     private int countOfKnockDownToLeft;
     private int countOfKnockDownToRight;
 
-    private int countOfKickCountToLeft;
-    private int countOfKickCountToRight;
+    private int[] countOfKickCountToLeft;
+    private int[] countOfKickCountToRight;
+    private int countOfKickCountToLeftInt;
+    private int countOfKickCountToRightInt;
 
     private final long TOURNAMENT_CATEGORIES_FK;
     private final int VERTEX;
@@ -86,11 +88,19 @@ public class ModelFight {
     }
 
     public int getCountOfKickCountToLeft() {
-        return countOfKickCountToLeft;
+        return countOfKickCountToLeftInt;
     }
 
     public int getCountOfKickCountToRight() {
-        return countOfKickCountToRight;
+        return countOfKickCountToRightInt;
+    }
+
+    public int getCountOfKickCountToLeftForRound(int round) {
+        return countOfKickCountToLeft[round];
+    }
+
+    public int getCountOfKickCountToRightForRound(int round) {
+        return countOfKickCountToRight[round];
     }
 
 
@@ -99,12 +109,19 @@ public class ModelFight {
         private Player player;
         private int[] deltaLeft; //
         private int[] deltaRight; //
+        private int round;
+
 
         Penalty(TypePenalty typePenalty, Player player) {
+            this(typePenalty, player, -1);
+        }
+
+        Penalty(TypePenalty typePenalty, Player player, int round) {
             this.typePenalty = typePenalty;
             this.player = player;
             deltaLeft = new int[3];
             deltaRight = new int[3];
+            this.round = round;
         }
     }
 
@@ -170,6 +187,9 @@ public class ModelFight {
         this.countOfPointsForTheLeftFighter = new int[this.countOfRounds + 1][3]; //  + 1 чтобы хранить экстрараунд
         this.countOfPointsForTheRightFighter = new int[this.countOfRounds + 1][3];
 
+        this.countOfKickCountToLeft = new int[this.countOfRounds + 1];
+        this.countOfKickCountToRight = new int[this.countOfRounds + 1];
+
         {
             spendTime = 0;
             currentRound = 0;
@@ -189,8 +209,8 @@ public class ModelFight {
             countOfKnockDownToLeft = 0;
             countOfKnockDownToRight = 0;
 
-            countOfKickCountToLeft = 0;
-            countOfKickCountToRight = 0;
+            this.countOfKickCountToLeftInt = 6;
+            this.countOfKickCountToRightInt = 6;
         }
 
 
@@ -255,6 +275,10 @@ public class ModelFight {
         else if (status == FightStatus.PauseFight)
             status = FightStatus.Fight;
         else if (status == FightStatus.PendingExtraRound) {
+            if (pointPanelMode == PointPanelMode.FullContact) {
+                countOfKickCountToLeftInt += 6;
+                countOfKickCountToRightInt += 6;
+            }
             status = FightStatus.ExtraRound;
             soundGong.play();
         } else if (status == FightStatus.ExtraRound)
@@ -310,6 +334,9 @@ public class ModelFight {
 
                 status = FightStatus.Fight;
                 ++currentRound;
+
+                countOfKickCountToLeftInt += 6;
+                countOfKickCountToRightInt += 6;
 
                 soundHummerBit.stop();
                 soundGong.play();
@@ -369,23 +396,29 @@ public class ModelFight {
 
 
     private Player findWinnerInCaseOfTieByEuropeanRules() {
+        int countJudgeForLeft = 0;
+        int countJudgeForRight = 0;
         for (int idJudge = 0; idJudge < 3; idJudge++) {
-            int countPointLeft = 0;
-            int countPointRight = 0;
-            for (int round = 0; round <= countOfRounds; round++) {
-                countPointLeft += countOfPointsForTheLeftFighter[round][idJudge];
-                countPointRight += countOfPointsForTheRightFighter[round][idJudge];
+            int countPointLeftOverAllRounds = 0;
+            int countPointRightOverAllRounds = 0;
+            for (int round = 0; round < countOfRounds; round++) {
+                countPointLeftOverAllRounds += countOfPointsForTheLeftFighter[round][idJudge];
+                countPointRightOverAllRounds += countOfPointsForTheRightFighter[round][idJudge];
             }
-            if (countPointLeft != countPointRight)
-                continue;
-            for (int round = countOfRounds; round >= 0; round--) {
-                if (countOfPointsForTheLeftFighter[round][idJudge] < countOfPointsForTheRightFighter[round][idJudge]) {
-                    return Player.Right;
-                } else if (countOfPointsForTheLeftFighter[round][idJudge] > countOfPointsForTheRightFighter[round][idJudge]) {
-                    return Player.Left;
+            if (countPointLeftOverAllRounds == countPointRightOverAllRounds) {
+                int l = countOfPointsForTheLeftFighter[countOfRounds - 1][idJudge];
+                int r = countOfPointsForTheRightFighter[countOfRounds - 1][idJudge];
+                if (l < r) {
+                    ++countJudgeForRight;
+                } else if (l > r) {
+                    ++countJudgeForLeft;
                 }
             }
         }
+        if (countJudgeForLeft < countJudgeForRight)
+            return Player.Right;
+        if (countJudgeForLeft > countJudgeForRight)
+            return Player.Left;
         return Player.NoPlayer;
     }
 
@@ -537,18 +570,20 @@ public class ModelFight {
     public void addKickCountToLeft() {
         if (pointPanelMode != PointPanelMode.FullContact)
             return;
-        if (countOfKickCountToLeft <= 3) {
-            ++countOfKickCountToLeft;
-            stackPenalty.add(new Penalty(TypePenalty.KickCount, Player.Left));
+        if (0 < countOfKickCountToLeftInt) {
+            --countOfKickCountToLeftInt;
+            ++countOfKickCountToLeft[currentRound];
+            stackPenalty.add(new Penalty(TypePenalty.KickCount, Player.Left, currentRound));
         }
     }
 
     public void addKickCountToRight() {
         if (pointPanelMode != PointPanelMode.FullContact)
             return;
-        if (countOfKickCountToRight <= 3) {
-            ++countOfKickCountToRight;
-            stackPenalty.add(new Penalty(TypePenalty.KickCount, Player.Right));
+        if (0 < countOfKickCountToRightInt) {
+            --countOfKickCountToRightInt;
+            ++countOfKickCountToRight[currentRound];
+            stackPenalty.add(new Penalty(TypePenalty.KickCount, Player.Right, currentRound));
         }
     }
 
@@ -731,7 +766,7 @@ public class ModelFight {
             }
         }
 
-        if (penalty.typePenalty == TypePenalty.KnockDown){
+        if (penalty.typePenalty == TypePenalty.KnockDown) {
             if (penalty.player == Player.Left) {
                 --countOfKnockDownToLeft;
             }
@@ -740,12 +775,14 @@ public class ModelFight {
             }
         }
 
-        if (penalty.typePenalty == TypePenalty.KickCount){
+        if (penalty.typePenalty == TypePenalty.KickCount) {
             if (penalty.player == Player.Left) {
-                --countOfKickCountToLeft;
+                --countOfKickCountToLeft[penalty.round];
+                ++countOfKickCountToLeftInt;
             }
             if (penalty.player == Player.Right) {
-                --countOfKickCountToRight;
+                --countOfKickCountToRight[penalty.round];
+                ++countOfKickCountToRightInt;
             }
         }
     }

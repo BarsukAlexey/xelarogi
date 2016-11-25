@@ -6,9 +6,6 @@ DialogDisq::DialogDisq(QWidget *parent) :
     ui(new Ui::DialogDisq)
 {
     ui->setupUi(this);
-
-    connect(this, &DialogDisq::accepted, [this](){});
-    connect(this, &DialogDisq::rejected, [this](){});
 }
 
 DialogDisq::~DialogDisq()

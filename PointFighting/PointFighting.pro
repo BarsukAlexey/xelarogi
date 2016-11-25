@@ -25,11 +25,9 @@ SOURCES += main.cpp\
     aspectratiotextlabel.cpp \
     myqlcdnumber.cpp \
     fighting.cpp \
-    fighting_table.cpp \
     fightingtable2.cpp
 
 HEADERS  += mainwindow.h \
-    fighting_table.h \
     qrightclickbutton.h \
     formscore.h \
     forma_dvertisement.h \
@@ -43,7 +41,6 @@ HEADERS  += mainwindow.h \
     fightingtable2.h
 
 FORMS    += mainwindow.ui \
-    fighting_table.ui \
     form.ui \
     form_advertisement.ui \
     form_advertisement_setting.ui \

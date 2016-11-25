@@ -285,6 +285,13 @@
             </widget>
            </item>
            <item>
+            <widget class="QPushButton" name="pushButtonAward">
+             <property name="text">
+              <string>Церемония награждения</string>
+             </property>
+            </widget>
+           </item>
+           <item>
             <spacer name="verticalSpacer">
              <property name="orientation">
               <enum>Qt::Vertical</enum>

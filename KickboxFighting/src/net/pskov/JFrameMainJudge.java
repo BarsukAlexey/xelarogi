@@ -27,7 +27,7 @@ import java.util.*;
 
 public class JFrameMainJudge extends JFrame {
 
-    private final String pathSaveJson = "save.json";
+    public static final String pathSaveJson = "save.json";
     private final String pathAdvJson = "adv.json";
 
 
@@ -123,6 +123,100 @@ public class JFrameMainJudge extends JFrame {
             jFrameAdvertisings.add(new JFrameAdvertising("Spectator" + id++, bounds, avd, intervalAdv));
         }
 
+        JMenuBar menuBar = new JMenuBar();
+        setJMenuBar(menuBar);
+
+        JMenu menu = new JMenu("Settings...");
+        menuBar.add(menu);
+        JMenuItem menuItem;
+
+        menuItem = new JMenuItem("Add fight...");
+        menuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JDialogAddPair dlg = new JDialogAddPair();
+                dlg.pack();
+                dlg.setLocationRelativeTo(null);
+                dlg.setVisible(true);
+                JFrameMainJudge.this.initListOfPlayers(JFrameMainJudge.pathSaveJson);
+            }
+        });
+        menu.add(menuItem);
+
+        menuItem = new JMenuItem("Select list of pairs...");
+        menuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser chooser = new JFileChooser();
+                chooser.setFileFilter(new FileNameExtensionFilter("json", "json"));
+                chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                chooser.setPreferredSize(new Dimension(800, 600));
+                if (chooser.showOpenDialog(JFrameMainJudge.this) == JFileChooser.APPROVE_OPTION) {
+                    String path = chooser.getSelectedFile().getAbsolutePath();
+                    try {
+                        Files.copy(Paths.get(path), Paths.get(pathSaveJson), StandardCopyOption.REPLACE_EXISTING);
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                    initListOfPlayers(path);
+                }
+            }
+        });
+        menu.add(menuItem);
+
+        menuItem = new JMenuItem("Save results...");
+        menuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser chooser = new JFileChooser();
+                chooser.setSelectedFile(new File("Results " + new SimpleDateFormat(" yyyy.MM.dd  HH'h'mm'm'").format(new Date()) + ".json"));
+                chooser.setPreferredSize(new Dimension(800, 600));
+                if (chooser.showSaveDialog(JFrameMainJudge.this) == JFileChooser.APPROVE_OPTION) {
+                    File selectedFile = chooser.getSelectedFile();
+                    try {
+                        Files.copy(Paths.get(pathSaveJson), selectedFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            }
+        });
+        menu.add(menuItem);
+
+
+        menuItem = new JMenuItem("Advertisement...");
+        menuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JDialogAdv dlg = new JDialogAdv(JFrameMainJudge.this, showAdv, intervalAdv);
+                dlg.setVisible(true);
+                if (!dlg.execCode())
+                    return;
+                showAdv = dlg.getShowAdv();
+                intervalAdv = dlg.getInterval();
+
+                System.err.println("intervalAdv: " + intervalAdv);
+                for (JFrameAdvertising adv : jFrameAdvertisings) {
+                    adv.setInterval(intervalAdv);
+                }
+
+                JsonObject object = new JsonObject();
+                object.addProperty("intervalAdv", intervalAdv);
+                object.addProperty("showAdv", showAdv);
+
+                try {
+                    PrintStream out = new PrintStream(new FileOutputStream(pathAdvJson));
+                    out.print(new Gson().toJson(object));
+                    out.flush();
+                    out.close();
+                } catch (FileNotFoundException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
+        menu.add(menuItem);
+
+
         setContentPane(initUI());
         initListOfPlayers(pathSaveJson);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -148,6 +242,10 @@ public class JFrameMainJudge extends JFrame {
         JScrollPane jScrollPane = new JScrollPane(table);
         table.setFillsViewportHeight(true);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+
+
+
+
 
         final JButton jStart = new JButton("Start Fight");
         jStart.addActionListener(new ActionListener() {
@@ -234,77 +332,7 @@ public class JFrameMainJudge extends JFrame {
         });
 
 
-        // выбор файла с боями
-        JButton jButtonLoadData = new JButton("Select list of pairs...");
-        jButtonLoadData.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JFileChooser chooser = new JFileChooser();
-                chooser.setFileFilter(new FileNameExtensionFilter("json", "json"));
-                chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-                chooser.setPreferredSize(new Dimension(800, 600));
-                if (chooser.showOpenDialog(JFrameMainJudge.this) == JFileChooser.APPROVE_OPTION) {
-                    String path = chooser.getSelectedFile().getAbsolutePath();
-                    try {
-                        Files.copy(Paths.get(path), Paths.get(pathSaveJson), StandardCopyOption.REPLACE_EXISTING);
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
-                    }
-                    initListOfPlayers(path);
-                }
-            }
-        });
 
-
-        // выбор папки куда сохранять результаты
-        JButton jButtonSaveFile = new JButton("Save results...");
-        jButtonSaveFile.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JFileChooser chooser = new JFileChooser();
-                chooser.setSelectedFile(new File("Results " + new SimpleDateFormat(" yyyy.MM.dd  HH'h'mm'm'").format(new Date()) + ".json"));
-                chooser.setPreferredSize(new Dimension(800, 600));
-                if (chooser.showSaveDialog(JFrameMainJudge.this) == JFileChooser.APPROVE_OPTION) {
-                    File selectedFile = chooser.getSelectedFile();
-                    try {
-                        Files.copy(Paths.get(pathSaveJson), selectedFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
-                    }
-                }
-            }
-        });
-
-        JButton jButtonAdv = new JButton("Advertisement...");
-        jButtonAdv.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JDialogAdv dlg = new JDialogAdv(JFrameMainJudge.this, showAdv, intervalAdv);
-                dlg.setVisible(true);
-                if (!dlg.execCode())
-                    return;
-                showAdv = dlg.getShowAdv();
-                intervalAdv = dlg.getInterval();
-
-                System.err.println("intervalAdv: " + intervalAdv);
-                for (JFrameAdvertising adv : jFrameAdvertisings) {
-                    adv.setInterval(intervalAdv);
-                }
-
-                JsonObject object = new JsonObject();
-                object.addProperty("intervalAdv", intervalAdv);
-                object.addProperty("showAdv", showAdv);
-
-                try {
-                    PrintStream out = new PrintStream(new FileOutputStream(pathAdvJson));
-                    out.print(new Gson().toJson(object));
-                    out.flush();
-                    out.close();
-                } catch (FileNotFoundException e1) {
-                    e1.printStackTrace();
-                }
-            }
-        });
 
         // добавление всех компонентов на панель
         JPanel jPanel = new JPanel();
@@ -312,9 +340,6 @@ public class JFrameMainJudge extends JFrame {
         jPanel.add(jScrollPane);
         jPanel.add(jStart);
         jPanel.add(buttonOpeningSystem);
-        jPanel.add(jButtonLoadData);
-        jPanel.add(jButtonSaveFile);
-        jPanel.add(jButtonAdv);
 
         return jPanel;
     }
@@ -338,7 +363,7 @@ public class JFrameMainJudge extends JFrame {
         try {
             JSON_DATA = new String(Files.readAllBytes(Paths.get(path)), StandardCharsets.UTF_8);
         } catch (IOException e1) {
-            e1.printStackTrace();
+            //e1.printStackTrace();
             return;
         }
 
@@ -372,14 +397,13 @@ public class JFrameMainJudge extends JFrame {
 //        }
 
 
-        final String[] heads = new String[]{"Fight #", "Can start?", "Red conner", "Country/Region", "Blue conner", "Country/Region",
+        final String[] heads = new String[]{"Fight #", "Can be started?", "Red conner", "Country/Region", "Blue conner", "Country/Region",
                 "Winner", "Result", "Tournament Categoty", "Duration of fight", "Duration of break", "Count of rounds",
                 "In case of tie",
                 "Duration of extra round",
                 "Point panel mode"
         };
         final Vector<Object[]> data = new Vector<>();
-
 
         allFighting = new Vector<>();
         canStartFight = new Vector<>();
@@ -407,8 +431,8 @@ public class JFrameMainJudge extends JFrame {
                     object.get("regionOfRightFighter").getAsString(),
                     object.get("TOURNAMENT_CATEGORIES_FK").getAsLong(),
                     object.get("VERTEX").getAsInt(),
-                    object.get("POINT_PANEL_MODE").getAsInt() == 1 ? PointPanelMode.LightContact :
-                            object.get("POINT_PANEL_MODE").getAsInt() == 2 ? PointPanelMode.K1 :
+                    object.get("POINT_PANEL_MODE").getAsInt() == 0 ? PointPanelMode.LightContact :
+                            object.get("POINT_PANEL_MODE").getAsInt() == 1 ? PointPanelMode.K1 :
                                     PointPanelMode.FullContact
             );
             allFighting.add(f);
@@ -460,7 +484,9 @@ public class JFrameMainJudge extends JFrame {
 
                     in_case_tie == 0 ? "Mouse click" : in_case_tie == 1 ? "European system" : "Extra round",
                     object.get("DURATION_EXTRA_ROUND").getAsInt(),
-                    object.get("POINT_PANEL_MODE").getAsInt()
+                    object.get("POINT_PANEL_MODE").getAsInt() == 0 ? "Light contact mode" :
+                            object.get("POINT_PANEL_MODE").getAsInt() == 1 ? "K-1 mode" :
+                                    "Full contact mode"
             });
         }
         table.setModel(new AbstractTableModel() {
@@ -476,18 +502,7 @@ public class JFrameMainJudge extends JFrame {
 
             @Override
             public Object getValueAt(int rowIndex, int columnIndex) {
-                Object value = data.get(rowIndex)[columnIndex];
-                if (columnIndex == 14) {
-                    int x = (int) value;
-                    if (x == 1)
-                        return "Light contact mode";
-                    else if (x == 2)
-                        return "K-1 mode";
-                    else if (x == 3)
-                        return "Full contact mode";
-                    return "---";
-                }
-                return value;
+                return data.get(rowIndex)[columnIndex];
             }
 
             @Override

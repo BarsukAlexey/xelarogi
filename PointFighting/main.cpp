@@ -1,5 +1,4 @@
 #include "mainwindow.h"
-#include "fighting_table.h"
 #include <QApplication>
 #include <QGraphicsScene>
 #include <QGraphicsView>

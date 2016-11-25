@@ -28,3 +28,31 @@ int Utils::log2(int x)
     while (x >>= 1) ++ans;
     return ans;
 }
+
+int Utils::getFontSize(const QString& text, QFont font, const QRect& rect)
+{
+    int l = 1, r = 1;
+    while (1)
+    {
+        font.setPointSize(r);
+        QRect rectText = QFontMetrics(font).boundingRect(rect, Qt::AlignCenter, text);
+        if (rect.width() <= rectText.width() || rect.height() <= rectText.height())
+            break;
+        l = r;
+        r *= 2;
+    }
+
+    while (l != r)
+    {
+        int m = (l + r + 1) / 2;
+        font.setPointSize(m);
+        QRect rectText = QFontMetrics(font).boundingRect(rect, Qt::AlignCenter, text);
+        if (rectText.width() < rect.width() && rectText.height() < rect.height())
+            l = m;
+        else
+            r = m - 1;
+    }
+    return l;
+}
+
+

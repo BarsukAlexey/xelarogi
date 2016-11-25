@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui sql axcontainer printsupport
+QT       += core gui sql axcontainer printsupport multimedia
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -51,6 +51,8 @@ SOURCES += main.cpp \
     report_manda.cpp \
     report_ministr.cpp \
     formdipl.cpp \
+    dialogaward.cpp \
+    SoundPlayer.cpp
 
 
 
@@ -89,6 +91,8 @@ HEADERS  += logindialog.h \
     report_manda.h \
     report_ministr.h \
     formdipl.h \
+    dialogaward.h \
+    SoundPlayer.h
 
 
 
@@ -114,6 +118,8 @@ FORMS +=  logindialog.ui \
     dialogschedule2.ui \
     dialogschedule2inputtype.ui \
     formdipl.ui \
+    dialogaward.ui \
+    soundplayer.ui
 
 
 

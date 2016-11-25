@@ -289,6 +289,18 @@ void MainWindow::on_pushButtonLoadWinner_clicked()
         QString result = object["result"].toString();
 
 
+        QString title =
+                "Не возможно загрузть результаты для " +
+                object["categoryOfFighting"].toString() +
+                "\n" +
+
+                "Пара: " +
+                object["nameOfLeftFighter"].toString() +
+                " VS " +
+                object["nameOfRightFighter"].toString() +
+                "\n";
+
+
         //qDebug() << TOURNAMENT_CATEGORIES_FK << VERTEX << orderUID;
 
         QVector<DBUtils::NodeOfTournirGrid> nodes = DBUtils::getNodes(TOURNAMENT_CATEGORIES_FK);
@@ -297,16 +309,15 @@ void MainWindow::on_pushButtonLoadWinner_clicked()
         if (nodes.size() <= 2 * VERTEX + 1 - 1)
         {
             errorMessage +=
-                    "Не возможно загрузть результаты для " + DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", TOURNAMENT_CATEGORIES_FK) + "\n"
-                    "Пара: " + DBUtils::getSecondNameAndFirstName(orderUID_left) + " VS " + DBUtils::getSecondNameAndFirstName(orderUID_right) + "\n"
-                    "Так как сетка была изменена или удалена\n";
+                    title +
+                    "Так как сетка была изменена или удалена\n" +
+                    "Или эта пара была введена вручную на ринге\n";
             continue;
         }
 
         if (orderUID_left != nodes[2 * VERTEX + 1 - 1].UID && orderUID_right != nodes[2 * VERTEX - 1].UID){
             errorMessage +=
-                    "Не возможно загрузть результаты для " + DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", TOURNAMENT_CATEGORIES_FK) + "\n"
-                    "Пара: " + DBUtils::getSecondNameAndFirstName(orderUID_left) + " VS " + DBUtils::getSecondNameAndFirstName(orderUID_right) + "\n"
+                    title +
                     "Так как сетка изменилась\n";
             continue;
         }
@@ -315,8 +326,7 @@ void MainWindow::on_pushButtonLoadWinner_clicked()
         {
             if (0 < orderUID && orderUID != nodes[VERTEX - 1].UID)
                 errorMessage +=
-                        "Не возможно загрузть результаты для " + DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", TOURNAMENT_CATEGORIES_FK) + "\n"
-                        "Пара: " + DBUtils::getSecondNameAndFirstName(orderUID_left) + " VS " + DBUtils::getSecondNameAndFirstName(orderUID_right) + "\n"
+                        title +
                         "Так как победитель уже занесен в турнирную сетку\n" +
                         "В программе победитель: " + DBUtils::getSecondNameAndFirstName(nodes[VERTEX - 1].UID) + "\n"
                         "A Вы пытаетесь загрузить: " + DBUtils::getSecondNameAndFirstName(orderUID) + "\n";
@@ -329,15 +339,13 @@ void MainWindow::on_pushButtonLoadWinner_clicked()
                 ++okCount;
             else
                 errorMessage +=
-                    "Не возможно загрузть результаты для " + DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", TOURNAMENT_CATEGORIES_FK) + "\n"
-                    "Пара: " + DBUtils::getSecondNameAndFirstName(orderUID_left) + " VS " + DBUtils::getSecondNameAndFirstName(orderUID_right) + "\n"
+                    title +
                     "Неизвестная ошибка\n";
         }
         else if (orderUID <= 0)
         {
             errorMessage +=
-                "Не возможно загрузть результаты для " + DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", TOURNAMENT_CATEGORIES_FK) + "\n"
-                "Пара: " + DBUtils::getSecondNameAndFirstName(orderUID_left) + " VS " + DBUtils::getSecondNameAndFirstName(orderUID_right) + "\n"
+                title +
                 "Жюри не запускала эту пару на ринг\n";
         }
         else
@@ -371,3 +379,10 @@ void MainWindow::on_btn_report_ministr_clicked()
 
 
 
+
+void MainWindow::on_pushButtonAward_clicked()
+{
+    DialogAward dlg;
+    dlg.showMaximized();
+    dlg.exec();
+}

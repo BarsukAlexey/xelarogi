@@ -57,6 +57,7 @@ public:
 
         radioButton_Right = new QRadioButton(groupBox);
         radioButton_Right->setObjectName(QStringLiteral("radioButton_Right"));
+        radioButton_Right->setChecked(false);
 
         horizontalLayout_2->addWidget(radioButton_Right);
 

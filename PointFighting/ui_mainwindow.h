@@ -32,6 +32,7 @@ public:
     QAction *actionLoad_data;
     QAction *actionExport_results;
     QAction *actionAdv;
+    QAction *actionSwitch_winner;
     QWidget *centralWidget;
     QGridLayout *gridLayout;
     QTableWidget *tableWidget;
@@ -52,6 +53,8 @@ public:
         actionExport_results->setObjectName(QStringLiteral("actionExport_results"));
         actionAdv = new QAction(MainWindow);
         actionAdv->setObjectName(QStringLiteral("actionAdv"));
+        actionSwitch_winner = new QAction(MainWindow);
+        actionSwitch_winner->setObjectName(QStringLiteral("actionSwitch_winner"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         gridLayout = new QGridLayout(centralWidget);
@@ -103,6 +106,7 @@ public:
         actionLoad_data->setText(QApplication::translate("MainWindow", "Load data...", 0));
         actionExport_results->setText(QApplication::translate("MainWindow", "Export results...", 0));
         actionAdv->setText(QApplication::translate("MainWindow", "Setting...", 0));
+        actionSwitch_winner->setText(QApplication::translate("MainWindow", "Switch winner...", 0));
         pushButtonGo->setText(QApplication::translate("MainWindow", "Go...", 0));
         menuData->setTitle(QApplication::translate("MainWindow", "Settings", 0));
     } // retranslateUi

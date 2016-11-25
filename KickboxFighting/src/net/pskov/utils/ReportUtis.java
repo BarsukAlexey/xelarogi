@@ -3,6 +3,7 @@ package net.pskov.utils;
 
 import net.pskov.ModelFight;
 import net.pskov.some_enum.Player;
+import net.pskov.some_enum.PointPanelMode;
 import net.pskov.some_enum.TypePenalty;
 
 public class ReportUtis {
@@ -37,14 +38,19 @@ public class ReportUtis {
         sb.append("<table  cellspacing=\"0\" border=\"1\">\n");
         sb.append("    <caption>").append("Penalty").append("</caption>");
         sb.append("    <tr><td>&nbsp;</td><th>Red conner</th><th>Blue conner</th></tr>\n");
-        for (TypePenalty typePenalty : new TypePenalty[]{TypePenalty.Minus, TypePenalty.Warning, TypePenalty.Exit}) {
-            String str;
+        for (TypePenalty typePenalty : new TypePenalty[]{TypePenalty.Minus, TypePenalty.Warning, TypePenalty.Exit, TypePenalty.KnockDown}) {
+            if (typePenalty == TypePenalty.Exit && f.getPointPanelMode() != PointPanelMode.LightContact ||
+                    typePenalty == TypePenalty.KnockDown && f.getPointPanelMode() != PointPanelMode.K1 && f.getPointPanelMode() != PointPanelMode.FullContact)
+                continue;
+            String str = "";
             if (typePenalty == TypePenalty.Minus)
                 str = "Minus";
             else if (typePenalty == TypePenalty.Warning)
                 str = "Fo";
-            else
+            else if (typePenalty == TypePenalty.Exit)
                 str = "Exit";
+            else if (typePenalty == TypePenalty.KnockDown)
+                str = "Knock down";
             sb.append("    <tr><th>")
                     .append(str)
                     .append("</th><td>")
@@ -56,6 +62,28 @@ public class ReportUtis {
         sb.append("</table>\n");
         sb.append("</p>\n");
         sb.append("\n");
+
+        if (f.getPointPanelMode() == PointPanelMode.FullContact) {
+            sb.append("<p>\n");
+            sb.append("<table cellspacing=\"0\" border=\"1\">\n");
+            sb.append("    <caption>").append("Kick count").append("</caption>");
+            sb.append("    <tr><td>&nbsp;</td><th>Red conner</th><th>Blue conner</th></tr>\n");
+            for (int round = 0; round < f.getCountOfRounds() + (f.getWasExtraRound() ? 1 : 0); round++) {
+                sb.append("    <tr><th>");
+                if (round < f.getCountOfRounds())
+                    sb.append("Round #").append(round + 1);
+                else
+                    sb.append("Extra round");
+                sb.append("</th><td>")
+                        .append(f.getCountOfKickCountToLeftForRound(round))
+                        .append("</td><td>")
+                        .append(f.getCountOfKickCountToRightForRound(round))
+                        .append("</td></tr>\n");
+            }
+            sb.append("</table>\n");
+            sb.append("</p>\n");
+            sb.append("\n");
+        }
 
 
         Player winner = f.getWinner();

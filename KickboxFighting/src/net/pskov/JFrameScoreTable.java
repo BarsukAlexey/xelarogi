@@ -29,64 +29,64 @@ class JFrameScoreTable extends JDialog {
             }
         });
 
-//        if (isThisForJudge) {
-//            addKeyListener(new KeyAdapter() {
-//                @Override
-//                public void keyPressed(KeyEvent e) {
-//                    if (e.getKeyCode() == KeyEvent.VK_6) {
-//                        f.setDialog(true);
-//                        JDialogStopRound dialog = new JDialogStopRound(JFrameScoreTable.this);
-//                        dialog.setVisible(true);
-//                        f.setDialog(false);
-//
-//                        f.forceStopRound(dialog.getWinner(), dialog.getResult());
-//                    }
-//                }
-//            });
-//
-//            //
-//            addMouseMotionListener(new MouseMotionListener() {
-//                @Override
-//                public void mouseDragged(MouseEvent arg0) {
-//                    mymove(arg0);
-//                }
-//
-//                @Override
-//                public void mouseMoved(MouseEvent arg0) {
-//                    mymove(arg0);
-//                }
-//
-//                private Robot robo;
-//
-//                {
-//                    try {
-//                        robo = new Robot();
-//                    } catch (AWTException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//
-//                private final int fixX = bound.width / 2;
-//                private final int fixY = bound.height / 2;
-//
-//                private void mymove(MouseEvent arg0) {
-//                    if (robo == null) return;
-//                    if (arg0.getX() == fixX && arg0.getY() == fixY) {
-//                        // ignore mouse action
-//                        return;
-//                    }
-//                    robo.mouseMove(fixX + JFrameScoreTable.this.getX(), fixY + JFrameScoreTable.this.getY());
-//                }
-//            });
-//        }
+        if (isThisForJudge) {
+            addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyPressed(KeyEvent e) {
+                    if (e.getKeyCode() == KeyEvent.VK_6) {
+                        f.setDialog(true);
+                        JDialogStopRound dialog = new JDialogStopRound(JFrameScoreTable.this);
+                        dialog.setVisible(true);
+                        f.setDialog(false);
+
+                        f.forceStopRound(dialog.getWinner(), dialog.getResult());
+                    }
+                }
+            });
+
+            //
+            addMouseMotionListener(new MouseMotionListener() {
+                @Override
+                public void mouseDragged(MouseEvent arg0) {
+                    mymove(arg0);
+                }
+
+                @Override
+                public void mouseMoved(MouseEvent arg0) {
+                    mymove(arg0);
+                }
+
+                private Robot robo;
+
+                {
+                    try {
+                        robo = new Robot();
+                    } catch (AWTException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                private final int fixX = bound.width / 2;
+                private final int fixY = bound.height / 2;
+
+                private void mymove(MouseEvent arg0) {
+                    if (robo == null) return;
+                    if (arg0.getX() == fixX && arg0.getY() == fixY) {
+                        // ignore mouse action
+                        return;
+                    }
+                    robo.mouseMove(fixX + JFrameScoreTable.this.getX(), fixY + JFrameScoreTable.this.getY());
+                }
+            });
+        }
 
 
         setModal(true);
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-//        setUndecorated(true);
+        setUndecorated(true);
         pack();
-//        setBounds(bound);
-        setBounds(new Rectangle(100, 100, 1700, 600));
+        setBounds(bound);
+//        setBounds(new Rectangle(100, 100, 1700, 600));
 
 
         timer = new Timer(250, new ActionListener() {
@@ -128,22 +128,22 @@ class JFrameScoreTable extends JDialog {
             scrDim = new Dimension((int) (0.85 * g.getClipBounds().width), g.getClipBounds().height);
             g.translate(scrDim.width, 0);
 
-            String[] msg = null;
+            String[] msg;
             if (modelFight.getPointPanelMode() == PointPanelMode.LightContact)
                 msg = new String[]{
                         "SPACE - start/pause",
                         "ESC - exit",
-
+                        "",
                         "Q - minus (red)",
                         "A - waring (red)",
                         "Z - exit (red)",
-
+                        "",
                         "O - minus (blue)",
                         "K - waring (blue)",
                         "M - exit (blue)",
-
-                        "G - cancel last penalty",
-
+                        "",
+                        "G - cancel last action",
+                        "",
                         "6 - STOP ROUND!"
                 };
 
@@ -151,36 +151,36 @@ class JFrameScoreTable extends JDialog {
                 msg = new String[]{
                         "SPACE - start/pause",
                         "ESC - exit",
-
+                        "",
                         "Q - minus (red)",
                         "A - waring (red)",
                         "Z - knock down (red)",
-
+                        "",
                         "O - minus (blue)",
                         "K - waring (blue)",
                         "M - knock down (blue)",
-
-                        "G - cancel last penalty",
-
+                        "",
+                        "G - cancel last action",
+                        "",
                         "6 - STOP ROUND!"
                 };
             else
                 msg = new String[]{
                         "SPACE - start/pause",
                         "ESC - exit",
-
+                        "",
                         "Q - minus (red)",
                         "A - waring (red)",
                         "Z - knock down (red)",
                         "W - kick count (red)",
-
+                        "",
                         "O - minus (blue)",
                         "K - waring (blue)",
                         "M - knock down (blue)",
                         "I - kick count (blue)",
-
-                        "G - cancel last penalty",
-
+                        "",
+                        "G - cancel last action",
+                        "",
                         "6 - STOP ROUND!"
                 };
 
@@ -547,7 +547,7 @@ class JFrameScoreTable extends JDialog {
                 double halfWidth = (scrDim.width / 2 - wUnit) / 2;
                 double sizeOfCube = Math.min(0.3 * hUnit, 0.3 * halfWidth / 2.2);
                 double widthSpaceBetweenCubes = Math.min(0.2 * hUnit, 0.2 * halfWidth / 2.2);
-                /** всего может быть 4 кубика и 5пробельчиков между ними
+                /*  всего может быть 4 кубика и 5пробельчиков между ними
                  * 4 * sizeOfCube + 5 * widthSpaceBetweenCubes = halfWidth  <=>
                  * 4 * 0.3 * hUnit + 5 * 0.2 * hUnit = halfWidth   <=>
                  * 1.2 * hUnit + 1 * hUnit = halfWidth   <=>
@@ -647,9 +647,11 @@ class JFrameScoreTable extends JDialog {
                         for (int i = 0; i < countOfKnockDown; i++) {
                             g.fill(new Rectangle.Double((halfWidth + (i + 1) * widthSpaceBetweenCubes + i * sizeOfCube), heightCenter + (-2.5 + 0.6 + 0.6) * hUnit + BUBEN, sizeOfCube, sizeOfCube));
                         }
-                        for (int i = 0; i < countOfKickCount; i++) {
-                            g.fill(new Rectangle.Double((halfWidth + (i + 1) * widthSpaceBetweenCubes + i * sizeOfCube), heightCenter + (-2.5 + 0.6 + 0.6 + 0.6) * hUnit + BUBEN, sizeOfCube, sizeOfCube));
-                        }
+                        GraphicsUtilities.drawTextInTheLeftOfRectangle(g, Color.white, "" + countOfKickCount,
+                                (int) ((scrDim.width / 2 - wUnit) / 2),
+                                (int) (heightCenter + (-2.5 + 0.6 + 0.6 + 0.6) * hUnit),
+                                (int) (0.5 * hUnit),
+                                sizeOfFont);
                     }
                 }
 
@@ -723,9 +725,11 @@ class JFrameScoreTable extends JDialog {
                         for (int i = 0; i < countOfKnockDown; i++) {
                             g.fill(new Rectangle.Double((halfWidth + (i + 1) * widthSpaceBetweenCubes + i * sizeOfCube), heightCenter + (-2.5 + 0.6 + 0.6) * hUnit + BUBEN, sizeOfCube, sizeOfCube));
                         }
-                        for (int i = 0; i < countOfKickCount; i++) {
-                            g.fill(new Rectangle.Double((halfWidth + (i + 1) * widthSpaceBetweenCubes + i * sizeOfCube), heightCenter + (-2.5 + 0.6 + 0.6 + 0.6) * hUnit + BUBEN, sizeOfCube, sizeOfCube));
-                        }
+                        GraphicsUtilities.drawTextInTheLeftOfRectangle(g, Color.white, "" + countOfKickCount,
+                                (int)((scrDim.width / 2 - wUnit) / 2),
+                                (int) (heightCenter + (-2.5 + 0.6 + 0.6 + 0.6) * hUnit),
+                                (int) (0.5 * hUnit),
+                                sizeOfFont);
                     }
 
                     g.translate(-(scrDim.width / 2 + wUnit), 0);

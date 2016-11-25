@@ -643,6 +643,10 @@ void SqlTableManager::setSqlTable(const QString& table,
         else
         {
             QLineEdit *edit = new QLineEdit(this);
+            if (model->headerData(i, Qt::Horizontal).toString() == "Флаг")
+            {
+                edit->setEnabled(false);
+            }
             lineEdits << edit;
             edit->setPlaceholderText(model->headerData(i, Qt::Horizontal).toString());
             alignedLayout->addWidget(edit);
