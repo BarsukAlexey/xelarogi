@@ -18,6 +18,7 @@ QPoint RenderAreaWidget::getCell(int v)
     QPoint p;
     p.setY(countColumns - Utils::log2(v) - 1);
     p.setX( (1 << (p.y() + 1)) * ((1 << (countColumns - p.y())) - 1 - v) + (1 << p.y()) - 1);
+    p.setX(p.x() + 1);
     return p;
 }
 
@@ -28,6 +29,7 @@ void RenderAreaWidget::paintEvent(QPaintEvent* )
 //    time.start();
 
     QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
 
     painter.fillRect(painter.viewport(), Qt::white);
 
@@ -179,6 +181,7 @@ void RenderAreaWidget::paintNodeOfGrid(int i, int j, QPainter& painter, const DB
     font.setPointSize(fontSize);
     painter.setFont(font);
     rect.setWidth(100500);
+    rect.adjust(0, -100500, 0, +100500);
     painter.drawText(rect, Qt::AlignLeft | Qt::AlignVCenter, " " + text);
 }
 
@@ -204,7 +207,8 @@ void RenderAreaWidget::setNormalSize()
     {
         countColumns = Utils::log2(nodes.last().v) + 1;
         countRows = 2 * (1 << (countColumns - 1)) - 1;
-        resize(countColumns * widthCell + 1, countRows * heightCell + 1);
+        //resize(countColumns * widthCell + 1, countRows * heightCell + 1);
+        resize((countColumns + 1) * widthCell + 1, (countRows + 2) * heightCell + 1);
     }
     //qDebug() << "RenderAreaWidget::size: " << size();
 }

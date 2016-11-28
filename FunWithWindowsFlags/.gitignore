@@ -1,7 +1,0 @@
-/release/*
-/debug/*
-/*.x*
-/Makefil*
-/object_*
-/*.user
-/*.user.*

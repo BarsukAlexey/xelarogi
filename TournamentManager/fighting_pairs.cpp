@@ -188,13 +188,13 @@ void FightingPairs::printListOfPairsInExcel(
                              f.leftUID <= 0? f.leftName :
                                              DBUtils::getField("SECOND_NAME", "ORDERS", f.leftUID) + " " +
                                              DBUtils::getField("FIRST_NAME" , "ORDERS", f.leftUID) + " (" +
-                                             getTextLocal(f.leftUID, typeText) +
+                                             DBUtils::getTextLocal(f.leftUID, typeText).toString() +
                                              ")");
         ExcelUtils::setValue(sheet, currentRow, 3,
                              f.rightUID <= 0? f.rightName :
                                               DBUtils::getField("SECOND_NAME", "ORDERS", f.rightUID) + " " +
                                               DBUtils::getField("FIRST_NAME" , "ORDERS", f.rightUID) + " (" +
-                                              getTextLocal(f.rightUID, typeText) +
+                                              DBUtils::getTextLocal(f.rightUID, typeText).toString() +
                                               ")");
         ExcelUtils::setBorder(sheet, currentRow, 1, currentRow, 3);
         ++currentRow;
@@ -429,23 +429,7 @@ void FightingPairs::writeGridsForPointFighting(
 
 
 
-QString FightingPairs::getTextLocal(long long orderUID, int type)
-{
-    if (type == 0) return DBUtils::getField("NAME", "COUNTRIES"   , DBUtils::getField("COUNTRY_FK"    , "ORDERS", orderUID));
-    if (type == 1) return DBUtils::getField("NAME", "REGIONS"     , DBUtils::getField("REGION_FK"     , "ORDERS", orderUID));
-    if (type == 2) return DBUtils::getField("NAME", "REGION_UNITS", DBUtils::getField("REGION_UNIT_FK", "ORDERS", orderUID));
-    if (type == 3) return DBUtils::getField("NAME", "CLUBS"       , DBUtils::getField("CLUB_FK"       , "ORDERS", orderUID));
-    return "";
-}
 
-QString FightingPairs::getFlagImage(long long orderUID, int type)
-{
-    if (type == 0) return DBUtils::getField("FLAG", "COUNTRIES"   , DBUtils::getField("COUNTRY_FK"    , "ORDERS", orderUID));
-    if (type == 1) return DBUtils::getField("FLAG", "REGIONS"     , DBUtils::getField("REGION_FK"     , "ORDERS", orderUID));
-    if (type == 2) return DBUtils::getField("FLAG", "REGION_UNITS", DBUtils::getField("REGION_UNIT_FK", "ORDERS", orderUID));
-    if (type == 3) return DBUtils::getField("FLAG", "CLUBS"       , DBUtils::getField("CLUB_FK"       , "ORDERS", orderUID));
-    return "";
-}
 
 QJsonObject FightingPairs::getQJsonObject(const NodeOfGridWithNames& f, const int fightingId, int typeText, int typeFlag)
 {
@@ -462,11 +446,11 @@ QJsonObject FightingPairs::getQJsonObject(const NodeOfGridWithNames& f, const in
     a["durationOfRound"] = DBUtils::getField("DURATION_FIGHING", "TOURNAMENT_CATEGORIES", f.tournamentCategory);
     a["durationOfBreak"] = DBUtils::getField("DURATION_BREAK"  , "TOURNAMENT_CATEGORIES", f.tournamentCategory);
 
-    a["regionOfLeftFighter" ] = getTextLocal(f.leftUID , typeText);
-    a["regionOfRightFighter"] = getTextLocal(f.rightUID, typeText);
+    a["regionOfLeftFighter" ] = DBUtils::getTextLocal(f.leftUID , typeText).toString();
+    a["regionOfRightFighter"] = DBUtils::getTextLocal(f.rightUID, typeText).toString();
 
-    a["leftFlag" ] = getFlagImage(f.leftUID , typeFlag);
-    a["rightFlag"] = getFlagImage(f.rightUID, typeFlag);
+    a["leftFlag" ] = DBUtils::getFlagImage(f.leftUID , typeFlag).toString();
+    a["rightFlag"] = DBUtils::getFlagImage(f.rightUID, typeFlag).toString();
 
     a["TOURNAMENT_CATEGORIES_FK"] = f.tournamentCategory;
     a["VERTEX"] = f.v;

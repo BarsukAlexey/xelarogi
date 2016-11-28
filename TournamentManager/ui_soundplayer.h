@@ -31,6 +31,7 @@ public:
     QPushButton *pushButtonOpen;
     QPushButton *pushButtonPlay;
     QPushButton *pushButtonStop;
+    QPushButton *pushButtonDelete;
     QSlider *sliderVolume;
     QHBoxLayout *horizontalLayout_2;
     QLabel *labelCurrent;
@@ -43,6 +44,7 @@ public:
         if (SoundPlayer->objectName().isEmpty())
             SoundPlayer->setObjectName(QStringLiteral("SoundPlayer"));
         SoundPlayer->resize(324, 154);
+        SoundPlayer->setAutoFillBackground(true);
         gridLayout = new QGridLayout(SoundPlayer);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
         horizontalLayout = new QHBoxLayout();
@@ -61,6 +63,11 @@ public:
         pushButtonStop->setObjectName(QStringLiteral("pushButtonStop"));
 
         horizontalLayout->addWidget(pushButtonStop);
+
+        pushButtonDelete = new QPushButton(SoundPlayer);
+        pushButtonDelete->setObjectName(QStringLiteral("pushButtonDelete"));
+
+        horizontalLayout->addWidget(pushButtonDelete);
 
         sliderVolume = new QSlider(SoundPlayer);
         sliderVolume->setObjectName(QStringLiteral("sliderVolume"));
@@ -109,6 +116,7 @@ public:
         pushButtonOpen->setText(QApplication::translate("SoundPlayer", "Open", 0));
         pushButtonPlay->setText(QString());
         pushButtonStop->setText(QString());
+        pushButtonDelete->setText(QApplication::translate("SoundPlayer", "\320\243\320\264\320\260\320\273\320\270\321\202\321\214", 0));
         labelCurrent->setText(QApplication::translate("SoundPlayer", "TextLabel", 0));
         labelRemain->setText(QApplication::translate("SoundPlayer", "TextLabel", 0));
         labelPath->setText(QApplication::translate("SoundPlayer", "#", 0));

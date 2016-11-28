@@ -149,6 +149,49 @@ public:
     // FIELD_TRANSLATES
     static QMap<QString, QSqlRecord> get_NAME_RUS__RELATION_TABLE_NAME();
 
+    static int getLocalFK(int orderUID, int type)
+    {
+        if (type == 0) return DBUtils::get("COUNTRY_FK"    , "ORDERS", orderUID).toInt();
+        if (type == 1) return DBUtils::get("REGION_FK"     , "ORDERS", orderUID).toInt();
+        if (type == 2) return DBUtils::get("REGION_UNIT_FK", "ORDERS", orderUID).toInt();
+        if (type == 3) return DBUtils::get("CLUB_FK"       , "ORDERS", orderUID).toInt();
+        return -1;
+    }
+
+    static QVariant getLocalFKValue(const QString& field, int localUID, int type)
+    {
+        if (type == 0) return DBUtils::get(field, "COUNTRIES"   , localUID);
+        if (type == 1) return DBUtils::get(field, "REGIONS"     , localUID);
+        if (type == 2) return DBUtils::get(field, "REGION_UNITS", localUID);
+        if (type == 3) return DBUtils::get(field, "CLUBS"       , localUID);
+        return -1;
+    }
+
+
+    static QVariant getLocalInfo(const QString& field, long long orderUID, int type)
+    {
+        if (type == 0) return DBUtils::get(field, "COUNTRIES"   , DBUtils::get("COUNTRY_FK"    , "ORDERS", orderUID));
+        if (type == 1) return DBUtils::get(field, "REGIONS"     , DBUtils::get("REGION_FK"     , "ORDERS", orderUID));
+        if (type == 2) return DBUtils::get(field, "REGION_UNITS", DBUtils::get("REGION_UNIT_FK", "ORDERS", orderUID));
+        if (type == 3) return DBUtils::get(field, "CLUBS"       , DBUtils::get("CLUB_FK"       , "ORDERS", orderUID));
+        return "";
+    }
+
+    static QVariant getTextLocal(long long orderUID, int type)
+    {
+        return getLocalInfo("NAME", orderUID, type);
+    }
+
+    static QVariant getFlagImage(long long orderUID, int type)
+    {
+        return getLocalInfo("FLAG", orderUID, type);
+    }
+
+    static QVariant getHymn(long long orderUID, int type)
+    {
+        return getLocalInfo("HYMN", orderUID, type);
+    }
+
 
     enum TypeField
     {

@@ -5,6 +5,7 @@
 #include "db_utils.h"
 #include "excel_utils.h"
 #include "imageloaderwidget.h"
+#include "SoundPlayer.h"
 
 
 
@@ -165,6 +166,7 @@ private:
     void saveToExcel();
 private slots:
     bool submitAllChanges();
+    void onSelectionModeChanged();
 
 
 private:

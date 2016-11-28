@@ -52,7 +52,8 @@ SOURCES += main.cpp \
     report_ministr.cpp \
     formdipl.cpp \
     dialogaward.cpp \
-    SoundPlayer.cpp
+    SoundPlayer.cpp \
+    dialogawardselecttournamentcategories.cpp
 
 
 
@@ -92,7 +93,8 @@ HEADERS  += logindialog.h \
     report_ministr.h \
     formdipl.h \
     dialogaward.h \
-    SoundPlayer.h
+    SoundPlayer.h \
+    dialogawardselecttournamentcategories.h
 
 
 
@@ -119,7 +121,8 @@ FORMS +=  logindialog.ui \
     dialogschedule2inputtype.ui \
     formdipl.ui \
     dialogaward.ui \
-    soundplayer.ui
+    soundplayer.ui \
+    dialogawardselecttournamentcategories.ui
 
 
 

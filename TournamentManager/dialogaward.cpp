@@ -12,6 +12,11 @@ void DialogAwardWidget::setImage(QString path)
     repaint();
 }
 
+QSize DialogAwardWidget::getImageSize()
+{
+    return image.size();
+}
+
 void DialogAwardWidget::setData(QByteArray& byteArray)
 {
     //qDebug() << "DialogAwardWidget::setData  size" << byteArray.size();
@@ -19,23 +24,39 @@ void DialogAwardWidget::setData(QByteArray& byteArray)
     {
         image = QPixmap();
         rects = QVector<QRect>();
-        for (int i = 0; i < 8; ++i)
+        for (int i = 0; i < 9; ++i)
         {
             rects << QRect(0, 0, 100, 100);
         }
         font = QFont();
         colorText  = Qt::white;
-        colorBound = Qt::white;
+        colorTextBound = Qt::black;
+        colorFlagBound = Qt::red;
+        withTextBound = 1;
     }
     else
     {
         QDataStream dataStream(&byteArray, QIODevice::ReadOnly);
-        dataStream >> image
+        dataStream
+                >> image
                 >> rects
                 >> font
                 >> colorText
-                >> colorBound;
+                >> colorTextBound
+                >> colorFlagBound
+                >> withTextBound;
     }
+    names.clear();
+    names << "1Фродо Бэггинс"
+          << "2Бильбо Бэггинс"
+          << "3Торин Дубощит"
+          << "4Бард Лучник";
+    countries.clear();
+    countries << "Mordor"
+              << "Harad"
+              << "Lindon"
+              << "Khand";
+    tournamentCategory = "low kick, Women, 17-18  years, 56-60 kg.";
     repaint();
 }
 
@@ -43,11 +64,14 @@ QByteArray DialogAwardWidget::getDate()
 {
     QByteArray byteArray;
     QDataStream dataStream(&byteArray, QIODevice::WriteOnly);
-    dataStream << image
-               << rects
-               << font
-               << colorText
-               << colorBound;
+    dataStream
+            << image
+            << rects
+            << font
+            << colorText
+            << colorTextBound
+            << colorFlagBound
+            << withTextBound;
     return byteArray;
 }
 
@@ -80,12 +104,23 @@ void DialogAwardWidget::setFont(const QFont& font)
 
 QColor DialogAwardWidget::getColorBound()
 {
-    return colorBound;
+    return colorFlagBound;
 }
 
 void DialogAwardWidget::setColorBound(const QColor& color)
 {
-    colorBound = color;
+    colorFlagBound = color;
+    repaint();
+}
+
+QColor DialogAwardWidget::getColorTextBound()
+{
+    return colorTextBound;
+}
+
+void DialogAwardWidget::setColorTextBound(const QColor& color)
+{
+    colorTextBound = color;
     repaint();
 }
 
@@ -99,73 +134,126 @@ void DialogAwardWidget::onRectTextChanged(int row, const QRect& rect)
 
 void DialogAwardWidget::paintEvent(QPaintEvent* event)
 {
+    //QTime t; t.start();
     //qDebug() << event->rect() << event->region();
     if (image.isNull())
         return;
 
-    QTime t; t.start();
+    QPixmap img(image);
+    QPainter painter(&img);
+    painter.setRenderHint(QPainter::Antialiasing);
 
-    QPainter painter(this);
+    for (int i = 0; i < rects.size(); ++i)
+    {
+        const QRect rect = rects[i];
+        if (i < 4 || i == 8)
+        {
+            painter.setBrush(QBrush());
+            painter.setPen(QPen(QColor(255 - colorText.red(),
+                                       255 - colorText.green(),
+                                       255 - colorText.blue()),
+                                3,
+                                Qt::DashDotLine));
+            painter.drawRect(rect);
+        }
+        else
+        {
+            painter.setPen(QPen(colorFlagBound));
+            painter.setBrush(QBrush(colorFlagBound));
+            painter.drawRect(rect);
+        }
 
-    const double coef = qMin((double)size().width() / image.width(),
-                             (double)size().height() / image.height());
-    const QPixmap imageScaled = image.scaled(
-                                    (int)(coef * image.width()),
-                                    (int)(coef * image.height()));
+        QString text;
+        if (i < 4)
+        {
+            for (int iter = 0; iter < 2; ++iter)
+            {
+                QString text = iter == 0? names[i] : countries[i];
+                QFont font = this->font;
+                QRect boundRect;
+                QRect target(rect.topLeft().x(),
+                             rect.topLeft().y() + iter * rect.height() / 2,
+                             rect.width(),
+                             rect.height() / 2);
+                Utils::setFontSize(text, font, target, boundRect);
+
+                QPoint pointOfBaseline(
+                            target.topLeft().x() + (target.width() - boundRect.width()) / 2,
+                            target.topLeft().y() + (target.height() + QFontMetrics(font).ascent()) / 2);
+
+                QPainterPath path;
+                path.addText(pointOfBaseline, font, text);
+
+                painter.setPen(QPen(colorTextBound, withTextBound));
+                painter.setBrush(QBrush(colorText));
+                painter.drawPath(path);
+            }
+        }
+        else if (i == 8)
+        {
+            QString text = tournamentCategory;
+            QFont font = this->font;
+            QRect boundRect;
+            Utils::setFontSize(text, font, rect, boundRect);
+
+            QPoint pointOfBaseline(
+                        rect.topLeft().x() + (rect.width() - boundRect.width()) / 2,
+                        rect.topLeft().y() + (rect.height() + QFontMetrics(font).ascent()) / 2);
+
+
+            QPainterPath path;
+            path.addText(pointOfBaseline, font, text);
+
+            painter.setPen(QPen(colorTextBound, withTextBound));
+            painter.setBrush(QBrush(colorText));
+            painter.drawPath(path);
+        }
+        else
+        {
+            QString text;
+            if      (i == 4) text = "1 Флаг";
+            else if (i == 5) text = "2 Флаг";
+            else if (i == 6) text = "3 Флаг";
+            else if (i == 7) text = "4 Флаг";
+            painter.setPen(QColor(255 - colorFlagBound.red(),
+                                  255 - colorFlagBound.green(),
+                                  255 - colorFlagBound.blue()));
+            painter.setFont(font);
+            painter.drawText(rect, Qt::AlignCenter, text);
+        }
+    }
+    painter.end();
+
+    painter.begin(this);
+    const QPixmap imageScaled = img.scaled(
+                                    size().width(),
+                                    size().height(),
+                                    Qt::KeepAspectRatio,
+                                    Qt::SmoothTransformation);
+
     const int offsetW = (size().width()  - imageScaled.size().width() ) / 2;
     const int offsetH = (size().height() - imageScaled.size().height()) / 2;
     painter.drawPixmap(offsetW, offsetH, imageScaled);
+    //qDebug() << "Paint in: " << t.elapsed();
+}
 
-    const double kw = (double)imageScaled.width()  / image.width();
-    const double kh = (double)imageScaled.height() / image.height();
-    for (int i = 0; i < rects.size(); ++i)
-    {
-        QRect rect = rects[i];
-        rect.setX(offsetW + (int)(kw * rect.x()));
-        rect.setY(offsetH + (int)(kh * rect.y()));
-        rect.setWidth ((int)(kw * rects[i].width ()));
-        rect.setHeight((int)(kh * rects[i].height()));
+int DialogAwardWidget::getWithTextBound() const
+{
+    return withTextBound;
+}
 
-
-        painter.fillRect(rect, QColor(255 - colorText.red(),
-                                      255 - colorText.green(),
-                                      255 - colorText.blue()
-                                      ));
-        if (4 <= i)
-        {
-            painter.save();
-            QPen p;
-            p.setWidth(3);
-            p.setColor(colorBound);
-            painter.setPen(p);
-            painter.drawRect(rect);
-            painter.restore();
-        }
-
-        QFont font = this->font;
-        QString text;
-        if      (i == 0) text = "1Фродо Бэггинс\nMordor";
-        else if (i == 1) text = "2Бильбо Бэггинс\nHarad";
-        else if (i == 2) text = "3Торин Дубощит\nLindon ";
-        else if (i == 3) text = "4Бард Лучник\nKhand";
-        else if (i == 4) text = "Флаг1";
-        else if (i == 5) text = "Флаг2";
-        else if (i == 6) text = "Флаг3";
-        else if (i == 7) text = "Флаг4";
-        font.setPointSize(Utils::getFontSize(text, font, rect));
-        painter.setFont(font);
-        painter.setPen(colorText);
-        painter.drawText(rect, Qt::AlignCenter, text);
-    }
-
-    qDebug() << "Paint in: " << t.elapsed();
+void DialogAwardWidget::setWithTextBound(int value)
+{
+    withTextBound = value;
+    repaint();
 }
 
 
 
-DialogAward::DialogAward(QWidget *parent) :
+DialogAward::DialogAward(const int tournamentUID, QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::DialogAward)
+    ui(new Ui::DialogAward),
+    tournamentUID(tournamentUID)
 {
     ui->setupUi(this);
     setWindowFlags(Qt::Window);
@@ -178,7 +266,8 @@ DialogAward::DialogAward(QWidget *parent) :
             << ui->radioButtonFlag0
             << ui->radioButtonFlag1
             << ui->radioButtonFlag2
-            << ui->radioButtonFlag3;
+            << ui->radioButtonFlag3
+            << ui->radioButtonTC;
 
     model = new QSqlTableModel(this);
     model->setTable("AWARD");
@@ -197,15 +286,14 @@ DialogAward::DialogAward(QWidget *parent) :
     connect(ui->spinBoxWidth , fun, this, &DialogAward::onInput);
     connect(ui->spinBoxHeight, fun, this, &DialogAward::onInput);
 
-    connect(ui->radioButtonName0, &QRadioButton::clicked, this, &DialogAward::onRadio);
-    connect(ui->radioButtonName1, &QRadioButton::clicked, this, &DialogAward::onRadio);
-    connect(ui->radioButtonName2, &QRadioButton::clicked, this, &DialogAward::onRadio);
-    connect(ui->radioButtonName3, &QRadioButton::clicked, this, &DialogAward::onRadio);
+    for (QRadioButton *r : radio)
+    {
+        connect(r, &QRadioButton::clicked, this, &DialogAward::onRadio);
+    }
 
-    connect(ui->radioButtonFlag0, &QRadioButton::clicked, this, &DialogAward::onRadio);
-    connect(ui->radioButtonFlag1, &QRadioButton::clicked, this, &DialogAward::onRadio);
-    connect(ui->radioButtonFlag2, &QRadioButton::clicked, this, &DialogAward::onRadio);
-    connect(ui->radioButtonFlag3, &QRadioButton::clicked, this, &DialogAward::onRadio);
+    connect(ui->spinBoxWidthTextBound, fun, [this](int value){
+        ui->widgetAward->setWithTextBound(value);
+    });
 
     on_comboBoxName_currentIndexChanged(ui->comboBoxName->currentIndex());
 }
@@ -251,6 +339,12 @@ void DialogAward::on_comboBoxName_currentIndexChanged(int index)
     ui->widgetAward->show();
     ui->widgetTools->show();
 
+    QSize imageSize = ui->widgetAward->getImageSize();
+    ui->labelImageWidth->setText(QString::number(imageSize.width()));
+    ui->labelImageHeight->setText(QString::number(imageSize.height()));
+
+    ui->spinBoxWidthTextBound->setValue(ui->widgetAward->getWithTextBound());
+
     onRadio();
 }
 
@@ -260,6 +354,10 @@ void DialogAward::on_pushButtonLoadImg_clicked()
     if (openFileName.isEmpty())
         return;
     ui->widgetAward->setImage(openFileName);
+
+    QSize imageSize = ui->widgetAward->getImageSize();
+    ui->labelImageWidth->setText(QString::number(imageSize.width()));
+    ui->labelImageHeight->setText(QString::number(imageSize.height()));
 }
 
 void DialogAward::onInput()
@@ -358,4 +456,128 @@ void DialogAward::on_pushButtonColorBound_clicked()
     {
         ui->widgetAward->setColorBound(initColor);
     }
+}
+
+void DialogAward::on_pushButtonColorBoundText_clicked()
+{
+    QColor initColor = ui->widgetAward->getColorTextBound();
+    QColorDialog dlg(initColor, this);
+    connect(&dlg, &QColorDialog::currentColorChanged, [this](const QColor& color){
+        ui->widgetAward->setColorTextBound(color);
+    });
+    if (dlg.exec() == QDialog::Rejected)
+    {
+        ui->widgetAward->setColorTextBound(initColor);
+    }
+}
+
+void DialogAward::on_pushButtonGo_clicked()
+{
+
+    DialogAwardSelectTournamentCategories dlg(tournamentUID, this);
+    dlg.showMaximized();
+    if (dlg.exec() == QDialog::Rejected)
+    {
+        return;
+    }
+
+
+
+
+    QVector<QString> TCs;
+    QVector<QVector<QString>> players;
+    QVector<QVector<int>> names;
+    QVector<QVector<int>> flags;
+    QVector<QVector<int>> hymns;
+    QMap<int, QString> mapNames;
+    QMap<int, QByteArray> mapFlag;
+    QMap<int, QByteArray> mapHymn;
+    for (const int uidTC : DBUtils::getTournamentCategoryUIDs(tournamentUID))
+    {
+        QVector<std::pair<long long, std::pair<int, int>>> orderUIDs =
+                DBUtils::getUIDsAndPlaces(uidTC, 4, true);
+        if (orderUIDs.isEmpty())
+            continue;
+
+        TCs << DBUtils::get("NAME", "TOURNAMENT_CATEGORIES", uidTC).toString();
+        players << QVector<QString>();
+        names   << QVector<int>();
+        flags   << QVector<int>();
+        hymns   << QVector<int>();
+        for (std::pair<long long, std::pair<int, int>> orderItem: orderUIDs)
+        {
+            const int orderUID = orderItem.first;
+            players.back() << DBUtils::getSecondNameAndFirstName(orderUID);
+            names  .back() << DBUtils::getLocalFK(orderUID, getTypeName());
+            flags  .back() << DBUtils::getLocalFK(orderUID, getTypeFlag());
+            hymns  .back() << DBUtils::getLocalFK(orderUID, getTypeHymn());
+        }
+    }
+    for (QVector<int> vect: names)
+        for (int localUID : vect)
+            if (!mapNames.contains(localUID))
+                 mapNames[localUID] = DBUtils::getLocalFKValue("NAME", localUID, getTypeName()).toString();
+
+    for (QVector<int> vect: flags)
+        for (int localUID : vect)
+            if (!mapFlag.contains(localUID))
+                 mapFlag[localUID] = QByteArray::fromBase64(
+                                        DBUtils::getLocalFKValue("FLAG", localUID, getTypeFlag())
+                                        .toString()
+                                        .toLocal8Bit());
+
+    for (QVector<int> vect: hymns)
+        for (int localUID : vect)
+            if (!mapHymn.contains(localUID))
+            {
+                mapHymn[localUID] = DBUtils::getLocalFKValue("HYMN", localUID, getTypeHymn()).toByteArray();
+            }
+
+
+    QString mainDirectory = QFileDialog::getExistingDirectory(this);
+    if (mainDirectory.isEmpty())
+        return;
+
+    QFile file(QDir(mainDirectory).filePath("award.dat"));
+    file.open(QIODevice::WriteOnly);
+    QDataStream dataStream(&file);
+    dataStream << ui->widgetAward->getDate()
+               << TCs
+               << players
+               << names
+               << flags
+               << hymns
+               << mapNames
+               << mapFlag
+               << mapHymn;
+    file.flush();
+    file.close();
+    QMessageBox::information(this, "", "DONE!");
+}
+
+int DialogAward::getTypeName()
+{
+    if (ui->radioButtonNameCounty->isChecked()) return 0;
+    if (ui->radioButtonNameRegion->isChecked()) return 1;
+    if (ui->radioButtonNameCity  ->isChecked()) return 2;
+    if (ui->radioButtonNameClub  ->isChecked()) return 3;
+    return -1;
+}
+
+int DialogAward::getTypeFlag()
+{
+    if (ui->radioButtonFlagCounty->isChecked()) return 0;
+    if (ui->radioButtonFlagRegion->isChecked()) return 1;
+    if (ui->radioButtonFlagCity  ->isChecked()) return 2;
+    if (ui->radioButtonFlagClub  ->isChecked()) return 3;
+    return -1;
+}
+
+int DialogAward::getTypeHymn()
+{
+    if (ui->radioButtonHymnCounty->isChecked()) return 0;
+    if (ui->radioButtonHymnRegion->isChecked()) return 1;
+    if (ui->radioButtonHymnCity  ->isChecked()) return 2;
+    if (ui->radioButtonHymnClub  ->isChecked()) return 3;
+    return -1;
 }

@@ -15,16 +15,23 @@
 #include <QFontComboBox>
 #include <QFontDialog>
 
+
+#include <QFile>
+
+
 #include "utils.h"
+#include "dialogawardselecttournamentcategories.h"
 
 class DialogAwardWidget : public QWidget
 {
     Q_OBJECT
 public:
     DialogAwardWidget(QWidget *parent);
-    void setImage(QString path);
 
     void setData(QByteArray& byteArray);
+
+    void setImage(QString path);
+    QSize getImageSize();
 
     QByteArray getDate();
     QRect getRects(int index);
@@ -38,6 +45,13 @@ public:
     QColor getColorBound();
     void setColorBound(const QColor& color);
 
+    QColor getColorTextBound();
+    void setColorTextBound(const QColor& color);
+
+
+    int getWithTextBound() const;
+    void setWithTextBound(int value);
+
 public slots:
     void onRectTextChanged(int row, const QRect& rect);
 
@@ -49,7 +63,13 @@ private:
     QVector<QRect> rects;
     QFont font;
     QColor colorText;
-    QColor colorBound;
+    QColor colorTextBound;
+    QColor colorFlagBound;
+    int withTextBound;
+
+    QString tournamentCategory;
+    QVector<QString> names;
+    QVector<QString> countries;
 
 };
 
@@ -63,7 +83,7 @@ class DialogAward : public QDialog
     Q_OBJECT
 
 public:
-    explicit DialogAward(QWidget *parent = 0);
+    explicit DialogAward(const int tournamentUID, QWidget *parent = 0);
     ~DialogAward();
 
 private slots:
@@ -71,21 +91,30 @@ private slots:
     void on_pushButtonNew_clicked();
     void on_pushButtonDelete_clicked();
     void on_pushButtonSave_clicked();
-    void on_pushButtonLoadImg_clicked();
+
 
     void onInput();
     void onRadio();
 
+    void on_pushButtonLoadImg_clicked();
     void on_pushButtonColorText_clicked();
-
     void on_pushButtonFont_clicked();
-
     void on_pushButtonColorBound_clicked();
+
+    void on_pushButtonColorBoundText_clicked();
+public slots:
+    void on_pushButtonGo_clicked();
+
+private:
+    int getTypeName();
+    int getTypeFlag();
+    int getTypeHymn();
 
 private:
     Ui::DialogAward *ui;
     QSqlTableModel* model;
     QVector<QRadioButton* > radio;
+    const int tournamentUID;
 };
 
 #endif // DIALOGAWARD_H

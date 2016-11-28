@@ -123,7 +123,26 @@ QVector<std::tuple<int, QString, QColor>> Dialogschedule2::getInfoForRing(
         else if (level == -1)
             color = QColor(Qt::darkBlue);
         else
-            color = QColor("#ff7b6d");
+        {
+            if (level == 0)
+                color = QColor("#FFD700");
+            else if (level == 1)
+                color = QColor("#C0C0C0");
+            else if (level == 2)
+                color = QColor("#cd7f32");
+
+            else if (level == 3)
+                color = QColor("#66CC99");
+            else if (level == 4)
+                color = QColor("#CC33FF");
+            else if (level == 5)
+                color = QColor("#33FF99");
+            else if (level == 6)
+                color = QColor("#999933");
+
+            else
+                color = QColor("#ff7b6d");
+        }
 
         arr << std::make_tuple(cntOccurRows, text, color);
 
@@ -409,7 +428,8 @@ void Dialogschedule2::updateRowsInTable()
 
             item->setData(Qt::UserRole, order);
             item->setBackgroundColor(color);
-            item->setForeground(QBrush(Qt::white));
+            //item->setForeground(QBrush(Qt::white));
+            item->setForeground(QBrush(Utils::getContrastColor(color)));
 
             ui->tableWidget->setItem(currentRow, ring, item);
             if (cntOccurRows != 1)

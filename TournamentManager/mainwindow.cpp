@@ -377,12 +377,11 @@ void MainWindow::on_btn_report_ministr_clicked()
 }
 
 
-
-
-
 void MainWindow::on_pushButtonAward_clicked()
 {
-    DialogAward dlg;
+    this->hide();
+    DialogAward dlg(tournamentUID);
     dlg.showMaximized();
     dlg.exec();
+    this->show();
 }

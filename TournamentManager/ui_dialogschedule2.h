@@ -260,7 +260,10 @@ public:
         horizontalLayout_9->setContentsMargins(0, 0, 0, 0);
         tableWidget = new Dialogschedule2TableWidget(layoutWidget);
         tableWidget->setObjectName(QStringLiteral("tableWidget"));
-        tableWidget->setFocusPolicy(Qt::NoFocus);
+        QFont font;
+        font.setPointSize(9);
+        tableWidget->setFont(font);
+        tableWidget->setFocusPolicy(Qt::StrongFocus);
         tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
         tableWidget->setSelectionMode(QAbstractItemView::SingleSelection);
 

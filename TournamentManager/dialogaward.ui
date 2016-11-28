@@ -6,12 +6,9 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>988</width>
-    <height>615</height>
+    <width>1402</width>
+    <height>644</height>
    </rect>
-  </property>
-  <property name="windowTitle">
-   <string>Dialog</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
@@ -51,7 +48,14 @@
        </widget>
       </item>
       <item row="1" column="0">
-       <widget class="QComboBox" name="comboBoxName"/>
+       <widget class="QComboBox" name="comboBoxName">
+        <property name="minimumSize">
+         <size>
+          <width>200</width>
+          <height>0</height>
+         </size>
+        </property>
+       </widget>
       </item>
       <item row="1" column="2">
        <widget class="QPushButton" name="pushButtonSave">
@@ -72,123 +76,6 @@
       </sizepolicy>
      </property>
      <layout class="QGridLayout" name="gridLayout_3">
-      <item row="0" column="6">
-       <widget class="QGroupBox" name="groupBox_3">
-        <property name="title">
-         <string>Флаг</string>
-        </property>
-        <layout class="QGridLayout" name="gridLayout_6">
-         <item row="0" column="0">
-          <widget class="QRadioButton" name="radioButton_10">
-           <property name="text">
-            <string>Страна</string>
-           </property>
-           <property name="checked">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QRadioButton" name="radioButton_12">
-           <property name="text">
-            <string>Регион</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QRadioButton" name="radioButton_11">
-           <property name="text">
-            <string>Город</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="0">
-          <widget class="QRadioButton" name="radioButton_9">
-           <property name="text">
-            <string>Клуб</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item row="0" column="7">
-       <widget class="QGroupBox" name="groupBox_4">
-        <property name="title">
-         <string>Гимн</string>
-        </property>
-        <layout class="QGridLayout" name="gridLayout_7">
-         <item row="0" column="0">
-          <widget class="QRadioButton" name="radioButton_13">
-           <property name="text">
-            <string>Страна</string>
-           </property>
-           <property name="checked">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QRadioButton" name="radioButton_14">
-           <property name="text">
-            <string>Регион</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QRadioButton" name="radioButton_15">
-           <property name="text">
-            <string>Город</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="0">
-          <widget class="QRadioButton" name="radioButton_16">
-           <property name="text">
-            <string>Клуб</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item row="0" column="3">
-       <widget class="QGroupBox" name="groupBox_5">
-        <property name="title">
-         <string>Настройки</string>
-        </property>
-        <layout class="QGridLayout" name="gridLayout_8">
-         <item row="1" column="0">
-          <widget class="QPushButton" name="pushButtonColorText">
-           <property name="text">
-            <string>Цвет текста</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="0">
-          <widget class="QPushButton" name="pushButtonFont">
-           <property name="text">
-            <string>Шритф</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QPushButton" name="pushButtonColorBound">
-           <property name="text">
-            <string>Цвет обводки флага</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item row="0" column="0">
-       <widget class="QPushButton" name="pushButtonLoadImg">
-        <property name="text">
-         <string>Загрузить картинку...</string>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="5">
        <spacer name="horizontalSpacer_2">
         <property name="orientation">
@@ -201,6 +88,194 @@
          </size>
         </property>
        </spacer>
+      </item>
+      <item row="0" column="9">
+       <widget class="QPushButton" name="pushButtonGo">
+        <property name="text">
+         <string>Выгрузить данные</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <widget class="QGroupBox" name="groupBox_5">
+        <property name="title">
+         <string>Настройки</string>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_8">
+         <item row="2" column="0">
+          <widget class="QPushButton" name="pushButtonColorBoundText">
+           <property name="text">
+            <string>Цвет обводки текста</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QPushButton" name="pushButtonColorBound">
+           <property name="text">
+            <string>Цвет обводки флага</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QPushButton" name="pushButtonColorText">
+           <property name="text">
+            <string>Цвет текста</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QPushButton" name="pushButtonFont">
+           <property name="text">
+            <string>Шритф текста</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="2">
+          <widget class="QSpinBox" name="spinBoxWidthTextBound">
+           <property name="suffix">
+            <string/>
+           </property>
+           <property name="minimum">
+            <number>1</number>
+           </property>
+           <property name="maximum">
+            <number>1000</number>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QLabel" name="label_7">
+           <property name="text">
+            <string>Ширина обводки:</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="0" column="8">
+       <widget class="QGroupBox" name="groupBox_4">
+        <property name="title">
+         <string>Гимн</string>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_7">
+         <item row="0" column="0">
+          <widget class="QRadioButton" name="radioButtonHymnCounty">
+           <property name="text">
+            <string>Страна</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QRadioButton" name="radioButtonHymnRegion">
+           <property name="text">
+            <string>Регион</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QRadioButton" name="radioButtonHymnCity">
+           <property name="text">
+            <string>Город</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QRadioButton" name="radioButtonHymnClub">
+           <property name="text">
+            <string>Клуб</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="0" column="7">
+       <widget class="QGroupBox" name="groupBox_3">
+        <property name="title">
+         <string>Флаг</string>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_6">
+         <item row="0" column="0">
+          <widget class="QRadioButton" name="radioButtonFlagCounty">
+           <property name="text">
+            <string>Страна</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QRadioButton" name="radioButtonFlagRegion">
+           <property name="text">
+            <string>Регион</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QRadioButton" name="radioButtonFlagCity">
+           <property name="text">
+            <string>Город</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QRadioButton" name="radioButtonFlagClub">
+           <property name="text">
+            <string>Клуб</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QGroupBox" name="groupBox_7">
+        <property name="title">
+         <string>Картинка</string>
+        </property>
+        <layout class="QFormLayout" name="formLayout">
+         <item row="0" column="0" colspan="2">
+          <widget class="QPushButton" name="pushButtonLoadImg">
+           <property name="text">
+            <string>Загрузить картинку...</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_5">
+           <property name="text">
+            <string>Ширина</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QLabel" name="labelImageWidth">
+           <property name="text">
+            <string>#</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_6">
+           <property name="text">
+            <string>Высота</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QLabel" name="labelImageHeight">
+           <property name="text">
+            <string>#</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
       </item>
       <item row="0" column="1">
        <widget class="QGroupBox" name="groupBox_6">
@@ -255,7 +330,7 @@
                <string>ФИО 1</string>
               </property>
               <property name="checked">
-               <bool>true</bool>
+               <bool>false</bool>
               </property>
              </widget>
             </item>
@@ -270,6 +345,16 @@
              <widget class="QRadioButton" name="radioButtonName1">
               <property name="text">
                <string>ФИО 2</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QRadioButton" name="radioButtonTC">
+              <property name="text">
+               <string>Весовая категория</string>
+              </property>
+              <property name="checked">
+               <bool>true</bool>
               </property>
              </widget>
             </item>
@@ -313,7 +398,7 @@
             <item row="0" column="1">
              <widget class="QSpinBox" name="spinBoxX">
               <property name="minimum">
-               <number>1</number>
+               <number>0</number>
               </property>
               <property name="maximum">
                <number>100500</number>
@@ -326,7 +411,7 @@
             <item row="1" column="1">
              <widget class="QSpinBox" name="spinBoxY">
               <property name="minimum">
-               <number>1</number>
+               <number>0</number>
               </property>
               <property name="maximum">
                <number>100500</number>
@@ -339,7 +424,7 @@
             <item row="2" column="1">
              <widget class="QSpinBox" name="spinBoxWidth">
               <property name="minimum">
-               <number>1</number>
+               <number>10</number>
               </property>
               <property name="maximum">
                <number>100500</number>
@@ -352,7 +437,7 @@
             <item row="3" column="1">
              <widget class="QSpinBox" name="spinBoxHeight">
               <property name="minimum">
-               <number>1</number>
+               <number>10</number>
               </property>
               <property name="maximum">
                <number>100500</number>
@@ -368,11 +453,44 @@
         </layout>
        </widget>
       </item>
-      <item row="0" column="4">
-       <widget class="QPushButton" name="pushButton">
-        <property name="text">
-         <string>Предосмотр</string>
+      <item row="0" column="6">
+       <widget class="QGroupBox" name="groupBox_8">
+        <property name="title">
+         <string>Название</string>
         </property>
+        <layout class="QGridLayout" name="gridLayout_9">
+         <item row="0" column="0">
+          <widget class="QRadioButton" name="radioButtonNameCounty">
+           <property name="text">
+            <string>Страна</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QRadioButton" name="radioButtonNameRegion">
+           <property name="text">
+            <string>Регион</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QRadioButton" name="radioButtonNameCity">
+           <property name="text">
+            <string>Город</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QRadioButton" name="radioButtonNameClub">
+           <property name="text">
+            <string>Клуб</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </widget>
       </item>
      </layout>
@@ -391,6 +509,38 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>comboBoxName</tabstop>
+  <tabstop>pushButtonNew</tabstop>
+  <tabstop>pushButtonSave</tabstop>
+  <tabstop>pushButtonDelete</tabstop>
+  <tabstop>pushButtonLoadImg</tabstop>
+  <tabstop>radioButtonName0</tabstop>
+  <tabstop>radioButtonName1</tabstop>
+  <tabstop>radioButtonName2</tabstop>
+  <tabstop>radioButtonName3</tabstop>
+  <tabstop>radioButtonFlag0</tabstop>
+  <tabstop>radioButtonFlag1</tabstop>
+  <tabstop>radioButtonFlag2</tabstop>
+  <tabstop>radioButtonFlag3</tabstop>
+  <tabstop>spinBoxX</tabstop>
+  <tabstop>spinBoxY</tabstop>
+  <tabstop>spinBoxWidth</tabstop>
+  <tabstop>spinBoxHeight</tabstop>
+  <tabstop>pushButtonFont</tabstop>
+  <tabstop>pushButtonColorText</tabstop>
+  <tabstop>pushButtonColorBoundText</tabstop>
+  <tabstop>spinBoxWidthTextBound</tabstop>
+  <tabstop>pushButtonColorBound</tabstop>
+  <tabstop>radioButtonFlagCounty</tabstop>
+  <tabstop>radioButtonFlagRegion</tabstop>
+  <tabstop>radioButtonFlagCity</tabstop>
+  <tabstop>radioButtonFlagClub</tabstop>
+  <tabstop>radioButtonHymnCounty</tabstop>
+  <tabstop>radioButtonHymnRegion</tabstop>
+  <tabstop>radioButtonHymnCity</tabstop>
+  <tabstop>radioButtonHymnClub</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

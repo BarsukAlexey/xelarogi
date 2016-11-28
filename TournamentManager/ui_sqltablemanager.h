@@ -14,9 +14,11 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QButtonGroup>
 #include <QtWidgets/QGridLayout>
+#include <QtWidgets/QGroupBox>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QRadioButton>
 #include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QSplitter>
 #include <QtWidgets/QTableView>
@@ -39,6 +41,10 @@ public:
     QPushButton *pushButtonCancel;
     QPushButton *pushButtonInsert;
     QSpacerItem *horizontalSpacer;
+    QGroupBox *groupBox;
+    QHBoxLayout *horizontalLayout_2;
+    QRadioButton *radioButtonSingleSelection;
+    QRadioButton *radioButtonMultiSelection;
     QSpacerItem *horizontalSpacer_2;
     QSpacerItem *horizontalSpacer_3;
     QPushButton *pushButtonDelete;
@@ -48,7 +54,7 @@ public:
     {
         if (SqlTableManager->objectName().isEmpty())
             SqlTableManager->setObjectName(QStringLiteral("SqlTableManager"));
-        SqlTableManager->resize(721, 451);
+        SqlTableManager->resize(815, 444);
         gridLayout = new QGridLayout(SqlTableManager);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
         splitter = new QSplitter(SqlTableManager);
@@ -66,7 +72,7 @@ public:
 
         tableView_2 = new QTableView(layoutWidget);
         tableView_2->setObjectName(QStringLiteral("tableView_2"));
-        tableView_2->setSelectionMode(QAbstractItemView::MultiSelection);
+        tableView_2->setSelectionMode(QAbstractItemView::SingleSelection);
         tableView_2->setSelectionBehavior(QAbstractItemView::SelectRows);
         tableView_2->setSortingEnabled(true);
 
@@ -96,6 +102,24 @@ public:
         horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
         horizontalLayout->addItem(horizontalSpacer);
+
+        groupBox = new QGroupBox(SqlTableManager);
+        groupBox->setObjectName(QStringLiteral("groupBox"));
+        horizontalLayout_2 = new QHBoxLayout(groupBox);
+        horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
+        radioButtonSingleSelection = new QRadioButton(groupBox);
+        radioButtonSingleSelection->setObjectName(QStringLiteral("radioButtonSingleSelection"));
+        radioButtonSingleSelection->setChecked(true);
+
+        horizontalLayout_2->addWidget(radioButtonSingleSelection);
+
+        radioButtonMultiSelection = new QRadioButton(groupBox);
+        radioButtonMultiSelection->setObjectName(QStringLiteral("radioButtonMultiSelection"));
+
+        horizontalLayout_2->addWidget(radioButtonMultiSelection);
+
+
+        horizontalLayout->addWidget(groupBox);
 
         horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
@@ -129,6 +153,9 @@ public:
         pushButtonSave->setText(QApplication::translate("SqlTableManager", "\320\241\320\276\321\205\321\200\320\260\320\275\320\270\321\202\321\214 \320\270\320\267\320\274\320\265\320\275\320\265\320\275\320\270\321\217", 0));
         pushButtonCancel->setText(QApplication::translate("SqlTableManager", "\320\236\321\202\320\272\320\260\321\202\320\270\321\202\321\214 \320\270\320\267\320\274\320\265\320\275\320\265\320\275\320\270\321\217", 0));
         pushButtonInsert->setText(QApplication::translate("SqlTableManager", "\320\224\320\276\320\261\320\260\320\262\320\270\321\202\321\214 \320\275\320\276\320\262\321\203\321\216 \320\267\320\260\320\277\320\270\321\201\321\214", 0));
+        groupBox->setTitle(QString());
+        radioButtonSingleSelection->setText(QApplication::translate("SqlTableManager", "SingleSelection", 0));
+        radioButtonMultiSelection->setText(QApplication::translate("SqlTableManager", "MultiSelection", 0));
         pushButtonDelete->setText(QApplication::translate("SqlTableManager", "\320\243\320\264\320\260\320\273\320\270\321\202\321\214", 0));
         pushButtonSaveInExcel->setText(QApplication::translate("SqlTableManager", "\320\241\320\276\321\205\321\200\320\260\320\275\320\270\321\202\321\214 \320\262 Excel", 0));
         Q_UNUSED(SqlTableManager);

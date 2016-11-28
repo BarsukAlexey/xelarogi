@@ -327,6 +327,7 @@ void FormDipl::onPushPrint()
 
         QPainter painter;
         painter.begin(&printer);
+        painter.setRenderHint(QPainter::Antialiasing);
 
         bool isThisFirstPage = true;
         for (int i = 0; i < UIDOrder.size(); ++i)

@@ -281,8 +281,13 @@
       <layout class="QHBoxLayout" name="horizontalLayout_9">
        <item>
         <widget class="Dialogschedule2TableWidget" name="tableWidget">
+         <property name="font">
+          <font>
+           <pointsize>9</pointsize>
+          </font>
+         </property>
          <property name="focusPolicy">
-          <enum>Qt::NoFocus</enum>
+          <enum>Qt::StrongFocus</enum>
          </property>
          <property name="editTriggers">
           <set>QAbstractItemView::NoEditTriggers</set>

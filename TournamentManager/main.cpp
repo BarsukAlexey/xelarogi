@@ -82,8 +82,8 @@ void connectDB()
 
 
 
-//#include "dialogaward.h"
-#include "SoundPlayer.h"
+//#include "dialogschedule2.h"
+
 
 int main(int argc, char *argv[])
 {
@@ -98,13 +98,18 @@ int main(int argc, char *argv[])
     //auth();
     connectDB();
 
-    SoundPlayer player;
-    player.show();
-//    DialogAward dlg;
+
+//    Dialogschedule2 dlg(21);
+//    dlg.showMaximized();
 //    dlg.exec();
 
-//    MainWindow w;
-//    w.show();
+
+//    DialogAward dlg(21);
+//    dlg.showMaximized();
+//    dlg.exec();
+
+    MainWindow w;
+    w.show();
 
 
     return a.exec();

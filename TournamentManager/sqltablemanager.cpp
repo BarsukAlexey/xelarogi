@@ -87,6 +87,13 @@ QWidget* MyQSqlRelationalDelegate::createEditor(QWidget* parent, const QStyleOpt
     if (QString::compare(field.name(), "UID", Qt::CaseInsensitive) == 0)
         return 0;
 
+    if (QString::compare(field.name(), "HYMN", Qt::CaseInsensitive) == 0)
+    {
+        SoundPlayer* player = new SoundPlayer(parent);
+        player->setRawData(index.data(Qt::EditRole).toByteArray());
+        return player;
+    }
+
     if (QString::compare(field.name(), "FLAG", Qt::CaseInsensitive) == 0)
     {
         QImage img;
@@ -249,6 +256,12 @@ void MyQSqlRelationalDelegate::setModelData(QWidget* editor,
         QString base64Image = imgLoader->getBase64Image();
         sqlModel->setData(index, base64Image, Qt::EditRole);
     }
+    else if (QString::compare(field.name(), "HYMN", Qt::CaseInsensitive) == 0)
+    {
+        SoundPlayer* player = qobject_cast<SoundPlayer *>(editor);
+        QByteArray rawData = player->getRawData();
+        sqlModel->setData(index, rawData, Qt::EditRole);
+    }
     else if (sqlModel->relationModel(index.column()))
     {
         QComboBox *combo = qobject_cast<QComboBox *>(editor);
@@ -371,6 +384,18 @@ void MyQSqlRelationalDelegate::paint(QPainter* painter, const QStyleOptionViewIt
         painter->drawText(option.rect, Qt::AlignVCenter, str);
         return ;
     }
+    else if (QString::compare(field.name(), "HYMN", Qt::CaseInsensitive) == 0)
+    {
+        int size = index.data(Qt::EditRole).toByteArray().size();
+        QString str;
+        if (size) str = "Размер файла: " + QString::number(size / 1024. / 1024., 'f', 3) + " МБ";
+        else str = "Нет гимна";
+        QFontMetrics metrics(painter->font());
+        str = metrics.elidedText(str, Qt::ElideRight, option.rect.width());
+        painter->setPen(Qt::black);
+        painter->drawText(option.rect, Qt::AlignVCenter, str);
+        return ;
+    }
     else
     {
         QItemDelegate::paint(painter, option, index);
@@ -396,6 +421,10 @@ QSize MyQSqlRelationalDelegate::sizeHint(const QStyleOptionViewItem& option, con
     if (QString::compare(sqlModel->record().field(index.column()).name(), "FLAG", Qt::CaseInsensitive) == 0)
     {
         return QSize(300, 100);
+    }
+    if (QString::compare(sqlModel->record().field(index.column()).name(), "HYMN", Qt::CaseInsensitive) == 0)
+    {
+        return QSize(500, 100);
     }
     return QItemDelegate::sizeHint(option, index);
 }
@@ -643,7 +672,8 @@ void SqlTableManager::setSqlTable(const QString& table,
         else
         {
             QLineEdit *edit = new QLineEdit(this);
-            if (model->headerData(i, Qt::Horizontal).toString() == "Флаг")
+            if (model->headerData(i, Qt::Horizontal).toString() == "Флаг" ||
+                model->headerData(i, Qt::Horizontal).toString() == "Гимн")
             {
                 edit->setEnabled(false);
             }
@@ -688,6 +718,9 @@ void SqlTableManager::setSqlTable(const QString& table,
     connect(ui->pushButtonSaveInExcel, &QPushButton::clicked, [this](){
         saveToExcel();
     });
+
+    connect(ui->radioButtonSingleSelection, &QRadioButton::toggled, this, &SqlTableManager::onSelectionModeChanged);
+    connect(ui->radioButtonMultiSelection, &QRadioButton::toggled, this, &SqlTableManager::onSelectionModeChanged);
 }
 
 void SqlTableManager::setFilter(const QString& columnName, const QString& text)
@@ -771,6 +804,15 @@ bool SqlTableManager::submitAllChanges()
     }
 }
 
+void SqlTableManager::onSelectionModeChanged()
+{
+    ui->tableView_2->clearSelection();
+    if (ui->radioButtonSingleSelection->isChecked())
+        ui->tableView_2->setSelectionMode(QAbstractItemView::SingleSelection);
+    else if (ui->radioButtonMultiSelection->isChecked())
+        ui->tableView_2->setSelectionMode(QAbstractItemView::MultiSelection);
+}
+
 
 
 void SqlTableManager::saveToExcel()
@@ -825,6 +867,10 @@ void SqlTableManager::saveToExcel()
                 str = DBUtils::roundDouble(data.toDouble(), 4).replace(".", ",");
             }
             else if (QString::compare(model->record().field(index.column()).name(), "FLAG", Qt::CaseInsensitive) == 0)
+            {
+                str = "";
+            }
+            else if (QString::compare(model->record().field(index.column()).name(), "HYMN", Qt::CaseInsensitive) == 0)
             {
                 str = "";
             }

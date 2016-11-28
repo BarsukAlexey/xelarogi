@@ -18,6 +18,7 @@ void ImageLoader::paintEvent(QPaintEvent* event)
     else
     {
         QPainter painter(this);
+        painter.setRenderHint(QPainter::Antialiasing);
 
         const int delta = 1;
         QRect rect = frameRect().adjusted(delta, delta, -delta, -delta);

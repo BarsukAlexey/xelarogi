@@ -5,21 +5,21 @@
 #include "dialogchosedata.h"
 #include "dialogorderoftc.h"
 
-#include <QAxWidget>
-#include <QGroupBox>
-#include <QRadioButton>
-#include <QObject>
-#include <QDialog>
-#include <QVector>
-#include <QListWidget>
-#include <QPushButton>
-#include <QSpinBox>
 #include <QAxObject>
-#include <QLineEdit>
+#include <QAxWidget>
 #include <QCheckBox>
-#include <QTableWidget>
+#include <QDialog>
+#include <QGroupBox>
+#include <QLineEdit>
+#include <QListWidget>
+#include <QObject>
 #include <QProgressDialog>
+#include <QPushButton>
+#include <QRadioButton>
+#include <QSpinBox>
+#include <QTableWidget>
 #include <QTimer>
+#include <QVector>
 
 
 
@@ -102,8 +102,8 @@ public:
             int tournamentUID
             );
 private:
-    static QString getTextLocal(long long orderUID, int type);
-    static QString getFlagImage(long long orderUID, int type);
+//    static QString getTextLocal(long long orderUID, int type);
+//    static QString getFlagImage(long long orderUID, int type);
     static QJsonObject getQJsonObject(const NodeOfGridWithNames& f, const int fightingId, int typeText, int typeFlag);
 
     std::vector<int> getDurationsOfFightsForChampionship(const QVector<int>& selectedRows);

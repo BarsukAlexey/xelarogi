@@ -6,6 +6,7 @@
 #include <QFont>
 #include <QFontMetrics>
 #include <QDebug>
+#include <QColor>
 
 class Utils
 {
@@ -13,7 +14,8 @@ public:
     static QString getTime(int timeSec);
     static int getAge(QDate birthdayDate, QDate DATE_WEIGHTING);
     static int log2(int x);
-    static int getFontSize(const QString& text, QFont font, const QRect& rect);
+    static void setFontSize(const QString& text, QFont& font, const QRect& taget, QRect& boundRect);
+    static QColor getContrastColor(const QColor& color);
 };
 
 #endif // UTILS_H

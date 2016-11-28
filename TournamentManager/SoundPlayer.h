@@ -1,5 +1,8 @@
+#pragma once
 #include <QWidget>
 #include <QMediaPlayer>
+#include <QBuffer>
+#include <QIODevice>
 
 class QPushButton;
 class QSlider;
@@ -15,6 +18,9 @@ class SoundPlayer : public QWidget {
 
 public:
     SoundPlayer(QWidget* pwgt = 0);
+    QByteArray getRawData();
+    void setRawData(const QByteArray& rawData);
+    ~SoundPlayer();
 
 private:
     QString msecsToString(qint64 n);
@@ -22,6 +28,8 @@ private:
 private:
     QMediaPlayer* mediaPlayer;
     Ui::SoundPlayer* ui;
+    QByteArray blob;
+    QBuffer buffer;
 
 
 
@@ -32,4 +40,5 @@ private slots:
     void slotSetMediaPosition(int);
     void slotSetDuration(qint64             );
     void slotStatusChanged(QMediaPlayer::State);
+    void on_pushButtonDelete_clicked();
 };
