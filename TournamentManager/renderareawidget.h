@@ -39,7 +39,8 @@ private:
     DBUtils::NodeOfTournirGrid selectedNode = noNode;
 
     QVector<DBUtils::NodeOfTournirGrid> nodes;
-    QVector<std::pair<DBUtils::TypeField, QString>> locationData;
+    //QVector<std::pair<DBUtils::TypeField, QString>> locationData;
+    QMap<int, QString> locationPlayer;
 
 public:
     explicit RenderAreaWidget(QWidget *parent = 0, int widthCell = 300, int heightCell = 30);

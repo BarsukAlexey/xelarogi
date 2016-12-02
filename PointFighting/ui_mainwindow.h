@@ -33,6 +33,7 @@ public:
     QAction *actionExport_results;
     QAction *actionAdv;
     QAction *actionSwitch_winner;
+    QAction *actionSwapWinner;
     QWidget *centralWidget;
     QGridLayout *gridLayout;
     QTableWidget *tableWidget;
@@ -55,6 +56,8 @@ public:
         actionAdv->setObjectName(QStringLiteral("actionAdv"));
         actionSwitch_winner = new QAction(MainWindow);
         actionSwitch_winner->setObjectName(QStringLiteral("actionSwitch_winner"));
+        actionSwapWinner = new QAction(MainWindow);
+        actionSwapWinner->setObjectName(QStringLiteral("actionSwapWinner"));
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QStringLiteral("centralWidget"));
         gridLayout = new QGridLayout(centralWidget);
@@ -63,6 +66,9 @@ public:
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
         tableWidget = new QTableWidget(centralWidget);
         tableWidget->setObjectName(QStringLiteral("tableWidget"));
+        QFont font;
+        font.setPointSize(11);
+        tableWidget->setFont(font);
         tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
         tableWidget->setSelectionMode(QAbstractItemView::SingleSelection);
         tableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -94,6 +100,7 @@ public:
         menuData->addAction(actionLoad_data);
         menuData->addAction(actionExport_results);
         menuData->addAction(actionAdv);
+        menuData->addAction(actionSwapWinner);
 
         retranslateUi(MainWindow);
 
@@ -107,6 +114,7 @@ public:
         actionExport_results->setText(QApplication::translate("MainWindow", "Export results...", 0));
         actionAdv->setText(QApplication::translate("MainWindow", "Setting...", 0));
         actionSwitch_winner->setText(QApplication::translate("MainWindow", "Switch winner...", 0));
+        actionSwapWinner->setText(QApplication::translate("MainWindow", "\320\241\320\262\320\260\320\277\320\275\321\203\321\202\321\214 \320\277\320\276\320\261\320\265\320\264\320\270\321\202\320\265\320\273\321\217...", 0));
         pushButtonGo->setText(QApplication::translate("MainWindow", "Go...", 0));
         menuData->setTitle(QApplication::translate("MainWindow", "Settings", 0));
     } // retranslateUi

@@ -17,6 +17,11 @@
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
      <widget class="QTableWidget" name="tableWidget">
+      <property name="font">
+       <font>
+        <pointsize>11</pointsize>
+       </font>
+      </property>
       <property name="editTriggers">
        <set>QAbstractItemView::NoEditTriggers</set>
       </property>
@@ -59,6 +64,7 @@
     <addaction name="actionLoad_data"/>
     <addaction name="actionExport_results"/>
     <addaction name="actionAdv"/>
+    <addaction name="actionSwapWinner"/>
    </widget>
    <addaction name="menuData"/>
   </widget>
@@ -89,6 +95,11 @@
   <action name="actionSwitch_winner">
    <property name="text">
     <string>Switch winner...</string>
+   </property>
+  </action>
+  <action name="actionSwapWinner">
+   <property name="text">
+    <string>Свапнуть победителя...</string>
    </property>
   </action>
  </widget>

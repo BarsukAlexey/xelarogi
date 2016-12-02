@@ -209,7 +209,10 @@ QWidget* MyQSqlRelationalDelegate::createEditor(QWidget* parent, const QStyleOpt
         field.name().compare("BIRTHDATE", Qt::CaseInsensitive) == 0)
     {
         QDateEdit *dateEdit = new QDateEdit(parent);
-        dateEdit->setDate(index.data(Qt::EditRole).toDate());
+        if (!index.data(Qt::EditRole).isNull())
+            dateEdit->setDate(index.data(Qt::EditRole).toDate());
+        else
+            dateEdit->setDate(QDate::currentDate());
         // installEventFilter ???
         return dateEdit;
     }
@@ -808,9 +811,15 @@ void SqlTableManager::onSelectionModeChanged()
 {
     ui->tableView_2->clearSelection();
     if (ui->radioButtonSingleSelection->isChecked())
+    {
         ui->tableView_2->setSelectionMode(QAbstractItemView::SingleSelection);
+        ui->tableView_2->setSelectionBehavior(QAbstractItemView::SelectItems);
+    }
     else if (ui->radioButtonMultiSelection->isChecked())
+    {
         ui->tableView_2->setSelectionMode(QAbstractItemView::MultiSelection);
+        ui->tableView_2->setSelectionBehavior(QAbstractItemView::SelectRows);
+    }
 }
 
 

@@ -5,6 +5,7 @@
 // ----------------------------------------------------------------------
 SoundPlayer::SoundPlayer(QWidget* pwgt) :
     QWidget(pwgt),
+    randomString("trash\\" + QString::number(rand())),
     ui(new Ui::SoundPlayer)
 {
     ui->setupUi(this);
@@ -38,8 +39,15 @@ SoundPlayer::SoundPlayer(QWidget* pwgt) :
     connect(mediaPlayer, SIGNAL(positionChanged(qint64)), SLOT(slotSetSliderPosition(qint64)));
     connect(mediaPlayer, SIGNAL(durationChanged(qint64)), SLOT(slotSetDuration(qint64)));
     connect(mediaPlayer, SIGNAL(stateChanged(QMediaPlayer::State)), SLOT(slotStatusChanged(QMediaPlayer::State)));
+    connect(mediaPlayer, SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)), SLOT(onMediaStatusChanged(QMediaPlayer::MediaStatus)));
 
-    //    slotOpen();
+    connect(mediaPlayer,
+            static_cast<void(QMediaPlayer::*)(QMediaPlayer::Error)>(&QMediaPlayer::error),
+         [=](QMediaPlayer::Error error){
+        qDebug() << "QMediaPlayer::Error "
+                 << error;
+    });
+
 }
 
 QByteArray SoundPlayer::getRawData()
@@ -51,12 +59,24 @@ void SoundPlayer::setRawData(const QByteArray& rawData)
 {
     blob = rawData;
 
-    buffer.close();
-    buffer.setBuffer(&blob);
-    if (!buffer.open(QIODevice::ReadOnly))
-        return;
-
-    mediaPlayer->setMedia(QMediaContent(), &buffer);
+//    buffer.close();
+//    buffer.setBuffer(&blob);
+//    if (!buffer.open(QIODevice::ReadOnly))
+//    {
+//        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << "!buffer.open";
+//        return;
+//    }
+    mediaPlayer->setMedia(QMediaContent());
+    {
+        QFile file(randomString);
+        if (!file.open(QIODevice::WriteOnly))
+            qDebug() << __LINE__ << __PRETTY_FUNCTION__ << "!buffer.open";
+        qDebug() << "I write bites: " << file.write(blob);
+        file.flush();
+        file.close();
+    }
+    mediaPlayer->setMedia(QUrl::fromLocalFile(randomString));
+    //mediaPlayer->setMedia(QMediaContent(), &buffer);
 }
 
 SoundPlayer::~SoundPlayer()
@@ -65,6 +85,8 @@ SoundPlayer::~SoundPlayer()
     settings.setValue("soundplayer/volume", mediaPlayer->volume());
 
     mediaPlayer->stop();
+    mediaPlayer->setMedia(QMediaContent());
+    QFile::remove(randomString);
     delete mediaPlayer;
     delete ui;
 }
@@ -81,6 +103,7 @@ void SoundPlayer::slotOpen()
 
     blob = file.readAll();
     qDebug() << "blob.size():" << blob.size() / 1024. / 1024.;
+
 
     setRawData(blob);
 }
@@ -146,6 +169,22 @@ QString SoundPlayer::msecsToString(qint64 n)
 void SoundPlayer::on_pushButtonDelete_clicked()
 {
     mediaPlayer->setMedia(QMediaContent());
-    buffer.close();
+    //buffer.close();
     blob.clear();
+}
+
+void SoundPlayer::onMediaStatusChanged(QMediaPlayer::MediaStatus status)
+{
+    if (status == QMediaPlayer::LoadedMedia)
+    {
+        qDebug() << "SoundPlayer::onMediaStatusChanged :: LoadedMedia"
+                 << mediaPlayer->errorString();
+
+//        mediaPlayer->setMedia(0,0);
+//        QMediaContent cont = mediaPlayer->currentMedia();
+
+//        QByteArray byteArray;
+//        QDataStream dataStream(&byteArray, QIODevice::WriteOnly);
+//        dataStream << cont;
+    }
 }

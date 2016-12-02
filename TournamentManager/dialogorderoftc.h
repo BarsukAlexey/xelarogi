@@ -50,8 +50,8 @@ public:
     bool moveRows(const QModelIndex &sourceParent, int srcRow, int ,
                   const QModelIndex &destinationParent, int destRow) Q_DECL_OVERRIDE
     {
-        if (srcRow < destRow && uidTC_Level[srcRow].first == uidTC_Level[destRow - 1].first && uidTC_Level[srcRow].second > uidTC_Level[destRow - 1].second ||
-            srcRow > destRow && uidTC_Level[srcRow].first == uidTC_Level[destRow    ].first && uidTC_Level[srcRow].second < uidTC_Level[destRow].second)
+        if ((srcRow < destRow && uidTC_Level[srcRow].first == uidTC_Level[destRow - 1].first && uidTC_Level[srcRow].second > uidTC_Level[destRow - 1].second) ||
+            (srcRow > destRow && uidTC_Level[srcRow].first == uidTC_Level[destRow    ].first && uidTC_Level[srcRow].second < uidTC_Level[destRow].second))
         {
             return false;
         }

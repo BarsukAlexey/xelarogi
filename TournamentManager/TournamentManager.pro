@@ -129,4 +129,5 @@ FORMS +=  logindialog.ui \
 
 DISTFILES +=
 
-RESOURCES +=
+RESOURCES += \
+    imgs.qrc

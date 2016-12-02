@@ -102,7 +102,7 @@ void CreateTournamentOrdersDialog::loadFromExcel()
     {
 
         QAxObject* sheet = sheets->querySubObject("Item(int)", sheetNumber);
-        ExcelUtils::generateDocumentation(sheet, "sheet");
+        //ExcelUtils::generateDocumentation(sheet, "sheet");
 
         QString countryName = ExcelUtils::getValue(sheet, 7, 2);
         if (countryName.isEmpty())

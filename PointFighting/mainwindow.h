@@ -69,6 +69,7 @@ private:
 
 private slots:
     void updateAdvertisement();
+    void onActionSwapWinner();
 
 };
 

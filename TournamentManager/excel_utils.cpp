@@ -99,19 +99,19 @@ void ExcelUtils::setWrapText(QAxObject* sheet, int row, int column)
     delete cell;
 }
 
-void ExcelUtils::generateDocumentation(QAxObject* p, const QString& name)
-{
-    QString localGenerateDocumentation = p->generateDocumentation();
-    QFile file("../" + name + ".html");
-    file.open(QIODevice::WriteOnly);
-    file.write(localGenerateDocumentation.toStdString().c_str());
-    file.close();
+//void ExcelUtils::generateDocumentation(QAxObject* p, const QString& name)
+//{
+//    QString localGenerateDocumentation = p->generateDocumentation();
+//    QFile file("../" + name + ".html");
+//    file.open(QIODevice::WriteOnly);
+//    file.write(localGenerateDocumentation.toStdString().c_str());
+//    file.close();
 
-    //QAxObject *pageSetup = sheet->querySubObject("PageSetup");
-    //sheet->setProperty("FitToPagesWide", 1);
-    //sheet->setProperty("FitToPagesTall", 1);
-    //for (auto x : pageSetup->propertyBag().keys()) qDebug() << x << pageSetup->propertyBag()[x];
-}
+//    //QAxObject *pageSetup = sheet->querySubObject("PageSetup");
+//    //sheet->setProperty("FitToPagesWide", 1);
+//    //sheet->setProperty("FitToPagesTall", 1);
+//    //for (auto x : pageSetup->propertyBag().keys()) qDebug() << x << pageSetup->propertyBag()[x];
+//}
 
 void ExcelUtils::setFontBold(QAxObject* sheet, int row, int column, bool isBold)
 {

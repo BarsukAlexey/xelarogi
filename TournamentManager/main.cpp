@@ -83,10 +83,11 @@ void connectDB()
 
 
 //#include "dialogschedule2.h"
-
+//#include "ebnutvbazu.h"
 
 int main(int argc, char *argv[])
 {
+    srand(time(0));
     qInstallMessageHandler(break_point);
     std::set_terminate(on_terminate);
 
@@ -98,15 +99,8 @@ int main(int argc, char *argv[])
     //auth();
     connectDB();
 
-
-//    Dialogschedule2 dlg(21);
-//    dlg.showMaximized();
-//    dlg.exec();
-
-
-//    DialogAward dlg(21);
-//    dlg.showMaximized();
-//    dlg.exec();
+//    EbnutVBazu::setRandomWinner();
+//    return 0;
 
     MainWindow w;
     w.show();

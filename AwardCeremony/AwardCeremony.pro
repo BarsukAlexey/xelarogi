@@ -14,10 +14,17 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    SoundPlayer.cpp
+    SoundPlayer.cpp \
+    dialogawardpanel.cpp \
+    utils.cpp \
+    qitemdelegateformusiclist.cpp
 
 HEADERS  += mainwindow.h \
-    SoundPlayer.h
+    SoundPlayer.h \
+    dialogawardpanel.h \
+    utils.h \
+    qitemdelegateformusiclist.h
 
 FORMS    += mainwindow.ui \
-    soundplayer.ui
+    soundplayer.ui \
+    dialogawardpanel.ui

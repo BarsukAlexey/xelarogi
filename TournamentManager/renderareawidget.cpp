@@ -25,8 +25,7 @@ QPoint RenderAreaWidget::getCell(int v)
 
 void RenderAreaWidget::paintEvent(QPaintEvent* )
 {
-//    QTime time;
-//    time.start();
+//    QTime time; time.start();
 
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
@@ -170,7 +169,7 @@ void RenderAreaWidget::paintNodeOfGrid(int i, int j, QPainter& painter, const DB
     }
     else
     {
-        QString location = DBUtils::get(locationData, node.UID);
+        QString location = locationPlayer[node.UID];
         if (!location.isEmpty())
             text += " (" + location + ")";
     }
@@ -244,7 +243,11 @@ void RenderAreaWidget::heightChanged(int height)
 
 void RenderAreaWidget::onLocationDataIsChanged(const QVector<std::pair<DBUtils::TypeField, QString> >& locationData)
 {
-    this->locationData = locationData;
+    locationPlayer.clear();
+    for (const DBUtils::NodeOfTournirGrid& node : nodes)
+    {
+        locationPlayer[node.UID] = DBUtils::get(locationData, node.UID);
+    }
     repaint();
 }
 

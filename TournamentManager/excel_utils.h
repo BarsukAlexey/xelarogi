@@ -57,7 +57,7 @@ public:
 
     static void setPageOrientation(QAxObject* sheet, int orientation);
     static void setWrapText(QAxObject* sheet, int row, int column);
-    static void generateDocumentation(QAxObject* p, const QString& name);
+    //static void generateDocumentation(QAxObject* p, const QString& name);
 
     static void setFontBold(QAxObject* sheet, int row, int column, bool isBold);
     static void setFitToPagesWide(QAxObject* sheet, int countPageDown = 100);

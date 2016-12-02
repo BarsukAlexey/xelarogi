@@ -73,6 +73,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    setWindowIcon(QIcon(":/new/prefix1/ANDROID-ikonka.png"));
 
     model = new TournamentModel(this);
     ui->tableViewTournament->setModel(model);

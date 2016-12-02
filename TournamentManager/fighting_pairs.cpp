@@ -421,8 +421,7 @@ void FightingPairs::writeGridsForPointFighting(
         QMessageBox::warning(0, "", "Невозможно сохранить файл " + path);
     }
     else {
-        qint64 localWrite = saveFile.write(QJsonDocument(arr).toJson());
-        //qDebug() << "writing: " << localWrite << "БайТ in " << path;
+        saveFile.write(QJsonDocument(arr).toJson());
     }
     /**/
 }

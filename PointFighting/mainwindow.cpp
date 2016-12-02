@@ -16,22 +16,22 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    while (true)
-    {
-        LoginDialog loginDialog(this);
-        if (loginDialog.exec() == QDialog::Accepted)
-        {
-            break;
-        }
-        if (!LoginDialog::mOkBtnClicked)
-        {
-            exit(0);
-        }
-        else
-        {
-            QMessageBox::warning(this, "Неудачная попытка авторизации", "Логи или пароль введены неверно");
-        }
-    }
+//    while (true)
+//    {
+//        LoginDialog loginDialog(this);
+//        if (loginDialog.exec() == QDialog::Accepted)
+//        {
+//            break;
+//        }
+//        if (!LoginDialog::mOkBtnClicked)
+//        {
+//            exit(0);
+//        }
+//        else
+//        {
+//            QMessageBox::warning(this, "Неудачная попытка авторизации", "Логи или пароль введены неверно");
+//        }
+//    }
 
 
     ui->setupUi(this);
@@ -74,34 +74,6 @@ MainWindow::MainWindow(QWidget *parent) :
     update();
 
     connect(&advTimer, &QTimer::timeout, this, &MainWindow::updateAdvertisement);
-
-//    connect(ui->actionSwitch_winner, &QAction::triggered, [this] () {
-//        if (!ui->tableWidget->selectionModel()->selectedRows().size())
-//        {
-//            QMessageBox::warning(this, "", "Select pair of fighters");
-//            return;
-//        }
-
-//        int row = ui->tableWidget->selectionModel()->selectedRows()[0].row();
-//        bool canStart = ui->tableWidget->item(row, 6)->data(Qt::UserRole).toBool();
-//        if (canStart)
-//            return;
-
-//        QJsonDocument doc = loadJSON(nameSaveFile);
-//        QJsonArray array = doc.array();
-
-//        QJsonObject object = array.at(row).toObject();
-
-//        QString winner = object["winner"];
-//        int winnerUID  = object["orderUID"].toInt();
-//        int realWinner = -1;
-//        if (winnerUID == object["orderUID"].toInt())
-
-////        for (QString key : {VERTEX % 2? "nameOfLeftFighter"    : "nameOfRightFighter",
-////                            VERTEX % 2? "orderUID_left"        : "orderUID_right",
-////                            VERTEX % 2? "regionOfLeftFighter"  : "regionOfRightFighter",
-////                            VERTEX % 2? "leftFlag"             : "rightFlag"})
-//    });
 
     connect(ui->actionLoad_data, &QAction::triggered, [this] () {
         QString path = QFileDialog::getOpenFileName(this);
@@ -173,7 +145,7 @@ MainWindow::MainWindow(QWidget *parent) :
         bool canStart = ui->tableWidget->item(row, 6)->data(Qt::UserRole).toBool();
         if (!canStart)
         {
-            QMessageBox::warning(this, "", "Played");
+            QMessageBox::warning(this, "", "Played!");
             return;
         }
 
@@ -290,6 +262,7 @@ MainWindow::MainWindow(QWidget *parent) :
     });
 
 
+    connect(ui->actionSwapWinner, &QAction::triggered, this, &MainWindow::onActionSwapWinner);
 
 }
 
@@ -374,6 +347,7 @@ void MainWindow::update()
         ui->tableWidget->setItem(i, column++, new QTableWidgetItem(QString::number(object["DURATION_EXTRA_ROUND"].toInt())));
     }
     ui->tableWidget->resizeColumnsToContents();
+    ui->tableWidget->resizeRowsToContents();
 }
 
 
@@ -422,4 +396,113 @@ void MainWindow::updateAdvertisement()
     {
         f->setImage(img);
     }
+}
+
+void MainWindow::onActionSwapWinner()
+{
+    if (!ui->tableWidget->selectionModel()->selectedRows().size())
+    {
+        QMessageBox::warning(this, "", "Select pair of fighters");
+        return;
+    }
+
+    int row = ui->tableWidget->selectionModel()->selectedRows()[0].row();
+
+    QJsonArray jsonArray = loadJSON(nameSaveFile).array();
+    QJsonObject object = jsonArray.at(row).toObject();
+
+    bool canStart = ui->tableWidget->item(row, 6)->data(Qt::UserRole).toBool();
+    if (canStart || object["orderUID"].isNull())
+    {
+        QMessageBox::warning(this, "", "No winner");
+        return;
+    }
+
+    const QJsonValue TOURNAMENT_CATEGORIES_FK = object["TOURNAMENT_CATEGORIES_FK"];
+    QSet<int> vertex;
+    {
+        int VERTEX = object["VERTEX"].toInt();
+        for (VERTEX /= 2; 0 < VERTEX; VERTEX /= 2)
+            vertex << VERTEX;
+    }
+
+
+    QJsonValue old_orderUID = object["orderUID"];
+    QJsonValue new_orderUID;
+    QJsonValue new_winner;
+    QJsonValue new_region;
+    QJsonValue new_flag;
+    if (object["orderUID"] == object["orderUID_left"])
+    {
+        new_orderUID = object["orderUID_right"];
+        new_winner   = object["nameOfRightFighter"];
+        new_region   = object["regionOfRightFighter"];
+        new_flag     = object["rightFlag"];
+    }
+    else if (object["orderUID"] == object["orderUID_right"])
+    {
+        new_orderUID = object["orderUID_left"];
+        new_winner   = object["nameOfLeftFighter"];
+        new_region   = object["regionOfLeftFighter"];
+        new_flag     = object["leftFlag"];
+    }
+    else
+    {
+        QMessageBox::warning(0, "", "Something bad =)");
+        return;
+    }
+
+    object["orderUID"] = new_orderUID;
+    object["winner"]   = new_winner;
+    jsonArray[row] = object;
+
+
+    for (int i = 0; i < jsonArray.size(); ++i)
+    {
+        object = jsonArray[i].toObject();
+//        qDebug() << i << old_orderUID << new_orderUID << "  cur:" << object["orderUID"]
+//                 << vertex
+//                 << object["VERTEX"].toInt()
+//                 << vertex.contains(object["VERTEX"].toInt());
+        if (TOURNAMENT_CATEGORIES_FK == object["TOURNAMENT_CATEGORIES_FK"] &&
+            vertex.contains(object["VERTEX"].toInt()) &&
+            (object["orderUID_left"]  == old_orderUID ||
+             object["orderUID_right"] == old_orderUID)
+            )
+        {
+//            qDebug() << "FIND!!" << row;
+            if      (old_orderUID == object["orderUID_left"])
+            {
+                object["orderUID_left"]       = new_orderUID;
+                object["nameOfLeftFighter"]   = new_winner;
+                object["regionOfLeftFighter"] = new_region;
+                object["leftFlag"]            = new_flag;
+            }
+            else if (old_orderUID == object["orderUID_right"])
+            {
+                object["orderUID_right"]       = new_orderUID;
+                object["nameOfRightFighter"]   = new_winner;
+                object["regionOfRightFighter"] = new_region;
+                object["rightFlag"]            = new_flag;
+            }
+            else
+            {
+                QMessageBox::warning(0, "", "Something bad =)");
+                return;
+            }
+            if (!object["orderUID"].isNull())
+            {
+                object["orderUID"] = new_orderUID;
+                object["winner"]   = new_winner;
+            }
+            jsonArray[i] = object;
+        }
+    }
+
+    QFile saveFile(nameSaveFile);
+    saveFile.open(QIODevice::WriteOnly);
+    saveFile.write(QJsonDocument(jsonArray).toJson());
+    saveFile.close();
+
+    update();
 }

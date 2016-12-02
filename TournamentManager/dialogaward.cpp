@@ -132,7 +132,7 @@ void DialogAwardWidget::onRectTextChanged(int row, const QRect& rect)
     repaint();
 }
 
-void DialogAwardWidget::paintEvent(QPaintEvent* event)
+void DialogAwardWidget::paintEvent(QPaintEvent* /*event*/)
 {
     //QTime t; t.start();
     //qDebug() << event->rect() << event->region();

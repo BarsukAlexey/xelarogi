@@ -7,6 +7,7 @@ FormDipl::FormDipl(long long UID_tournament, QWidget *parent) :
     UID_tournament(UID_tournament)
 {
     ui->setupUi(this);
+    setWindowFlags(Qt::Window);
 
     for (int i = 0; i < 16; ++i)
        ui->comboBoxMaxPlace->addItem(QString::number(1 << i));

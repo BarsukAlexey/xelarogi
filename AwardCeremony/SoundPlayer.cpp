@@ -5,6 +5,7 @@
 // ----------------------------------------------------------------------
 SoundPlayer::SoundPlayer(QWidget* pwgt) :
     QWidget(pwgt),
+    randomString("trash\\" + QString::number(rand())),
     ui(new Ui::SoundPlayer)
 {
     ui->setupUi(this);
@@ -28,7 +29,7 @@ SoundPlayer::SoundPlayer(QWidget* pwgt) :
     mediaPlayer->setVolume(volume);
     ui->sliderVolume->setValue(volume);
 
-    connect(ui->pushButtonOpen, SIGNAL(clicked()), SLOT(slotOpen()));
+    //connect(ui->pushButtonOpen, SIGNAL(clicked()), SLOT(slotOpen()));
     connect(ui->pushButtonPlay, SIGNAL(clicked()), SLOT(slotPlay()));
     connect(ui->pushButtonStop, SIGNAL(clicked()), mediaPlayer, SLOT(stop()));
     connect(ui->sliderVolume, SIGNAL(valueChanged(int)), mediaPlayer, SLOT(setVolume(int)));
@@ -38,6 +39,8 @@ SoundPlayer::SoundPlayer(QWidget* pwgt) :
     connect(mediaPlayer, SIGNAL(positionChanged(qint64)), SLOT(slotSetSliderPosition(qint64)));
     connect(mediaPlayer, SIGNAL(durationChanged(qint64)), SLOT(slotSetDuration(qint64)));
     connect(mediaPlayer, SIGNAL(stateChanged(QMediaPlayer::State)), SLOT(slotStatusChanged(QMediaPlayer::State)));
+    connect(mediaPlayer, SIGNAL(mediaStatusChanged(QMediaPlayer::MediaStatus)), SLOT(onMediaStatusChanged(QMediaPlayer::MediaStatus)));
+
 
     //    slotOpen();
 }
@@ -47,16 +50,50 @@ QByteArray SoundPlayer::getRawData()
     return blob;
 }
 
-void SoundPlayer::setRawData(const QByteArray& rawData)
+void SoundPlayer::loadMusic(const QString& path, bool startPlay)
 {
-    blob = rawData;
-
-    buffer.close();
-    buffer.setBuffer(&blob);
-    if (!buffer.open(QIODevice::ReadOnly))
+    QFile file(path);
+    if (!file.open(QIODevice::ReadOnly))
         return;
 
-    mediaPlayer->setMedia(QMediaContent(), &buffer);
+    ui->labelPath->setText(QFileInfo(file.fileName()).fileName());
+
+    blob = file.readAll();
+    setRawData(blob, startPlay);
+}
+
+void SoundPlayer::setRawData(const QByteArray& rawData, bool startPlay)
+{
+//    blob = rawData;
+
+//    buffer.close();
+//    buffer.setBuffer(&blob);
+//    if (!buffer.open(QIODevice::ReadOnly))
+//        return;
+
+//    mediaPlayer->setMedia(QMediaContent(), &buffer);
+//    if (startPlay)
+//    {
+//        mediaPlayer->play();
+//        emit iPlayMusic();
+//    }
+
+    blob = rawData;
+    mediaPlayer->setMedia(QMediaContent());
+    {
+        QFile file(randomString);
+        if (!file.open(QIODevice::WriteOnly))
+            qDebug() << __LINE__ << __PRETTY_FUNCTION__ << "!buffer.open";
+        qDebug() << "I write bites: " << file.write(blob);
+        file.flush();
+        file.close();
+    }
+    mediaPlayer->setMedia(QUrl::fromLocalFile(randomString));
+    if (startPlay)
+    {
+        mediaPlayer->play();
+        emit iPlayMusic();
+    }
 }
 
 SoundPlayer::~SoundPlayer()
@@ -67,6 +104,17 @@ SoundPlayer::~SoundPlayer()
     mediaPlayer->stop();
     delete mediaPlayer;
     delete ui;
+}
+
+QSize SoundPlayer::sizeHint() const
+{
+    //qDebug() << "sizeHint";
+    return QSize(300, 100);
+}
+
+void SoundPlayer::setTitle(const QString& text)
+{
+    ui->labelPath->setText(text);
 }
 
 void SoundPlayer::slotOpen()
@@ -95,7 +143,10 @@ void SoundPlayer::slotPlay()
         break;
         default:
             if (blob.size())
+            {
                 mediaPlayer->play();
+                emit iPlayMusic();
+            }
         break;
     }
 }
@@ -114,13 +165,28 @@ void SoundPlayer::slotSetDuration(qint64 n)
 
 void SoundPlayer::slotStatusChanged(QMediaPlayer::State state)
 {
-    switch(state) {
-    case QMediaPlayer::PlayingState:
-        ui->pushButtonPlay->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
-        break;
-    default:
-        ui->pushButtonPlay->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
-        break;
+    switch(state)
+    {
+        case QMediaPlayer::PlayingState:
+            ui->pushButtonPlay->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
+            break;
+        default:
+            ui->pushButtonPlay->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
+            break;
+    }
+}
+
+void SoundPlayer::onMediaStatusChanged(QMediaPlayer::MediaStatus status)
+{
+    if (status == QMediaPlayer::EndOfMedia)
+        emit giveMeNextMusic();
+}
+
+void SoundPlayer::onSomePlayerStarPlayMusic()
+{
+    if (mediaPlayer->state() == QMediaPlayer::PlayingState)
+    {
+        mediaPlayer->pause();
     }
 }
 
@@ -143,9 +209,9 @@ QString SoundPlayer::msecsToString(qint64 n)
 }
 
 
-void SoundPlayer::on_pushButtonDelete_clicked()
-{
-    mediaPlayer->setMedia(QMediaContent());
-    buffer.close();
-    blob.clear();
-}
+//void SoundPlayer::on_pushButtonDelete_clicked()
+//{
+//    mediaPlayer->setMedia(QMediaContent());
+//    buffer.close();
+//    blob.clear();
+//}

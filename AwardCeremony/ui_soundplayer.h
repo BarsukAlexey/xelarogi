@@ -28,32 +28,25 @@ class Ui_SoundPlayer
 public:
     QGridLayout *gridLayout;
     QHBoxLayout *horizontalLayout;
-    QPushButton *pushButtonOpen;
     QPushButton *pushButtonPlay;
     QPushButton *pushButtonStop;
-    QPushButton *pushButtonDelete;
-    QSlider *sliderVolume;
+    QLabel *labelPath;
     QHBoxLayout *horizontalLayout_2;
     QLabel *labelCurrent;
     QSlider *sliderPosition;
     QLabel *labelRemain;
-    QLabel *labelPath;
+    QSlider *sliderVolume;
 
     void setupUi(QWidget *SoundPlayer)
     {
         if (SoundPlayer->objectName().isEmpty())
             SoundPlayer->setObjectName(QStringLiteral("SoundPlayer"));
-        SoundPlayer->resize(324, 154);
+        SoundPlayer->resize(583, 289);
         SoundPlayer->setAutoFillBackground(true);
         gridLayout = new QGridLayout(SoundPlayer);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
         horizontalLayout = new QHBoxLayout();
         horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
-        pushButtonOpen = new QPushButton(SoundPlayer);
-        pushButtonOpen->setObjectName(QStringLiteral("pushButtonOpen"));
-
-        horizontalLayout->addWidget(pushButtonOpen);
-
         pushButtonPlay = new QPushButton(SoundPlayer);
         pushButtonPlay->setObjectName(QStringLiteral("pushButtonPlay"));
 
@@ -64,19 +57,13 @@ public:
 
         horizontalLayout->addWidget(pushButtonStop);
 
-        pushButtonDelete = new QPushButton(SoundPlayer);
-        pushButtonDelete->setObjectName(QStringLiteral("pushButtonDelete"));
-
-        horizontalLayout->addWidget(pushButtonDelete);
-
-        sliderVolume = new QSlider(SoundPlayer);
-        sliderVolume->setObjectName(QStringLiteral("sliderVolume"));
-        sliderVolume->setOrientation(Qt::Vertical);
-
-        horizontalLayout->addWidget(sliderVolume);
-
 
         gridLayout->addLayout(horizontalLayout, 1, 0, 1, 1);
+
+        labelPath = new QLabel(SoundPlayer);
+        labelPath->setObjectName(QStringLiteral("labelPath"));
+
+        gridLayout->addWidget(labelPath, 0, 0, 1, 1);
 
         horizontalLayout_2 = new QHBoxLayout();
         horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
@@ -99,10 +86,11 @@ public:
 
         gridLayout->addLayout(horizontalLayout_2, 2, 0, 1, 1);
 
-        labelPath = new QLabel(SoundPlayer);
-        labelPath->setObjectName(QStringLiteral("labelPath"));
+        sliderVolume = new QSlider(SoundPlayer);
+        sliderVolume->setObjectName(QStringLiteral("sliderVolume"));
+        sliderVolume->setOrientation(Qt::Vertical);
 
-        gridLayout->addWidget(labelPath, 0, 0, 1, 1);
+        gridLayout->addWidget(sliderVolume, 0, 1, 3, 1);
 
 
         retranslateUi(SoundPlayer);
@@ -113,13 +101,11 @@ public:
     void retranslateUi(QWidget *SoundPlayer)
     {
         SoundPlayer->setWindowTitle(QApplication::translate("SoundPlayer", "Form", 0));
-        pushButtonOpen->setText(QApplication::translate("SoundPlayer", "Open", 0));
         pushButtonPlay->setText(QString());
         pushButtonStop->setText(QString());
-        pushButtonDelete->setText(QApplication::translate("SoundPlayer", "\320\243\320\264\320\260\320\273\320\270\321\202\321\214", 0));
+        labelPath->setText(QApplication::translate("SoundPlayer", "#", 0));
         labelCurrent->setText(QApplication::translate("SoundPlayer", "TextLabel", 0));
         labelRemain->setText(QApplication::translate("SoundPlayer", "TextLabel", 0));
-        labelPath->setText(QApplication::translate("SoundPlayer", "#", 0));
     } // retranslateUi
 
 };
