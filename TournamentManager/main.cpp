@@ -25,7 +25,7 @@ void break_point(QtMsgType msgType, const QMessageLogContext &, const QString &m
 
 void on_terminate()
 {
-    qDebug() << "on_terminate";
+    std::cerr << "on_terminate";
     return ;
 }
 
@@ -84,6 +84,8 @@ void connectDB()
 
 //#include "dialogschedule2.h"
 //#include "ebnutvbazu.h"
+#include "dialogtournamentgrid.h"
+
 
 int main(int argc, char *argv[])
 {
@@ -99,8 +101,8 @@ int main(int argc, char *argv[])
     //auth();
     connectDB();
 
-//    EbnutVBazu::setRandomWinner();
-//    return 0;
+//    DialogTournamentGrid dlg(0, "", 21);
+//    dlg.show();
 
     MainWindow w;
     w.show();

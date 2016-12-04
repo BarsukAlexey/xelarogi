@@ -9,7 +9,7 @@ RenderAreaWidget::RenderAreaWidget(QWidget *parent, int widthCell, int heightCel
     widthCell(widthCell),
     heightCell(heightCell)
 {
-    setNormalSize();
+    resizeWidgetAccordingToGrid();
 }
 
 
@@ -21,6 +21,8 @@ QPoint RenderAreaWidget::getCell(int v)
     p.setX(p.x() + 1);
     return p;
 }
+
+
 
 
 void RenderAreaWidget::paintEvent(QPaintEvent* )
@@ -194,7 +196,7 @@ void RenderAreaWidget::paintLine(const QPoint& aa, const QPoint& bb, QPainter& p
 }
 
 
-void RenderAreaWidget::setNormalSize()
+void RenderAreaWidget::resizeWidgetAccordingToGrid()
 {
     if (nodes.isEmpty())
     {
@@ -223,32 +225,41 @@ void RenderAreaWidget::tournamentCategoryIsChanged(int tournamentCategory)
         nodes.clear();
     else
         nodes = DBUtils::getNodes(tournamentCategory);
-    setNormalSize();
+    resizeWidgetAccordingToGrid();
+    //QTime t; t.start();
+    updateLocationPlayer();
+    //qDebug() << "tournamentCategoryIsChanged:" << t.elapsed();
     repaint();
 }
 
 void RenderAreaWidget::widthChanged(int width)
 {
     widthCell = width;
-    setNormalSize();
+    resizeWidgetAccordingToGrid();
     repaint();
 }
 
 void RenderAreaWidget::heightChanged(int height)
 {
     heightCell = height;
-    setNormalSize();
+    resizeWidgetAccordingToGrid();
     repaint();
 }
 
 void RenderAreaWidget::onLocationDataIsChanged(const QVector<std::pair<DBUtils::TypeField, QString> >& locationData)
+{
+    this->locationData = locationData;
+    updateLocationPlayer();
+    repaint();
+}
+
+void RenderAreaWidget::updateLocationPlayer()
 {
     locationPlayer.clear();
     for (const DBUtils::NodeOfTournirGrid& node : nodes)
     {
         locationPlayer[node.UID] = DBUtils::get(locationData, node.UID);
     }
-    repaint();
 }
 
 void RenderAreaWidget::onFontSizeChanged(const int fontSize)
@@ -321,8 +332,6 @@ void RenderAreaWidget::printTableGridInExcel(QAxObject* workbook, DialogChoseDat
 
     for (const DBUtils::NodeOfTournirGrid& node : nodes)
     {
-        //QApplication::processEvents(); TODO
-
         QPoint p = getCell(node.v, countColumns);
 
         maxRow    = qMax(maxRow   , p.x() + 1 + offset);

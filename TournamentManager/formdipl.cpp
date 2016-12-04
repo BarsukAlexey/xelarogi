@@ -278,7 +278,8 @@ void FormDipl::onPushPrint()
     //QString dirPath = "C:\\Trash";
     if (dirPath.isEmpty()) return;
 
-    QVector<long long> localGet_UIDs_of_TOURNAMENT_CATEGORIES = DBUtils::getTournamentCategoryUIDs(UID_tournament);
+    QVector<long long> localGet_UIDs_of_TOURNAMENT_CATEGORIES =
+            DBUtils::getTournamentCategoryUIDs(UID_tournament);
 
     //QProgressDialog progress("Working...", "Don't push", 0, localGet_UIDs_of_TOURNAMENT_CATEGORIES.size(), this);
     QProgressDialog progress(this);

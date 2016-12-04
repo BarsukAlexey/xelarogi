@@ -26,6 +26,8 @@ public:
 
     static void copyTable(QString table);
 
+    static void testMakeGrid();
+
 };
 
 #endif // EBNUTVBAZU_H

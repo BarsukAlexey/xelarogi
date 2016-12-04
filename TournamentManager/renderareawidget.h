@@ -41,6 +41,7 @@ private:
     QVector<DBUtils::NodeOfTournirGrid> nodes;
     //QVector<std::pair<DBUtils::TypeField, QString>> locationData;
     QMap<int, QString> locationPlayer;
+    QVector<std::pair<DBUtils::TypeField, QString> > locationData;
 
 public:
     explicit RenderAreaWidget(QWidget *parent = 0, int widthCell = 300, int heightCell = 30);
@@ -52,8 +53,9 @@ protected:
 private:
     void paintNodeOfGrid(int i, int j, QPainter& painter, const DBUtils::NodeOfTournirGrid& node);
     void paintLine(const QPoint& , const QPoint& , QPainter& painter);
-    void setNormalSize();
+    void resizeWidgetAccordingToGrid();
     QPoint getCell(int v);
+    void updateLocationPlayer();
 
 signals:
     void iChangeToutGrid();

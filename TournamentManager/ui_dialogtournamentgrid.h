@@ -42,7 +42,14 @@ public:
     QGridLayout *gridLayout;
     QSplitter *splitter;
     QWidget *widget;
+    QVBoxLayout *verticalLayout_2;
+    QPushButton *pushButtonShowHide;
+    QWidget *widgetSettings;
     QVBoxLayout *verticalLayout;
+    QHBoxLayout *horizontalLayout_7;
+    QPushButton *buttonSave;
+    QPushButton *buttonSaveAll;
+    QSpacerItem *horizontalSpacer;
     QHBoxLayout *horizontalLayout;
     QGroupBox *groupBox;
     QHBoxLayout *horizontalLayout_2;
@@ -50,7 +57,23 @@ public:
     QRadioButton *radioButtonLonly;
     QRadioButton *radioButtonInvalid;
     QRadioButton *radioButtonInvalidTurn;
-    QSpacerItem *horizontalSpacer_3;
+    QSpacerItem *horizontalSpacer_6;
+    QHBoxLayout *horizontalLayout_4;
+    QGroupBox *groupBox_5;
+    QGridLayout *gridLayout_2;
+    QLabel *label_3;
+    QSpinBox *spinBoxFontSizeOfOrders;
+    QSpinBox *spinBoxFontSizeOfNodeOfGrid;
+    QSpinBox *spinBoxWidth;
+    QSpinBox *spinBoxHeight;
+    QLabel *label_6;
+    QLabel *label;
+    QLabel *label_5;
+    QLabel *label_4;
+    QSpinBox *spinBoxFontSizeOfTC;
+    QSpinBox *spinBoxFontSizeOfListOfPairs;
+    QLabel *label_2;
+    QSpacerItem *horizontalSpacer_5;
     QHBoxLayout *horizontalLayout_5;
     QGroupBox *groupBox_2;
     QHBoxLayout *horizontalLayout_3;
@@ -58,31 +81,23 @@ public:
     QCheckBox *checkBoxRegion;
     QCheckBox *checkBoxCity;
     QCheckBox *checkBoxClub;
-    QGroupBox *groupBox_5;
-    QGridLayout *gridLayout_6;
-    QSpinBox *spinBoxFontSizeOfOrders;
-    QSpinBox *spinBoxHeight;
-    QSpinBox *spinBoxWidth;
-    QSpinBox *spinBoxFontSizeOfTC;
-    QSpinBox *spinBoxFontSizeOfListOfPairs;
-    QSpinBox *spinBoxFontSizeOfNodeOfGrid;
-    QLabel *label;
-    QLabel *label_2;
-    QLabel *label_3;
-    QLabel *label_4;
-    QLabel *label_5;
-    QLabel *label_6;
-    QSpacerItem *horizontalSpacer;
+    QSpacerItem *horizontalSpacer_4;
+    QHBoxLayout *horizontalLayout_6;
+    QGroupBox *groupBox_3;
+    QHBoxLayout *horizontalLayout_8;
+    QRadioButton *radioButtonSeparateCountry;
+    QRadioButton *radioButtonSeparateRegion;
+    QRadioButton *radioButtonSeparateCity;
+    QRadioButton *radioButtonSeparateClub;
+    QSpacerItem *horizontalSpacer_3;
     QLineEdit *filterCategoriesLE;
     QComboBox *qComboBoxSelectCategory;
     QTableWidget *qTableWidget;
-    QHBoxLayout *horizontalLayout_4;
-    QPushButton *buttonGenerate;
+    QGridLayout *gridLayout_5;
     QPushButton *buttonGenerateAll;
     QPushButton *buttonDelete;
     QPushButton *buttonDeleteAll;
-    QPushButton *buttonSave;
-    QPushButton *buttonSaveAll;
+    QPushButton *buttonGenerate;
     QSpacerItem *horizontalSpacer_2;
     QTabWidget *qTabWidget;
     QWidget *tab;
@@ -97,7 +112,7 @@ public:
     {
         if (DialogTournamentGrid->objectName().isEmpty())
             DialogTournamentGrid->setObjectName(QStringLiteral("DialogTournamentGrid"));
-        DialogTournamentGrid->resize(1371, 610);
+        DialogTournamentGrid->resize(1371, 688);
         gridLayout = new QGridLayout(DialogTournamentGrid);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
         splitter = new QSplitter(DialogTournamentGrid);
@@ -105,17 +120,54 @@ public:
         splitter->setOrientation(Qt::Horizontal);
         widget = new QWidget(splitter);
         widget->setObjectName(QStringLiteral("widget"));
-        verticalLayout = new QVBoxLayout(widget);
+        verticalLayout_2 = new QVBoxLayout(widget);
+        verticalLayout_2->setObjectName(QStringLiteral("verticalLayout_2"));
+        pushButtonShowHide = new QPushButton(widget);
+        pushButtonShowHide->setObjectName(QStringLiteral("pushButtonShowHide"));
+        pushButtonShowHide->setCheckable(true);
+        pushButtonShowHide->setAutoDefault(false);
+
+        verticalLayout_2->addWidget(pushButtonShowHide);
+
+        widgetSettings = new QWidget(widget);
+        widgetSettings->setObjectName(QStringLiteral("widgetSettings"));
+        verticalLayout = new QVBoxLayout(widgetSettings);
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
-        horizontalLayout = new QHBoxLayout();
-        horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
-        groupBox = new QGroupBox(widget);
-        groupBox->setObjectName(QStringLiteral("groupBox"));
-        QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+        horizontalLayout_7 = new QHBoxLayout();
+        horizontalLayout_7->setObjectName(QStringLiteral("horizontalLayout_7"));
+        buttonSave = new QPushButton(widgetSettings);
+        buttonSave->setObjectName(QStringLiteral("buttonSave"));
+        QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
-        sizePolicy.setHeightForWidth(groupBox->sizePolicy().hasHeightForWidth());
-        groupBox->setSizePolicy(sizePolicy);
+        sizePolicy.setHeightForWidth(buttonSave->sizePolicy().hasHeightForWidth());
+        buttonSave->setSizePolicy(sizePolicy);
+
+        horizontalLayout_7->addWidget(buttonSave);
+
+        buttonSaveAll = new QPushButton(widgetSettings);
+        buttonSaveAll->setObjectName(QStringLiteral("buttonSaveAll"));
+        sizePolicy.setHeightForWidth(buttonSaveAll->sizePolicy().hasHeightForWidth());
+        buttonSaveAll->setSizePolicy(sizePolicy);
+
+        horizontalLayout_7->addWidget(buttonSaveAll);
+
+        horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_7->addItem(horizontalSpacer);
+
+
+        verticalLayout->addLayout(horizontalLayout_7);
+
+        horizontalLayout = new QHBoxLayout();
+        horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
+        groupBox = new QGroupBox(widgetSettings);
+        groupBox->setObjectName(QStringLiteral("groupBox"));
+        QSizePolicy sizePolicy1(QSizePolicy::Preferred, QSizePolicy::Preferred);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(0);
+        sizePolicy1.setHeightForWidth(groupBox->sizePolicy().hasHeightForWidth());
+        groupBox->setSizePolicy(sizePolicy1);
         horizontalLayout_2 = new QHBoxLayout(groupBox);
         horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
         radioButtonAll = new QRadioButton(groupBox);
@@ -142,16 +194,111 @@ public:
 
         horizontalLayout->addWidget(groupBox);
 
-        horizontalSpacer_3 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+        horizontalSpacer_6 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-        horizontalLayout->addItem(horizontalSpacer_3);
+        horizontalLayout->addItem(horizontalSpacer_6);
 
 
         verticalLayout->addLayout(horizontalLayout);
 
+        horizontalLayout_4 = new QHBoxLayout();
+        horizontalLayout_4->setObjectName(QStringLiteral("horizontalLayout_4"));
+        groupBox_5 = new QGroupBox(widgetSettings);
+        groupBox_5->setObjectName(QStringLiteral("groupBox_5"));
+        gridLayout_2 = new QGridLayout(groupBox_5);
+        gridLayout_2->setObjectName(QStringLiteral("gridLayout_2"));
+        label_3 = new QLabel(groupBox_5);
+        label_3->setObjectName(QStringLiteral("label_3"));
+
+        gridLayout_2->addWidget(label_3, 0, 2, 1, 1);
+
+        spinBoxFontSizeOfOrders = new QSpinBox(groupBox_5);
+        spinBoxFontSizeOfOrders->setObjectName(QStringLiteral("spinBoxFontSizeOfOrders"));
+        spinBoxFontSizeOfOrders->setMinimum(1);
+        spinBoxFontSizeOfOrders->setMaximum(228);
+        spinBoxFontSizeOfOrders->setValue(9);
+
+        gridLayout_2->addWidget(spinBoxFontSizeOfOrders, 1, 1, 1, 1);
+
+        spinBoxFontSizeOfNodeOfGrid = new QSpinBox(groupBox_5);
+        spinBoxFontSizeOfNodeOfGrid->setObjectName(QStringLiteral("spinBoxFontSizeOfNodeOfGrid"));
+        spinBoxFontSizeOfNodeOfGrid->setMinimum(1);
+        spinBoxFontSizeOfNodeOfGrid->setMaximum(228);
+        spinBoxFontSizeOfNodeOfGrid->setValue(9);
+
+        gridLayout_2->addWidget(spinBoxFontSizeOfNodeOfGrid, 1, 2, 1, 1);
+
+        spinBoxWidth = new QSpinBox(groupBox_5);
+        spinBoxWidth->setObjectName(QStringLiteral("spinBoxWidth"));
+        spinBoxWidth->setMinimum(1);
+        spinBoxWidth->setMaximum(3000);
+        spinBoxWidth->setSingleStep(5);
+        spinBoxWidth->setValue(300);
+
+        gridLayout_2->addWidget(spinBoxWidth, 1, 3, 1, 1);
+
+        spinBoxHeight = new QSpinBox(groupBox_5);
+        spinBoxHeight->setObjectName(QStringLiteral("spinBoxHeight"));
+        spinBoxHeight->setMinimum(1);
+        spinBoxHeight->setMaximum(3000);
+        spinBoxHeight->setValue(30);
+
+        gridLayout_2->addWidget(spinBoxHeight, 1, 4, 1, 1);
+
+        label_6 = new QLabel(groupBox_5);
+        label_6->setObjectName(QStringLiteral("label_6"));
+
+        gridLayout_2->addWidget(label_6, 0, 5, 1, 1);
+
+        label = new QLabel(groupBox_5);
+        label->setObjectName(QStringLiteral("label"));
+
+        gridLayout_2->addWidget(label, 0, 0, 1, 1);
+
+        label_5 = new QLabel(groupBox_5);
+        label_5->setObjectName(QStringLiteral("label_5"));
+
+        gridLayout_2->addWidget(label_5, 0, 4, 1, 1);
+
+        label_4 = new QLabel(groupBox_5);
+        label_4->setObjectName(QStringLiteral("label_4"));
+
+        gridLayout_2->addWidget(label_4, 0, 3, 1, 1);
+
+        spinBoxFontSizeOfTC = new QSpinBox(groupBox_5);
+        spinBoxFontSizeOfTC->setObjectName(QStringLiteral("spinBoxFontSizeOfTC"));
+        spinBoxFontSizeOfTC->setMinimum(1);
+        spinBoxFontSizeOfTC->setMaximum(228);
+        spinBoxFontSizeOfTC->setValue(8);
+
+        gridLayout_2->addWidget(spinBoxFontSizeOfTC, 1, 0, 1, 1);
+
+        spinBoxFontSizeOfListOfPairs = new QSpinBox(groupBox_5);
+        spinBoxFontSizeOfListOfPairs->setObjectName(QStringLiteral("spinBoxFontSizeOfListOfPairs"));
+        spinBoxFontSizeOfListOfPairs->setMinimum(1);
+        spinBoxFontSizeOfListOfPairs->setMaximum(228);
+        spinBoxFontSizeOfListOfPairs->setValue(9);
+
+        gridLayout_2->addWidget(spinBoxFontSizeOfListOfPairs, 1, 5, 1, 1);
+
+        label_2 = new QLabel(groupBox_5);
+        label_2->setObjectName(QStringLiteral("label_2"));
+
+        gridLayout_2->addWidget(label_2, 0, 1, 1, 1);
+
+
+        horizontalLayout_4->addWidget(groupBox_5);
+
+        horizontalSpacer_5 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_4->addItem(horizontalSpacer_5);
+
+
+        verticalLayout->addLayout(horizontalLayout_4);
+
         horizontalLayout_5 = new QHBoxLayout();
         horizontalLayout_5->setObjectName(QStringLiteral("horizontalLayout_5"));
-        groupBox_2 = new QGroupBox(widget);
+        groupBox_2 = new QGroupBox(widgetSettings);
         groupBox_2->setObjectName(QStringLiteral("groupBox_2"));
         horizontalLayout_3 = new QHBoxLayout(groupBox_2);
         horizontalLayout_3->setObjectName(QStringLiteral("horizontalLayout_3"));
@@ -178,110 +325,64 @@ public:
 
         horizontalLayout_5->addWidget(groupBox_2);
 
-        groupBox_5 = new QGroupBox(widget);
-        groupBox_5->setObjectName(QStringLiteral("groupBox_5"));
-        gridLayout_6 = new QGridLayout(groupBox_5);
-        gridLayout_6->setObjectName(QStringLiteral("gridLayout_6"));
-        spinBoxFontSizeOfOrders = new QSpinBox(groupBox_5);
-        spinBoxFontSizeOfOrders->setObjectName(QStringLiteral("spinBoxFontSizeOfOrders"));
-        spinBoxFontSizeOfOrders->setMinimum(1);
-        spinBoxFontSizeOfOrders->setMaximum(228);
-        spinBoxFontSizeOfOrders->setValue(9);
+        horizontalSpacer_4 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-        gridLayout_6->addWidget(spinBoxFontSizeOfOrders, 1, 1, 1, 1);
-
-        spinBoxHeight = new QSpinBox(groupBox_5);
-        spinBoxHeight->setObjectName(QStringLiteral("spinBoxHeight"));
-        spinBoxHeight->setMinimum(1);
-        spinBoxHeight->setMaximum(3000);
-        spinBoxHeight->setValue(30);
-
-        gridLayout_6->addWidget(spinBoxHeight, 1, 4, 1, 1);
-
-        spinBoxWidth = new QSpinBox(groupBox_5);
-        spinBoxWidth->setObjectName(QStringLiteral("spinBoxWidth"));
-        spinBoxWidth->setMinimum(1);
-        spinBoxWidth->setMaximum(3000);
-        spinBoxWidth->setSingleStep(5);
-        spinBoxWidth->setValue(300);
-
-        gridLayout_6->addWidget(spinBoxWidth, 1, 3, 1, 1);
-
-        spinBoxFontSizeOfTC = new QSpinBox(groupBox_5);
-        spinBoxFontSizeOfTC->setObjectName(QStringLiteral("spinBoxFontSizeOfTC"));
-        spinBoxFontSizeOfTC->setMinimum(1);
-        spinBoxFontSizeOfTC->setMaximum(228);
-        spinBoxFontSizeOfTC->setValue(8);
-
-        gridLayout_6->addWidget(spinBoxFontSizeOfTC, 1, 0, 1, 1);
-
-        spinBoxFontSizeOfListOfPairs = new QSpinBox(groupBox_5);
-        spinBoxFontSizeOfListOfPairs->setObjectName(QStringLiteral("spinBoxFontSizeOfListOfPairs"));
-        spinBoxFontSizeOfListOfPairs->setMinimum(1);
-        spinBoxFontSizeOfListOfPairs->setMaximum(228);
-        spinBoxFontSizeOfListOfPairs->setValue(9);
-
-        gridLayout_6->addWidget(spinBoxFontSizeOfListOfPairs, 1, 5, 1, 1);
-
-        spinBoxFontSizeOfNodeOfGrid = new QSpinBox(groupBox_5);
-        spinBoxFontSizeOfNodeOfGrid->setObjectName(QStringLiteral("spinBoxFontSizeOfNodeOfGrid"));
-        spinBoxFontSizeOfNodeOfGrid->setMinimum(1);
-        spinBoxFontSizeOfNodeOfGrid->setMaximum(228);
-        spinBoxFontSizeOfNodeOfGrid->setValue(9);
-
-        gridLayout_6->addWidget(spinBoxFontSizeOfNodeOfGrid, 1, 2, 1, 1);
-
-        label = new QLabel(groupBox_5);
-        label->setObjectName(QStringLiteral("label"));
-
-        gridLayout_6->addWidget(label, 0, 0, 1, 1);
-
-        label_2 = new QLabel(groupBox_5);
-        label_2->setObjectName(QStringLiteral("label_2"));
-
-        gridLayout_6->addWidget(label_2, 0, 1, 1, 1);
-
-        label_3 = new QLabel(groupBox_5);
-        label_3->setObjectName(QStringLiteral("label_3"));
-
-        gridLayout_6->addWidget(label_3, 0, 2, 1, 1);
-
-        label_4 = new QLabel(groupBox_5);
-        label_4->setObjectName(QStringLiteral("label_4"));
-
-        gridLayout_6->addWidget(label_4, 0, 3, 1, 1);
-
-        label_5 = new QLabel(groupBox_5);
-        label_5->setObjectName(QStringLiteral("label_5"));
-
-        gridLayout_6->addWidget(label_5, 0, 4, 1, 1);
-
-        label_6 = new QLabel(groupBox_5);
-        label_6->setObjectName(QStringLiteral("label_6"));
-
-        gridLayout_6->addWidget(label_6, 0, 5, 1, 1);
-
-
-        horizontalLayout_5->addWidget(groupBox_5);
-
-        horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        horizontalLayout_5->addItem(horizontalSpacer);
+        horizontalLayout_5->addItem(horizontalSpacer_4);
 
 
         verticalLayout->addLayout(horizontalLayout_5);
 
+        horizontalLayout_6 = new QHBoxLayout();
+        horizontalLayout_6->setObjectName(QStringLiteral("horizontalLayout_6"));
+        groupBox_3 = new QGroupBox(widgetSettings);
+        groupBox_3->setObjectName(QStringLiteral("groupBox_3"));
+        horizontalLayout_8 = new QHBoxLayout(groupBox_3);
+        horizontalLayout_8->setObjectName(QStringLiteral("horizontalLayout_8"));
+        radioButtonSeparateCountry = new QRadioButton(groupBox_3);
+        radioButtonSeparateCountry->setObjectName(QStringLiteral("radioButtonSeparateCountry"));
+        radioButtonSeparateCountry->setChecked(true);
+
+        horizontalLayout_8->addWidget(radioButtonSeparateCountry);
+
+        radioButtonSeparateRegion = new QRadioButton(groupBox_3);
+        radioButtonSeparateRegion->setObjectName(QStringLiteral("radioButtonSeparateRegion"));
+
+        horizontalLayout_8->addWidget(radioButtonSeparateRegion);
+
+        radioButtonSeparateCity = new QRadioButton(groupBox_3);
+        radioButtonSeparateCity->setObjectName(QStringLiteral("radioButtonSeparateCity"));
+
+        horizontalLayout_8->addWidget(radioButtonSeparateCity);
+
+        radioButtonSeparateClub = new QRadioButton(groupBox_3);
+        radioButtonSeparateClub->setObjectName(QStringLiteral("radioButtonSeparateClub"));
+
+        horizontalLayout_8->addWidget(radioButtonSeparateClub);
+
+
+        horizontalLayout_6->addWidget(groupBox_3);
+
+        horizontalSpacer_3 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_6->addItem(horizontalSpacer_3);
+
+
+        verticalLayout->addLayout(horizontalLayout_6);
+
+
+        verticalLayout_2->addWidget(widgetSettings);
+
         filterCategoriesLE = new QLineEdit(widget);
         filterCategoriesLE->setObjectName(QStringLiteral("filterCategoriesLE"));
 
-        verticalLayout->addWidget(filterCategoriesLE);
+        verticalLayout_2->addWidget(filterCategoriesLE);
 
         qComboBoxSelectCategory = new QComboBox(widget);
         qComboBoxSelectCategory->setObjectName(QStringLiteral("qComboBoxSelectCategory"));
         qComboBoxSelectCategory->setEditable(false);
         qComboBoxSelectCategory->setMaxVisibleItems(300);
 
-        verticalLayout->addWidget(qComboBoxSelectCategory);
+        verticalLayout_2->addWidget(qComboBoxSelectCategory);
 
         qTableWidget = new QTableWidget(widget);
         if (qTableWidget->columnCount() < 4)
@@ -299,61 +400,44 @@ public:
         qTableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
         qTableWidget->setSelectionMode(QAbstractItemView::NoSelection);
 
-        verticalLayout->addWidget(qTableWidget);
+        verticalLayout_2->addWidget(qTableWidget);
 
-        horizontalLayout_4 = new QHBoxLayout();
-        horizontalLayout_4->setObjectName(QStringLiteral("horizontalLayout_4"));
-        buttonGenerate = new QPushButton(widget);
-        buttonGenerate->setObjectName(QStringLiteral("buttonGenerate"));
-        QSizePolicy sizePolicy1(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        sizePolicy1.setHorizontalStretch(0);
-        sizePolicy1.setVerticalStretch(0);
-        sizePolicy1.setHeightForWidth(buttonGenerate->sizePolicy().hasHeightForWidth());
-        buttonGenerate->setSizePolicy(sizePolicy1);
-
-        horizontalLayout_4->addWidget(buttonGenerate);
-
+        gridLayout_5 = new QGridLayout();
+        gridLayout_5->setObjectName(QStringLiteral("gridLayout_5"));
         buttonGenerateAll = new QPushButton(widget);
         buttonGenerateAll->setObjectName(QStringLiteral("buttonGenerateAll"));
-        sizePolicy1.setHeightForWidth(buttonGenerateAll->sizePolicy().hasHeightForWidth());
-        buttonGenerateAll->setSizePolicy(sizePolicy1);
+        sizePolicy.setHeightForWidth(buttonGenerateAll->sizePolicy().hasHeightForWidth());
+        buttonGenerateAll->setSizePolicy(sizePolicy);
 
-        horizontalLayout_4->addWidget(buttonGenerateAll);
+        gridLayout_5->addWidget(buttonGenerateAll, 0, 1, 1, 1);
 
         buttonDelete = new QPushButton(widget);
         buttonDelete->setObjectName(QStringLiteral("buttonDelete"));
-        sizePolicy1.setHeightForWidth(buttonDelete->sizePolicy().hasHeightForWidth());
-        buttonDelete->setSizePolicy(sizePolicy1);
+        sizePolicy.setHeightForWidth(buttonDelete->sizePolicy().hasHeightForWidth());
+        buttonDelete->setSizePolicy(sizePolicy);
 
-        horizontalLayout_4->addWidget(buttonDelete);
+        gridLayout_5->addWidget(buttonDelete, 0, 3, 1, 1);
 
         buttonDeleteAll = new QPushButton(widget);
         buttonDeleteAll->setObjectName(QStringLiteral("buttonDeleteAll"));
-        sizePolicy1.setHeightForWidth(buttonDeleteAll->sizePolicy().hasHeightForWidth());
-        buttonDeleteAll->setSizePolicy(sizePolicy1);
+        sizePolicy.setHeightForWidth(buttonDeleteAll->sizePolicy().hasHeightForWidth());
+        buttonDeleteAll->setSizePolicy(sizePolicy);
 
-        horizontalLayout_4->addWidget(buttonDeleteAll);
+        gridLayout_5->addWidget(buttonDeleteAll, 0, 4, 1, 1);
 
-        buttonSave = new QPushButton(widget);
-        buttonSave->setObjectName(QStringLiteral("buttonSave"));
-        sizePolicy1.setHeightForWidth(buttonSave->sizePolicy().hasHeightForWidth());
-        buttonSave->setSizePolicy(sizePolicy1);
+        buttonGenerate = new QPushButton(widget);
+        buttonGenerate->setObjectName(QStringLiteral("buttonGenerate"));
+        sizePolicy.setHeightForWidth(buttonGenerate->sizePolicy().hasHeightForWidth());
+        buttonGenerate->setSizePolicy(sizePolicy);
 
-        horizontalLayout_4->addWidget(buttonSave);
-
-        buttonSaveAll = new QPushButton(widget);
-        buttonSaveAll->setObjectName(QStringLiteral("buttonSaveAll"));
-        sizePolicy1.setHeightForWidth(buttonSaveAll->sizePolicy().hasHeightForWidth());
-        buttonSaveAll->setSizePolicy(sizePolicy1);
-
-        horizontalLayout_4->addWidget(buttonSaveAll);
+        gridLayout_5->addWidget(buttonGenerate, 0, 0, 1, 1);
 
         horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-        horizontalLayout_4->addItem(horizontalSpacer_2);
+        gridLayout_5->addItem(horizontalSpacer_2, 0, 2, 1, 1);
 
 
-        verticalLayout->addLayout(horizontalLayout_4);
+        verticalLayout_2->addLayout(gridLayout_5);
 
         splitter->addWidget(widget);
         qTabWidget = new QTabWidget(splitter);
@@ -372,7 +456,7 @@ public:
         scrollArea->setAlignment(Qt::AlignCenter);
         pRenderArea = new RenderAreaWidget();
         pRenderArea->setObjectName(QStringLiteral("pRenderArea"));
-        pRenderArea->setGeometry(QRect(64, 118, 252, 348));
+        pRenderArea->setGeometry(QRect(115, 157, 252, 348));
         scrollArea->setWidget(pRenderArea);
 
         gridLayout_3->addWidget(scrollArea, 0, 0, 1, 1);
@@ -427,9 +511,7 @@ public:
         QWidget::setTabOrder(buttonGenerate, buttonGenerateAll);
         QWidget::setTabOrder(buttonGenerateAll, buttonDelete);
         QWidget::setTabOrder(buttonDelete, buttonDeleteAll);
-        QWidget::setTabOrder(buttonDeleteAll, buttonSave);
-        QWidget::setTabOrder(buttonSave, buttonSaveAll);
-        QWidget::setTabOrder(buttonSaveAll, qTabWidget);
+        QWidget::setTabOrder(buttonDeleteAll, qTabWidget);
         QWidget::setTabOrder(qTabWidget, scrollArea);
         QWidget::setTabOrder(scrollArea, tableWidgeRight);
 
@@ -444,23 +526,31 @@ public:
     void retranslateUi(QDialog *DialogTournamentGrid)
     {
         DialogTournamentGrid->setWindowTitle(QApplication::translate("DialogTournamentGrid", "\320\241\320\265\321\202\320\272\320\270", 0));
+        pushButtonShowHide->setText(QApplication::translate("DialogTournamentGrid", "\320\237\320\276\320\272\320\260\320\267\320\260\321\202\321\214/\321\201\320\272\321\200\321\213\321\202\321\214 \320\275\320\260\321\201\321\202\321\200\320\276\320\271\320\272\320\270", 0));
+        buttonSave->setText(QApplication::translate("DialogTournamentGrid", "Save as Excel", 0));
+        buttonSaveAll->setText(QApplication::translate("DialogTournamentGrid", "Save all as Excel", 0));
         groupBox->setTitle(QApplication::translate("DialogTournamentGrid", "\320\244\320\270\320\273\321\214\321\202\321\200 \321\201\320\265\321\202\320\276\320\272", 0));
         radioButtonAll->setText(QApplication::translate("DialogTournamentGrid", "\320\222\321\201\320\265", 0));
         radioButtonLonly->setText(QApplication::translate("DialogTournamentGrid", "\320\236\320\264\320\270\320\275", 0));
         radioButtonInvalid->setText(QApplication::translate("DialogTournamentGrid", "\320\240\320\260\320\267\320\275\321\213\320\265 \321\203\321\207\320\260\321\201\321\202\320\275\320\270\320\272\320\270", 0));
         radioButtonInvalidTurn->setText(QApplication::translate("DialogTournamentGrid", "\320\235\320\265\320\267\320\260\320\277\320\276\320\273\320\275\320\265\320\275\320\275\321\213\320\265 \320\272\321\200\321\203\320\263\320\270", 0));
-        groupBox_2->setTitle(QString());
+        groupBox_5->setTitle(QApplication::translate("DialogTournamentGrid", "\320\235\320\260\321\201\321\202\321\200\320\276\320\271\320\272\320\270", 0));
+        label_3->setText(QApplication::translate("DialogTournamentGrid", "\320\241\320\265\321\202\320\272\320\260", 0));
+        label_6->setText(QApplication::translate("DialogTournamentGrid", "\320\237\320\260\321\200\321\213", 0));
+        label->setText(QApplication::translate("DialogTournamentGrid", "\320\232\320\260\321\202\320\265\320\263.", 0));
+        label_5->setText(QApplication::translate("DialogTournamentGrid", "\320\222\321\213\321\201\320\276\321\202\320\260", 0));
+        label_4->setText(QApplication::translate("DialogTournamentGrid", "\320\250\320\270\321\200\320\270\320\275\320\260", 0));
+        label_2->setText(QApplication::translate("DialogTournamentGrid", "\320\243\321\207\320\260\321\201\321\202\320\275.", 0));
+        groupBox_2->setTitle(QApplication::translate("DialogTournamentGrid", "\320\237\320\276\320\272\320\260\320\267\321\213\320\262\320\260\321\202\321\214", 0));
         checkBoxCountry->setText(QApplication::translate("DialogTournamentGrid", "\320\241\321\202\321\200\320\260\320\275\320\260", 0));
         checkBoxRegion->setText(QApplication::translate("DialogTournamentGrid", "\320\240\320\265\320\263\320\270\320\276\320\275", 0));
         checkBoxCity->setText(QApplication::translate("DialogTournamentGrid", "\320\223\320\276\321\200\320\276\320\264", 0));
         checkBoxClub->setText(QApplication::translate("DialogTournamentGrid", "\320\232\320\273\321\203\320\261", 0));
-        groupBox_5->setTitle(QString());
-        label->setText(QApplication::translate("DialogTournamentGrid", "\320\232\320\260\321\202\320\265\320\263.", 0));
-        label_2->setText(QApplication::translate("DialogTournamentGrid", "\320\243\321\207\320\260\321\201\321\202\320\275.", 0));
-        label_3->setText(QApplication::translate("DialogTournamentGrid", "\320\241\320\265\321\202\320\272\320\260", 0));
-        label_4->setText(QApplication::translate("DialogTournamentGrid", "\320\250\320\270\321\200\320\270\320\275\320\260", 0));
-        label_5->setText(QApplication::translate("DialogTournamentGrid", "\320\222\321\213\321\201\320\276\321\202\320\260", 0));
-        label_6->setText(QApplication::translate("DialogTournamentGrid", "\320\237\320\260\321\200\321\213", 0));
+        groupBox_3->setTitle(QApplication::translate("DialogTournamentGrid", "\320\240\320\260\320\267\320\262\320\276\320\264", 0));
+        radioButtonSeparateCountry->setText(QApplication::translate("DialogTournamentGrid", "\320\241\321\202\321\200\320\260\320\275\320\260", 0));
+        radioButtonSeparateRegion->setText(QApplication::translate("DialogTournamentGrid", "\320\240\320\265\320\263\320\270\320\276\320\275", 0));
+        radioButtonSeparateCity->setText(QApplication::translate("DialogTournamentGrid", "\320\223\320\276\321\200\320\276\320\264", 0));
+        radioButtonSeparateClub->setText(QApplication::translate("DialogTournamentGrid", "\320\232\320\273\321\203\320\261", 0));
         filterCategoriesLE->setInputMask(QString());
         filterCategoriesLE->setPlaceholderText(QString());
         QTableWidgetItem *___qtablewidgetitem = qTableWidget->horizontalHeaderItem(0);
@@ -471,12 +561,10 @@ public:
         ___qtablewidgetitem2->setText(QApplication::translate("DialogTournamentGrid", "\320\237\321\200\320\270\320\276\321\200\320\270\321\202\320\265\321\202", 0));
         QTableWidgetItem *___qtablewidgetitem3 = qTableWidget->horizontalHeaderItem(3);
         ___qtablewidgetitem3->setText(QApplication::translate("DialogTournamentGrid", "\320\240\320\260\320\267\321\200\321\217\320\264", 0));
-        buttonGenerate->setText(QApplication::translate("DialogTournamentGrid", "\320\241\320\276\320\267\320\264\320\260\321\202\321\214", 0));
         buttonGenerateAll->setText(QApplication::translate("DialogTournamentGrid", "\320\241\320\276\320\267\320\264\320\260\321\202\321\214 \320\262\321\201\321\221", 0));
         buttonDelete->setText(QApplication::translate("DialogTournamentGrid", "\320\243\320\264\320\260\320\273\320\270\321\202\321\214", 0));
         buttonDeleteAll->setText(QApplication::translate("DialogTournamentGrid", "\320\243\320\264\320\260\320\273\320\270\321\202\321\214 \320\262\321\201\321\221", 0));
-        buttonSave->setText(QApplication::translate("DialogTournamentGrid", "Save as Excel", 0));
-        buttonSaveAll->setText(QApplication::translate("DialogTournamentGrid", "Save all as Excel", 0));
+        buttonGenerate->setText(QApplication::translate("DialogTournamentGrid", "\320\241\320\276\320\267\320\264\320\260\321\202\321\214", 0));
         qTabWidget->setTabText(qTabWidget->indexOf(tab), QApplication::translate("DialogTournamentGrid", "\320\241\320\265\321\202\320\272\320\260", 0));
         QTableWidgetItem *___qtablewidgetitem4 = tableWidgeRight->horizontalHeaderItem(0);
         ___qtablewidgetitem4->setText(QApplication::translate("DialogTournamentGrid", "\320\241\320\277\320\276\321\200\321\202\321\201\320\274\320\265\320\275 A", 0));

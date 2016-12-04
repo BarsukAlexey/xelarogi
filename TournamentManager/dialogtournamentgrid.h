@@ -3,8 +3,8 @@
 
 #include "dialogchosedata.h"
 #include "renderareawidget.h"
-#include "createtournamentordersdialog.h"
 #include "utils.h"
+#include "createtournamentordersdialog.h"
 
 #include <algorithm>
 #include <assert.h>
@@ -49,6 +49,11 @@
 #include <time.h>
 #include <utility>
 
+#include <set>
+#include <vector>
+#include "superstruct.h"
+using namespace std;
+
 
 namespace Ui {
 class DialogTournamentGrid;
@@ -66,24 +71,13 @@ public:
      }
 };
 
+
 class DialogTournamentGrid : public QDialog
 {
     Q_OBJECT
 
 private:
-    struct RegionRandomOrders
-    {
-        long long region;
-        long long random_number;
-        QVector<long long> orderUIDs;
 
-        bool operator < (const RegionRandomOrders& a) const
-        {
-            if (orderUIDs.size() != a.orderUIDs.size()) return orderUIDs.size() > a.orderUIDs.size();
-            if (random_number    != a.random_number   ) return random_number    < a.random_number;
-            return region < a.region;
-        }
-    };
 
 private:
     Ui::DialogTournamentGrid *ui;
@@ -97,14 +91,16 @@ public:
     explicit DialogTournamentGrid(QWidget *parent, QString filter, long long tournamentUID);
     ~DialogTournamentGrid();
 
+
+    static void generatGrid(const long long tournamentUID, const long long tournamentCaterotyUID, QVector<long long> bestFighters, const int separate);
 private:
-    static void generatGrid(const long long tournamentUID, const long long tournamentCaterotyUID, QVector<long long> bestFighters);
     static void deleteGrid (const long long uidTC);
     QString getLocation(const int orderUID);
     QVector<std::pair<DBUtils::TypeField, QString>> getLocationData();
 
     void fillListOfOrders();
     void fillListOfPairs();
+    int getLocationForSeparate();
 
 
 
@@ -133,6 +129,10 @@ private slots:
     void onCheckBoxesChangeState();
 
 
+
+
+
+    void on_pushButtonShowHide_clicked(bool checked);
 
 signals:
 

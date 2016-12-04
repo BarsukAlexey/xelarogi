@@ -16,20 +16,21 @@ TEMPLATE = app
 LIBS     += libgdi32
 
 
-SOURCES += main.cpp \
-    logindialog.cpp \
-    db_utils.cpp \
+SOURCES += db_utils.cpp \
     utils.cpp \
-    ebnutvbazu.cpp \
-    excel_utils.cpp \
-    dialog_change_category.cpp \
+    superstruct.cpp \
+    main.cpp \
     dialogtournamentgrid.cpp \
-    dialogselectfieldsfordimloma.cpp \
+    logindialog.cpp \
     dialogchosedata.cpp \
     renderareawidget.cpp \
     renderarearesultdialog.cpp \
+    excel_utils.cpp \
+    dialogselectfieldsfordimloma.cpp \
     createtournamentordersdialog.cpp \
     sqltablemanager.cpp \
+    ebnutvbazu.cpp \
+    dialog_change_category.cpp \
     dialogsqltablemanager.cpp \
     imageloaderwidget.cpp \
     errormessagesdialog.cpp \
@@ -58,19 +59,21 @@ SOURCES += main.cpp \
 
 
 
-HEADERS  += logindialog.h \
-    db_utils.h \
+
+HEADERS  += db_utils.h \
     utils.h \
-    ebnutvbazu.h \
-    excel_utils.h \
-    dialog_change_category.h \
+    superstruct.h \
     dialogtournamentgrid.h \
+    logindialog.h \
     dialogchosedata.h \
-    dialogselectfieldsfordimloma.h \
     renderareawidget.h \
     renderarearesultdialog.h \
+    excel_utils.h \
+    dialogselectfieldsfordimloma.h \
     createtournamentordersdialog.h \
     sqltablemanager.h \
+    ebnutvbazu.h \
+    dialog_change_category.h \
     dialogsqltablemanager.h \
     imageloaderwidget.h \
     errormessagesdialog.h \
@@ -99,12 +102,13 @@ HEADERS  += logindialog.h \
 
 
 
+
 FORMS +=  logindialog.ui \
     dialogchangecategory.ui \
     dialogtournamentgrid.ui \
-    dialogselectfieldsfordimloma.ui \
     dialogchosedata.ui \
     renderarearesultdialog.ui \
+    dialogselectfieldsfordimloma.ui \
     createtournamentordersdialog.ui \
     sqltablemanager.ui \
     dialogsqltablemanager.ui \

@@ -13,6 +13,7 @@ DialogTournamentGrid::DialogTournamentGrid(QWidget *parent, QString filter, long
     setWindowFlags(Qt::Window);
 
     QSettings settings;
+    settings.beginGroup("DialogTournamentGrid");
     ui->spinBoxFontSizeOfTC->setValue(settings.value("spinBoxFontSizeOfTC",ui->spinBoxFontSizeOfTC->value()).toInt());
     ui->spinBoxFontSizeOfOrders->setValue(settings.value("spinBoxFontSizeOfOrders",ui->spinBoxFontSizeOfOrders->value()).toInt());
     ui->spinBoxFontSizeOfNodeOfGrid->setValue(settings.value("spinBoxFontSizeOfNodeOfGrid",ui->spinBoxFontSizeOfNodeOfGrid->value()).toInt());
@@ -20,12 +21,17 @@ DialogTournamentGrid::DialogTournamentGrid(QWidget *parent, QString filter, long
     ui->spinBoxHeight->setValue(settings.value("spinBoxHeight", ui->spinBoxHeight->value()).toInt());
     ui->spinBoxFontSizeOfListOfPairs->setValue(settings.value("spinBoxFontSizeOfListOfPairs", ui->spinBoxFontSizeOfListOfPairs->value()).toInt());
 
-    ui->checkBoxCountry->setChecked(settings.value("DialogTournamentGrid/checkBoxCountry").toBool());
-    ui->checkBoxRegion->setChecked(settings.value("DialogTournamentGrid/checkBoxRegion").toBool());
-    ui->checkBoxCity->setChecked(settings.value("DialogTournamentGrid/checkBoxCity").toBool());
-    ui->checkBoxClub->setChecked(settings.value("DialogTournamentGrid/checkBoxClub").toBool());
+    ui->checkBoxCountry->setChecked(settings.value("checkBoxCountry").toBool());
+    ui->checkBoxRegion->setChecked(settings.value("checkBoxRegion").toBool());
+    ui->checkBoxCity->setChecked(settings.value("checkBoxCity").toBool());
+    ui->checkBoxClub->setChecked(settings.value("checkBoxClub").toBool());
 
-    ui->splitter->restoreState(settings.value("DialogTournamentGrid/splitterSizes").toByteArray());
+    ui->splitter->restoreState(settings.value("splitterSizes").toByteArray());
+
+    ui->radioButtonSeparateCountry->setChecked(settings.value("radioButtonSeparateCountry").toBool());
+    ui->radioButtonSeparateRegion ->setChecked(settings.value("radioButtonSeparateRegion").toBool());
+    ui->radioButtonSeparateCity   ->setChecked(settings.value("radioButtonSeparateCity").toBool());
+    ui->radioButtonSeparateClub   ->setChecked(settings.value("radioButtonSeparateClub").toBool());
 
 
     onSpinBoxFontSizeChangedOfTournamentCategory(ui->spinBoxFontSizeOfTC->value());
@@ -80,6 +86,8 @@ DialogTournamentGrid::~DialogTournamentGrid()
 {
     QSettings settings;
 
+    settings.beginGroup("DialogTournamentGrid");
+
     settings.setValue("spinBoxFontSizeOfTC",ui->spinBoxFontSizeOfTC->value());
     settings.setValue("spinBoxFontSizeOfOrders",ui->spinBoxFontSizeOfOrders->value());
     settings.setValue("spinBoxFontSizeOfNodeOfGrid",ui->spinBoxFontSizeOfNodeOfGrid->value());
@@ -88,20 +96,30 @@ DialogTournamentGrid::~DialogTournamentGrid()
     settings.setValue("spinBoxFontSizeOfListOfPairs",ui->spinBoxFontSizeOfListOfPairs->value());
 
 
-    settings.setValue("DialogTournamentGrid/checkBoxCountry", ui->checkBoxCountry->isChecked());
-    settings.setValue("DialogTournamentGrid/checkBoxRegion", ui->checkBoxRegion->isChecked());
-    settings.setValue("DialogTournamentGrid/checkBoxCity", ui->checkBoxCity->isChecked());
-    settings.setValue("DialogTournamentGrid/checkBoxClub", ui->checkBoxClub->isChecked());
+    settings.setValue("checkBoxCountry", ui->checkBoxCountry->isChecked());
+    settings.setValue("checkBoxRegion", ui->checkBoxRegion->isChecked());
+    settings.setValue("checkBoxCity", ui->checkBoxCity->isChecked());
+    settings.setValue("checkBoxClub", ui->checkBoxClub->isChecked());
 
-    settings.setValue("DialogTournamentGrid/splitterSizes", ui->splitter->saveState());
+    settings.setValue("splitterSizes", ui->splitter->saveState());
+
+    settings.setValue("radioButtonSeparateCountry", ui->radioButtonSeparateCountry->isChecked());
+    settings.setValue("radioButtonSeparateRegion" , ui->radioButtonSeparateRegion ->isChecked());
+    settings.setValue("radioButtonSeparateCity"   , ui->radioButtonSeparateCity->isChecked());
+    settings.setValue("radioButtonSeparateClub"   , ui->radioButtonSeparateClub->isChecked());
+
+    settings.endGroup();
 
     delete ui;
 }
 
 void DialogTournamentGrid::generatGrid(const long long tournamentUID,
                                        const long long tournamentCaterotyUID,
-                                       QVector<long long> bestUID)
+                                       QVector<long long> bestUID,
+                                       const int separate)
 {
+    //QTime time; time.start();
+
     {
         // удалим старую сетку
         //DBUtils::dele
@@ -114,9 +132,11 @@ void DialogTournamentGrid::generatGrid(const long long tournamentUID,
         }
     }
 
-    srand(time(0));
 
-    QVector<int> dayFight; // dayFight[levelGrid]
+
+    int countOrderUid = 0;
+
+    QVector<int> dayFight;  // dayFight[levelGrid]
     QVector<int> timeFight; // dayFight[levelGrid]
     {
         QSqlQuery queryCOUNT("SELECT count() AS COUNT "
@@ -129,17 +149,18 @@ void DialogTournamentGrid::generatGrid(const long long tournamentUID,
             qDebug() << __PRETTY_FUNCTION__ << queryCOUNT.lastError();
             return;
         }
-        int count = 0;
         if (queryCOUNT.next())
-            count = queryCOUNT.value("COUNT").toInt();
+            countOrderUid = queryCOUNT.value("COUNT").toInt();
+        if (!countOrderUid)
+            return;
 
         const QStringList days = DBUtils::get_DAYS_FROM_TOURNAMENTS(tournamentUID);
         int countTurns = 0;
         for (int fight = 1; ; fight *= 2)
         {
-            if (count < 2 * fight)
+            if (countOrderUid < 2 * fight)
             {
-                if (0 < count - fight) ++countTurns;
+                if (0 < countOrderUid - fight) ++countTurns;
                 break;
             }
             else
@@ -148,12 +169,12 @@ void DialogTournamentGrid::generatGrid(const long long tournamentUID,
 
         if (3 * days.size() < countTurns)
         {
-            QMessageBox::warning(0, QString("Проблема"),
-                                 QString("Для сетки \"%1\" необходимо %2 круга (кругов), "
-                                         "но имеется только %3 день (дня, дней)")
-                                 .arg(DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", tournamentCaterotyUID))
-                                 .arg(countTurns)
-                                 .arg(days.size()));
+//            QMessageBox::warning(0, QString("Проблема"),
+//                                 QString("Для сетки \"%1\" необходимо %2 круга (кругов), "
+//                                         "но имеется только %3 день (дня, дней)")
+//                                 .arg(DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", tournamentCaterotyUID))
+//                                 .arg(countTurns)
+//                                 .arg(days.size()));
             for (int day = 0, turn = 0; turn < countTurns; ++day)
             {
                 for (int time = 0; time < 3 && turn < countTurns; ++time, ++turn)
@@ -184,12 +205,12 @@ void DialogTournamentGrid::generatGrid(const long long tournamentUID,
     }
 
 
-    int n = 0;
-    std::set<RegionRandomOrders> notUsedFighters; // всех простых бойцов из another  кидаем в notUsedFighters
+    SuperStruct super(separate);
     {
-        QHash<long long, QVector<long long>> usualFighters;
-
-        QSqlQuery query("SELECT * FROM ORDERS WHERE TOURNAMENT_CATEGORY_FK = ? ORDER BY SECOND_NAME, FIRST_NAME");
+        QSqlQuery query("SELECT * "
+                        "FROM ORDERS "
+                        "WHERE TOURNAMENT_CATEGORY_FK = ? "
+                        "ORDER BY SECOND_NAME, FIRST_NAME");
         query.addBindValue(tournamentCaterotyUID);
         if (!query.exec())
         {
@@ -198,20 +219,12 @@ void DialogTournamentGrid::generatGrid(const long long tournamentUID,
         }
         while (query.next())
         {
-            ++n;
             long long orderUID = query.value("UID").toLongLong();
-            long long region   = query.value("CLUB_FK").toLongLong();;
             if (!bestUID.contains(orderUID))
-                usualFighters[region].push_back(orderUID);
-        }
-
-        for (auto it = usualFighters.begin(); it != usualFighters.end(); ++it)
-        {
-            std::random_shuffle(it.value().begin(), it.value().end());
-            notUsedFighters.insert(RegionRandomOrders({it.key(), rand(), it.value()}));
+                super.add(orderUID);
         }
     }
-    if (n <= 0) return;
+
 
 
     QVector<bool> isLeaf(2);
@@ -220,7 +233,7 @@ void DialogTournamentGrid::generatGrid(const long long tournamentUID,
         int cnt = 1;
         isLeaf[1] = true;
         queue.enqueue(1);
-        while (cnt < n)
+        while (cnt < countOrderUid)
         {
             int v = queue.dequeue();
             isLeaf[v] = false;
@@ -255,7 +268,7 @@ void DialogTournamentGrid::generatGrid(const long long tournamentUID,
 
 
     QVector<bool> isUsedLeaf(maxVertex + 1);
-    QVector<long long> regionLeaf(maxVertex + 1);
+    QVector<long long> orderUID(maxVertex + 1);
     QVector<int> vertexOfBest;
     if (!bestUID.isEmpty())
     {
@@ -271,7 +284,7 @@ void DialogTournamentGrid::generatGrid(const long long tournamentUID,
             vertexOfBest << v;
 
             isUsedLeaf[v] = true;
-            regionLeaf[v] = DBUtils::getField("CLUB_FK", "ORDERS", bestUID[i]).toLongLong();
+            orderUID[v] = bestUID[i];
 
             DBUtils::insertLeafOfGrid(tournamentCaterotyUID, v, bestUID[i]);
         }
@@ -284,36 +297,9 @@ void DialogTournamentGrid::generatGrid(const long long tournamentUID,
         if (!(1 <= anotherVetex && anotherVetex <= maxVertex)) continue;
         if (isLeaf[v] && !isUsedLeaf[v] && isLeaf[anotherVetex] && isUsedLeaf[anotherVetex])
         {
-            const int regionAnother = regionLeaf[anotherVetex];
-            long long orderUID_V;
-
-            RegionRandomOrders a = *notUsedFighters.begin();
-            notUsedFighters.erase(notUsedFighters.begin());
-            if (!notUsedFighters.empty() && a.region == regionAnother)
-            {
-                RegionRandomOrders b = *notUsedFighters.begin();
-                notUsedFighters.erase(notUsedFighters.begin());
-                orderUID_V = b.orderUIDs.takeLast();
-
-                if (!b.orderUIDs.empty())
-                {
-                    b.random_number = rand();
-                    notUsedFighters.insert(b);
-                }
-            }
-            else
-                orderUID_V = a.orderUIDs.takeLast();
-
-            if (!a.orderUIDs.empty())
-            {
-                a.random_number = rand();
-                notUsedFighters.insert(a);
-            }
-
-            DBUtils::insertLeafOfGrid(tournamentCaterotyUID, v, orderUID_V);
+            orderUID[v] = super.pollOrderUid(orderUID[anotherVetex]);
+            DBUtils::insertLeafOfGrid(tournamentCaterotyUID, v, orderUID[v]);
             isUsedLeaf[v] = true;
-            regionLeaf[v] = DBUtils::getField("CLUB_FK", "ORDERS", orderUID_V).toLongLong();
-            //qDebug() << v << "cur: " << DBUtils::getField("REGION_FK", "ORDERS", orderUID_V).toLongLong() <<  "regionAnother: " << regionAnother;
         }
     }
 
@@ -330,51 +316,29 @@ void DialogTournamentGrid::generatGrid(const long long tournamentUID,
     std::random_shuffle(freePairsOfLeafs.begin(), freePairsOfLeafs.end());
 
 
+//    qDebug() << super.getAllOrderUIDs();
+//    super.updataRndAndLocation();
+//    qDebug() << super.getAllOrderUIDs();
+//    return;
+
     // просто берем пары
     while (!freePairsOfLeafs.isEmpty())
     {
-        const std::pair<int, int> pair = freePairsOfLeafs.last();
-        freePairsOfLeafs.pop_back();
+        const std::pair<int, int> pair = freePairsOfLeafs.takeLast();
+//        qDebug() << pair << super.getAllOrderUIDs();
 
-        //for (auto it : notUsedFighters){ qDebug() << "region: " <<  DBUtils::getField("NAME", "REGIONS", it.region) << it.random_number << it.orderUIDs;}
-
-        long long orderUID0;
-        long long orderUID1;
-        {
-            RegionRandomOrders a = *notUsedFighters.begin();
-            notUsedFighters.erase(notUsedFighters.begin());
-            orderUID0 = a.orderUIDs.takeLast();
-            if (notUsedFighters.empty()) // соединяем двух чуваков с одного региона; какая жалость
-            {
-                orderUID1 = a.orderUIDs.takeLast();
-            }
-            else
-            {
-                RegionRandomOrders b = *notUsedFighters.begin();
-                notUsedFighters.erase(notUsedFighters.begin());
-                orderUID1 = b.orderUIDs.takeLast();
-
-                if (!b.orderUIDs.empty())
-                {
-                    b.random_number = rand();
-                    notUsedFighters.insert(b);
-                }
-            }
-            if (!a.orderUIDs.empty())
-            {
-                a.random_number = rand();
-                notUsedFighters.insert(a);
-            }
-        }
+        int orderUID0 = -1;
+        int orderUID1 = -1;
+        super.pollTwoOrders(orderUID0, orderUID1);
+//        qDebug() << "\t" << orderUID0 << orderUID1;
 
         DBUtils::insertLeafOfGrid(tournamentCaterotyUID, pair.first , orderUID0);
         DBUtils::insertLeafOfGrid(tournamentCaterotyUID, pair.second, orderUID1);
 
         isUsedLeaf[pair.first ] = true;
         isUsedLeaf[pair.second] = true;
-        regionLeaf[pair.first ] = DBUtils::getField("CLUB_FK", "ORDERS", orderUID0).toLongLong();
-        regionLeaf[pair.second] = DBUtils::getField("CLUB_FK", "ORDERS", orderUID1).toLongLong();
-        //qDebug() << pair.first << pair.second << DBUtils::getField("REGION_FK", "ORDERS", orderUID0) << DBUtils::getField("REGION_FK", "ORDERS", orderUID1);
+        orderUID  [pair.first ] = orderUID0;
+        orderUID  [pair.second] = orderUID1;
     }
 
 
@@ -383,23 +347,17 @@ void DialogTournamentGrid::generatGrid(const long long tournamentUID,
     {
         if (isLeaf[v] && !isUsedLeaf[v])
         {
-            RegionRandomOrders b = *notUsedFighters.begin();
-            notUsedFighters.erase(notUsedFighters.begin());
-            long long orderUID = b.orderUIDs.takeLast();
-
-            if (!b.orderUIDs.empty())
-            {
-                b.random_number = rand();
-                notUsedFighters.insert(b);
-            }
+            int orderUID = super.pollLastOrder();
 
             DBUtils::insertLeafOfGrid(tournamentCaterotyUID, v, orderUID);
             break;
         }
     }
-    assert (notUsedFighters.empty());
-    /**/
+
+    assert (super.getAllOrderUIDs().isEmpty());
     QSqlDatabase::database().commit();
+
+    //qDebug() << "time.elapsed():" << time.elapsed();
 }
 
 void DialogTournamentGrid::deleteGrid(const long long uidTC)
@@ -530,7 +488,6 @@ void DialogTournamentGrid::onCellCLickedForChangePrioritet(int row, int)
 
 void DialogTournamentGrid::onButtonGenerateGrid()
 {
-    //
     {
         // проверяем есть ли турнирная сетка, если есть, то задаём вопрос
         QSqlQuery query("SELECT * FROM GRIDS WHERE TOURNAMENT_CATEGORIES_FK = ? ");
@@ -583,7 +540,8 @@ void DialogTournamentGrid::onButtonGenerateGrid()
     for (std::pair<int, long long> f : bestFighters)
         bestUID << f.second;
 
-    generatGrid(tournamentUID, ui->qComboBoxSelectCategory->currentData(Qt::UserRole).toInt(), bestUID);
+    generatGrid(tournamentUID, ui->qComboBoxSelectCategory->currentData(Qt::UserRole).toInt(), bestUID,
+                getLocationForSeparate());
 
     ui->pRenderArea->tournamentCategoryIsChanged(ui->qComboBoxSelectCategory->currentData(Qt::UserRole).toInt());
     fillListOfPairs();
@@ -887,7 +845,7 @@ void DialogTournamentGrid::onButtonGenerateAll()
         //        bestUID.resize(qMin(bestUID.size(), sz));
 
         if (DBUtils::getNodes(tcUID).isEmpty())
-            generatGrid(tournamentUID, tcUID, bestUID);
+            generatGrid(tournamentUID, tcUID, bestUID, getLocationForSeparate());
 
         progress.setValue(progress.value() + 1);
         if (progress.wasCanceled())
@@ -911,8 +869,12 @@ void DialogTournamentGrid::onCustomContextMenuRequested(const QPoint& pos)
         contextMenu.addAction(restrictAction);
         connect(restrictAction, &QAction::triggered, [this, &index] ()
         {
-            long long orderUID = index.data(Qt::UserRole).toLongLong();
-            CreateTournamentOrdersDialog dlg(this->tournamentUID, 0,
+            int orderUID = index.model()->index(index.row(), 0).data(Qt::UserRole).toInt();
+            //long long orderUID = index.data(Qt::UserRole).toLongLong();
+            qDebug() << orderUID
+                     << DBUtils::getField("SECOND_NAME", "ORDERS", orderUID)
+                     << DBUtils::getField("FIRST_NAME", "ORDERS", orderUID);
+            CreateTournamentOrdersDialog dlg(this->tournamentUID, this,
                                          DBUtils::getField("SECOND_NAME", "ORDERS", orderUID),
                                          DBUtils::getField("FIRST_NAME", "ORDERS", orderUID)
                                          );
@@ -924,7 +886,7 @@ void DialogTournamentGrid::onCustomContextMenuRequested(const QPoint& pos)
 
     QAction delAction("Все заявки...", &contextMenu);
     contextMenu.addAction(&delAction);
-    connect(&delAction, &QAction::triggered, [this, &pos] ()
+    connect(&delAction, &QAction::triggered, [this] ()
     {
         CreateTournamentOrdersDialog(this->tournamentUID, this).exec();
         onActivatedCategory();
@@ -1019,6 +981,15 @@ void DialogTournamentGrid::fillListOfPairs()
     ui->tableWidgeRight->clearFocus();
 }
 
+int DialogTournamentGrid::getLocationForSeparate()
+{
+    if (ui->radioButtonSeparateCountry->isChecked()) return 0;
+    if (ui->radioButtonSeparateRegion ->isChecked()) return 1;
+    if (ui->radioButtonSeparateCity   ->isChecked()) return 2;
+    if (ui->radioButtonSeparateClub   ->isChecked()) return 3;
+    return -1;
+}
+
 void DialogTournamentGrid::onSpinBoxFontSizeChangedOfListOfOrders(int sizeFont)
 {
     QFont font = ui->qTableWidget->font();
@@ -1061,3 +1032,11 @@ void DialogTournamentGrid::onCheckBoxesChangeState()
 
 
 
+
+
+
+void DialogTournamentGrid::on_pushButtonShowHide_clicked(bool checked)
+{
+    //qDebug() << "checked:" << checked;
+    ui->widgetSettings->setVisible(!checked);
+}

@@ -64,7 +64,7 @@ public:
         }
     };
 
-    static QVariant get(const QString& field, const QString& table, const QVariant& UID, const QString PRETTY_FUNCTION = __PRETTY_FUNCTION__);
+    static QVariant get(const QString& field, const QString& table, const QVariant& UID);
     static QString getField(const QString& field, const QString& table, const QString& UID, QString PRETTY_FUNCTION = __PRETTY_FUNCTION__);
     static QString getField(const QString& field, const QString& table, const long long UID, QString PRETTY_FUNCTION = __PRETTY_FUNCTION__);
     static QDate getFieldDateAsDate(const QString& field, const QString& table, const long long UID);
@@ -73,7 +73,7 @@ public:
     // для таблицы ORDERS
     static QString getSecondNameAndFirstName(long long UID);
     static QString getSecondNameAndOneLetterOfName(long long UID);
-    static QSet<long long> getSetOfOrdersInTournamentCategory(long long uidTournamentCategory); // TODO DELETE ?
+    static QSet<long long> getSetOfOrdersInTournamentCategory(long long uidTournamentCategory);
     static int findUidToutnamentCategory(int tournamentUID, QDate birthday, int sexUID, double weight, int typeUID);
 
 
@@ -300,7 +300,8 @@ public:
         return map;
     }
 
-    static QString get(QVector<std::pair<DBUtils::TypeField, QString>> arrayData, long long uidOrder, int rowNumber = -1)
+    static QString get(const QVector<std::pair<DBUtils::TypeField, QString>>& arrayData,
+                       long long uidOrder, int rowNumber = -1)
     {
         QString result;
         for (int i = 0; i < arrayData.size(); ++i)
@@ -310,10 +311,11 @@ public:
         return result;
     }
 
-    static QString get(std::pair<DBUtils::TypeField, QString> data, long long uidOrder, int rowNumber = -1)
+    static QString get(const std::pair<DBUtils::TypeField, QString>& data,
+                       long long uidOrder, int rowNumber = -1)
     {
         QString text;
-        long long uidTC = getField("TOURNAMENT_CATEGORY_FK", "ORDERS", uidOrder).toLongLong();
+
 
         TypeField typeField = data.first;
 
@@ -336,7 +338,7 @@ public:
         }
         else if (typeField == birthyhdate)
         {
-            text = get("BIRTHDATE", "ORDERS", uidOrder, __PRETTY_FUNCTION__).toDate().toString("dd.MM.yyyy");;
+            text = get("BIRTHDATE", "ORDERS", uidOrder).toDate().toString("dd.MM.yyyy");;
         }
         else if (typeField == sex)
         {
@@ -352,7 +354,7 @@ public:
         }
         else if (typeField == country)
         {
-            text = getField("NAME", "COUNTRIES", getField("COUNTRY_FK", "ORDERS", uidOrder, __PRETTY_FUNCTION__), __PRETTY_FUNCTION__);
+            text = get("NAME", "COUNTRIES", get("COUNTRY_FK", "ORDERS", uidOrder)).toString();
         }
         else if (typeField == region)
         {
@@ -418,22 +420,27 @@ public:
 
         else if (typeField == TC_ageRange)
         {
+            const int uidTC = get("TOURNAMENT_CATEGORY_FK", "ORDERS", uidOrder).toInt();
             text = DBUtils::getField("AGE", "TOURNAMENT_CATEGORIES", uidTC);
         }
         else if (typeField == TC_weightRange)
         {
+            const int uidTC = get("TOURNAMENT_CATEGORY_FK", "ORDERS", uidOrder).toInt();
             text = DBUtils::getField("WEIGHT", "TOURNAMENT_CATEGORIES", uidTC);
         }
         else if (typeField == TC_weight)
         {
+            const int uidTC = get("TOURNAMENT_CATEGORY_FK", "ORDERS", uidOrder).toInt();
             text = getWeightAsOneNumberPlusMinus(uidTC);
         }
         else if (typeField == TC_sexAgeType)
         {
+            const int uidTC = get("TOURNAMENT_CATEGORY_FK", "ORDERS", uidOrder).toInt();
             text = getField("NAME", "AGE_CATEGORIES", getField("AGE_CATEGORY_FK", "TOURNAMENT_CATEGORIES", uidTC, __PRETTY_FUNCTION__), __PRETTY_FUNCTION__);
         }
         else if (typeField == TC_TYPES)
         {
+            const int uidTC = get("TOURNAMENT_CATEGORY_FK", "ORDERS", uidOrder).toInt();
             text = getField("NAME", "TYPES", getField("TYPE_FK", "TOURNAMENT_CATEGORIES", uidTC, __PRETTY_FUNCTION__), __PRETTY_FUNCTION__);
         }
 

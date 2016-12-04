@@ -34,6 +34,9 @@ private:
     Ui::SoundPlayer* ui;
     QByteArray blob;
     //QBuffer buffer;
+    QMediaResource rsrc;
+    QMediaContent ctnt;
+    QUrl uqwe;
 
 
 

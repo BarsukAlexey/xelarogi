@@ -58,14 +58,6 @@ QByteArray SoundPlayer::getRawData()
 void SoundPlayer::setRawData(const QByteArray& rawData)
 {
     blob = rawData;
-
-//    buffer.close();
-//    buffer.setBuffer(&blob);
-//    if (!buffer.open(QIODevice::ReadOnly))
-//    {
-//        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << "!buffer.open";
-//        return;
-//    }
     mediaPlayer->setMedia(QMediaContent());
     {
         QFile file(randomString);
@@ -76,7 +68,13 @@ void SoundPlayer::setRawData(const QByteArray& rawData)
         file.close();
     }
     mediaPlayer->setMedia(QUrl::fromLocalFile(randomString));
-    //mediaPlayer->setMedia(QMediaContent(), &buffer);
+
+
+//    blob = rawData;
+//    uqwe = QUrl::fromEncoded(blob, QUrl::DecodedMode);
+//    rsrc = QMediaResource();
+//    ctnt = QMediaContent(rsrc);
+//    mediaPlayer->setMedia(ctnt);
 }
 
 SoundPlayer::~SoundPlayer()

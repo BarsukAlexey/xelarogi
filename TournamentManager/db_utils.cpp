@@ -1,9 +1,9 @@
 #include "db_utils.h"
 
 
-QVariant DBUtils::get(const QString& field, const QString& table, const QVariant& UID, const QString)
+QVariant DBUtils::get(const QString& field, const QString& table, const QVariant& UID)
 {
-    QSqlQuery query("SELECT * FROM " + table + " WHERE UID = ?");
+    QSqlQuery query("SELECT " + field + " FROM " + table + " WHERE UID = ?");
     query.addBindValue(UID);
     if (!query.exec())
         qDebug() << __LINE__ << __PRETTY_FUNCTION__ << query.lastError()<< query.lastQuery();
