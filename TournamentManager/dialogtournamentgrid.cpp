@@ -555,26 +555,29 @@ void DialogTournamentGrid::onButtonGenerateGrid()
 
 
 
-    QVector<std::pair<int, long long>> bestFighters;
-    for (int row = 0; row < ui->tableWidgetOrders->rowCount(); ++row)
-    {
-        long long orderUID = ui->tableWidgetOrders->item(row, 0)->data(Qt::UserRole).toLongLong();
-        QSpinBox* spinBox = qobject_cast<QSpinBox*> (ui->tableWidgetOrders->cellWidget(row, 2));
-        int priority = spinBox->value();
-        if (priority != 0)
-        {
-            bestFighters << std::make_pair(priority, orderUID);
-        }
-    }
-    std::random_shuffle(bestFighters.begin(), bestFighters.end());
-    qSort(bestFighters.begin(), bestFighters.end(), [](const std::pair<int, long long> a, const std::pair<int, long long> b){
-        return a.first < b.first;
-    });
-    QVector<long long> bestUID;
-    for (std::pair<int, long long> f : bestFighters)
-        bestUID << f.second;
+//    QVector<std::pair<int, long long>> bestFighters;
+//    for (int row = 0; row < ui->tableWidgetOrders->rowCount(); ++row)
+//    {
+//        long long orderUID = ui->tableWidgetOrders->item(row, 0)->data(Qt::UserRole).toLongLong();
+//        QSpinBox* spinBox = qobject_cast<QSpinBox*> (ui->tableWidgetOrders->cellWidget(row, 2));
+//        int priority = spinBox->value();
+//        if (priority != 0)
+//        {
+//            bestFighters << std::make_pair(priority, orderUID);
+//        }
+//    }
+//    std::random_shuffle(bestFighters.begin(), bestFighters.end());
+//    qSort(bestFighters.begin(), bestFighters.end(), [](const std::pair<int, long long> a, const std::pair<int, long long> b){
+//        return a.first < b.first;
+//    });
+//    QVector<long long> bestUID;
+//    for (std::pair<int, long long> f : bestFighters)
+//        bestUID << f.second;
 
-    generatGrid(tournamentUID, ui->qComboBoxSelectCategory->currentData(Qt::UserRole).toInt(), bestUID,
+    const int tcUID = ui->qComboBoxSelectCategory->currentData(Qt::UserRole).toInt();
+    generatGrid(tournamentUID,
+                tcUID,
+                bestUID(tcUID),
                 getLocationForSeparate());
 
     ui->pRenderArea->tournamentCategoryIsChanged(ui->qComboBoxSelectCategory->currentData(Qt::UserRole).toInt());
@@ -862,22 +865,13 @@ void DialogTournamentGrid::onButtonGenerateAll()
     while (query.next())
     {
         qlonglong tcUID = query.value("UID").toLongLong();
-        QVector<long long> bestUID; // TODO доделать это получить с БД
-
-        //        QSqlQuery queryOrder("SELECT * FROM ORDERS WHERE TOURNAMENT_CATEGORIES = ? ");
-        //        queryOrder.bindValue(0, tcUID);
-        //        queryOrder.exec();
-        //        while (queryOrder.next()) bestUID << queryOrder.value("UID").toLongLong();
-        //        std::random_shuffle(bestUID.begin(), bestUID.end());
-        //        bestUID.resize(qMin(bestUID.size(), sz));
 
         if (DBUtils::getNodes(tcUID).isEmpty())
-            generatGrid(tournamentUID, tcUID, bestUID, getLocationForSeparate());
+            generatGrid(tournamentUID, tcUID, bestUID(tcUID), getLocationForSeparate());
 
         progress.setValue(progress.value() + 1);
         if (progress.wasCanceled())
             break;
-
     }
 
     ui->pRenderArea->tournamentCategoryIsChanged(ui->qComboBoxSelectCategory->currentData(Qt::UserRole).toInt());
@@ -1015,6 +1009,38 @@ int DialogTournamentGrid::getLocationForSeparate()
     if (ui->radioButtonSeparateCity   ->isChecked()) return 2;
     if (ui->radioButtonSeparateClub   ->isChecked()) return 3;
     return -1;
+}
+
+QVector<long long> DialogTournamentGrid::bestUID(const int tcUID)
+{
+    QVector<std::pair<int, long long>> bestFighters;
+
+    QSqlQuery queryOrder("SELECT * FROM ORDERS WHERE TOURNAMENT_CATEGORY_FK = ? ");
+    queryOrder.addBindValue(tcUID);
+    if (!queryOrder.exec())
+    {
+        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << queryOrder.lastError();
+    }
+    while (queryOrder.next())
+    {
+        qlonglong orderUID = queryOrder.value("UID").toLongLong();
+        QVariant priority = queryOrder.value("PRIORITY");
+        if (priority.isNull() || priority.toInt() == 0)
+        {
+            continue;
+        }
+        bestFighters << std::make_pair(priority.toInt(), orderUID);
+    }
+    std::random_shuffle(bestFighters.begin(), bestFighters.end());
+    qSort(bestFighters.begin(), bestFighters.end(), [](const std::pair<int, long long> a, const std::pair<int, long long> b){
+        return a.first < b.first;
+    });
+
+    QVector<long long> bestUID;
+    for (std::pair<int, long long> f : bestFighters)
+        bestUID << f.second;
+
+    return bestUID;
 }
 
 void DialogTournamentGrid::onSpinBoxFontSizeChangedOfListOfOrders(int sizeFont)

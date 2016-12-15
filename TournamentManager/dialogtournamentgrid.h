@@ -100,6 +100,8 @@ private:
     void fillListOfPairs();
     int getLocationForSeparate();
 
+    static QVector<long long> bestUID(const int tcUID);
+
 
 
 private slots:
