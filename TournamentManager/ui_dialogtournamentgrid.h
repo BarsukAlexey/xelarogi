@@ -92,7 +92,7 @@ public:
     QSpacerItem *horizontalSpacer_3;
     QLineEdit *filterCategoriesLE;
     QComboBox *qComboBoxSelectCategory;
-    QTableWidget *qTableWidget;
+    QTableWidget *tableWidgetOrders;
     QGridLayout *gridLayout_5;
     QPushButton *buttonGenerateAll;
     QPushButton *buttonDelete;
@@ -384,23 +384,23 @@ public:
 
         verticalLayout_2->addWidget(qComboBoxSelectCategory);
 
-        qTableWidget = new QTableWidget(widget);
-        if (qTableWidget->columnCount() < 4)
-            qTableWidget->setColumnCount(4);
+        tableWidgetOrders = new QTableWidget(widget);
+        if (tableWidgetOrders->columnCount() < 4)
+            tableWidgetOrders->setColumnCount(4);
         QTableWidgetItem *__qtablewidgetitem = new QTableWidgetItem();
-        qTableWidget->setHorizontalHeaderItem(0, __qtablewidgetitem);
+        tableWidgetOrders->setHorizontalHeaderItem(0, __qtablewidgetitem);
         QTableWidgetItem *__qtablewidgetitem1 = new QTableWidgetItem();
-        qTableWidget->setHorizontalHeaderItem(1, __qtablewidgetitem1);
+        tableWidgetOrders->setHorizontalHeaderItem(1, __qtablewidgetitem1);
         QTableWidgetItem *__qtablewidgetitem2 = new QTableWidgetItem();
-        qTableWidget->setHorizontalHeaderItem(2, __qtablewidgetitem2);
+        tableWidgetOrders->setHorizontalHeaderItem(2, __qtablewidgetitem2);
         QTableWidgetItem *__qtablewidgetitem3 = new QTableWidgetItem();
-        qTableWidget->setHorizontalHeaderItem(3, __qtablewidgetitem3);
-        qTableWidget->setObjectName(QStringLiteral("qTableWidget"));
-        qTableWidget->setFocusPolicy(Qt::NoFocus);
-        qTableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
-        qTableWidget->setSelectionMode(QAbstractItemView::NoSelection);
+        tableWidgetOrders->setHorizontalHeaderItem(3, __qtablewidgetitem3);
+        tableWidgetOrders->setObjectName(QStringLiteral("tableWidgetOrders"));
+        tableWidgetOrders->setFocusPolicy(Qt::NoFocus);
+        tableWidgetOrders->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        tableWidgetOrders->setSelectionMode(QAbstractItemView::NoSelection);
 
-        verticalLayout_2->addWidget(qTableWidget);
+        verticalLayout_2->addWidget(tableWidgetOrders);
 
         gridLayout_5 = new QGridLayout();
         gridLayout_5->setObjectName(QStringLiteral("gridLayout_5"));
@@ -534,7 +534,7 @@ public:
         radioButtonLonly->setText(QApplication::translate("DialogTournamentGrid", "\320\236\320\264\320\270\320\275", 0));
         radioButtonInvalid->setText(QApplication::translate("DialogTournamentGrid", "\320\240\320\260\320\267\320\275\321\213\320\265 \321\203\321\207\320\260\321\201\321\202\320\275\320\270\320\272\320\270", 0));
         radioButtonInvalidTurn->setText(QApplication::translate("DialogTournamentGrid", "\320\235\320\265\320\267\320\260\320\277\320\276\320\273\320\275\320\265\320\275\320\275\321\213\320\265 \320\272\321\200\321\203\320\263\320\270", 0));
-        groupBox_5->setTitle(QApplication::translate("DialogTournamentGrid", "\320\235\320\260\321\201\321\202\321\200\320\276\320\271\320\272\320\270", 0));
+        groupBox_5->setTitle(QApplication::translate("DialogTournamentGrid", "\320\240\320\260\320\267\320\274\320\265\321\200\321\213 \321\210\321\200\320\270\321\204\321\202\320\276\320\262", 0));
         label_3->setText(QApplication::translate("DialogTournamentGrid", "\320\241\320\265\321\202\320\272\320\260", 0));
         label_6->setText(QApplication::translate("DialogTournamentGrid", "\320\237\320\260\321\200\321\213", 0));
         label->setText(QApplication::translate("DialogTournamentGrid", "\320\232\320\260\321\202\320\265\320\263.", 0));
@@ -546,20 +546,20 @@ public:
         checkBoxRegion->setText(QApplication::translate("DialogTournamentGrid", "\320\240\320\265\320\263\320\270\320\276\320\275", 0));
         checkBoxCity->setText(QApplication::translate("DialogTournamentGrid", "\320\223\320\276\321\200\320\276\320\264", 0));
         checkBoxClub->setText(QApplication::translate("DialogTournamentGrid", "\320\232\320\273\321\203\320\261", 0));
-        groupBox_3->setTitle(QApplication::translate("DialogTournamentGrid", "\320\240\320\260\320\267\320\262\320\276\320\264", 0));
+        groupBox_3->setTitle(QApplication::translate("DialogTournamentGrid", "\320\240\320\260\320\267\320\262\320\265\320\264\320\265\320\275\320\270\320\265", 0));
         radioButtonSeparateCountry->setText(QApplication::translate("DialogTournamentGrid", "\320\241\321\202\321\200\320\260\320\275\320\260", 0));
         radioButtonSeparateRegion->setText(QApplication::translate("DialogTournamentGrid", "\320\240\320\265\320\263\320\270\320\276\320\275", 0));
         radioButtonSeparateCity->setText(QApplication::translate("DialogTournamentGrid", "\320\223\320\276\321\200\320\276\320\264", 0));
         radioButtonSeparateClub->setText(QApplication::translate("DialogTournamentGrid", "\320\232\320\273\321\203\320\261", 0));
         filterCategoriesLE->setInputMask(QString());
         filterCategoriesLE->setPlaceholderText(QString());
-        QTableWidgetItem *___qtablewidgetitem = qTableWidget->horizontalHeaderItem(0);
+        QTableWidgetItem *___qtablewidgetitem = tableWidgetOrders->horizontalHeaderItem(0);
         ___qtablewidgetitem->setText(QApplication::translate("DialogTournamentGrid", "\320\241\320\277\320\276\321\200\321\202\321\201\320\274\320\265\320\275", 0));
-        QTableWidgetItem *___qtablewidgetitem1 = qTableWidget->horizontalHeaderItem(1);
+        QTableWidgetItem *___qtablewidgetitem1 = tableWidgetOrders->horizontalHeaderItem(1);
         ___qtablewidgetitem1->setText(QApplication::translate("DialogTournamentGrid", "\320\241\321\202\321\200\320\260\320\275\320\260/\321\200\320\265\320\263\320\270\320\276\320\275/\320\263\320\276\321\200\320\276\320\264/\320\272\320\273\321\203\320\261", 0));
-        QTableWidgetItem *___qtablewidgetitem2 = qTableWidget->horizontalHeaderItem(2);
+        QTableWidgetItem *___qtablewidgetitem2 = tableWidgetOrders->horizontalHeaderItem(2);
         ___qtablewidgetitem2->setText(QApplication::translate("DialogTournamentGrid", "\320\237\321\200\320\270\320\276\321\200\320\270\321\202\320\265\321\202", 0));
-        QTableWidgetItem *___qtablewidgetitem3 = qTableWidget->horizontalHeaderItem(3);
+        QTableWidgetItem *___qtablewidgetitem3 = tableWidgetOrders->horizontalHeaderItem(3);
         ___qtablewidgetitem3->setText(QApplication::translate("DialogTournamentGrid", "\320\240\320\260\320\267\321\200\321\217\320\264", 0));
         buttonGenerateAll->setText(QApplication::translate("DialogTournamentGrid", "\320\241\320\276\320\267\320\264\320\260\321\202\321\214 \320\262\321\201\321\221", 0));
         buttonDelete->setText(QApplication::translate("DialogTournamentGrid", "\320\243\320\264\320\260\320\273\320\270\321\202\321\214", 0));

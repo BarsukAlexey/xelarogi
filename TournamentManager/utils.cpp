@@ -71,4 +71,28 @@ QColor Utils::getContrastColor(const QColor& color)
 //                  );
 }
 
+void Utils::eraseBadChars(QString& str){
+    str = str
+          .replace('\\', ' ')
+          .replace('/', ' ')
+          .replace(':', ' ')
+          .replace('*', ' ')
+          .replace('?', ' ')
+          .replace('"', ' ')
+          .replace('<', ' ')
+          .replace('>', ' ')
+          .replace('|', ' ')
+
+          .replace('%', ' ')
+          .replace('!', ' ')
+          .replace('@', ' ')
+
+          .trimmed();
+//    while (str.endsWith('.'))
+//    {
+//        str = str.remove(str.length() - 1).simplified();
+//    }
+
+}
+
 

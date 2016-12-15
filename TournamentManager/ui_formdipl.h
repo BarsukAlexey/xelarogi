@@ -42,9 +42,8 @@ public:
     QWidget *widget_3;
     QGridLayout *gridLayout_3;
     QLabel *label_3;
-    QPushButton *pushButtonPrint;
     QLabel *label_4;
-    QLabel *label_6;
+    QPushButton *pushButtonPrint;
     QTableWidget *tableWidget;
     QWidget *widget_2;
     QGridLayout *gridLayout_2;
@@ -60,7 +59,6 @@ public:
     QPushButton *pushButtonSave;
     QPushButton *pushButton_3;
     QComboBox *comboBox;
-    QSpacerItem *horizontalSpacer_2;
     QGroupBox *groupBoxPlace;
     QGridLayout *gridLayout_7;
     QLabel *label_5;
@@ -70,12 +68,19 @@ public:
     QHBoxLayout *horizontalLayout_3;
     QRadioButton *radioButtonBadge;
     QRadioButton *radioButtonDiplom;
+    QSpacerItem *horizontalSpacer_2;
+    QGroupBox *groupBoxPDF_badge;
+    QGridLayout *gridLayout_4;
+    QRadioButton *radioButtonCountry;
+    QRadioButton *radioButtonRegion;
+    QRadioButton *radioButtonCity;
+    QRadioButton *radioButtonClub;
 
     void setupUi(QDialog *FormDipl)
     {
         if (FormDipl->objectName().isEmpty())
             FormDipl->setObjectName(QStringLiteral("FormDipl"));
-        FormDipl->resize(1101, 581);
+        FormDipl->resize(1190, 558);
         gridLayout = new QGridLayout(FormDipl);
         gridLayout->setObjectName(QStringLiteral("gridLayout"));
         widget = new QWidget(FormDipl);
@@ -108,21 +113,16 @@ public:
 
         gridLayout_3->addWidget(label_3, 1, 0, 1, 1);
 
-        pushButtonPrint = new QPushButton(widget_3);
-        pushButtonPrint->setObjectName(QStringLiteral("pushButtonPrint"));
-
-        gridLayout_3->addWidget(pushButtonPrint, 0, 0, 1, 1);
-
         label_4 = new QLabel(widget_3);
         label_4->setObjectName(QStringLiteral("label_4"));
         label_4->setWordWrap(true);
 
         gridLayout_3->addWidget(label_4, 2, 0, 1, 1);
 
-        label_6 = new QLabel(widget_3);
-        label_6->setObjectName(QStringLiteral("label_6"));
+        pushButtonPrint = new QPushButton(widget_3);
+        pushButtonPrint->setObjectName(QStringLiteral("pushButtonPrint"));
 
-        gridLayout_3->addWidget(label_6, 3, 0, 1, 1);
+        gridLayout_3->addWidget(pushButtonPrint, 0, 0, 1, 1);
 
 
         gridLayout->addWidget(widget_3, 4, 0, 1, 1);
@@ -224,10 +224,6 @@ public:
 
         gridLayout_2->addWidget(groupBox_3, 0, 0, 1, 1);
 
-        horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        gridLayout_2->addItem(horizontalSpacer_2, 0, 4, 1, 1);
-
         groupBoxPlace = new QGroupBox(widget_2);
         groupBoxPlace->setObjectName(QStringLiteral("groupBoxPlace"));
         gridLayout_7 = new QGridLayout(groupBoxPlace);
@@ -269,6 +265,38 @@ public:
 
         gridLayout_2->addWidget(groupBox, 0, 2, 1, 1);
 
+        horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        gridLayout_2->addItem(horizontalSpacer_2, 0, 5, 1, 1);
+
+        groupBoxPDF_badge = new QGroupBox(widget_2);
+        groupBoxPDF_badge->setObjectName(QStringLiteral("groupBoxPDF_badge"));
+        gridLayout_4 = new QGridLayout(groupBoxPDF_badge);
+        gridLayout_4->setObjectName(QStringLiteral("gridLayout_4"));
+        radioButtonCountry = new QRadioButton(groupBoxPDF_badge);
+        radioButtonCountry->setObjectName(QStringLiteral("radioButtonCountry"));
+        radioButtonCountry->setChecked(true);
+
+        gridLayout_4->addWidget(radioButtonCountry, 0, 0, 1, 1);
+
+        radioButtonRegion = new QRadioButton(groupBoxPDF_badge);
+        radioButtonRegion->setObjectName(QStringLiteral("radioButtonRegion"));
+
+        gridLayout_4->addWidget(radioButtonRegion, 1, 0, 1, 1);
+
+        radioButtonCity = new QRadioButton(groupBoxPDF_badge);
+        radioButtonCity->setObjectName(QStringLiteral("radioButtonCity"));
+
+        gridLayout_4->addWidget(radioButtonCity, 2, 0, 1, 1);
+
+        radioButtonClub = new QRadioButton(groupBoxPDF_badge);
+        radioButtonClub->setObjectName(QStringLiteral("radioButtonClub"));
+
+        gridLayout_4->addWidget(radioButtonClub, 3, 0, 1, 1);
+
+
+        gridLayout_2->addWidget(groupBoxPDF_badge, 0, 4, 1, 1);
+
 
         gridLayout->addWidget(widget_2, 0, 0, 1, 1);
 
@@ -280,14 +308,13 @@ public:
 
     void retranslateUi(QDialog *FormDipl)
     {
-        FormDipl->setWindowTitle(QApplication::translate("FormDipl", "Form", 0));
+        FormDipl->setWindowTitle(QString());
         pushButtonAdd->setText(QApplication::translate("FormDipl", "\320\224\320\276\320\261\320\260\320\262\320\270\321\202\321\214 \321\201\321\202\321\200\320\276\320\272\321\203", 0));
         pushButtonDelete->setText(QApplication::translate("FormDipl", "\320\243\320\264\320\260\320\273\320\270\321\202\321\214 \321\201\321\202\321\200\320\276\320\272\321\203", 0));
         label_3->setText(QApplication::translate("FormDipl", "* \320\237\321\200\320\270 \320\277\320\265\321\207\320\260\321\202\320\270 PDF \321\203\320\272\320\260\320\266\320\270\321\202\320\265 100% \320\274\320\260\321\201\321\210\321\202\320\260\320\261 (\320\261\320\265\320\267 \320\277\320\276\320\273\320\265\320\271, \320\276\321\202\321\201\321\202\321\203\320\277\320\276\320\262 \320\270 \321\202.\320\264.)", 0));
-        pushButtonPrint->setText(QApplication::translate("FormDipl", "\320\241\320\276\321\205\321\200\320\260\320\275\320\270\321\202\321\214 \320\272\320\260\320\272 PDF...", 0));
         label_4->setText(QApplication::translate("FormDipl", "<html><head/><body><p>** \320\225\321\201\320\273\320\270 \321\202\320\265\320\272\321\201\321\202 \320\261\321\203\320\264\320\265\321\202 \320\262\321\213\320\273\320\265\320\267\320\260\321\202\321\214 \320\267\320\260 \321\210\320\270\321\200\320\270\320\275\321\203 \320\276\321\202\320\262\320\265\320\264\321\221\320\275\320\275\320\276\320\271 \320\265\320\271 \321\201\321\202\321\200\320\276\320\272\320\270, \321\202\320\276 \321\200\320\260\320\267\320\274\320\265\321\200 \321\210\321\200\320\270\321\204\321\202\320\260 \320\264\320\273\321\217 \321\215\321\202\320\276\320\263\320\276 \321\202\320\265\320\272\321\201\321\202\320\260 \320\260\320\262\321\202\320\276\320\274\320\260\321\202\320\270\321\207\320\265\321\201\320\272\320\270 \321\203\320\274\320\265\320\275\321\214\321\210\320\270\321\202\321\201\321\217 \321\202\320\260\320\272, \321\207\321\202\320\276\320\261\321\213 \320\277\320\276\320\273\320\275\320\276\321\201\321\202\321\214\321\216 \320\277\320\276\320\274\320\265\321\201\321\202\320"
                         "\270\321\202\321\214\321\201\321\217 \320\275\320\260 \321\201\321\202\321\200\320\276\320\272\320\265</p></body></html>", 0));
-        label_6->setText(QApplication::translate("FormDipl", "*** \320\237\320\265\321\200\320\265\320\264 \320\277\320\265\321\207\320\260\321\202\321\214\321\216 \320\261\320\265\320\271\320\264\320\266\320\270\320\272\320\276\320\262 \320\275\320\265\320\276\320\261\321\205\320\276\320\264\320\270\320\274\320\276 \321\201\320\263\320\265\320\275\320\265\321\200\320\270\321\200\320\276\320\262\320\260\321\202\321\214 \321\202\321\203\321\200\320\275\320\270\321\200\320\275\321\213\320\265 \321\201\320\265\321\202\320\272\320\270", 0));
+        pushButtonPrint->setText(QApplication::translate("FormDipl", "\320\241\320\276\321\205\321\200\320\260\320\275\320\270\321\202\321\214 \320\272\320\260\320\272 PDF...", 0));
         QTableWidgetItem *___qtablewidgetitem = tableWidget->horizontalHeaderItem(0);
         ___qtablewidgetitem->setText(QApplication::translate("FormDipl", "\320\247\321\202\320\276 \320\277\320\270\321\201\320\260\321\202\321\214?", 0));
         QTableWidgetItem *___qtablewidgetitem1 = tableWidget->horizontalHeaderItem(1);
@@ -302,9 +329,9 @@ public:
         ___qtablewidgetitem5->setText(QApplication::translate("FormDipl", "\320\240\320\260\321\201\321\202\320\276\320\275\320\270\320\265 \320\276\321\202 \320\262\320\265\321\200\321\205\320\275\320\265\320\263\320\276 \320\272\321\200\320\260\321\217, \320\274\320\274", 0));
         QTableWidgetItem *___qtablewidgetitem6 = tableWidget->horizontalHeaderItem(6);
         ___qtablewidgetitem6->setText(QApplication::translate("FormDipl", "\320\224\320\273\320\270\320\275\320\260 \321\201\321\202\321\200\320\276\320\272\320\270, \320\274\320\274", 0));
-        groupBox_2->setTitle(QApplication::translate("FormDipl", "\320\233\320\270\321\201\321\202", 0));
-        label->setText(QApplication::translate("FormDipl", "\320\250\320\270\321\200\320\270\320\275\320\260 \320\273\320\270\321\201\321\202\320\260 (\320\274\320\274)", 0));
-        label_2->setText(QApplication::translate("FormDipl", "\320\222\321\213\321\201\320\276\321\202\320\260 \320\273\320\270\321\201\321\202\320\260 (\320\274\320\274)", 0));
+        groupBox_2->setTitle(QApplication::translate("FormDipl", "\320\240\320\260\320\267\320\274\320\265\321\200\321\213 \320\273\320\270\321\201\321\202\320\260", 0));
+        label->setText(QApplication::translate("FormDipl", "\320\250\320\270\321\200\320\270\320\275\320\260 (\320\274\320\274)", 0));
+        label_2->setText(QApplication::translate("FormDipl", "\320\222\321\213\321\201\320\276\321\202\320\260 (\320\274\320\274)", 0));
         groupBox_3->setTitle(QApplication::translate("FormDipl", "\320\250\320\260\320\261\320\273\320\276\320\275", 0));
         pushButtonNew->setText(QApplication::translate("FormDipl", "\320\235\320\276\320\262\321\213\320\271", 0));
         pushButtonSave->setText(QApplication::translate("FormDipl", "\320\241\320\276\321\205\321\200\320\260\320\275\320\270\321\202\321\214", 0));
@@ -313,9 +340,13 @@ public:
         label_5->setText(QApplication::translate("FormDipl", "\320\234\320\260\320\272\321\201. \320\274\320\265\321\201\321\202\320\276:", 0));
         checkBoxAllGrids->setText(QApplication::translate("FormDipl", "\320\237\320\265\321\207\320\260\321\202\320\260\321\202\321\214 \320\275\320\265 \320\264\320\276 \320\272\320\276\320\275\321\206\320\260 \320\267\320\260\320\277\320\276\320\273\320\275\320\265\320\275\320\275\321\213\320\265 \321\201\320\265\321\202\320\272\320\270", 0));
         groupBox->setTitle(QApplication::translate("FormDipl", "\320\242\320\270\320\277", 0));
-        radioButtonBadge->setText(QApplication::translate("FormDipl", "\320\221\320\265\320\271\320\264\320\266\320\270\320\272\320\270\n"
-"(\320\262\321\201\320\265 \321\201\320\277\320\276\321\200\321\202\321\201\320\274\320\265\320\275\321\213)", 0));
+        radioButtonBadge->setText(QApplication::translate("FormDipl", "\320\221\320\265\320\271\320\264\320\266\320\270\320\272\320\270", 0));
         radioButtonDiplom->setText(QApplication::translate("FormDipl", "\320\223\321\200\320\260\320\274\320\276\321\202\321\213", 0));
+        groupBoxPDF_badge->setTitle(QApplication::translate("FormDipl", "\320\223\321\200\321\203\320\277\320\277\320\270\321\200\320\276\320\262\320\272\320\260 PDF-\321\204\320\260\320\271\320\273\320\276\320\262", 0));
+        radioButtonCountry->setText(QApplication::translate("FormDipl", "\320\241\321\202\321\200\320\260\320\275\320\260", 0));
+        radioButtonRegion->setText(QApplication::translate("FormDipl", "\320\240\320\265\320\263\320\270\320\276\320\275", 0));
+        radioButtonCity->setText(QApplication::translate("FormDipl", "\320\223\320\276\321\200\320\276\320\264", 0));
+        radioButtonClub->setText(QApplication::translate("FormDipl", "\320\232\320\273\321\203\320\261", 0));
     } // retranslateUi
 
 };

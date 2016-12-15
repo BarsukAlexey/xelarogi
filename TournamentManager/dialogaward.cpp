@@ -508,9 +508,9 @@ void DialogAward::on_pushButtonGo_clicked()
         {
             const int orderUID = orderItem.first;
             players.back() << DBUtils::getSecondNameAndFirstName(orderUID);
-            names  .back() << DBUtils::getLocalFK(orderUID, getTypeName());
-            flags  .back() << DBUtils::getLocalFK(orderUID, getTypeFlag());
-            hymns  .back() << DBUtils::getLocalFK(orderUID, getTypeHymn());
+            names  .back() << DBUtils::getLocalUIDOfOrderUID(orderUID, getTypeName());
+            flags  .back() << DBUtils::getLocalUIDOfOrderUID(orderUID, getTypeFlag());
+            hymns  .back() << DBUtils::getLocalUIDOfOrderUID(orderUID, getTypeHymn());
         }
     }
     for (QVector<int> vect: names)

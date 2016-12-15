@@ -148,7 +148,7 @@
             <item>
              <widget class="QGroupBox" name="groupBox_5">
               <property name="title">
-               <string>Настройки</string>
+               <string>Размеры шрифтов</string>
               </property>
               <layout class="QGridLayout" name="gridLayout_2">
                <item row="0" column="2">
@@ -351,7 +351,7 @@
             <item>
              <widget class="QGroupBox" name="groupBox_3">
               <property name="title">
-               <string>Развод</string>
+               <string>Разведение</string>
               </property>
               <layout class="QHBoxLayout" name="horizontalLayout_8">
                <item>
@@ -427,7 +427,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QTableWidget" name="qTableWidget">
+        <widget class="QTableWidget" name="tableWidgetOrders">
          <property name="focusPolicy">
           <enum>Qt::NoFocus</enum>
          </property>

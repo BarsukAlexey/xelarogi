@@ -276,8 +276,8 @@ public class ModelFight {
             status = FightStatus.Fight;
         else if (status == FightStatus.PendingExtraRound) {
             if (pointPanelMode == PointPanelMode.FullContact) {
-                countOfKickCountToLeftInt += 6;
-                countOfKickCountToRightInt += 6;
+//                countOfKickCountToLeftInt += 6;
+//                countOfKickCountToRightInt += 6;
             }
             status = FightStatus.ExtraRound;
             soundGong.play();
@@ -301,6 +301,13 @@ public class ModelFight {
                 spendTime -= durationOfRound; // spendTime = 0;
 
                 if (currentRound + 1 == countOfRounds) {
+                    if (0 < countOfKickCountToLeftInt) {
+                        addMinusToLeft();
+                    }
+                    if (0 < countOfKickCountToRightInt) {
+                        addMinusToRight();
+                    }
+
                     int l = getCountJudgeForLeftFighter();
                     int r = getCountJudgeForRightFighter();
                     if (l > r)
@@ -332,11 +339,28 @@ public class ModelFight {
             if (durationOfBreak <= spendTime) {
                 spendTime -= durationOfBreak; // spendTime = 0;
 
-                status = FightStatus.Fight;
-                ++currentRound;
+                if (pointPanelMode == PointPanelMode.FullContact) {
+                    if (countOfKickCountToLeftInt == 0) {
+                        countOfKickCountToLeftInt = 6;
+                    } else if (0 < currentRound && countOfKickCountToLeft[currentRound - 1] < 6) {
+                        countOfKickCountToLeftInt = 6;
+                        addMinusToLeft();
+                    } else {
+                        countOfKickCountToLeftInt += 6;
+                    }
 
-                countOfKickCountToLeftInt += 6;
-                countOfKickCountToRightInt += 6;
+                    if (countOfKickCountToRightInt == 0) {
+                        countOfKickCountToRightInt = 6;
+                    } else if (0 < currentRound && countOfKickCountToRight[currentRound - 1] < 6) {
+                        countOfKickCountToRightInt = 6;
+                        addMinusToRight();
+                    } else {
+                        countOfKickCountToRightInt += 6;
+                    }
+                }
+
+                status = FightStatus.Fight;
+                ++currentRound; // увеличиваем тут, так как выше там нужено currentRound
 
                 soundHummerBit.stop();
                 soundGong.play();

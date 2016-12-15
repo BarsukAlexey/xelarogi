@@ -14,6 +14,21 @@ QVariant DBUtils::get(const QString& field, const QString& table, const QVariant
     return QVariant();
 }
 
+bool DBUtils::set(const QString& field, const QString& table, const QVariant& UID, const QVariant& value)
+{
+    QSqlQuery query("UPDATE " + table + " "
+                    "SET " + field + " = ? "
+                    "WHERE UID = ?");
+    query.addBindValue(value);
+    query.addBindValue(UID);
+    if (!query.exec())
+    {
+        qDebug() << __LINE__ << __PRETTY_FUNCTION__ << query.lastError()<< query.lastQuery();
+        return false;
+    }
+    return true;
+}
+
 QString DBUtils::getField(const QString& field, const QString& table, const QString& UID, QString )
 {
     return get(field, table, UID).toString();
@@ -78,10 +93,14 @@ QString DBUtils::getSecondNameAndOneLetterOfName(long long UID)
     return res;
 }
 
-QSet<long long> DBUtils::getSetOfOrdersInTournamentCategory(long long uidTournamentCategory)
+QVector<int> DBUtils::getOrderUIDsInTournamentCategory(long long uidTournamentCategory)
 {
-    QSet<long long> set;
-    QSqlQuery queryOrder("SELECT * FROM ORDERS WHERE TOURNAMENT_CATEGORY_FK = ? ");
+    QVector<int> set;
+    QSqlQuery queryOrder("SELECT * "
+                         "FROM ORDERS "
+                         "WHERE TOURNAMENT_CATEGORY_FK = ? "
+                         "ORDER BY "
+                         "    SECOND_NAME, FIRST_NAME");
     queryOrder.addBindValue(uidTournamentCategory);
     if (!queryOrder.exec())
     {
@@ -447,10 +466,13 @@ std::pair<int, int> DBUtils::getPlace(long long UIDOrder)
     return std::make_pair(-1, -1);
 }
 
-QVector<std::pair<long long, std::pair<int, int>>> DBUtils::getUIDsAndPlaces(long long tournamentCategoryUID, int maxPlace, bool skeepEmptyGrids)
+QVector<std::pair<long long, std::pair<int, int>>> DBUtils::getUIDsAndPlaces(
+        long long tournamentCategoryUID,
+        int maxPlace,
+        bool skeepEmptyGrids)
 {
-    QVector<QVector<NodeOfTournirGrid> > grid = getNodesAsLevelListOfList(tournamentCategoryUID);
     QVector<std::pair<long long, std::pair<int, int>>> result;
+    QVector<QVector<NodeOfTournirGrid> > grid = getNodesAsLevelListOfList(tournamentCategoryUID);
     QSet<long long> used;
     for (int i = 0, r = 1; i < grid.size(); ++i, r *= 2)
     {

@@ -709,13 +709,32 @@ void SqlTableManager::setSqlTable(const QString& table,
         ui->tableView_2->scrollToBottom();
     });
     connect(ui->pushButtonDelete, &QPushButton::clicked, [this](){
-        for (QModelIndex index : ui->tableView_2->selectionModel()->selectedRows())
+
+        if (QMessageBox::question(0, "", "Удалить? Уверены?") != QMessageBox::StandardButton::Yes)
         {
-            if (!model->removeRow(proxyModel->mapToSource(index).row()))
-                qDebug() << "NOT remove!";
-            //qDebug() << index << index.data();
+            return;
         }
-        submitAllChanges();
+
+        QSet<int> rows;
+        for (QModelIndex index : ui->tableView_2->selectionModel()->selectedIndexes())
+        {
+//            qDebug() << "remove:" << index.data() << index.row();
+            if (!rows.contains(index.row()))
+            {
+                rows << index.row();
+//                qDebug() << "BE" << proxyModel->rowCount();
+                if (!proxyModel->removeRow(index.row()))
+                    qDebug() << "NOT remove!";
+//                qDebug() << "AF" << proxyModel->rowCount();
+//                if (!model->removeRow(proxyModel->mapToSource(index).row()))
+//                    qDebug() << "NOT remove!";
+            }
+        }
+        if (!submitAllChanges())
+        {
+            model->revertAll();
+            proxyModel->invalidate();
+        }
     });
 
     connect(ui->pushButtonSaveInExcel, &QPushButton::clicked, [this](){
@@ -754,17 +773,24 @@ QModelIndex SqlTableManager::getUidIndexOfSelectedRow()
         return QModelIndex();
     }
 
-    QModelIndexList rows = ui->tableView_2->selectionModel()->selectedRows();
-    if (1 < rows.count())
+    QModelIndexList selectedIndexes = ui->tableView_2->selectionModel()->selectedIndexes();
+    int resultRow = -1;
+    for (QModelIndex index : selectedIndexes)
     {
-        QMessageBox::warning(0, "",
-                             "Количество выделеных строк: " + QString::number(rows.count()) + "\n" +
-                             "Выберите какую-нибудь одну строку");
-        return QModelIndex();
+        if (resultRow == -1)
+        {
+            resultRow = index.row();
+        }
+        else if (resultRow != index.row())
+        {
+
+            QMessageBox::warning(0, "",
+                                 "Выделено несколько строк\n"
+                                 "Выделите только одну строку");
+            return QModelIndex();
+        }
     }
-    if (rows.count())
-        return rows[0];
-    return QModelIndex();
+    return ui->tableView_2->model()->index(resultRow, 0);
 }
 
 bool SqlTableManager::addNewName(const QString& name)

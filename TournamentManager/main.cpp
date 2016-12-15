@@ -83,8 +83,9 @@ void connectDB()
 
 
 //#include "dialogschedule2.h"
-//#include "ebnutvbazu.h"
-#include "dialogtournamentgrid.h"
+#include "ebnutvbazu.h"
+//#include "dialogtournamentgrid.h"
+//#include "formdipl.h"
 
 
 int main(int argc, char *argv[])
@@ -101,7 +102,15 @@ int main(int argc, char *argv[])
     //auth();
     connectDB();
 
+//    FormDipl d(21);
+//    d.show();
+
+    EbnutVBazu::copyTable("ORDERS");
+
+    //EbnutVBazu::testMakeGrid();
+
 //    DialogTournamentGrid dlg(0, "", 21);
+//    dlg.resize(1900, dlg.size().height());
 //    dlg.show();
 
     MainWindow w;

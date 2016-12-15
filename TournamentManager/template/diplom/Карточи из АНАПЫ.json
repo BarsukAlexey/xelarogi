@@ -1,0 +1,71 @@
+{
+    "arr": [
+        {
+            "aligment": 2,
+            "color": "#51f516",
+            "data": [
+                {
+                    "id": 1,
+                    "text": ""
+                },
+                {
+                    "id": 23,
+                    "text": " "
+                },
+                {
+                    "id": 2,
+                    "text": ""
+                }
+            ],
+            "font": "Ravie,24,-1,5,75,1,0,0,0,0",
+            "width": 150,
+            "x": 20,
+            "y": 50
+        },
+        {
+            "aligment": 1,
+            "color": "#f30505",
+            "data": [
+                {
+                    "id": 22,
+                    "text": ""
+                },
+                {
+                    "id": 23,
+                    "text": " "
+                },
+                {
+                    "id": 19,
+                    "text": ""
+                }
+            ],
+            "font": "MS Gothic,24,-1,5,50,0,0,0,0,0",
+            "width": 150,
+            "x": 20,
+            "y": 80
+        },
+        {
+            "aligment": 0,
+            "color": "#000000",
+            "data": [
+                {
+                    "id": 4,
+                    "text": ""
+                }
+            ],
+            "font": "Palace Script MT,22,-1,5,50,1,0,0,0,0",
+            "width": 150,
+            "x": 20,
+            "y": 120
+        }
+    ],
+    "badge": true,
+    "checkBoxAllGrids": false,
+    "height": 297,
+    "maxPlace": "4",
+    "radioButtonCity": false,
+    "radioButtonClub": true,
+    "radioButtonCountry": false,
+    "radioButtonRegion": false,
+    "width": 210
+}

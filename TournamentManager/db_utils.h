@@ -65,6 +65,7 @@ public:
     };
 
     static QVariant get(const QString& field, const QString& table, const QVariant& UID);
+    static bool set(const QString& field, const QString& table, const QVariant& UID, const QVariant& value);
     static QString getField(const QString& field, const QString& table, const QString& UID, QString PRETTY_FUNCTION = __PRETTY_FUNCTION__);
     static QString getField(const QString& field, const QString& table, const long long UID, QString PRETTY_FUNCTION = __PRETTY_FUNCTION__);
     static QDate getFieldDateAsDate(const QString& field, const QString& table, const long long UID);
@@ -73,7 +74,7 @@ public:
     // для таблицы ORDERS
     static QString getSecondNameAndFirstName(long long UID);
     static QString getSecondNameAndOneLetterOfName(long long UID);
-    static QSet<long long> getSetOfOrdersInTournamentCategory(long long uidTournamentCategory);
+    static QVector<int> getOrderUIDsInTournamentCategory(long long uidTournamentCategory);
     static int findUidToutnamentCategory(int tournamentUID, QDate birthday, int sexUID, double weight, int typeUID);
 
 
@@ -149,7 +150,7 @@ public:
     // FIELD_TRANSLATES
     static QMap<QString, QSqlRecord> get_NAME_RUS__RELATION_TABLE_NAME();
 
-    static int getLocalFK(int orderUID, int type)
+    static int getLocalUIDOfOrderUID(int orderUID, int type)
     {
         if (type == 0) return DBUtils::get("COUNTRY_FK"    , "ORDERS", orderUID).toInt();
         if (type == 1) return DBUtils::get("REGION_FK"     , "ORDERS", orderUID).toInt();

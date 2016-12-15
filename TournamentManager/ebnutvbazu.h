@@ -2,6 +2,7 @@
 #define EBNUTVBAZU_H
 
 #include "db_utils.h"
+#include "dialogtournamentgrid.h"
 
 #include <QDebug>
 #include <QSqlQuery>

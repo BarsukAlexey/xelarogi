@@ -54,11 +54,6 @@
 #include "superstruct.h"
 using namespace std;
 
-
-namespace Ui {
-class DialogTournamentGrid;
-}
-
 class DrawBorderDelegate : public QStyledItemDelegate
 {
 public:
@@ -71,6 +66,11 @@ public:
      }
 };
 
+//--------------------------------------------------------------
+
+namespace Ui {
+class DialogTournamentGrid;
+}
 
 class DialogTournamentGrid : public QDialog
 {
@@ -84,8 +84,6 @@ private:
     const long long tournamentUID;
     int selectedRowOfRableGrid;
     int selectedColumnOfRableGrid;
-    QVector<int> specialGroup;
-    const QString no_special_group = "нет";
 
 public:
     explicit DialogTournamentGrid(QWidget *parent, QString filter, long long tournamentUID);
@@ -106,7 +104,6 @@ private:
 
 private slots:
     void onActivatedCategory();
-    void onCellCLickedForChangePrioritet(int, int);
     void onButtonGenerateGrid();
 
     void saveAllGridsInExcel();
@@ -118,19 +115,13 @@ private slots:
 
     void onButtonGenerateAll();
 
-
     void onCustomContextMenuRequested(const QPoint& pos);
 
     void onSpinBoxFontSizeChangedOfTournamentCategory(const int sizeFont);
     void onSpinBoxFontSizeChangedOfListOfOrders(int sizeFont);
-    //void onSpinBoxFontSizeChangedOfNodeOfGrid(const int sizeFont);
     void onSpinBoxFontSizeChangedOfListOfPairs(int sizeFont);
 
     void onCheckBoxesChangeState();
-
-
-
-
 
     void on_pushButtonShowHide_clicked(bool checked);
 

@@ -244,9 +244,6 @@ public class JFrameMainJudge extends JFrame {
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
 
-
-
-
         final JButton jStart = new JButton("Start Fight");
         jStart.addActionListener(new ActionListener() {
             @Override
@@ -306,7 +303,7 @@ public class JFrameMainJudge extends JFrame {
         buttonOpeningSystem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int row = table.getSelectedRow();
+                final int row = table.getSelectedRow();
                 if (row < 0) return;
 
                 JDialog dlg = new JDialog(JFrameMainJudge.this, "", true);
@@ -318,20 +315,41 @@ public class JFrameMainJudge extends JFrame {
                 jta.setEditable(false);
                 jta.setContentType("text/html");
                 jta.setText(stringOpenSystem.get(row));
+                System.err.println(stringOpenSystem.get(row));
 
                 jsp = new JScrollPane(jta);
                 //jsp.setPreferredSize(new Dimension(250, 450));
 
+                JButton jButton = new JButton("Save as...");
+                jButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        final JFileChooser chooser = new JFileChooser();
+                        int returnVal = chooser.showSaveDialog(null);
+                        if (returnVal == JFileChooser.APPROVE_OPTION) {
+                            ArrayList<String> arr = new ArrayList<>();
+                            arr.add(stringOpenSystem.get(row));
+                            try {
+                                Files.write(
+                                        Paths.get(chooser.getSelectedFile().getAbsolutePath() + ".html"),
+                                        arr,
+                                        StandardCharsets.UTF_8);
+                            } catch (IOException e1) {
+                                e1.printStackTrace();
+                            }
+                        }
+                    }
+                });
+
                 dlg.setLayout(new BorderLayout());
                 dlg.add(jsp, BorderLayout.CENTER);
+                dlg.add(jButton, BorderLayout.SOUTH);
                 dlg.pack();
                 dlg.setLocationRelativeTo(null);
                 dlg.setVisible(true);
 
             }
         });
-
-
 
 
         // добавление всех компонентов на панель

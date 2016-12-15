@@ -4,12 +4,12 @@
 DialogTournamentGrid::DialogTournamentGrid(QWidget *parent, QString filter, long long tournamentUID) :
     QDialog(parent),
     ui(new Ui::DialogTournamentGrid),
-    tournamentUID(tournamentUID),
-    specialGroup(QVector<int>(4, false))
+    tournamentUID(tournamentUID)
+    //specialGroup(QVector<int>(4, false))
 {
     ui->setupUi(this);
     ui->filterCategoriesLE->setText(filter);
-    ui->qTableWidget->setContextMenuPolicy(Qt::CustomContextMenu);
+    ui->tableWidgetOrders->setContextMenuPolicy(Qt::CustomContextMenu);
     setWindowFlags(Qt::Window);
 
     QSettings settings;
@@ -64,8 +64,7 @@ DialogTournamentGrid::DialogTournamentGrid(QWidget *parent, QString filter, long
 
     connect(ui->qComboBoxSelectCategory, SIGNAL(activated(int)), this, SLOT(onActivatedCategory()));
 
-    connect(ui->qTableWidget, &QTableView::customContextMenuRequested, this, &DialogTournamentGrid::onCustomContextMenuRequested);
-    connect(ui->qTableWidget, SIGNAL(cellClicked(int,int)), SLOT(onCellCLickedForChangePrioritet(int, int)));
+    connect(ui->tableWidgetOrders, &QTableView::customContextMenuRequested, this, &DialogTournamentGrid::onCustomContextMenuRequested);
 
     connect(ui->radioButtonAll        , &QRadioButton::clicked, [this] (){fillCategoryCombobox(ui->filterCategoriesLE->text());});
     connect(ui->radioButtonLonly      , &QRadioButton::clicked, [this] (){fillCategoryCombobox(ui->filterCategoriesLE->text());});
@@ -247,7 +246,8 @@ void DialogTournamentGrid::generatGrid(const long long tournamentUID,
     const int maxVertex = isLeaf.size() - 1;
 
 
-    QSqlDatabase::database().transaction();
+    //QSqlDatabase::database().transaction(); // TODO
+
     for (int v = maxVertex;  1 <= v; --v)
     {
         if (isLeaf[v]) continue;
@@ -269,25 +269,71 @@ void DialogTournamentGrid::generatGrid(const long long tournamentUID,
 
     QVector<bool> isUsedLeaf(maxVertex + 1);
     QVector<long long> orderUID(maxVertex + 1);
-    QVector<int> vertexOfBest;
+    //QVector<int> vertexOfBest;
     if (!bestUID.isEmpty())
     {
-        QVector<QString> pref;
-        if (bestUID.size() == 1) pref << "1";
-        if (bestUID.size() == 2) pref << "11" << "10";
-        if (bestUID.size() == 3) pref << "11" << "101" << "100";
-        if (bestUID.size() == 4) pref << "111" << "101" << "110" << "100";
-        for (int i = 0; i < bestUID.size(); ++i)
+        QVector<int> sizeTree(maxVertex + 1);
+        for (int v = maxVertex; 1 <= v; --v)
         {
-            int v = pref[i].toInt(0, 2);
-            while (!isLeaf[v]) v = 2 * v + 1;
-            vertexOfBest << v;
-
-            isUsedLeaf[v] = true;
-            orderUID[v] = bestUID[i];
-
-            DBUtils::insertLeafOfGrid(tournamentCaterotyUID, v, bestUID[i]);
+            if (isLeaf[v])
+                sizeTree[v] = 1;
+            else
+                sizeTree[v] = sizeTree[2 * v + 1] + sizeTree[2 * v];
         }
+
+        QQueue<std::pair<int, QVector<long long>>> queue;
+        queue.enqueue(std::make_pair(1, bestUID));
+        while (!queue.isEmpty())
+        {
+            int v = queue.head().first;
+            QVector<long long> curBestUID = queue.head().second;
+            queue.dequeue();
+
+            if (isLeaf[v])
+            {
+                assert(curBestUID.size() <= 1);
+
+                if (!curBestUID.isEmpty())
+                {
+                    isUsedLeaf[v] = true;
+                    orderUID[v] = curBestUID[0];
+                    DBUtils::insertLeafOfGrid(tournamentCaterotyUID, v, curBestUID[0]);
+                }
+            }
+            else
+            {
+                QVector<long long> left;
+                QVector<long long> right;
+
+                for (int i = 0, iter = 0; i < curBestUID.size() && iter < sizeTree[2 * v + 1]; i += 2, ++iter)
+                {
+                    left << curBestUID[i];
+                }
+                for (int orderUID : curBestUID)
+                    if (!left.contains(orderUID))
+                        right << orderUID;
+
+                queue.enqueue(std::make_pair(2 * v + 1, left ));
+                queue.enqueue(std::make_pair(2 * v    , right));
+            }
+        }
+
+//        QVector<QString> pref;
+//        if (bestUID.size() == 1) pref << "1";
+//        if (bestUID.size() == 2) pref << "11" << "10";
+//        if (bestUID.size() == 3) pref << "11" << "101" << "100";
+//        if (bestUID.size() == 4) pref << "111" << "101" << "110" << "100";
+//        for (int i = 0; i < bestUID.size(); ++i)
+//        {
+//            int v = pref[i].toInt(0, 2);
+//            while (!isLeaf[v]) v = 2 * v + 1;
+//            vertexOfBest << v;
+
+//            isUsedLeaf[v] = true;
+//            orderUID[v] = bestUID[i];
+
+//            DBUtils::insertLeafOfGrid(tournamentCaterotyUID, v, bestUID[i]);
+//        }
     }
 
     // находим пару для тех бойцов, для которые без пары
@@ -355,7 +401,7 @@ void DialogTournamentGrid::generatGrid(const long long tournamentUID,
     }
 
     assert (super.getAllOrderUIDs().isEmpty());
-    QSqlDatabase::database().commit();
+    //QSqlDatabase::database().commit(); // TODO
 
     //qDebug() << "time.elapsed():" << time.elapsed();
 }
@@ -418,7 +464,7 @@ QVector<std::pair<DBUtils::TypeField, QString> > DialogTournamentGrid::getLocati
 
 void DialogTournamentGrid::fillListOfOrders()
 {
-    ui->qTableWidget->setRowCount(0);
+    ui->tableWidgetOrders->setRowCount(0);
     QSqlQuery query("SELECT * FROM ORDERS WHERE TOURNAMENT_CATEGORY_FK = ? ORDER BY SECOND_NAME, FIRST_NAME");
     query.addBindValue(ui->qComboBoxSelectCategory->currentData(Qt::UserRole).toInt());
     query.exec();
@@ -428,21 +474,34 @@ void DialogTournamentGrid::fillListOfOrders()
         QString name = query.value("SECOND_NAME").toString() + " " + query.value("FIRST_NAME").toString();
         QString location = getLocation(orderUID);
 
-        ui->qTableWidget->setRowCount(ui->qTableWidget->rowCount() + 1);
+        ui->tableWidgetOrders->setRowCount(ui->tableWidgetOrders->rowCount() + 1);
         QTableWidgetItem *item;
 
         item = new QTableWidgetItem(name);
         item->setData(Qt::UserRole, orderUID);
-        ui->qTableWidget->setItem(ui->qTableWidget->rowCount() - 1, 0, item);
 
-        ui->qTableWidget->setItem(ui->qTableWidget->rowCount() - 1, 1, new QTableWidgetItem(location));
+        int row = ui->tableWidgetOrders->rowCount() - 1;
 
-        ui->qTableWidget->setItem(ui->qTableWidget->rowCount() - 1, 2, new QTableWidgetItem(no_special_group));
+        ui->tableWidgetOrders->setItem(row, 0, item);
 
-        ui->qTableWidget->setItem(ui->qTableWidget->rowCount() - 1, 3, new QTableWidgetItem(DBUtils::getField("NAME", "SPORT_CATEGORIES", query.value("SPORT_CATEGORY_FK").toString())));
+        ui->tableWidgetOrders->setItem(row, 1, new QTableWidgetItem(location));
+
+        QSpinBox *spinBox = new QSpinBox;
+        spinBox->setRange(0, 100500);
+        spinBox->setSpecialValueText("Нет");
+        spinBox->setValue(DBUtils::get("PRIORITY", "ORDERS", orderUID).toInt());
+        ui->tableWidgetOrders->setCellWidget(row, 2, spinBox);
+        connect(spinBox, static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+                [orderUID](const int prioriry){
+            //QTime time; time.start();
+            DBUtils::set("PRIORITY", "ORDERS", orderUID, prioriry);
+            //qDebug() << "time: " << time.elapsed() << orderUID;
+        });
+
+        ui->tableWidgetOrders->setItem(row, 3, new QTableWidgetItem(DBUtils::getField("NAME", "SPORT_CATEGORIES", query.value("SPORT_CATEGORY_FK").toString())));
     }
-    ui->qTableWidget->resizeColumnsToContents();
-    ui->qTableWidget->resizeRowsToContents();
+    ui->tableWidgetOrders->resizeColumnsToContents();
+    ui->tableWidgetOrders->resizeRowsToContents();
 }
 
 void DialogTournamentGrid::onActivatedCategory()
@@ -450,40 +509,16 @@ void DialogTournamentGrid::onActivatedCategory()
     const int id = ui->qComboBoxSelectCategory->currentIndex();
     if (!(0 <= id && id < ui->qComboBoxSelectCategory->count()))
     {
-        ui->qTableWidget->setRowCount(0);
+        ui->tableWidgetOrders->setRowCount(0);
         ui->tableWidgeRight->setRowCount(0);
         ui->pRenderArea->tournamentCategoryIsChanged(-1);
         return;
     }
-    specialGroup = QVector<int>(4, false);
 
     ui->pRenderArea->tournamentCategoryIsChanged(ui->qComboBoxSelectCategory->currentData(Qt::UserRole).toInt());
 
     fillListOfOrders();
     fillListOfPairs();
-}
-
-void DialogTournamentGrid::onCellCLickedForChangePrioritet(int row, int)
-{
-    if (!(0 <= row && row < ui->qTableWidget->rowCount())) return;
-    QString orderValue = ui->qTableWidget->item(row, 2)->data(Qt::DisplayRole).toString();
-    if (orderValue == no_special_group)
-    {
-        for (int i = 1; i <= 3; ++i)
-        {
-            if ((i <= 2 && specialGroup[i] == 0) || (i == 3 && specialGroup[i] <= 1))
-            {
-                ui->qTableWidget->setItem(row, 2, new QTableWidgetItem(QString::number(i)));
-                ++specialGroup[i];
-                break;
-            }
-        }
-    }
-    else
-    {
-        ui->qTableWidget->setItem(row, 2, new QTableWidgetItem(no_special_group));
-        --specialGroup[orderValue.toInt()];
-    }
 }
 
 void DialogTournamentGrid::onButtonGenerateGrid()
@@ -521,15 +556,14 @@ void DialogTournamentGrid::onButtonGenerateGrid()
 
 
     QVector<std::pair<int, long long>> bestFighters;
-    for (int row = 0; row < ui->qTableWidget->rowCount(); ++row)
+    for (int row = 0; row < ui->tableWidgetOrders->rowCount(); ++row)
     {
-        long long orderUID = ui->qTableWidget->item(row, 0)->data(Qt::UserRole).toLongLong();
-        QString special_group = ui->qTableWidget->item(row, 2)->data(Qt::DisplayRole).toString();
-        if (special_group != no_special_group)
+        long long orderUID = ui->tableWidgetOrders->item(row, 0)->data(Qt::UserRole).toLongLong();
+        QSpinBox* spinBox = qobject_cast<QSpinBox*> (ui->tableWidgetOrders->cellWidget(row, 2));
+        int priority = spinBox->value();
+        if (priority != 0)
         {
-            int priority = special_group.toInt();
             bestFighters << std::make_pair(priority, orderUID);
-            //qDebug() << __LINE__ << __PRETTY_FUNCTION__ << orderUID << " " << priority << " " << region;
         }
     }
     std::random_shuffle(bestFighters.begin(), bestFighters.end());
@@ -696,35 +730,27 @@ void DialogTournamentGrid::fillCategoryCombobox(QString filterStr)
     {
         while (query.next())
         {
-            QString categoryUID = query.value("UID").toString();
+            int categoryUID = query.value("UID").toInt();
             QString categoryName = query.value("NAME").toString();
 
-            std::set<long long> mansFromOrder;
-            {
-                QSqlQuery queryOrders("SELECT * FROM ORDERS WHERE TOURNAMENT_CATEGORY_FK = ? ");
-                queryOrders.addBindValue(categoryUID);
-                if (!queryOrders.exec())
-                {
-                    qDebug() << __PRETTY_FUNCTION__ << queryOrders.lastError() << queryOrders.lastQuery();
-                    continue;
-                }
-                while (queryOrders.next())
-                    mansFromOrder.insert(queryOrders.value("UID").toLongLong());
-            }
+            QVector<int> mansFromOrder = DBUtils::getOrderUIDsInTournamentCategory(categoryUID);
+            qSort(mansFromOrder);
 
-            std::set<long long> mansFromGrig;
+            QVector<int> mansFromGrig;
             bool haveSomePeopleInGridOrInOrder = 0 < mansFromOrder.size();
-            for(const DBUtils::NodeOfTournirGrid& it : DBUtils::getNodes(categoryUID.toLongLong()))
+            for(const DBUtils::NodeOfTournirGrid& it : DBUtils::getNodes(categoryUID))
             {
                 haveSomePeopleInGridOrInOrder = true;
-                if (0 < it.UID)
-                    mansFromGrig.insert(it.UID);
+                if (!it.isFight)
+                    mansFromGrig << it.UID;
             }
+            qSort(mansFromGrig);
 
 
             bool havePartiallyFilledLevel = false;
             {
-                QVector<QVector<DBUtils::NodeOfTournirGrid> > grid = DBUtils::getNodesAsLevelListOfList(categoryUID.toLongLong());
+                QVector<QVector<DBUtils::NodeOfTournirGrid> > grid =
+                        DBUtils::getNodesAsLevelListOfList(categoryUID);
                 for (int i = 0; i < grid.size(); ++i)
                 {
                     int countFilled = 0;
@@ -756,14 +782,15 @@ void DialogTournamentGrid::fillCategoryCombobox(QString filterStr)
                 }
             }
 
-
+            //qDebug() << ui->radioButtonInvalid->isChecked() << mansFromOrder << mansFromGrig;
 
             if (
                 (ui->radioButtonAll->isChecked() && haveSomePeopleInGridOrInOrder) ||
                 (ui->radioButtonLonly->isChecked() && mansFromOrder.size() == 1) ||
-                (ui->radioButtonInvalid->isChecked() && std::vector<int>(mansFromOrder.begin(), mansFromOrder.end()) != std::vector<int>(mansFromGrig.begin(), mansFromGrig.end())) ||
+                (ui->radioButtonInvalid->isChecked() && mansFromOrder != mansFromGrig) ||
                 (ui->radioButtonInvalidTurn->isChecked() && havePartiallyFilledLevel)
-                ){
+                )
+            {
                 ui->qComboBoxSelectCategory->addItem(categoryName, categoryUID);
             }
         }
@@ -835,7 +862,7 @@ void DialogTournamentGrid::onButtonGenerateAll()
     while (query.next())
     {
         qlonglong tcUID = query.value("UID").toLongLong();
-        QVector<long long> bestUID;
+        QVector<long long> bestUID; // TODO доделать это получить с БД
 
         //        QSqlQuery queryOrder("SELECT * FROM ORDERS WHERE TOURNAMENT_CATEGORIES = ? ");
         //        queryOrder.bindValue(0, tcUID);
@@ -860,7 +887,7 @@ void DialogTournamentGrid::onButtonGenerateAll()
 void DialogTournamentGrid::onCustomContextMenuRequested(const QPoint& pos)
 {
     QMenu contextMenu;
-    QModelIndex index = ui->qTableWidget->indexAt(pos);
+    QModelIndex index = ui->tableWidgetOrders->indexAt(pos);
     qDebug() << "index: " << index;
 
     QAction* restrictAction = new QAction("Заявки спортсмена...", &contextMenu);
@@ -878,7 +905,7 @@ void DialogTournamentGrid::onCustomContextMenuRequested(const QPoint& pos)
                                          DBUtils::getField("SECOND_NAME", "ORDERS", orderUID),
                                          DBUtils::getField("FIRST_NAME", "ORDERS", orderUID)
                                          );
-            dlg.showMaximized(); // НИХУЯ не работает DOTO
+            dlg.showMaximized(); // НИХУЯ не работает TODO
             dlg.exec();
             onActivatedCategory();
         });
@@ -892,7 +919,7 @@ void DialogTournamentGrid::onCustomContextMenuRequested(const QPoint& pos)
         onActivatedCategory();
     });
 
-    contextMenu.exec(ui->qTableWidget->viewport()->mapToGlobal(pos));
+    contextMenu.exec(ui->tableWidgetOrders->viewport()->mapToGlobal(pos));
     delete restrictAction;
 }
 
@@ -992,11 +1019,11 @@ int DialogTournamentGrid::getLocationForSeparate()
 
 void DialogTournamentGrid::onSpinBoxFontSizeChangedOfListOfOrders(int sizeFont)
 {
-    QFont font = ui->qTableWidget->font();
+    QFont font = ui->tableWidgetOrders->font();
     font.setPointSize(sizeFont);
-    ui->qTableWidget->setFont(font);
-    ui->qTableWidget->resizeColumnsToContents();
-    ui->qTableWidget->resizeRowsToContents();
+    ui->tableWidgetOrders->setFont(font);
+    ui->tableWidgetOrders->resizeColumnsToContents();
+    ui->tableWidgetOrders->resizeRowsToContents();
 }
 
 //void DialogTournamentGrid::onSpinBoxFontSizeChangedOfNodeOfGrid(const int sizeFont)

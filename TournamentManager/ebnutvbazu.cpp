@@ -357,6 +357,8 @@ void EbnutVBazu::copyTable(QString table)
 
 void EbnutVBazu::testMakeGrid()
 {
+    QSqlDatabase::database().transaction(); //
+
     for (int tUID = 0; tUID < 100; ++tUID)
     {
         qDebug() << "tUID:" << tUID;
@@ -364,20 +366,21 @@ void EbnutVBazu::testMakeGrid()
         {
             qDebug() << "\ttcUID:" << tcUID;
             QVector<long long> orderUIDs;
-            for(int x : DBUtils::getSetOfOrdersInTournamentCategory(tcUID))
+            for(int x : DBUtils::getOrderUIDsInTournamentCategory(tcUID))
                 orderUIDs << x;
-            for (int length = 0; length < qMin(orderUIDs.size(), 4); ++length)
+            //for (int length = 0; length < qMin(orderUIDs.size(), 4); ++length)
+            for (int length = 0; length < orderUIDs.size(); ++length)
             {
-                for (int iter = 0; iter < 100; ++iter)
+                for (int separator = 0; separator < 4; ++separator)
                 {
-                    for (int separator = 0; separator < 4; ++separator)
+                    for (int iter = 0; iter < 1; ++iter)
                     {
                         std::random_shuffle(orderUIDs.begin(), orderUIDs.end());
-//                        DialogTournamentGrid::generatGrid(
-//                                tUID,
-//                                tcUID,
-//                                orderUIDs.mid(0, length),
-//                                separator);
+                        DialogTournamentGrid::generatGrid(
+                                tUID,
+                                tcUID,
+                                orderUIDs.mid(0, length),
+                                separator);
                     }
                 }
             }

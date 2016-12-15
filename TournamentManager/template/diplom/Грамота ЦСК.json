@@ -47,9 +47,13 @@
             "y": 20
         }
     ],
-    "badge": false,
+    "badge": true,
     "checkBoxAllGrids": false,
     "height": 297,
     "maxPlace": "4",
+    "radioButtonCity": false,
+    "radioButtonClub": false,
+    "radioButtonCountry": true,
+    "radioButtonRegion": false,
     "width": 210
 }

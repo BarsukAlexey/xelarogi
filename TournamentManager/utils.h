@@ -16,6 +16,7 @@ public:
     static int log2(int x);
     static void setFontSize(const QString& text, QFont& font, const QRect& taget, QRect& boundRect);
     static QColor getContrastColor(const QColor& color);
+    static void eraseBadChars(QString& str);
 };
 
 #endif // UTILS_H

@@ -25,6 +25,7 @@
 #include <QSpinBox>
 #include <QSqlQuery>
 #include <QWidget>
+#include <QtAlgorithms>
 
 
 
@@ -53,6 +54,7 @@ public:
 private:
     void onSaveData();
     void loadData();
+    void printDataOfOrderUID(const int orderUID, QPainter* painter, QPrinter* printer);
 
 private slots:
     void onTableClicked(const QModelIndex & index);

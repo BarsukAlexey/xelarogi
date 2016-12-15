@@ -10,13 +10,15 @@ FormDipl::FormDipl(long long UID_tournament, QWidget *parent) :
     setWindowFlags(Qt::Window);
 
     for (int i = 0; i < 16; ++i)
-       ui->comboBoxMaxPlace->addItem(QString::number(1 << i));
+        ui->comboBoxMaxPlace->addItem(QString::number(1 << i));
 
     ui->tableWidget->resizeColumnsToContents();
     ui->tableWidget->setColumnWidth(0,175);
     ui->tableWidget->setColumnWidth(1,120);
     ui->tableWidget->setColumnWidth(2,175);
 
+
+    ui->groupBoxPDF_badge->setVisible(false);
 
     connect(ui->pushButtonNew, &QPushButton::clicked, [this](){onNewTemplate();});
     connect(ui->pushButtonSave, &QPushButton::clicked, [this](){onSaveData();});
@@ -26,12 +28,14 @@ FormDipl::FormDipl(long long UID_tournament, QWidget *parent) :
     connect(ui->tableWidget, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(onTableClicked(const QModelIndex &)));
     connect(ui->pushButtonPrint, &QPushButton::clicked, this, &FormDipl::onPushPrint);
     connect(ui->radioButtonDiplom, &QRadioButton::clicked, [this](){
-        ui->groupBoxPlace->setEnabled(true);
+        ui->groupBoxPlace->setVisible(true);
+        ui->groupBoxPDF_badge->setVisible(false);
     });
     connect(ui->radioButtonBadge, &QRadioButton::clicked, [this](){
-        ui->groupBoxPlace->setEnabled(false);
+        ui->groupBoxPlace->setVisible(false);
+        ui->groupBoxPDF_badge->setVisible(true);
     });
-    connect(ui->comboBox, &QComboBox::currentTextChanged, [this](){
+    connect(ui->comboBox, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged), [this](){
         loadData();
     });
 
@@ -45,6 +49,7 @@ FormDipl::FormDipl(long long UID_tournament, QWidget *parent) :
 
 FormDipl::~FormDipl()
 {
+    onSaveData();
     delete ui;
 }
 
@@ -57,6 +62,11 @@ void FormDipl::onSaveData()
     obj["badge"] = ui->radioButtonBadge->isChecked();
     obj["maxPlace"] = ui->comboBoxMaxPlace->currentText();
     obj["checkBoxAllGrids"] = ui->checkBoxAllGrids->isChecked();
+
+    obj["radioButtonCountry"] = ui->radioButtonCountry->isChecked();
+    obj["radioButtonRegion"]  = ui->radioButtonRegion->isChecked();
+    obj["radioButtonCity"]    = ui->radioButtonCity->isChecked();
+    obj["radioButtonClub"]    = ui->radioButtonClub->isChecked();
 
     QJsonArray arr;
     for (int row = 0; row < fields.size(); ++row)
@@ -73,7 +83,6 @@ void FormDipl::onSaveData()
         }
         a["data"] = data;
         a["font"] = fonts[row].toString();
-        // DOTO CHECK HERE
         a["color"] = colors[row].name();
 
         int x        = dynamic_cast<QSpinBox* >(ui->tableWidget->cellWidget(row, 4))->value();
@@ -94,7 +103,8 @@ void FormDipl::onSaveData()
         qWarning("Couldn't open save file.");
         return;
     }
-    qDebug() << "Записано " << saveFile.write(QJsonDocument(obj).toJson());
+    saveFile.write(QJsonDocument(obj).toJson());
+    //qDebug() << "Записано " <<
 }
 
 void FormDipl::loadData()
@@ -119,7 +129,13 @@ void FormDipl::loadData()
     ui->comboBoxMaxPlace->setCurrentText(obj["maxPlace"].toString());
     ui->checkBoxAllGrids->setChecked(obj["checkBoxAllGrids"].toBool());
 
-    ui->groupBoxPlace->setEnabled(!obj["badge"].toBool());
+    ui->radioButtonCountry->setChecked(obj["radioButtonCountry"].toBool());
+    ui->radioButtonRegion ->setChecked(obj["radioButtonRegion"].toBool());
+    ui->radioButtonCity   ->setChecked(obj["radioButtonCity"].toBool());
+    ui->radioButtonClub   ->setChecked(obj["radioButtonClub"].toBool());
+
+    ui->groupBoxPlace->setVisible(!obj["badge"].toBool());
+    ui->groupBoxPDF_badge->setVisible(obj["badge"].toBool());
 
 
     QJsonArray arr = obj["arr"].toArray();
@@ -170,6 +186,8 @@ void FormDipl::loadData()
 
 
 
+
+
 void FormDipl::onTableClicked(const QModelIndex& index)
 {
     if (!index.isValid())
@@ -202,7 +220,7 @@ void FormDipl::onTableClicked(const QModelIndex& index)
     else if (index.column() == 3)
     {
         QColor color = QColorDialog::getColor(colors[index.row()]);
-//        qDebug() << color << colors[index.row()];
+        //        qDebug() << color << colors[index.row()];
         if (color.isValid())
         {
             QTableWidgetItem *item = new QTableWidgetItem();
@@ -249,7 +267,7 @@ void FormDipl::addRow()
         ui->tableWidget->setCellWidget(row, column++, box);
     }
 
-//    ui->tableWidget->resizeColumnsToContents();
+    //    ui->tableWidget->resizeColumnsToContents();
 
     fonts << QFont();
     fields << QVector<std::pair<DBUtils::TypeField, QString> >();
@@ -274,142 +292,265 @@ void FormDipl::onPushPrint()
 {
     onSaveData();
 
-    QString dirPath = QFileDialog::getExistingDirectory(this);
-    //QString dirPath = "C:\\Trash";
+    const QString dirPath = QFileDialog::getExistingDirectory(this);
+    //const QString dirPath = "C:\\Trash";
     if (dirPath.isEmpty()) return;
 
     QVector<long long> localGet_UIDs_of_TOURNAMENT_CATEGORIES =
             DBUtils::getTournamentCategoryUIDs(UID_tournament);
 
-    //QProgressDialog progress("Working...", "Don't push", 0, localGet_UIDs_of_TOURNAMENT_CATEGORIES.size(), this);
-    QProgressDialog progress(this);
-    progress.setMaximum(localGet_UIDs_of_TOURNAMENT_CATEGORIES.size());
-    progress.setWindowModality(Qt::WindowModal);
-    progress.setMinimumDuration(500);
-
-    for (const long long uidTC : localGet_UIDs_of_TOURNAMENT_CATEGORIES)
+    if (ui->radioButtonBadge->isChecked())
     {
-        //QVector<long long> UIDOrder = DBUtils::get_UIDOrder_for_TC(uidTC);
-        //qDebug() << uidTC << UIDOrder.size();
-
-        QVector<std::pair<long long, std::pair<int, int>>> UIDOrder =
-                DBUtils::getUIDsAndPlaces(
-                    uidTC,
-                    ui->radioButtonBadge->isChecked()? (int)1e9 : ui->comboBoxMaxPlace->currentText().toInt(),
-                    ui->radioButtonDiplom->isChecked() && !ui->checkBoxAllGrids->isChecked());
-        if (UIDOrder.isEmpty())
-            continue;
-        //qDebug() << uidTC << UIDOrder.size();
-
-
-        std::sort(UIDOrder.begin(), UIDOrder.end(), [](
-                  const std::pair<long long, std::pair<int, int>>& UIDOrder0,
-                  const std::pair<long long, std::pair<int, int>>& UIDOrder1)  -> bool {
-            std::pair<int, int> place0 = UIDOrder0.second;
-            std::pair<int, int> place1 = UIDOrder1.second;
-            QString name0 = DBUtils::getSecondNameAndFirstName(UIDOrder0.first);
-            QString name1 = DBUtils::getSecondNameAndFirstName(UIDOrder1.first);
-            return  place0 <  place1 ||
-                   (place0 == place1 && name0 < name1);
+        QVector<QVector<int>> data;
+        for (int tcUID : localGet_UIDs_of_TOURNAMENT_CATEGORIES)
+        {
+            for (int orderUID : DBUtils::getOrderUIDsInTournamentCategory(tcUID))
+            {
+                data << (QVector<int>()
+                         << DBUtils::getLocalUIDOfOrderUID(orderUID, 0)
+                         << DBUtils::getLocalUIDOfOrderUID(orderUID, 1)
+                         << DBUtils::getLocalUIDOfOrderUID(orderUID, 2)
+                         << DBUtils::getLocalUIDOfOrderUID(orderUID, 3)
+                         << orderUID
+                         );
+            }
+        }
+        if (data.isEmpty())
+            return;
+        qStableSort(data.begin(), data.end(), [](const QVector<int>& a, const QVector<int>& b) -> bool {
+            return a.mid(0, 4) < b.mid(0, 4);
         });
 
-        QString fileName = DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", uidTC, __PRETTY_FUNCTION__) + ".pdf";
-        QString fullpath = QDir(dirPath).filePath(fileName);
+        QProgressDialog progress("", "Отмена", 0, data.size(), this);
+        progress.setWindowModality(Qt::WindowModal);
+
+        QPrinter* printer = 0;
+        QPainter* painter = 0;
+        bool isThisFirstPage;
+
+        QVector<QRadioButton*> rbs;
+        rbs << ui->radioButtonCountry
+            << ui->radioButtonRegion
+            << ui->radioButtonCity
+            << ui->radioButtonClub;
+
+        for (int indexData = 0; indexData < data.size(); ++indexData)
         {
-            QFile file(fullpath);
-            if (file.exists())
-                file.remove();
-        }
+            QApplication::processEvents(),
+            progress.setValue(indexData);
+            if (progress.wasCanceled())
+            {
+                break;
+            }
 
-        QPrinter printer;
-        printer.setPageMargins(0, 0, 0, 0, QPrinter::Unit::Millimeter);
-        printer.setPaperSize(QSizeF(ui->spinBoxWidth->value(), ui->spinBoxHeight->value()), QPrinter::Millimeter);
-        printer.setOutputFormat(QPrinter::PdfFormat);
-        printer.setOutputFileName(fullpath);
+            bool doNewDocument = indexData == 0;
+            if (0 < indexData)
+            {
+                for (int i = 0; i < 4; ++i)
+                {
+                    if (rbs[i]->isChecked() && data[indexData - 1][i] != data[indexData][i])
+                    {
+                        doNewDocument = true;
+                    }
+                }
 
-        QPainter painter;
-        painter.begin(&printer);
-        painter.setRenderHint(QPainter::Antialiasing);
+            }
 
-        bool isThisFirstPage = true;
-        for (int i = 0; i < UIDOrder.size(); ++i)
-        {
-            const long long uidOrder = UIDOrder[i].first;
+            if (doNewDocument)
+            {
+
+                QString fullpath = "badge";
+                for (int i = 0; i < 4; ++i)
+                {
+                    fullpath += " - " + DBUtils::getLocalInfo("NAME", data[indexData][4], i).toString();
+                    if (rbs[i]->isChecked())
+                        break;
+                }
+                fullpath += ".pdf";
+                Utils::eraseBadChars(fullpath);
+                //progress.setLabelText(fullpath);
+                fullpath = QDir(dirPath).filePath(fullpath);
+                {
+                    QFile file(fullpath);
+                    if (file.exists())
+                        file.remove();
+                }
+                //qDebug() << "fullpath: " << fullpath;
+
+                if (painter)
+                {
+                    painter->end();
+                    delete painter;
+                }
+                if (printer) delete printer;
+
+                printer = new QPrinter();
+                printer->setPageMargins(0, 0, 0, 0, QPrinter::Unit::Millimeter);
+                printer->setPaperSize(QSizeF(ui->spinBoxWidth->value(), ui->spinBoxHeight->value()), QPrinter::Millimeter);
+                printer->setOutputFormat(QPrinter::PdfFormat);
+                printer->setOutputFileName(fullpath);
+
+                painter = new QPainter();
+                painter->begin(printer);
+                painter->setRenderHint(QPainter::Antialiasing);
+
+                isThisFirstPage = true;
+            }
 
             if (isThisFirstPage)
                 isThisFirstPage = false;
             else
-                printer.newPage();
-
-            //сетка в 1 см
-//            for (int index = 0; index < 20; ++index)
-//            {
-//                double y = 10.0 * printer.height() / printer.heightMM();
-//                painter.drawLine(QPoint(0, index * y), QPoint(printer.width(), index * y));
-
-//                double x = 10.0 * printer.width() / printer.widthMM();
-//                painter.drawLine(QPoint(index * x, 0), QPoint(index * x, printer.height()));
-//            }
-
-
-            for (int row = 0; row < fonts.size(); ++row)
-            {
-                QString text = DBUtils::get(fields[row], uidOrder);
-
-                QFont font = fonts[row];
-                int x        = dynamic_cast<QSpinBox*>(ui->tableWidget->cellWidget(row, 4))->value() * printer.width()  / ui->spinBoxWidth ->value();
-                int y        = dynamic_cast<QSpinBox*>(ui->tableWidget->cellWidget(row, 5))->value() * printer.height() / ui->spinBoxHeight->value();
-                int width    = dynamic_cast<QSpinBox*>(ui->tableWidget->cellWidget(row, 6))->value() * printer.width()  / ui->spinBoxWidth ->value();
-
-//                painter.drawLine(QPoint(x        , 0), QPoint(x        , printer.height()));
-//                painter.drawLine(QPoint(x + width, 0), QPoint(x + width, printer.height()));
-
-
-                if (1 < font.pointSize())
-                {
-                    qreal l = 1, r = font.pointSizeF();
-                    for (int i = 0; i < 150; ++i)
-                    {
-                        qreal m = (l + r) / 2;
-                        font.setPointSizeF(m);
-                        if (width <= QFontMetrics(font).boundingRect(text).width())
-                            r = m;
-                        else
-                            l = m;
-                    }
-                    font.setPointSizeF((l + r) / 2);
-                }
-
-                int index = dynamic_cast<QComboBox*>(ui->tableWidget->cellWidget(row, 1))->currentIndex();
-                if      (index == 0);
-                else if (index == 1) x += (width - QFontMetrics(font).boundingRect(text).width()) / 2;
-                else if (index == 2) x +=  width - QFontMetrics(font).boundingRect(text).width();
-                else
-                    qDebug() << "WTF" << __PRETTY_FUNCTION__;
-
-
-                painter.setPen(colors[row]);
-                painter.setFont(font);
-                //qDebug() << "print:" << font.pointSize();
-                painter.drawText(x, y, text);
-            }
+                printer->newPage();
+            //painter->drawRect(0, 0, 100, 100);
+            const int uidOrder = data[indexData][4];
+            printDataOfOrderUID(uidOrder, painter, printer);
         }
-        painter.end();
-
-        progress.setValue(progress.value() + 1);
-        if (progress.wasCanceled())
-            break;
+        if (painter)
+        {
+            painter->end();
+            delete painter;
+        }
+        if (printer)
+        {
+            delete printer;
+        }
     }
-    qDebug() << "DONE!";
+    else
+    {
+        //QProgressDialog progress("Working...", "Don't push", 0, localGet_UIDs_of_TOURNAMENT_CATEGORIES.size(), this);
+        QProgressDialog progress(this);
+        progress.setMaximum(localGet_UIDs_of_TOURNAMENT_CATEGORIES.size());
+        progress.setWindowModality(Qt::WindowModal);
+        progress.setMinimumDuration(500);
+
+        for (const long long uidTC : localGet_UIDs_of_TOURNAMENT_CATEGORIES)
+        {
+            //QVector<long long> UIDOrder = DBUtils::get_UIDOrder_for_TC(uidTC);
+            //qDebug() << uidTC << UIDOrder.size();
+
+            QVector<std::pair<long long, std::pair<int, int>>> UIDOrder =
+                    DBUtils::getUIDsAndPlaces(
+                        uidTC,
+                        ui->radioButtonBadge->isChecked()? (int)1e9 : ui->comboBoxMaxPlace->currentText().toInt(),
+                        ui->radioButtonDiplom->isChecked() && !ui->checkBoxAllGrids->isChecked());
+            if (UIDOrder.isEmpty())
+                continue;
+            //qDebug() << uidTC << UIDOrder.size();
+
+
+            std::sort(UIDOrder.begin(), UIDOrder.end(), [](
+                      const std::pair<long long, std::pair<int, int>>& UIDOrder0,
+                      const std::pair<long long, std::pair<int, int>>& UIDOrder1)  -> bool {
+                std::pair<int, int> place0 = UIDOrder0.second;
+                std::pair<int, int> place1 = UIDOrder1.second;
+                QString name0 = DBUtils::getSecondNameAndFirstName(UIDOrder0.first);
+                QString name1 = DBUtils::getSecondNameAndFirstName(UIDOrder1.first);
+                return  place0 <  place1 ||
+                        (place0 == place1 && name0 < name1);
+            });
+
+            QString fileName = DBUtils::getField("NAME", "TOURNAMENT_CATEGORIES", uidTC, __PRETTY_FUNCTION__) + ".pdf";
+            QString fullpath = QDir(dirPath).filePath(fileName);
+            {
+                QFile file(fullpath);
+                if (file.exists())
+                    file.remove();
+            }
+
+            QPrinter printer;
+            printer.setPageMargins(0, 0, 0, 0, QPrinter::Unit::Millimeter);
+            printer.setPaperSize(QSizeF(ui->spinBoxWidth->value(), ui->spinBoxHeight->value()), QPrinter::Millimeter);
+            printer.setOutputFormat(QPrinter::PdfFormat);
+            printer.setOutputFileName(fullpath);
+
+            QPainter painter;
+            painter.begin(&printer);
+            painter.setRenderHint(QPainter::Antialiasing);
+
+            bool isThisFirstPage = true;
+            for (int i = 0; i < UIDOrder.size(); ++i)
+            {
+                const long long uidOrder = UIDOrder[i].first;
+
+                if (isThisFirstPage)
+                    isThisFirstPage = false;
+                else
+                    printer.newPage();
+
+                printDataOfOrderUID(uidOrder, &painter, &printer);
+            }
+            painter.end();
+
+            progress.setValue(progress.value() + 1);
+            if (progress.wasCanceled())
+                break;
+        }
+    }
+    //qDebug() << "DONE!";
+}
+
+
+void FormDipl::printDataOfOrderUID(const int uidOrder, QPainter* painter, QPrinter* printer)
+{
+    //сетка в 1 см
+    //            for (int index = 0; index < 20; ++index)
+    //            {
+    //                double y = 10.0 * printer.height() / printer.heightMM();
+    //                painter.drawLine(QPoint(0, index * y), QPoint(printer.width(), index * y));
+
+    //                double x = 10.0 * printer.width() / printer.widthMM();
+    //                painter.drawLine(QPoint(index * x, 0), QPoint(index * x, printer.height()));
+    //            }
+    for (int row = 0; row < fonts.size(); ++row)
+    {
+        QString text = DBUtils::get(fields[row], uidOrder);
+
+        QFont font = fonts[row];
+        int x        = dynamic_cast<QSpinBox*>(ui->tableWidget->cellWidget(row, 4))->value() * printer->width()  / ui->spinBoxWidth ->value();
+        int y        = dynamic_cast<QSpinBox*>(ui->tableWidget->cellWidget(row, 5))->value() * printer->height() / ui->spinBoxHeight->value();
+        int width    = dynamic_cast<QSpinBox*>(ui->tableWidget->cellWidget(row, 6))->value() * printer->width()  / ui->spinBoxWidth ->value();
+
+        //                painter.drawLine(QPoint(x        , 0), QPoint(x        , printer.height()));
+        //                painter.drawLine(QPoint(x + width, 0), QPoint(x + width, printer.height()));
+
+
+        if (1 < font.pointSize())
+        {
+            qreal l = 1, r = font.pointSizeF();
+            for (int i = 0; i < 150; ++i)
+            {
+                qreal m = (l + r) / 2;
+                font.setPointSizeF(m);
+                if (width <= QFontMetrics(font).boundingRect(text).width())
+                    r = m;
+                else
+                    l = m;
+            }
+            font.setPointSizeF((l + r) / 2);
+        }
+
+        int index = dynamic_cast<QComboBox*>(ui->tableWidget->cellWidget(row, 1))->currentIndex();
+        if      (index == 0);
+        else if (index == 1) x += (width - QFontMetrics(font).boundingRect(text).width()) / 2;
+        else if (index == 2) x +=  width - QFontMetrics(font).boundingRect(text).width();
+        else
+            qDebug() << "WTF" << __PRETTY_FUNCTION__;
+
+
+        painter->setPen(colors[row]);
+        painter->setFont(font);
+        //qDebug() << "print:" << font.pointSize();
+        painter->drawText(x, y, text);
+    }
 }
 
 void FormDipl::onNewTemplate()
 {
     bool ok;
     QString fileName = QInputDialog::getText(this, tr(" "),
-                                         tr("Введите назание шаблона:"),
-                                         QLineEdit::Normal,
-                                         "", &ok);
+                                             tr("Введите назание шаблона:"),
+                                             QLineEdit::Normal,
+                                             "", &ok);
     if (!ok || fileName.isEmpty())
         return;
 
