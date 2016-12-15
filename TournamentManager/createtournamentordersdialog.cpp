@@ -73,6 +73,22 @@ void CreateTournamentOrdersDialog::loadFromExcel()
     if (filePath.isEmpty()) return;
 
 
+
+////QDir dir("C:\\code\\Заявки\\Окончательные\\21.09.2016");
+////QDir dir("C:\\code\\Заявки\\Окончательные\\22.09.2016 загруженные");
+//QDir dir("C:\\code\\Заявки\\reg forms 2016 new");
+//QFileInfoList list = dir.entryInfoList();
+//for (int i = 0; i < list.size(); ++i) {
+//    QFileInfo fileInfo = list.at(i);
+//    QString filePath = fileInfo.absoluteFilePath();
+//    if (!fileInfo.isFile()) continue;
+//    qDebug() << "filePath: " << filePath;
+//    //continue;
+
+
+
+
+
     QAxObject* excel = new QAxObject("Excel.Application", this);
     //excel->setProperty("Visible", true);
     QAxObject* workbooks = excel->querySubObject("Workbooks");
@@ -416,6 +432,7 @@ void CreateTournamentOrdersDialog::loadFromExcel()
                 "Не добавлены (ошибка при добавлении заявок в базу данных): " + QString::number(errorOrders));
 
     ui->widget->updateMyData();
+//}
 }
 
 

@@ -99,13 +99,26 @@ int main(int argc, char *argv[])
     QCoreApplication::setOrganizationDomain("SecretOrganizationDomain.com");
     QCoreApplication::setApplicationName("Perfect Tournament Manager");
 
+
+
+//    EbnutVBazu::copyTable("AGE_CATEGORIES");
+//    EbnutVBazu::copyTable("CLUBS");
+//    EbnutVBazu::copyTable("COACHS");
+//    EbnutVBazu::copyTable("COUNTRIES");
+//    EbnutVBazu::copyTable("ORDERS");
+//    EbnutVBazu::copyTable("REGIONS");
+//    EbnutVBazu::copyTable("REGION_UNITS");
+//    EbnutVBazu::copyTable("ORDERS");
+//    EbnutVBazu::copyTable("SPORT_CATEGORIES");
+//    EbnutVBazu::copyTable("TYPES");
+    //return 228;
+
+
     //auth();
     connectDB();
 
 //    FormDipl d(21);
 //    d.show();
-
-    EbnutVBazu::copyTable("ORDERS");
 
     //EbnutVBazu::testMakeGrid();
 
