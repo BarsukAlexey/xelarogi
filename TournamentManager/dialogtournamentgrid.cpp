@@ -246,7 +246,7 @@ void DialogTournamentGrid::generatGrid(const long long tournamentUID,
     const int maxVertex = isLeaf.size() - 1;
 
 
-    //QSqlDatabase::database().transaction(); // TODO
+    QSqlDatabase::database().transaction();
 
     for (int v = maxVertex;  1 <= v; --v)
     {
@@ -401,7 +401,7 @@ void DialogTournamentGrid::generatGrid(const long long tournamentUID,
     }
 
     assert (super.getAllOrderUIDs().isEmpty());
-    //QSqlDatabase::database().commit(); // TODO
+    QSqlDatabase::database().commit();
 
     //qDebug() << "time.elapsed():" << time.elapsed();
 }

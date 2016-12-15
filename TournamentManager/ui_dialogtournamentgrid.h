@@ -125,7 +125,7 @@ public:
         pushButtonShowHide = new QPushButton(widget);
         pushButtonShowHide->setObjectName(QStringLiteral("pushButtonShowHide"));
         pushButtonShowHide->setCheckable(true);
-        pushButtonShowHide->setAutoDefault(false);
+        pushButtonShowHide->setAutoDefault(true);
 
         verticalLayout_2->addWidget(pushButtonShowHide);
 
@@ -142,6 +142,7 @@ public:
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(buttonSave->sizePolicy().hasHeightForWidth());
         buttonSave->setSizePolicy(sizePolicy);
+        buttonSave->setAutoDefault(false);
 
         horizontalLayout_7->addWidget(buttonSave);
 
@@ -149,6 +150,7 @@ public:
         buttonSaveAll->setObjectName(QStringLiteral("buttonSaveAll"));
         sizePolicy.setHeightForWidth(buttonSaveAll->sizePolicy().hasHeightForWidth());
         buttonSaveAll->setSizePolicy(sizePolicy);
+        buttonSaveAll->setAutoDefault(false);
 
         horizontalLayout_7->addWidget(buttonSaveAll);
 
@@ -408,6 +410,7 @@ public:
         buttonGenerateAll->setObjectName(QStringLiteral("buttonGenerateAll"));
         sizePolicy.setHeightForWidth(buttonGenerateAll->sizePolicy().hasHeightForWidth());
         buttonGenerateAll->setSizePolicy(sizePolicy);
+        buttonGenerateAll->setAutoDefault(false);
 
         gridLayout_5->addWidget(buttonGenerateAll, 0, 1, 1, 1);
 
@@ -415,6 +418,7 @@ public:
         buttonDelete->setObjectName(QStringLiteral("buttonDelete"));
         sizePolicy.setHeightForWidth(buttonDelete->sizePolicy().hasHeightForWidth());
         buttonDelete->setSizePolicy(sizePolicy);
+        buttonDelete->setAutoDefault(false);
 
         gridLayout_5->addWidget(buttonDelete, 0, 3, 1, 1);
 
@@ -422,6 +426,7 @@ public:
         buttonDeleteAll->setObjectName(QStringLiteral("buttonDeleteAll"));
         sizePolicy.setHeightForWidth(buttonDeleteAll->sizePolicy().hasHeightForWidth());
         buttonDeleteAll->setSizePolicy(sizePolicy);
+        buttonDeleteAll->setAutoDefault(false);
 
         gridLayout_5->addWidget(buttonDeleteAll, 0, 4, 1, 1);
 
@@ -429,6 +434,7 @@ public:
         buttonGenerate->setObjectName(QStringLiteral("buttonGenerate"));
         sizePolicy.setHeightForWidth(buttonGenerate->sizePolicy().hasHeightForWidth());
         buttonGenerate->setSizePolicy(sizePolicy);
+        buttonGenerate->setAutoDefault(false);
 
         gridLayout_5->addWidget(buttonGenerate, 0, 0, 1, 1);
 

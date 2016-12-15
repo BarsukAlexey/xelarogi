@@ -100,27 +100,13 @@ int main(int argc, char *argv[])
     QCoreApplication::setApplicationName("Perfect Tournament Manager");
 
 
-
-//    EbnutVBazu::copyTable("AGE_CATEGORIES");
-//    EbnutVBazu::copyTable("CLUBS");
-//    EbnutVBazu::copyTable("COACHS");
-//    EbnutVBazu::copyTable("COUNTRIES");
-//    EbnutVBazu::copyTable("ORDERS");
-//    EbnutVBazu::copyTable("REGIONS");
-//    EbnutVBazu::copyTable("REGION_UNITS");
-//    EbnutVBazu::copyTable("ORDERS");
-//    EbnutVBazu::copyTable("SPORT_CATEGORIES");
-//    EbnutVBazu::copyTable("TYPES");
-    //return 228;
-
-
     //auth();
     connectDB();
 
 //    FormDipl d(21);
 //    d.show();
 
-    //EbnutVBazu::testMakeGrid();
+//    EbnutVBazu::testMakeGrid(); return 228;
 
 //    DialogTournamentGrid dlg(0, "", 21);
 //    dlg.resize(1900, dlg.size().height());
@@ -128,7 +114,6 @@ int main(int argc, char *argv[])
 
     MainWindow w;
     w.show();
-
 
     return a.exec();
 }
