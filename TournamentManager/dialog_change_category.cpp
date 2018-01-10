@@ -92,7 +92,8 @@ DialogChangeCategory::DialogChangeCategory(const int orderUID, QWidget *parent) 
         if (!lst.size()) return;
         int uidCategory = model->data(model->index(lst[0].row(), 0)).toInt();
 
-        QSqlQuery updateQuery(
+        QSqlQuery updateQuery;
+        updateQuery.prepare(
                     "UPDATE ORDERS "
                     "SET "
                     "TOURNAMENT_CATEGORY_FK = ?, TYPE_FK = ? "

@@ -30,7 +30,8 @@ void ReporMinistr::report(const long long tournamentUID)
         QAxObject *sheet = sheets->querySubObject( "Item( int )", 1);
         sheet->setProperty("Name", "Количество участников");
         QSqlQuery query;
-        query = QSqlQuery(
+        query = QSqlQuery();
+        query.prepare(
             "SELECT REGIONS.UID "
             "FROM ORDERS "
                 "INNER JOIN REGIONS               ON ORDERS.REGION_FK              = REGIONS.UID "
@@ -59,7 +60,8 @@ void ReporMinistr::report(const long long tournamentUID)
                 ExcelUtils::setValue(sheet, 3 + i, 1, QString::number(i + 1));
                 ExcelUtils::setValue(sheet, 3 + i, 2, DBUtils::getField("NAME", "REGIONS", uidsOfRegions[i]));
 
-                QSqlQuery queryMan(
+                QSqlQuery queryMan;
+                queryMan.prepare(
                     "SELECT COUNT(*) AS CNT "
                     "FROM ORDERS "
                          "INNER JOIN REGIONS               ON ORDERS.REGION_FK              = REGIONS.UID "
@@ -81,7 +83,8 @@ void ReporMinistr::report(const long long tournamentUID)
                 }
 
 
-                QSqlQuery queryGirl(
+                QSqlQuery queryGirl;
+                queryGirl.prepare(
                     "SELECT COUNT(*) AS CNT "
                     "FROM ORDERS "
                          "INNER JOIN REGIONS               ON ORDERS.REGION_FK              = REGIONS.UID "
@@ -106,7 +109,8 @@ void ReporMinistr::report(const long long tournamentUID)
 
 
 
-                QSqlQuery queryCoach(
+                QSqlQuery queryCoach;
+                queryCoach.prepare(
                     "SELECT COUNT(*) AS CNT "
                     "FROM ORDERS "
                          "INNER JOIN REGIONS               ON ORDERS.REGION_FK              = REGIONS.UID "
@@ -184,7 +188,8 @@ void ReporMinistr::f2(QAxObject *sheet, const long long tournamentUID)
 {
     QVector<long long> sportCat;
     {
-        QSqlQuery querySC("SELECT * FROM SPORT_CATEGORIES ORDER BY NAME");
+        QSqlQuery querySC;
+        querySC.prepare("SELECT * FROM SPORT_CATEGORIES ORDER BY NAME");
         if (!querySC.exec())
         {
             qDebug() << __PRETTY_FUNCTION__  << querySC.lastError() << querySC.lastQuery();
@@ -195,7 +200,8 @@ void ReporMinistr::f2(QAxObject *sheet, const long long tournamentUID)
     for (int i = 0; i < sportCat.size(); ++i)
         ExcelUtils::setValue(sheet, i + 1, 1, DBUtils::getField("NAME", "SPORT_CATEGORIES", sportCat[i]));
 
-    QSqlQuery queryCat(
+    QSqlQuery queryCat;
+    queryCat.prepare(
         "SELECT "
             "SEX_FK, AGE_FROM, AGE_TILL, AGE_CATEGORY_FK "
         "FROM "
@@ -281,7 +287,8 @@ void ReporMinistr::f3(QAxObject* sheet, const long long tournamentUID)
 {
     std::map<long long,  QVector<int> > regionAnsCntMedal;
 
-    QSqlQuery query(
+    QSqlQuery query;
+    query.prepare(
         "SELECT "
             "UID "
         "FROM "

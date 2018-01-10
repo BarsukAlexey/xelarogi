@@ -12,7 +12,7 @@
 #include <QObject>
 #include <QSqlDatabase>
 #include <QSqlError>
-#include <QSqlQuery>
+
 
 class WinnerReport : public QObject
 {

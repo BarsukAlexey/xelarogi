@@ -122,7 +122,8 @@ void DialogTournamentGrid::generatGrid(const long long tournamentUID,
     {
         // удалим старую сетку
         //DBUtils::dele
-        QSqlQuery query("DELETE FROM GRIDS WHERE TOURNAMENT_CATEGORIES_FK = ? ");
+        QSqlQuery query;
+query.prepare("DELETE FROM GRIDS WHERE TOURNAMENT_CATEGORIES_FK = ? ");
         query.addBindValue(tournamentCaterotyUID);
         if (!query.exec())
         {
@@ -138,7 +139,8 @@ void DialogTournamentGrid::generatGrid(const long long tournamentUID,
     QVector<int> dayFight;  // dayFight[levelGrid]
     QVector<int> timeFight; // dayFight[levelGrid]
     {
-        QSqlQuery queryCOUNT("SELECT count() AS COUNT "
+        QSqlQuery queryCOUNT;
+        queryCOUNT.prepare("SELECT count() AS COUNT "
                              "FROM ORDERS "
                              "WHERE TOURNAMENT_CATEGORY_FK = ? "
                              "GROUP BY TOURNAMENT_CATEGORY_FK");
@@ -206,7 +208,8 @@ void DialogTournamentGrid::generatGrid(const long long tournamentUID,
 
     SuperStruct super(separate);
     {
-        QSqlQuery query("SELECT * "
+        QSqlQuery query;
+query.prepare("SELECT * "
                         "FROM ORDERS "
                         "WHERE TOURNAMENT_CATEGORY_FK = ? "
                         "ORDER BY SECOND_NAME, FIRST_NAME");
@@ -252,7 +255,8 @@ void DialogTournamentGrid::generatGrid(const long long tournamentUID,
     {
         if (isLeaf[v]) continue;
 
-        QSqlQuery query("INSERT INTO GRIDS VALUES (?,?,?,   ?,?,   ?,?)");
+        QSqlQuery query;
+query.prepare("INSERT INTO GRIDS VALUES (?,?,?,   ?,?,   ?,?)");
         query.addBindValue(tournamentCaterotyUID);
         query.addBindValue(v);
         query.addBindValue(1);
@@ -409,7 +413,8 @@ void DialogTournamentGrid::generatGrid(const long long tournamentUID,
 void DialogTournamentGrid::deleteGrid(const long long uidTC)
 {
     // проверяем есть ли турнирная сетка, если есть, то задаём вопрос
-    QSqlQuery query("SELECT * FROM GRIDS WHERE TOURNAMENT_CATEGORIES_FK = ? ");
+    QSqlQuery query;
+query.prepare("SELECT * FROM GRIDS WHERE TOURNAMENT_CATEGORIES_FK = ? ");
     query.addBindValue(uidTC);
     if (!query.exec())
         qDebug() << __PRETTY_FUNCTION__ << query.lastError() << query.lastQuery();
@@ -465,7 +470,8 @@ QVector<std::pair<DBUtils::TypeField, QString> > DialogTournamentGrid::getLocati
 void DialogTournamentGrid::fillListOfOrders()
 {
     ui->tableWidgetOrders->setRowCount(0);
-    QSqlQuery query("SELECT * FROM ORDERS WHERE TOURNAMENT_CATEGORY_FK = ? ORDER BY SECOND_NAME, FIRST_NAME");
+    QSqlQuery query;
+query.prepare("SELECT * FROM ORDERS WHERE TOURNAMENT_CATEGORY_FK = ? ORDER BY SECOND_NAME, FIRST_NAME");
     query.addBindValue(ui->qComboBoxSelectCategory->currentData(Qt::UserRole).toInt());
     query.exec();
     while (query.next())
@@ -525,7 +531,8 @@ void DialogTournamentGrid::onButtonGenerateGrid()
 {
     {
         // проверяем есть ли турнирная сетка, если есть, то задаём вопрос
-        QSqlQuery query("SELECT * FROM GRIDS WHERE TOURNAMENT_CATEGORIES_FK = ? ");
+        QSqlQuery query;
+query.prepare("SELECT * FROM GRIDS WHERE TOURNAMENT_CATEGORIES_FK = ? ");
         query.addBindValue(ui->qComboBoxSelectCategory->currentData(Qt::UserRole).toInt());
         if (query.exec())
         {
@@ -847,7 +854,8 @@ void DialogTournamentGrid::onButtonGenerateAll()
     progress.setWindowModality(Qt::WindowModal);
     progress.setMinimumDuration(500);
     {
-        QSqlQuery query("SELECT COUNT(*) AS CNT FROM TOURNAMENT_CATEGORIES WHERE TOURNAMENT_FK = ? ");
+        QSqlQuery query;
+query.prepare("SELECT COUNT(*) AS CNT FROM TOURNAMENT_CATEGORIES WHERE TOURNAMENT_FK = ? ");
         query.addBindValue(tournamentUID);
         if (query.exec() && query.next())
             progress.setMaximum(query.value("CNT").toInt());
@@ -855,7 +863,8 @@ void DialogTournamentGrid::onButtonGenerateAll()
             progress.setMaximum(0);
     }
 
-    QSqlQuery query("SELECT * FROM TOURNAMENT_CATEGORIES WHERE TOURNAMENT_FK = ? ORDER BY SEX_FK, TYPE_FK, AGE_FROM, AGE_TILL, WEIGHT_FROM, WEIGHT_TILL ");
+    QSqlQuery query;
+query.prepare("SELECT * FROM TOURNAMENT_CATEGORIES WHERE TOURNAMENT_FK = ? ORDER BY SEX_FK, TYPE_FK, AGE_FROM, AGE_TILL, WEIGHT_FROM, WEIGHT_TILL ");
     query.bindValue(0, tournamentUID);
     if (!query.exec())
     {
@@ -1015,7 +1024,8 @@ QVector<long long> DialogTournamentGrid::bestUID(const int tcUID)
 {
     QVector<std::pair<int, long long>> bestFighters;
 
-    QSqlQuery queryOrder("SELECT * FROM ORDERS WHERE TOURNAMENT_CATEGORY_FK = ? ");
+    QSqlQuery queryOrder;
+    queryOrder.prepare("SELECT * FROM ORDERS WHERE TOURNAMENT_CATEGORY_FK = ? ");
     queryOrder.addBindValue(tcUID);
     if (!queryOrder.exec())
     {

@@ -45,7 +45,8 @@ void EbnutVBazu::f(const QSqlDatabase &database, long long )
                     //count_people = (count_people + 1) % 17;
                     ++count_people;
 
-                    query = new QSqlQuery("INSERT INTO TOURNAMENT_CATEGORIES VALUES (?, ?, ?, ?, ?, ?, 1, ?, ?,   ?, ?, ?)", database);
+                    query = new QSqlQuery(database);
+                    query->prepare("INSERT INTO TOURNAMENT_CATEGORIES VALUES (?, ?, ?, ?, ?, ?, 1, ?, ?,   ?, ?, ?)");
                     QString str;
 
                     str.sprintf("%s от %d до %d лет, от %d до %d кг, %s", (sex==1? "М" : "Ж"), age, age + stepAge, weight, weight + stepWeight, types[type - 1]);
@@ -68,13 +69,14 @@ void EbnutVBazu::f(const QSqlDatabase &database, long long )
 
 
                     for (int j = 0; j < count_people; ++j, ++UID_people){
-                        query = new QSqlQuery("INSERT INTO ORDERS VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", database);
+                        query = new QSqlQuery(database);
+                        query->prepare("INSERT INTO ORDERS VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
                         query->bindValue(0, UID_people);
                         query->bindValue(1, "Name" + QString('A' + j));
                         query->bindValue(2, "Second" + QString(char('A' + j)));
                         query->bindValue(3, "Patr" + QString(char('A' + j)));
                         QDate date;
-                        date.addYears(- age - stepAge / 2);
+                        date = date.addYears(- age - stepAge / 2);
                         query->bindValue(4, date);
                         query->bindValue(5, sex);
                         query->bindValue(6, weight + stepWeight / 2);
@@ -107,7 +109,8 @@ void EbnutVBazu::f(const QSqlDatabase &database, long long )
 
 void EbnutVBazu::setRandomWinner()
 {
-    QSqlQuery query("SELECT * FROM TOURNAMENT_CATEGORIES ORDER BY UID");
+    QSqlQuery query;
+query.prepare("SELECT * FROM TOURNAMENT_CATEGORIES ORDER BY UID");
     if (!query.exec())
     {
         qDebug() << __LINE__ << __PRETTY_FUNCTION__  << query.lastError().text() << query.lastQuery();
@@ -128,7 +131,8 @@ void EbnutVBazu::setRandomWinner()
             int child = rand() % 2? 2 * v + 1 : 2 * v;
             if (child <= nodes.size())
             {
-                QSqlQuery q("UPDATE GRIDS SET ORDER_FK = ?, result = ?  WHERE TOURNAMENT_CATEGORIES_FK = ? AND VERTEX = ?");
+                QSqlQuery q;
+                q.prepare("UPDATE GRIDS SET ORDER_FK = ?, result = ?  WHERE TOURNAMENT_CATEGORIES_FK = ? AND VERTEX = ?");
                 if (nodes[child - 1].UID == 0)
                 {
                     qDebug() << "Fuck";

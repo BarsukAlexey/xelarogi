@@ -24,7 +24,8 @@ DialogScheduleSettingLists::DialogScheduleSettingLists(QWidget *parent, const lo
     connect(ui->buttonBox, &QDialogButtonBox::accepted, this, &DialogScheduleSettingLists::onbuttonBoxAccepted);
 
 
-    QSqlQuery query(
+    QSqlQuery query;
+query.prepare(
                 "SELECT * "
                 "FROM AGE_TYPES  "
                 "WHERE TOURNAMENT_FK = ?"

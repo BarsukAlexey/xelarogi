@@ -5,3 +5,5 @@
 /object_*
 /*.user
 /*.user.*
+.qmake.stash
+ui_*

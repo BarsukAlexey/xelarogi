@@ -73,7 +73,8 @@ void RenderAreaWidget::mousePressEvent(QMouseEvent* event)
         {
             if (selectedNode.v == currentNode.v && selectedNode.isFight)
             {
-                QSqlQuery query("UPDATE GRIDS SET ORDER_FK = ?, result = ? WHERE TOURNAMENT_CATEGORIES_FK = ? AND VERTEX = ?");
+                QSqlQuery query;
+query.prepare("UPDATE GRIDS SET ORDER_FK = ?, result = ? WHERE TOURNAMENT_CATEGORIES_FK = ? AND VERTEX = ?");
                 query.bindValue(0, QVariant(QVariant::Int));
                 query.bindValue(1, QVariant(QVariant::String));
                 query.bindValue(2, tournamentCategories);
@@ -107,14 +108,16 @@ void RenderAreaWidget::mousePressEvent(QMouseEvent* event)
 
                 QString orderUID;
                 {
-                    QSqlQuery query("SELECT * FROM GRIDS WHERE TOURNAMENT_CATEGORIES_FK = ? AND VERTEX = ?");
+                    QSqlQuery query;
+query.prepare("SELECT * FROM GRIDS WHERE TOURNAMENT_CATEGORIES_FK = ? AND VERTEX = ?");
                     query.bindValue(0, tournamentCategories);
                     query.bindValue(1, node1.v);
                     if (!( query.exec() && query.next()))
                         qDebug() << __PRETTY_FUNCTION__ << " " << query.lastError().text() << "\n" << query.lastQuery();
                     orderUID = query.value("ORDER_FK").toString();
                 }
-                QSqlQuery query("UPDATE GRIDS SET ORDER_FK = ?, RESULT = ? WHERE TOURNAMENT_CATEGORIES_FK = ? AND VERTEX = ?");
+                QSqlQuery query;
+query.prepare("UPDATE GRIDS SET ORDER_FK = ?, RESULT = ? WHERE TOURNAMENT_CATEGORIES_FK = ? AND VERTEX = ?");
                 query.bindValue(0, orderUID);
                 query.bindValue(1, node0.result);
                 query.bindValue(2, tournamentCategories);

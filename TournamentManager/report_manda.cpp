@@ -41,7 +41,8 @@ void ReportManda::report(const long long tournamentUID)
         QString ageCatUID = queryCategory.value("AGE_CATEGORY_FK").toString();
         QString age       = queryCategory.value("AGE").toString();
 
-        QSqlQuery queryClubs(
+        QSqlQuery queryClubs;
+        queryClubs.prepare(
                     "SELECT CLUBS.UID AS clubid12 "
                     "FROM ORDERS "
                     "INNER JOIN CLUBS ON CLUBS.UID = ORDERS.CLUB_FK "
@@ -96,7 +97,8 @@ void ReportManda::report(const long long tournamentUID)
         ExcelUtils::uniteRange(sheet, startRow + uidsOfClubs.size(), 1, startRow + uidsOfClubs.size() + 1, 2);
         ExcelUtils::setValue  (sheet, startRow + uidsOfClubs.size(), 1, translations["Всего"]);
 
-        QSqlQuery queryWEIGHTS(
+        QSqlQuery queryWEIGHTS;
+        queryWEIGHTS.prepare(
                     "SELECT WEIGHT_FROM, WEIGHT_TILL, MAX(TOURNAMENT_CATEGORIES.WEIGHT) AS WEIGHT "
                     "FROM ORDERS "
                     "INNER JOIN CLUBS ON CLUBS.UID = ORDERS.CLUB_FK "
@@ -180,7 +182,8 @@ void ReportManda::report(const long long tournamentUID)
 
                 for (int i = 0; i < uidsOfClubs.size(); ++i)
                 {
-                    QSqlQuery query(
+                    QSqlQuery query;
+query.prepare(
                                 "SELECT COUNT(*) AS CNT "
                                 "FROM ORDERS "
                                 "INNER JOIN CLUBS                 ON CLUBS.UID                 = ORDERS.CLUB_FK "

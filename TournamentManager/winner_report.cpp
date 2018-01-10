@@ -32,7 +32,8 @@ WinnerReport::WinnerReport(const long long tournamentUID, QObject* parent)
     QAxObject *sheets = workbook->querySubObject("WorkSheets");
 
 
-    QSqlQuery query(
+    QSqlQuery query;
+    query.prepare(
                 "SELECT "
                     "TYPE_FK, AGE_FROM, AGE_TILL, SEX_FK, AGE_CATEGORY_FK, MAX(UID) AS MAX_UID_TC "
                 "FROM "
