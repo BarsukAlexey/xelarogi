@@ -70,6 +70,9 @@ void CreateTournamentOrdersDialog::loadFromExcel()
     QString filePath = QFileDialog::getOpenFileName(this, tr("Выберите файл, в котором содержатся заявки"),
                                                     "", tr("Excel/Excel 97(*.xlsx *.xls);;Все файлы (*.*)"));
     //QString filePath = "D:\\Barnaul.xlsx";
+    std::cerr << "aa: " << filePath.toStdString() << std::endl;
+    filePath = filePath.replace("/", "\\");
+    std::cerr << "bb: " << filePath.toStdString() << std::endl;
     if (filePath.isEmpty()) return;
 
 
